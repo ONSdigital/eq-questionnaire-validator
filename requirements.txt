@@ -1,3 +1,0 @@
-flask==0.12.2
-jsonschema==2.5.1
-structlog==16.1.0

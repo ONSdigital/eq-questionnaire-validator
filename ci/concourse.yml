@@ -58,9 +58,10 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator
-          pip install -r requirements.txt
-          pip install -r test_requirements.txt
-          py.test
+          pip install -U pip pipenv
+          pipenv install --dev --deploy
+          pipenv check
+          pipenv run py.test
 
   - put: eq-schema-validator-image
     params:
@@ -97,9 +98,10 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator-pull-request
-          pip install -r requirements.txt
-          pip install -r test_requirements.txt
-          py.test
+          pip install -U pip pipenv
+          pipenv install --dev --deploy
+          pipenv check
+          pipenv run py.test
 
   - put: eq-schema-validator-image
     params:
