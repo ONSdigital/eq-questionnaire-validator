@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Introduction"]
+      },
+      "primary_content": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "../common_definitions.json#/id"
+            },
+            "content": {
+              "$ref": "../common_definitions.json#/guidance_content"
+            }
+          }
+        }
+      },
+      "preview_content": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "../common_definitions.json#/id"
+          },
+          "content": {
+            "$ref": "../common_definitions.json#/guidance_content"
+          }
+        }
+      },
+      "secondary_content": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "../common_definitions.json#/id"
+            },
+            "content": {
+              "$ref": "../common_definitions.json#/guidance_content"
+            }
+          }
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type"
+    ]
+  }
+}

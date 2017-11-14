@@ -1,5 +1,7 @@
-import json
 import urllib
+
+import json
+from json import JSONDecodeError
 
 from flask import Blueprint, request, jsonify, Response
 
@@ -29,11 +31,10 @@ def validate_schema_from_url():
 def validate_schema(data):
     try:
         json_to_validate = json.loads(data)
-    except json.JSONDecodeError:
+    except JSONDecodeError:
         return Response(status=400, response='Could not parse JSON')
 
-    response = {
-    }
+    response = {}
 
     errors = validator.validate_schema(json_to_validate)
 

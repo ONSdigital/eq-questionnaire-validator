@@ -10,7 +10,7 @@
     },
     "type": {
       "type": "string",
-      "pattern": "^uk.gov.ons.edc.eq:feedback$"
+      "enum": ["uk.gov.ons.edc.eq:feedback"]
     },
     "version": {
       "type": "string",
@@ -18,7 +18,7 @@
     },
     "origin": {
       "type": "string",
-      "pattern": "^uk.gov.ons.edc.eq$"
+      "enum": ["uk.gov.ons.edc.eq"]
     },
     "survey_id": {
       "type": "string",

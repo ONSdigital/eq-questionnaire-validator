@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "answer": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "type": "string"
+      },
+      "guidance": {
+        "$ref": "../common_definitions.json#/guidance"
+      },
+      "description": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "Number"
+        ]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "max_length": {
+        "type": "integer"
+      },
+      "decimal_places": {
+        "type": "integer",
+        "description": "Number of decimal places allowed"
+      },
+      "alias": {
+        "$ref": "definitions.json#/alias"
+      },
+      "max_value": {
+        "$ref": "definitions.json#/max_value"
+      },
+      "min_value": {
+        "$ref": "definitions.json#/min_value"
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MANDATORY_NUMBER": {
+              "type": "string"
+            },
+            "NUMBER_TOO_SMALL": {
+              "type": "string"
+            },
+            "NUMBER_TOO_LARGE": {
+              "type": "string"
+            },
+            "NUMBER_TOO_SMALL_EXCLUSIVE": {
+              "type": "string"
+            },
+            "NUMBER_TOO_LARGE_EXCLUSIVE": {
+              "type": "string"
+            },
+            "INVALID_NUMBER": {
+              "type": "string"
+            },
+            "INVALID_INTEGER": {
+              "type": "string"
+            },
+            "INVALID_DECIMAL": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "calculated": {
+        "$ref": "definitions.json#/calculated"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "mandatory"
+    ]
+  }
+}

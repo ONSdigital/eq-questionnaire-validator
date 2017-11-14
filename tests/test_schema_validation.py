@@ -24,10 +24,9 @@ class TestSchemaValidation(unittest.TestCase):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
         json_to_validate = load(json_file)
 
-        errors = self.validator.validate_schema(json_to_validate)
-        block_errors = [error for error in errors if 'invalid block' in error['message']]
+        error = self.validator.validate_schema(json_to_validate)
 
-        self.assertNotEqual(len(block_errors), 0, 'This schema should fail with an invalid block')
+        self.assertTrue('message' in error, 'This schema should fail with an invalid block')
 
     def test_invalid_schema_group(self):
 
@@ -36,10 +35,9 @@ class TestSchemaValidation(unittest.TestCase):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
         json_to_validate = load(json_file)
 
-        errors = self.validator.validate_schema(json_to_validate)
-        group_errors = [error for error in errors if 'invalid group' in error['message']]
+        error = self.validator.validate_schema(json_to_validate)
 
-        self.assertNotEqual(len(group_errors), 0, 'This schema should fail with an invalid group')
+        self.assertTrue('message' in error, 'This schema should fail with an invalid block')
 
     def test_schemas(self):
 

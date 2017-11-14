@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "title": {
+        "type": "string"
+      },
+      "number": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "guidance": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "../common_definitions.json#/guidance_content"
+          }
+        }
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["General"]
+      },
+      "answers": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../answers/checkbox.json#/answer"
+            },
+            {
+              "$ref": "../answers/currency.json#/answer"
+            },
+            {
+              "$ref": "../answers/date.json#/answer"
+            },
+            {
+              "$ref": "../answers/month_year_date.json#/answer"
+            },
+            {
+              "$ref": "../answers/number.json#/answer"
+            },
+            {
+              "$ref": "../answers/percentage.json#/answer"
+            },
+            {
+              "$ref": "../answers/radio.json#/answer"
+            },
+            {
+              "$ref": "../answers/relationship.json#/answer"
+            },
+            {
+              "$ref": "../answers/text_area.json#/answer"
+            },
+            {
+              "$ref": "../answers/text_field.json#/answer"
+            },
+            {
+              "$ref": "../answers/unit.json#/answer"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "type",
+      "answers"
+    ]
+  }
+}

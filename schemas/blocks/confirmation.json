@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "number": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Confirmation"]
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../questions/general.json#/question"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type"
+    ]
+  }
+}

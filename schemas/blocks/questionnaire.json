@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "section_number": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "number": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Questionnaire"]
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../questions/general.json#/question"
+            },
+            {
+              "$ref": "../questions/date_range.json#/question"
+            },
+            {
+              "$ref": "../questions/repeating_answer.json#/question"
+            },
+            {
+              "$ref": "../questions/relationship.json#/question"
+            }
+          ]
+        }
+      },
+      "routing_rules": {
+        "ref": "../common_definitions.json#/routing_rules"
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "questions"
+    ]
+  }
+}
