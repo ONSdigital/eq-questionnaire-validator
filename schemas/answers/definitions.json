@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "alias": {
+    "type": "string",
+    "description": "An alias that can be used when piping this answer."
+  },
+  "calculated": {
+    "$ref": "definitions.json#/calculated"
+  },
+  "options": {
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "q_code": {
+          "$ref": "../common_definitions.json#/q_code"
+        },
+        "child_answer_id": {
+          "type": "string",
+          "description": "The id of an answer that should be treated as a child of this one, for example a text field answer can be the child of a radio option. The id must be of an answer in this list of answers.",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Descriptive text that appears below the option label"
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ]
+    }
+  },
+  "max_value": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer",
+        "description": "Maximum numeric value allowed."
+      },
+      "answer_id": {
+        "type": "string",
+        "description": "The id of an answer from which to obtain the max_value"
+      },
+      "exclusive": {
+        "type": "boolean",
+        "description": "Whether validation is exclusive of value or not"
+      }
+    },
+    "oneOf": [
+      {
+        "required": [
+          "value"
+        ]
+      },
+      {
+        "required": [
+          "answer_id"
+        ]
+      }
+    ]
+  },
+  "min_value": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer",
+        "description": "Minimum numeric value allowed."
+      },
+      "answer_id": {
+        "type": "string",
+        "description": "The id of an answer from which to obtain the min_value"
+      },
+      "exclusive": {
+        "type": "boolean",
+        "description": "Whether validation is exclusive of value or not"
+      }
+    },
+    "oneOf": [
+      {
+        "required": [
+          "value"
+        ]
+      },
+      {
+        "required": [
+          "answer_id"
+        ]
+      }
+    ]
+  }
+}

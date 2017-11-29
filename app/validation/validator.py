@@ -13,7 +13,7 @@ MAX_DECIMAL_PLACES = 6
 class Validator:
 
     def __init__(self):
-        with open('schema/schema_v1.json', encoding='utf8') as schema_data:
+        with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
 
     def validate_schema(self, json_to_validate):
@@ -43,14 +43,14 @@ class Validator:
 
     def _validate_json_against_schema(self, json_to_validate):
         try:
-            baseURI = pathlib.Path(os.path.abspath('schema/schema_v1.json')).as_uri()
-            resolver = RefResolver(base_uri=baseURI, referrer=self.schema)
+            base_uri = pathlib.Path(os.path.abspath('schemas/questionnaire_v1.json')).as_uri()
+            resolver = RefResolver(base_uri=base_uri, referrer=self.schema)
             validate(json_to_validate, self.schema, resolver=resolver)
             return []
         except ValidationError as e:
             return {
                 'message': e.message,
-                'path': str(e.path)
+                'path': str(e.path),
             }
         except SchemaError as e:
             return '{}'.format(e)
@@ -163,7 +163,7 @@ class Validator:
                     used_answer_decimals = int(answer.get('decimal_places', 0))
 
         if not used_answer_exists:
-            error_message = '{} used for {} is not an answer id in schema'.format(used_answer_id, answer_id)
+            error_message = '{} used for {} is not an answer id in schemas'.format(used_answer_id, answer_id)
             range_errors.append(self._error_message(error_message))
         elif used_answer_type not in ['Number', 'Currency', 'Percentage']:
             error_message = '{} is of type {} and therefore can not be passed to max/min values for {}'\
@@ -230,18 +230,18 @@ class Validator:
 
                     for child_answer_id in child_answer_ids:
                         if child_answer_id not in answers_by_id:
-                            errors.extend([self._error_message('Child answer with id %s does not exist in schema'
-                                           % (child_answer_id))])
+                            errors.extend([self._error_message('Child answer with id %s does not exist in schemas'
+                                                               % (child_answer_id))])
                             continue
                         if 'parent_answer_id' not in answers_by_id[child_answer_id]:
                             errors.extend([self._error_message('Child answer %s does not define parent_answer_id %s '
-                                                               'in schema' % (child_answer_id, answer_id))])
+                                                               'in schemas' % (child_answer_id, answer_id))])
                             continue
                         if answers_by_id[child_answer_id]['parent_answer_id'] != answer_id:
                             errors.extend([self._error_message('Child answer %s defines incorrect parent_answer_id %s '
-                                                               'in schema: Should be %s'
-                                           % (child_answer_id, answers_by_id[child_answer_id]['parent_answer_id'],
-                                              answer_id))])
+                                                               'in schemas: Should be %s'
+                                                               % (child_answer_id, answers_by_id[child_answer_id]['parent_answer_id'],
+                                                                  answer_id))])
                             continue
 
         return errors

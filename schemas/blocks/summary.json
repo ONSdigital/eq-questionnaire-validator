@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Summary"]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type"
+    ]
+  }
+}

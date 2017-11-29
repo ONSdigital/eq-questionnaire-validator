@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from jsonschema import ValidationError, validate
+from app.validation.validator import Validator
 
 
 def create_schema_with_id(schema_id='answer'):
@@ -10,7 +10,7 @@ def create_schema_with_id(schema_id='answer'):
     :param schema_id: The Id to use for the answer.
     :return: The JSON file with the Id swapped for schema_id
     """
-    schema_path = 'tests/schemas/test_schema_id_regex.json.json'
+    schema_path = 'tests/schemas/test_schema_id_regex.json'
 
     with open(schema_path, encoding='utf8') as json_data:
         json_content = json.load(json_data)
@@ -19,21 +19,10 @@ def create_schema_with_id(schema_id='answer'):
         return json_content
 
 
-def validate_json_against_schema(json_to_validate, schema):
-    try:
-        validate(json_to_validate, schema)
-        return []
-    except ValidationError as e:
-        return ['Schema Validation Error! JSON [{}] does not validate against schema. Error [{}]'
-                .format(json_to_validate, e)]
-
-
 class TestSchemaIdRegEx(unittest.TestCase):
 
     def setUp(self):
-        with open('schema/schema_v1.json', encoding='utf8') as schema_data:
-            self.schema = json.load(schema_data)
-
+        self.validator = Validator()
         self.errors = []
 
     def test_default_id_should_pass_validation(self):
@@ -41,7 +30,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id()
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        errors = self.validator.validate_schema(json_to_validate)
 
         # Then
         self.assertEqual(len(errors), 0)
@@ -51,7 +40,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id('star-wars')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        errors = self.validator.validate_schema(json_to_validate)
 
         # Then
         self.assertEqual(len(errors), 0)
@@ -61,7 +50,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id('name-with-hyphens')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        errors = self.validator.validate_schema(json_to_validate)
 
         # Then
         self.assertEqual(len(errors), 0)
@@ -71,7 +60,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id('this-is-a-valid-id-0')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        errors = self.validator.validate_schema(json_to_validate)
 
         # Then
         self.assertEqual(len(errors), 0)
@@ -81,7 +70,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id('0-this-is-a-valid-id-0')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        errors = self.validator.validate_schema(json_to_validate)
 
         # Then
         self.assertEqual(len(errors), 0)
@@ -91,37 +80,41 @@ class TestSchemaIdRegEx(unittest.TestCase):
         json_to_validate = create_schema_with_id('!n0t-@-valid-id')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        error = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 1)
+        self.assertTrue(isinstance(error, dict))
+        self.assertTrue('is not valid under any of the given schemas' in error['message'])
 
     def test_id_with_spaces_should_fail_validation(self):
         # Given
         json_to_validate = create_schema_with_id('not a valid id')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        error = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 1)
+        self.assertTrue(isinstance(error, dict))
+        self.assertTrue('is not valid under any of the given schemas' in error['message'])
 
     def test_id_with_capital_letters_should_fail_validation(self):
         # Given
         json_to_validate = create_schema_with_id('NOT-A-VALID-ID')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        error = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 1)
+        self.assertTrue(isinstance(error, dict))
+        self.assertTrue('is not valid under any of the given schemas' in error['message'])
 
     def test_id_with_underscores_should_pass_validation(self):
         # Given
         json_to_validate = create_schema_with_id('not_a_valid_id')
 
         # When
-        errors = validate_json_against_schema(json_to_validate, self.schema)
+        error = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 1)
+        self.assertTrue(isinstance(error, dict))
+        self.assertTrue('is not valid under any of the given schemas' in error['message'])
