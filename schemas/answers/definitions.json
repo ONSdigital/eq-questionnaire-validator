@@ -5,7 +5,8 @@
     "description": "An alias that can be used when piping this answer."
   },
   "calculated": {
-    "$ref": "definitions.json#/calculated"
+    "type": "boolean",
+    "description": "Indicates that the answer should be treated as the result of a calculation."
   },
   "options": {
     "type": "array",
