@@ -41,6 +41,9 @@
           ]
         }
       },
+      "content": {
+        "$ref": "common_definitions.json#/content"
+      },
       "routing_rules": {
         "ref": "../common_definitions.json#/routing_rules"
       },
