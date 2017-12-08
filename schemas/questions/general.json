@@ -19,7 +19,7 @@
         "type": "object",
         "properties": {
           "content": {
-            "$ref": "../common_definitions.json#/guidance_content"
+            "$ref": "../common_definitions.json#/content"
           }
         }
       },

@@ -22,11 +22,11 @@
         "description": "The text that is used for the 'Hide guidance' link."
       },
       "content": {
-        "$ref": "common_definitions.json#/guidance_content"
+        "$ref": "common_definitions.json#/content"
       }
     }
   },
-  "guidance_content": {
+  "content": {
     "description": "Allows customisation of guidance text.",
     "type": "array",
     "minItems": 1,

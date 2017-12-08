@@ -25,7 +25,7 @@
               "$ref": "../common_definitions.json#/id"
             },
             "content": {
-              "$ref": "../common_definitions.json#/guidance_content"
+              "$ref": "../common_definitions.json#/content"
             }
           }
         }
@@ -37,7 +37,7 @@
             "$ref": "../common_definitions.json#/id"
           },
           "content": {
-            "$ref": "../common_definitions.json#/guidance_content"
+            "$ref": "../common_definitions.json#/content"
           }
         }
       },
@@ -50,7 +50,7 @@
               "$ref": "../common_definitions.json#/id"
             },
             "content": {
-              "$ref": "../common_definitions.json#/guidance_content"
+              "$ref": "../common_definitions.json#/content"
             }
           }
         }
