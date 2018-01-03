@@ -193,7 +193,7 @@
         "goto": {
           "type": "object",
           "properties": {
-            "id": {
+            "block": {
               "type": "string",
               "description": "The id of another block in the same group."
             },
@@ -208,7 +208,7 @@
           "oneOf": [
             {
               "required": [
-                "id"
+                "block"
               ]
             },
             {
@@ -217,9 +217,7 @@
               ]
             }
           ],
-          "required": [
-            "id"
-          ]
+          "additionalProperties": false
         },
         "repeat": {
           "type": "object",

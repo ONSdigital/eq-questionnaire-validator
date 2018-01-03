@@ -41,7 +41,7 @@
             "routing_rules":[
                 {
                     "goto": {
-                        "id" : "response-yes",
+                        "block" : "response-yes",
                         "when": [
                             {
                                 "id" : "conditional-routing-answer",
@@ -54,7 +54,7 @@
                 },
                 {
                     "goto": {
-                        "id": "invalid-location",
+                        "block": "invalid-location",
                         "when": [
                             {
                                 "id" : "conditional-routing-answer",
@@ -89,7 +89,7 @@
             "routing_rules":[
                 {
                     "goto": {
-                        "id" : "Summary"
+                        "block" : "Summary"
                     }
 
                 }
