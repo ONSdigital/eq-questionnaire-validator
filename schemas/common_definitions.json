@@ -107,7 +107,8 @@
         "value": {
           "type": [
             "string",
-            "boolean"
+            "boolean",
+            "integer"
           ]
         }
       },
