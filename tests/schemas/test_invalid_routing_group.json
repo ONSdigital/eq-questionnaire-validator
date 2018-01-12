@@ -11,7 +11,7 @@
             "id": "which-group",
             "title": "What group do you want to go to?",
             "blocks": [{
-                "type": "Questionnaire",
+                "type": "Question",
                 "id": "which-group-block",
                 "description": "",
                 "title": "Pick your next group?",
@@ -66,7 +66,7 @@
             "id": "group1",
             "title": "This is Group 1",
             "blocks": [{
-                "type": "Questionnaire",
+                "type": "Question",
                 "id": "group1-block",
                 "routing_rules": [],
                 "description": "",

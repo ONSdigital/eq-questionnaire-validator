@@ -160,7 +160,7 @@
                   "$ref": "blocks/introduction.json#/block"
                 },
                 {
-                  "$ref": "blocks/questionnaire.json#/block"
+                  "$ref": "blocks/question.json#/block"
                 },
                 {
                   "$ref": "blocks/interstitial.json#/block"
