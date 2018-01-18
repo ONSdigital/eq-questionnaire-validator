@@ -20,7 +20,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Questionnaire"]
+        "enum": ["Question"]
       },
       "questions": {
         "type": "array",

@@ -9,7 +9,7 @@
     "description": "A questionnaire to test schema id regex",
     "groups": [{
             "blocks": [{
-                "type": "Questionnaire",
+                "type": "Question",
                 "id": "block",
                 "questions": [{
                     "answers": [{
