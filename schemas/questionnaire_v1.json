@@ -59,14 +59,14 @@
         "StatisticsOfTradeAct"
       ]
     },
-    "view_submitted_responses": {
+    "view_submitted_response": {
       "type": "object",
       "properties": {
         "enabled": {
           "description": "Whether or not answers are available after submission.",
           "type": "boolean"
         },
-        "timeout": {
+        "duration": {
           "description": "The amount of time in seconds submitted answers are available for.",
           "type": "integer"
         }
