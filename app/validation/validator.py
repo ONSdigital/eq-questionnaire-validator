@@ -11,7 +11,6 @@ MAX_DECIMAL_PLACES = 6
 
 
 class Validator:
-
     def __init__(self):
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
@@ -29,7 +28,7 @@ class Validator:
 
         errors.extend(self.validate_routing_rules_has_default_if_not_all_answers_routed(json_to_validate))
 
-        errors.extend(self.validate_range_types_from_answers(json_to_validate))
+        errors.extend(self.validate_numeric_answer_types(json_to_validate))
 
         ignored_keys = ['routing_rules', 'skip_conditions']
         errors.extend(self.validate_duplicates(json_to_validate, ignored_keys, 'id'))
@@ -120,82 +119,47 @@ class Validator:
                 answer_errors.append(self._error_message(unrouted_error))
         return answer_errors
 
-    def validate_range_types_from_answers(self, json_to_validate):
+    def validate_numeric_answer_types(self, json_to_validate):
         errors = []
+        answer_ranges = {}
 
-        for block in self._get_blocks(json_to_validate):
-            for answer in self._get_answers_for_block(block):
-                used_answers = []
-                values = []
-                answer_id = answer['id']
-                answer_decimals = answer.get('decimal_places', 0)
+        numeric_answers = (
+            answer for answer in self._get_answers(json_to_validate)
+            if answer['type'] in ['Number', 'Currency', 'Percentage']
+        )
 
-                if answer.get('max_value') and 'value' in answer.get('max_value'):
-                    values.append(answer['max_value']['value'])
+        for answer in numeric_answers:
+            answer_ranges[answer.get('id')] = self._get_numeric_range_values(answer, answer_ranges)
 
-                if answer.get('max_value') and 'answer_id' in answer.get('max_value'):
-                    used_answers.append(answer['max_value']['answer_id'])
+            # Validate referred numeric answer exists (skip further tests for answer if error is returned)
+            referred_errors = self._validate_referred_numeric_answer(answer, answer_ranges)
+            errors.extend(referred_errors)
+            if referred_errors:
+                continue
 
-                if answer.get('min_value') and 'value' in answer.get('min_value'):
-                    values.append(answer['min_value']['value'])
+            # Validate numeric answer has a positive range of possible responses
+            errors.extend(self._validate_numeric_range(answer, answer_ranges))
 
-                if answer.get('min_value') and 'answer_id' in answer.get('min_value'):
-                    used_answers.append(answer['min_value']['answer_id'])
+            # Validate numeric answer value within system limits
+            errors.extend(self._validate_numeric_answer_value(answer))
 
-                for value in values:
-                    errors.extend(self.validate_range_value(value, answer_id, answer_decimals))
+            # Validate numeric answer decimal places within system limits
+            errors.extend(self._validate_numeric_answer_decimals(answer))
 
-                for used_answer_id in used_answers:
-                    errors.extend(self._validate_range_type(
-                        json_to_validate, used_answer_id, answer_id, answer_decimals))
+            # Validate referred numeric answer decimals
+            errors.extend(self._validate_referred_numeric_answer_decimals(answer, answer_ranges))
 
         return errors
 
-    def _validate_range_type(self, json_to_validate, used_answer_id, answer_id, answer_decimals):
-        range_errors = []
+    def _get_numeric_range_values(self, answer, answer_ranges):
 
-        used_answer_exists = False
-        for block in self._get_blocks(json_to_validate):
-            for answer in self._get_answers_for_block(block):
-                if answer.get('id') == used_answer_id:
-                    used_answer_exists = True
-                    used_answer_type = answer['type']
-                    used_answer_decimals = int(answer.get('decimal_places', 0))
-
-        if not used_answer_exists:
-            error_message = '{} used for {} is not an answer id in schemas'.format(used_answer_id, answer_id)
-            range_errors.append(self._error_message(error_message))
-        elif used_answer_type not in ['Number', 'Currency', 'Percentage']:
-            error_message = '{} is of type {} and therefore can not be passed to max/min values for {}'\
-                .format(used_answer_id, used_answer_type, answer_id)
-            range_errors.append(self._error_message(error_message))
-        elif used_answer_decimals > answer_decimals:
-            if answer_decimals == 0:
-                error_message = '{} of type decimal is being passed to ' \
-                                'max/min value for {} of type integer'.format(used_answer_id, answer_id)
-            else:
-                error_message = '{} is of type decimal with {} places is being passed to' \
-                                ' max/min value for {} of {} decimal_places'\
-                    .format(used_answer_id, used_answer_decimals, answer_id, answer_decimals)
-
-            range_errors.append(self._error_message(error_message))
-
-        return range_errors
-
-    def validate_range_value(self, value, answer_id, answer_decimals):
-        error_message = 'Decimal Places used in {} should be less than or equal to {}, currently {}' \
-            .format(answer_id, MAX_DECIMAL_PLACES, answer_decimals)
-
-        if answer_decimals > MAX_DECIMAL_PLACES:
-            return [self._error_message(error_message)]
-
-        error_message = 'Value {} used in {} should be between system limits {} to {}'\
-            .format(value, answer_id, MIN_NUMBER, MAX_NUMBER)
-
-        if MIN_NUMBER <= value <= MAX_NUMBER:
-            return []
-
-        return [self._error_message(error_message)]
+        return {
+            'min': self._get_answer_minimum(answer, answer_ranges),
+            'max': self._get_answer_maximum(answer, answer_ranges),
+            'decimal_places': answer.get('decimal_places', 0),
+            'min_referred': answer.get('min_value', {}).get('answer_id'),
+            'max_referred': answer.get('max_value', {}).get('answer_id'),
+        }
 
     def validate_duplicates(self, json_to_validate, ignored_keys, special_key):
         unique_items = []
@@ -231,7 +195,7 @@ class Validator:
                     for child_answer_id in child_answer_ids:
                         if child_answer_id not in answers_by_id:
                             errors.extend([self._error_message('Child answer with id %s does not exist in schemas'
-                                                               % (child_answer_id))])
+                                                               % child_answer_id)])
                             continue
                         if 'parent_answer_id' not in answers_by_id[child_answer_id]:
                             errors.extend([self._error_message('Child answer %s does not define parent_answer_id %s '
@@ -240,11 +204,18 @@ class Validator:
                         if answers_by_id[child_answer_id]['parent_answer_id'] != answer_id:
                             errors.extend([self._error_message('Child answer %s defines incorrect parent_answer_id %s '
                                                                'in schemas: Should be %s'
-                                                               % (child_answer_id, answers_by_id[child_answer_id]['parent_answer_id'],
+                                                               % (child_answer_id,
+                                                                  answers_by_id[child_answer_id]['parent_answer_id'],
                                                                   answer_id))])
                             continue
 
         return errors
+
+    def _get_answers(self, survey_json):
+        for block in self._get_blocks(survey_json):
+            for question in block.get('questions', []):
+                for answer in question['answers']:
+                    yield answer
 
     @staticmethod
     def _get_blocks(survey_json):
@@ -276,6 +247,122 @@ class Validator:
             for answer_json in question_json['answers']:
                 answers.append(answer_json)
         return answers
+
+    def _get_answer_minimum(self, answer, answer_ranges):
+        defined_minimum = answer.get('min_value')
+        minimum_values = self.get_defined_numeric_value(defined_minimum, 0, answer_ranges)
+        minimum_values = self._convert_numeric_values_to_exclusive(defined_minimum, minimum_values,
+                                                                   'min', answer.get('decimal_places', 0))
+
+        return minimum_values
+
+    def _get_answer_maximum(self, answer, answer_ranges):
+        defined_maximum = answer.get('max_value')
+        maximum_values = self.get_defined_numeric_value(defined_maximum, MAX_NUMBER, answer_ranges)
+        maximum_values = self._convert_numeric_values_to_exclusive(defined_maximum, maximum_values,
+                                                                   'max', answer.get('decimal_places', 0))
+
+        return maximum_values
+
+    @staticmethod
+    def get_defined_numeric_value(defined_value, system_default, answer_ranges):
+        values = None
+
+        if defined_value is None:
+            values = [system_default]
+        elif 'value' in defined_value:
+            values = [defined_value.get('value')]
+        elif 'answer_id' in defined_value:
+            referred_answer = answer_ranges.get(defined_value['answer_id'])
+            if referred_answer is None:
+                values = None  # Referred answer is not  valid (picked up by _validate_referred_numeric_answer)
+            else:
+                values = referred_answer['min'] + referred_answer['max']
+
+        return values
+
+    @staticmethod
+    def _convert_numeric_values_to_exclusive(defined_value, values, min_or_max, decimal_places):
+        exclusive_values = values
+        if defined_value and defined_value.get('exclusive') and values:
+            exclusive_values = []
+            for value in values:
+                if min_or_max == 'min':
+                    exclusive_values.append(value + (1 / 10 ** decimal_places))
+                else:
+                    exclusive_values.append(value - (1 / 10 ** decimal_places))
+
+        return exclusive_values
+
+
+    def _validate_referred_numeric_answer(self, answer, answer_ranges):
+        # Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
+        # If either of the above is true then it will not have been given a value by _get_numeric_range_values
+        errors = []
+        if answer_ranges[answer.get('id')]['min'] is None:
+            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'\
+                .format(answer['min_value']['answer_id'], answer['id'])
+            errors.append(self._error_message(error_message))
+        if answer_ranges[answer.get('id')]['max'] is None:
+            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'\
+                .format(answer['max_value']['answer_id'], answer['id'])
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_range(self, answer, answer_ranges):
+        errors = []
+        for max_value in answer_ranges[answer.get('id')]['max']:
+            for min_value in answer_ranges[answer.get('id')]['min']:
+                if max_value - min_value < 0:
+                    error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'\
+                        .format(min_value, max_value, answer['id'])
+                    errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_answer_value(self, answer):
+        errors = []
+        if answer.get('min_value') and answer['min_value'].get('value', 0) < MIN_NUMBER:
+            error_message = 'Minimum value {} for answer "{}" is less than system limit of {}' \
+                .format(answer['min_value']['value'], answer['id'], MIN_NUMBER)
+            errors.append(self._error_message(error_message))
+
+        if answer.get('max_value') and answer['max_value'].get('value', 0) > MAX_NUMBER:
+            error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}' \
+                .format(answer['max_value']['value'], answer['id'], MAX_NUMBER)
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_answer_decimals(self, answer):
+        errors = []
+        if answer.get('decimal_places', 0) > MAX_DECIMAL_PLACES:
+            error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}' \
+                .format(answer['decimal_places'], answer['id'], MAX_DECIMAL_PLACES)
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_referred_numeric_answer_decimals(self, answer, answer_ranges):
+        errors = []
+        answer_values = answer_ranges[answer['id']]
+
+        if answer_values['min_referred'] is not None:
+            referred_values = answer_ranges[answer_values['min_referred']]
+            if answer_values['decimal_places'] < referred_values['decimal_places']:
+                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"' \
+                    .format(answer_values['min_referred'], answer['id'])
+                errors.append(self._error_message(error_message))
+
+        if answer_values['max_referred'] is not None:
+            referred_values = answer_ranges[answer_values['max_referred']]
+            if answer_values['decimal_places'] < referred_values['decimal_places']:
+                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"' \
+                    .format(answer_values['max_referred'], answer['id'])
+                errors.append(self._error_message(error_message))
+
+        return errors
 
     def _contains_group(self, json, group_id):
         matching_groups = [g for g in self._get_groups(json) if g['id'] == group_id]
