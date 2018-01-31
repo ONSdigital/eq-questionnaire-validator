@@ -294,7 +294,6 @@ class Validator:
 
         return exclusive_values
 
-
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         # Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         # If either of the above is true then it will not have been given a value by _get_numeric_range_values

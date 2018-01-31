@@ -46,8 +46,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: python
-          tag: 3.6
+          repository: onsdigital/eq-python-build
 
       inputs:
       - name: eq-schema-validator
@@ -58,9 +57,11 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator
+          pyenv install
           pip install -U pip pipenv
           pipenv install --dev --deploy
           pipenv check
+          pipenv run ./scripts/run_lint.sh
           pipenv run py.test
 
   - put: eq-schema-validator-image
@@ -86,8 +87,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: python
-          tag: 3.6
+          repository: onsdigital/eq-python-build
 
       inputs:
       - name: eq-schema-validator-pull-request
@@ -98,9 +98,11 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator-pull-request
+          pyenv install
           pip install -U pip pipenv
           pipenv install --dev --deploy
           pipenv check
+          pipenv run ./scripts/run_lint.sh
           pipenv run py.test
 
   - put: eq-schema-validator-image
