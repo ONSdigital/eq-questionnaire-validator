@@ -134,6 +134,9 @@
     "type": "object",
     "description": "These messages override the standard error messages.",
     "properties": {
+      "MANDATORY_DROPDOWN": {
+        "type": "string"
+      },
       "MANDATORY_TEXTFIELD": {
         "type": "string"
       },
