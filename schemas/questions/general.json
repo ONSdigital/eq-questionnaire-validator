@@ -66,6 +66,9 @@
             },
             {
               "$ref": "../answers/unit.json#/answer"
+            },
+            {
+              "$ref": "../answers/dropdown.json#/answer"
             }
           ]
         }

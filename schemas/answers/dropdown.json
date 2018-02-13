@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "answer": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "guidance": {
+        "$ref": "../common_definitions.json#/guidance"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "Dropdown"
+        ]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "label": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "options": {
+        "$ref": "definitions.json#/options"
+      },
+      "alias": {
+        "$ref": "definitions.json#/alias"
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MANDATORY_DROPDOWN": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "mandatory",
+      "label",
+      "options"
+    ]
+  }
+}
