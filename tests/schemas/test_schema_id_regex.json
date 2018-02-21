@@ -7,7 +7,9 @@
     "theme": "default",
     "legal_basis": "StatisticsOfTradeAct",
     "description": "A questionnaire to test schema id regex",
-    "groups": [{
+    "sections": [{
+        "id": "section1",
+        "groups": [{
             "blocks": [{
                 "type": "Question",
                 "id": "block",
@@ -29,16 +31,17 @@
                 }],
                 "title": "Percentage Input Test"
             }],
-            "id": "group",
-            "title": "Test Group"
-        },
-        {
-            "blocks": [{
-                "type": "Summary",
-                "id": "summary"
-            }],
-            "id": "summary-group",
-            "title": "Summary"
-        }
-    ]
+                "id": "group",
+                "title": "Test Group"
+            },
+            {
+                "blocks": [{
+                    "type": "Summary",
+                    "id": "summary"
+                }],
+                "id": "summary-group",
+                "title": "Summary"
+            }
+        ]
+    }]
 }
