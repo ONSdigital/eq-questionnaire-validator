@@ -166,6 +166,9 @@
                   "$ref": "blocks/interstitial.json#/block"
                 },
                 {
+                  "$ref": "blocks/section_summary.json#/block"
+                },
+                {
                   "$ref": "blocks/summary.json#/block"
                 },
                 {
