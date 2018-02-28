@@ -19,5 +19,5 @@ function display_result {
   fi
 }
 
-py.test
+py.test "$@"
 display_result $? 3 "Unit tests"

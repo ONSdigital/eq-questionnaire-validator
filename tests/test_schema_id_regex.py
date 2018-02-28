@@ -15,7 +15,7 @@ def create_schema_with_id(schema_id='answer'):
     with open(schema_path, encoding='utf8') as json_data:
         json_content = json.load(json_data)
 
-        json_content['groups'][0]['blocks'][0]['questions'][0]['answers'][0]['id'] = schema_id
+        json_content['sections'][0]['groups'][0]['blocks'][0]['questions'][0]['answers'][0]['id'] = schema_id
         return json_content
 
 
@@ -33,7 +33,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(len(errors), 0, errors)
 
     def test_guid_should_pass_validation(self):
         # Given
@@ -43,7 +43,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(len(errors), 0, errors)
 
     def test_id_with_hyphenated_names_should_pass_validation(self):
         # Given
@@ -53,7 +53,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(len(errors), 0, errors)
 
     def test_id_with_numeric_should_pass_validation(self):
         # Given
@@ -63,7 +63,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(len(errors), 0, errors)
 
     def test_id_with_numeric_at_start_should_pass_validation(self):
         # Given
@@ -73,7 +73,7 @@ class TestSchemaIdRegEx(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         # Then
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(len(errors), 0, errors)
 
     def test_id_with_punctuation_should_fail_validation(self):
         # Given

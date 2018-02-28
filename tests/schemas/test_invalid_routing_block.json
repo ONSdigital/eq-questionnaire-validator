@@ -7,95 +7,98 @@
     "description": "",
     "theme": "default",
     "legal_basis": "StatisticsOfTradeAct",
-    "groups": [{
-        "blocks": [{
-            "type": "Question",
-            "id": "conditional-routing-block",
-                "title": "Conditional Routing Test",
-                "description": "",
-                "questions": [{
-                    "id": "conditional-routing-question",
-                    "title": "Do you drink coffee?",
+    "sections": [{
+        "id": "section1",
+        "groups": [{
+            "blocks": [{
+                "type": "Question",
+                "id": "conditional-routing-block",
+                    "title": "Conditional Routing Test",
                     "description": "",
-                    "type": "General",
-                    "answers": [{
-                        "options": [
-                            {
-                                "label": "Yes",
-                                "value": "yes",
-                                "description": ""
-                            },
-                            {
-                                "label": "No, I prefer tea",
-                                "value": "no",
-                                "description": ""
-                            }
-                        ],
-                        "q_code": "1",
-                        "id": "conditional-routing-answer",
-                        "label": "Which conditional question should we jump to?",
-                        "mandatory": true,
-                        "type": "Radio"
-                    }]
-                }],
-            "routing_rules":[
-                {
-                    "goto": {
-                        "block" : "response-yes",
-                        "when": [
-                            {
-                                "id" : "conditional-routing-answer",
-                                "condition": "equals",
-                                "value":"yes"
-                            }
-                        ]
-                    }
+                    "questions": [{
+                        "id": "conditional-routing-question",
+                        "title": "Do you drink coffee?",
+                        "description": "",
+                        "type": "General",
+                        "answers": [{
+                            "options": [
+                                {
+                                    "label": "Yes",
+                                    "value": "yes",
+                                    "description": ""
+                                },
+                                {
+                                    "label": "No, I prefer tea",
+                                    "value": "no",
+                                    "description": ""
+                                }
+                            ],
+                            "q_code": "1",
+                            "id": "conditional-routing-answer",
+                            "label": "Which conditional question should we jump to?",
+                            "mandatory": true,
+                            "type": "Radio"
+                        }]
+                    }],
+                "routing_rules":[
+                    {
+                        "goto": {
+                            "block" : "response-yes",
+                            "when": [
+                                {
+                                    "id" : "conditional-routing-answer",
+                                    "condition": "equals",
+                                    "value":"yes"
+                                }
+                            ]
+                        }
 
-                },
-                {
-                    "goto": {
-                        "block": "invalid-location",
-                        "when": [
-                            {
-                                "id" : "conditional-routing-answer",
-                                "condition": "equals",
-                                "value":"no"
-                            }
-                        ]
-                    }
+                    },
+                    {
+                        "goto": {
+                            "block": "invalid-location",
+                            "when": [
+                                {
+                                    "id" : "conditional-routing-answer",
+                                    "condition": "equals",
+                                    "value":"no"
+                                }
+                            ]
+                        }
 
-                }
-            ]
-        },
-        {
-            "type": "Question",
-            "id": "response-yes",
-                "title": "Yes, I do drink coffee",
-                "description": "",
-                "questions": [{
-                    "id": "response-yes-question",
-                    "title": "How many cups of coffee do you drink a day?",
+                    }
+                ]
+            },
+            {
+                "type": "Question",
+                "id": "response-yes",
+                    "title": "Yes, I do drink coffee",
                     "description": "",
-                    "type": "General",
-                    "answers": [{
-                        "id": "response-yes-number-of-cups",
-                        "label": "Number of cups",
-                        "mandatory": true,
-                        "options": [],
-                        "q_code": "2",
-                        "type": "Number"
-                    }]
-                }],
-            "routing_rules":[
-                {
-                    "goto": {
-                        "block" : "Summary"
-                    }
+                    "questions": [{
+                        "id": "response-yes-question",
+                        "title": "How many cups of coffee do you drink a day?",
+                        "description": "",
+                        "type": "General",
+                        "answers": [{
+                            "id": "response-yes-number-of-cups",
+                            "label": "Number of cups",
+                            "mandatory": true,
+                            "options": [],
+                            "q_code": "2",
+                            "type": "Number"
+                        }]
+                    }],
+                "routing_rules":[
+                    {
+                        "goto": {
+                            "block" : "Summary"
+                        }
 
-                }
-            ]
-        }],
-        "id": "conditional-routing-within-group",
-        "title": "Conditional routing within group"
+                    }
+                ]
+            }],
+            "id": "conditional-routing-within-group",
+            "title": "Conditional routing within group"
+        }]
     }]
 }

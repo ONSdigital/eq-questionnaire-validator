@@ -1,7 +1,7 @@
-import pathlib
-
-import os
+import itertools
 from json import load
+import os
+import pathlib
 
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
 
@@ -211,22 +211,29 @@ class Validator:
 
         return errors
 
-    def _get_answers(self, survey_json):
-        for block in self._get_blocks(survey_json):
-            for question in block.get('questions', []):
-                for answer in question['answers']:
-                    yield answer
+    @classmethod
+    def _get_answers(cls, survey_json):
+        return itertools.chain.from_iterable(
+            question.get('answers', []) for question in cls._get_questions(survey_json)
+        )
 
-    @staticmethod
-    def _get_blocks(survey_json):
-        for group in survey_json['groups']:
-            for block in group['blocks']:
-                yield block
+    @classmethod
+    def _get_questions(cls, survey_json):
+        return itertools.chain.from_iterable(
+            block.get('questions', []) for block in cls._get_blocks(survey_json)
+        )
 
-    @staticmethod
-    def _get_groups(survey_json):
-        for group in survey_json['groups']:
-            yield group
+    @classmethod
+    def _get_blocks(cls, survey_json):
+        return itertools.chain.from_iterable(
+            group.get('blocks', []) for group in cls._get_groups(survey_json)
+        )
+
+    @classmethod
+    def _get_groups(cls, survey_json):
+        return itertools.chain.from_iterable(
+            section.get('groups', []) for section in survey_json['sections']
+        )
 
     @staticmethod
     def _get_answers_by_id_for_block(block_json):

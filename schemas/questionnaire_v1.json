@@ -7,7 +7,7 @@
     "data_version",
     "survey_id",
     "title",
-    "groups",
+    "sections",
     "theme",
     "legal_basis"
   ],
@@ -91,48 +91,13 @@
       "properties": {
         "visible": {
           "type": "boolean"
-        },
-        "sections": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string",
-                "description": "Title for a given id."
-              },
-              "title_from_answers": {
-                "type": "array",
-                "description": "Takes a list of answer ids. Title will be generated from answer values concatenated together with spaces."
-              },
-              "group_order": {
-                "type": "array",
-                "description": "Order in which groups will be navigated within this section."
-              }
-            },
-            "required": [
-              "group_order"
-            ],
-            "oneOf": [
-              {
-                "required": [
-                "title"
-                ]
-              },
-              {
-                "required": [
-                  "title_from_answers"
-                ]
-              }
-            ]
-          }
         }
       }
     },
     "messages": {
       "$ref": "common_definitions.json#/messages"
     },
-    "groups": {
+    "sections": {
       "type": "array",
       "items": {
         "type": "object",
@@ -141,48 +106,68 @@
             "$ref": "common_definitions.json#/id"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "description": "Title used for the navigation container."
           },
-          "hide_in_navigation": {
-            "type": "boolean"
+          "title_from_answers": {
+            "type": "array",
+            "description": "Takes a list of answer ids. Title will be generated from answer values concatenated together with spaces."
           },
-          "skip_conditions": {
-            "$ref": "common_definitions.json#/skip_conditions"
-          },
-          "routing_rules": {
-            "ref": "common_definitions.json#/routing_rules"
-          },
-          "blocks": {
+          "groups": {
             "type": "array",
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "blocks/introduction.json#/block"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "common_definitions.json#/id"
                 },
-                {
-                  "$ref": "blocks/question.json#/block"
+                "title": {
+                  "type": "string"
                 },
-                {
-                  "$ref": "blocks/interstitial.json#/block"
+                "hide_in_navigation": {
+                  "type": "boolean"
                 },
-                {
-                  "$ref": "blocks/section_summary.json#/block"
+                "skip_conditions": {
+                  "$ref": "common_definitions.json#/skip_conditions"
                 },
-                {
-                  "$ref": "blocks/summary.json#/block"
+                "routing_rules": {
+                  "ref": "common_definitions.json#/routing_rules"
                 },
-                {
-                  "$ref": "blocks/confirmation.json#/block"
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "blocks/introduction.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/question.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/interstitial.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/summary.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/confirmation.json#/block"
+                      }
+                    ]
+                  }
                 }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "blocks"
               ]
             }
           }
         },
-        "additionalProperties": false,
         "required": [
           "id",
-          "title",
-          "blocks"
+          "groups"
         ]
       }
     }
