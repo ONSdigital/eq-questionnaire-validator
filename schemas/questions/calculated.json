@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "title": {
+        "type": "string"
+      },
+      "number": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "guidance": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "../common_definitions.json#/content"
+          }
+        }
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Calculated"]
+      },
+      "calculated": {
+        "type": "object",
+        "properties": {
+          "calculated_type": {
+            "type": "string",
+            "enum": [
+              "sum",
+              "average"
+            ]
+          },
+          "answer_id": {
+            "type": "string",
+            "description": "The id of an answer from which to obtain the total to validate against"
+          },
+          "answers_to_group": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "../common_definitions.json#/id"
+            },
+            "description": "The id of the answers from which to do calculated_type to"
+          },
+          "condition": {
+            "type": "string",
+            "enum": [
+              "equal-to",
+              "less-than-equal-to",
+              "less-than"
+            ]
+          }
+        },
+        "required": [
+          "calculated_type",
+          "answer_id",
+          "answers_to_group",
+          "condition"
+        ]
+      },
+      "answers": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../answers/currency.json#/answer"
+            },
+            {
+              "$ref": "../answers/number.json#/answer"
+            },
+            {
+              "$ref": "../answers/percentage.json#/answer"
+            },
+            {
+              "$ref": "../answers/unit.json#/answer"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "type",
+      "calculated",
+      "answers"
+    ]
+  }
+}

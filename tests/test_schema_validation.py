@@ -63,25 +63,44 @@ class TestSchemaValidation(unittest.TestCase):
             'Schema Integrity Error. Invalid range of min = 0 and max = -1.0 is possible for answer "answer-2".')
         self.assertEqual(
             errors[1]['message'],
-            'Schema Integrity Error. The referenced answer "answer-1" has a greater number of decimal places than answer "answer-2"')
+            'Schema Integrity Error. The referenced answer "answer-1" has a greater number of decimal places than '
+            'answer "answer-2"')
         self.assertEqual(
             errors[2]['message'],
-            'Schema Integrity Error. The referenced answer "answer-4" can not be used to set the minimum of answer "answer-3"')
+            'Schema Integrity Error. The referenced answer "answer-4" can not be used to set the minimum of answer '
+            '"answer-3"')
         self.assertEqual(
             errors[3]['message'],
-            'Schema Integrity Error. The referenced answer "answer-5" can not be used to set the maximum of answer "answer-3"')
+            'Schema Integrity Error. The referenced answer "answer-5" can not be used to set the maximum of answer '
+            '"answer-3"')
         self.assertEqual(
             errors[4]['message'],
-            'Schema Integrity Error. Minimum value -99999999999 for answer "answer-4" is less than system limit of -999999999')
+            'Schema Integrity Error. Minimum value -99999999999 for answer "answer-4" is less than system limit of '
+            '-999999999')
         self.assertEqual(
             errors[5]['message'],
-            'Schema Integrity Error. Maximum value 99999999999 for answer "answer-4" is greater than system limit of 9999999999')
+            'Schema Integrity Error. Maximum value 99999999999 for answer "answer-4" is greater than system limit of '
+            '9999999999')
         self.assertEqual(
             errors[6]['message'],
-            'Schema Integrity Error. Number of decimal places 10 for answer "answer-5" is greater than system limit of 6')
+            'Schema Integrity Error. Number of decimal places 10 for answer "answer-5" is greater than system limit '
+            'of 6')
         self.assertEqual(
             errors[7]['message'],
-            'Schema Integrity Error. The referenced answer "answer-1" has a greater number of decimal places than answer "answer-6"')
+            'Schema Integrity Error. The referenced answer "answer-1" has a greater number of decimal places than '
+            'answer "answer-6"')
+
+    def test_invalid_id_in_answers_to_group(self):
+
+        file = 'schemas/test_invalid_id_in_grouped_answers_to_calculate.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_calculated_ids_in_answers_to_group_exists(json_to_validate)
+        self.assertEqual(len(errors), 2)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Answer id - breakdown-3 does not exist '
+                                               'within this question - breakdown-question')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Answer id - breakdown-4 does not exist within '
+                                               'this question - breakdown-question')
 
     @staticmethod
     def open_and_load_schema_file(file):

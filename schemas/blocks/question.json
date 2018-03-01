@@ -30,6 +30,9 @@
               "$ref": "../questions/general.json#/question"
             },
             {
+              "$ref": "../questions/calculated.json#/question"
+            },
+            {
               "$ref": "../questions/date_range.json#/question"
             },
             {

@@ -26,6 +26,8 @@ class Validator:
 
         errors.extend(self.validate_schema_contains_valid_routing_rules(json_to_validate))
 
+        errors.extend(self.validate_calculated_ids_in_answers_to_group_exists(json_to_validate))
+
         errors.extend(self.validate_routing_rules_has_default_if_not_all_answers_routed(json_to_validate))
 
         errors.extend(self.validate_numeric_answer_types(json_to_validate))
@@ -53,6 +55,24 @@ class Validator:
             }
         except SchemaError as e:
             return '{}'.format(e)
+
+    def validate_calculated_ids_in_answers_to_group_exists(self, json_to_validate):
+        # Validates that any answer ids within the 'answer_to_group'
+        # list are existing answers within the question
+
+        errors = []
+
+        for question in self._get_questions(json_to_validate):
+            if question['type'] == 'Calculated':
+                answer_ids = [answer['id'] for answer in question.get('answers')]
+                calculated_question = question.get('calculated')
+                for answer_id in calculated_question['answers_to_group']:
+                    if answer_id not in answer_ids:
+                        invalid_answer_id_error = 'Answer id - {} does not exist within this question - {}'\
+                            .format(answer_id, question['id'])
+                        errors.append(self._error_message(invalid_answer_id_error))
+
+        return errors
 
     def validate_schema_contains_valid_routing_rules(self, json_to_validate):
 
