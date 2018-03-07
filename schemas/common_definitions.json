@@ -110,6 +110,61 @@
             "boolean",
             "integer"
           ]
+        },
+        "date_comparison": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "meta": {
+              "type": "string",
+              "description": "Metadata provided by the calling service. This will vary between surveys."
+            },
+            "value": {
+              "type": "string",
+              "description": "Hard coded YYYY-MM-DD/YYYY-MM date or now to give current date",
+              "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
+            },
+            "offset_by": {
+              "type": "object",
+              "properties": {
+                "days": {
+                  "type": "integer"
+                },
+                "months": {
+                  "type": "integer"
+                },
+                "years": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "anyOf": [
+                  {
+                    "required": [ "days" ]
+                  },
+                  {
+                    "required": [ "months" ]
+                  },
+                  {
+                    "required": [ "years" ]
+                  }
+                ]
+            }
+          },
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [ "id" ]
+            },
+            {
+              "required": [ "meta" ]
+            },
+            {
+              "required": [ "value" ]
+            }
+          ]
         }
       },
       "additionalProperties": false,
@@ -261,3 +316,4 @@
     }
   }
 }
+
