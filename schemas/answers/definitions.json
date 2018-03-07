@@ -11,6 +11,7 @@
   "options": {
     "type": "array",
     "uniqueItems": true,
+    "minItems": 2,
     "items": {
       "type": "object",
       "properties": {
