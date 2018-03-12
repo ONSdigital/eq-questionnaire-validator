@@ -36,6 +36,8 @@ class Validator:
         errors.extend(self.validate_duplicates(json_to_validate, ignored_keys, 'id'))
         errors.extend(self.validate_duplicates(json_to_validate, ignored_keys, 'alias'))
 
+        errors.extend(self.validate_duplicate_options(json_to_validate))
+
         errors.extend(self.validate_contains_confirmation_or_summary(json_to_validate))
 
         errors.extend(self.validate_child_answers_define_parent(json_to_validate))
@@ -192,6 +194,29 @@ class Validator:
                 unique_items.append(value)
 
         return duplicate_errors
+
+    def validate_duplicate_options(self, json_to_validate):
+        errors = []
+
+        for block in self._get_blocks(json_to_validate):
+            answers_for_block = self._get_answers_for_block(block)
+
+            for answers in answers_for_block:
+                labels = set()
+                values = set()
+
+                for option in answers.get('options', []):
+
+                    if option['label'] in labels:
+                        errors.append(self._error_message('Duplicate label found - {}'.format(option['label'])))
+
+                    if option['value'] in values:
+                        errors.append(self._error_message('Duplicate value found - {}'.format(option['value'])))
+
+                    labels.add(option['label'])
+                    values.add(option['value'])
+
+        return errors
 
     def validate_contains_confirmation_or_summary(self, json_to_validate):
         blocks = self._get_blocks(json_to_validate)
