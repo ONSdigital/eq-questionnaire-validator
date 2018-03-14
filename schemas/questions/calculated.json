@@ -28,7 +28,9 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Calculated"]
+        "enum": [
+          "Calculated"
+        ]
       },
       "calculated": {
         "type": "object",
@@ -36,15 +38,14 @@
           "calculated_type": {
             "type": "string",
             "enum": [
-              "sum",
-              "average"
+              "sum"
             ]
           },
           "answer_id": {
             "type": "string",
             "description": "The id of an answer from which to obtain the total to validate against"
           },
-          "answers_to_group": {
+          "answers_to_calculate": {
             "type": "array",
             "minItems": 2,
             "items": {
@@ -52,49 +53,62 @@
             },
             "description": "The id of the answers from which to do calculated_type to"
           },
-          "condition": {
-            "type": "string",
-            "enum": [
-              "equal-to",
-              "less-than-equal-to",
-              "less-than"
+          "conditions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "anyOf": [
+                {
+                  "required": "less than"
+                },
+                {
+                  "required": "greater than"
+                },
+                {
+                  "required": "equals"
+                }
+              ]
+            },
+
+            "description": "The conditions wanted to used for grouped validations, 2 items adds an 'OR' condition"
+          },
+          "required": [
+            "calculated_type",
+            "answer_id",
+            "answers_to_calculate",
+            "condition"
+          ]
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "../answers/currency.json#/answer"
+              },
+              {
+                "$ref": "../answers/number.json#/answer"
+              },
+              {
+                "$ref": "../answers/percentage.json#/answer"
+              },
+              {
+                "$ref": "../answers/unit.json#/answer"
+              }
             ]
           }
-        },
-        "required": [
-          "calculated_type",
-          "answer_id",
-          "answers_to_group",
-          "condition"
-        ]
-      },
-      "answers": {
-        "type": "array",
-        "items": {
-          "oneOf": [
-            {
-              "$ref": "../answers/currency.json#/answer"
-            },
-            {
-              "$ref": "../answers/number.json#/answer"
-            },
-            {
-              "$ref": "../answers/percentage.json#/answer"
-            },
-            {
-              "$ref": "../answers/unit.json#/answer"
-            }
-          ]
         }
-      }
-    },
-    "additionalProperties": false,
-    "required": [
-      "id",
-      "title",
-      "type",
-      "calculated",
-      "answers"
-    ]
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "type",
+        "calculated",
+        "answers"
+      ]
+    }
   }
 }

@@ -44,13 +44,15 @@
                         "calculated": {
                             "calculated_type": "sum",
                             "answer_id": "total-answer",
-                            "answers_to_group": [
+                            "answers_to_calculate": [
                                 "breakdown-1",
                                 "breakdown-2",
                                 "breakdown-3",
                                 "breakdown-4"
                             ],
-                            "condition": "equal-to"
+                            "conditions": [
+                                "equals"
+                            ]
                         },
                         "answers": [{
                                 "id": "breakdown-1",
