@@ -127,6 +127,23 @@
                     }]
                 },
                 {
+                    "type": "Questionnaire",
+                    "id": "block-7",
+                    "questions": [{
+                        "type": "General",
+                        "id": "question-7",
+                        "title": "Enter a value 7",
+                        "answers": [{
+                                "id": "answer-7",
+                                "label": "Default with Mandatory",
+                                "type": "Number",
+                                "mandatory": true,
+                                "default": 0
+                            }
+                        ]
+                    }]
+                },
+                {
                     "type": "Summary",
                     "id": "summary"
                 }

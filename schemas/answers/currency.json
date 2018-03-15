@@ -34,6 +34,10 @@
         "type": "integer",
         "description": "Number of decimal places allowed"
       },
+      "default": {
+        "type": "integer",
+        "description": "Default value on POST if none given"
+      },
       "alias": {
         "$ref": "definitions.json#/alias"
       },
