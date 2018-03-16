@@ -28,7 +28,10 @@
         "type": "string"
       },
       "options": {
-        "$ref": "definitions.json#/options"
+        "allOf": [
+          { "$ref": "definitions.json#/options"},
+          { "minItems": 2 }
+        ]
       },
       "alias": {
         "$ref": "definitions.json#/alias"
