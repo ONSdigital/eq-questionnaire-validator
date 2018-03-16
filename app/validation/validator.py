@@ -171,7 +171,17 @@ class Validator:
             # Validate referred numeric answer decimals
             errors.extend(self._validate_referred_numeric_answer_decimals(answer, answer_ranges))
 
+            # Validate default is only used with non mandatory answers
+            errors.extend(self._validate_numeric_default(answer))
+
         return errors
+
+    def _validate_numeric_default(self, answer):
+        error = []
+        if answer.get('mandatory') and answer.get('default') is not None:
+            error.append(self._error_message('Default is being used with a mandatory answer: {}'.format(answer['id'])))
+
+        return error
 
     def _get_numeric_range_values(self, answer, answer_ranges):
 

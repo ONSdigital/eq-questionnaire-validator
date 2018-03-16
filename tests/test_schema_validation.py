@@ -57,7 +57,7 @@ class TestSchemaValidation(unittest.TestCase):
         json_to_validate = self.open_and_load_schema_file(file)
 
         errors = self.validator.validate_numeric_answer_types(json_to_validate)
-        self.assertEqual(len(errors), 8)
+        self.assertEqual(len(errors), 9)
         self.assertEqual(
             errors[0]['message'],
             'Schema Integrity Error. Invalid range of min = 0 and max = -1.0 is possible for answer "answer-2".')
@@ -89,6 +89,10 @@ class TestSchemaValidation(unittest.TestCase):
             errors[7]['message'],
             'Schema Integrity Error. The referenced answer "answer-1" has a greater number of decimal places than '
             'answer "answer-6"')
+
+        self.assertEqual(
+            errors[8]['message'],
+            'Schema Integrity Error. Default is being used with a mandatory answer: answer-7')
 
     def test_invalid_id_in_answers_to_calculate(self):
 
