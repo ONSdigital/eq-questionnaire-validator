@@ -25,7 +25,10 @@
         ]
       },
       "options": {
-        "$ref": "definitions.json#/options"
+        "allOf": [
+          { "$ref": "definitions.json#/options"},
+          { "minItems": 2 }
+        ]
       },
       "mandatory": {
         "type": "boolean"
