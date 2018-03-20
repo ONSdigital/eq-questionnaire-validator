@@ -22,18 +22,24 @@ class TestSchemaValidation(unittest.TestCase):
         file = 'schemas/test_invalid_routing_block.json'
         json_to_validate = self.open_and_load_schema_file(file)
 
-        error = self.validator.validate_schema(json_to_validate)
+        errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertTrue('message' in error, 'This schema should fail with an invalid block')
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(
+            errors[0]['message'],
+            'Schema Integrity Error. Routing rule routes to invalid block [invalid-location]')
 
     def test_invalid_schema_group(self):
 
         file = 'schemas/test_invalid_routing_group.json'
         json_to_validate = self.open_and_load_schema_file(file)
 
-        error = self.validator.validate_schema(json_to_validate)
+        errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertTrue('message' in error, 'This schema should fail with an invalid block')
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(
+            errors[0]['message'],
+            'Schema Integrity Error. Routing rule routes to invalid group [invalid-group]')
 
     def test_schemas(self):
 
@@ -56,7 +62,7 @@ class TestSchemaValidation(unittest.TestCase):
         file = 'schemas/test_invalid_numeric_answers.json'
         json_to_validate = self.open_and_load_schema_file(file)
 
-        errors = self.validator.validate_numeric_answer_types(json_to_validate)
+        errors = self.validator.validate_schema(json_to_validate)
         self.assertEqual(len(errors), 9)
         self.assertEqual(
             errors[0]['message'],
@@ -99,7 +105,9 @@ class TestSchemaValidation(unittest.TestCase):
         file = 'schemas/test_invalid_id_in_grouped_answers_to_calculate.json'
         json_to_validate = self.open_and_load_schema_file(file)
 
-        errors = self.validator.validate_calculated_ids_in_answers_to_calculate_exists(json_to_validate)
+        question = json_to_validate['sections'][0]['groups'][0]['blocks'][1]['questions'][0]
+
+        errors = self.validator.validate_calculated_ids_in_answers_to_calculate_exists(question)
         self.assertEqual(len(errors), 2)
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Answer id - breakdown-3 does not exist '
                                                'within this question - breakdown-question')
