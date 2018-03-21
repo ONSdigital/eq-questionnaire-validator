@@ -82,12 +82,12 @@ class Validator:
 
         if question['type'] == 'Calculated':
             answer_ids = [answer['id'] for answer in question.get('answers')]
-            calculated_question = question.get('calculated')
-            for answer_id in calculated_question['answers_to_calculate']:
-                if answer_id not in answer_ids:
-                    invalid_answer_id_error = 'Answer id - {} does not exist within this question - {}'\
-                        .format(answer_id, question['id'])
-                    errors.append(self._error_message(invalid_answer_id_error))
+            for calculation in question.get('calculations'):
+                for answer_id in calculation['answers_to_calculate']:
+                    if answer_id not in answer_ids:
+                        invalid_answer_id_error = 'Answer id - {} does not exist within this question - {}'\
+                            .format(answer_id, question['id'])
+                        errors.append(self._error_message(invalid_answer_id_error))
 
         return errors
 
