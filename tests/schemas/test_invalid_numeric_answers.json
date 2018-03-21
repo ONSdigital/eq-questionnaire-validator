@@ -13,23 +13,23 @@
             "id": "group",
             "title": "Testing range of linked answers, with min/max_values",
             "blocks": [{
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-1",
                     "questions": [{
-                        "type": "General",
                         "id": "question-1",
                         "title": "Enter a value 1",
+                        "type": "General",
                         "answers": [{
                                 "id": "answer-1",
-                                "label": "Referenced Answer",
                                 "type": "Number",
+                                "mandatory": false,
                                 "decimal_places": 2
                             }
                         ]
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-2",
                     "questions": [{
                         "type": "General",
@@ -39,6 +39,7 @@
                                 "id": "answer-2",
                                 "label": "Invalid Range",
                                 "type": "Currency",
+                                "mandatory": false,
                                 "currency": "GBP",
                                 "max_value": {
                                     "answer_id": "answer-1",
@@ -49,7 +50,7 @@
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-3",
                     "questions": [{
                         "type": "General",
@@ -59,6 +60,7 @@
                                 "id": "answer-3",
                                 "label": "Invalid References",
                                 "type": "Percentage",
+                                "mandatory": false,
                                 "min_value": {
                                     "answer_id": "answer-4"
                                 },
@@ -70,7 +72,7 @@
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-4",
                     "questions": [{
                         "type": "General",
@@ -80,6 +82,7 @@
                                 "id": "answer-4",
                                 "label": "Max/Min out of system limits",
                                 "type": "Number",
+                                "mandatory": false,
                                 "min_value": {
                                     "value": -99999999999
                                 },
@@ -91,7 +94,7 @@
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-5",
                     "questions": [{
                         "type": "General",
@@ -101,13 +104,14 @@
                                 "id": "answer-5",
                                 "label": "Too many decimals declared",
                                 "type": "Number",
+                                "mandatory": false,
                                 "decimal_places": 10
                             }
                         ]
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-6",
                     "questions": [{
                         "type": "General",
@@ -117,6 +121,7 @@
                                 "id": "answer-6",
                                 "label": "Invalid Range",
                                 "type": "Currency",
+                                "mandatory": false,
                                 "currency": "GBP",
                                 "decimal_places": 1,
                                 "max_value": {
@@ -127,7 +132,7 @@
                     }]
                 },
                 {
-                    "type": "Questionnaire",
+                    "type": "Question",
                     "id": "block-7",
                     "questions": [{
                         "type": "General",
@@ -137,6 +142,7 @@
                                 "id": "answer-7",
                                 "label": "Default with Mandatory",
                                 "type": "Number",
+                                "mandatory": false,
                                 "mandatory": true,
                                 "default": 0
                             }
