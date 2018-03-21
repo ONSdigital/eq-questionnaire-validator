@@ -35,7 +35,14 @@
         "minItems": 2,
         "maxItems": 2,
         "items": {
-          "$ref": "../answers/date.json#/answer"
+          "oneOf": [
+            {
+              "$ref": "../answers/date.json#/answer"
+            },
+            {
+              "$ref": "../answers/month_year_date.json#/answer"
+            }
+          ]
         }
       }
     },
