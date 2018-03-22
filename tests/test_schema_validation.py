@@ -100,6 +100,15 @@ class TestSchemaValidation(unittest.TestCase):
             errors[8]['message'],
             'Schema Integrity Error. Default is being used with a mandatory answer: answer-7')
 
+    def test_numeric_default_with_routing(self):
+
+        file = 'schemas/test_numeric_default_with_routing.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 0)
+
     def test_invalid_id_in_answers_to_calculate(self):
 
         file = 'schemas/test_invalid_id_in_grouped_answers_to_calculate.json'

@@ -1,0 +1,91 @@
+{
+    "mime_type": "application/json/ons/eq",
+    "schema_version": "0.0.1",
+    "data_version": "0.0.1",
+    "survey_id": "0",
+    "title": "Minimum and maximum exclusivity",
+    "theme": "default",
+    "legal_basis": "StatisticsOfTradeAct",
+    "description": "A questionnaire to test currency input type",
+    "sections": [{
+        "id": "section-1",
+        "groups": [{
+            "id": "group",
+            "title": "Testing range of linked answers, with min/max_values",
+            "blocks": [{
+                    "type": "Question",
+                    "id": "block-1",
+                    "questions": [{
+                        "id": "question-1",
+                        "title": "Enter a value 1",
+                        "type": "General",
+                        "answers": [{
+                                "id": "answer-1",
+                                "type": "Number",
+                                "mandatory": false,
+                                "default": 0
+                            }
+                        ]
+                    }],
+                    "routing_rules": [{
+                                "goto": {
+                                    "when": [{
+                                        "value": "0",
+                                        "id": "answer-1",
+                                        "condition": "equals"
+                                    }],
+                                    "block": "block-3"
+                                }
+                            },
+                            {
+                                "goto": {
+                                    "block": "block-2"
+                                }
+                            }
+                        ]
+                },
+                {
+                    "type": "Question",
+                    "id": "block-2",
+                    "questions": [{
+                        "type": "General",
+                        "id": "question-2",
+                        "title": "Enter a value 2",
+                        "answers": [{
+                                "id": "answer-2",
+                                "label": "Invalid Range",
+                                "type": "Currency",
+                                "mandatory": false,
+                                "currency": "GBP",
+                                "max_value": {
+                                    "answer_id": "answer-1",
+                                    "exclusive": true
+                                }
+                            }
+                        ]
+                    }]
+                },
+                {
+                    "type": "Question",
+                    "id": "block-3",
+                    "questions": [{
+                        "type": "General",
+                        "id": "question-3",
+                        "title": "Enter a value 3",
+                        "answers": [{
+                                "id": "answer-3",
+                                "label": "Invalid References",
+                                "type": "Percentage",
+                                "mandatory": false
+                            }
+                        ]
+                    }]
+                },
+                {
+                    "type": "Summary",
+                    "id": "summary"
+                }
+            ]
+        }]
+    }]
+}
