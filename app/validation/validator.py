@@ -172,6 +172,7 @@ class Validator:
             'decimal_places': answer.get('decimal_places', 0),
             'min_referred': answer.get('min_value', {}).get('answer_id'),
             'max_referred': answer.get('max_value', {}).get('answer_id'),
+            'default': answer.get('default')
         }
 
     def validate_duplicates(self, json_to_validate):
@@ -282,6 +283,8 @@ class Validator:
             referred_answer = answer_ranges.get(defined_value['answer_id'])
             if referred_answer is None:
                 values = None  # Referred answer is not  valid (picked up by _validate_referred_numeric_answer)
+            elif referred_answer.get('default') is not None:
+                values = [system_default]
             else:
                 values = referred_answer['min'] + referred_answer['max']
 
