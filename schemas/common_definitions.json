@@ -127,30 +127,7 @@
               "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
             },
             "offset_by": {
-              "type": "object",
-              "properties": {
-                "days": {
-                  "type": "integer"
-                },
-                "months": {
-                  "type": "integer"
-                },
-                "years": {
-                  "type": "integer"
-                }
-              },
-              "additionalProperties": false,
-              "anyOf": [
-                  {
-                    "required": [ "days" ]
-                  },
-                  {
-                    "required": [ "months" ]
-                  },
-                  {
-                    "required": [ "years" ]
-                  }
-                ]
+              "$ref": "common_definitions.json#/offset_by"
             }
           },
           "additionalProperties": false,
@@ -242,6 +219,32 @@
       }
     },
     "additionalProperties": false
+  },
+  "offset_by": {
+    "type": "object",
+    "properties": {
+      "days": {
+        "type": "integer"
+      },
+      "months": {
+        "type": "integer"
+      },
+      "years": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": false,
+    "anyOf": [
+        {
+          "required": [ "days" ]
+        },
+        {
+          "required": [ "months" ]
+        },
+        {
+          "required": [ "years" ]
+        }
+      ]
   },
   "routing_rules": {
     "type": "array",
