@@ -41,8 +41,8 @@
                         "id": "breakdown-question",
                         "title": "Breakdown",
                         "type": "Calculated",
-                        "calculated": {
-                            "calculated_type": "sum",
+                        "calculations": [{
+                            "calculation_type": "sum",
                             "answer_id": "total-answer",
                             "answers_to_calculate": [
                                 "breakdown-1",
@@ -53,7 +53,7 @@
                             "conditions": [
                                 "equals"
                             ]
-                        },
+                        }],
                         "answers": [{
                                 "id": "breakdown-1",
                                 "label": "Breakdown 1",
