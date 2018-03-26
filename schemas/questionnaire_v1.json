@@ -154,9 +154,6 @@
                       },
                       {
                         "$ref": "blocks/confirmation.json#/block"
-                      },
-                      {
-                        "$ref": "blocks/section_summary.json#/block"
                       }
                     ]
                   }

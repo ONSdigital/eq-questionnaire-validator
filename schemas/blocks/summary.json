@@ -8,7 +8,10 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Summary"]
+        "enum": [
+          "Summary",
+          "SectionSummary"
+        ]
       }
     },
     "additionalProperties": false,
