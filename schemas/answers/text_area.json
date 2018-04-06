@@ -30,9 +30,6 @@
       "max_length": {
         "type": "integer"
       },
-      "alias": {
-        "$ref": "definitions.json#/alias"
-      },
       "validation": {
         "type": "object",
         "properties": {

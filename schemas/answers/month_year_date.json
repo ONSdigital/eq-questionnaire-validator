@@ -25,9 +25,6 @@
       "mandatory": {
         "type": "boolean"
       },
-      "alias": {
-        "$ref": "definitions.json#/alias"
-      },
       "validation": {
         "type": "object",
         "properties": {

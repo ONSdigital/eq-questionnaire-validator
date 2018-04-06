@@ -46,9 +46,6 @@
       },
       "mandatory": {
         "type": "boolean"
-      },
-      "alias": {
-        "$ref": "definitions.json#/alias"
       }
     },
     "additionalProperties": false,

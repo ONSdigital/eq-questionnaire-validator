@@ -1,9 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "alias": {
-    "type": "string",
-    "description": "An alias that can be used when piping this answer."
-  },
   "calculated": {
     "type": "boolean",
     "description": "Indicates that the answer should be treated as the result of a calculation."

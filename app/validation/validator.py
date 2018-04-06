@@ -176,7 +176,7 @@ class Validator:
         }
 
     def validate_duplicates(self, json_to_validate):
-        special_keys = ['id', 'alias']
+        special_keys = ['id']
         duplicate_errors = []
 
         for special_key in special_keys:
