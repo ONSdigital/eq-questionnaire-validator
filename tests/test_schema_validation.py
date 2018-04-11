@@ -156,6 +156,17 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The minimum offset date is greater than the '
                                                'maximum offset date')
 
+    def test_invalid_metadata(self):
+        self.skipTest('Will enable once runner PR is merged.')
+        file = 'schemas/test_invalid_metadata.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 2)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Metadata - invalid not specified in metadata field')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Unused metadata defined in metadata field - invalid_metadata')
+
     @staticmethod
     def open_and_load_schema_file(file):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
