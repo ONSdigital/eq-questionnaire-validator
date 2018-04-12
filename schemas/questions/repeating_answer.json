@@ -6,6 +6,9 @@
       "id": {
         "$ref": "../common_definitions.json#/id"
       },
+      "content": {
+        "$ref": "../common_definitions.json#/content"
+      },
       "title": {
         "type": "string"
       },
