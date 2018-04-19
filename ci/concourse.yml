@@ -57,12 +57,7 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator
-          pyenv install
-          pip install -U pip pipenv
-          pipenv install --dev --deploy
-          pipenv check
-          pipenv run ./scripts/run_lint.sh
-          pipenv run py.test
+          ./ci/install.sh
 
   - put: eq-schema-validator-image
     params:
@@ -98,12 +93,7 @@ jobs:
         - -exc
         - |
           cd eq-schema-validator-pull-request
-          pyenv install
-          pip install -U pip pipenv
-          pipenv install --dev --deploy
-          pipenv check
-          pipenv run ./scripts/run_lint.sh
-          pipenv run py.test
+          ./ci/install.sh
 
   - put: eq-schema-validator-image
     params:
