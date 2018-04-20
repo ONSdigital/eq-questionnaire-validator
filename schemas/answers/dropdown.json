@@ -33,9 +33,6 @@
           { "minItems": 2 }
         ]
       },
-      "alias": {
-        "$ref": "definitions.json#/alias"
-      },
       "validation": {
         "type": "object",
         "properties": {

@@ -38,9 +38,6 @@
         "type": "integer",
         "description": "Default value on POST if none given"
       },
-      "alias": {
-        "$ref": "definitions.json#/alias"
-      },
       "max_value": {
         "$ref": "definitions.json#/max_value"
       },
