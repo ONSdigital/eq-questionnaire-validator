@@ -10,6 +10,7 @@ name = "pypi"
 Flask = "*"
 jsonschema = "*"
 structlog = "*"
+python-dateutil = "*"
 
 
 [dev-packages]
@@ -18,7 +19,6 @@ pytest = "==2.8.2"
 "flake8" = "==3.4.1"
 pylint = "==1.8.2"
 pylint-quotes = "==0.1.6"
-python-dateutil = "*"
 
 
 [requires]
