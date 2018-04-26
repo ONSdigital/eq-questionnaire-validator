@@ -123,6 +123,28 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Answer id - breakdown-4 does not exist within '
                                                'this question - breakdown-question')
 
+    def test_invalid_date_range_period(self):
+
+        file = 'schemas/test_invalid_date_range_period.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The minimum period is greater than the maximum '
+                                               'period for date-range-question')
+
+    def test_invalid_single_date_period(self):
+
+        file = 'schemas/test_invalid_single_date_min_max_period.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The minimum offset date is greater than the '
+                                               'maximum offset date')
+
     @staticmethod
     def open_and_load_schema_file(file):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')

@@ -33,6 +33,75 @@
         "type": "string",
         "enum": ["DateRange"]
       },
+      "period_limits": {
+        "type": "object",
+        "description": "minimum and/or maximum time limit for the period to be in days/months/years.",
+        "properties": {
+          "minimum": {
+            "type": "object",
+            "description": "minimum limit for the period to be greater than.",
+            "properties": {
+              "days": {
+                "type": "integer"
+              },
+              "months": {
+                "type": "integer"
+              },
+              "years": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "anyOf": [
+              {
+                "required": [ "days" ]
+              },
+              {
+                "required": [ "months" ]
+              },
+              {
+                "required": [ "years" ]
+              }
+            ]
+          },
+          "maximum": {
+            "type": "object",
+            "description": "minimum limit for the period to be greater than.",
+            "properties": {
+              "days": {
+                "type": "integer"
+              },
+              "months": {
+                "type": "integer"
+              },
+              "years": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "anyOf": [
+              {
+                "required": [ "days" ]
+              },
+              {
+                "required": [ "months" ]
+              },
+              {
+                "required": [ "years" ]
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+          "anyOf": [
+            {
+              "required": [ "minimum" ]
+            },
+            {
+              "required": [ "maximum" ]
+            }
+          ]
+      },
       "answers": {
         "type": "array",
         "minItems": 2,

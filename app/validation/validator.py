@@ -1,7 +1,10 @@
+import re
 from json import load
 import os
 import pathlib
 
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
 
 MAX_NUMBER = 9999999999
@@ -47,12 +50,21 @@ class Validator:
                         errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
                         errors.extend(self.validate_child_answers_define_parent(question['answers']))
 
+                        if question['type'] == 'DateRange' and question.get('period_limits'):
+                            errors.extend(self.validate_date_range_period_limit(question['period_limits'],
+                                                                                question['id']))
+
                         for answer in question['answers']:
                             errors.extend(self.validate_routing_on_answer_options(block, answer))
                             errors.extend(self.validate_duplicate_options(answer))
 
+                            if answer['type'] == 'Date':
+                                if 'minimum' in answer and 'maximum' in answer:
+                                    errors.extend(self.validate_minimum_and_maximum_offset_date(answer))
+
                             if answer['type'] in ['Number', 'Currency', 'Percentage']:
-                                numeric_answer_ranges[answer.get('id')] = self._get_numeric_range_values(answer, numeric_answer_ranges)
+                                numeric_answer_ranges[answer.get('id')] = self._get_numeric_range_values(
+                                    answer, numeric_answer_ranges)
 
                                 errors.extend(self.validate_numeric_answer_types(answer, numeric_answer_ranges))
 
@@ -130,6 +142,37 @@ class Validator:
                 unrouted_error = unrouted_error_template.format(answer['id'], options)
                 answer_errors.append(self._error_message(unrouted_error))
         return answer_errors
+
+    def validate_date_range_period_limit(self, period_limits, question_id):
+        # Validates that a date range does not have a negative period
+        # If period_limits object is present in the DateRange question
+        errors = []
+
+        if 'minimum' in period_limits and 'maximum' in period_limits:
+            example_date = '2016-05-10'
+
+            # Get minimum and maximum possible dates
+            minimum_date = self._get_relative_date(example_date, period_limits['minimum'])
+            maximum_date = self._get_relative_date(example_date, period_limits['maximum'])
+
+            if minimum_date > maximum_date:
+                errors.append(self._error_message('The minimum period is greater than the maximum period for {}'
+                                                  .format(question_id)))
+
+        return errors
+
+    def validate_minimum_and_maximum_offset_date(self, answer):
+        # Validates if a date answer has a minimum and maximum
+        errors = []
+
+        if 'value' in answer['minimum'] and 'value' in answer['maximum']:
+            minimum_date = self._get_offset_date_value(answer['minimum'])
+            maximum_date = self._get_offset_date_value(answer['maximum'])
+
+            if minimum_date > maximum_date:
+                errors.append(self._error_message('The minimum offset date is greater than the maximum offset date'))
+
+        return errors
 
     def validate_numeric_answer_types(self, numeric_answer, answer_ranges):
         errors = []
@@ -394,3 +437,29 @@ class Validator:
                 for schema_item in value:
                     if isinstance(schema_item, dict):
                         yield from self._parse_values(schema_item, parsed_key)
+
+    def _get_offset_date_value(self, answer_min_or_max):
+        if answer_min_or_max['value'] == 'now':
+            value = datetime.utcnow().strftime('%Y-%m-%d')
+        else:
+            value = answer_min_or_max['value']
+
+        if 'offset_by' in answer_min_or_max:
+            offset = answer_min_or_max['offset_by']
+            value = self._get_relative_date(value, offset)
+
+        return value
+
+    def _get_relative_date(self, date_string, offset_object):
+        # Returns a relative date given an offset or period object
+        return self.convert_to_datetime(date_string) + relativedelta(years=offset_object.get('years', 0),
+                                                                     months=offset_object.get('months', 0),
+                                                                     days=offset_object.get('days', 0))
+
+    @staticmethod
+    def convert_to_datetime(value):
+        date_format = '%Y-%m'
+        if value and re.match(r'\d{4}-\d{2}-\d{2}', value):
+            date_format = '%Y-%m-%d'
+
+        return datetime.strptime(value, date_format) if value else None
