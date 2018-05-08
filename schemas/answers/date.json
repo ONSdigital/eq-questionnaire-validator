@@ -60,7 +60,7 @@
             "description": "Metadata provided by the calling service. This will vary between surveys."
           },
           "offset_by": {
-            "$ref": "../common_definitions.json#/offset_by"
+            "$ref": "../common_definitions.json#/offset_by_yyyy_mm_dd"
           }
         },
         "additionalProperties": false,
@@ -99,7 +99,7 @@
             "description": "Metadata provided by the calling service. This will vary between surveys."
           },
           "offset_by": {
-            "$ref": "../common_definitions.json#/offset_by"
+            "$ref": "../common_definitions.json#/offset_by_yyyy_mm_dd"
           }
         },
         "additionalProperties": false,
