@@ -12,6 +12,9 @@
       "title": {
         "type": "string"
       },
+      "titles": {
+        "$ref": "../common_definitions.json#/titles"
+      },
       "number": {
         "type": "string"
       },
@@ -77,9 +80,12 @@
     "additionalProperties": false,
     "required": [
       "id",
-      "title",
       "type",
       "answers"
+    ],
+    "oneOf": [
+      {"required": ["title"]},
+      {"required": ["titles"]}
     ]
   }
 }

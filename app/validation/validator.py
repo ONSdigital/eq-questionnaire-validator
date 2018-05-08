@@ -29,6 +29,7 @@ class Validator:
         errors.extend(self._validate_schema_contain_metadata(json_to_validate))
 
         numeric_answer_ranges = {}
+        all_answer_ids = self._get_all_answer_ids(json_to_validate)
 
         all_groups = []
         for section in json_to_validate.get('sections'):
@@ -52,9 +53,13 @@ class Validator:
                         errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
                         errors.extend(self.validate_child_answers_define_parent(question['answers']))
                         errors.extend(self.validate_date_range(question))
+                        if question.get('titles'):
+                            errors.extend(self.validate_multiple_question_titles(question['titles'],
+                                                                                 question['id'],
+                                                                                 all_answer_ids))
 
                         for answer in question['answers']:
-                            errors.extend(self.validate_routing_on_answer_options(block, answer))
+                            errors.extend(self.validate_routing_on_answer_options(block, answer, all_answer_ids))
                             errors.extend(self.validate_duplicate_options(answer))
 
                             if answer['type'] == 'Date':
@@ -140,7 +145,7 @@ class Validator:
 
         return errors
 
-    def validate_routing_on_answer_options(self, block, answer):
+    def validate_routing_on_answer_options(self, block, answer, answer_ids):
         answer_errors = []
         if 'routing_rules' in block and block['routing_rules'] and 'options' in answer:
             options = [option['value'] for option in answer['options']]
@@ -148,9 +153,15 @@ class Validator:
 
             for rule in block['routing_rules']:
                 if 'goto' in rule and 'when' in rule['goto'].keys():
-                    when = rule['goto']['when']
-                    if 'id' in when and when['id'] == answer['id'] and when['value'] in options:
-                        options.remove(when['value'])
+                    when_clause = rule['goto']['when']
+                    is_valid, error_message = self.validate_when_rule(when_clause, answer_ids, block['id'])
+                    if not is_valid:
+                        answer_errors.append(self._error_message(error_message))
+
+                    for when in when_clause:
+                        if 'id' in when and 'value' in when:
+                            if when['id'] == answer['id'] and when['value'] in options:
+                                options.remove(when['value'])
                 else:
                     options = []
                     has_default_route = True
@@ -167,6 +178,35 @@ class Validator:
                 unrouted_error = unrouted_error_template.format(answer['id'], options)
                 answer_errors.append(self._error_message(unrouted_error))
         return answer_errors
+
+    @staticmethod
+    def validate_when_rule(when_clause, existing_ids, referenced_id):
+        # Validates any answer id in a when clause exists within the schema
+        for when in when_clause:
+            if 'id' in when:
+                if when['id'] not in existing_ids:
+                    return False, 'The answer id - {} in the "when" clause for {} does not exist'.format(when['id'],
+                                                                                                         referenced_id)
+
+        return True, 'Valid'
+
+    def validate_multiple_question_titles(self, question_titles, question_id, answer_ids):
+        # Validates that the last title in a question titles object contains only a value key
+        # Also validates that in any title the value key is always the first key
+        errors = []
+
+        last_title = question_titles[-1]
+        if len(last_title) != 1 or 'value' not in last_title:
+            errors.append(self._error_message('The last value must be the default value with no "when" clause for {}'
+                                              .format(question_id)))
+
+        for title in question_titles:
+            if 'when' in title:
+                is_valid, error_message = self.validate_when_rule(title['when'], answer_ids, question_id)
+                if not is_valid:
+                    errors.append(self._error_message(error_message))
+
+        return errors
 
     def validate_date_range(self, question):
         # If period_limits object is present in the DateRange question
@@ -461,7 +501,7 @@ class Validator:
         return False
 
     def _parse_values(self, schema_json, parsed_key):
-        ignored_keys = ['routing_rules', 'skip_conditions']
+        ignored_keys = ['titles', 'routing_rules', 'skip_conditions']
 
         for key, value in schema_json.items():
             if key == parsed_key:
@@ -500,3 +540,17 @@ class Validator:
             date_format = '%Y-%m-%d'
 
         return datetime.strptime(value, date_format) if value else None
+
+    @staticmethod
+    def _get_all_answer_ids(json_to_validate):
+        answer_ids = []
+
+        for section in json_to_validate.get('sections'):
+            for group in section.get('groups'):
+                for block in group.get('blocks'):
+                    if block.get('questions'):
+                        for question in block['questions']:
+                            for answer in question.get('answers'):
+                                answer_ids.append(answer['id'])
+
+        return answer_ids

@@ -89,6 +89,9 @@
         "id": {
           "type": "string"
         },
+        "group_instance": {
+          "type": "integer"
+        },
         "meta": {
           "type": "string",
           "description": "Metadata provided by the calling service. This will vary between surveys."
@@ -335,6 +338,19 @@
             "repeat"
           ]
         }
+      ]
+    }
+  },
+  "titles": {
+    "type": "array",
+    "description": "Used to allow a title contents to be set based on conditional values",
+    "items": {
+      "value": "string",
+      "when": {
+        "$ref": "common_definitions.json#/when"
+      },
+      "required": [
+        "value"
       ]
     }
   }
