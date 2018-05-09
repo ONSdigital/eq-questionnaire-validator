@@ -134,6 +134,17 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The minimum period is greater than the maximum '
                                                'period for date-range-question')
 
+    def test_invalid_mm_yyyy_date_range_period(self):
+
+        file = 'schemas/test_invalid_mm_yyyy_date_range_period.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Days can not be used in period_limit '
+                                               'for yyyy-mm date range for date-range-question')
+
     def test_invalid_single_date_period(self):
 
         file = 'schemas/test_invalid_single_date_min_max_period.json'

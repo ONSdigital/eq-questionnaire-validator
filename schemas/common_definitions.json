@@ -127,7 +127,7 @@
               "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
             },
             "offset_by": {
-              "$ref": "common_definitions.json#/offset_by"
+              "$ref": "common_definitions.json#/offset_by_yyyy_mm_dd"
             }
           },
           "additionalProperties": false,
@@ -220,7 +220,7 @@
     },
     "additionalProperties": false
   },
-  "offset_by": {
+  "offset_by_yyyy_mm_dd": {
     "type": "object",
     "properties": {
       "days": {
@@ -238,6 +238,26 @@
         {
           "required": [ "days" ]
         },
+        {
+          "required": [ "months" ]
+        },
+        {
+          "required": [ "years" ]
+        }
+      ]
+  },
+  "offset_by_yyyy_mm": {
+    "type": "object",
+    "properties": {
+      "months": {
+        "type": "integer"
+      },
+      "years": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": false,
+    "anyOf": [
         {
           "required": [ "months" ]
         },

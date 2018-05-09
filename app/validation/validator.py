@@ -49,10 +49,7 @@ class Validator:
 
                         errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
                         errors.extend(self.validate_child_answers_define_parent(question['answers']))
-
-                        if question['type'] == 'DateRange' and question.get('period_limits'):
-                            errors.extend(self.validate_date_range_period_limit(question['period_limits'],
-                                                                                question['id']))
+                        errors.extend(self.validate_date_range(question))
 
                         for answer in question['answers']:
                             errors.extend(self.validate_routing_on_answer_options(block, answer))
@@ -97,7 +94,7 @@ class Validator:
             for calculation in question.get('calculations'):
                 for answer_id in calculation['answers_to_calculate']:
                     if answer_id not in answer_ids:
-                        invalid_answer_id_error = 'Answer id - {} does not exist within this question - {}'\
+                        invalid_answer_id_error = 'Answer id - {} does not exist within this question - {}' \
                             .format(answer_id, question['id'])
                         errors.append(self._error_message(invalid_answer_id_error))
 
@@ -143,21 +140,32 @@ class Validator:
                 answer_errors.append(self._error_message(unrouted_error))
         return answer_errors
 
-    def validate_date_range_period_limit(self, period_limits, question_id):
-        # Validates that a date range does not have a negative period
+    def validate_date_range(self, question):
         # If period_limits object is present in the DateRange question
+        # Validates that a date range does not have a negative period and
+        # Days can not be used to define limits for yyyy-mm date ranges
+
         errors = []
 
-        if 'minimum' in period_limits and 'maximum' in period_limits:
-            example_date = '2016-05-10'
+        if question['type'] == 'DateRange' and question.get('period_limits'):
+            period_limits = question['period_limits']
+            if 'minimum' in period_limits and 'maximum' in period_limits:
+                example_date = '2016-05-10'
 
-            # Get minimum and maximum possible dates
-            minimum_date = self._get_relative_date(example_date, period_limits['minimum'])
-            maximum_date = self._get_relative_date(example_date, period_limits['maximum'])
+                # Get minimum and maximum possible dates
+                minimum_date = self._get_relative_date(example_date, period_limits['minimum'])
+                maximum_date = self._get_relative_date(example_date, period_limits['maximum'])
 
-            if minimum_date > maximum_date:
-                errors.append(self._error_message('The minimum period is greater than the maximum period for {}'
-                                                  .format(question_id)))
+                if minimum_date > maximum_date:
+                    errors.append(self._error_message('The minimum period is greater than the maximum period for {}'
+                                                      .format(question['id'])))
+
+            first_answer_type = question['answers'][0]['type']
+            if (first_answer_type == 'MonthYearDate'
+                    and ('minimum' in period_limits and 'days' in period_limits['minimum']
+                         or 'maximum' in period_limits and 'days' in period_limits['maximum'])):
+                errors.append(self._error_message('Days can not be used in period_limit for yyyy-mm date range for {}'
+                                                  .format(question['id'])))
 
         return errors
 
@@ -227,7 +235,8 @@ class Validator:
 
             for value in self._parse_values(json_to_validate, special_key):
                 if value in unique_items:
-                    duplicate_errors.append(self._error_message('Duplicate {} found. value {}'.format(special_key, value)))
+                    duplicate_errors.append(
+                        self._error_message('Duplicate {} found. value {}'.format(special_key, value)))
                 else:
                     unique_items.append(value)
 
@@ -351,11 +360,11 @@ class Validator:
         # If either of the above is true then it will not have been given a value by _get_numeric_range_values
         errors = []
         if answer_ranges[answer.get('id')]['min'] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'\
+            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"' \
                 .format(answer['min_value']['answer_id'], answer['id'])
             errors.append(self._error_message(error_message))
         if answer_ranges[answer.get('id')]['max'] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'\
+            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"' \
                 .format(answer['max_value']['answer_id'], answer['id'])
             errors.append(self._error_message(error_message))
 
@@ -366,7 +375,7 @@ class Validator:
         for max_value in answer_ranges[answer.get('id')]['max']:
             for min_value in answer_ranges[answer.get('id')]['min']:
                 if max_value - min_value < 0:
-                    error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'\
+                    error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".' \
                         .format(min_value, max_value, answer['id'])
                     errors.append(self._error_message(error_message))
 
