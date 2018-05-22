@@ -59,6 +59,29 @@
         "StatisticsOfTradeAct"
       ]
     },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "user_id",
+        "period_id"
+      ],
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "validator": {
+              "type": "string",
+              "enum": [
+                "date",
+                "string",
+                "object"
+              ]
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "view_submitted_response": {
       "type": "object",
       "properties": {
