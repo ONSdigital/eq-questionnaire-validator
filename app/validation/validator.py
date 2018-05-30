@@ -26,7 +26,7 @@ class Validator:
 
         errors = []
 
-        # errors.extend(self._validate_schema_contain_metadata(json_to_validate))
+        errors.extend(self._validate_schema_contain_metadata(json_to_validate))
 
         numeric_answer_ranges = {}
 

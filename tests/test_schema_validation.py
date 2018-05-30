@@ -157,7 +157,7 @@ class TestSchemaValidation(unittest.TestCase):
                                                'maximum offset date')
 
     def test_invalid_metadata(self):
-        self.skipTest('Will enable once runner PR is merged.')
+
         file = 'schemas/test_invalid_metadata.json'
         json_to_validate = self.open_and_load_schema_file(file)
 
