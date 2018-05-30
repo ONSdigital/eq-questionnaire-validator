@@ -9,7 +9,8 @@
     "title",
     "sections",
     "theme",
-    "legal_basis"
+    "legal_basis",
+    "metadata"
   ],
   "properties": {
     "eq_id": {
