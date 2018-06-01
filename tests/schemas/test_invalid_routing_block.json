@@ -67,7 +67,7 @@
                             "block": "invalid-location",
                             "when": [
                                 {
-                                    "id" : "conditional-routing-answer",
+                                    "id" : "fake-answer",
                                     "condition": "equals",
                                     "value":"no"
                                 }

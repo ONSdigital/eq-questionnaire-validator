@@ -24,10 +24,14 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEqual(len(errors), 1)
-        self.assertEqual(
-            errors[0]['message'],
-            'Schema Integrity Error. Routing rule routes to invalid block [invalid-location]')
+        self.assertEqual(len(errors), 3)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Routing rule routes to invalid block '
+                                               '[invalid-location]')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - fake-answer in the "when" '
+                                               'clause for conditional-routing-block does not exist')
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Routing rule not defined for all answers or '
+                                               'default not defined for answer [conditional-routing-answer] '
+                                               "missing options [\'no\']")
 
     def test_invalid_schema_group(self):
 
@@ -164,8 +168,23 @@ class TestSchemaValidation(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         self.assertEqual(len(errors), 2)
-        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Metadata - invalid not specified in metadata field')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Unused metadata defined in metadata field - invalid_metadata')
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Metadata - invalid not specified in metadata '
+                                               'field')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Unused metadata defined in metadata field - '
+                                               'invalid_metadata')
+
+    def test_invalid_question_titles_object(self):
+
+        file = 'schemas/test_invalid_multiple_question_titles.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 2)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The last value must be the default value with '
+                                               'no "when" clause for single-title-question')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - behalf-of-answer-fake in the '
+                                               '"when" clause for what-gender-question does not exist')
 
     @staticmethod
     def open_and_load_schema_file(file):
