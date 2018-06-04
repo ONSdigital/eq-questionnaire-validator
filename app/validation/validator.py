@@ -95,9 +95,14 @@ class Validator:
         errors = []
 
         # user_id and period_id required downstream for receipting
-        # ru_name required for template rendering
+        # ru_name required for template rendering in default and NI theme
         default_metadata = ['user_id', 'period_id']
         schema_metadata = schema['metadata']
+
+        if schema['theme'] in ['default', 'northernireland']:
+            if 'ru_name' not in schema_metadata:
+                errors.append(self._error_message('Metadata - ru_name not specified in metadata field'))
+            default_metadata.append('ru_name')
 
         # Find all words that precede any of:
         all_metadata = set(re.findall(r"((?<=metadata\[\')\w+"  # metadata['
