@@ -14,9 +14,6 @@
         "period_id": {
             "validator": "string"
         },
-        "ru_name": {
-            "validator": "string"
-        },
         "trad_as": {
             "validator": "string"
         },
@@ -60,8 +57,6 @@
                         "title": "",
                         "content": [{
                             "title": "period_str: {{ metadata['period_str'] }}"
-                        }, {
-                            "title": "ru_name: {{ metadata['ru_name'] }}"
                         }, {
                             "title": "trad_as: {{ metadata['trad_as'] }}"
                         }, {

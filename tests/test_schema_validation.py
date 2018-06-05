@@ -167,10 +167,12 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEqual(len(errors), 2)
-        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Metadata - invalid not specified in metadata '
+        self.assertEqual(len(errors), 3)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Metadata - ru_name not specified in metadata '
                                                'field')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Unused metadata defined in metadata field - '
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Metadata - invalid not specified in metadata '
+                                               'field')
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Unused metadata defined in metadata field - '
                                                'invalid_metadata')
 
     def test_invalid_question_titles_object(self):
