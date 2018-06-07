@@ -269,6 +269,16 @@
         }
       ]
   },
+  "offset_by_yyyy": {
+    "type": "object",
+    "properties": {
+      "years": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": false,
+    "required": [ "years" ]
+  },
   "routing_rules": {
     "type": "array",
     "description": "Used to direct the journey through a survey (in conjunction with navigation).",
