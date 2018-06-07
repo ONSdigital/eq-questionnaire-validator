@@ -35,7 +35,8 @@
     },
     "survey_id": {
       "type": "string",
-      "description": "The ONS id of the survey derived from the inquiry code already in use for that survey."
+      "description": "The ONS id of the survey derived from the inquiry code already in use for that survey.",
+      "pattern": "^[0-9a-z]+$"
     },
     "session_timeout_in_seconds": {
       "description": "The amount of time in seconds before timing out a users session.",
