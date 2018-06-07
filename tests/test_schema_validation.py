@@ -188,6 +188,15 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - behalf-of-answer-fake in the '
                                                '"when" clause for what-gender-question does not exist')
 
+    def test_invalid_survey_id_whitespace(self):
+
+        file = 'schemas/test_invalid_survey_id_whitespace.json'
+        json_to_validate = self.open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEquals(errors.get('message'), "'lms ' does not match '^[0-9a-z]+$'")
+
     @staticmethod
     def open_and_load_schema_file(file):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
