@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "answer": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "type": "string"
+      },
+      "guidance": {
+        "$ref": "../common_definitions.json#/guidance"
+      },
+      "description": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["YearDate"]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MANDATORY_DATE": {
+              "type": "string"
+            },
+            "INVALID_DATE": {
+              "type": "string"
+            },
+            "INVALID_DATE_RANGE": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "minimum": {
+        "type": "object",
+        "description": "minimum offset date for user entered date to be larger than.",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "date string or 'now'."
+          },
+          "answer_id": {
+            "type": "string",
+            "description": "The id of an answer from which to obtain the date"
+          },
+          "meta": {
+            "type": "string",
+            "description": "Metadata provided by the calling service. This will vary between surveys."
+          },
+          "offset_by": {
+            "$ref": "../common_definitions.json#/offset_by_yyyy"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "value"
+            ]
+          },
+          {
+            "required": [
+              "answer_id"
+            ]
+          },
+          {
+            "required": [
+              "meta"
+            ]
+          }
+        ]
+      },
+      "maximum": {
+        "type": "object",
+        "description": "maximum offset date for user entered date to be lower than.",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "date string or 'now'."
+          },
+          "answer_id": {
+            "type": "string",
+            "description": "The id of an answer from which to obtain the date"
+          },
+          "meta": {
+            "type": "string",
+            "description": "Metadata provided by the calling service. This will vary between surveys."
+          },
+          "offset_by": {
+            "$ref": "../common_definitions.json#/offset_by_yyyy"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "value"
+            ]
+          },
+          {
+            "required": [
+              "answer_id"
+            ]
+          },
+          {
+            "required": [
+              "meta"
+            ]
+          }
+        ]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "mandatory"
+    ]
+  }
+}

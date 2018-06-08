@@ -234,11 +234,19 @@ class Validator:
                                                       .format(question['id'])))
 
             first_answer_type = question['answers'][0]['type']
-            if (first_answer_type == 'MonthYearDate'
-                    and ('minimum' in period_limits and 'days' in period_limits['minimum']
-                         or 'maximum' in period_limits and 'days' in period_limits['maximum'])):
+
+            has_days_limit = 'days' in period_limits.get('minimum', []) \
+                             or 'days' in period_limits.get('maximum', [])
+            has_months_limit = 'months' in period_limits.get('minimum', []) \
+                               or 'months' in period_limits.get('maximum', [])
+
+            if first_answer_type == 'MonthYearDate' and has_days_limit:
                 errors.append(self._error_message('Days can not be used in period_limit for yyyy-mm date range for {}'
                                                   .format(question['id'])))
+
+            if first_answer_type == 'YearDate' and (has_days_limit or has_months_limit):
+                errors.append(self._error_message('Days/Months can not be used in period_limit for yyyy date range'
+                                                  ' for {}'.format(question['id'])))
 
         return errors
 

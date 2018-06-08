@@ -116,6 +116,9 @@
             },
             {
               "$ref": "../answers/month_year_date.json#/answer"
+            },
+            {
+              "$ref": "../answers/year_date.json#/answer"
             }
           ]
         }
