@@ -21,6 +21,9 @@
       "description": {
         "type": "string"
       },
+      "definitions": {
+        "$ref": "../common_definitions.json#/definitions"
+      },
       "guidance": {
         "type": "object",
         "properties": {
