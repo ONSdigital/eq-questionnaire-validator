@@ -123,6 +123,7 @@
             "not equals",
             "contains",
             "not contains",
+            "set",
             "not set",
             "greater than",
             "less than"
