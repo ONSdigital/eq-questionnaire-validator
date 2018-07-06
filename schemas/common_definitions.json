@@ -110,9 +110,6 @@
         "id": {
           "type": "string"
         },
-        "group_instance": {
-          "type": "integer"
-        },
         "meta": {
           "type": "string",
           "description": "Metadata provided by the calling service. This will vary between surveys."
