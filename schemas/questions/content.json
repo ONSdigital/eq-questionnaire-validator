@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "content": {
+        "$ref": "../common_definitions.json#/content"
+      },
+      "title": {
+        "type": "string"
+      },
+      "titles": {
+        "$ref": "../common_definitions.json#/titles"
+      },
+      "number": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "definitions": {
+        "$ref": "../common_definitions.json#/definitions"
+      },
+      "guidance": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "../common_definitions.json#/content"
+          }
+        }
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Content"]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type"
+    ],
+    "oneOf": [
+      {"required": ["title"]},
+      {"required": ["titles"]}
+    ]
+  }
+}

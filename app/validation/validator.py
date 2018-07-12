@@ -54,14 +54,14 @@ class Validator:
                     for question in block.get('questions', []):
 
                         errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
-                        errors.extend(self.validate_child_answers_define_parent(question['answers']))
+                        errors.extend(self.validate_child_answers_define_parent(question.get('answers', [])))
                         errors.extend(self.validate_date_range(question))
                         if question.get('titles'):
                             errors.extend(self.validate_multiple_question_titles(question['titles'],
                                                                                  question['id'],
                                                                                  all_answer_ids))
 
-                        for answer in question['answers']:
+                        for answer in question.get('answers', []):
                             errors.extend(self.validate_routing_on_answer_options(block, answer))
                             errors.extend(self.validate_duplicate_options(answer))
 
@@ -571,7 +571,7 @@ class Validator:
                 for block in group.get('blocks'):
                     if block.get('questions'):
                         for question in block['questions']:
-                            for answer in question.get('answers'):
+                            for answer in question.get('answers', []):
                                 answer_ids.append(answer['id'])
 
         return answer_ids
