@@ -209,6 +209,9 @@
       "MANDATORY_DATE": {
         "type": "string"
       },
+      "MANDATORY_DURATION": {
+        "type": "string"
+      },
       "NUMBER_TOO_SMALL": {
         "type": "string"
       },
@@ -237,6 +240,9 @@
         "type": "string"
       },
       "INVALID_DATE_RANGE": {
+        "type": "string"
+      },
+      "INVALID_DURATION": {
         "type": "string"
       }
     },

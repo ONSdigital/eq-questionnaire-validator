@@ -60,6 +60,9 @@
               "$ref": "../answers/year_date.json#/answer"
             },
             {
+              "$ref": "../answers/duration.json#/answer"
+            },
+            {
               "$ref": "../answers/number.json#/answer"
             },
             {
