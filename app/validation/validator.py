@@ -45,8 +45,10 @@ class Validator:
                         errors.extend(self.validate_contains_confirmation_or_summary(block))
 
                     for rule in block.get('routing_rules', []):
-                        errors.extend(self.validate_schema_contains_valid_routing_rules(group['blocks'], 'block', rule))
-                        errors.extend(self.validate_schema_contains_valid_routing_rules(all_groups, 'group', rule))
+                        errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+                        errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+
+                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, all_answer_ids, block))
 
                     for question in block.get('questions', []):
 
@@ -59,7 +61,7 @@ class Validator:
                                                                                  all_answer_ids))
 
                         for answer in question['answers']:
-                            errors.extend(self.validate_routing_on_answer_options(block, answer, all_answer_ids))
+                            errors.extend(self.validate_routing_on_answer_options(block, answer))
                             errors.extend(self.validate_duplicate_options(answer))
 
                             if answer['type'] == 'Date':
@@ -138,7 +140,7 @@ class Validator:
 
         return errors
 
-    def validate_schema_contains_valid_routing_rules(self, dict_list, goto_key, rule):
+    def validate_schema_routing_rule_routes_to_valid_target(self, dict_list, goto_key, rule):
         errors = []
 
         if 'goto' in rule and goto_key in rule['goto'].keys():
@@ -147,10 +149,20 @@ class Validator:
             if not self._is_contained_in_list(dict_list, referenced_id):
                 invalid_block_error = 'Routing rule routes to invalid {} [{}]'.format(goto_key, referenced_id)
                 errors.append(self._error_message(invalid_block_error))
+        return errors
+
+    @staticmethod
+    def validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids, block):
+        errors = []
+
+        if 'when' in rule['goto']:
+            when_errors = Validator.validate_when_rule(rule['goto']['when'], answer_ids, block['id'])
+            if when_errors:
+                errors.append(when_errors)
 
         return errors
 
-    def validate_routing_on_answer_options(self, block, answer, answer_ids):
+    def validate_routing_on_answer_options(self, block, answer):
         answer_errors = []
         if 'routing_rules' in block and block['routing_rules'] and 'options' in answer:
             options = [option['value'] for option in answer['options']]
@@ -159,10 +171,6 @@ class Validator:
             for rule in block['routing_rules']:
                 if 'goto' in rule and 'when' in rule['goto'].keys():
                     when_clause = rule['goto']['when']
-                    is_valid, error_message = self.validate_when_rule(when_clause, answer_ids, block['id'])
-                    if not is_valid:
-                        answer_errors.append(self._error_message(error_message))
-
                     for when in when_clause:
                         if 'id' in when and 'value' in when:
                             if when['id'] == answer['id'] and when['value'] in options:
@@ -190,10 +198,8 @@ class Validator:
         for when in when_clause:
             if 'id' in when:
                 if when['id'] not in existing_ids:
-                    return False, 'The answer id - {} in the "when" clause for {} does not exist'.format(when['id'],
-                                                                                                         referenced_id)
-
-        return True, 'Valid'
+                    return Validator._error_message('The answer id - {} in the "when" clause for {} does not exist'
+                                                    .format(when['id'], referenced_id))
 
     def validate_multiple_question_titles(self, question_titles, question_id, answer_ids):
         # Validates that the last title in a question titles object contains only a value key
@@ -207,9 +213,9 @@ class Validator:
 
         for title in question_titles:
             if 'when' in title:
-                is_valid, error_message = self.validate_when_rule(title['when'], answer_ids, question_id)
-                if not is_valid:
-                    errors.append(self._error_message(error_message))
+                when_errors = self.validate_when_rule(title['when'], answer_ids, question_id)
+                if when_errors:
+                    errors.append(when_errors)
 
         return errors
 
