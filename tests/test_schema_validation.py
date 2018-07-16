@@ -24,7 +24,7 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEqual(len(errors), 3)
+        self.assertEqual(len(errors), 4)
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Routing rule routes to invalid block '
                                                '[invalid-location]')
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - fake-answer in the "when" '
@@ -32,9 +32,10 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Routing rule not defined for all answers or '
                                                'default not defined for answer [conditional-routing-answer] '
                                                "missing options [\'no\']")
+        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in '
+                                               'the "when" clause for response-yes does not exist')
 
     def test_invalid_schema_group(self):
-
         file = 'schemas/test_invalid_routing_group.json'
         json_to_validate = self.open_and_load_schema_file(file)
 

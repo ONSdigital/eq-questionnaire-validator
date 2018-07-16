@@ -25,7 +25,7 @@
                 "type": "Question",
                 "id": "conditional-routing-block",
                     "title": "Conditional Routing Test",
-                    "description": "",
+                    "description": "Testing invalid routing with an options answer",
                     "questions": [{
                         "id": "conditional-routing-question",
                         "title": "Do you drink coffee?",
@@ -88,7 +88,7 @@
                     "questions": [{
                         "id": "response-yes-question",
                         "title": "How many cups of coffee do you drink a day?",
-                        "description": "",
+                        "description": "testing invalid answer in a non options answer",
                         "type": "General",
                         "answers": [{
                             "id": "response-yes-number-of-cups",
@@ -99,6 +99,19 @@
                         }]
                     }],
                 "routing_rules":[
+                    {
+                        "goto": {
+                            "block": "conditional-routing-block",
+                            "when": [
+                                {
+                                   "id": "AnAnswerThatDoesNotExist",
+                                    "condition": "equals",
+                                    "value": 17
+                                }
+                            ]
+
+                        }
+                    },
                     {
                         "goto": {
                             "block" : "summary"
