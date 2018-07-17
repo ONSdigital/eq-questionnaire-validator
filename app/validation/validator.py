@@ -6,6 +6,7 @@ import pathlib
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
+from jsonschema.exceptions import best_match
 
 MAX_NUMBER = 9999999999
 MIN_NUMBER = -999999999
@@ -87,6 +88,7 @@ class Validator:
         except ValidationError as e:
             return {
                 'message': e.message,
+                'predicted_cause': best_match([e]).message,
                 'path': str(e.path),
             }
         except SchemaError as e:
