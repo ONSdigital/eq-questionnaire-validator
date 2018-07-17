@@ -24,19 +24,11 @@
       },
       "questions": {
         "type": "array",
+        "minItems": 1,
         "items": {
           "oneOf": [
             {
-              "$ref": "../questions/general.json#/question"
-            },
-            {
-              "$ref": "../questions/date_range.json#/question"
-            },
-            {
-              "$ref": "../questions/repeating_answer.json#/question"
-            },
-            {
-              "$ref": "../questions/relationship.json#/question"
+              "$ref": "../questions/content.json#/question"
             }
           ]
         }
