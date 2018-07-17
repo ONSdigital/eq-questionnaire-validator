@@ -27,13 +27,13 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(len(errors), 4)
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Routing rule routes to invalid block '
                                                '[invalid-location]')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - fake-answer in the "when" '
-                                               'clause for conditional-routing-block does not exist')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - fake-answer in the id key of the '
+                                               '"when" clause for conditional-routing-block does not exist')
         self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Routing rule not defined for all answers or '
                                                'default not defined for answer [conditional-routing-answer] '
                                                "missing options [\'no\']")
-        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in '
-                                               'the "when" clause for response-yes does not exist')
+        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id '
+                                               'key of the "when" clause for response-yes does not exist')
 
     def test_invalid_schema_group(self):
         file = 'schemas/test_invalid_routing_group.json'
@@ -198,7 +198,7 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The last value must be the default value with '
                                                'no "when" clause for single-title-question')
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - behalf-of-answer-fake in the '
-                                               '"when" clause for what-gender-question does not exist')
+                                               'id key of the "when" clause for what-gender-question does not exist')
 
     def test_invalid_survey_id_whitespace(self):
 
@@ -208,6 +208,19 @@ class TestSchemaValidation(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         self.assertEquals(errors.get('message'), "'lms ' does not match '^[0-9a-z]+$'")
+
+    def test_invalid_routing_when_answer_count(self):
+        """Asserts that invalid `when` routing_rules are caught for `answer_count`"""
+        file_name = 'schemas/test_invalid_routing_when_answer_count.json'
+        json_to_validate = self.open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The answer id - invalid-answer-id in the '
+                                               'answer_count key of the "when" clause for household-composition '
+                                               'does not exist')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The condition "contains" is not valid '
+                                               'for an answer_count based "when" clause')
 
     @staticmethod
     def open_and_load_schema_file(file):

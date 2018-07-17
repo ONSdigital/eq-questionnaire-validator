@@ -197,11 +197,28 @@ class Validator:
     @staticmethod
     def validate_when_rule(when_clause, existing_ids, referenced_id):
         # Validates any answer id in a when clause exists within the schema
+        answer_reference_id_fields = ('id', 'answer_count')
+
         for when in when_clause:
-            if 'id' in when:
-                if when['id'] not in existing_ids:
-                    return Validator._error_message('The answer id - {} in the "when" clause for {} does not exist'
-                                                    .format(when['id'], referenced_id))
+            # either of the reference fields may be in use, however it will
+            # never be the case that both are defined since this is handled by
+            # the JSON schema check
+            present_id_ref_keys = [x for x in answer_reference_id_fields if x in when]
+
+            if not present_id_ref_keys:
+                # No further validation required if there are no references to answers
+                continue
+
+            id_ref_key = present_id_ref_keys.pop()
+
+            if when[id_ref_key] not in existing_ids:
+                return Validator._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
+                                                .format(when[id_ref_key], id_ref_key, referenced_id))
+
+            if 'answer_count' == id_ref_key:
+                if when['condition'] in ('contains', 'not contains'):
+                    return Validator._error_message('The condition "{}" is not valid for an answer_count based "when" clause'
+                                                    .format(when['condition']))
 
     def validate_multiple_question_titles(self, question_titles, question_id, answer_ids):
         # Validates that the last title in a question titles object contains only a value key
