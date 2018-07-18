@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "answer": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "type": "string"
+      },
+      "guidance": {
+        "$ref": "../common_definitions.json#/guidance"
+      },
+      "description": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Duration"]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "units": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "enum": ["years", "months"]
+        }
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MANDATORY_DURATION": {
+              "type": "string"
+            },
+            "INVALID_DURATION": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "mandatory",
+      "units"
+    ]
+  }
+}
