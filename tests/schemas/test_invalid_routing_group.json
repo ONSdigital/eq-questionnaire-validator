@@ -25,6 +25,35 @@
                 {
                     "id": "which-group",
                     "title": "What group do you want to go to?",
+                    "routing_rules": [
+                        {
+                            "goto": {
+                                "group": "group1",
+                                "when": [{
+                                    "answer_count": "invalid-answer-id",
+                                    "condition": "equals",
+                                    "value": 2
+                                }]
+                            }
+                        },
+                        {
+                            "repeat": {
+                                "type": "until",
+                                "when": [
+                                    {
+                                        "id": "invalid-answer-id",
+                                        "condition": "equals",
+                                        "value": 2
+                                    },
+                                    {
+                                        "id": "group1-answer",
+                                        "condition": "equals",
+                                        "value": 2
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "blocks": [
                         {
                             "type": "Question",

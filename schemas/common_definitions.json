@@ -191,7 +191,8 @@
           ]
         }
       ]
-    }
+    },
+    "minItems": 1
   },
   "messages": {
     "type": "object",
@@ -349,24 +350,65 @@
           "additionalProperties": false
         },
         "repeat": {
-          "type": "object",
-          "properties": {
-            "answer_id": {
-              "type": "string"
-            },
-            "goto": {
-              "type": "string"
-            },
-            "type": {
-              "enum": [
-                "answer_value",
-                "answer_count",
-                "answer_count_minus_one"
-              ]
-            }
-          },
-          "required": [
-            "answer_id"
+          "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "until"
+                    ]
+                  },
+                  "when": {
+                    "$ref": "common_definitions.json#/when"
+                  }
+                },
+                "required": [
+                  "type",
+                  "when"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "answer_value",
+                      "answer_count_minus_one"
+                    ]
+                  },
+                  "answer_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "answer_id"
+                ],
+                "additionalProperties": false
+              },
+                          {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "answer_count"
+                    ]
+                  },
+                  "offset": {
+                    "type": "integer"
+                  },
+                  "answer_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "answer_id"
+                ],
+                "additionalProperties": false
+              }
           ]
         }
       },

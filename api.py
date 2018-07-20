@@ -8,4 +8,4 @@ application.register_blueprint(validate_blueprint)
 application.register_blueprint(status_blueprint)
 
 if __name__ == '__main__':
-    application.run()
+    application.run(port=5001)
