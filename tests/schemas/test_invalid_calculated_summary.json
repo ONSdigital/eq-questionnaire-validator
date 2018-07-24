@@ -1,0 +1,277 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.2",
+  "survey_id": "0",
+  "title": "A test schema to validate a sum of answers are Equal to a given total",
+  "theme": "default",
+  "legal_basis": "StatisticsOfTradeAct",
+  "description": "A survey that tests grouped and calculated answers against a total",
+  "metadata": {
+    "user_id": {
+      "validator": "string"
+    },
+    "period_id": {
+      "validator": "string"
+    },
+    "ru_name": {
+      "validator": "string"
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Total a range of values",
+          "blocks": [
+            {
+              "type": "Question",
+              "title": "First Number Block Title",
+              "id": "first-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "first-number-question",
+                  "title": "First Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "first-number-answer",
+                      "label": "First answer label",
+                      "mandatory": true,
+                      "type": "Currency",
+                      "currency": "GBP"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Question",
+              "title": "Second Number Block Title",
+              "id": "second-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "second-number-question",
+                  "title": "Second Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "second-number-answer",
+                      "label": "Second answer label",
+                      "mandatory": true,
+                      "type": "Number"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-type-error",
+              "titles": [
+                {
+                  "value": "We calculate the total of values entered to be %(total)s. Is this correct?"
+                }
+              ],
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "first-number-answer",
+                  "second-number-answer"
+                ],
+                "titles": [
+                  {
+                    "value": "Grand total of previous values"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "title": "Third Number Block Title",
+              "id": "third-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "third-number-question",
+                  "title": "third Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "third-number-answer",
+                      "label": "Third answer label",
+                      "mandatory": true,
+                      "type": "Currency",
+                      "currency": "GBP"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Question",
+              "title": "Fourth Number Block Title",
+              "id": "fourth-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "fourth-number-question",
+                  "title": "Fourth Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "fourth-number-answer",
+                      "label": "Fourth answer label",
+                      "mandatory": true,
+                      "type": "Currency",
+                      "currency": "EUR"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-currency-error",
+              "titles": [
+                {
+                  "value": "We calculate the total of values entered to be %(total)s. Is this correct?"
+                }
+              ],
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "third-number-answer",
+                  "fourth-number-answer"
+                ],
+                "titles": [
+                  {
+                    "value": "Grand total of previous values"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "title": "Fifth Number Block Title",
+              "id": "fifth-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "fifth-number-question",
+                  "title": "fifth Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "fifth-number-answer",
+                      "label": "Fifth answer label",
+                      "mandatory": true,
+                      "type": "Unit",
+                      "unit": "length-centimeter"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Question",
+              "title": "Sixth Number Block Title",
+              "id": "sixth-number-block",
+              "description": "",
+              "questions": [
+                {
+                  "id": "sixth-number-question",
+                  "title": "Sixth Number Question Title",
+                  "type": "General",
+                  "answers": [
+                    {
+                      "id": "sixth-number-answer",
+                      "label": "Sixth answer label",
+                      "mandatory": true,
+                      "type": "Unit",
+                      "unit": "length-meter"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-unit-error",
+              "titles": [
+                {
+                  "value": "We calculate the total of values entered to be %(total)s. Is this correct?"
+                }
+              ],
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "fifth-number-answer",
+                  "sixth-number-answer"
+                ],
+                "titles": [
+                  {
+                    "value": "Grand total of previous values"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-answer-error",
+              "titles": [
+                {
+                  "value": "We calculate the total of values entered to be %(total)s. Is this correct?"
+                }
+              ],
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "sixth-number-answer",
+                  "seventh-number-answer"
+                ],
+                "titles": [
+                  {
+                    "value": "Grand total of previous values"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-duplicate-error",
+              "titles": [
+                {
+                  "value": "We calculate the total of values entered to be %(total)s. Is this correct?"
+                }
+              ],
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "fourth-number-answer",
+                  "fourth-number-answer",
+                  "fifth-number-answer",
+                  "sixth-number-answer",
+                  "sixth-number-answer"
+                ],
+                "titles": [
+                  {
+                    "value": "Grand total of previous values"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

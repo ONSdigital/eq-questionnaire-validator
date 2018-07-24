@@ -220,7 +220,7 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEquals(errors.get('message'), "'lms ' does not match '^[0-9a-z]+$'")
+        self.assertEqual(errors.get('message'), "'lms ' does not match '^[0-9a-z]+$'")
 
     def test_invalid_routing_when_answer_count(self):
         """Asserts that invalid `when` routing_rules are caught for `answer_count`"""
@@ -234,6 +234,30 @@ class TestSchemaValidation(unittest.TestCase):
                                                'does not exist')
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The condition "contains" is not valid '
                                                'for an answer_count based "when" clause')
+
+    def test_invalid_calculated_summary(self):
+        """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
+        file_name = 'schemas/test_invalid_calculated_summary.json'
+        json_to_validate = self.open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 5)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. '
+                                               "All answers in block total-playback-type-error's answers_to_calculate "
+                                               'must be of the same type')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. '
+                                               "All answers in block total-playback-currency-error's "
+                                               'answers_to_calculate must be of the same currency')
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. '
+                                               "All answers in block total-playback-unit-error's "
+                                               'answers_to_calculate must be of the same unit')
+        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. '
+                                               "Invalid answer id 'seventh-number-answer' in block "
+                                               "total-playback-answer-error's answers_to_calculate")
+        self.assertEqual(errors[4]['message'], 'Schema Integrity Error. '
+                                               "Duplicate answers: {'sixth-number-answer', 'fourth-number-answer'} "
+                                               "in block total-playback-duplicate-error's answers_to_calculate")
 
     @staticmethod
     def open_and_load_schema_file(file):

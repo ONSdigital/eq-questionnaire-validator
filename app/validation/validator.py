@@ -18,7 +18,7 @@ class Validator:
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
 
-    def validate_schema(self, json_to_validate):  # noqa: C901  pylint: disable=too-complex
+    def validate_schema(self, json_to_validate):  # noqa: C901  pylint: disable=too-complex, too-many-branches
 
         schema_errors = self._validate_json_against_schema(json_to_validate)
 
@@ -30,7 +30,7 @@ class Validator:
         errors.extend(self._validate_schema_contain_metadata(json_to_validate))
 
         numeric_answer_ranges = {}
-        answer_ids_with_group_id = self._get_answer_ids_with_group_id(json_to_validate)
+        answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
 
         all_groups = []
         for section in json_to_validate.get('sections'):
@@ -43,8 +43,8 @@ class Validator:
                     errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
                     errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                    errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, group))
-                    errors.extend(self.validate_repeat_when_rule_restricted(rule, answer_ids_with_group_id, group))
+                    errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answers_with_parent_ids, group))
+                    errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
                 for block in group['blocks']:
 
@@ -57,8 +57,11 @@ class Validator:
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, block))
+                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answers_with_parent_ids, block))
                         errors.extend(self.validate_repeat_rule_restricted(rule, block))
+
+                    if block['type'] == 'CalculatedSummary':
+                        errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
 
                     for question in block.get('questions', []):
 
@@ -68,7 +71,7 @@ class Validator:
                         if question.get('titles'):
                             errors.extend(self.validate_multiple_question_titles(question['titles'],
                                                                                  question['id'],
-                                                                                 answer_ids_with_group_id))
+                                                                                 answers_with_parent_ids))
 
                         for answer in question.get('answers', []):
                             errors.extend(self.validate_routing_on_answer_options(block, answer))
@@ -179,18 +182,18 @@ class Validator:
         errors = []
 
         if 'repeat' in rule and 'when' in rule['repeat']:
-            when = rule['repeat']['when']
-            if len(when) > 1:
+            whens = rule['repeat']['when']
+            if len(whens) > 1:
                 errors.append(Validator._error_message('The "when" clause in the repeat for {} has more than one condition'
                                                        .format(group['id'])))
 
-            for w in when:
-                if 'id' not in w:
+            for when in whens:
+                if 'id' not in when:
                     errors.append(Validator._error_message('The "when" clause in the repeat for {} must be based on "id"'
                                                            .format(group['id'])))
-                elif w['id'] in answer_ids_with_group_id and answer_ids_with_group_id[w['id']]['group_id'] != group['id']:
+                elif when['id'] in answer_ids_with_group_id and answer_ids_with_group_id[when['id']]['group_id'] != group['id']:
                     errors.append(Validator._error_message('The answer id - {} in the id key of the "when" clause for {} is not in the same group'
-                                                           .format(w['id'], group['id'])))
+                                                           .format(when['id'], group['id'])))
 
         return errors
 
@@ -203,6 +206,46 @@ class Validator:
                                                    .format(block['id'])))
 
         return errors
+
+    def validate_calculated_summary_type(self, block, answers_with_parent_ids):
+        answers_to_calculate = block['calculation']['answers_to_calculate']
+        try:
+            answer_types = [
+                answers_with_parent_ids[answer_id]['answer']['type']
+                for answer_id in answers_to_calculate
+            ]
+        except KeyError as e:
+            return [self._error_message(
+                "Invalid answer id {} in block {}'s answers_to_calculate".format(e, block['id']))]
+
+        duplicates = set([answer for answer in answers_to_calculate if answers_to_calculate.count(answer) > 1])
+        if duplicates:
+            return [self._error_message(
+                "Duplicate answers: {} in block {}'s answers_to_calculate".format(duplicates, block['id']))]
+
+        if not all(answer_type == answer_types[0] for answer_type in answer_types):
+            return [self._error_message(
+                "All answers in block {}'s answers_to_calculate must be of the same type".format(block['id']))]
+
+        if answer_types[0] == 'Unit':
+            unit_types = [
+                answers_with_parent_ids[answer_id]['answer']['unit']
+                for answer_id in answers_to_calculate
+            ]
+            if not all(unit_type == unit_types[0] for unit_type in unit_types):
+                return [self._error_message(
+                    "All answers in block {}'s answers_to_calculate must be of the same unit".format(block['id']))]
+
+        if answer_types[0] == 'Currency':
+            currency_types = [
+                answers_with_parent_ids[answer_id]['answer']['currency']
+                for answer_id in answers_to_calculate
+            ]
+            if not all(currency_type == currency_types[0] for currency_type in currency_types):
+                return [self._error_message(
+                    "All answers in block {}'s answers_to_calculate must be of the same currency".format(block['id']))]
+
+        return []
 
     def validate_routing_on_answer_options(self, block, answer):
         answer_errors = []
@@ -255,7 +298,7 @@ class Validator:
                 return Validator._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
                                                 .format(when[id_ref_key], id_ref_key, referenced_id))
 
-            if 'answer_count' == id_ref_key:
+            if id_ref_key == 'answer_count':
                 if when['condition'] in ('contains', 'not contains'):
                     return Validator._error_message('The condition "{}" is not valid for an answer_count based "when" clause'
                                                     .format(when['condition']))
@@ -620,7 +663,7 @@ class Validator:
         return datetime.strptime(value, date_format) if value else None
 
     @staticmethod
-    def _get_answer_ids_with_group_id(json_to_validate):
+    def _get_answers_with_parent_ids(json_to_validate):
         answers = {}
 
         for section in json_to_validate.get('sections'):
@@ -629,6 +672,11 @@ class Validator:
                     if block.get('questions'):
                         for question in block['questions']:
                             for answer in question.get('answers', []):
-                                answers[answer['id']] = {'group_id': group['id']}
+                                answers[answer['id']] = {
+                                    'answer': answer,
+                                    'block': block['id'],
+                                    'group_id': group['id'],
+                                    'section': section['id']
+                                }
 
         return answers
