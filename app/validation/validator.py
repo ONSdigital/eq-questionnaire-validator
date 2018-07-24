@@ -30,7 +30,7 @@ class Validator:
         errors.extend(self._validate_schema_contain_metadata(json_to_validate))
 
         numeric_answer_ranges = {}
-        all_answer_ids = self._get_all_answer_ids(json_to_validate)
+        answer_ids_with_group_id = self._get_answer_ids_with_group_id(json_to_validate)
 
         all_groups = []
         for section in json_to_validate.get('sections'):
@@ -38,6 +38,14 @@ class Validator:
 
         for section in json_to_validate['sections']:
             for group in section['groups']:
+
+                for rule in group.get('routing_rules', []):
+                    errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+                    errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+
+                    errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, group))
+                    errors.extend(self.validate_repeat_when_rule_restricted(rule, answer_ids_with_group_id, group))
+
                 for block in group['blocks']:
 
                     if section == json_to_validate['sections'][-1] \
@@ -49,7 +57,8 @@ class Validator:
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, all_answer_ids, block))
+                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, block))
+                        errors.extend(self.validate_repeat_rule_restricted(rule, block))
 
                     for question in block.get('questions', []):
 
@@ -59,7 +68,7 @@ class Validator:
                         if question.get('titles'):
                             errors.extend(self.validate_multiple_question_titles(question['titles'],
                                                                                  question['id'],
-                                                                                 all_answer_ids))
+                                                                                 answer_ids_with_group_id))
 
                         for answer in question.get('answers', []):
                             errors.extend(self.validate_routing_on_answer_options(block, answer))
@@ -154,13 +163,44 @@ class Validator:
         return errors
 
     @staticmethod
-    def validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids, block):
+    def validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, block_or_group):
         errors = []
 
-        if 'when' in rule['goto']:
-            when_errors = Validator.validate_when_rule(rule['goto']['when'], answer_ids, block['id'])
+        rule = rule.get('goto') or rule.get('repeat')
+        if 'when' in rule:
+            when_errors = Validator.validate_when_rule(rule['when'], answer_ids_with_group_id, block_or_group['id'])
             if when_errors:
                 errors.append(when_errors)
+
+        return errors
+
+    @staticmethod
+    def validate_repeat_when_rule_restricted(rule, answer_ids_with_group_id, group):
+        errors = []
+
+        if 'repeat' in rule and 'when' in rule['repeat']:
+            when = rule['repeat']['when']
+            if len(when) > 1:
+                errors.append(Validator._error_message('The "when" clause in the repeat for {} has more than one condition'
+                                                       .format(group['id'])))
+
+            for w in when:
+                if 'id' not in w:
+                    errors.append(Validator._error_message('The "when" clause in the repeat for {} must be based on "id"'
+                                                           .format(group['id'])))
+                elif w['id'] in answer_ids_with_group_id and answer_ids_with_group_id[w['id']]['group_id'] != group['id']:
+                    errors.append(Validator._error_message('The answer id - {} in the id key of the "when" clause for {} is not in the same group'
+                                                           .format(w['id'], group['id'])))
+
+        return errors
+
+    @staticmethod
+    def validate_repeat_rule_restricted(rule, block):
+        errors = []
+
+        if 'repeat' in rule:
+            errors.append(Validator._error_message('The block {} has a repeating routing rule'
+                                                   .format(block['id'])))
 
         return errors
 
@@ -195,7 +235,7 @@ class Validator:
         return answer_errors
 
     @staticmethod
-    def validate_when_rule(when_clause, existing_ids, referenced_id):
+    def validate_when_rule(when_clause, answer_ids_with_group_id, referenced_id):
         # Validates any answer id in a when clause exists within the schema
         answer_reference_id_fields = ('id', 'answer_count')
 
@@ -211,7 +251,7 @@ class Validator:
 
             id_ref_key = present_id_ref_keys.pop()
 
-            if when[id_ref_key] not in existing_ids:
+            if when[id_ref_key] not in answer_ids_with_group_id:
                 return Validator._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
                                                 .format(when[id_ref_key], id_ref_key, referenced_id))
 
@@ -580,8 +620,8 @@ class Validator:
         return datetime.strptime(value, date_format) if value else None
 
     @staticmethod
-    def _get_all_answer_ids(json_to_validate):
-        answer_ids = []
+    def _get_answer_ids_with_group_id(json_to_validate):
+        answers = {}
 
         for section in json_to_validate.get('sections'):
             for group in section.get('groups'):
@@ -589,6 +629,6 @@ class Validator:
                     if block.get('questions'):
                         for question in block['questions']:
                             for answer in question.get('answers', []):
-                                answer_ids.append(answer['id'])
+                                answers[answer['id']] = {'group_id': group['id']}
 
-        return answer_ids
+        return answers

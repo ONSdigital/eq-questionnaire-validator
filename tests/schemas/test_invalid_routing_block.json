@@ -24,33 +24,33 @@
             "blocks": [{
                 "type": "Question",
                 "id": "conditional-routing-block",
-                    "title": "Conditional Routing Test",
-                    "description": "Testing invalid routing with an options answer",
-                    "questions": [{
-                        "id": "conditional-routing-question",
-                        "title": "Do you drink coffee?",
-                        "description": "",
-                        "type": "General",
-                        "answers": [{
-                            "options": [
-                                {
-                                    "label": "Yes",
-                                    "value": "yes",
-                                    "description": ""
-                                },
-                                {
-                                    "label": "No, I prefer tea",
-                                    "value": "no",
-                                    "description": ""
-                                }
-                            ],
-                            "q_code": "1",
-                            "id": "conditional-routing-answer",
-                            "label": "Which conditional question should we jump to?",
-                            "mandatory": true,
-                            "type": "Radio"
-                        }]
-                    }],
+                "title": "Conditional Routing Test",
+                "description": "Testing invalid routing with an options answer",
+                "questions": [{
+                    "id": "conditional-routing-question",
+                    "title": "Do you drink coffee?",
+                    "description": "",
+                    "type": "General",
+                    "answers": [{
+                        "options": [
+                            {
+                                "label": "Yes",
+                                "value": "yes",
+                                "description": ""
+                            },
+                            {
+                                "label": "No, I prefer tea",
+                                "value": "no",
+                                "description": ""
+                            }
+                        ],
+                        "q_code": "1",
+                        "id": "conditional-routing-answer",
+                        "label": "Which conditional question should we jump to?",
+                        "mandatory": true,
+                        "type": "Radio"
+                    }]
+                }],
                 "routing_rules":[
                     {
                         "goto": {
@@ -63,7 +63,6 @@
                                 }
                             ]
                         }
-
                     },
                     {
                         "goto": {
@@ -76,28 +75,27 @@
                                 }
                             ]
                         }
-
                     }
                 ]
             },
             {
                 "type": "Question",
                 "id": "response-yes",
-                    "title": "Yes, I do drink coffee",
-                    "description": "",
-                    "questions": [{
-                        "id": "response-yes-question",
-                        "title": "How many cups of coffee do you drink a day?",
-                        "description": "testing invalid answer in a non options answer",
-                        "type": "General",
-                        "answers": [{
-                            "id": "response-yes-number-of-cups",
-                            "label": "Number of cups",
-                            "mandatory": true,
-                            "q_code": "2",
-                            "type": "Number"
-                        }]
-                    }],
+                "title": "Yes, I do drink coffee",
+                "description": "",
+                "questions": [{
+                    "id": "response-yes-question",
+                    "title": "How many cups of coffee do you drink a day?",
+                    "description": "testing invalid answer in a non options answer",
+                    "type": "General",
+                    "answers": [{
+                        "id": "response-yes-number-of-cups",
+                        "label": "Number of cups",
+                        "mandatory": true,
+                        "q_code": "2",
+                        "type": "Number"
+                    }]
+                }],
                 "routing_rules":[
                     {
                         "goto": {
@@ -117,6 +115,18 @@
                             "block" : "summary"
                         }
 
+                    },
+                    {
+                        "repeat": {
+                            "type": "until",
+                            "when": [
+                                {
+                                    "id": "response-yes-number-of-cups",
+                                    "condition": "equals",
+                                    "value": 2
+                                }
+                            ]
+                        }
                     }
                 ]
             },
