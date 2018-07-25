@@ -79,7 +79,10 @@
                 "object"
               ]
             }
-          }
+          },
+          "required": [
+            "validator"
+          ]
         }
       },
       "additionalProperties": false
