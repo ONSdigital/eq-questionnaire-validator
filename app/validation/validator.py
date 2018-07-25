@@ -113,7 +113,16 @@ class Validator:
         # user_id and period_id required downstream for receipting
         # ru_name required for template rendering in default and NI theme
         default_metadata = ['user_id', 'period_id']
-        schema_metadata = schema['metadata']
+        schema_metadata = [metadata_field['name'] for metadata_field in schema['metadata']]
+
+        if len(schema_metadata) != len(set(schema_metadata)):
+            errors.append(self._error_message('Mandatory Metadata - contains duplicates'))
+
+        required_metadata_names = ['user_id', 'period_id']
+        for metadata_name in required_metadata_names:
+            if metadata_name not in schema_metadata:
+                errors.append(self._error_message(
+                    'Mandatory Metadata - `{}` not specified in metadata field'.format(metadata_name)))
 
         if schema['theme'] in ['default', 'northernireland']:
             if 'ru_name' not in schema_metadata:
@@ -127,11 +136,11 @@ class Validator:
 
         # Checks if piped/routed metadata is defined in the schema
         for metadata in all_metadata:
-            if metadata not in schema_metadata.keys():
+            if metadata not in schema_metadata:
                 errors.append(self._error_message('Metadata - {} not specified in metadata field'.format(metadata)))
 
         # Checks if unused metadata is defined
-        for metadata in schema_metadata.keys():
+        for metadata in schema_metadata:
             if metadata not in all_metadata and metadata not in default_metadata:
                 errors.append(self._error_message('Unused metadata defined in metadata field - {}'.format(metadata)))
 

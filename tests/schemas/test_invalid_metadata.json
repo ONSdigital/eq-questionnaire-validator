@@ -1,110 +1,145 @@
 {
-    "data_version": "0.0.1",
-    "description": "Test Schema Context",
-    "mime_type": "application/json/ons/eq",
-    "schema_version": "0.0.1",
-    "survey_id": "144",
-    "theme": "default",
-    "legal_basis": "Voluntary",
-    "title": "Test Schema Context",
-    "metadata": {
-        "user_id": {
-            "validator": "string"
-        },
-        "period_id": {
-            "validator": "string"
-        },
-        "trad_as": {
-            "validator": "string"
-        },
-        "period_str": {
-            "validator": "string"
-        },
-        "trad_as_or_ru_name": {
-            "validator": "string"
-        },
-        "ref_p_start_date": {
-            "validator": "date"
-        },
-        "ref_p_end_date": {
-            "validator": "date"
-        },
-        "employment_date": {
-            "validator": "date"
-        },
-        "return_by": {
-            "validator": "date"
-        },
-        "region_code": {
-            "validator": "string"
-        },
-        "variant_flags": {
-            "validator": "object"
-        },
-        "invalid_metadata": {
-            "validator": "string"
-        }
+  "data_version": "0.0.1",
+  "description": "Test Schema Context",
+  "legal_basis": "Voluntary",
+  "metadata": [
+    {
+      "name": "return_by",
+      "validator": "date"
     },
-    "sections": [{
-        "id": "default-section",
-        "groups": [{
-                "blocks": [{
-                    "id": "introduction",
-                    "type": "Introduction",
-                    "primary_content": [{
-                        "type": "Preview",
-                        "id": "preview",
-                        "title": "",
-                        "content": [{
-                            "title": "period_str: {{ metadata['period_str'] }}"
-                        }, {
-                            "title": "trad_as: {{ metadata['trad_as'] }}"
-                        }, {
-                            "title": "trad_as_or_ru_name: {{ metadata['trad_as_or_ru_name'] }}"
-                        }, {
-                            "title": "ref_p_start_date: {{ metadata['ref_p_start_date'] }}"
-                        }, {
-                            "title": "ref_p_end_date: {{ metadata['ref_p_end_date'] }}"
-                        }, {
-                            "title": "employment_date: {{ metadata['employment_date'] }}"
-                        }, {
-                            "title": "return_by: {{ metadata['return_by'] }}"
-                        }, {
-                            "title": "region_code: {{ metadata['region_code'] }}"
-                        }, {
-                            "title": "variant_flags: {{ metadata['variant_flags'] }}"
-                        }, {
-
-                            "title": "Invalid: {{ metadata['invalid'] }}"
-                        }]
-                    }]
-                }],
-                "id": "general-business-information",
-                "title": "General Business Information"
-            },
+    {
+      "name": "period_id",
+      "validator": "string"
+    },
+    {
+      "name": "region_code",
+      "validator": "string"
+    },
+    {
+      "name": "invalid_metadata",
+      "validator": "string"
+    },
+    {
+      "name": "ref_p_start_date",
+      "validator": "date"
+    },
+    {
+      "name": "trad_as_or_ru_name",
+      "validator": "string"
+    },
+    {
+      "name": "trad_as",
+      "validator": "string"
+    },
+    {
+      "name": "user_id",
+      "validator": "string"
+    },
+    {
+      "name": "ref_p_end_date",
+      "validator": "date"
+    },
+    {
+      "name": "employment_date",
+      "validator": "date"
+    },
+    {
+      "name": "variant_flags",
+      "validator": "object"
+    },
+    {
+      "name": "period_str",
+      "validator": "string"
+    }
+  ],
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
             {
-                "blocks": [{
-                    "id": "confirmation",
-                    "description": "",
-                    "questions": [{
-                        "id": "ready-to-submit-completed-question",
-                        "title": "Submission",
-                        "type": "Content",
-                        "guidance": {
-                            "content": [{
-                                "list": [
-                                    "You will not be able to access or change your answers on submitting the questionnaire",
-                                    "If you wish to review your answers please select the relevant completed sections"
-                                ]
-                            }]
-                        }
-                    }],
-                    "title": "You are now ready to submit this survey",
-                    "type": "Confirmation"
-                }],
-                "id": "ready-to-submit",
-                "title": "Submit answers"
+              "id": "introduction",
+              "primary_content": [
+                {
+                  "content": [
+                    {
+                      "title": "period_str: {{ metadata['period_str'] }}"
+                    },
+                    {
+                      "title": "trad_as: {{ metadata['trad_as'] }}"
+                    },
+                    {
+                      "title": "trad_as_or_ru_name: {{ metadata['trad_as_or_ru_name'] }}"
+                    },
+                    {
+                      "title": "ref_p_start_date: {{ metadata['ref_p_start_date'] }}"
+                    },
+                    {
+                      "title": "ref_p_end_date: {{ metadata['ref_p_end_date'] }}"
+                    },
+                    {
+                      "title": "employment_date: {{ metadata['employment_date'] }}"
+                    },
+                    {
+                      "title": "return_by: {{ metadata['return_by'] }}"
+                    },
+                    {
+                      "title": "region_code: {{ metadata['region_code'] }}"
+                    },
+                    {
+                      "title": "variant_flags: {{ metadata['variant_flags'] }}"
+                    },
+                    {
+                      "title": "Invalid: {{ metadata['invalid'] }}"
+                    }
+                  ],
+                  "id": "preview",
+                  "title": "",
+                  "type": "Preview"
+                }
+              ],
+              "type": "Introduction"
             }
-        ]
-    }]
+          ],
+          "id": "general-business-information",
+          "title": "General Business Information"
+        },
+        {
+          "blocks": [
+            {
+              "description": "",
+              "id": "confirmation",
+              "questions": [
+                {
+                  "guidance": {
+                    "content": [
+                      {
+                        "list": [
+                          "You will not be able to access or change your answers on submitting the questionnaire",
+                          "If you wish to review your answers please select the relevant completed sections"
+                        ]
+                      }
+                    ]
+                  },
+                  "id": "ready-to-submit-completed-question",
+                  "title": "Submission",
+                  "type": "Content"
+                }
+              ],
+              "title": "You are now ready to submit this survey",
+              "type": "Confirmation"
+            }
+          ],
+          "id": "ready-to-submit",
+          "title": "Submit answers"
+        }
+      ],
+      "id": "default-section"
+    }
+  ],
+  "survey_id": "144",
+  "theme": "default",
+  "title": "Test Schema Context"
 }

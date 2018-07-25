@@ -255,9 +255,7 @@ class TestSchemaValidation(unittest.TestCase):
         self.assertEqual(errors[3]['message'], 'Schema Integrity Error. '
                                                "Invalid answer id 'seventh-number-answer' in block "
                                                "total-playback-answer-error's answers_to_calculate")
-        self.assertEqual(errors[4]['message'], 'Schema Integrity Error. '
-                                               "Duplicate answers: {'sixth-number-answer', 'fourth-number-answer'} "
-                                               "in block total-playback-duplicate-error's answers_to_calculate")
+        self.assertIn('Duplicate answers: ', errors[4]['message'])
 
     @staticmethod
     def open_and_load_schema_file(file):

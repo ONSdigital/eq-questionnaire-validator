@@ -1,156 +1,170 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "schema_version": "0.0.1",
-    "data_version": "0.0.1",
-    "survey_id": "0",
-    "title": "Test Invalid Routing To Group",
-    "description": "",
-    "theme": "default",
-    "legal_basis": "StatisticsOfTradeAct",
-    "metadata": {
-        "user_id": {
-            "validator": "string"
-        },
-        "period_id": {
-            "validator": "string"
-        },
-        "ru_name": {
-            "validator": "string"
-        }
+  "data_version": "0.0.1",
+  "description": "",
+  "legal_basis": "StatisticsOfTradeAct",
+  "metadata": [
+    {
+      "name": "user_id",
+      "validator": "string"
     },
-    "sections": [
+    {
+      "name": "ru_name",
+      "validator": "string"
+    },
+    {
+      "name": "period_id",
+      "validator": "string"
+    }
+  ],
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "sections": [
+    {
+      "groups": [
         {
-            "id": "section1",
-            "groups": [
+          "blocks": [
+            {
+              "description": "",
+              "id": "which-group-block",
+              "questions": [
                 {
-                    "id": "which-group",
-                    "title": "What group do you want to go to?",
-                    "routing_rules": [
+                  "answers": [
+                    {
+                      "id": "which-group-answer",
+                      "label": "Choose next group",
+                      "mandatory": true,
+                      "options": [
                         {
-                            "goto": {
-                                "group": "group1",
-                                "when": [{
-                                    "answer_count": "invalid-answer-id",
-                                    "condition": "equals",
-                                    "value": 2
-                                }]
-                            }
+                          "label": "Group 1",
+                          "value": "group1"
                         },
                         {
-                            "repeat": {
-                                "type": "until",
-                                "when": [
-                                    {
-                                        "id": "invalid-answer-id",
-                                        "condition": "equals",
-                                        "value": 2
-                                    },
-                                    {
-                                        "id": "group1-answer",
-                                        "condition": "equals",
-                                        "value": 2
-                                    }
-                                ]
-                            }
+                          "label": "Group 2",
+                          "value": "group2"
                         }
-                    ],
-                    "blocks": [
-                        {
-                            "type": "Question",
-                            "id": "which-group-block",
-                            "description": "",
-                            "title": "Pick your next group?",
-                            "questions": [
-                                {
-                                    "description": "",
-                                    "id": "which-group-question",
-                                    "title": "Select Group",
-                                    "type": "General",
-                                    "answers": [
-                                        {
-                                            "id": "which-group-answer",
-                                            "label": "Choose next group",
-                                            "mandatory": true,
-                                            "options": [
-                                                {
-                                                    "label": "Group 1",
-                                                    "value": "group1"
-                                                },
-                                                {
-                                                    "label": "Group 2",
-                                                    "value": "group2"
-                                                }
-                                            ],
-                                            "type": "Radio",
-                                            "validation": {
-                                                "messages": {}
-                                            }
-                                        }
-                                    ]
-                                }
-                            ],
-                            "routing_rules": [
-                                {
-                                    "goto": {
-                                        "group": "group1",
-                                        "when": [
-                                            {
-                                                "id": "which-group-answer",
-                                                "condition": "equals",
-                                                "value": "group1"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "goto": {
-                                        "group": "invalid-group",
-                                        "when": [
-                                            {
-                                                "id": "which-group-answer",
-                                                "condition": "equals",
-                                                "value": "group2"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                      ],
+                      "type": "Radio",
+                      "validation": {
+                        "messages": {}
+                      }
+                    }
+                  ],
+                  "description": "",
+                  "id": "which-group-question",
+                  "title": "Select Group",
+                  "type": "General"
                 }
-            ]
-        },
-        {
-            "id": "section2",
-            "groups": [
+              ],
+              "routing_rules": [
+                {
+                  "goto": {
+                    "group": "group1",
+                    "when": [
+                      {
+                        "condition": "equals",
+                        "id": "which-group-answer",
+                        "value": "group1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "group": "invalid-group",
+                    "when": [
+                      {
+                        "condition": "equals",
+                        "id": "which-group-answer",
+                        "value": "group2"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "title": "Pick your next group?",
+              "type": "Question"
+            }
+          ],
+          "id": "which-group",
+          "routing_rules": [
             {
-                "id": "group1",
-                "title": "This is Group 1",
-                "blocks": [{
-                    "type": "Question",
-                    "id": "group1-block",
-                    "title": "Did you want Group 1?",
-                    "questions": [{
-                        "id": "group1-question",
-                        "title": "Did you want Group 1?",
-                        "type": "General",
-                        "answers": [{
-                            "id": "group1-answer",
-                            "label": "Why did you choose Group 1?",
-                            "mandatory": true,
-                            "type": "TextArea"
-                        }]
-                    }]
-                }]
+              "goto": {
+                "group": "group1",
+                "when": [
+                  {
+                    "answer_count": "invalid-answer-id",
+                    "condition": "equals",
+                    "value": 2
+                  }
+                ]
+              }
             },
             {
-                "blocks": [{
-                    "type": "Summary",
-                    "id": "summary"
-                }],
-                "id": "summary-group",
-                "title": "Summary"
+              "repeat": {
+                "type": "until",
+                "when": [
+                  {
+                    "condition": "equals",
+                    "id": "invalid-answer-id",
+                    "value": 2
+                  },
+                  {
+                    "condition": "equals",
+                    "id": "group1-answer",
+                    "value": 2
+                  }
+                ]
+              }
             }
-        ]
-    }]
+          ],
+          "title": "What group do you want to go to?"
+        }
+      ],
+      "id": "section1"
+    },
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "group1-block",
+              "questions": [
+                {
+                  "answers": [
+                    {
+                      "id": "group1-answer",
+                      "label": "Why did you choose Group 1?",
+                      "mandatory": true,
+                      "type": "TextArea"
+                    }
+                  ],
+                  "id": "group1-question",
+                  "title": "Did you want Group 1?",
+                  "type": "General"
+                }
+              ],
+              "title": "Did you want Group 1?",
+              "type": "Question"
+            }
+          ],
+          "id": "group1",
+          "title": "This is Group 1"
+        },
+        {
+          "blocks": [
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ],
+          "id": "summary-group",
+          "title": "Summary"
+        }
+      ],
+      "id": "section2"
+    }
+  ],
+  "survey_id": "0",
+  "theme": "default",
+  "title": "Test Invalid Routing To Group"
 }
