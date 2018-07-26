@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "CalculatedSummary"
+        ]
+      },
+      "titles": {
+        "$ref": "../common_definitions.json#/titles"
+      },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "calculation": {
+        "type": "object",
+        "properties": {
+          "calculation_type": {
+            "type": "string",
+            "enum": [
+              "sum"
+            ]
+          },
+          "answers_to_calculate": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "../common_definitions.json#/id"
+            },
+            "description": "The id of the answers from which to do calculated_type to"
+          },
+          "titles": {
+            "$ref": "../common_definitions.json#/titles"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calculation_type",
+          "answers_to_calculate",
+          "titles"
+        ]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "titles",
+      "calculation"
+    ]
+  }
+}

@@ -167,10 +167,10 @@
                   "items": {
                     "oneOf": [
                       {
-                        "$ref": "blocks/introduction.json#/block"
+                        "$ref": "blocks/calculated_summary.json#/block"
                       },
                       {
-                        "$ref": "blocks/question.json#/block"
+                        "$ref": "blocks/confirmation.json#/block"
                       },
                       {
                         "$ref": "blocks/confirmation_question.json#/block"
@@ -179,10 +179,13 @@
                         "$ref": "blocks/interstitial.json#/block"
                       },
                       {
-                        "$ref": "blocks/summary.json#/block"
+                        "$ref": "blocks/introduction.json#/block"
                       },
                       {
-                        "$ref": "blocks/confirmation.json#/block"
+                        "$ref": "blocks/question.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/summary.json#/block"
                       }
                     ]
                   }
