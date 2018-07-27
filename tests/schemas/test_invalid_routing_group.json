@@ -115,6 +115,14 @@
                   }
                 ]
               }
+            },
+            {
+              "repeat": {
+                "type": "group",
+                "group_ids": [
+                  "invalid-group-id"
+                ]
+              }
             }
           ],
           "title": "What group do you want to go to?"
