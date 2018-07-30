@@ -1,58 +1,72 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "schema_version": "0.0.1",
-    "data_version": "0.0.1",
-    "survey_id": "0",
-    "title": "Test Schema ID",
-    "theme": "default",
-    "legal_basis": "StatisticsOfTradeAct",
-    "description": "A questionnaire to test schema id regex",
-    "metadata": {
-        "user_id": {
-            "validator": "string"
-        },
-        "period_id": {
-            "validator": "string"
-        },
-        "ru_name": {
-            "validator": "string"
-        }
+  "data_version": "0.0.1",
+  "description": "A questionnaire to test schema id regex",
+  "legal_basis": "StatisticsOfTradeAct",
+  "metadata": [
+    {
+      "name": "user_id",
+      "validator": "string"
     },
-    "sections": [{
-        "id": "section1",
-        "groups": [{
-            "blocks": [{
-                "type": "Question",
-                "id": "block",
-                "questions": [{
-                    "answers": [{
-                        "description": "Enter percentage of growth",
-                        "id": "answer",
-                        "label": "New to the market 2012-2014",
-                        "mandatory": false,
-                        "q_code": "0",
-                        "type": "Percentage",
-                        "max_value": {
-                            "value": 100
-                        }
-                    }],
-                    "id": "question",
-                    "title": "Test Question",
-                    "type": "General"
-                }],
-                "title": "Percentage Input Test"
-            }],
-                "id": "group",
-                "title": "Test Group"
-            },
+    {
+      "name": "ru_name",
+      "validator": "string"
+    },
+    {
+      "name": "period_id",
+      "validator": "string"
+    }
+  ],
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
             {
-                "blocks": [{
-                    "type": "Summary",
-                    "id": "summary"
-                }],
-                "id": "summary-group",
-                "title": "Summary"
+              "id": "block",
+              "questions": [
+                {
+                  "answers": [
+                    {
+                      "description": "Enter percentage of growth",
+                      "id": "answer",
+                      "label": "New to the market 2012-2014",
+                      "mandatory": false,
+                      "max_value": {
+                        "value": 100
+                      },
+                      "q_code": "0",
+                      "type": "Percentage"
+                    }
+                  ],
+                  "id": "question",
+                  "title": "Test Question",
+                  "type": "General"
+                }
+              ],
+              "title": "Percentage Input Test",
+              "type": "Question"
             }
-        ]
-    }]
+          ],
+          "id": "group",
+          "title": "Test Group"
+        },
+        {
+          "blocks": [
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ],
+          "id": "summary-group",
+          "title": "Summary"
+        }
+      ],
+      "id": "section1"
+    }
+  ],
+  "survey_id": "0",
+  "theme": "default",
+  "title": "Test Schema ID"
 }

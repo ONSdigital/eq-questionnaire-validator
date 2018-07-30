@@ -1,66 +1,77 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "schema_version": "0.0.1",
-    "data_version": "0.0.2",
-    "survey_id": "023",
-    "title": "Date formats",
-    "description": "A test schema for different date formats",
-    "theme": "default",
-    "legal_basis": "StatisticsOfTradeAct",
-    "metadata": {
-        "user_id": {
-            "validator": "string"
-        },
-        "period_id": {
-            "validator": "string"
-        },
-        "ru_name": {
-            "validator": "string"
-        }
+  "data_version": "0.0.2",
+  "description": "A test schema for different date formats",
+  "legal_basis": "StatisticsOfTradeAct",
+  "metadata": [
+    {
+      "name": "user_id",
+      "validator": "string"
     },
-    "sections": [{
-        "id": "default-section",
-        "groups": [{
-            "id": "dates",
-            "title": "Date Range Validation",
-            "blocks": [{
-                    "type": "Question",
-                    "id": "date-range-block",
-                    "title": "Date Range",
-                    "questions": [{
-                        "id": "date-range-question",
-                        "title": "Enter Date Range",
-                        "type": "DateRange",
-                        "period_limits": {
-                            "minimum": {
-                                "years": 1,
-                                "days": 23
-                            },
-                            "maximum": {
-                                "months": 1,
-                                "days": 20
-                            }
-                        },
-                        "answers": [{
-                                "id": "date-range-from",
-                                "label": "Period from",
-                                "mandatory": true,
-                                "type": "Date"
-                            },
-                            {
-                                "id": "date-range-to",
-                                "label": "Period to",
-                                "mandatory": true,
-                                "type": "Date"
-                            }
-                        ]
-                    }]
-                },
+    {
+      "name": "ru_name",
+      "validator": "string"
+    },
+    {
+      "name": "period_id",
+      "validator": "string"
+    }
+  ],
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "date-range-block",
+              "questions": [
                 {
-                    "type": "Summary",
-                    "id": "summary"
+                  "answers": [
+                    {
+                      "id": "date-range-from",
+                      "label": "Period from",
+                      "mandatory": true,
+                      "type": "Date"
+                    },
+                    {
+                      "id": "date-range-to",
+                      "label": "Period to",
+                      "mandatory": true,
+                      "type": "Date"
+                    }
+                  ],
+                  "id": "date-range-question",
+                  "period_limits": {
+                    "maximum": {
+                      "days": 20,
+                      "months": 1
+                    },
+                    "minimum": {
+                      "days": 23,
+                      "years": 1
+                    }
+                  },
+                  "title": "Enter Date Range",
+                  "type": "DateRange"
                 }
-            ]
-        }]
-    }]
+              ],
+              "title": "Date Range",
+              "type": "Question"
+            },
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ],
+          "id": "dates",
+          "title": "Date Range Validation"
+        }
+      ],
+      "id": "default-section"
+    }
+  ],
+  "survey_id": "023",
+  "theme": "default",
+  "title": "Date formats"
 }

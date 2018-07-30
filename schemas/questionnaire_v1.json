@@ -62,30 +62,28 @@
       ]
     },
     "metadata": {
-      "type": "object",
-      "required": [
-        "user_id",
-        "period_id"
-      ],
-      "patternProperties": {
-        "^.*$": {
-          "type": "object",
-          "properties": {
-            "validator": {
-              "type": "string",
-              "enum": [
-                "date",
-                "string",
-                "object"
-              ]
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "required": [
-            "validator"
-          ]
-        }
-      },
-      "additionalProperties": false
+          "validator": {
+            "type": "string",
+            "enum": [
+              "date",
+              "string",
+              "object"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "validator"
+        ]
+      }
     },
     "view_submitted_response": {
       "type": "object",
