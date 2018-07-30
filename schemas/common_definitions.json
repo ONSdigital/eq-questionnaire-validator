@@ -18,15 +18,15 @@
       "type": "object",
       "required": [
         "title",
-        "description"
+        "content"
       ],
       "properties": {
         "title": {
           "type": "string"
         },
-        "description": {
-          "type": "string"
-        }
+        "content": {
+          "$ref": "common_definitions.json#/content"
+      }
       },
       "additionalProperties": false
     }
