@@ -42,7 +42,7 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEqual(len(errors), 5)
+        self.assertEqual(len(errors), 6)
         self.assertEqual(
             errors[0]['message'],
             'Schema Integrity Error. The answer id - invalid-answer-id in the answer_count key of the "when" clause for which-group does not exist')
@@ -57,6 +57,9 @@ class TestSchemaValidation(unittest.TestCase):
             'Schema Integrity Error. The answer id - group1-answer in the id key of the "when" clause for which-group is not in the same group')
         self.assertEqual(
             errors[4]['message'],
+            'Schema Integrity Error. Group repeat rule repeats over invalid group [invalid-group-id]')
+        self.assertEqual(
+            errors[5]['message'],
             'Schema Integrity Error. Routing rule routes to invalid group [invalid-group]')
 
     def test_schemas(self):

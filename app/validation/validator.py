@@ -43,7 +43,7 @@ class Validator:
                     errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
                     errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                    errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answers_with_parent_ids, group))
+                    errors.extend(self.validate_routing_rule(rule, all_groups, answers_with_parent_ids, group))
                     errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
                 for block in group['blocks']:
@@ -57,7 +57,7 @@ class Validator:
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
                         errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                        errors.extend(self.validate_schema_routing_rule_dependent_on_valid_answer(rule, answers_with_parent_ids, block))
+                        errors.extend(self.validate_routing_rule(rule, all_groups, answers_with_parent_ids, block))
                         errors.extend(self.validate_repeat_rule_restricted(rule, block))
 
                     if block['type'] == 'CalculatedSummary':
@@ -174,15 +174,32 @@ class Validator:
                 errors.append(self._error_message(invalid_block_error))
         return errors
 
-    @staticmethod
-    def validate_schema_routing_rule_dependent_on_valid_answer(rule, answer_ids_with_group_id, block_or_group):
+    def validate_routing_rule(self, rule, all_groups, answer_ids_with_group_id, block_or_group):
         errors = []
 
-        rule = rule.get('goto') or rule.get('repeat')
-        if 'when' in rule:
-            when_errors = Validator.validate_when_rule(rule['when'], answer_ids_with_group_id, block_or_group['id'])
+        when = None
+        if 'goto' in rule:
+            when = rule['goto'].get('when')
+        elif 'repeat' in rule:
+            when = rule['repeat'].get('when')
+
+            if rule['repeat']['type'] == 'group':
+                errors += self.validate_repeat_group_rule(rule, all_groups)
+
+        if when:
+            when_errors = Validator.validate_when_rule(when, answer_ids_with_group_id, block_or_group['id'])
             if when_errors:
                 errors.append(when_errors)
+
+        return errors
+
+    def validate_repeat_group_rule(self, rule, all_groups):
+        errors = []
+
+        for group_id in rule['repeat']['group_ids']:
+            if not self._is_contained_in_list(all_groups, group_id):
+                invalid_block_error = 'Group repeat rule repeats over invalid group [{}]'.format(group_id)
+                errors.append(self._error_message(invalid_block_error))
 
         return errors
 

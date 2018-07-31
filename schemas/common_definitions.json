@@ -374,6 +374,29 @@
                 "properties": {
                   "type": {
                     "enum": [
+                      "group"
+                    ]
+                  },
+                  "group_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "type",
+                  "group_ids"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
                       "answer_value",
                       "answer_count_minus_one"
                     ]
