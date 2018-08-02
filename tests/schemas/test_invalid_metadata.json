@@ -44,12 +44,16 @@
       "validator": "date"
     },
     {
-      "name": "variant_flags",
-      "validator": "object"
+      "name": "flag",
+      "validator": "boolean"
     },
     {
       "name": "period_str",
       "validator": "string"
+    },
+    {
+      "name": "case_id",
+      "validator": "uuid"
     }
   ],
   "mime_type": "application/json/ons/eq",
@@ -89,7 +93,10 @@
                       "title": "region_code: {{ metadata['region_code'] }}"
                     },
                     {
-                      "title": "variant_flags: {{ metadata['variant_flags'] }}"
+                      "title": "flag: {{ metadata['flag'] }}"
+                    },
+                    {
+                      "title": "case_id: {{ metadata['case_id'] }}"
                     },
                     {
                       "title": "Invalid: {{ metadata['invalid'] }}"
