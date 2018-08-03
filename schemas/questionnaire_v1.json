@@ -72,9 +72,10 @@
           "validator": {
             "type": "string",
             "enum": [
+              "boolean",
               "date",
               "string",
-              "object"
+              "uuid"
             ]
           }
         },
