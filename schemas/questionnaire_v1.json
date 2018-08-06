@@ -67,7 +67,8 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-zA-Z-_]+$"
           },
           "validator": {
             "type": "string",
