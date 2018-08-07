@@ -12,6 +12,10 @@
           "Summary",
           "SectionSummary"
         ]
+      },
+      "collapsible": {
+        "description": "When True, the summary page will contain a list of collapsible section summaries",
+        "type": "boolean"
       }
     },
     "additionalProperties": false,
