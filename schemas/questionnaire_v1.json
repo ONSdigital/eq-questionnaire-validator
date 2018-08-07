@@ -68,7 +68,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "pattern": "^[a-zA-Z-_]+$"
+            "pattern": "^[a-zA-Z0-9-_]+$"
           },
           "validator": {
             "type": "string",
