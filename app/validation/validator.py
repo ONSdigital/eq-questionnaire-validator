@@ -130,8 +130,8 @@ class Validator:
             default_metadata.append('ru_name')
 
         # Find all words that precede any of:
-        all_metadata = set(re.findall(r"((?<=metadata\[\')\w+"  # metadata['
-                                      r'|(?<=metadata\.)\w+'  # metadata.
+        all_metadata = set(re.findall(r"((?<!collection_metadata\[\')(?<=metadata\[\')\w+"  # metadata[' not _metadata['
+                                      r'|(?<!collection_metadata\.)(?<=metadata\.)\w+'  # metadata. not _metadata.
                                       r"|(?<=meta\': \')\w+)", str(schema)))  # meta': '
 
         # Checks if piped/routed metadata is defined in the schema

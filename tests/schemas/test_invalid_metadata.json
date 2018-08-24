@@ -99,6 +99,9 @@
                       "title": "case_id: {{ metadata['case_id'] }}"
                     },
                     {
+                      "title": "started_at: {{ collection_metadata['started_at'] }}"
+                    },
+                    {
                       "title": "Invalid: {{ metadata['invalid'] }}"
                     }
                   ],
