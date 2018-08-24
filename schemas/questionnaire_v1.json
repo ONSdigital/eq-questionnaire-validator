@@ -9,7 +9,6 @@
     "title",
     "sections",
     "theme",
-    "legal_basis",
     "metadata"
   ],
   "properties": {
@@ -56,10 +55,7 @@
       "type": "string"
     },
     "legal_basis": {
-      "enum": [
-        "Voluntary",
-        "StatisticsOfTradeAct"
-      ]
+      "type": "string"
     },
     "metadata": {
       "type": "array",
