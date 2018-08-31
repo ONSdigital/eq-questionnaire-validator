@@ -36,32 +36,6 @@ class TestSchemaValidation(unittest.TestCase):
                                                'key of the "when" clause for response-yes does not exist')
         self.assertEqual(errors[4]['message'], 'Schema Integrity Error. The block response-yes has a repeating routing rule')
 
-    def test_invalid_schema_group(self):
-        file = 'schemas/test_invalid_routing_group.json'
-        json_to_validate = self.open_and_load_schema_file(file)
-
-        errors = self.validator.validate_schema(json_to_validate)
-
-        self.assertEqual(len(errors), 6)
-        self.assertEqual(
-            errors[0]['message'],
-            'Schema Integrity Error. The answer id - invalid-answer-id in the answer_count key of the "when" clause for which-group does not exist')
-        self.assertEqual(
-            errors[1]['message'],
-            'Schema Integrity Error. The answer id - invalid-answer-id in the id key of the "when" clause for which-group does not exist')
-        self.assertEqual(
-            errors[2]['message'],
-            'Schema Integrity Error. The "when" clause in the repeat for which-group has more than one condition')
-        self.assertEqual(
-            errors[3]['message'],
-            'Schema Integrity Error. The answer id - group1-answer in the id key of the "when" clause for which-group is not in the same group')
-        self.assertEqual(
-            errors[4]['message'],
-            'Schema Integrity Error. Group repeat rule repeats over invalid group [invalid-group-id]')
-        self.assertEqual(
-            errors[5]['message'],
-            'Schema Integrity Error. Routing rule routes to invalid group [invalid-group]')
-
     def test_schemas(self):
 
         errors = []
