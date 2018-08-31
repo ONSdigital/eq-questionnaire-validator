@@ -16,3 +16,16 @@ To run the app:
 ```
 pipenv run ./scripts/run_app.sh
 ```
+
+## Testing
+
+To test the app:
+
+```
+pipenv run ./scripts/run_app.sh
+```
+
+then, in another terminal window/tab, navigate to a checked out copy of eq-survey-runner:
+```
+pipenv run ./scripts/test_schemas.sh --local
+```
