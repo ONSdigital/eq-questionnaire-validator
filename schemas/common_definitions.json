@@ -137,6 +137,10 @@
             "integer"
           ]
         },
+        "comparison_id": {
+            "type": "string",
+            "description": "The id of an answer which should be compared to."
+        },
         "date_comparison": {
           "type": "object",
           "properties": {

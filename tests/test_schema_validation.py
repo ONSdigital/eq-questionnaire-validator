@@ -234,6 +234,52 @@ class TestSchemaValidation(unittest.TestCase):
                                                "total-playback-answer-error's answers_to_calculate")
         self.assertIn('Duplicate answers: ', errors[4]['message'])
 
+    def test_answer_comparisons_different_types(self):
+        """ Ensures that when answer comparison is used, the type of the variables must be the same """
+        file_name = 'schemas/test_invalid_answer_comparison_types.json'
+        json_to_validate = self.open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        error_messages = [
+            'Schema Integrity Error. The answers used as comparison_id "repeating-comparison-2-answer" and answer_id "repeating-comparison-1-answer" in the "when" clause for repeating-comparison have different types',
+            'Schema Integrity Error. The answers used as comparison_id "route-comparison-1-answer" and answer_id "route-comparison-2-answer" in the "when" clause for route-comparison-2 have different types',
+            'Schema Integrity Error. The "when" clause for comparison-3-question with conditional titles cannot contain a comparison_id',
+            'Schema Integrity Error. The "when" clause for comparison-3-question with conditional titles cannot contain a comparison_id',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for equals-answers have different types',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for less-than-answers have different types',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for less-than-answers have different types',
+            'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
+            'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
+        ]
+        
+        self.assertEqual(len(errors), len(error_messages))
+
+        for i, error in enumerate(errors):
+            self.assertEqual(error['message'], error_messages[i])
+
+    def test_answer_comparisons_invalid_comparison_id(self):
+        """ Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
+        file_name = 'schemas/test_invalid_answer_comparison_id.json'
+        json_to_validate = self.open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        error_messages = [
+            'Schema Integrity Error. The answer id - bad-answer-id-1 in the comparison_id key of the "when" clause for repeating-comparison does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison_id key of the "when" clause for route-comparison-2 does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison_id key of the "when" clause for equals-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-4 in the comparison_id key of the "when" clause for less-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-5 in the comparison_id key of the "when" clause for less-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-6 in the comparison_id key of the "when" clause for greater-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-7 in the id key of the "when" clause for greater-than-answers does not exist',
+        ]
+        
+        self.assertEqual(len(errors), len(error_messages))
+
+        for i, error in enumerate(errors):
+            self.assertEqual(error['message'], error_messages[i])
+
     @staticmethod
     def open_and_load_schema_file(file):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
