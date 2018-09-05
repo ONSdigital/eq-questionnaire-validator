@@ -374,8 +374,7 @@
                 "properties": {
                   "type": {
                     "enum": [
-                      "answer_value",
-                      "answer_count_minus_one"
+                      "answer_value"
                     ]
                   },
                   "answer_id": {
@@ -393,7 +392,8 @@
                 "properties": {
                   "type": {
                     "enum": [
-                      "answer_count"
+                      "answer_count",
+                      "answer_count_minus_one"
                     ]
                   },
                   "offset": {
