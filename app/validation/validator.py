@@ -46,6 +46,9 @@ class Validator:
                     errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
                     errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
+                for skip_condition in group.get('skip_conditions', []):
+                    errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, group))
+
                 for block in group['blocks']:
 
                     if section == json_to_validate['sections'][-1] \
@@ -59,6 +62,9 @@ class Validator:
 
                         errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, block))
                         errors.extend(self.validate_repeat_rule_restricted(rule, block))
+
+                    for skip_condition in block.get('skip_conditions', []):
+                        errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, block))
 
                     if block['type'] == 'CalculatedSummary':
                         errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
@@ -186,6 +192,15 @@ class Validator:
 
         return errors
 
+    def validate_skip_condition(self, skip_condition, answer_ids_with_group_id, block_or_group):
+        errors = []
+        when = skip_condition.get('when')
+        when_errors = self.validate_when_rule(when, answer_ids_with_group_id, block_or_group['id'])
+        if when_errors:
+            errors.append(when_errors)
+
+        return errors
+
     @staticmethod
     def validate_repeat_when_rule_restricted(rule, answer_ids_with_group_id, group):
         errors = []
@@ -288,33 +303,48 @@ class Validator:
 
     @staticmethod
     def validate_when_rule(when_clause, answer_ids_with_group_id, referenced_id):
-        # Validates any answer id in a when clause exists within the schema
-        answer_reference_id_fields = ('id', 'answer_count')
+        """
+        Validates any answer id in a when clause exists within the schema
+        Will also check that comparison_id exists
+        """
+        answer_reference_id_fields = ('id', 'answer_count', 'comparison_id')
 
         for when in when_clause:
-            # either of the reference fields may be in use, however it will
-            # never be the case that both are defined since this is handled by
-            # the JSON schema check
             present_id_ref_keys = [x for x in answer_reference_id_fields if x in when]
 
-            if not present_id_ref_keys:
-                # No further validation required if there are no references to answers
-                continue
+            for id_ref_key in present_id_ref_keys:
 
-            id_ref_key = present_id_ref_keys.pop()
+                if when[id_ref_key] not in answer_ids_with_group_id:
+                    return Validator._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
+                                                    .format(when[id_ref_key], id_ref_key, referenced_id))
 
-            if when[id_ref_key] not in answer_ids_with_group_id:
-                return Validator._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
-                                                .format(when[id_ref_key], id_ref_key, referenced_id))
+                if id_ref_key == 'answer_count':
+                    if when['condition'] in ('contains', 'not contains'):
+                        return Validator._error_message('The condition "{}" is not valid for an answer_count based "when" clause'
+                                                        .format(when['condition']))
 
-            if id_ref_key == 'answer_count':
-                if when['condition'] in ('contains', 'not contains'):
-                    return Validator._error_message('The condition "{}" is not valid for an answer_count based "when" clause'
-                                                    .format(when['condition']))
+            # Validate that all types with comparison_id match
+            if 'comparison_id' in when:
+
+                comparison_type = answer_ids_with_group_id[when['comparison_id']]['answer']['type']
+                id_type = answer_ids_with_group_id[when['id']]['answer']['type']
+
+                if comparison_type != id_type:
+                    return Validator._error_message('The answers used as comparison_id "{}" and answer_id "{}" in the '
+                                                    '"when" clause for {} have different types'
+                                                    .format(when['comparison_id'], when['id'], referenced_id))
+
+                if when['condition'] in ('set', 'not set'):
+                    return Validator._error_message('The "when" clause for {} contains a comparison_id and uses a '
+                                                    'condition of unset or set'
+                                                    .format(referenced_id))
 
     def validate_multiple_question_titles(self, question_titles, question_id, answer_ids):
-        # Validates that the last title in a question titles object contains only a value key
-        # Also validates that in any title the value key is always the first key
+        """Validates that the last title in a question titles object contains only a value key
+        Also validates that in any title the value key is always the first key
+        and checks that the when clause does not use a comparison_id
+        """
+
         errors = []
 
         last_title = question_titles[-1]
@@ -324,6 +354,11 @@ class Validator:
 
         for title in question_titles:
             if 'when' in title:
+                for when_clause in title['when']:
+                    if when_clause.get('comparison_id'):
+                        errors.append(self._error_message('The "when" clause for {} with conditional titles cannot contain '
+                                                          'a comparison_id'
+                                                          .format(question_id)))
                 when_errors = self.validate_when_rule(title['when'], answer_ids, question_id)
                 if when_errors:
                     errors.append(when_errors)
