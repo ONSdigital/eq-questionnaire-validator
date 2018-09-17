@@ -39,8 +39,7 @@
     "required": [
       "id",
       "type",
-      "questions",
-      "routing_rules"
+      "questions"
     ]
   }
 }
