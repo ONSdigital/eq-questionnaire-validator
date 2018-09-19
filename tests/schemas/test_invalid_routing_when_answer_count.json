@@ -125,6 +125,11 @@
                       }
                     ]
                   }
+                },
+                {
+                  "goto": {
+                    "group": "group0"
+                  }
                 }
               ],
               "title": "Household",

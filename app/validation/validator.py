@@ -57,9 +57,14 @@ class Validator:
     def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
         errors = []
 
+        errors.extend(self.validate_routing_rules_default(group.get('routing_rules', []), group))
         for rule in group.get('routing_rules', []):
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+
+            for rule in group.get('routing_rules', []):
+                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
             errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
             errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
@@ -75,6 +80,8 @@ class Validator:
                     and group == section['groups'][-1] \
                     and block == group['blocks'][-1]:
                 errors.extend(self.validate_contains_confirmation_or_summary(block))
+
+            errors.extend(self.validate_routing_rules_default(block.get('routing_rules', []), block))
 
             for rule in block.get('routing_rules', []):
                 errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
@@ -202,6 +209,34 @@ class Validator:
                 invalid_block_error = 'Routing rule routes to invalid {} [{}]'.format(goto_key, referenced_id)
                 errors.append(self._error_message(invalid_block_error))
         return errors
+
+    @staticmethod
+    def validate_routing_rules_default(rules, block_or_group):
+        """
+        Ensure that a set of routing rules contains a default, without a when clause.
+        """
+        errors = []
+
+        if not rules or all(('goto' not in rule for rule in rules)):
+            return errors
+
+        default_routing_rule_count = 0
+
+        for rule in rules:
+            rule_directive = rule.get('goto') 
+            if rule_directive and 'when' not in rule_directive:
+                default_routing_rule_count += 1
+
+        if not default_routing_rule_count:
+            errors.append(Validator._error_message('The routing rules for group or block: {} must contain a default '
+                                                   'routing rule without a when rule'.format(block_or_group['id'])))
+        elif default_routing_rule_count > 1:
+            errors.append(Validator._error_message('The routing rules for group or block: {} contain multiple default '
+                                                   'routing rules. Some of them will not be used'.format(block_or_group['id'])))
+
+        return errors
+
+
 
     def validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
         errors = []
