@@ -163,6 +163,9 @@
                   "items": {
                     "oneOf": [
                       {
+                        "$ref": "blocks/answer_summary.json#/block"
+                      },
+                      {
                         "$ref": "blocks/calculated_summary.json#/block"
                       },
                       {

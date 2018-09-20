@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "AnswerSummary"
+        ]
+      },
+      "title": {
+        "type": "string"
+      },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "answer_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "answer_label": {
+        "type": "string"
+      },
+      "icon": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "answer_ids"
+    ]
+  }
+}
