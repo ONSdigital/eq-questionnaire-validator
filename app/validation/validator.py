@@ -145,11 +145,6 @@ class Validator:
             if metadata not in schema_metadata:
                 errors.append(self._error_message('Metadata - {} not specified in metadata field'.format(metadata)))
 
-        # Checks if unused metadata is defined
-        for metadata in schema_metadata:
-            if metadata not in all_metadata and metadata not in default_metadata:
-                errors.append(self._error_message('Unused metadata defined in metadata field - {}'.format(metadata)))
-
         return errors
 
     def validate_calculated_ids_in_answers_to_calculate_exists(self, question):
