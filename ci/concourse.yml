@@ -67,6 +67,7 @@ jobs:
       skip_download: true
 
 - name: Pull Requests
+  public: true
   plan:
   - get: eq-schema-validator-pull-request
     trigger: true
