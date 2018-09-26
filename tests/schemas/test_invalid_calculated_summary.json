@@ -174,7 +174,8 @@
                       "label": "Fifth answer label",
                       "mandatory": true,
                       "type": "Unit",
-                      "unit": "length-centimeter"
+                      "unit": "length-centimeter",
+                      "unit_length": "short"
                     }
                   ]
                 }
@@ -196,7 +197,8 @@
                       "label": "Sixth answer label",
                       "mandatory": true,
                       "type": "Unit",
-                      "unit": "length-meter"
+                      "unit": "length-meter",
+                      "unit_length": "short"
                     }
                   ]
                 }

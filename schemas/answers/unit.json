@@ -45,6 +45,10 @@
       "unit": {
         "$ref": "../lists/units.json#/unit"
       },
+      "unit_length": {
+        "type": "string",
+        "enum": ["short", "narrow", "long"]
+      },
       "validation": {
         "type": "object",
         "properties": {
@@ -85,7 +89,8 @@
       "id",
       "type",
       "mandatory",
-      "unit"
+      "unit",
+      "unit_length"
     ]
   }
 }

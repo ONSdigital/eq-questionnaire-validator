@@ -19,13 +19,18 @@ pipenv run ./scripts/run_app.sh
 
 ## Testing
 
-To test the app:
+To run the app's unit tests:
 
+```
+pipenv run ./scripts/run_tests_unit.sh
+```
+
+To test the apps functionality:
 ```
 pipenv run ./scripts/run_app.sh
 ```
 
-then, in another terminal window/tab, navigate to a checked out copy of eq-survey-runner:
+Then, in another terminal window/tab, navigate to a checked out copy of eq-survey-runner:
 ```
 pipenv run ./scripts/test_schemas.sh --local
 ```
