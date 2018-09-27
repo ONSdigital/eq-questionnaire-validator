@@ -15,6 +15,9 @@
       "title": {
         "type": "string"
       },
+      "label": {
+        "type": "string"
+      },
       "routing_rules": {
         "$ref": "../common_definitions.json#/routing_rules"
       },
@@ -40,6 +43,8 @@
     "required": [
       "id",
       "type",
+      "title",
+      "label",
       "answer_ids"
     ]
   }
