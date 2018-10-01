@@ -74,6 +74,9 @@
               "string",
               "uuid"
             ]
+          },
+          "optional": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false,
