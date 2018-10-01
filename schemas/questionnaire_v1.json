@@ -76,7 +76,7 @@
             ]
           }
         },
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": [
           "name",
           "validator"
