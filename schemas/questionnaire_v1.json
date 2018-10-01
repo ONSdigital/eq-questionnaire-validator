@@ -74,9 +74,27 @@
               "string",
               "uuid"
             ]
+          },
+          "address_line1": {
+            "type": "string"
+          },
+          "address_line2": {
+            "type": "string"
+          },
+          "locality": {
+            "type": "string"
+          },
+          "town_name": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "optional": {
+            "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name",
           "validator"
