@@ -72,11 +72,9 @@
               "boolean",
               "date",
               "string",
+              "optional_string",
               "uuid"
             ]
-          },
-          "optional": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false,
