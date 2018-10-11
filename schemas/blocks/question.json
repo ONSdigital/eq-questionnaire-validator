@@ -41,6 +41,9 @@
             },
             {
               "$ref": "../questions/relationship.json#/question"
+            },
+            {
+              "$ref": "../questions/mutually_exclusive.json#/question"
             }
           ]
         }

@@ -20,7 +20,7 @@ class TestSchemaValidation(unittest.TestCase):
 
     def test_invalid_schema_block(self):
         file = 'schemas/test_invalid_routing_block.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -40,7 +40,7 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = []
 
-        files = self.all_schema_files()
+        files = self._all_schema_files()
 
         for file in files:
             with open(file, encoding='utf8') as json_file:
@@ -55,7 +55,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_numeric_answers(self):
 
         file = 'schemas/test_invalid_numeric_answers.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
         self.assertEqual(len(errors), 9)
@@ -98,7 +98,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_numeric_default_with_routing(self):
 
         file = 'schemas/test_numeric_default_with_routing.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -107,7 +107,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_id_in_answers_to_calculate(self):
 
         file = 'schemas/test_invalid_id_in_grouped_answers_to_calculate.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         question = json_to_validate['sections'][0]['groups'][0]['blocks'][1]['questions'][0]
 
@@ -121,7 +121,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_date_range_period(self):
 
         file = 'schemas/test_invalid_date_range_period.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -132,7 +132,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_mm_yyyy_date_range_period(self):
 
         file = 'schemas/test_invalid_mm_yyyy_date_range_period.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -143,7 +143,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_yyyy_date_range_period(self):
 
         file = 'schemas/test_invalid_yyyy_date_range_period.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -154,7 +154,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_single_date_period(self):
 
         file = 'schemas/test_invalid_single_date_min_max_period.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -165,7 +165,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_metadata(self):
 
         file = 'schemas/test_invalid_metadata.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -178,7 +178,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_question_titles_object(self):
 
         file = 'schemas/test_invalid_multiple_question_titles.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -191,7 +191,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_survey_id_whitespace(self):
 
         file = 'schemas/test_invalid_survey_id_whitespace.json'
-        json_to_validate = self.open_and_load_schema_file(file)
+        json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -200,7 +200,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_routing_when_answer_count(self):
         """Asserts that invalid `when` routing_rules are caught for `answer_count`"""
         file_name = 'schemas/test_invalid_routing_when_answer_count.json'
-        json_to_validate = self.open_and_load_schema_file(file_name)
+        json_to_validate = self._open_and_load_schema_file(file_name)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -213,7 +213,7 @@ class TestSchemaValidation(unittest.TestCase):
     def test_invalid_calculated_summary(self):
         """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
         file_name = 'schemas/test_invalid_calculated_summary.json'
-        json_to_validate = self.open_and_load_schema_file(file_name)
+        json_to_validate = self._open_and_load_schema_file(file_name)
 
         errors = self.validator.validate_schema(json_to_validate)
 
@@ -235,22 +235,27 @@ class TestSchemaValidation(unittest.TestCase):
     def test_answer_comparisons_different_types(self):
         """ Ensures that when answer comparison is used, the type of the variables must be the same """
         file_name = 'schemas/test_invalid_answer_comparison_types.json'
-        json_to_validate = self.open_and_load_schema_file(file_name)
+        json_to_validate = self._open_and_load_schema_file(file_name)
 
         errors = self.validator.validate_schema(json_to_validate)
 
         error_messages = [
-            'Schema Integrity Error. The answers used as comparison_id "repeating-comparison-2-answer" and answer_id "repeating-comparison-1-answer" in the "when" clause for repeating-comparison have different types',
-            'Schema Integrity Error. The answers used as comparison_id "route-comparison-1-answer" and answer_id "route-comparison-2-answer" in the "when" clause for route-comparison-2 have different types',
+            'Schema Integrity Error. The answers used as comparison_id "repeating-comparison-2-answer" and answer_id "repeating-comparison-1-answer" '
+            'in the "when" clause for repeating-comparison have different types',
+            'Schema Integrity Error. The answers used as comparison_id "route-comparison-1-answer" and answer_id "route-comparison-2-answer" '
+            'in the "when" clause for route-comparison-2 have different types',
             'Schema Integrity Error. The "when" clause for comparison-3-question with conditional titles cannot contain a comparison_id',
             'Schema Integrity Error. The "when" clause for comparison-3-question with conditional titles cannot contain a comparison_id',
-            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for equals-answers have different types',
-            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for less-than-answers have different types',
-            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" clause for less-than-answers have different types',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
+            'clause for equals-answers have different types',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
+            'clause for less-than-answers have different types',
+            'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
+            'clause for less-than-answers have different types',
             'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
             'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
         ]
-        
+
         self.assertEqual(len(errors), len(error_messages))
 
         for i, error in enumerate(errors):
@@ -259,44 +264,62 @@ class TestSchemaValidation(unittest.TestCase):
     def test_answer_comparisons_invalid_comparison_id(self):
         """ Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
         file_name = 'schemas/test_invalid_answer_comparison_id.json'
-        json_to_validate = self.open_and_load_schema_file(file_name)
+        json_to_validate = self._open_and_load_schema_file(file_name)
 
         errors = self.validator.validate_schema(json_to_validate)
 
         error_messages = [
-            'Schema Integrity Error. The answer id - bad-answer-id-1 in the comparison_id key of the "when" clause for repeating-comparison does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison_id key of the "when" clause for route-comparison-2 does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison_id key of the "when" clause for equals-answers does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-4 in the comparison_id key of the "when" clause for less-than-answers does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-5 in the comparison_id key of the "when" clause for less-than-answers does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-6 in the comparison_id key of the "when" clause for greater-than-answers does not exist',
-            'Schema Integrity Error. The answer id - bad-answer-id-7 in the id key of the "when" clause for greater-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-1 in the comparison_id key of the "when" '
+            'clause for repeating-comparison does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison_id key of the "when" '
+            'clause for route-comparison-2 does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison_id key of the "when" '
+            'clause for equals-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-4 in the comparison_id key of the "when" '
+            'clause for less-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-5 in the comparison_id key of the "when" '
+            'clause for less-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-6 in the comparison_id key of the "when" '
+            'clause for greater-than-answers does not exist',
+            'Schema Integrity Error. The answer id - bad-answer-id-7 in the id key of the "when" '
+            'clause for greater-than-answers does not exist',
         ]
-        
+
         self.assertEqual(len(errors), len(error_messages))
 
         for i, error in enumerate(errors):
             self.assertEqual(error['message'], error_messages[i])
 
+    def test_invalid_mutually_exclusive_conditions(self):
+
+        file = 'schemas/test_invalid_mutually_exclusive_conditions.json'
+        json_to_validate = self._open_and_load_schema_file(file)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(len(errors), 3)
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. MutuallyExclusive question type cannot contain mandatory answers.')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Too many answers have been provided.')
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. mutually-exclusive-date-answer-3 is not of type Checkbox.')
+
     def test_metadata_defined_but_not_used_is_valid(self):
         """ Ensures that there are no errors when metadata is defined in the schema but not used """
         file_name = 'schemas/test_valid_metadata.json'
-        json_to_validate = self.open_and_load_schema_file(file_name)
+        json_to_validate = self._open_and_load_schema_file(file_name)
 
         errors = self.validator.validate_schema(json_to_validate)
 
         self.assertEqual(0, len(errors))
 
-
     @staticmethod
-    def open_and_load_schema_file(file):
+    def _open_and_load_schema_file(file):
         json_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding='utf8')
         json_to_validate = load(json_file)
 
         return json_to_validate
 
     @staticmethod
-    def all_schema_files():
+    def _all_schema_files():
         schema_files = []
         for folder, _, files in os.walk('schemas'):
             for filename in files:
