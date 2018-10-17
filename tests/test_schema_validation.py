@@ -205,10 +205,13 @@ class TestSchemaValidation(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The answer id - invalid-answer-id in the '
-                                               'answer_count key of the "when" clause for household-composition '
+                                               'answer_ids key of the "when" clause for household-composition '
                                                'does not exist')
         self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The condition "contains" is not valid '
                                                'for an answer_count based "when" clause')
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Duplicate answer ids found within household-composition clause')
+        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. "answer_ids" key has to be included when type '
+                                               'is "answer_count" in a "when" clause')
 
     def test_invalid_calculated_summary(self):
         """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
