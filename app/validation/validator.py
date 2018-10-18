@@ -1,7 +1,8 @@
-import re
-from json import load
 import os
+import re
+
 import pathlib
+from json import load
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -74,6 +75,8 @@ class Validator:
                         errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
                         errors.extend(self.validate_child_answers_define_parent(question.get('answers', [])))
                         errors.extend(self.validate_date_range(question))
+                        errors.extend(self.validate_mutually_exclusive(question))
+
                         if question.get('titles'):
                             errors.extend(self.validate_multiple_question_titles(question['titles'],
                                                                                  question['id'],
@@ -237,7 +240,7 @@ class Validator:
             return [self._error_message(
                 "Invalid answer id {} in block {}'s answers_to_calculate".format(e, block['id']))]
 
-        duplicates = set([answer for answer in answers_to_calculate if answers_to_calculate.count(answer) > 1])
+        duplicates = {answer for answer in answers_to_calculate if answers_to_calculate.count(answer) > 1}
         if duplicates:
             return [self._error_message(
                 "Duplicate answers: {} in block {}'s answers_to_calculate".format(duplicates, block['id']))]
@@ -652,6 +655,24 @@ class Validator:
 
         return errors
 
+    def validate_mutually_exclusive(self, question):
+        errors = []
+
+        if question['type'] == 'MutuallyExclusive':
+            answers = question['answers']
+
+            if any(answer['mandatory'] is True for answer in answers):
+                errors.append(self._error_message('MutuallyExclusive question type cannot contain mandatory answers.'))
+
+            # Only need to check length of 3 as others are handled by the JSON schema minItems/maxItems
+            if len(answers) == 3 and not any('parent_answer_id' in answer for answer in answers):
+                errors.append(self._error_message('Too many answers have been provided.'))
+
+            if answers[-1]['type'] != 'Checkbox':
+                errors.append(self._error_message('{} is not of type Checkbox.'.format(answers[-1]['id'])))
+
+        return errors
+
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):
         for dict_to_check in dict_list:
@@ -689,12 +710,12 @@ class Validator:
 
     def _get_relative_date(self, date_string, offset_object):
         # Returns a relative date given an offset or period object
-        return self.convert_to_datetime(date_string) + relativedelta(years=offset_object.get('years', 0),
-                                                                     months=offset_object.get('months', 0),
-                                                                     days=offset_object.get('days', 0))
+        return self._convert_to_datetime(date_string) + relativedelta(years=offset_object.get('years', 0),
+                                                                      months=offset_object.get('months', 0),
+                                                                      days=offset_object.get('days', 0))
 
     @staticmethod
-    def convert_to_datetime(value):
+    def _convert_to_datetime(value):
         date_format = '%Y-%m'
         if value and re.match(r'\d{4}-\d{2}-\d{2}', value):
             date_format = '%Y-%m-%d'
