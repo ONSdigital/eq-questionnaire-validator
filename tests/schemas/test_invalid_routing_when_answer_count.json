@@ -67,7 +67,8 @@
                     "group": "group1",
                     "when": [
                       {
-                        "answer_count": "first-name",
+                        "type": "answer_count",
+                        "answer_ids": ["first-name"],
                         "condition": "equals",
                         "value": 2
                       }
@@ -79,7 +80,8 @@
                     "group": "group2",
                     "when": [
                       {
-                        "answer_count": "invalid-answer-id",
+                        "type": "answer_count",
+                        "answer_ids": ["invalid-answer-id"],
                         "condition": "greater than",
                         "value": 2
                       }
@@ -91,9 +93,35 @@
                     "group": "group0",
                     "when": [
                       {
-                        "answer_count": "first-name",
+                        "type": "answer_count",
+                        "answer_ids": ["first-name"],
                         "condition": "contains",
                         "value": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "group": "group0",
+                    "when": [
+                      {
+                        "type": "answer_count",
+                        "answer_ids": ["first-name", "first-name"],
+                        "condition": "greater than",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "group": "group0",
+                    "when": [
+                      {
+                        "type": "answer_count",
+                        "condition": "greater than",
+                        "value": 1
                       }
                     ]
                   }

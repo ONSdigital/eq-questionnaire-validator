@@ -114,9 +114,15 @@
           "type": "string",
           "description": "Metadata provided by the calling service. This will vary between surveys."
         },
-        "answer_count": {
-          "type": "string",
-          "description": "A repeated group id, for which the count will be fetched."
+        "type": {
+          "enum": [
+            "answer_count"
+          ],
+          "description": "Type of rule used for when condition."
+        },
+        "answer_ids": {
+          "type": "array",
+          "description": "List of ids of answers that will be evaluated."
         },
         "condition": {
           "enum": [
@@ -191,7 +197,7 @@
         },
         {
           "required": [
-            "answer_count"
+            "type"
           ]
         }
       ]
