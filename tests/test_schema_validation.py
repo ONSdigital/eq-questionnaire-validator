@@ -23,18 +23,21 @@ class TestSchemaValidation(unittest.TestCase):
         json_to_validate = self._open_and_load_schema_file(file)
 
         errors = self.validator.validate_schema(json_to_validate)
+        self.assertEqual(len(errors), 6)
 
-        self.assertEqual(len(errors), 5)
-        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. Routing rule routes to invalid block '
+        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. The routing rules for group or block: '
+                                               'conditional-routing-block must contain a default routing rule '
+                                               'without a when rule')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Routing rule routes to invalid block '
                                                '[invalid-location]')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. The answer id - fake-answer in the id key of the '
+        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. The answer id - fake-answer in the id key of the '
                                                '"when" clause for conditional-routing-block does not exist')
-        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. Routing rule not defined for all answers or '
+        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. Routing rule not defined for all answers or '
                                                'default not defined for answer [conditional-routing-answer] '
                                                "missing options [\'no\']")
-        self.assertEqual(errors[3]['message'], 'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id '
+        self.assertEqual(errors[4]['message'], 'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id '
                                                'key of the "when" clause for response-yes does not exist')
-        self.assertEqual(errors[4]['message'], 'Schema Integrity Error. The block response-yes has a repeating routing rule')
+        self.assertEqual(errors[5]['message'], 'Schema Integrity Error. The block response-yes has a repeating routing rule')
 
     def test_schemas(self):
 
