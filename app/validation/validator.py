@@ -19,8 +19,12 @@ class Validator:
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
 
-    def validate_schema(self, json_to_validate):  # noqa: C901  pylint: disable=too-complex
-
+    def validate_schema(self, json_to_validate):
+        """
+        Validates the json schema provided is correct
+        :param json_to_validate: json schema to be validated
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
         schema_errors = self._validate_json_against_schema(json_to_validate)
 
         if schema_errors:
@@ -41,37 +45,51 @@ class Validator:
         for section in json_to_validate['sections']:
             for group in section['groups']:
 
-                for rule in group.get('routing_rules', []):
-                    errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
-                    errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
-
-                    errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
-                    errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
+                errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
                 for skip_condition in group.get('skip_conditions', []):
                     errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, group))
 
-                for block in group['blocks']:
+                errors.extend(self._validate_blocks(json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges))
 
-                    if section == json_to_validate['sections'][-1] \
-                            and group == section['groups'][-1] \
-                            and block == group['blocks'][-1]:
-                        errors.extend(self.validate_contains_confirmation_or_summary(block))
+        return errors
 
-                    for rule in block.get('routing_rules', []):
-                        errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
-                        errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+    def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
+        errors = []
 
-                        errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, block))
-                        errors.extend(self.validate_repeat_rule_restricted(rule, block))
+        for rule in group.get('routing_rules', []):
+            errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+            errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                    for skip_condition in block.get('skip_conditions', []):
-                        errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, block))
+            errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
+            errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
-                    if block['type'] == 'CalculatedSummary':
-                        errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
+        return errors
 
-                    errors.extend(self._validate_questions(block, answers_with_parent_ids, numeric_answer_ranges))
+    def _validate_blocks(self, json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges):
+        errors = []
+
+        for block in group['blocks']:
+
+            if section == json_to_validate['sections'][-1] \
+                    and group == section['groups'][-1] \
+                    and block == group['blocks'][-1]:
+                errors.extend(self.validate_contains_confirmation_or_summary(block))
+
+            for rule in block.get('routing_rules', []):
+                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+
+                errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, block))
+                errors.extend(self.validate_repeat_rule_restricted(rule, block))
+
+            for skip_condition in block.get('skip_conditions', []):
+                errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, block))
+
+            if block['type'] == 'CalculatedSummary':
+                errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
+
+            errors.extend(self._validate_questions(block, answers_with_parent_ids, numeric_answer_ranges))
 
         return errors
 
@@ -195,6 +213,10 @@ class Validator:
         return errors
 
     def validate_skip_condition(self, skip_condition, answer_ids_with_group_id, block_or_group):
+        """
+        Validate skip condition is valid
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
         errors = []
         when = skip_condition.get('when')
         errors.extend(self.validate_when_rule(when, answer_ids_with_group_id, block_or_group['id']))
@@ -390,7 +412,6 @@ class Validator:
         Validates that the last title in a question titles object contains only a value key. Also validates that in any title
         the value key is always the first key and checks that the when clause does not use a comparison_id
         """
-
         errors = []
 
         last_title = question_titles[-1]
@@ -460,6 +481,10 @@ class Validator:
         return errors
 
     def validate_numeric_answer_types(self, numeric_answer, answer_ranges):
+        """
+        Validate numeric answer types are valid.
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
         errors = []
 
         # Validate referred numeric answer exists (skip further tests for answer if error is returned)
@@ -539,6 +564,11 @@ class Validator:
         return errors
 
     def validate_contains_confirmation_or_summary(self, last_block):
+        """
+        Validate that the final block is of type Summary or Confirmation.
+        :param last_block: final block of the schema
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
         if last_block['type'] in ['Summary', 'Confirmation']:
             return []
 
