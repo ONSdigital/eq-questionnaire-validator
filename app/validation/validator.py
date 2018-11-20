@@ -117,6 +117,7 @@ class Validator:
             for answer in question.get('answers', []):
                 errors.extend(self.validate_routing_on_answer_options(block, answer))
                 errors.extend(self.validate_duplicate_options(answer))
+                errors.extend(self.validate_totaliser_defines_decimal_places(answer))
 
                 if answer['type'] == 'Date':
                     if 'minimum' in answer and 'maximum' in answer:
@@ -783,6 +784,14 @@ class Validator:
 
             if answers[-1]['type'] != 'Checkbox':
                 errors.append(self._error_message('{} is not of type Checkbox.'.format(answers[-1]['id'])))
+
+        return errors
+
+    def validate_totaliser_defines_decimal_places(self, answer):
+        errors = []
+
+        if 'calculated' in answer and ('decimal_places' not in answer or answer['decimal_places'] != 2):
+            errors.append(self._error_message('\'decimal_places\' must be defined and set to 2 for the answer_id - {}'.format(answer['id'])))
 
         return errors
 
