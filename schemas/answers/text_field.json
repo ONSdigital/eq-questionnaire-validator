@@ -6,10 +6,6 @@
       "id": {
         "$ref": "../common_definitions.json#/id"
       },
-      "parent_answer_id": {
-        "type": "string",
-        "description": "The id of an answer which is the parent of this child answer, for example a radio option leading to a text field answer."
-      },
       "q_code": {
         "$ref": "../common_definitions.json#/q_code"
       },
@@ -49,6 +45,7 @@
     "required": [
       "id",
       "type",
+      "label",
       "mandatory"
     ]
   }

@@ -303,10 +303,9 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
 
-        self.assertEqual(len(errors), 3)
+        self.assertEqual(len(errors), 2)
         self.assertEqual(errors[0]['message'], 'Schema Integrity Error. MutuallyExclusive question type cannot contain mandatory answers.')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. Too many answers have been provided.')
-        self.assertEqual(errors[2]['message'], 'Schema Integrity Error. mutually-exclusive-date-answer-3 is not of type Checkbox.')
+        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. mutually-exclusive-date-answer-2 is not of type Checkbox.')
 
     def test_decimal_places_must_be_defined_when_using_totaliser(self):
 
@@ -315,9 +314,10 @@ class TestSchemaValidation(unittest.TestCase):
 
         errors = self.validator.validate_schema(json_to_validate)
         self.assertEqual(len(errors), 2)
-        self.assertEqual(errors[0]['message'], 'Schema Integrity Error. \'decimal_places\' must be defined and set to 2 for the answer_id - total-percentage')
-        self.assertEqual(errors[1]['message'], 'Schema Integrity Error. \'decimal_places\' must be defined and set to 2 for the answer_id - total-percentage-2')
-
+        self.assertEqual(errors[0]['message'],
+                         "Schema Integrity Error. 'decimal_places' must be defined and set to 2 for the answer_id - total-percentage")
+        self.assertEqual(errors[1]['message'],
+                         "Schema Integrity Error. 'decimal_places' must be defined and set to 2 for the answer_id - total-percentage-2")
 
     def test_metadata_defined_but_not_used_is_valid(self):
         """ Ensures that there are no errors when metadata is defined in the schema but not used """
