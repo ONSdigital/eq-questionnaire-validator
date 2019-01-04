@@ -31,6 +31,7 @@
                     {
                       "default": 0,
                       "id": "answer-1",
+                      "label": "Answer 1",
                       "mandatory": false,
                       "type": "Number"
                     }

@@ -87,7 +87,8 @@
       "id",
       "type",
       "mandatory",
-      "currency"
+      "currency",
+      "label"
     ]
   }
 }

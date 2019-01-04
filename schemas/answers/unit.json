@@ -90,7 +90,8 @@
       "type",
       "mandatory",
       "unit",
-      "unit_length"
+      "unit_length",
+      "label"
     ]
   }
 }

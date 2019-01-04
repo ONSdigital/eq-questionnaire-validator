@@ -57,16 +57,14 @@
                           "label": "Other",
                           "description": "Choose any other topping",
                           "value": "Other",
-                          "child_answer_id": "checkbox-child-other-answer"
+                          "detail_answer": {
+                            "mandatory": false,
+                            "id": "checkbox-child-other-answer",
+                            "label": "Please specify other",
+                            "type": "TextField"
+                          }
                         }
                       ]
-                    },
-                    {
-                      "parent_answer_id": "checkbox-answer",
-                      "mandatory": false,
-                      "id": "checkbox-child-other-answer",
-                      "label": "Please specify other",
-                      "type": "TextField"
                     },
                     {
                       "id": "checkbox-exclusive-answer",
@@ -102,11 +100,6 @@
                     },
                     {
                       "id": "mutually-exclusive-date-answer-2",
-                      "mandatory": false,
-                      "type": "Date"
-                    },
-                    {
-                      "id": "mutually-exclusive-date-answer-3",
                       "mandatory": false,
                       "type": "Date"
                     }

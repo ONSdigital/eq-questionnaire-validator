@@ -14,7 +14,7 @@ MIN_NUMBER = -999999999
 MAX_DECIMAL_PLACES = 6
 
 
-class Validator:
+class Validator:    # pylint: disable=too-many-public-methods
     def __init__(self):
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
@@ -61,11 +61,6 @@ class Validator:
         for rule in group.get('routing_rules', []):
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
-
-            for rule in group.get('routing_rules', []):
-                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
-                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
-
             errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
             errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
@@ -105,7 +100,6 @@ class Validator:
 
         for question in block.get('questions', []):
             errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
-            errors.extend(self.validate_child_answers_define_parent(question.get('answers', [])))
             errors.extend(self.validate_date_range(question))
             errors.extend(self.validate_mutually_exclusive(question))
 
@@ -224,7 +218,7 @@ class Validator:
         default_routing_rule_count = 0
 
         for rule in rules:
-            rule_directive = rule.get('goto') 
+            rule_directive = rule.get('goto')
             if rule_directive and 'when' not in rule_directive:
                 default_routing_rule_count += 1
 
@@ -236,8 +230,6 @@ class Validator:
                                                    'routing rules. Some of them will not be used'.format(block_or_group['id'])))
 
         return errors
-
-
 
     def validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
         errors = []
@@ -610,35 +602,6 @@ class Validator:
 
         return [self._error_message('Schemas does not have a confirmation or summary page')]
 
-    def validate_child_answers_define_parent(self, answers):
-        errors = []
-
-        answers_by_id = self._get_answers_by_id_for_block(answers)
-
-        for answer in answers:
-            if answer['type'] in ['Radio', 'Checkbox']:
-                child_answer_ids = (option['child_answer_id'] for option in answer['options']
-                                    if 'child_answer_id' in option and option['child_answer_id'])
-
-                for child_answer_id in child_answer_ids:
-                    if child_answer_id not in answers_by_id:
-                        errors.extend([self._error_message('Child answer with id %s does not exist in schemas'
-                                                           % child_answer_id)])
-                        continue
-                    if 'parent_answer_id' not in answers_by_id[child_answer_id]:
-                        errors.extend([self._error_message('Child answer %s does not define parent_answer_id %s '
-                                                           'in schemas' % (child_answer_id, answer['id']))])
-                        continue
-                    if answers_by_id[child_answer_id]['parent_answer_id'] != answer['id']:
-                        errors.extend([self._error_message('Child answer %s defines incorrect parent_answer_id %s '
-                                                           'in schemas: Should be %s'
-                                                           % (child_answer_id,
-                                                              answers_by_id[child_answer_id]['parent_answer_id'],
-                                                              answer['id']))])
-                        continue
-
-        return errors
-
     @staticmethod
     def _get_answers_by_id_for_block(answers):
         keyed_answers = {}
@@ -778,10 +741,6 @@ class Validator:
             if any(answer['mandatory'] is True for answer in answers):
                 errors.append(self._error_message('MutuallyExclusive question type cannot contain mandatory answers.'))
 
-            # Only need to check length of 3 as others are handled by the JSON schema minItems/maxItems
-            if len(answers) == 3 and not any('parent_answer_id' in answer for answer in answers):
-                errors.append(self._error_message('Too many answers have been provided.'))
-
             if answers[-1]['type'] != 'Checkbox':
                 errors.append(self._error_message('{} is not of type Checkbox.'.format(answers[-1]['id'])))
 
@@ -791,7 +750,7 @@ class Validator:
         errors = []
 
         if 'calculated' in answer and ('decimal_places' not in answer or answer['decimal_places'] != 2):
-            errors.append(self._error_message('\'decimal_places\' must be defined and set to 2 for the answer_id - {}'.format(answer['id'])))
+            errors.append(self._error_message("'decimal_places' must be defined and set to 2 for the answer_id - {}".format(answer['id'])))
 
         return errors
 
