@@ -10,7 +10,7 @@
         "$ref": "../common_definitions.json#/content"
       },
       "title": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "titles": {
         "$ref": "../common_definitions.json#/titles"
@@ -19,7 +19,7 @@
         "type": "string"
       },
       "description": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "member_label": {
         "type": "string"

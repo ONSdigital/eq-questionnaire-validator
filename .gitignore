@@ -104,3 +104,6 @@ secrets.yml
 
 #PyCharm
 .idea
+
+*.bak
+.vscode/

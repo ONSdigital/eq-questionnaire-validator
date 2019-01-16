@@ -7,10 +7,10 @@
         "$ref": "../common_definitions.json#/id"
       },
       "title": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "description": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "type": {
         "type": "string",

@@ -11,7 +11,7 @@
       "type": "object",
       "properties": {
         "label": {
-          "type": "string"
+          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
         },
         "value": {
           "type": "string"

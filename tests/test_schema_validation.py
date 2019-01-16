@@ -13,7 +13,7 @@ logger = getLogger()
 configure(logger_factory=LoggerFactory())
 
 
-class TestSchemaValidation(unittest.TestCase):
+class TestSchemaValidation(unittest.TestCase):  # pylint: disable=too-many-public-methods
 
     def setUp(self):
         self.validator = Validator()
@@ -327,6 +327,38 @@ class TestSchemaValidation(unittest.TestCase):
         errors = self.validator.validate_schema(json_to_validate)
 
         self.assertEqual(0, len(errors))
+
+    def test_string_transforms(self):
+        file_name = 'schemas/test_string_transforms.json'
+        json_to_validate = self._open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(0, len(errors))
+
+    def test_invalid_string_transforms(self):
+        file_name = 'schemas/test_invalid_string_transforms.json'
+        json_to_validate = self._open_and_load_schema_file(file_name)
+
+        errors = self.validator.validate_schema(json_to_validate)
+
+        self.assertEqual(5, len(errors))
+
+        self.assertEqual(
+            errors[0]['message'],
+            "Schema Integrity Error. Placeholders in 'text' doesn't match 'placeholders' definition for block id 'block1'")
+        self.assertEqual(
+            errors[1]['message'],
+            "Schema Integrity Error. Placeholders in 'text' doesn't match 'placeholders' definition for block id 'block2'")
+        self.assertEqual(
+            errors[2]['message'],
+            "Schema Integrity Error. Placeholders in 'text' doesn't match 'placeholders' definition for block id 'block3'")
+        self.assertEqual(
+            errors[3]['message'],
+            "Schema Integrity Error. Can't reference `previous_transform` in a first transform in block id 'block4'")
+        self.assertEqual(
+            errors[4]['message'],
+            "Schema Integrity Error. `previous_transform` not referenced in chained transform in block id 'block5'")
 
     @staticmethod
     def _open_and_load_schema_file(file):

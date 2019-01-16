@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "calculate_years_difference": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["calculate_years_difference"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "first_date": {
+            "oneOf": [
+              {
+                "$ref": "../definitions.json#/value_sources" 
+              },
+              {
+                "$ref": "#/date_value" 
+              }
+            ]
+          },
+          "second_date": {
+            "oneOf": [
+              {
+                "$ref": "../definitions.json#/value_sources" 
+              },
+              {
+                "$ref": "#/date_value" 
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "first_date",
+          "second_date"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  },
+  "date_value": {
+    "type:": "object",
+    "properties": {
+      "value": {
+        "type": "string",
+        "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now)$"
+      }
+    },
+    "additionalProperties": false
+  }
+}

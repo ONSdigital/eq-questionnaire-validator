@@ -13,7 +13,7 @@
         ]
       },
       "title": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "label": {
         "type": "string"

@@ -462,7 +462,9 @@
     "type": "array",
     "description": "Used to allow a title contents to be set based on conditional values",
     "items": {
-      "value": "string",
+      "value": {
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+      },
       "when": {
         "$ref": "common_definitions.json#/when"
       },
