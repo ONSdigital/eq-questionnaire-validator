@@ -1,6 +1,6 @@
-FROM python:3.6
+FROM python:3.6-alpine
 
-RUN pip install pipenv==8.2.7
+RUN pip install pipenv==2018.11.26
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

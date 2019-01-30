@@ -1,0 +1,31 @@
+language: python
+python: 3.6
+dist: trusty
+sudo: true
+env:
+    - PIPENV_IGNORE_VIRTUALENVS=1
+before_install:
+    - pyenv versions
+    - pyenv install --skip-existing
+    - pyenv rehash
+    - pyenv global $(cat .python-version)
+    - pip install -U pip pipenv wheel
+    - pipenv install --dev --deploy
+    - pipenv check
+cache:
+    - pip
+    - directories:
+        - /opt/python/
+        - /home/travis/.local/share/
+script:
+    - set -e
+    - pipenv run ./scripts/run_lint.sh
+    - pipenv run py.test
+    - export TAG=`if [ "$TRAVIS_PULL_REQUEST_BRANCH" == "" ]; then echo "v3"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
+    - docker build -t onsdigital/eq-schema-validator:$TAG -f Dockerfile .
+    - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+    - echo "Pushing with tag [$TAG]"
+    - docker push onsdigital/eq-schema-validator:$TAG
+branches:
+    only:
+        - v3
