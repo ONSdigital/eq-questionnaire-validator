@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "format_date": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_date"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "$ref": "../definitions.json#/value_sources" 
+          },
+          "format": {
+            "type": "string",
+            "description": "See https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
+            "enum": [
+              "EEEE d MMMM",
+              "EEEE d MMMM YYYY"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "date"
+        ]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}

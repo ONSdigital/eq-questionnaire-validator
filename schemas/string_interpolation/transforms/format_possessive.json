@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "format_possessive": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_possessive"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "string": {
+            "$ref": "../definitions.json#/value_sources" 
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "string"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}

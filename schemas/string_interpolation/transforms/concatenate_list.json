@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "concatenate_list": {
+    "description": "A transform for joining lists of strings together with a delimiter e.g. with a list of ['a','b'] and delimeter ' ' the output would be 'a b'.",
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["concatenate_list"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
+            "$ref": "../definitions.json#/value_sources" 
+          },
+          "delimiter": {
+            "description": "The delimiter to use, common ones are ' ' for names and ', ' for addresses.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "list",
+          "delimiter"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}

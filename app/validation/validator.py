@@ -93,6 +93,8 @@ class Validator:    # pylint: disable=too-many-public-methods
 
             errors.extend(self._validate_questions(block, answers_with_parent_ids, numeric_answer_ranges))
 
+            errors.extend(self._validate_placeholders(block))
+
         return errors
 
     def _validate_questions(self, block, answers_with_parent_ids, numeric_answer_ranges):
@@ -580,6 +582,10 @@ class Validator:    # pylint: disable=too-many-public-methods
 
         for option in answer.get('options', []):
 
+            # labels can have placeholders in, in which case we won't know if they are a duplicate or not
+            if isinstance(option['label'], dict):
+                continue
+
             if option['label'] in labels:
                 errors.append(self._error_message('Duplicate label found - {}'.format(option['label'])))
 
@@ -751,6 +757,71 @@ class Validator:    # pylint: disable=too-many-public-methods
 
         if 'calculated' in answer and ('decimal_places' not in answer or answer['decimal_places'] != 2):
             errors.append(self._error_message("'decimal_places' must be defined and set to 2 for the answer_id - {}".format(answer['id'])))
+
+        return errors
+
+    def _get_dicts_with_key(self, input_data, key_name):
+        """
+        Get all dicts that contain `key_name`.
+        :param input_data: the input data to search
+        :param key_name: the key to find
+        :return: list of dicts containing the key name, otherwise returns None
+        """
+        if isinstance(input_data, dict):
+            for k, v in input_data.items():
+                if k == key_name:
+                    yield input_data
+                else:
+                    yield from self._get_dicts_with_key(v, key_name)
+        elif isinstance(input_data, list):
+            for item in input_data:
+                yield from self._get_dicts_with_key(item, key_name)
+
+    def _validate_placeholders(self, block_json):
+        errors = []
+        strings_with_placeholders = self._get_dicts_with_key(block_json, 'placeholders')
+        for string_with_placeholders in strings_with_placeholders or []:
+            regex = re.compile('{(.*?)}')
+            placeholders_in_string = regex.findall(string_with_placeholders.get('text'))
+            placeholder_definition_names = []
+            for placeholder_definition in string_with_placeholders.get('placeholders'):
+                placeholder_definition_names.append(placeholder_definition['placeholder'])
+
+                transforms = placeholder_definition.get('transforms')
+                if transforms:
+                    errors.extend(self._validate_placeholder_transforms(transforms, block_json['id']))
+
+            if sorted(placeholders_in_string) != sorted(placeholder_definition_names):
+                errors.append(self._error_message(
+                    "Placeholders in 'text' doesn't match 'placeholders' definition for block id '{}'".format(
+                        block_json['id'])))
+
+        return errors
+
+    def _validate_placeholder_transforms(self, transforms, block_id):
+        errors = []
+
+        # First transform can't reference a previous transform
+        first_transform = transforms[0]
+        for argument_name in first_transform.get('arguments'):
+            argument = first_transform['arguments'][argument_name]
+            if isinstance(argument, dict) and argument.get('source') == 'previous_transform':
+                errors.append(self._error_message(
+                    "Can't reference `previous_transform` in a first transform in block id '{}'".format(
+                        block_id)))
+
+        # Previous transform must be referenced in all subsequent transforms
+        for transform in transforms[1:]:
+            previous_transform_used = False
+            for argument_name in transform.get('arguments'):
+                argument = transform['arguments'][argument_name]
+                if isinstance(argument, dict) and argument.get('source') == 'previous_transform':
+                    previous_transform_used = True
+
+            if not previous_transform_used:
+                errors.append(self._error_message(
+                    "`previous_transform` not referenced in chained transform in block id '{}'".format(
+                        block_id)))
 
         return errors
 

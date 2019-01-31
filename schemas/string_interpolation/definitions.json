@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "string_with_placeholders": {
+    "oneOf": [
+      {
+        "description": "String with no placeholders.",
+        "type": "string"
+      },
+      {
+        "description": "An object that represents a string with placeholders.",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "placeholders": {
+            "$ref": "#/placeholders"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "placeholders"
+        ]
+      }
+    ]
+  },
+  "placeholders": {
+    "description": "A mapping of string placeholders to their values.",
+    "type": "array", 
+    "items": {
+      "$ref": "#/placeholder"
+    },
+    "minItems": 1
+  },
+  "placeholder": {
+    "description": "A mapping of a string placeholder to it's value. The value can also be transformed.",
+    "type": "object",
+    "properties": {
+      "placeholder": {
+        "description": "The placeholder in the string that will be replaced e.g. 'test' is the placeholder in 'My {test} string'.",
+        "type": "string",
+        "pattern": "^[0-9a-z_]+$"
+      },
+      "value": {
+        "description": "A direct lookup with no transforms.",
+        "$ref": "#/lookup_source"
+      },
+      "transforms": {
+        "description": "A list of transforms to resolve the placeholder value.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "anyOf": [
+            {
+              "$ref": "transforms/format_number.json#/format_number"
+            },
+            {
+              "$ref": "transforms/format_date.json#/format_date"
+            },
+            {
+              "$ref": "transforms/format_date_range.json#/format_date_range"
+            },
+            {
+              "$ref": "transforms/calculate_years_difference.json#/calculate_years_difference"
+            },
+            {
+              "$ref": "transforms/concatenate_list.json#/concatenate_list"
+            },
+            {
+              "$ref": "transforms/format_list.json#/format_list"
+            },
+            {
+              "$ref": "transforms/format_possessive.json#/format_possessive"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "placeholder"
+    ],
+    "oneOf": [
+      {
+        "required": [ "value" ]
+      },
+      {
+        "required": [ "transforms" ]
+      }
+    ]
+  },
+  "value_sources": {
+    "oneOf": [
+      {
+        "$ref": "#/chained_source"
+      },
+      {
+        "$ref": "#/lookup_source"
+      }
+    ]
+  },
+  "chained_source": {
+    "description": "This will take the value from the previous transform. Can't be used for the first transform.",
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string",
+        "enum": [
+          "previous_transform"
+        ]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "source"
+    ]
+  },
+  "lookup_source": {
+    "description": "Look up the value from a data source.",
+    "type": "object",
+    "properties": {
+      "source": {
+        "description": "The data source.",
+        "type": "string",
+        "enum": [
+          "answers",
+          "metadata",
+          "collection_metadata"
+        ]
+      },
+      "identifier": {
+        "description": "The identifier of the item in the data source. This would be an answer id for answers, and a metadata property name for metadata. The array option allows multiple values to be passed as a list to a transform.",
+        "type": ["string","array"]
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "source",
+      "identifier"
+    ]
+  }
+}
+

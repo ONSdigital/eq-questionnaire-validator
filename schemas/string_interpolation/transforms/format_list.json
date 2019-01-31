@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "format_list": {
+    "description": "A transform for outputting a list",
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_list"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
+            "$ref": "../definitions.json#/value_sources" 
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "list"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}

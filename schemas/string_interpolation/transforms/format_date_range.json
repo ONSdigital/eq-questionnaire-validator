@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "format_date_range": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_date_range"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "$ref": "../definitions.json#/value_sources"
+          },
+          "end_date": {
+            "$ref": "../definitions.json#/value_sources"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "start_date"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}
