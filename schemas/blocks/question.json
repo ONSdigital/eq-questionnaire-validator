@@ -22,31 +22,11 @@
         "type": "string",
         "enum": ["Question"]
       },
-      "questions": {
-        "type": "array",
-        "minItems": 1,
-        "items": {
-          "oneOf": [
-            {
-              "$ref": "../questions/general.json#/question"
-            },
-            {
-              "$ref": "../questions/calculated.json#/question"
-            },
-            {
-              "$ref": "../questions/date_range.json#/question"
-            },
-            {
-              "$ref": "../questions/repeating_answer.json#/question"
-            },
-            {
-              "$ref": "../questions/relationship.json#/question"
-            },
-            {
-              "$ref": "../questions/mutually_exclusive.json#/question"
-            }
-          ]
-        }
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "question_variants": {
+        "$ref": "../common_definitions.json#/question_variants"
       },
       "routing_rules": {
         "$ref": "../common_definitions.json#/routing_rules"
@@ -58,8 +38,19 @@
     "additionalProperties": false,
     "required": [
       "id",
-      "type",
-      "questions"
+      "type"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "question"
+        ]
+      },
+      {
+        "required": [
+          "question_variants"
+        ]
+      }
     ]
   }
 }

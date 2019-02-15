@@ -26,7 +26,7 @@
         },
         "content": {
           "$ref": "common_definitions.json#/content"
-      }
+        }
       },
       "additionalProperties": false
     }
@@ -53,8 +53,7 @@
     "minItems": 1,
     "items": {
       "type": "object",
-      "anyOf": [
-        {
+      "anyOf": [{
           "required": [
             "title"
           ]
@@ -146,8 +145,8 @@
           ]
         },
         "comparison_id": {
-            "type": "string",
-            "description": "The id of an answer which should be compared to."
+          "type": "string",
+          "description": "The id of an answer which should be compared to."
         },
         "date_comparison": {
           "type": "object",
@@ -169,15 +168,14 @@
             }
           },
           "additionalProperties": false,
-          "oneOf": [
-            {
-              "required": [ "id" ]
+          "oneOf": [{
+              "required": ["id"]
             },
             {
-              "required": [ "meta" ]
+              "required": ["meta"]
             },
             {
-              "required": [ "value" ]
+              "required": ["value"]
             }
           ]
         }
@@ -186,8 +184,7 @@
       "required": [
         "condition"
       ],
-      "oneOf": [
-        {
+      "oneOf": [{
           "required": [
             "id"
           ]
@@ -284,17 +281,16 @@
       }
     },
     "additionalProperties": false,
-    "anyOf": [
-        {
-          "required": [ "days" ]
-        },
-        {
-          "required": [ "months" ]
-        },
-        {
-          "required": [ "years" ]
-        }
-      ]
+    "anyOf": [{
+        "required": ["days"]
+      },
+      {
+        "required": ["months"]
+      },
+      {
+        "required": ["years"]
+      }
+    ]
   },
   "offset_by_yyyy_mm": {
     "type": "object",
@@ -307,14 +303,13 @@
       }
     },
     "additionalProperties": false,
-    "anyOf": [
-        {
-          "required": [ "months" ]
-        },
-        {
-          "required": [ "years" ]
-        }
-      ]
+    "anyOf": [{
+        "required": ["months"]
+      },
+      {
+        "required": ["years"]
+      }
+    ]
   },
   "offset_by_yyyy": {
     "type": "object",
@@ -324,7 +319,7 @@
       }
     },
     "additionalProperties": false,
-    "required": [ "years" ]
+    "required": ["years"]
   },
   "routing_rules": {
     "type": "array",
@@ -347,8 +342,7 @@
               "$ref": "common_definitions.json#/when"
             }
           },
-          "oneOf": [
-            {
+          "oneOf": [{
               "required": [
                 "block"
               ]
@@ -362,90 +356,86 @@
           "additionalProperties": false
         },
         "repeat": {
-          "oneOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "enum": [
-                      "until"
-                    ]
-                  },
-                  "when": {
-                    "$ref": "common_definitions.json#/when"
-                  }
+          "oneOf": [{
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "until"
+                  ]
                 },
-                "required": [
-                  "type",
-                  "when"
-                ],
-                "additionalProperties": false
+                "when": {
+                  "$ref": "common_definitions.json#/when"
+                }
               },
-              {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "enum": [
-                      "answer_value"
-                    ]
-                  },
-                  "answer_id": {
-                    "type": "string"
-                  }
+              "required": [
+                "type",
+                "when"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "answer_value"
+                  ]
                 },
-                "required": [
-                  "type",
-                  "answer_id"
-                ],
-                "additionalProperties": false
+                "answer_id": {
+                  "type": "string"
+                }
               },
-              {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "enum": [
-                      "answer_count",
-                      "answer_count_minus_one"
-                    ]
-                  },
-                  "offset": {
-                    "type": "integer"
-                  },
-                  "answer_id": {
+              "required": [
+                "type",
+                "answer_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "answer_count",
+                    "answer_count_minus_one"
+                  ]
+                },
+                "offset": {
+                  "type": "integer"
+                },
+                "answer_id": {
+                  "type": "string"
+                },
+                "answer_ids": {
+                  "type": "array",
+                  "items": {
                     "type": "string"
                   },
-                  "answer_ids": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
-                  }
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "oneOf": [{
+                  "required": [
+                    "type",
+                    "answer_id"
+                  ]
                 },
-                "oneOf": [
-                  {
-                    "required": [
-                      "type",
-                      "answer_id"
-                    ]
-                  },
-                  {
-                    "required": [
-                      "type",
-                      "answer_ids"
-                    ]
-                  }
-                ]
-                ,
-                "additionalProperties": false
-              }
+                {
+                  "required": [
+                    "type",
+                    "answer_ids"
+                  ]
+                }
+              ],
+              "additionalProperties": false
+            }
           ]
         }
       },
       "additionalProperties": false,
-      "oneOf": [
-        {
+      "oneOf": [{
           "required": [
             "goto"
           ]
@@ -458,20 +448,18 @@
       ]
     }
   },
-  "titles": {
+  "content_variants": {
     "type": "array",
-    "description": "Used to allow a title contents to be set based on conditional values",
+    "minItems": 2,
     "items": {
-      "value": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
-      "when": {
-        "$ref": "common_definitions.json#/when"
-      },
-      "required": [
-        "value"
-      ]
+      "$ref": "variants/content_variant.json#/content_variant"
+    }
+  },
+  "question_variants": {
+    "type": "array",
+    "minItems": 2,
+    "items": {
+      "$ref": "variants/question_variant.json#/question_variant"
     }
   }
 }
-

@@ -22,11 +22,11 @@
         "type": "string",
         "enum": ["ConfirmationQuestion"]
       },
-      "questions": {
-        "type": "array",
-        "items": {
-          "$ref": "../questions/general.json#/question"
-        }
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "question_variants": {
+        "$ref": "../common_definitions.json#/question_variants"
       },
       "routing_rules": {
         "$ref": "../common_definitions.json#/routing_rules"
@@ -39,7 +39,19 @@
     "required": [
       "id",
       "type",
-      "questions"
+      "routing_rules"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "question"
+        ]
+      },
+      {
+        "required": [
+          "question_variants"
+        ]
+      }
     ]
   }
 }

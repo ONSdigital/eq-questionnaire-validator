@@ -203,57 +203,62 @@ Must support proxy versions for the following features:
 
 ### Interstitial
 
-To allow proxy versions of interstitials, a top-level `variants` object has been introduced. The variant to display will be chosen based on the `when` conditions listed in the `variant_choice` list. `routing_rules` and block `id` are kept at the top-level, so these cannot be changed as part of the proxy variant.
+To allow proxy versions of interstitials, a top-level `content_variants` object has been introduced. The variant to display will be chosen based on the `when` conditions for each object in the variants block. 
 
 ```json
 {
     "type": "Interstitial",
     "id": "past-main-employment-block",
-    "variants": {
-        "past-main-employment": {
-            "title": "Answer the remaining questions for your last main job",
-            "description": "Your main job is the job in which you usually worked the most hours",
-            "content": [
-                {
-                    "title": "Some extra information",
-                    "list": [
-                        "A list of thing",
-                        "Some of these things are needed"
-                    ]
-                },
-                {
-                    "description": "Some more extra information"
-                }
-            ]
-        },
-        "past-main-employment-proxy": {
-            "title": "Answer the remaining questions for {{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name_possessive}} last main job",
-            "description": "Their main job is the job in which they usually worked the most hours",
-            "content": [
-                {
-                    "title": "Some extra information",
-                    "list": [
-                        "A list of thing",
-                        "Some of these things are needed"
-                    ]
-                },
-                {
-                    "description": "Some more extra information"
-                }
-            ]
-        }
-    },
-    "variant_choice": [
+    "content_variants": [
         {
-            "variant": "past-main-employment-proxy",
+            "content": {
+                "id": "past-main-employment-content",
+                "type": "Content",
+                "title": "Answer the remaining questions for your last main job",
+                "description": "Your main job is the job in which you usually worked the most hours",
+                "content": [
+                    {
+                        "title": "Some extra information",
+                        "list": [
+                            "A list of thing",
+                            "Some of these things are needed"
+                        ]
+                    },
+                    {
+                        "description": "Some more extra information"
+                    }
+                ]
+            },
+            "when": [{
+                "id": "proxy-answer",
+                "condition": "equals",
+                "value": "no"
+            }]
+        },
+        {
+            "content": {
+                "id": "past-main-employment-content",
+                "type": "Content",
+                "title": "Answer the remaining questions for {{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name_possessive}} last main job",
+                "description": "Their main job is the job in which they usually worked the most hours",
+                "content": [
+                    {
+                        "title": "Some extra information",
+                        "list": [
+                            "A list of thing",
+                            "Some of these things are needed"
+                        ]
+                    },
+                    {
+                        "description": "Some more extra information"
+                    }
+                ]
+            },
             "when": [{
                 "id": "proxy-answer",
                 "condition": "equals",
                 "value": "proxy"
-            }]
-        },
-        {
-            "variant": "past-main-employment",
+            }],
         }
     ],
     "routing_rules": [{
@@ -264,13 +269,11 @@ To allow proxy versions of interstitials, a top-level `variants` object has been
 }
 ```
 
-Variant choice is composed of a list of objects, these will be evaluated in the order of the list and the first matching variant will be chosen for display.
+Each variant object can contain a content object and a when rule which governs whether the content should be displayed.
 
-A default variant may be enforced, e.g. one of the variants does not include a when condition and will be used if no previous variants match.
+Variants will be evaluated in order.
 
-An object has been used for the variants key to allow the id of each variant to be looked up efficiently.
-
-Variants with a length of one should be disallowed since they can be moved out of the `variants` object.
+Variants with a length of one should be disallowed since they can be moved out of the `content_variants` object.
 
 ### Question
 
@@ -280,8 +283,8 @@ For questions, the basic premise is to use the multiple question scheme that is 
 {
     "id": "example",
     "type": "Question",
-    "variants": {
-        "example-question": {
+    "question_variants": [{
+        "question": {
             "id": "example-question",
             "title": "Did you do any work today?",
             "type": "General",
@@ -300,7 +303,14 @@ For questions, the basic premise is to use the multiple question scheme that is 
                 ]
             }]
         },
-        "example-question-proxy": {
+        "when": [{
+            "id": "proxy-answer",
+            "condition": "equals",
+            "value": "no"
+        }]
+    },
+    {
+        "question": {
             "id": "example-question-proxy",
             "title": "Did they do any work today?",
             "type": "General",
@@ -319,34 +329,25 @@ For questions, the basic premise is to use the multiple question scheme that is 
                     }
                 ]
             }]
-        }
-    },
-    "variant_choice": [
-        {
-            "variant": "example-question-proxy",
-            "when": [{
-                "id": "proxy-answer",
-                "condition": "equals",
-                "value": "proxy"
-            }]
         },
-        {
-            "variant": "example-question"
-        }
-    ]
+        "when": [{
+            "id": "proxy-answer",
+            "condition": "equals",
+            "value": "proxy"
+        }]
+    }]
 }
 ```
 
-Each variant should have the same structure as questions currently do, including the `id`. The key of each object in `variants` is a label for that variant and does not necessarily correspond to the question id.
+Each variant should have the same structure as questions currently do. 
 
-Skip conditions on questions have been moved to the top level of the block and into `variant_choice`. This enforces a seperation between the questions themselves and the logic around whether or not they should be displayed.
-
-The schema should intitially still allow `question` to be used for questions which don't require a variant form. The question should still use the same object schema as currently found within `questions`.
+The `questions` key should be removed from the block and replaced with `question` and `question_variant`.
 
 Single variants should be disallowed (i.e. length of variants == 1) since a variants object should be converted to a question at this point.
 
 ### Additional Changes
 - The current `titles` key should be removed and replaced with `title` which is a string.
 - `questions` should be removed and relpaced with `question` object which only allows a single question.
-- The schema validator should ensure that variants has a length of greater than one.
-- The schema validator should enforce at least one variant_choice without a `when` condition as a default choice.
+- The schema validator should ensure that question_variants and content_variants has a length of greater than one.
+- Answer IDs within variants should allow duplicates. This means routing becomes simpler for proxy etc.
+

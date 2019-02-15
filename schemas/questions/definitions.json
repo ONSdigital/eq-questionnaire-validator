@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "questions": {
+    "type": "array",
+    "minItems": 1,
+    "items": {
+      "$ref": "#/question"
+    }
+  },
+  "question": {
+    "oneOf": [{
+        "$ref": "types/general.json#/question"
+      },
+      {
+        "$ref": "types/calculated.json#/question"
+      },
+      {
+        "$ref": "types/date_range.json#/question"
+      },
+      {
+        "$ref": "types/repeating_answer.json#/question"
+      },
+      {
+        "$ref": "types/relationship.json#/question"
+      },
+      {
+        "$ref": "types/mutually_exclusive.json#/question"
+      }
+    ]
+  }
+}

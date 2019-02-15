@@ -12,8 +12,8 @@
           "CalculatedSummary"
         ]
       },
-      "titles": {
-        "$ref": "../common_definitions.json#/titles"
+      "title": {
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "routing_rules": {
         "$ref": "../common_definitions.json#/routing_rules"
@@ -38,15 +38,15 @@
             },
             "description": "The id of the answers from which to do calculated_type to"
           },
-          "titles": {
-            "$ref": "../common_definitions.json#/titles"
+          "title": {
+            "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
           }
         },
         "additionalProperties": false,
         "required": [
           "calculation_type",
           "answers_to_calculate",
-          "titles"
+          "title"
         ]
       }
     },
@@ -54,7 +54,7 @@
     "required": [
       "id",
       "type",
-      "titles",
+      "title",
       "calculation"
     ]
   }

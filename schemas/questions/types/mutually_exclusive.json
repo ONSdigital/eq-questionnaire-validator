@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../../common_definitions.json#/id"
+      },
+      "content": {
+        "$ref": "../../common_definitions.json#/content"
+      },
+      "title": {
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "number": {
+        "type": "string"
+      },
+      "description": {
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "definitions": {
+        "$ref": "../../common_definitions.json#/definitions"
+      },
+      "guidance": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "../../common_definitions.json#/content"
+          }
+        }
+      },
+      "skip_conditions": {
+        "$ref": "../../common_definitions.json#/skip_conditions"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["MutuallyExclusive"]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "answers": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../../answers/checkbox.json#/answer"
+            },
+            {
+              "$ref": "../../answers/currency.json#/answer"
+            },
+            {
+              "$ref": "../../answers/date.json#/answer"
+            },
+            {
+              "$ref": "../../answers/month_year_date.json#/answer"
+            },
+            {
+              "$ref": "../../answers/year_date.json#/answer"
+            },
+            {
+              "$ref": "../../answers/duration.json#/answer"
+            },
+            {
+              "$ref": "../../answers/number.json#/answer"
+            },
+            {
+              "$ref": "../../answers/percentage.json#/answer"
+            },
+            {
+              "$ref": "../../answers/text_area.json#/answer"
+            },
+            {
+              "$ref": "../../answers/text_field.json#/answer"
+            },
+            {
+              "$ref": "../../answers/unit.json#/answer"
+            },
+            {
+              "$ref": "../../answers/dropdown.json#/answer"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "mandatory",
+      "answers",
+      "title"
+    ]
+  }
+}

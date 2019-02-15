@@ -19,22 +19,29 @@
         "type": "string",
         "enum": ["Confirmation"]
       },
-      "questions": {
-        "type": "array",
-        "minItems": 1,
-        "items": {
-          "oneOf": [
-            {
-              "$ref": "../questions/content.json#/question"
-            }
-          ]
-        }
+      "content": {
+        "$ref": "../common_definitions.json#/content"
+      },
+      "content_variants": {
+        "$ref": "../common_definitions.json#/content_variants"
       }
     },
     "additionalProperties": false,
     "required": [
       "id",
       "type"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "content"
+        ]
+      },
+      {
+        "required": [
+          "content_variants"
+        ]
+      }
     ]
   }
 }

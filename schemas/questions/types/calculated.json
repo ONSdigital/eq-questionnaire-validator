@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../../common_definitions.json#/id"
+      },
+      "content": {
+        "$ref": "../../common_definitions.json#/content"
+      },
+      "title": {
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "number": {
+        "type": "string"
+      },
+      "description": {
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "definitions": {
+        "$ref": "../../common_definitions.json#/definitions"
+      },
+      "guidance": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "../../common_definitions.json#/content"
+          }
+        }
+      },
+      "skip_conditions": {
+        "$ref": "../../common_definitions.json#/skip_conditions"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "Calculated"
+        ]
+      },
+      "calculations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "calculation_type": {
+              "type": "string",
+              "enum": [
+                "sum"
+              ]
+            },
+            "answer_id": {
+              "type": "string",
+              "description": "The id of an answer from which to obtain the total to validate against"
+            },
+            "value": {
+              "type": "integer",
+              "description": "A hard coded total to validate against"
+            },
+            "answers_to_calculate": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "../../common_definitions.json#/id"
+              },
+              "description": "The id of the answers from which to do calculated_type to"
+            },
+            "conditions": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "anyOf": [
+                  {
+                    "required": "less than"
+                  },
+                  {
+                    "required": "greater than"
+                  },
+                  {
+                    "required": "equals"
+                  }
+                ]
+              },
+              "description": "The conditions wanted to used for grouped validations, 2 items adds an 'OR' condition"
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "answer_id"
+              ]
+            },
+            {
+              "required": [
+                "value"
+              ]
+            }
+          ],
+          "required": [
+            "calculation_type",
+            "answers_to_calculate",
+            "conditions"
+          ]
+        }
+      },
+      "answers": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "../../answers/currency.json#/answer"
+            },
+            {
+              "$ref": "../../answers/number.json#/answer"
+            },
+            {
+              "$ref": "../../answers/percentage.json#/answer"
+            },
+            {
+              "$ref": "../../answers/unit.json#/answer"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "calculations",
+        "answers",
+        "title"
+      ]
+    }
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "eq_id": "3",
+  "form_type": "3",
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.2",
+  "survey_id": "3",
+  "title": "Invalid String Transforms",
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
+          "title": "",
+          "blocks": [
+            {
+              "id": "block1",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question1",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Placeholder in 'text' doesn't have a definition",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer2",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "answer1"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block2",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question2",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Number of placeholders in 'text' doesn't match number of definitions",
+                    "description": {
+                      "text": "test {answer1} and {answer2}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "answer1"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block3",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question3",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer3",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Number of placeholders in 'text' doesn't match number of definitions",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "answer1"
+                          }
+                        },
+                        {
+                          "placeholder": "answer2",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "answer2"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block4",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question4",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer4",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Can't reference 'previous_transform' in first transform",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "previous_transform"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block5",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question5",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer5",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Chained transforms must reference previous_transform",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "answer1"
+                                }
+                              }
+                            },
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "answer1"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "confirmation",
+              "type": "Confirmation",
+              "description": "",
+              "title": "",
+              "content": [
+                {
+                  "title": "Confirm"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "theme": "default",
+  "legal_basis": "StatisticsOfTradeAct",
+  "navigation": {
+    "visible": false
+  },
+  "metadata": [
+    {
+      "name": "user_id",
+      "validator": "string"
+    },
+    {
+      "name": "period_id",
+      "validator": "string"
+    },
+    {
+      "name": "ru_name",
+      "validator": "string"
+    },
+    {
+      "name": "test_metadata",
+      "validator": "string"
+    }
+  ]
+}

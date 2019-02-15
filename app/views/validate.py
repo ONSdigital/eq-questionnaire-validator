@@ -44,7 +44,7 @@ def validate_schema(data):
 
     errors = validator.validate_schema(json_to_validate)
 
-    if errors:
+    if errors['validation_errors'] or errors['schema_errors']:
         response['errors'] = errors
         logger.info('Schema validator returned errors', status=400)
         return jsonify(response), 400
