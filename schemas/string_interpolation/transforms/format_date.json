@@ -10,10 +10,10 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "date": {
+          "date_to_format": {
             "$ref": "../definitions.json#/value_sources" 
           },
-          "format": {
+          "date_format": {
             "type": "string",
             "description": "See https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
             "enum": [
@@ -24,7 +24,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "date"
+          "date_to_format"
         ]
       }
     },

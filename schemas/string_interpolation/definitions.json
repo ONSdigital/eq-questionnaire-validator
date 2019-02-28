@@ -56,6 +56,9 @@
               "$ref": "transforms/format_number.json#/format_number"
             },
             {
+              "$ref": "transforms/format_currency.json#/format_currency"
+            },
+            {
               "$ref": "transforms/format_date.json#/format_date"
             },
             {

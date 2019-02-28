@@ -10,13 +10,13 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "string": {
+          "string_to_format": {
             "$ref": "../definitions.json#/value_sources" 
           }
         },
         "additionalProperties": false,
         "required": [
-          "string"
+          "string_to_format"
         ]    
       }
     },
