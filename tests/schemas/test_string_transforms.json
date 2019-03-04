@@ -134,11 +134,11 @@
                                 {
                                     "transform": "format_date",
                                     "arguments": {
-                                        "date": {
+                                        "date_to_format": {
                                             "source": "answers",
                                             "identifier": "answer5"
                                         },
-                                        "format": "EEEE d MMMM"
+                                        "date_format": "EEEE d MMMM"
                                     }
                                 }
                             ]
@@ -278,7 +278,7 @@
                                     {
                                         "transform": "concatenate_list",
                                         "arguments": {
-                                            "list": {
+                                            "list_to_concatenate": {
                                                 "source": "answers",
                                                 "identifier": "q2-answer-1"
                                             },
@@ -302,7 +302,7 @@
                                     {
                                         "transform": "concatenate_list",
                                         "arguments": {
-                                            "list": {
+                                            "list_to_concatenate": {
                                                 "source": "answers",
                                                 "identifier": ["q2-answer-1","q2-answer-2"]
                                             },
@@ -334,7 +334,7 @@
                                     {
                                         "transform": "format_possessive",
                                         "arguments": {
-                                            "string": {
+                                            "string_to_format": {
                                                 "source": "answers",
                                                 "identifier": "q3-answer-1"
                                             }
@@ -357,7 +357,7 @@
                                     {
                                         "transform": "concatenate_list",
                                         "arguments": {
-                                            "list": {
+                                            "list_to_concatenate": {
                                                 "source": "answers",
                                                 "identifier": ["q2-answer-1","q2-answer-2"]
                                             },
@@ -367,7 +367,7 @@
                                     {
                                         "transform": "format_possessive",
                                         "arguments": {
-                                            "string": {
+                                            "string_to_format": {
                                                 "source": "previous_transform"
                                             }
                                         }
@@ -397,7 +397,7 @@
                                     {
                                         "transform": "format_list",
                                         "arguments": {
-                                            "list": {
+                                            "list_to_format": {
                                                 "source": "answers",
                                                 "identifier": ["q2-answer-1","q2-answer-2"]
                                             }
