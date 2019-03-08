@@ -20,7 +20,7 @@
           "$ref": "../common_definitions.json#/q_code"
         },
         "detail_answer": {
-            "$ref": "./text_field.json#/answer"
+          "$ref": "./text_field.json#/answer"
         },
         "description": {
           "type": "string",
@@ -50,8 +50,7 @@
         "description": "Whether validation is exclusive of value or not"
       }
     },
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "value"
         ]
@@ -79,8 +78,7 @@
         "description": "Whether validation is exclusive of value or not"
       }
     },
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "value"
         ]

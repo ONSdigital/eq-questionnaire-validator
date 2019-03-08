@@ -1,0 +1,30 @@
+{
+  "name": "eq-schema-validator",
+  "version": "1.0.0",
+  "description": "An API for validating survey schemas.",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gulp lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ONSdigital/eq-schema-validator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ONSdigital/eq-schema-validator/issues"
+  },
+  "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-diff": "^1.0.0",
+    "gulp-jsbeautifier": "^3.0.0",
+    "gulp-util": "^3.0.8"
+  }
+}

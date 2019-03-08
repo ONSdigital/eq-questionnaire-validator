@@ -31,7 +31,7 @@
         "exercise_sid": {
           "type": "string"
         },
-        "instrument_id":{
+        "instrument_id": {
           "type": "string"
         },
         "period": {

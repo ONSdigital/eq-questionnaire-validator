@@ -28,9 +28,12 @@
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "options": {
-        "allOf": [
-          { "$ref": "definitions.json#/options"},
-          { "minItems": 2 }
+        "allOf": [{
+            "$ref": "definitions.json#/options"
+          },
+          {
+            "minItems": 2
+          }
         ]
       },
       "validation": {

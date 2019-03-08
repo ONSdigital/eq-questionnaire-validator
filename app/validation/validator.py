@@ -3,6 +3,7 @@ import re
 
 import pathlib
 from json import load
+from collections import defaultdict
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -25,15 +26,14 @@ class Validator:    # pylint: disable=too-many-public-methods
         :param json_to_validate: json schema to be validated
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        schema_errors = self._validate_json_against_schema(json_to_validate)
+        all_errors = {}
 
-        if schema_errors:
-            return schema_errors
+        all_errors['schema_errors'] = self._validate_json_against_schema(json_to_validate)
 
-        errors = []
+        validation_errors = []
 
-        errors.extend(self._validate_schema_contain_metadata(json_to_validate))
-        errors.extend(self.validate_duplicates(json_to_validate))
+        validation_errors.extend(self._validate_schema_contain_metadata(json_to_validate))
+        validation_errors.extend(self.validate_duplicates(json_to_validate))
 
         numeric_answer_ranges = {}
         answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
@@ -45,14 +45,23 @@ class Validator:    # pylint: disable=too-many-public-methods
         for section in json_to_validate['sections']:
             for group in section['groups']:
 
-                errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
+                validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
                 for skip_condition in group.get('skip_conditions', []):
-                    errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, group))
+                    validation_errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, group))
 
-                errors.extend(self._validate_blocks(json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges))
+                validation_errors.extend(
+                    self._validate_blocks(json_to_validate,
+                                          section,
+                                          group,
+                                          all_groups,
+                                          answers_with_parent_ids,
+                                          numeric_answer_ranges)
+                )
 
-        return errors
+        all_errors['validation_errors'] = validation_errors
+
+        return all_errors
 
     def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
         errors = []
@@ -91,27 +100,30 @@ class Validator:    # pylint: disable=too-many-public-methods
             if block['type'] == 'CalculatedSummary':
                 errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
 
-            errors.extend(self._validate_questions(block, answers_with_parent_ids, numeric_answer_ranges))
+            errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
             errors.extend(self._validate_placeholders(block))
 
+            errors.extend(self._validate_variants(block, answers_with_parent_ids, numeric_answer_ranges))
+
         return errors
 
-    def _validate_questions(self, block, answers_with_parent_ids, numeric_answer_ranges):
+    def _validate_questions(self, block_or_variant, numeric_answer_ranges):
         errors = []
 
-        for question in block.get('questions', []):
+        questions = block_or_variant.get('questions', [])
+        question = block_or_variant.get('question')
+
+        if question:
+            questions.append(question)
+
+        for question in questions:
             errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
             errors.extend(self.validate_date_range(question))
             errors.extend(self.validate_mutually_exclusive(question))
 
-            if question.get('titles'):
-                errors.extend(self.validate_multiple_question_titles(question['titles'],
-                                                                     question['id'],
-                                                                     answers_with_parent_ids))
-
             for answer in question.get('answers', []):
-                errors.extend(self.validate_routing_on_answer_options(block, answer))
+                errors.extend(self.validate_routing_on_answer_options(block_or_variant, answer))
                 errors.extend(self.validate_duplicate_options(answer))
                 errors.extend(self.validate_totaliser_defines_decimal_places(answer))
 
@@ -127,12 +139,32 @@ class Validator:    # pylint: disable=too-many-public-methods
 
         return errors
 
+    def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
+        errors = []
+
+        question_variants = block.get('question_variants', [])
+        content_variants = block.get('content_variants', [])
+
+        all_variants = question_variants + content_variants
+
+        # This is validated in json schema, but the error message is not good at the moment.
+        if len(question_variants) == 1 or len(content_variants) == 1:
+            errors.append(self._error_message('Variants contains fewer than two variants - block: {}'.format(block['id'])))
+
+        for variant in question_variants:
+            errors.extend(self._validate_questions(variant, numeric_answer_ranges))
+
+        for variant in all_variants:
+            errors.extend(self.validate_when_rule(variant.get('when', []), answer_ids_with_group_id, block['id']))
+
+        return errors
+
     def _validate_json_against_schema(self, json_to_validate):
         try:
             base_uri = pathlib.Path(os.path.abspath('schemas/questionnaire_v1.json')).as_uri()
             resolver = RefResolver(base_uri=base_uri, referrer=self.schema)
             validate(json_to_validate, self.schema, resolver=resolver)
-            return []
+            return {}
         except ValidationError as e:
             return {
                 'message': e.message,
@@ -437,29 +469,6 @@ class Validator:    # pylint: disable=too-many-public-methods
 
         return errors
 
-    def validate_multiple_question_titles(self, question_titles, question_id, answer_ids):
-        """
-        Validates that the last title in a question titles object contains only a value key. Also validates that in any title
-        the value key is always the first key and checks that the when clause does not use a comparison_id
-        """
-        errors = []
-
-        last_title = question_titles[-1]
-        if len(last_title) != 1 or 'value' not in last_title:
-            errors.append(self._error_message('The last value must be the default value with no "when" clause for {}'
-                                              .format(question_id)))
-
-        for title in question_titles:
-            if 'when' in title:
-                for when_clause in title['when']:
-                    if when_clause.get('comparison_id'):
-                        errors.append(self._error_message('The "when" clause for {} with conditional titles cannot contain '
-                                                          'a comparison_id'
-                                                          .format(question_id)))
-                errors.extend(self.validate_when_rule(title['when'], answer_ids, question_id))
-
-        return errors
-
     def validate_date_range(self, question):
         """
         If period_limits object is present in the DateRange question validates that a date range
@@ -559,20 +568,52 @@ class Validator:    # pylint: disable=too-many-public-methods
         }
 
     def validate_duplicates(self, json_to_validate):
-        special_keys = ['id']
+        """
+        question_id & answer_id should be globally unique with some exceptions:
+            - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
+        """
+
         duplicate_errors = []
 
-        for special_key in special_keys:
-            unique_items = []
+        unique_ids_per_block = defaultdict(set)
+        non_block_ids = []
+        all_ids = []
 
-            for value in self._parse_values(json_to_validate, special_key):
-                if value in unique_items:
-                    duplicate_errors.append(
-                        self._error_message('Duplicate {} found. value {}'.format(special_key, value)))
-                else:
-                    unique_items.append(value)
+        for path, value in self._parse_values(json_to_validate, 'id'):
+            if 'blocks' in path:
+                # Generate a string path and add it to the set representing the ids in that path
+                path_list = path.split('/')
+
+                block_path = path_list[:path_list.index('blocks') + 2]
+
+                string_path = '/'.join(block_path)
+                # Since unique_ids_per_block is a set, duplicate ids will only be recorded once within the block.
+                unique_ids_per_block[string_path].add(value)
+            else:
+                non_block_ids.append(value)
+
+        for block_ids in unique_ids_per_block.values():
+            all_ids.extend(block_ids)
+
+        all_ids.extend(non_block_ids)
+
+        duplicates = Validator._find_duplicates(all_ids)
+
+        for duplicate in duplicates:
+            duplicate_errors.append(
+                self._error_message('Duplicate id found: {}'.format(duplicate)))
 
         return duplicate_errors
+
+    @staticmethod
+    def _find_duplicates(values):
+        """ Yield any elements in the input iterator which occur more than once
+        """
+        seen = set()
+        for item in values:
+            if item in seen:
+                yield item
+            seen.add(item)
 
     def validate_duplicate_options(self, answer):
         errors = []
@@ -833,20 +874,34 @@ class Validator:    # pylint: disable=too-many-public-methods
 
         return False
 
-    def _parse_values(self, schema_json, parsed_key):
-        ignored_keys = ['titles', 'routing_rules', 'skip_conditions']
+    def _parse_values(self, schema_json, parsed_key, path=None):
+        """ generate a list of values with a key of `parsed_key`.
+
+        These values will be returned with the json pointer path to them through the object e.g.
+            - '/sections/0/groups/0/blocks/1/question_variants/0/question/question-2'
+
+        Returns: generator yielding (path, value) tuples
+        """
+
+        if path is None:
+            path = ''
+
+        ignored_keys = ['routing_rules', 'skip_conditions', 'when']
 
         for key, value in schema_json.items():
             if key == parsed_key:
-                yield value
+                yield (path, value)
             elif key in ignored_keys:
                 continue
             elif isinstance(value, dict):
-                yield from self._parse_values(value, parsed_key)
+                new_path = f'{path}/{key}'
+                yield from self._parse_values(value, parsed_key, new_path)
             elif isinstance(value, list):
-                for schema_item in value:
+                new_path = f'{path}/{key}'
+                for index, schema_item in enumerate(value):
+                    indexed_path = new_path + f'/{index}'
                     if isinstance(schema_item, dict):
-                        yield from self._parse_values(schema_item, parsed_key)
+                        yield from self._parse_values(schema_item, parsed_key, indexed_path)
 
     def _get_offset_date_value(self, answer_min_or_max):
         if answer_min_or_max['value'] == 'now':
@@ -881,14 +936,23 @@ class Validator:    # pylint: disable=too-many-public-methods
         for section in json_to_validate.get('sections'):
             for group in section.get('groups'):
                 for block in group.get('blocks'):
-                    if block.get('questions'):
-                        for question in block['questions']:
-                            for answer in question.get('answers', []):
-                                answers[answer['id']] = {
-                                    'answer': answer,
-                                    'block': block['id'],
-                                    'group_id': group['id'],
-                                    'section': section['id']
-                                }
+                    questions = []
+
+                    for variant in block.get('question_variants', []):
+                        if 'question' in variant:
+                            questions.append(variant.get('question', {}))
+
+                    single_question = block.get('question')
+                    if single_question:
+                        questions.append(single_question)
+
+                    for question in questions:
+                        for answer in question.get('answers', []):
+                            answers[answer['id']] = {
+                                'answer': answer,
+                                'block': block['id'],
+                                'group_id': group['id'],
+                                'section': section['id']
+                            }
 
         return answers

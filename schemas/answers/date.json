@@ -64,8 +64,7 @@
           }
         },
         "additionalProperties": false,
-        "oneOf": [
-          {
+        "oneOf": [{
             "required": [
               "value"
             ]
@@ -103,8 +102,7 @@
           }
         },
         "additionalProperties": false,
-        "oneOf": [
-          {
+        "oneOf": [{
             "required": [
               "value"
             ]

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "question_variant": {
+    "type": "object",
+    "properties": {
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "when": {
+        "$ref": "../common_definitions.json#/when"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "when",
+      "question"
+    ]
+  }
+}

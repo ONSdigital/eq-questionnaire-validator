@@ -12,6 +12,12 @@ before_install:
     - pip install -U pip pipenv wheel
     - pipenv install --dev --deploy
     - pipenv check
+    - nvm install 10
+    - nvm use 10
+
+install:
+    - npm install .
+
 cache:
     - pip
     - directories:

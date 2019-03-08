@@ -1,8 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
   "string_with_placeholders": {
-    "oneOf": [
-      {
+    "oneOf": [{
         "description": "String with no placeholders.",
         "type": "string"
       },
@@ -27,7 +26,7 @@
   },
   "placeholders": {
     "description": "A mapping of string placeholders to their values.",
-    "type": "array", 
+    "type": "array",
     "items": {
       "$ref": "#/placeholder"
     },
@@ -51,8 +50,7 @@
         "type": "array",
         "items": {
           "type": "object",
-          "anyOf": [
-            {
+          "anyOf": [{
               "$ref": "transforms/format_number.json#/format_number"
             },
             {
@@ -84,18 +82,16 @@
     "required": [
       "placeholder"
     ],
-    "oneOf": [
-      {
-        "required": [ "value" ]
+    "oneOf": [{
+        "required": ["value"]
       },
       {
-        "required": [ "transforms" ]
+        "required": ["transforms"]
       }
     ]
   },
   "value_sources": {
-    "oneOf": [
-      {
+    "oneOf": [{
         "$ref": "#/chained_source"
       },
       {
@@ -134,7 +130,7 @@
       },
       "identifier": {
         "description": "The identifier of the item in the data source. This would be an answer id for answers, and a metadata property name for metadata. The array option allows multiple values to be passed as a list to a transform.",
-        "type": ["string","array"]
+        "type": ["string", "array"]
       }
     },
     "additionalProperties": false,
@@ -144,4 +140,3 @@
     ]
   }
 }
-

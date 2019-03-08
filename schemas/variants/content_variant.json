@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "content_variant": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "$ref": "../common_definitions.json#/content"
+      },
+      "when": {
+        "$ref": "../common_definitions.json#/when"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "when",
+      "content"
+    ]
+  }
+}
