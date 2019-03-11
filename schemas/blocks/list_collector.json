@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["ListCollector"]
+      },
+      "populates_list": {
+        "type": "string"
+      },
+      "add_answer_value": {
+        "type": "string"
+      },
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "question_variants": {
+        "$ref": "../common_definitions.json#/question_variants"
+      },
+      "add_block": {
+        "$ref": "question.json#/block"
+      },
+      "edit_block": {
+        "$ref": "question.json#/block"
+      },
+      "remove_block": {
+        "$ref": "question.json#/block"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "populates_list",
+      "add_answer_value",
+      "add_block",
+      "edit_block",
+      "remove_block"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "question"
+        ]
+      },
+      {
+        "required": [
+          "question_variants"
+        ]
+      }
+    ]
+  }
+}
