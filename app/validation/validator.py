@@ -1,10 +1,8 @@
 import os
 import re
-
 import pathlib
 from json import load
 from collections import defaultdict
-
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
@@ -100,10 +98,11 @@ class Validator:    # pylint: disable=too-many-public-methods
             if block['type'] == 'CalculatedSummary':
                 errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
 
+            if block['type'] == 'ListCollector':
+                errors.extend(self.validate_list_collector_type(block))
+
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
-
             errors.extend(self._validate_placeholders(block))
-
             errors.extend(self._validate_variants(block, answers_with_parent_ids, numeric_answer_ranges))
 
         return errors
@@ -311,6 +310,49 @@ class Validator:    # pylint: disable=too-many-public-methods
                                               .format(block['id'])))
 
         return errors
+
+    def validate_list_collector_type(self, block):  # noqa: C901  pylint: disable=too-complex
+        errors = []
+        questions = []
+        add_answer_value = block['add_answer_value']
+
+        if 'question' in block:
+            questions.append(block['question'])
+
+        if 'question_variants' in block:
+            for question in block['question_variants']:
+                questions.append(question)
+
+        for question in questions:
+            for answer in question['answers']:
+                if answer['type'] != 'Radio':
+                    errors.append(self._error_message('The list collector block {} does not contain a Radio answer type'
+                                                      .format(block['id'])))
+
+                if not self.options_contain_value(answer['options'], add_answer_value):
+                    errors.append(
+                        self._error_message('The list collector block {} has an add_answer_value that is not present in the answer values'
+                                            .format(block['id'])))
+
+        if 'routing_rules' in block['add_block']:
+            errors.append(self._error_message('The list collector block {} contains routing rule on the "add_block"'
+                                              .format(block['id'])))
+
+        if 'routing_rules' in block['edit_block']:
+            errors.append(self._error_message('The list collector block {} contains routing rule on the "edit_block"'
+                                              .format(block['id'])))
+
+        if 'routing_rules' in block['remove_block']:
+            errors.append(self._error_message('The list collector block {} contains routing rule on the "remove_block"'
+                                              .format(block['id'])))
+
+        return errors
+
+    @staticmethod
+    def options_contain_value(options, value):
+        for option in options:
+            if option['value'] == value:
+                return True
 
     def validate_calculated_summary_type(self, block, answers_with_parent_ids):
         answers_to_calculate = block['calculation']['answers_to_calculate']

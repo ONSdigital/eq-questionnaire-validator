@@ -352,3 +352,41 @@ def test_duplicate_answer_ids():
     assert 'Schema Integrity Error. Duplicate id found: block-2' in error_messages
 
     assert schema_errors == {}
+
+
+def test_invalid_list_collector_non_radio():
+    file_name = 'schemas/invalid/test_invalid_list_collector_non_radio.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, schema_errors = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    assert 'Schema Integrity Error. The list collector block list-collector does not contain a Radio answer type' \
+           in error_messages
+
+    assert schema_errors == {}
+
+
+def test_invalid_list_collector_with_routing():
+    file_name = 'schemas/invalid/test_invalid_list_collector_with_routing.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, schema_errors = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    assert 'Schema Integrity Error. The list collector block list-collector contains routing rule on the "remove_block"' in error_messages
+
+    assert schema_errors == {}
+
+
+def test_invalid_list_collector_with_no_add_option():
+    file_name = 'schemas/invalid/test_invalid_list_collector_with_no_add_option.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, schema_errors = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    assert 'Schema Integrity Error. The list collector block list-collector has an add_answer_value that is not present ' \
+           'in the answer values' in error_messages
+
+    assert schema_errors == {}

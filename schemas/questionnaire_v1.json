@@ -177,6 +177,9 @@
                         "$ref": "blocks/introduction.json#/block"
                       },
                       {
+                        "$ref": "blocks/list_collector.json#/block"
+                      },
+                      {
                         "$ref": "blocks/question.json#/block"
                       },
                       {

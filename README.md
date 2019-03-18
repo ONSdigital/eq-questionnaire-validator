@@ -46,6 +46,7 @@ In the eq-schema-validator directory, ensure you are using a recent version of n
 
 ```
 npm install 
+npm i -g gulp-cli
 ```
 
 Run the following to format all json files in the schemas directory:
