@@ -15,6 +15,39 @@
           "title": "",
           "blocks": [
             {
+              "id": "block0",
+              "type": "Question",
+              "question": {
+                "id": "question0",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "ref-answer0",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "An answer which transforms may reference",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "ref-answer1",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A second answer which transforms may reference",
+                    "description": ""
+                  },
+                  {
+                    "id": "ref-answer2",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A third answer which transforms may reference",
+                    "description": ""
+                  }
+                ]
+              }
+            },
+            {
               "id": "block1",
               "title": "",
               "type": "Question",
@@ -36,7 +69,7 @@
                           "placeholder": "answer2",
                           "value": {
                             "source": "answers",
-                            "identifier": "answer1"
+                            "identifier": "ref-answer0"
                           }
                         }
                       ]
@@ -67,7 +100,7 @@
                           "placeholder": "answer1",
                           "value": {
                             "source": "answers",
-                            "identifier": "answer1"
+                            "identifier": "ref-answer1"
                           }
                         }
                       ]
@@ -98,14 +131,14 @@
                           "placeholder": "answer1",
                           "value": {
                             "source": "answers",
-                            "identifier": "answer1"
+                            "identifier": "ref-answer1"
                           }
                         },
                         {
                           "placeholder": "answer2",
                           "value": {
                             "source": "answers",
-                            "identifier": "answer2"
+                            "identifier": "ref-answer2"
                           }
                         }
                       ]
@@ -177,7 +210,7 @@
                               "arguments": {
                                 "number": {
                                   "source": "answers",
-                                  "identifier": "answer1"
+                                  "identifier": "ref-answer1"
                                 }
                               }
                             },
@@ -186,7 +219,7 @@
                               "arguments": {
                                 "number": {
                                   "source": "answers",
-                                  "identifier": "answer1"
+                                  "identifier": "ref-answer1"
                                 }
                               }
                             }
