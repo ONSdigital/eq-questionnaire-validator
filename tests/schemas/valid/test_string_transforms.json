@@ -38,6 +38,39 @@
           "title": "",
           "blocks": [
             {
+              "id": "block0",
+              "type": "Question",
+              "question": {
+                "id": "question0",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "ref-answer0",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "An answer which transforms may reference",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "ref-answer1",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A second answer which transforms may reference",
+                    "description": ""
+                  },
+                  {
+                    "id": "ref-answer2",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A third answer which transforms may reference",
+                    "description": ""
+                  }
+                ]
+              }
+            },
+            {
               "id": "block1",
               "title": "",
               "type": "Question",
@@ -66,7 +99,7 @@
                           "placeholder": "simple_answer",
                           "value": {
                             "source": "answers",
-                            "identifier": "answer1"
+                            "identifier": "ref-answer1"
                           }
                         }
                       ]
@@ -88,7 +121,7 @@
                               "arguments": {
                                 "number": {
                                   "source": "answers",
-                                  "identifier": "answer2"
+                                  "identifier": "ref-answer2"
                                 }
                               }
                             }
@@ -113,11 +146,11 @@
                               "arguments": {
                                 "start_date": {
                                   "source": "answers",
-                                  "identifier": "answer3"
+                                  "identifier": "ref-answer2"
                                 },
                                 "end_date": {
                                   "source": "answers",
-                                  "identifier": "answer3"
+                                  "identifier": "ref-answer2"
                                 }
                               }
                             }
@@ -142,7 +175,7 @@
                               "arguments": {
                                 "number": {
                                   "source": "answers",
-                                  "identifier": "answer4"
+                                  "identifier": "ref-answer1"
                                 }
                               }
                             },
@@ -174,7 +207,7 @@
                                     "arguments": {
                                         "date_to_format": {
                                             "source": "answers",
-                                            "identifier": "answer5"
+                                            "identifier": "ref-answer2"
                                         },
                                         "date_format": "EEEE d MMMM"
                                     }
@@ -239,7 +272,7 @@
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
-                                  "identifier": "q2-answer-1"
+                                  "identifier": "ref-answer1"
                                 },
                                 "second_date": {
                                   "value": "2019-01-20"
@@ -267,11 +300,11 @@
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
-                                  "identifier": "q2-answer-1"
+                                  "identifier": "ref-answer1"
                                 },
                                 "second_date": {
                                   "source": "answers",
-                                  "identifier": "q2-answer-2"
+                                  "identifier": "ref-answer2"
                                 }
                               }
                             }
@@ -296,7 +329,7 @@
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
-                                  "identifier": "q2-answer-1"
+                                  "identifier": "ref-answer1"
                                 },
                                 "second_date": {
                                   "value": "now"
@@ -337,7 +370,7 @@
                               "arguments": {
                                 "list_to_concatenate": {
                                   "source": "answers",
-                                  "identifier": "q2-answer-1"
+                                  "identifier": "ref-answer1"
                                 },
                                 "delimiter": " "
                               }
@@ -364,8 +397,8 @@
                                 "list_to_concatenate": {
                                   "source": "answers",
                                   "identifier": [
-                                    "q2-answer-1",
-                                    "q2-answer-2"
+                                    "ref-answer1",
+                                    "ref-answer2"
                                   ]
                                 },
                                 "delimiter": ", "
@@ -405,7 +438,7 @@
                               "arguments": {
                                 "string_to_format": {
                                   "source": "answers",
-                                  "identifier": "q3-answer-1"
+                                  "identifier": "ref-answer0"
                                 }
                               }
                             }
@@ -431,8 +464,8 @@
                                 "list_to_concatenate": {
                                   "source": "answers",
                                   "identifier": [
-                                    "q2-answer-1",
-                                    "q2-answer-2"
+                                    "ref-answer1",
+                                    "ref-answer2"
                                   ]
                                 },
                                 "delimiter": " "
@@ -481,8 +514,8 @@
                                 "list_to_format": {
                                   "source": "answers",
                                   "identifier": [
-                                    "q2-answer-1",
-                                    "q2-answer-2"
+                                    "ref-answer1",
+                                    "ref-answer2"
                                   ]
                                 }
                               }
@@ -520,7 +553,7 @@
                               "placeholder": "simple_answer",
                               "value": {
                                 "source": "answers",
-                                "identifier": "answer1"
+                                "identifier": "ref-answer1"
                               }
                             }
                           ]
@@ -561,7 +594,7 @@
                               "placeholder": "simple_answer",
                               "value": {
                                 "source": "answers",
-                                "identifier": "answer1"
+                                "identifier": "ref-answer1"
                               }
                             }
                           ]

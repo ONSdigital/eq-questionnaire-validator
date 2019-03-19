@@ -301,17 +301,6 @@ def test_decimal_places_must_be_defined_when_using_totaliser():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_metadata_defined_but_not_used_is_valid():
-    """ Ensures that there are no errors when metadata is defined in the schema but not used """
-    file_name = 'schemas/valid/test_valid_metadata.json'
-    json_to_validate = _open_and_load_schema_file(file_name)
-
-    validation_errors, schema_errors = validate_schema(json_to_validate)
-
-    assert validation_errors == []
-    assert schema_errors == {}
-
-
 def test_invalid_string_transforms():
     filename = 'schemas/invalid/test_invalid_string_transforms.json'
 
@@ -321,6 +310,19 @@ def test_invalid_string_transforms():
         "Schema Integrity Error. Placeholders in 'text' doesn't match 'placeholders' definition for block id 'block3'",
         "Schema Integrity Error. Can't reference `previous_transform` in a first transform in block id 'block4'",
         "Schema Integrity Error. `previous_transform` not referenced in chained transform in block id 'block5'"
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_placeholder_answer_ids():
+    filename = 'schemas/invalid/test_invalid_placeholder_source_ids.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. Invalid answer id reference `answer4` for placeholder `simple_answer` (self-reference)',
+        'Schema Integrity Error. Invalid answer id reference `invalid-answer0` for placeholder `simple_answer`',
+        'Schema Integrity Error. Invalid answer id reference `invalid-answer1` for placeholder `answer1`',
+        'Schema Integrity Error. Invalid metadata reference `invalid-metadata-ref` for placeholder `simple_metadata`'
     ]
 
     check_validation_errors(filename, expected_error_messages)

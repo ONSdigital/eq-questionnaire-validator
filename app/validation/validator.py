@@ -13,7 +13,7 @@ MIN_NUMBER = -999999999
 MAX_DECIMAL_PLACES = 6
 
 
-class Validator:    # pylint: disable=too-many-public-methods
+class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
     def __init__(self):
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
@@ -24,9 +24,9 @@ class Validator:    # pylint: disable=too-many-public-methods
         :param json_to_validate: json schema to be validated
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        all_errors = {}
-
-        all_errors['schema_errors'] = self._validate_json_against_schema(json_to_validate)
+        all_errors = {
+            'schema_errors': self._validate_json_against_schema(json_to_validate)
+        }
 
         validation_errors = []
 
@@ -102,7 +102,13 @@ class Validator:    # pylint: disable=too-many-public-methods
                 errors.extend(self.validate_list_collector_type(block))
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
-            errors.extend(self._validate_placeholders(block))
+
+            valid_metadata_ids = []
+            if 'metadata' in json_to_validate:
+                valid_metadata_ids = [m['name'] for m in json_to_validate['metadata']]
+
+            errors.extend(self._validate_placeholders(block, answers_with_parent_ids, valid_metadata_ids))
+
             errors.extend(self._validate_variants(block, answers_with_parent_ids, numeric_answer_ranges))
 
         return errors
@@ -860,7 +866,7 @@ class Validator:    # pylint: disable=too-many-public-methods
             for item in input_data:
                 yield from self._get_dicts_with_key(item, key_name)
 
-    def _validate_placeholders(self, block_json):
+    def _validate_placeholders(self, block_json, answers_with_parent_ids, valid_metadata_ids):
         errors = []
         strings_with_placeholders = self._get_dicts_with_key(block_json, 'placeholders')
         for string_with_placeholders in strings_with_placeholders or []:
@@ -871,6 +877,13 @@ class Validator:    # pylint: disable=too-many-public-methods
                 placeholder_definition_names.append(placeholder_definition['placeholder'])
 
                 transforms = placeholder_definition.get('transforms')
+                answer_ids_to_validate, metadata_ids_to_validate = self.get_placeholder_source_ids(placeholder_definition, transforms)
+
+                errors.extend(self._validate_placeholder_answer_ids(block_json['id'], placeholder_definition,
+                                                                    answers_with_parent_ids, answer_ids_to_validate))
+                errors.extend(self._validate_placeholder_metadata_ids(valid_metadata_ids, metadata_ids_to_validate,
+                                                                      placeholder_definition['placeholder']))
+
                 if transforms:
                     errors.extend(self._validate_placeholder_transforms(transforms, block_json['id']))
 
@@ -878,6 +891,67 @@ class Validator:    # pylint: disable=too-many-public-methods
                 errors.append(self._error_message(
                     "Placeholders in 'text' doesn't match 'placeholders' definition for block id '{}'".format(
                         block_json['id'])))
+
+        return errors
+
+    @staticmethod
+    def get_placeholder_source_ids(placeholder_definition, transforms):
+
+        answer_ids_to_validate = []
+        metadata_ids_to_validate = []
+
+        if transforms:
+            for transform in transforms:
+                for argument in transform['arguments'].values():
+                    if 'source' in argument and argument['source'] == 'answers':
+                        if isinstance(argument['identifier'], list):
+                            answer_ids_to_validate.extend(argument['identifier'])
+                        else:
+                            answer_ids_to_validate.append(argument['identifier'])
+
+                    if 'source' in argument and argument['source'] == 'metadata':
+                        if isinstance(argument['identifier'], list):
+                            metadata_ids_to_validate.extend(argument['identifier'])
+                        else:
+                            metadata_ids_to_validate.append(argument['identifier'])
+
+        if 'value' in placeholder_definition and 'source' in placeholder_definition['value'] and \
+                placeholder_definition['value']['source'] == 'answers':
+            answer_ids_to_validate.append(placeholder_definition['value']['identifier'])
+
+        if 'value' in placeholder_definition and 'source' in placeholder_definition['value'] and \
+                placeholder_definition['value']['source'] == 'metadata':
+            metadata_ids_to_validate.append(placeholder_definition['value']['identifier'])
+
+        return answer_ids_to_validate, metadata_ids_to_validate
+
+    def _validate_placeholder_answer_ids(self, block_id, placeholder_definition, answers_with_parent_ids, answer_ids_to_validate):
+        errors = []
+
+        for answer_id_to_validate in answer_ids_to_validate:
+            if answer_id_to_validate not in answers_with_parent_ids:
+                errors.append(self._error_message('Invalid answer id reference `{}` for placeholder `{}`'.format(
+                    answer_id_to_validate,
+                    placeholder_definition['placeholder']
+                )))
+                continue
+            answer_block_id = answers_with_parent_ids[answer_id_to_validate]['block']
+            if answer_block_id == block_id:
+                errors.append(self._error_message('Invalid answer id reference `{}` for placeholder `{}` (self-reference)'.format(
+                    answer_id_to_validate,
+                    placeholder_definition['placeholder']
+                )))
+        return errors
+
+    def _validate_placeholder_metadata_ids(self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name):
+        errors = []
+
+        for metadata_id_to_validate in metadata_ids_to_validate:
+            if metadata_id_to_validate not in valid_metadata_ids:
+                errors.append(self._error_message('Invalid metadata reference `{}` for placeholder `{}`'.format(
+                    metadata_id_to_validate,
+                    placeholder_name
+                )))
 
         return errors
 
