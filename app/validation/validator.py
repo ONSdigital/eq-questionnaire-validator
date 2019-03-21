@@ -144,6 +144,44 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
+    def _ensure_all_variant_ids_consistent(self, block, variants):
+        """ Ensure consistency between ids in variants
+
+        - Ensure that question_ids are the same across all variants.
+        - Ensure answer_ids are the same across all variants.
+        """
+        if not variants:
+            return []
+
+        errors = []
+
+        question_ids = set()
+        answer_ids = set()
+
+        number_of_answers = set()
+
+        for variant in variants:
+            question_variant = variant['question']
+            question_ids.add(question_variant['id'])
+
+            number_of_answers.add(len(variant['question']['answers']))
+
+            if len(number_of_answers) > 1:
+                errors.append(self._error_message('Variants in block: {} contain different numbers of answers'.format(block['id'])))
+
+            for answer in question_variant['answers']:
+                answer_ids.add(answer['id'])
+
+        if len(question_ids) != 1:
+            errors.append(self._error_message(
+                'Variants contain more than one question_id for block: {}. Found ids: {}' .format(block['id'], question_ids)))
+
+        if len(answer_ids) != next(iter(number_of_answers)):
+            errors.append(self._error_message(
+                'Variants have mismatched answer_ids for block: {}. Found ids: {}.' .format(block['id'], answer_ids)))
+
+        return errors
+
     def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
         errors = []
 
@@ -152,15 +190,17 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         all_variants = question_variants + content_variants
 
+        for variant in question_variants:
+            errors.extend(self._validate_questions(variant, numeric_answer_ranges))
+
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
             errors.append(self._error_message('Variants contains fewer than two variants - block: {}'.format(block['id'])))
 
-        for variant in question_variants:
-            errors.extend(self._validate_questions(variant, numeric_answer_ranges))
-
         for variant in all_variants:
             errors.extend(self.validate_when_rule(variant.get('when', []), answer_ids_with_group_id, block['id']))
+
+        errors.extend(self._ensure_all_variant_ids_consistent(block, question_variants))
 
         return errors
 

@@ -392,3 +392,25 @@ def test_invalid_list_collector_with_no_add_option():
            'in the answer values' in error_messages
 
     assert schema_errors == {}
+
+
+def test_inconsistent_ids_in_variants():
+    file_name = 'schemas/invalid/test_invalid_inconsistent_ids_in_variants.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, schema_errors = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    fuzzy_error_messages = ['Schema Integrity Error. Variants contain more than one question_id for block: block-2. Found ids',
+                            'question-2',
+                            'question-2-variant',
+                            'Schema Integrity Error. Variants have mismatched answer_ids for block: block-2.']
+
+    for fuzzy_error in fuzzy_error_messages:
+        assert any(fuzzy_error in error_message for error_message in error_messages)
+
+    assert 'Schema Integrity Error. Variants in block: block-2 contain different numbers of answers' in error_messages
+
+    assert len(validation_errors) == 3
+
+    assert schema_errors == {}

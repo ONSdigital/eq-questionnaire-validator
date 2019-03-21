@@ -457,6 +457,7 @@
   },
   "question_variants": {
     "type": "array",
+    "description": "All question ids within question_variants must match",
     "minItems": 2,
     "items": {
       "$ref": "variants/question_variant.json#/question_variant"
