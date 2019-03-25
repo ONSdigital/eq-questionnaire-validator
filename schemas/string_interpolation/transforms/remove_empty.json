@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "remove_empty": {
+    "description": "A transform for removing empty items from a list",
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["remove_empty"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "list_to_filter": {
+            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
+            "$ref": "../definitions.json#/value_sources" 
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "list_to_filter"
+        ]    
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "transform",
+      "arguments"
+    ]
+  }
+}
