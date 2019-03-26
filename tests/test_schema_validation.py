@@ -43,10 +43,12 @@ def check_validation_errors(filename, expected_validation_error_messages):
 
     assert schema_errors == {}
 
-    assert len(validation_errors) == len(expected_validation_error_messages)
+    error_messages = list(error['message'] for error in validation_errors)
 
-    for error in validation_errors:
-        assert error['message'] in expected_validation_error_messages
+    for expected_error_message in expected_validation_error_messages:
+        assert expected_error_message in error_messages
+
+    assert len(validation_errors) == len(expected_validation_error_messages)
 
 
 def test_param_valid_schemas(valid_schema_filename):
@@ -81,8 +83,6 @@ def test_invalid_schema_block():
 
         'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id '
         'key of the "when" clause for response-yes does not exist',
-
-        'Schema Integrity Error. The block response-yes has a repeating routing rule'
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -186,24 +186,6 @@ def test_invalid_survey_id_whitespace():
     assert "'lms ' does not match '^[0-9a-z]+$'" in schema_errors.get('message')
 
 
-def test_invalid_routing_when_answer_count():
-    """Asserts that invalid `when` routing_rules are caught for `answer_count`"""
-    filename = 'schemas/invalid/test_invalid_routing_when_answer_count.json'
-
-    expected_error_messages = [
-        'Schema Integrity Error. The answer id - invalid-answer-id in the '
-        'answer_ids key of the "when" clause for household-composition '
-        'does not exist',
-        'Schema Integrity Error. The condition "contains" is not valid '
-        'for an answer_count based "when" clause',
-        'Schema Integrity Error. Duplicate answer ids found within household-composition clause',
-        'Schema Integrity Error. "answer_ids" key has to be included when type '
-        'is "answer_count" in a "when" clause',
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_calculated_summary():
     """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
     filename = 'schemas/invalid/test_invalid_calculated_summary.json'
@@ -239,8 +221,6 @@ def test_answer_comparisons_different_types():
     filename = 'schemas/invalid/test_invalid_answer_comparison_types.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. The answers used as comparison_id "repeating-comparison-2-answer" and answer_id "repeating-comparison-1-answer" '
-        'in the "when" clause for repeating-comparison have different types',
         'Schema Integrity Error. The answers used as comparison_id "route-comparison-1-answer" and answer_id "route-comparison-2-answer" '
         'in the "when" clause for route-comparison-2 have different types',
         'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
@@ -261,8 +241,6 @@ def test_answer_comparisons_invalid_comparison_id():
     filename = 'schemas/invalid/test_invalid_answer_comparison_id.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. The answer id - bad-answer-id-1 in the comparison_id key of the "when" '
-        'clause for repeating-comparison does not exist',
         'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison_id key of the "when" '
         'clause for route-comparison-2 does not exist',
         'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison_id key of the "when" '

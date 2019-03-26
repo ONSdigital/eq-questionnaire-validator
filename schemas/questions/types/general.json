@@ -69,9 +69,6 @@
               "$ref": "../../answers/radio.json#/answer"
             },
             {
-              "$ref": "../../answers/relationship.json#/answer"
-            },
-            {
               "$ref": "../../answers/text_area.json#/answer"
             },
             {

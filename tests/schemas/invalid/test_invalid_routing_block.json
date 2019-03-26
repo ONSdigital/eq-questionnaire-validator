@@ -117,18 +117,6 @@
                   "goto": {
                     "block": "summary"
                   }
-                },
-                {
-                  "repeat": {
-                    "type": "until",
-                    "when": [
-                      {
-                        "condition": "equals",
-                        "id": "response-yes-number-of-cups",
-                        "value": 2
-                      }
-                    ]
-                  }
                 }
               ],
               "title": "Yes, I do drink coffee",

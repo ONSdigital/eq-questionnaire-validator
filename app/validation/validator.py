@@ -69,7 +69,6 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
             errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
             errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
-            errors.extend(self.validate_repeat_when_rule_restricted(rule, answers_with_parent_ids, group))
 
         return errors
 
@@ -90,7 +89,6 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                 errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
                 errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, block))
-                errors.extend(self.validate_repeat_rule_restricted(rule, block))
 
             for skip_condition in block.get('skip_conditions', []):
                 errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, block))
@@ -313,7 +311,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
     def validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
         errors = []
 
-        rule = rule.get('goto') or rule.get('repeat')
+        rule = rule.get('goto')
         if 'when' in rule:
             errors.extend(self.validate_when_rule(rule['when'], answer_ids_with_group_id, block_or_group['id']))
 
@@ -327,34 +325,6 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         errors = []
         when = skip_condition.get('when')
         errors.extend(self.validate_when_rule(when, answer_ids_with_group_id, block_or_group['id']))
-        return errors
-
-    def validate_repeat_when_rule_restricted(self, rule, answer_ids_with_group_id, group):
-        errors = []
-
-        if 'repeat' in rule and 'when' in rule['repeat']:
-            whens = rule['repeat']['when']
-            if len(whens) > 1:
-                errors.append(self._error_message('The "when" clause in the repeat for {} has more than one condition'
-                                                  .format(group['id'])))
-
-            for when in whens:
-                if 'id' not in when:
-                    errors.append(self._error_message('The "when" clause in the repeat for {} must be based on "id"'
-                                                      .format(group['id'])))
-                elif when['id'] in answer_ids_with_group_id and answer_ids_with_group_id[when['id']]['group_id'] != group['id']:
-                    errors.append(self._error_message('The answer id - {} in the id key of the "when" clause for {} is not in the same group'
-                                                      .format(when['id'], group['id'])))
-
-        return errors
-
-    def validate_repeat_rule_restricted(self, rule, block):
-        errors = []
-
-        if 'repeat' in rule:
-            errors.append(self._error_message('The block {} has a repeating routing rule'
-                                              .format(block['id'])))
-
         return errors
 
     def validate_list_collector_type(self, block):  # noqa: C901  pylint: disable=too-complex
