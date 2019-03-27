@@ -71,10 +71,10 @@
       ],
       "properties": {
         "title": {
-          "type": "string"
+          "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
         },
         "description": {
-          "type": "string"
+          "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
         },
         "list": {
           "type": "array",
