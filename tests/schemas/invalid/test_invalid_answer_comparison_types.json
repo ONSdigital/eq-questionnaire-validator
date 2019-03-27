@@ -26,68 +26,6 @@
       "id": "default-section",
       "groups": [
         {
-          "id": "repeating-comparison",
-          "title": "Repeat until comparison",
-          "routing_rules": [
-            {
-              "repeat": {
-                "type": "until",
-                "when": [
-                  {
-                    "id": "repeating-comparison-1-answer",
-                    "condition": "equals",
-                    "comparison_id": "repeating-comparison-2-answer"
-                  }
-                ]
-              }
-            }
-          ],
-          "blocks": [
-            {
-              "type": "Question",
-              "id": "repeating-comparison-1-block",
-              "title": "",
-              "description": "",
-              "question": {
-                "description": "",
-                "id": "repeating-comparison-1-question",
-                "title": "Enter a number",
-                "type": "General",
-                "answers": [
-                  {
-                    "id": "repeating-comparison-1-answer",
-                    "description": "",
-                    "label": "A number",
-                    "mandatory": true,
-                    "type": "Number"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Question",
-              "id": "repeating-comparison-2-block",
-              "title": "Enter the same number to stop",
-              "description": "",
-              "question": {
-                "description": "",
-                "id": "repeating-comparison-2-question",
-                "title": "Enter another number",
-                "type": "General",
-                "answers": [
-                  {
-                    "id": "repeating-comparison-2-answer",
-                    "description": "",
-                    "label": "Another number",
-                    "mandatory": true,
-                    "type": "TextField"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
           "id": "route-group",
           "title": "",
           "blocks": [
