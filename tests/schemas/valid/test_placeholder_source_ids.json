@@ -47,11 +47,33 @@
                 "type": "General",
                 "answers": [
                   {
-                    "id": "ref-answer0",
+                    "id": "ref-answer0-1",
                     "mandatory": true,
                     "type": "TextField",
                     "label": "An answer which transforms may reference",
                     "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "ref-answer0-2",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "label": "An answer with a detail answer which transforms may reference",
+                    "options": [
+                      {
+                         "label": "No",
+                         "value": "No"
+                      },
+                      {
+                         "detail_answer": {
+                            "id": "ref-answer0-2-detail",
+                            "label": "Answer detail",
+                            "mandatory": true,
+                            "type": "TextField"
+                         },
+                         "label": "Other",
+                         "value": "Other"
+                      }
+                    ]
                   }
                 ]
               }
@@ -67,13 +89,6 @@
                 "type": "General",
                 "answers": [
                   {
-                    "id": "answer0",
-                    "mandatory": false,
-                    "type": "TextField",
-                    "label": "Simple value from answer store",
-                    "description": "description with no placeholders"
-                  },
-                  {
                     "id": "answer1",
                     "mandatory": false,
                     "type": "TextField",
@@ -85,7 +100,7 @@
                           "placeholder": "simple_answer",
                           "value": {
                             "source": "answers",
-                            "identifier": "ref-answer0"
+                            "identifier": "ref-answer0-1"
                           }
                         }
                       ]
@@ -106,6 +121,37 @@
                 "answers": [
                   {
                     "id": "answer2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Detail answer value from answer store",
+                    "description": {
+                      "text": "test {detail_answer}",
+                      "placeholders": [
+                        {
+                          "placeholder": "detail_answer",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer0-2-detail"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block3",
+              "title": "",
+              "type": "Question",
+              "question": {
+                "id": "question3",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer3",
                     "mandatory": false,
                     "type": "TextField",
                     "label": "Simple value from answer store",
