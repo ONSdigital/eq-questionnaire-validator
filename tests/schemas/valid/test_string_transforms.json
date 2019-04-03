@@ -215,6 +215,29 @@
                             ]
                         }]
                     }
+                  },
+                  {
+                    "id": "answer6",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "format_date with fixed value",
+                    "description": {
+                        "text": "test {value}",
+                        "placeholders": [{
+                            "placeholder": "value",
+                            "transforms": [
+                                {
+                                    "transform": "format_date",
+                                    "arguments": {
+                                        "date_to_format": {
+                                           "value": "2019-01-01"
+                                        },
+                                        "date_format": "EEEE d MMMM"
+                                    }
+                                }
+                            ]
+                        }]
+                    }
                   }
                 ]
               }

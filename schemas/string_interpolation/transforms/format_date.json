@@ -11,7 +11,14 @@
         "type": "object",
         "properties": {
           "date_to_format": {
-            "$ref": "../definitions.json#/value_sources" 
+            "oneOf": [
+              {
+                "$ref": "../definitions.json#/value_sources" 
+              },
+              {
+                "$ref": "../definitions.json#/date_value" 
+              }
+            ]
           },
           "date_format": {
             "type": "string",
