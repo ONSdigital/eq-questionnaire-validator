@@ -1058,8 +1058,25 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
     @staticmethod
     def _get_answers_with_parent_ids(json_to_validate):
         answers = {}
+        for question, context in Validator._get_questions_with_context(json_to_validate):
+            for answer in question.get('answers', []):
+                answers[answer['id']] = {
+                    'answer': answer,
+                    **context
+                }
+                for option in answer.get('options', []):
+                    detail_answer = option.get('detail_answer')
+                    if detail_answer:
+                        answers[detail_answer['id']] = {
+                            'answer': detail_answer,
+                            **context
+                        }
 
-        for section in json_to_validate.get('sections'):
+        return answers
+
+    @staticmethod
+    def _get_questions_with_context(json):
+        for section in json.get('sections'):
             for group in section.get('groups'):
                 for block in group.get('blocks'):
                     questions = []
@@ -1073,12 +1090,9 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                         questions.append(single_question)
 
                     for question in questions:
-                        for answer in question.get('answers', []):
-                            answers[answer['id']] = {
-                                'answer': answer,
-                                'block': block['id'],
-                                'group_id': group['id'],
-                                'section': section['id']
-                            }
-
-        return answers
+                        context = {
+                            'block': block['id'],
+                            'group_id': group['id'],
+                            'section': section['id']
+                        }
+                        yield question, context
