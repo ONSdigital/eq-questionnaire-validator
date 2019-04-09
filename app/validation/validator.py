@@ -142,11 +142,13 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def _ensure_all_variant_ids_consistent(self, block, variants):
-        """ Ensure consistency between ids in variants
+    def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
+        """ Ensure consistency between relevant fields in variants
 
         - Ensure that question_ids are the same across all variants.
         - Ensure answer_ids are the same across all variants.
+        - Ensure question types are the same across all variants.
+        - Ensure answer types are the same across all variants.
         """
         if not variants:
             return []
@@ -155,12 +157,16 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         question_ids = set()
         answer_ids = set()
+        question_types = set()
+
+        answer_types = defaultdict(set)
 
         number_of_answers = set()
 
         for variant in variants:
             question_variant = variant['question']
             question_ids.add(question_variant['id'])
+            question_types.add(question_variant['type'])
 
             number_of_answers.add(len(variant['question']['answers']))
 
@@ -169,15 +175,29 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
             for answer in question_variant['answers']:
                 answer_ids.add(answer['id'])
+                answer_types[answer['id']].add(answer['type'])
 
         if len(question_ids) != 1:
             errors.append(self._error_message(
                 'Variants contain more than one question_id for block: {}. Found ids: {}' .format(block['id'], question_ids)))
 
+        if len(question_types) != 1:
+            errors.append(self._error_message(
+                'Variants have more than one question type for block: {}. Found types: {}'.format(block['id'], question_types)))
+
         if len(answer_ids) != next(iter(number_of_answers)):
             errors.append(self._error_message(
-                'Variants have mismatched answer_ids for block: {}. Found ids: {}.' .format(block['id'], answer_ids)))
+                'Variants have mismatched answer_ids for block: {}. Found ids: {}.'.format(block['id'], answer_ids)))
 
+        for answer_id, type_set in answer_types.items():
+            if len(type_set) != 1:
+                errors.append(
+                    self._error_message(
+                        'Variants have mismatched answer types for block: {}. Found types: {} for answer ID: {}.'.format(
+                            block['id'], type_set, answer_id
+                        )
+                    )
+                )
         return errors
 
     def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
@@ -198,7 +218,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         for variant in all_variants:
             errors.extend(self.validate_when_rule(variant.get('when', []), answer_ids_with_group_id, block['id']))
 
-        errors.extend(self._ensure_all_variant_ids_consistent(block, question_variants))
+        errors.extend(self._ensure_relevant_variant_fields_are_consistent(block, question_variants))
 
         return errors
 

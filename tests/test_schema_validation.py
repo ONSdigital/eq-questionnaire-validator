@@ -392,3 +392,21 @@ def test_inconsistent_ids_in_variants():
     assert len(validation_errors) == 3
 
     assert schema_errors == {}
+
+
+def test_inconsistent_types_in_variants():
+    file_name = 'schemas/invalid/test_invalid_inconsistent_types_in_variants.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, _ = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    fuzzy_error_messages = (
+        'Schema Integrity Error. Variants have more than one question type for block: block-2',
+        'Schema Integrity Error. Variants have mismatched answer types for block: block-2. Found types:',
+    )
+
+    for fuzzy_error in fuzzy_error_messages:
+        assert any(fuzzy_error in error_message for error_message in error_messages)
+
+    assert len(validation_errors) == 2
