@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "description": "Comparison against list of values",
+  "properties": {
+    "id": {
+      "$ref": "definitions.json#/answer_identifier"
+    },
+    "meta": {
+      "$ref": "definitions.json#/metadata_identifier"
+    },
+    "condition": {
+      "enum": [
+        "contains all",
+        "contains any",
+        "equals any",
+        "not equals any"
+      ]
+    },
+    "values": {
+      "$ref": "definitions.json#/comparison_values"
+    },
+    "comparison_id": {
+      "$ref": "definitions.json#/comparison_identifier"
+    }
+  },
+  "required": [
+    "condition"
+  ],
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "meta"
+          ]
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "required": [
+            "values"
+          ]
+        },
+        {
+          "required": [
+            "comparison_id"
+          ]
+        }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

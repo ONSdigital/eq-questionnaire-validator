@@ -7,7 +7,7 @@
         "$ref": "../common_definitions.json#/content"
       },
       "when": {
-        "$ref": "../common_definitions.json#/when"
+        "$ref": "../when_rule/definitions.json#/when"
       }
     },
     "additionalProperties": false,

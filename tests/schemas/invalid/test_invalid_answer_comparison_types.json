@@ -75,6 +75,11 @@
                         "id": "route-comparison-2-answer",
                         "condition": "greater than",
                         "comparison_id": "route-comparison-1-answer"
+                      },
+                      {
+                        "id": "route-comparison-1-answer",
+                        "condition": "equals any",
+                        "comparison_id": "route-comparison-2-answer"
                       }
                     ]
                   }

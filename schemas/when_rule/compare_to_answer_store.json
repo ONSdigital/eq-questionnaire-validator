@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "description": "Checks if the answer is answered or not answered",
+  "properties": {
+    "id": {
+      "$ref": "definitions.json#/answer_identifier"
+    },
+    "condition": {
+      "enum": [
+        "set",
+        "not set"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "condition"
+  ],
+  "additionalProperties": false
+}

@@ -1,9 +1,10 @@
 import os
-import re
 import pathlib
-from json import load
+import re
 from collections import defaultdict
 from datetime import datetime
+from json import load
+
 from dateutil.relativedelta import relativedelta
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
 from jsonschema.exceptions import best_match
@@ -13,7 +14,7 @@ MIN_NUMBER = -999999999
 MAX_DECIMAL_PLACES = 6
 
 
-class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
+class Validator:  # pylint: disable=too-many-lines
     def __init__(self):
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
@@ -31,7 +32,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         validation_errors = []
 
         validation_errors.extend(self._validate_schema_contain_metadata(json_to_validate))
-        validation_errors.extend(self.validate_duplicates(json_to_validate))
+        validation_errors.extend(self._validate_duplicates(json_to_validate))
 
         numeric_answer_ranges = {}
         answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
@@ -46,7 +47,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                 validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
                 for skip_condition in group.get('skip_conditions', []):
-                    validation_errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, group))
+                    validation_errors.extend(self._validate_skip_condition(skip_condition, answers_with_parent_ids, group))
 
                 validation_errors.extend(
                     self._validate_blocks(json_to_validate,
@@ -64,11 +65,11 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
     def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
         errors = []
 
-        errors.extend(self.validate_routing_rules_default(group.get('routing_rules', []), group))
+        errors.extend(self._validate_routing_rules_default(group.get('routing_rules', []), group))
         for rule in group.get('routing_rules', []):
-            errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
-            errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
-            errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, group))
+            errors.extend(self._validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+            errors.extend(self._validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+            errors.extend(self._validate_routing_rule(rule, answers_with_parent_ids, group))
 
         return errors
 
@@ -80,24 +81,24 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             if section == json_to_validate['sections'][-1] \
                     and group == section['groups'][-1] \
                     and block == group['blocks'][-1]:
-                errors.extend(self.validate_contains_confirmation_or_summary(block))
+                errors.extend(self._validate_contains_confirmation_or_summary(block))
 
-            errors.extend(self.validate_routing_rules_default(block.get('routing_rules', []), block))
+            errors.extend(self._validate_routing_rules_default(block.get('routing_rules', []), block))
 
             for rule in block.get('routing_rules', []):
-                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
-                errors.extend(self.validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
+                errors.extend(self._validate_schema_routing_rule_routes_to_valid_target(group['blocks'], 'block', rule))
+                errors.extend(self._validate_schema_routing_rule_routes_to_valid_target(all_groups, 'group', rule))
 
-                errors.extend(self.validate_routing_rule(rule, answers_with_parent_ids, block))
+                errors.extend(self._validate_routing_rule(rule, answers_with_parent_ids, block))
 
             for skip_condition in block.get('skip_conditions', []):
-                errors.extend(self.validate_skip_condition(skip_condition, answers_with_parent_ids, block))
+                errors.extend(self._validate_skip_condition(skip_condition, answers_with_parent_ids, block))
 
             if block['type'] == 'CalculatedSummary':
-                errors.extend(self.validate_calculated_summary_type(block, answers_with_parent_ids))
+                errors.extend(self._validate_calculated_summary_type(block, answers_with_parent_ids))
 
             if block['type'] == 'ListCollector':
-                errors.extend(self.validate_list_collector_type(block))
+                errors.extend(self._validate_list_collector_type(block))
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -121,24 +122,24 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             questions.append(question)
 
         for question in questions:
-            errors.extend(self.validate_calculated_ids_in_answers_to_calculate_exists(question))
-            errors.extend(self.validate_date_range(question))
-            errors.extend(self.validate_mutually_exclusive(question))
+            errors.extend(self._validate_calculated_ids_in_answers_to_calculate_exists(question))
+            errors.extend(self._validate_date_range(question))
+            errors.extend(self._validate_mutually_exclusive(question))
 
             for answer in question.get('answers', []):
-                errors.extend(self.validate_routing_on_answer_options(block_or_variant, answer))
-                errors.extend(self.validate_duplicate_options(answer))
-                errors.extend(self.validate_totaliser_defines_decimal_places(answer))
+                errors.extend(self._validate_routing_on_answer_options(block_or_variant, answer))
+                errors.extend(self._validate_duplicate_options(answer))
+                errors.extend(self._validate_totaliser_defines_decimal_places(answer))
 
                 if answer['type'] == 'Date':
                     if 'minimum' in answer and 'maximum' in answer:
-                        errors.extend(self.validate_minimum_and_maximum_offset_date(answer))
+                        errors.extend(self._validate_minimum_and_maximum_offset_date(answer))
 
                 if answer['type'] in ['Number', 'Currency', 'Percentage']:
                     numeric_answer_ranges[answer.get('id')] = self._get_numeric_range_values(
                         answer, numeric_answer_ranges)
 
-                    errors.extend(self.validate_numeric_answer_types(answer, numeric_answer_ranges))
+                    errors.extend(self._validate_numeric_answer_types(answer, numeric_answer_ranges))
 
         return errors
 
@@ -179,7 +180,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         if len(question_ids) != 1:
             errors.append(self._error_message(
-                'Variants contain more than one question_id for block: {}. Found ids: {}' .format(block['id'], question_ids)))
+                'Variants contain more than one question_id for block: {}. Found ids: {}'.format(block['id'], question_ids)))
 
         if len(question_types) != 1:
             errors.append(self._error_message(
@@ -216,7 +217,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             errors.append(self._error_message('Variants contains fewer than two variants - block: {}'.format(block['id'])))
 
         for variant in all_variants:
-            errors.extend(self.validate_when_rule(variant.get('when', []), answer_ids_with_group_id, block['id']))
+            errors.extend(self._validate_when_rule(variant.get('when', []), answer_ids_with_group_id, block['id']))
 
         errors.extend(self._ensure_relevant_variant_fields_are_consistent(block, question_variants))
 
@@ -272,7 +273,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_calculated_ids_in_answers_to_calculate_exists(self, question):
+    def _validate_calculated_ids_in_answers_to_calculate_exists(self, question):
         """
         Validates that any answer ids within the 'answer_to_group'
         list are existing answers within the question
@@ -291,7 +292,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_schema_routing_rule_routes_to_valid_target(self, dict_list, goto_key, rule):
+    def _validate_schema_routing_rule_routes_to_valid_target(self, dict_list, goto_key, rule):
         errors = []
 
         if 'goto' in rule and goto_key in rule['goto'].keys():
@@ -303,7 +304,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         return errors
 
     @staticmethod
-    def validate_routing_rules_default(rules, block_or_group):
+    def _validate_routing_rules_default(rules, block_or_group):
         """
         Ensure that a set of routing rules contains a default, without a when clause.
         """
@@ -328,26 +329,26 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
+    def _validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
         errors = []
 
         rule = rule.get('goto')
         if 'when' in rule:
-            errors.extend(self.validate_when_rule(rule['when'], answer_ids_with_group_id, block_or_group['id']))
+            errors.extend(self._validate_when_rule(rule['when'], answer_ids_with_group_id, block_or_group['id']))
 
         return errors
 
-    def validate_skip_condition(self, skip_condition, answer_ids_with_group_id, block_or_group):
+    def _validate_skip_condition(self, skip_condition, answer_ids_with_group_id, block_or_group):
         """
         Validate skip condition is valid
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         errors = []
         when = skip_condition.get('when')
-        errors.extend(self.validate_when_rule(when, answer_ids_with_group_id, block_or_group['id']))
+        errors.extend(self._validate_when_rule(when, answer_ids_with_group_id, block_or_group['id']))
         return errors
 
-    def validate_list_collector_type(self, block):  # noqa: C901  pylint: disable=too-complex
+    def _validate_list_collector_type(self, block):  # noqa: C901  pylint: disable=too-complex
         errors = []
         questions = []
         add_answer_value = block['add_answer_value']
@@ -365,7 +366,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                     errors.append(self._error_message('The list collector block {} does not contain a Radio answer type'
                                                       .format(block['id'])))
 
-                if not self.options_contain_value(answer['options'], add_answer_value):
+                if not self._options_contain_value(answer['options'], add_answer_value):
                     errors.append(
                         self._error_message('The list collector block {} has an add_answer_value that is not present in the answer values'
                                             .format(block['id'])))
@@ -385,12 +386,12 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         return errors
 
     @staticmethod
-    def options_contain_value(options, value):
+    def _options_contain_value(options, value):
         for option in options:
             if option['value'] == value:
                 return True
 
-    def validate_calculated_summary_type(self, block, answers_with_parent_ids):
+    def _validate_calculated_summary_type(self, block, answers_with_parent_ids):
         answers_to_calculate = block['calculation']['answers_to_calculate']
         try:
             answer_types = [
@@ -430,7 +431,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return []
 
-    def validate_routing_on_answer_options(self, block, answer):
+    def _validate_routing_on_answer_options(self, block, answer):
         answer_errors = []
         if 'routing_rules' in block and block['routing_rules'] and 'options' in answer:
             options = [option['value'] for option in answer['options']]
@@ -460,7 +461,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                 answer_errors.append(self._error_message(unrouted_error))
         return answer_errors
 
-    def validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
+    def _validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
         """
         Validates any answer id in a when clause exists within the schema
         Will also check that comparison_id exists
@@ -472,15 +473,10 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             if answer_errors:
                 errors.extend(answer_errors)
             else:  # We know the ids are correct, so can continue to perform validation
-                if 'type' in when:
-                    answer_errors = self._validate_type_key_in_when_rule(when, referenced_id)
-                    if answer_errors:
-                        errors.extend(answer_errors)
+                errors.extend(self._validate_checkbox_exclusive_conditions_in_when_rule(when, answer_ids_with_group_id))
 
                 if 'comparison_id' in when:
-                    answer_errors = self._validate_comparison_id_in_when_rule(when, answer_ids_with_group_id, referenced_id)
-                    if answer_errors:
-                        errors.extend(answer_errors)
+                    errors.extend(self._validate_comparison_id_in_when_rule(when, answer_ids_with_group_id, referenced_id))
 
         return errors
 
@@ -491,63 +487,63 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         errors = []
-        answer_reference_id_fields = ('id', 'answer_ids', 'comparison_id')
+        answer_reference_id_fields = ('id', 'comparison_id')
         present_id_ref_keys = [x for x in answer_reference_id_fields if x in when]
 
         for id_ref_key in present_id_ref_keys:
-            # answer_ids is a list, so we have to handle it a little differently to get the same error message.
-            if id_ref_key == 'answer_ids':
-                for answer_id in when['answer_ids']:
-                    if answer_id not in answer_ids_with_group_id:
-                        errors.append(self._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
-                                                          .format(answer_id, id_ref_key, referenced_id)))
-            else:
-                if when[id_ref_key] not in answer_ids_with_group_id:
-                    errors.append(self._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
-                                                      .format(when[id_ref_key], id_ref_key, referenced_id)))
+            if when[id_ref_key] not in answer_ids_with_group_id:
+                errors.append(self._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
+                                                  .format(when[id_ref_key], id_ref_key, referenced_id)))
 
         return errors
 
-    def _validate_type_key_in_when_rule(self, when, referenced_id):
+    def _validate_checkbox_exclusive_conditions_in_when_rule(self, when, answer_ids_with_group_id):
         """
-        Validate when rule with 'type' key is correct
+        Validate checkbox exclusive conditions are only used when answer type is Checkbox
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         errors = []
 
-        if when['type'] == 'answer_count' and 'answer_ids' not in when:
-            errors.append(self._error_message('"answer_ids" key has to be included when type is "answer_count" in a "when" clause'))
-        else:  # We know we have a 'answer_ids' key so can do validation against it
-            if when['condition'] in ('contains', 'not contains'):
-                errors.append(self._error_message('The condition "{}" is not valid for an answer_count based "when" clause'
-                                                  .format(when['condition'])))
-            if len(when['answer_ids']) != len(set(when['answer_ids'])):
-                errors.append(self._error_message('Duplicate answer ids found within {} clause'.format(referenced_id)))
+        condition = when['condition']
+        checkbox_exclusive_conditions = ('contains any', 'contains all', 'contains', 'not contains')
+        all_checkbox_conditions = checkbox_exclusive_conditions + ('set', 'not set')
+        answer_type = answer_ids_with_group_id[when['id']]['answer']['type'] if 'id' in when else None
+
+        if answer_type == 'Checkbox':
+            if condition not in all_checkbox_conditions:
+                errors.append(self._error_message(f'The condition `{condition}` cannot be used with `Checkbox` answer type.'))
+        elif condition in checkbox_exclusive_conditions:
+            errors.append(
+                self._error_message(f'The condition `{condition}` can only be used with `Checkbox` answer types. Found answer type: {answer_type}'))
 
         return errors
 
     def _validate_comparison_id_in_when_rule(self, when, answer_ids_with_group_id, referenced_id):
         """
-        Validate that all types with comparison_id match
+        Validate that conditions requiring list match values define a comparison answer id that is of type Checkbox
+        and ensure all other conditions with comparison id match answer types
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         errors = []
-        comparison_type = answer_ids_with_group_id[when['comparison_id']]['answer']['type']
-        id_type = answer_ids_with_group_id[when['id']]['answer']['type']
 
-        if comparison_type != id_type:
-            errors.append(self._error_message('The answers used as comparison_id "{}" and answer_id "{}" in the '
-                                              '"when" clause for {} have different types'
-                                              .format(when['comparison_id'], when['id'], referenced_id)))
+        answer_id, comparison_id, condition = when['id'], when['comparison_id'], when['condition']
+        comparison_answer_type = answer_ids_with_group_id[when['comparison_id']]['answer']['type']
+        id_answer_type = answer_ids_with_group_id[when['id']]['answer']['type']
+        conditions_requiring_list_match_values = ('equals any', 'not equals any', 'contains any', 'contains all')
 
-        if when['condition'] in ('set', 'not set'):
-            errors.append(self._error_message('The "when" clause for {} contains a comparison_id and uses a '
-                                              'condition of unset or set'
-                                              .format(referenced_id)))
+        if condition in conditions_requiring_list_match_values:
+            if comparison_answer_type != 'Checkbox':
+                errors.append(self._error_message(
+                    f'The comparison_id `{comparison_id}` is not of answer type `Checkbox`. '
+                    f'The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`'))
+
+        elif comparison_answer_type != id_answer_type:
+            errors.append(self._error_message(f'The answers used as comparison_id `{comparison_id}` and answer_id `{answer_id}` in the `when` '
+                                              f'clause for `{referenced_id}` have different types'))
 
         return errors
 
-    def validate_date_range(self, question):
+    def _validate_date_range(self, question):
         """
         If period_limits object is present in the DateRange question validates that a date range
         does not have a negative period and days can not be used to define limits for yyyy-mm date ranges
@@ -584,7 +580,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_minimum_and_maximum_offset_date(self, answer):
+    def _validate_minimum_and_maximum_offset_date(self, answer):
         # Validates if a date answer has a minimum and maximum
         errors = []
 
@@ -597,7 +593,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_numeric_answer_types(self, numeric_answer, answer_ranges):
+    def _validate_numeric_answer_types(self, numeric_answer, answer_ranges):
         """
         Validate numeric answer types are valid.
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
@@ -645,7 +641,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
             'default': answer.get('default')
         }
 
-    def validate_duplicates(self, json_to_validate):
+    def _validate_duplicates(self, json_to_validate):
         """
         question_id & answer_id should be globally unique with some exceptions:
             - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
@@ -693,7 +689,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                 yield item
             seen.add(item)
 
-    def validate_duplicate_options(self, answer):
+    def _validate_duplicate_options(self, answer):
         errors = []
 
         labels = set()
@@ -716,7 +712,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_contains_confirmation_or_summary(self, last_block):
+    def _validate_contains_confirmation_or_summary(self, last_block):
         """
         Validate that the final block is of type Summary or Confirmation.
         :param last_block: final block of the schema
@@ -728,19 +724,12 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         return [self._error_message('Schemas does not have a confirmation or summary page')]
 
     @staticmethod
-    def _get_answers_by_id_for_block(answers):
-        keyed_answers = {}
-        for answer_json in answers:
-            keyed_answers[answer_json['id']] = answer_json
-        return keyed_answers
-
-    @staticmethod
     def _error_message(message):
         return {'message': 'Schema Integrity Error. {}'.format(message)}
 
     def _get_answer_minimum(self, answer, answer_ranges):
         defined_minimum = answer.get('min_value')
-        minimum_values = self.get_defined_numeric_value(defined_minimum, 0, answer_ranges)
+        minimum_values = self._get_defined_numeric_value(defined_minimum, 0, answer_ranges)
         minimum_values = self._convert_numeric_values_to_exclusive(defined_minimum, minimum_values,
                                                                    'min', answer.get('decimal_places', 0))
 
@@ -748,14 +737,14 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
     def _get_answer_maximum(self, answer, answer_ranges):
         defined_maximum = answer.get('max_value')
-        maximum_values = self.get_defined_numeric_value(defined_maximum, MAX_NUMBER, answer_ranges)
+        maximum_values = self._get_defined_numeric_value(defined_maximum, MAX_NUMBER, answer_ranges)
         maximum_values = self._convert_numeric_values_to_exclusive(defined_maximum, maximum_values,
                                                                    'max', answer.get('decimal_places', 0))
 
         return maximum_values
 
     @staticmethod
-    def get_defined_numeric_value(defined_value, system_default, answer_ranges):
+    def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
         values = None
 
         if defined_value is None:
@@ -857,7 +846,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_mutually_exclusive(self, question):
+    def _validate_mutually_exclusive(self, question):
         errors = []
 
         if question['type'] == 'MutuallyExclusive':
@@ -871,7 +860,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
 
         return errors
 
-    def validate_totaliser_defines_decimal_places(self, answer):
+    def _validate_totaliser_defines_decimal_places(self, answer):
         errors = []
 
         if 'calculated' in answer and ('decimal_places' not in answer or answer['decimal_places'] != 2):
@@ -907,7 +896,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
                 placeholder_definition_names.append(placeholder_definition['placeholder'])
 
                 transforms = placeholder_definition.get('transforms')
-                answer_ids_to_validate, metadata_ids_to_validate = self.get_placeholder_source_ids(placeholder_definition, transforms)
+                answer_ids_to_validate, metadata_ids_to_validate = self._get_placeholder_source_ids(placeholder_definition, transforms)
 
                 errors.extend(self._validate_placeholder_answer_ids(block_json['id'], placeholder_definition,
                                                                     answers_with_parent_ids, answer_ids_to_validate))
@@ -925,7 +914,7 @@ class Validator:    # pylint: disable=too-many-public-methods, too-many-lines
         return errors
 
     @staticmethod
-    def get_placeholder_source_ids(placeholder_definition, transforms):
+    def _get_placeholder_source_ids(placeholder_definition, transforms):
 
         answer_ids_to_validate = []
         metadata_ids_to_validate = []
