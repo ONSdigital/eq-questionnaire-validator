@@ -221,16 +221,20 @@ def test_answer_comparisons_different_types():
     filename = 'schemas/invalid/test_invalid_answer_comparison_types.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. The answers used as comparison_id "route-comparison-1-answer" and answer_id "route-comparison-2-answer" '
-        'in the "when" clause for route-comparison-2 have different types',
-        'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
-        'clause for equals-answers have different types',
-        'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
-        'clause for less-than-answers have different types',
-        'Schema Integrity Error. The answers used as comparison_id "comparison-2-answer" and answer_id "comparison-1-answer" in the "when" '
-        'clause for less-than-answers have different types',
-        'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
-        'Schema Integrity Error. The "when" clause for greater-than-answers contains a comparison_id and uses a condition of unset or set',
+        'Schema Integrity Error. The answers used as comparison_id `route-comparison-1-answer` and answer_id `route-comparison-2-answer` '
+        'in the `when` clause for `route-comparison-2` have different types',
+
+        'Schema Integrity Error. The comparison_id `route-comparison-2-answer` is not of answer type `Checkbox`. '
+        'The condition `equals any` can only reference `Checkbox` answers when using `comparison id`',
+
+        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'clause for `equals-answers` have different types',
+
+        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'clause for `less-than-answers` have different types',
+
+        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'clause for `less-than-answers` have different types',
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -410,3 +414,25 @@ def test_inconsistent_types_in_variants():
         assert any(fuzzy_error in error_message for error_message in error_messages)
 
     assert len(validation_errors) == 2
+
+
+def test_invalid_when_condition_property():
+    file_name = 'schemas/invalid/test_invalid_when_condition_property.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, schema_errors = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    fuzzy_error_messages = [
+        'Schema Integrity Error. The comparison_id `country-checkbox-answer2` is not of answer type `Checkbox`. '
+        'The condition `contains any` can only reference `Checkbox` answers when using `comparison id`',
+
+        'Schema Integrity Error. The condition `equals any` cannot be used with `Checkbox` answer type.'
+    ]
+
+    for fuzzy_error in fuzzy_error_messages:
+        assert any(fuzzy_error in error_message for error_message in error_messages)
+
+    assert len(validation_errors) == 2
+
+    assert schema_errors != {}

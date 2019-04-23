@@ -16,7 +16,7 @@
                 "$ref": "../definitions.json#/value_sources" 
               },
               {
-                "$ref": "../definitions.json#/date_value" 
+                "$ref": "../../common_definitions.json#/date_value"
               }
             ]
           },
@@ -26,7 +26,7 @@
                 "$ref": "../definitions.json#/value_sources" 
               },
               {
-                "$ref": "../definitions.json#/date_value" 
+                "$ref": "../../common_definitions.json#/date_value"
               }
             ]
           }

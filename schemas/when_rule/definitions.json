@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "when": {
+    "type": "array",
+    "items": {
+      "anyOf": [
+        {
+          "$ref": "compare_to_value.json"
+        },
+        {
+          "$ref": "compare_to_list.json"
+        },
+        {
+          "$ref": "compare_to_answer_store.json"
+        }
+      ]
+    },
+    "minItems": 1
+  },
+  "answer_identifier": {
+    "type": "string",
+    "description": "The id of an answer from which to obtain the value"
+  },
+  "metadata_identifier": {
+    "type": "string",
+    "description": "The id of a metadata provided by the calling service from which to obtain the value"
+  },
+  "comparison_value": {
+    "type": [
+      "string",
+      "boolean",
+      "integer"
+    ],
+    "description": "The value to compare against"
+  },
+  "comparison_values": {
+    "type": "array",
+    "description": "An array of values to compare against",
+    "minItems": 1
+  },
+  "comparison_identifier": {
+    "type": "string",
+    "description": "The id of an answer from which to obtain the value and compare to"
+  },
+  "date_comparison_value": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "#/answer_identifier"
+      },
+      "meta": {
+        "$ref": "#/metadata_identifier"
+      },
+      "value": {
+        "type": "string",
+        "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
+      },
+      "offset_by": {
+        "$ref": "../common_definitions.json#/offset_by_yyyy_mm_dd"
+      }
+    },
+    "additionalProperties": false,
+    "oneOf": [
+      {
+        "required": [
+          "id"
+        ]
+      },
+      {
+        "required": [
+          "meta"
+        ]
+      },
+      {
+        "required": [
+          "value"
+        ]
+      }
+    ]
+  }
+}
