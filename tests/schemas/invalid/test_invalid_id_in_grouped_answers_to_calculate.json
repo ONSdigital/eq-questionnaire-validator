@@ -1,5 +1,5 @@
 {
-  "data_version": "0.0.1",
+  "data_version": "0.0.3",
   "description": "A survey that tests grouped and calculated answers against a total",
   "legal_basis": "StatisticsOfTradeAct",
   "metadata": [

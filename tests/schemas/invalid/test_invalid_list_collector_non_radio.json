@@ -1,7 +1,7 @@
 {
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "data_version": "0.0.2",
+  "data_version": "0.0.3",
   "survey_id": "0",
   "title": "Test ListCollector",
   "theme": "default",
@@ -32,7 +32,14 @@
               "id": "list-collector",
               "type": "ListCollector",
               "populates_list": "people",
-              "add_answer_value": "Yes",
+              "add_answer": {
+                "id": "anyone-else",
+                "value": "Yes"
+              },
+              "remove_answer": {
+                "id": "remove-confirmation",
+                "value": "Yes"
+              },
               "question": {
                 "id": "confirmation-question",
                 "type": "General",
@@ -57,7 +64,7 @@
               },
               "add_block": {
                 "id": "add-person",
-                "type": "Question",
+                "type": "ListAddQuestion",
                 "question": {
                   "id": "add-question",
                   "type": "General",
@@ -81,7 +88,7 @@
               },
               "edit_block": {
                 "id": "edit-person",
-                "type": "Question",
+                "type": "ListEditQuestion",
                 "question": {
                   "id": "edit-question",
                   "type": "General",
@@ -105,7 +112,7 @@
               },
               "remove_block": {
                 "id": "remove-person",
-                "type": "Question",
+                "type": "ListRemoveQuestion",
                 "question": {
                   "id": "remove-question",
                   "type": "General",

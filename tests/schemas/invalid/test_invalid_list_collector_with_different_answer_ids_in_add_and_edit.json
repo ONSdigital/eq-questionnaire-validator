@@ -34,7 +34,7 @@
               "populates_list": "people",
               "add_answer": {
                 "id": "anyone-else",
-                "value": "SomethingElse"
+                "value": "Yes"
               },
               "remove_answer": {
                 "id": "remove-confirmation",
@@ -71,16 +71,16 @@
                   "title": "What is the name of the person?",
                   "answers": [
                     {
-                        "id": "first-name",
-                        "label": "First name",
-                        "mandatory": true,
-                        "type": "TextField"
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
                     },
                     {
-                        "id": "last-name",
-                        "label": "Last name",
-                        "mandatory": true,
-                        "type": "TextField"
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
                     }
                   ]
 
@@ -95,16 +95,22 @@
                   "title": "What is the name of the person?",
                   "answers": [
                     {
-                        "id": "first-name",
-                        "label": "First name",
-                        "mandatory": true,
-                        "type": "TextField"
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
                     },
                     {
-                        "id": "last-name",
-                        "label": "Last name",
-                        "mandatory": true,
-                        "type": "TextField"
+                      "id": "middle-name",
+                      "label": "Middle name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
                     }
                   ]
 

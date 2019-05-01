@@ -1,5 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
+  "answer_reference": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id",
+        "description": "The id of an answer to reference"
+      },
+      "value": {
+        "type": [
+          "string",
+          "integer"
+        ],
+        "description": "The value of the answer which should be matched"
+      }
+    },
+    "required": ["id", "value"],
+    "additionalProperties": false
+  },
   "block": {
     "type": "object",
     "properties": {
@@ -13,8 +31,11 @@
       "populates_list": {
         "type": "string"
       },
-      "add_answer_value": {
-        "type": "string"
+      "add_answer": {
+        "$ref": "list_collector.json#/answer_reference"
+      },
+      "remove_answer": {
+        "$ref": "list_collector.json#/answer_reference"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"
@@ -37,7 +58,8 @@
       "id",
       "type",
       "populates_list",
-      "add_answer_value",
+      "add_answer",
+      "remove_answer",
       "add_block",
       "edit_block",
       "remove_block"

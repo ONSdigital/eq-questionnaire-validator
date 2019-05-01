@@ -19,6 +19,8 @@ class Validator:  # pylint: disable=too-many-lines
         with open('schemas/questionnaire_v1.json', encoding='utf8') as schema_data:
             self.schema = load(schema_data)
 
+        self._list_collector_answer_ids = {}
+
     def validate_schema(self, json_to_validate):
         """
         Validates the json schema provided is correct
@@ -73,7 +75,8 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
-    def _validate_blocks(self, json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges):
+    # pylint: disable=too-complex
+    def _validate_blocks(self, json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges):  # noqa: C901
         errors = []
 
         for block in group['blocks']:
@@ -97,8 +100,13 @@ class Validator:  # pylint: disable=too-many-lines
             if block['type'] == 'CalculatedSummary':
                 errors.extend(self._validate_calculated_summary_type(block, answers_with_parent_ids))
 
-            if block['type'] == 'ListCollector':
-                errors.extend(self._validate_list_collector_type(block))
+            elif block['type'] == 'ListCollector':
+                try:
+                    errors.extend(self._validate_list_collector(block))
+                except KeyError as e:
+                    errors.append(f'Missing key in list collector: {e}')
+            elif block['type'] in ['ListAddQuestion', 'ListEditQuestion', 'ListRemoveQuestion']:
+                errors.append(f'Block type: {block["type"]} not allowed outside of ListCollectors')
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -348,39 +356,97 @@ class Validator:  # pylint: disable=too-many-lines
         errors.extend(self._validate_when_rule(when, answer_ids_with_group_id, block_or_group['id']))
         return errors
 
-    def _validate_list_collector_type(self, block):  # noqa: C901  pylint: disable=too-complex
+    def _validate_list_answer_references(self, block):
         errors = []
-        questions = []
-        add_answer_value = block['add_answer_value']
 
-        if 'question' in block:
-            questions.append(block['question'])
+        main_block_questions = self._get_all_questions_for_block(block)
+        main_block_ids = {answer['id'] for question in main_block_questions for answer in question['answers']}
+        remove_block_questions = self._get_all_questions_for_block(block['remove_block'])
+        remove_block_ids = {answer['id'] for question in remove_block_questions for answer in question['answers']}
 
-        if 'question_variants' in block:
-            for question in block['question_variants']:
-                questions.append(question)
+        if block['add_answer']['id'] not in main_block_ids:
+            errors.append(self._error_message(
+                'add_answer reference uses id not found in main block question: {}'.format(block['add_answer']['id'])
+            ))
+        if block['remove_answer']['id'] not in remove_block_ids:
+            errors.append(self._error_message(
+                'remove_answer reference uses id not found in remove_block: {}'.format(block['remove_answer']['id'])
+            ))
 
-        for question in questions:
-            for answer in question['answers']:
-                if answer['type'] != 'Radio':
+        return errors
+
+    def _validate_list_collector(self, block):  # noqa: C901  pylint: disable=too-complex, too-many-locals
+        errors = []
+        collector_questions = self._get_all_questions_for_block(block)
+        errors.extend(self._validate_list_answer_references(block))
+        remove_questions = self._get_all_questions_for_block(block['remove_block'])
+        add_answer_value = block['add_answer']['value']
+        remove_answer_value = block['remove_answer']['value']
+
+        for collector_question in collector_questions:
+            for collector_answer in collector_question['answers']:
+                if collector_answer['type'] != 'Radio':
                     errors.append(self._error_message('The list collector block {} does not contain a Radio answer type'
                                                       .format(block['id'])))
 
-                if not self._options_contain_value(answer['options'], add_answer_value):
+                if not self._options_contain_value(collector_answer['options'], add_answer_value):
                     errors.append(
                         self._error_message('The list collector block {} has an add_answer_value that is not present in the answer values'
                                             .format(block['id'])))
 
-        if 'routing_rules' in block['add_block']:
-            errors.append(self._error_message('The list collector block {} contains routing rule on the "add_block"'
-                                              .format(block['id'])))
+        for remove_question in remove_questions:
+            for remove_answer in remove_question['answers']:
+                if remove_answer['type'] != 'Radio':
+                    errors.append(self._error_message('The list collector remove block {} does not contain a Radio answer type'
+                                                      .format(block['id'])))
 
-        if 'routing_rules' in block['edit_block']:
-            errors.append(self._error_message('The list collector block {} contains routing rule on the "edit_block"'
-                                              .format(block['id'])))
+                if not self._options_contain_value(remove_answer['options'], remove_answer_value):
+                    errors.append(
+                        self._error_message('The list collector block {} has a remove_answer_value that is not present in the answer values'
+                                            .format(block['id'])))
 
-        if 'routing_rules' in block['remove_block']:
-            errors.append(self._error_message('The list collector block {} contains routing rule on the "remove_block"'
+        nested_blocks = [('add_block', 'ListAddQuestion'), ('edit_block', 'ListEditQuestion'), ('remove_block', 'ListRemoveQuestion')]
+        for nested_block_name, nested_block_type in nested_blocks:
+            nested_block = block[nested_block_name]
+            if nested_block['type'] != nested_block_type:
+                errors.append(self._error_message(
+                    f'The type of the {nested_block_name} is incorrect for a nested ListCollector block. '
+                    f'Expected: {nested_block_type}'))
+            if 'routing_rules' in nested_block:
+                errors.append(self._error_message(f'The list collector block {block["id"]} contains routing rules '
+                                                  f'on the {nested_block["id"]} sub block'))
+
+        errors.extend(self._validate_list_collector_answer_ids(block))
+
+        return errors
+
+    def _validate_list_collector_answer_ids(self, block):
+        """
+        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
+        - Enforce the same answer_ids on add and edit sub-blocks
+        """
+        errors = []
+        list_name = block['populates_list']
+
+        add_block_questions = self._get_all_questions_for_block(block['add_block'])
+        edit_block_questions = self._get_all_questions_for_block(block['edit_block'])
+
+        add_answer_ids = {answer['id'] for question in add_block_questions for answer in question['answers']}
+
+        edit_answer_ids = {answer['id'] for question in edit_block_questions for answer in question['answers']}
+
+        existing_add_ids = self._list_collector_answer_ids.get(list_name)
+
+        if not existing_add_ids:
+            self._list_collector_answer_ids[list_name] = add_answer_ids
+        else:
+            difference = add_answer_ids.symmetric_difference(existing_add_ids)
+            if difference:
+                errors.append(self._error_message('Multiple list collectors populate the list: {} using different answer_ids in the add block'
+                                                  .format(list_name)))
+
+        if add_answer_ids.symmetric_difference(edit_answer_ids):
+            errors.append(self._error_message('The list collector block {} contains an add block and edit block with different answer ids'
                                               .format(block['id'])))
 
         return errors
@@ -393,6 +459,7 @@ class Validator:  # pylint: disable=too-many-lines
 
     def _validate_calculated_summary_type(self, block, answers_with_parent_ids):
         answers_to_calculate = block['calculation']['answers_to_calculate']
+
         try:
             answer_types = [
                 answers_with_parent_ids[answer_id]['answer']['type']
@@ -645,6 +712,7 @@ class Validator:  # pylint: disable=too-many-lines
         """
         question_id & answer_id should be globally unique with some exceptions:
             - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
+            - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
         """
 
         duplicate_errors = []
@@ -1022,17 +1090,19 @@ class Validator:  # pylint: disable=too-many-lines
             path = ''
 
         ignored_keys = ['routing_rules', 'skip_conditions', 'when']
+        ignored_sub_paths = ['edit_block/question/answers', 'add_block/question/answers', 'remove_block/question/answers']
 
         for key, value in schema_json.items():
+            new_path = f'{path}/{key}'
             if key == parsed_key:
                 yield (path, value)
             elif key in ignored_keys:
                 continue
+            elif any([ignored_path in new_path for ignored_path in ignored_sub_paths]):
+                continue
             elif isinstance(value, dict):
-                new_path = f'{path}/{key}'
                 yield from self._parse_values(value, parsed_key, new_path)
             elif isinstance(value, list):
-                new_path = f'{path}/{key}'
                 for index, schema_item in enumerate(value):
                     indexed_path = new_path + f'/{index}'
                     if isinstance(schema_item, dict):
@@ -1064,10 +1134,9 @@ class Validator:  # pylint: disable=too-many-lines
 
         return datetime.strptime(value, date_format) if value else None
 
-    @staticmethod
-    def _get_answers_with_parent_ids(json_to_validate):
+    def _get_answers_with_parent_ids(self, json_to_validate):
         answers = {}
-        for question, context in Validator._get_questions_with_context(json_to_validate):
+        for question, context in self._get_questions_with_context(json_to_validate):
             for answer in question.get('answers', []):
                 answers[answer['id']] = {
                     'answer': answer,
@@ -1083,21 +1152,11 @@ class Validator:  # pylint: disable=too-many-lines
 
         return answers
 
-    @staticmethod
-    def _get_questions_with_context(json):
+    def _get_questions_with_context(self, json):
         for section in json.get('sections'):
             for group in section.get('groups'):
                 for block in group.get('blocks'):
-                    questions = []
-
-                    for variant in block.get('question_variants', []):
-                        if 'question' in variant:
-                            questions.append(variant.get('question', {}))
-
-                    single_question = block.get('question')
-                    if single_question:
-                        questions.append(single_question)
-
+                    questions = self._get_all_questions_for_block(block)
                     for question in questions:
                         context = {
                             'block': block['id'],
@@ -1105,3 +1164,17 @@ class Validator:  # pylint: disable=too-many-lines
                             'section': section['id']
                         }
                         yield question, context
+
+    @staticmethod
+    def _get_all_questions_for_block(block):
+        """ Get all questions on a block including variants"""
+        questions = []
+
+        for variant in block.get('question_variants', []):
+            questions.append(variant['question'])
+
+        single_question = block.get('question')
+        if single_question:
+            questions.append(single_question)
+
+        return questions
