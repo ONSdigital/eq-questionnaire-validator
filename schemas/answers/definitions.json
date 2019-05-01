@@ -1,93 +1,95 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "calculated": {
-    "type": "boolean",
-    "description": "Indicates that the answer should be treated as the result of a calculation."
-  },
-  "options": {
-    "type": "array",
-    "uniqueItems": true,
-    "items": {
-      "type": "object",
-      "properties": {
-        "label": {
-          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-        },
-        "value": {
-          "type": "string"
-        },
-        "q_code": {
-          "$ref": "../common_definitions.json#/q_code"
-        },
-        "detail_answer": {
-          "$ref": "./text_field.json#/answer"
-        },
-        "description": {
-          "type": "string",
-          "description": "Descriptive text that appears below the option label"
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "calculated": {
+        "type": "boolean",
+        "description": "Indicates that the answer should be treated as the result of a calculation."
+    },
+    "options": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "q_code": {
+                    "$ref": "../common_definitions.json#/q_code"
+                },
+                "detail_answer": {
+                    "$ref": "./text_field.json#/answer"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Descriptive text that appears below the option label"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "label",
+                "value"
+            ]
         }
-      },
-      "additionalProperties": false,
-      "required": [
-        "label",
-        "value"
-      ]
+    },
+    "max_value": {
+        "type": "object",
+        "properties": {
+            "value": {
+                "type": "integer",
+                "description": "Maximum numeric value allowed."
+            },
+            "answer_id": {
+                "type": "string",
+                "description": "The id of an answer from which to obtain the max_value"
+            },
+            "exclusive": {
+                "type": "boolean",
+                "description": "Whether validation is exclusive of value or not"
+            }
+        },
+        "oneOf": [
+            {
+                "required": [
+                    "value"
+                ]
+            },
+            {
+                "required": [
+                    "answer_id"
+                ]
+            }
+        ]
+    },
+    "min_value": {
+        "type": "object",
+        "properties": {
+            "value": {
+                "type": "integer",
+                "description": "Minimum numeric value allowed."
+            },
+            "answer_id": {
+                "type": "string",
+                "description": "The id of an answer from which to obtain the min_value"
+            },
+            "exclusive": {
+                "type": "boolean",
+                "description": "Whether validation is exclusive of value or not"
+            }
+        },
+        "oneOf": [
+            {
+                "required": [
+                    "value"
+                ]
+            },
+            {
+                "required": [
+                    "answer_id"
+                ]
+            }
+        ]
     }
-  },
-  "max_value": {
-    "type": "object",
-    "properties": {
-      "value": {
-        "type": "integer",
-        "description": "Maximum numeric value allowed."
-      },
-      "answer_id": {
-        "type": "string",
-        "description": "The id of an answer from which to obtain the max_value"
-      },
-      "exclusive": {
-        "type": "boolean",
-        "description": "Whether validation is exclusive of value or not"
-      }
-    },
-    "oneOf": [{
-        "required": [
-          "value"
-        ]
-      },
-      {
-        "required": [
-          "answer_id"
-        ]
-      }
-    ]
-  },
-  "min_value": {
-    "type": "object",
-    "properties": {
-      "value": {
-        "type": "integer",
-        "description": "Minimum numeric value allowed."
-      },
-      "answer_id": {
-        "type": "string",
-        "description": "The id of an answer from which to obtain the min_value"
-      },
-      "exclusive": {
-        "type": "boolean",
-        "description": "Whether validation is exclusive of value or not"
-      }
-    },
-    "oneOf": [{
-        "required": [
-          "value"
-        ]
-      },
-      {
-        "required": [
-          "answer_id"
-        ]
-      }
-    ]
-  }
 }

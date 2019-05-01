@@ -29,7 +29,7 @@ def _open_and_load_schema_file(file):
     return json_to_validate
 
 
-def check_validation_errors(filename, expected_validation_error_messages):
+def check_validation_errors(filename, expected_validation_error_messages, expected_number_validation_errors=None):
     """
     Helper function to automate tests which are just checking validation errors against a known list.
     """
@@ -48,7 +48,12 @@ def check_validation_errors(filename, expected_validation_error_messages):
     for expected_error_message in expected_validation_error_messages:
         assert expected_error_message in error_messages
 
-    assert len(validation_errors) == len(expected_validation_error_messages)
+    if not expected_number_validation_errors:
+        expected_number_validation_errors = len(expected_validation_error_messages)
+
+    assert len(validation_errors) == expected_number_validation_errors
+
+    return (validation_errors, schema_errors)
 
 
 def test_param_valid_schemas(valid_schema_filename):
@@ -324,56 +329,66 @@ def test_single_variant_invalid():
 
 
 def test_duplicate_answer_ids():
-    file_name = 'schemas/invalid/test_invalid_duplicate_ids.json'
-    json_to_validate = _open_and_load_schema_file(file_name)
+    filename = 'schemas/invalid/test_invalid_duplicate_ids.json'
 
-    validation_errors, schema_errors = validate_schema(json_to_validate)
-    error_messages = [error['message'] for error in validation_errors]
+    expected_error_messages = [
+        'Schema Integrity Error. Duplicate id found: block-1',
+        'Schema Integrity Error. Duplicate id found: answer-2',
+        'Schema Integrity Error. Duplicate id found: question-1',
+        'Schema Integrity Error. Duplicate id found: block-2',
+    ]
 
-    assert 'Schema Integrity Error. Duplicate id found: block-1' in error_messages
-    assert 'Schema Integrity Error. Duplicate id found: answer-2' in error_messages
-    assert 'Schema Integrity Error. Duplicate id found: question-1' in error_messages
-    assert 'Schema Integrity Error. Duplicate id found: block-2' in error_messages
-
-    assert schema_errors == {}
+    check_validation_errors(filename, expected_error_messages, expected_number_validation_errors=5)
 
 
 def test_invalid_list_collector_non_radio():
-    file_name = 'schemas/invalid/test_invalid_list_collector_non_radio.json'
-    json_to_validate = _open_and_load_schema_file(file_name)
+    filename = 'schemas/invalid/test_invalid_list_collector_non_radio.json'
 
-    validation_errors, schema_errors = validate_schema(json_to_validate)
-    error_messages = [error['message'] for error in validation_errors]
+    expected_error_messages = [
+        'Schema Integrity Error. The list collector block list-collector does not contain a Radio answer type',
+    ]
 
-    assert 'Schema Integrity Error. The list collector block list-collector does not contain a Radio answer type' \
-           in error_messages
-
-    assert schema_errors == {}
+    check_validation_errors(filename, expected_error_messages)
 
 
 def test_invalid_list_collector_with_routing():
-    file_name = 'schemas/invalid/test_invalid_list_collector_with_routing.json'
-    json_to_validate = _open_and_load_schema_file(file_name)
+    filename = 'schemas/invalid/test_invalid_list_collector_with_routing.json'
 
-    validation_errors, schema_errors = validate_schema(json_to_validate)
-    error_messages = [error['message'] for error in validation_errors]
+    expected_error_messages = [
+        'Schema Integrity Error. The list collector block list-collector contains routing rules on the remove-person sub block',
+    ]
 
-    assert 'Schema Integrity Error. The list collector block list-collector contains routing rule on the "remove_block"' in error_messages
-
-    assert schema_errors == {}
+    check_validation_errors(filename, expected_error_messages)
 
 
 def test_invalid_list_collector_with_no_add_option():
-    file_name = 'schemas/invalid/test_invalid_list_collector_with_no_add_option.json'
-    json_to_validate = _open_and_load_schema_file(file_name)
+    filename = 'schemas/invalid/test_invalid_list_collector_with_no_add_option.json'
 
-    validation_errors, schema_errors = validate_schema(json_to_validate)
-    error_messages = [error['message'] for error in validation_errors]
+    expected_error_messages = [
+        'Schema Integrity Error. The list collector block list-collector has an add_answer_value that is not present in the answer values',
+    ]
 
-    assert 'Schema Integrity Error. The list collector block list-collector has an add_answer_value that is not present ' \
-           'in the answer values' in error_messages
+    check_validation_errors(filename, expected_error_messages)
 
-    assert schema_errors == {}
+
+def test_invalid_list_collector_with_different_add_block_answer_ids():
+    filename = 'schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. Multiple list collectors populate the list: people using different answer_ids in the add block',
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
+    filename = 'schemas/invalid/test_invalid_list_collector_with_different_answer_ids_in_add_and_edit.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. The list collector block list-collector contains an add block and edit block with different answer ids',
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
 
 
 def test_inconsistent_ids_in_variants():
@@ -396,6 +411,15 @@ def test_inconsistent_ids_in_variants():
     assert len(validation_errors) == 3
 
     assert schema_errors == {}
+
+
+def test_invalid_list_collector_duplicate_ids_between_list_collectors():
+    filename = 'schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json'
+    expected_error_messages = ['Schema Integrity Error. Duplicate id found: add-person',
+                               'Schema Integrity Error. Duplicate id found: remove-person',
+                               'Schema Integrity Error. Duplicate id found: edit-person']
+
+    check_validation_errors(filename, expected_error_messages)
 
 
 def test_inconsistent_types_in_variants():
@@ -436,3 +460,13 @@ def test_invalid_when_condition_property():
     assert len(validation_errors) == 2
 
     assert schema_errors != {}
+
+
+def test_invalid_list_collector_bad_answer_reference_ids():
+    filename = 'schemas/invalid/test_invalid_list_collector_bad_answer_reference_ids.json'
+    expected_error_messages = [
+        'Schema Integrity Error. add_answer reference uses id not found in main block question: someone-else',
+        'Schema Integrity Error. remove_answer reference uses id not found in remove_block: delete-confirmation'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
