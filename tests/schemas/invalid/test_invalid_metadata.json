@@ -5,55 +5,55 @@
   "metadata": [
     {
       "name": "return_by",
-      "validator": "date"
+      "type": "date"
     },
     {
       "name": "period_id",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "region_code",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "invalid_metadata",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "ref_p_start_date",
-      "validator": "date"
+      "type": "date"
     },
     {
       "name": "trad_as_or_ru_name",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "trad_as",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "user_id",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "ref_p_end_date",
-      "validator": "date"
+      "type": "date"
     },
     {
       "name": "employment_date",
-      "validator": "date"
+      "type": "date"
     },
     {
       "name": "flag",
-      "validator": "boolean"
+      "type": "boolean"
     },
     {
       "name": "period_str",
-      "validator": "string"
+      "type": "string"
     },
     {
       "name": "case_id",
-      "validator": "uuid"
+      "type": "uuid"
     }
   ],
   "mime_type": "application/json/ons/eq",

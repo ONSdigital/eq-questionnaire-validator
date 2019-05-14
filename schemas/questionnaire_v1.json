@@ -62,21 +62,40 @@
             "type": "string",
             "pattern": "^[a-zA-Z0-9-_]+$"
           },
-          "validator": {
+          "type": {
             "type": "string",
             "enum": [
               "boolean",
               "date",
               "string",
-              "optional_string",
-              "uuid"
+              "uuid",
+              "url"
             ]
+          },
+          "min_length": {
+            "type": "integer",
+            "description": "The minimum length of a string field",
+            "minimum": 1
+          },
+          "max_length": {
+            "type": "integer",
+            "description": "The maximum length of a string field",
+            "minimum": 1
+          },
+          "length": {
+            "type": "integer",
+            "description": "The length of a string field must be equal to this",
+            "minimum": 0
+          },
+          "optional": {
+            "description": "Whether an error should be raised if this field is not provided.",
+            "type": "boolean"
           }
         },
         "additionalProperties": false,
         "required": [
           "name",
-          "validator"
+          "type"
         ]
       }
     },
