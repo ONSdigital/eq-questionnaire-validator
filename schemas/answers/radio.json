@@ -13,7 +13,7 @@
         "type": "string"
       },
       "guidance": {
-        "$ref": "../common_definitions.json#/guidance"
+        "$ref": "definitions.json#/answer_guidance"
       },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"

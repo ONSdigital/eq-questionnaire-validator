@@ -10,7 +10,7 @@
         "$ref": "../common_definitions.json#/q_code"
       },
       "guidance": {
-        "$ref": "../common_definitions.json#/guidance"
+        "$ref": "definitions.json#/answer_guidance"
       },
       "type": {
         "type": "string",

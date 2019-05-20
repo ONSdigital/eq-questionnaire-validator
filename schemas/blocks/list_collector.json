@@ -41,7 +41,7 @@
         "$ref": "../questions/definitions.json#/question"
       },
       "question_variants": {
-        "$ref": "../common_definitions.json#/question_variants"
+        "$ref": "definitions.json#/question_variants"
       },
       "add_block": {
         "$ref": "question.json#/block"

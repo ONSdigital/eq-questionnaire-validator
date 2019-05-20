@@ -9,9 +9,6 @@
       "title": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "description": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
       "type": {
         "type": "string",
         "enum": ["Introduction"]
@@ -24,10 +21,14 @@
             "id": {
               "$ref": "../common_definitions.json#/id"
             },
-            "content": {
-              "$ref": "../common_definitions.json#/content"
+            "title": {
+              "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+            },
+            "contents": {
+              "$ref": "../common_definitions.json#/contents"
             }
-          }
+          },
+          "additionalProperties": false
         }
       },
       "preview_content": {
@@ -36,10 +37,31 @@
           "id": {
             "$ref": "../common_definitions.json#/id"
           },
-          "content": {
-            "$ref": "../common_definitions.json#/content"
+          "title": {
+            "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "../common_definitions.json#/id"
+                },
+                "question": {
+                  "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+                },
+                "contents": {
+                  "$ref": "../common_definitions.json#/contents"
+                }
+              }
+            }
+          },
+          "contents": {
+            "$ref": "../common_definitions.json#/contents"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "secondary_content": {
         "type": "array",
@@ -49,10 +71,11 @@
             "id": {
               "$ref": "../common_definitions.json#/id"
             },
-            "content": {
-              "$ref": "../common_definitions.json#/content"
+            "contents": {
+              "$ref": "../common_definitions.json#/contents"
             }
-          }
+          },
+          "additionalProperties": false
         }
       }
     },

@@ -50,6 +50,7 @@
                 "description": "Whether validation is exclusive of value or not"
             }
         },
+        "additionalProperties": false,
         "oneOf": [
             {
                 "required": [
@@ -79,6 +80,7 @@
                 "description": "Whether validation is exclusive of value or not"
             }
         },
+        "additionalProperties": false,
         "oneOf": [
             {
                 "required": [
@@ -91,5 +93,23 @@
                 ]
             }
         ]
+    },
+    "answer_guidance": {
+        "description": "Answer guidance",
+        "type": "object",
+        "properties": {
+            "show_guidance": {
+                "type": "string",
+                "description": "The text that is used for the 'Show guidance' link."
+            },
+            "hide_guidance": {
+                "type": "string",
+                "description": "The text that is used for the 'Hide guidance' link."
+            },
+            "contents": {
+                "$ref": "../common_definitions.json#/contents"
+            }
+        },
+        "additionalProperties": false
     }
 }

@@ -9,12 +9,12 @@ const beautifySettings = {
 
 };
 
-const formatPath = "./schemas/**.json";
+const formatPath = "./tests/schemas/*/**.json";
 
 gulp.task("format", () =>
   gulp.src([formatPath])
     .pipe(beautify(beautifySettings))
-    .pipe(gulp.dest("./schemas/"))
+    .pipe(gulp.dest("./tests/schemas/"))
 );
 
 gulp.task("lint", () =>
