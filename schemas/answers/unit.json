@@ -34,7 +34,7 @@
       },
       "default": {
         "type": "integer",
-        "description": "Default value on POST if none given"
+        "description": "Default value if no answer given"
       },
       "max_value": {
         "$ref": "definitions.json#/max_value"

@@ -36,6 +36,10 @@
       "mandatory": {
         "type": "boolean"
       },
+      "default": {
+        "type": "string",
+        "description": "Default value if no answer given"
+      },
       "validation": {
         "type": "object",
         "properties": {
