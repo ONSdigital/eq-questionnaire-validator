@@ -1116,7 +1116,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         if 'offset_by' in answer_min_or_max:
             offset = answer_min_or_max['offset_by']
-            value = self._get_relative_date(value, offset)
+            value = self._get_relative_date(value, offset).strftime('%Y-%m-%d')
 
         return value
 
