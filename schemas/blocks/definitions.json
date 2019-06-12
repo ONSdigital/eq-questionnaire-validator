@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "content": {
+    "description": "Block level content block",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "The top-level heading on the page"
+      },
+      "contents": {
+        "$ref": "../common_definitions.json#/contents"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["title"]
+  },
+  "content_variants": {
+    "type": "array",
+    "minItems": 2,
+    "items": {
+      "$ref": "definitions.json#/content_variant"
+    }
+  },
+  "content_variant": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "$ref": "definitions.json#/content"
+      },
+      "when": {
+        "$ref": "../when_rule/definitions.json#/when"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "when",
+      "content"
+    ]
+  },
+  "question_variants": {
+    "type": "array",
+    "description": "All question ids within question_variants must match",
+    "minItems": 2,
+    "items": {
+      "$ref": "definitions.json#/question_variant"
+    }
+  },
+  "question_variant": {
+    "type": "object",
+    "properties": {
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "when": {
+        "$ref": "../when_rule/definitions.json#/when"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "when",
+      "question"
+    ]
+  }
+}

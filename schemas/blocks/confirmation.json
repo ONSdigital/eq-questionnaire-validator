@@ -6,12 +6,6 @@
       "id": {
         "$ref": "../common_definitions.json#/id"
       },
-      "title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
-      "description": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
       "number": {
         "type": "string"
       },
@@ -20,10 +14,10 @@
         "enum": ["Confirmation"]
       },
       "content": {
-        "$ref": "../common_definitions.json#/content"
+        "$ref": "definitions.json#/content"
       },
       "content_variants": {
-        "$ref": "../common_definitions.json#/content_variants"
+        "$ref": "definitions.json#/content_variants"
       }
     },
     "additionalProperties": false,

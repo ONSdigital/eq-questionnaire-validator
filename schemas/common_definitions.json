@@ -18,37 +18,21 @@
       "type": "object",
       "required": [
         "title",
-        "content"
+        "contents"
       ],
       "properties": {
         "title": {
           "type": "string"
         },
-        "content": {
-          "$ref": "common_definitions.json#/content"
+        "contents": {
+          "$ref": "common_definitions.json#/contents"
         }
       },
       "additionalProperties": false
     }
   },
-  "guidance": {
-    "type": "object",
-    "properties": {
-      "show_guidance": {
-        "type": "string",
-        "description": "The text that is used for the 'Show guidance' link."
-      },
-      "hide_guidance": {
-        "type": "string",
-        "description": "The text that is used for the 'Hide guidance' link."
-      },
-      "content": {
-        "$ref": "common_definitions.json#/content"
-      }
-    }
-  },
-  "content": {
-    "description": "Allows customisation of guidance text.",
+  "contents": {
+    "description": "Collection of flexible content (headings, paragraphs, lists).",
     "type": "array",
     "minItems": 1,
     "items": {
@@ -267,21 +251,6 @@
       "required": [
         "goto"
       ]
-    }
-  },
-  "content_variants": {
-    "type": "array",
-    "minItems": 2,
-    "items": {
-      "$ref": "variants/content_variant.json#/content_variant"
-    }
-  },
-  "question_variants": {
-    "type": "array",
-    "description": "All question ids within question_variants must match",
-    "minItems": 2,
-    "items": {
-      "$ref": "variants/question_variant.json#/question_variant"
     }
   }
 }

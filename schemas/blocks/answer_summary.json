@@ -6,14 +6,14 @@
       "id": {
         "$ref": "../common_definitions.json#/id"
       },
+      "title": {
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+      },
       "type": {
         "type": "string",
         "enum": [
           "AnswerSummary"
         ]
-      },
-      "title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "label": {
         "type": "string"

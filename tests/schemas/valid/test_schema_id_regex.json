@@ -2,68 +2,52 @@
   "data_version": "0.0.3",
   "description": "A questionnaire to test schema id regex",
   "legal_basis": "StatisticsOfTradeAct",
-  "metadata": [
-    {
-      "name": "user_id",
-      "type": "string"
-    },
-    {
-      "name": "ru_name",
-      "type": "string"
-    },
-    {
-      "name": "period_id",
-      "type": "string"
-    }
-  ],
+  "metadata": [{
+    "name": "user_id",
+    "type": "string"
+  }, {
+    "name": "ru_name",
+    "type": "string"
+  }, {
+    "name": "period_id",
+    "type": "string"
+  }],
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "sections": [
-    {
-      "groups": [
-        {
-          "blocks": [
-            {
-              "id": "block",
-              "question": {
-                "answers": [
-                  {
-                    "description": "Enter percentage of growth",
-                    "id": "answer",
-                    "label": "New to the market 2012-2014",
-                    "mandatory": false,
-                    "max_value": {
-                      "value": 100
-                    },
-                    "q_code": "0",
-                    "type": "Percentage"
-                  }
-                ],
-                "id": "question",
-                "title": "Test Question",
-                "type": "General"
-              },
-              "title": "Percentage Input Test",
-              "type": "Question"
-            }
-          ],
-          "id": "group",
-          "title": "Test Group"
+  "sections": [{
+    "groups": [{
+      "blocks": [{
+        "id": "block",
+        "question": {
+          "answers": [{
+            "description": "Enter percentage of growth",
+            "id": "answer",
+            "label": "New to the market 2012-2014",
+            "mandatory": false,
+            "max_value": {
+              "value": 100
+            },
+            "q_code": "0",
+            "type": "Percentage"
+          }],
+          "id": "question",
+          "title": "Test Question",
+          "type": "General"
         },
-        {
-          "blocks": [
-            {
-              "id": "summary",
-              "type": "Summary"
-            }
-          ],
-          "id": "summary-group",
-          "title": "Summary"
-        }
-      ],
-      "id": "section1"
-    }
-  ],
+        "type": "Question"
+      }],
+      "id": "group",
+      "title": "Test Group"
+    }, {
+      "blocks": [{
+        "id": "summary",
+        "type": "Summary"
+      }],
+      "id": "summary-group",
+      "title": "Summary"
+    }],
+    "id": "section1"
+  }],
   "survey_id": "0",
   "theme": "default",
   "title": "Test Schema ID"

@@ -6,15 +6,6 @@
       "id": {
         "$ref": "../common_definitions.json#/id"
       },
-      "section_number": {
-        "type": "string"
-      },
-      "title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
-      "description": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
       "number": {
         "type": "string"
       },
@@ -23,10 +14,10 @@
         "enum": ["Interstitial"]
       },
       "content_variants": {
-        "$ref": "../common_definitions.json#/content_variants"
+        "$ref": "definitions.json#/content_variants"
       },
       "content": {
-        "$ref": "../common_definitions.json#/content"
+        "$ref": "definitions.json#/content"
       },
       "routing_rules": {
         "ref": "../common_definitions.json#/routing_rules"

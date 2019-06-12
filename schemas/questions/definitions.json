@@ -21,5 +21,14 @@
         "$ref": "types/mutually_exclusive.json#/question"
       }
     ]
+  },
+  "question_guidance": {
+    "description": "Question guidance",
+    "type": "object",
+    "properties": {
+      "contents": {
+        "$ref": "../common_definitions.json#/contents"
+      }
+    }
   }
 }
