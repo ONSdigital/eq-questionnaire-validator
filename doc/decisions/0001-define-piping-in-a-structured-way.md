@@ -87,7 +87,7 @@ Proposed:
 
 ```json
 {
-    "description": "Are you able to report for the period starting on {{format_date_custom(metadata['ref_p_start_date'], 'EEEE d MMMM YYYY')}}?"
+    "description": "Are you able to report for the period starting on {{format_date_custom(metadata['ref_p_start_date'], 'EEEE d MMMM yyyy')}}?"
 }
 ```
 
@@ -109,7 +109,7 @@ Proposed:
                                 "source": "metadata",
                                 "identifier": "ref_p_start_date"
                             },
-                            "format": "EEEE d MMMM YYYY"
+                            "format": "EEEE d MMMM yyyy"
                         }
                     }
                 ]
