@@ -470,3 +470,12 @@ def test_invalid_list_collector_bad_answer_reference_ids():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_list_name_in_when_rule():
+    filename = 'schemas/invalid/test_invalid_when_condition_list_property.json'
+    expected_error_messages = [
+        'Schema Integrity Error. The list `non-existent-list-name` is not defined in the schema'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)

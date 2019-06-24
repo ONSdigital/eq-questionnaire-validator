@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "description": "Comparison against a list count",
+  "properties": {
+    "list": {
+      "type": "string",
+      "description": "The name of a list"
+    },
+    "condition": {
+      "enum": [
+        "equals",
+        "not equals",
+        "greater than",
+        "less than",
+        "greater than or equal to",
+        "less than or equal to"
+      ]
+    },
+    "value": {
+      "type": "integer",
+      "description": "The value to compare against"
+    }
+  },
+  "required": [
+    "list",
+    "condition",
+    "value"
+  ],
+  "additionalProperties": false
+}

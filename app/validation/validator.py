@@ -20,6 +20,7 @@ class Validator:  # pylint: disable=too-many-lines
             self.schema = load(schema_data)
 
         self._list_collector_answer_ids = {}
+        self._list_names = []
 
     def validate_schema(self, json_to_validate):
         """
@@ -38,6 +39,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         numeric_answer_ranges = {}
         answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
+        self._list_names = self._get_list_names(json_to_validate)
 
         all_groups = []
         for section in json_to_validate.get('sections'):
@@ -536,14 +538,20 @@ class Validator:  # pylint: disable=too-many-lines
         errors = []
 
         for when in when_clause:
+            if 'list' in when:
+                errors.extend(self._validate_list_name_in_when_rule(when))
+                break
+
             answer_errors = self._validate_answer_ids_present_in_schema(when, answer_ids_with_group_id, referenced_id)
             if answer_errors:
                 errors.extend(answer_errors)
-            else:  # We know the ids are correct, so can continue to perform validation
-                errors.extend(self._validate_checkbox_exclusive_conditions_in_when_rule(when, answer_ids_with_group_id))
+                break
 
-                if 'comparison_id' in when:
-                    errors.extend(self._validate_comparison_id_in_when_rule(when, answer_ids_with_group_id, referenced_id))
+            # We know the ids are correct, so can continue to perform validation
+            errors.extend(self._validate_checkbox_exclusive_conditions_in_when_rule(when, answer_ids_with_group_id))
+
+            if 'comparison_id' in when:
+                errors.extend(self._validate_comparison_id_in_when_rule(when, answer_ids_with_group_id, referenced_id))
 
         return errors
 
@@ -607,6 +615,17 @@ class Validator:  # pylint: disable=too-many-lines
         elif comparison_answer_type != id_answer_type:
             errors.append(self._error_message(f'The answers used as comparison_id `{comparison_id}` and answer_id `{answer_id}` in the `when` '
                                               f'clause for `{referenced_id}` have different types'))
+
+        return errors
+
+    def _validate_list_name_in_when_rule(self, when):
+        """
+        Validate that the list referenced in the when rule is defined in the schema
+        """
+        errors = []
+        list_name = when['list']
+        if list_name not in self._list_names:
+            errors.append(self._error_message(f'The list `{list_name}` is not defined in the schema'))
 
         return errors
 
@@ -1178,3 +1197,13 @@ class Validator:  # pylint: disable=too-many-lines
             questions.append(single_question)
 
         return questions
+
+    @staticmethod
+    def _get_list_names(json_to_validate):
+        list_names = []
+        for section in json_to_validate['sections']:
+            for group in section['groups']:
+                for block in group['blocks']:
+                    if block['type'] == 'ListCollector':
+                        list_names.append(block['populates_list'])
+        return list_names

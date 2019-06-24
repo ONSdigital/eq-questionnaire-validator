@@ -107,3 +107,4 @@ secrets.yml
 
 *.bak
 .vscode/
+.pytest_cache/

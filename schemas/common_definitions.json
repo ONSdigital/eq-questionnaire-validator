@@ -75,10 +75,14 @@
     "type": "array",
     "minItems": 1,
     "uniqueItems": true,
-    "properties": {
-      "when": {
-        "$ref": "when_rule/definitions.json#/when"
-      }
+    "items": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "$ref": "when_rule/definitions.json#/when"
+        }
+      },
+      "additionalProperties": false
     },
     "required": [
       "when"
