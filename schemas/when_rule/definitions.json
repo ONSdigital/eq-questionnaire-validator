@@ -8,10 +8,13 @@
           "$ref": "compare_to_value.json"
         },
         {
-          "$ref": "compare_to_list.json"
+          "$ref": "compare_to_multiple_values.json"
         },
         {
           "$ref": "compare_to_answer_store.json"
+        },
+        {
+          "$ref": "compare_to_list_count.json"
         }
       ]
     },

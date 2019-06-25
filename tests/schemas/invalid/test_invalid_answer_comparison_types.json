@@ -186,25 +186,6 @@
             "comparison_id": "comparison-2-answer"
           }]
         }]
-      }, {
-        "type": "Interstitial",
-        "id": "greater-than-answers",
-        "content": {
-          "title": "First greater than second"
-        },
-        "skip_conditions": [{
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "not set",
-            "comparison_id": "comparison-1-answer"
-          }]
-        }, {
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "set",
-            "comparison_id": "comparison-1-answer"
-          }]
-        }]
       }],
       "id": "skip-group",
       "title": ""

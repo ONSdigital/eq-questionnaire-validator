@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
   "type": "object",
-  "description": "Comparison against list of values",
+  "description": "Comparison against multiple values",
   "properties": {
     "id": {
       "$ref": "definitions.json#/answer_identifier"
