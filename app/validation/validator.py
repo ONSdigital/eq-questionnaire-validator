@@ -86,7 +86,7 @@ class Validator:  # pylint: disable=too-many-lines
             if section == json_to_validate['sections'][-1] \
                     and group == section['groups'][-1] \
                     and block == group['blocks'][-1]:
-                errors.extend(self._validate_contains_confirmation_or_summary(block))
+                errors.extend(self._validate_schema_contains_submission_page(schema=json_to_validate, last_block=block))
 
             errors.extend(self._validate_routing_rules_default(block.get('routing_rules', []), block))
 
@@ -799,16 +799,22 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
-    def _validate_contains_confirmation_or_summary(self, last_block):
+    def _validate_schema_contains_submission_page(self, schema, last_block):
         """
         Validate that the final block is of type Summary or Confirmation.
-        :param last_block: final block of the schema
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        :param last_block: The final block in the schema
+        :return: List of dictionaries containing error messages, otherwise it returns an empty list
         """
-        if last_block['type'] in ['Summary', 'Confirmation']:
-            return []
+        is_last_block_valid = last_block['type'] in {'Summary', 'Confirmation'}
+        is_hub_enabled = schema.get('hub', {}).get('enabled')
 
-        return [self._error_message('Schemas does not have a confirmation or summary page')]
+        if is_last_block_valid and is_hub_enabled:
+            return [self._error_message('Schema can only contain one of [Confirmation page, Summary page, Hub page]')]
+
+        if not is_last_block_valid and not is_hub_enabled:
+            return [self._error_message('Schema must contain one of [Confirmation page, Summary page, Hub page]')]
+
+        return []
 
     @staticmethod
     def _error_message(message):
