@@ -106,7 +106,15 @@ class Validator:  # pylint: disable=too-many-lines
         return errors
 
     # pylint: disable=too-complex
-    def _validate_blocks(self, json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges):  # noqa: C901
+    def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
+            self,
+            json_to_validate,
+            section,
+            group,
+            all_groups,
+            answers_with_parent_ids,
+            numeric_answer_ranges,
+        ):
         errors = []
         for block in group.get('blocks'):
             if section == json_to_validate['sections'][-1] \
@@ -144,6 +152,10 @@ class Validator:  # pylint: disable=too-many-lines
                                    'ListRemoveQuestion']:
                 errors.append(f'Block type: {block["type"]} not allowed outside of '
                               'ListCollectors')
+            elif block['type'] == 'RelationshipCollector':
+                errors.extend(self._validate_relationship_list_exists(block))
+                errors.extend(self._validate_relationship_collector_contains_single_relationship_answer(block))
+                errors.extend(self._validate_relationship_collector_answer_type(block))
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -1119,6 +1131,24 @@ class Validator:  # pylint: disable=too-many-lines
                         block_json['id'])))
 
         return errors
+
+    def _validate_relationship_list_exists(self, block):
+        for_list = block['for_list']
+
+        if for_list not in self._list_names:
+            msg = f"for_list '{for_list}' in RelationshipCollector is not populated by any ListCollector blocks"
+            return [self._error_message(msg)]
+        return []
+
+    def _validate_relationship_collector_contains_single_relationship_answer(self, block):
+        answers = block['question']['answers']
+        msg = 'RelationshipCollector contains more than one answer.'
+
+        return [self._error_message(msg)] if len(answers) > 1 else []
+
+    def _validate_relationship_collector_answer_type(self, block):
+        msg = 'Ony answers of type Relationship are valid in RelationshipCollector blocks.'
+        return [self._error_message(msg)] if block['question']['answers'][0]['type'] != 'Relationship' else []
 
     @staticmethod
     def _get_placeholder_source_ids(placeholder_definition, transforms):

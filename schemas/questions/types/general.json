@@ -71,6 +71,9 @@
             },
             {
               "$ref": "../../answers/dropdown.json#/answer"
+            },
+            {
+              "$ref": "../../answers/relationship.json#/answer"
             }
           ]
         }

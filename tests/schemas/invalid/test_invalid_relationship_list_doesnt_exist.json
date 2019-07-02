@@ -1,0 +1,68 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Relationships",
+  "theme": "default",
+  "description": "A questionnaire to test capturing of relationships.",
+  "messages": {},
+  "metadata": [{
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [{
+    "id": "section",
+    "groups": [{
+      "id": "group",
+      "title": "Relationships",
+      "blocks": [{
+          "type": "RelationshipCollector",
+          "id": "relationships",
+          "title": "This will iterate over the people list, capturing the one way relationships.",
+          "for_list": "not-a-list",
+          "question": {
+            "id": "relationship-question",
+            "type": "General",
+            "title": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+            "answers": [{
+              "id": "relationship-answer",
+              "mandatory": true,
+              "type": "Relationship",
+              "playback": "{second_person_name} is {first_person_name} <em>…</em>",
+              "options": [{
+                  "value": "Husband or Wife",
+                  "label": "husband or Wife",
+                  "title": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
+                  "playback": "{second_person_name} is {first_person_name} <em>husband or wife</em>"
+                },
+                {
+                  "value": "Legally Registered Civil Partner",
+                  "label": "Legally Registered Civil Partner",
+                  "title": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
+                  "playback": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>"
+                }
+              ]
+            }]
+          }
+        },
+        {
+          "type": "Confirmation",
+          "id": "confirmation",
+          "content": {
+            "title": "Thank you for your answers, do you wish to submit"
+          }
+        }
+      ]
+    }]
+  }]
+}
