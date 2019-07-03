@@ -479,3 +479,21 @@ def test_invalid_list_name_in_when_rule():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_hub_and_spoke_with_summary_confirmation():
+    filename = 'schemas/invalid/test_invalid_hub_and_spoke_with_summary_confirmation.json'
+    expected_error_messages = [
+        'Schema Integrity Error. Schema can only contain one of [Confirmation page, Summary page, Hub page]'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
+    filename = 'schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json'
+    expected_error_messages = [
+        'Schema Integrity Error. Schema must contain one of [Confirmation page, Summary page, Hub page]'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)

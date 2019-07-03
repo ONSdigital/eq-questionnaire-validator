@@ -137,6 +137,19 @@
     "messages": {
       "$ref": "common_definitions.json#/messages"
     },
+    "hub": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether or not the hub and spoke pattern is enabled for this questionnaire.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "additionalProperties": false
+    },
     "sections": {
       "type": "array",
       "items": {
