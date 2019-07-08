@@ -212,6 +212,9 @@
                         "$ref": "blocks/list_collector.json#/block"
                       },
                       {
+                        "$ref": "blocks/primary_person_list_collector.json#/block"
+                      },
+                      {
                         "$ref": "blocks/question.json#/block"
                       },
                       {

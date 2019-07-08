@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "answer_reference": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id",
+        "description": "The id of an answer to reference"
+      },
+      "value": {
+        "type": [
+          "string",
+          "integer"
+        ],
+        "description": "The value of the answer which should be matched"
+      }
+    },
+    "required": ["id", "value"],
+    "additionalProperties": false
+  },
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["PrimaryPersonListCollector"]
+      },
+      "populates_list": {
+        "type": "string"
+      },
+      "add_or_edit_answer": {
+        "$ref": "list_collector.json#/answer_reference"
+      },
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "question_variants": {
+        "$ref": "definitions.json#/question_variants"
+      },
+      "add_or_edit_block": {
+        "$ref": "question.json#/block"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "populates_list",
+      "add_or_edit_answer",
+      "add_or_edit_block"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "question"
+        ]
+      },
+      {
+        "required": [
+          "question_variants"
+        ]
+      }
+    ]
+  }
+}

@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
   "devDependencies": {
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-diff": "^1.0.0",
     "gulp-jsbeautifier": "^3.0.0",
     "gulp-util": "^3.0.8"

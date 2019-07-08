@@ -33,38 +33,66 @@ class Validator:  # pylint: disable=too-many-lines
         }
 
         validation_errors = []
-
         validation_errors.extend(self._validate_schema_contain_metadata(json_to_validate))
         validation_errors.extend(self._validate_duplicates(json_to_validate))
 
-        numeric_answer_ranges = {}
-        answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
-        self._list_names = self._get_list_names(json_to_validate)
+        try:
+            all_groups = self._build_groups_list(json_to_validate)
+        except self.CoreStructureError as cve:
+            validation_errors.extend([{'message': cve.message}])
+        else:
+            numeric_answer_ranges = {}
+            answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
+            self._list_names = self._get_list_names(json_to_validate)
 
-        all_groups = []
-        for section in json_to_validate.get('sections'):
-            all_groups.extend(section.get('groups'))
+            for section in json_to_validate['sections']:
+                for group in section['groups']:
 
-        for section in json_to_validate['sections']:
-            for group in section['groups']:
+                    validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
-                validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
+                    for skip_condition in group.get('skip_conditions', []):
+                        validation_errors.extend(self._validate_skip_condition(skip_condition, answers_with_parent_ids, group))
 
-                for skip_condition in group.get('skip_conditions', []):
-                    validation_errors.extend(self._validate_skip_condition(skip_condition, answers_with_parent_ids, group))
-
-                validation_errors.extend(
-                    self._validate_blocks(json_to_validate,
-                                          section,
-                                          group,
-                                          all_groups,
-                                          answers_with_parent_ids,
-                                          numeric_answer_ranges)
-                )
+                    validation_errors.extend(
+                        self._validate_blocks(json_to_validate,
+                                              section,
+                                              group,
+                                              all_groups,
+                                              answers_with_parent_ids,
+                                              numeric_answer_ranges)
+                    )
 
         all_errors['validation_errors'] = validation_errors
 
         return all_errors
+
+    def _build_groups_list(self, json_to_validate):
+        sections = json_to_validate.get('sections', [])
+        if not sections:
+            raise self.CoreStructureError(
+                'Sections key missing from schema or is empty list'
+            )
+
+        sections_with_empty_groups = [
+            section.get('id', section) for section in sections if not section.get('groups')
+        ]
+        if sections_with_empty_groups:
+            raise self.CoreStructureError(
+                f'Section "{sections_with_empty_groups[0]}" is missing groups key or groups list is empty'
+            )
+
+        all_groups = [group for section in sections for group in section.get('groups')]
+        groups_with_empty_blocks = [
+            group.get('id', group)
+            for group in all_groups
+            if not group.get('blocks')
+        ]
+        if groups_with_empty_blocks:
+            raise self.CoreStructureError(
+                f'Group "{groups_with_empty_blocks[0]}" is missing blocks key or blocks list is empty'
+            )
+
+        return all_groups
 
     def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
         errors = []
@@ -80,9 +108,7 @@ class Validator:  # pylint: disable=too-many-lines
     # pylint: disable=too-complex
     def _validate_blocks(self, json_to_validate, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges):  # noqa: C901
         errors = []
-
-        for block in group['blocks']:
-
+        for block in group.get('blocks'):
             if section == json_to_validate['sections'][-1] \
                     and group == section['groups'][-1] \
                     and block == group['blocks'][-1]:
@@ -101,14 +127,23 @@ class Validator:  # pylint: disable=too-many-lines
 
             if block['type'] == 'CalculatedSummary':
                 errors.extend(self._validate_calculated_summary_type(block, answers_with_parent_ids))
-
+            elif block['type'] == 'PrimaryPersonListCollector':
+                try:
+                    errors.extend(self._validate_primary_person_list_collector(block))
+                except KeyError as e:
+                    errors.append(f'Missing key in list collector: {e}')
             elif block['type'] == 'ListCollector':
                 try:
                     errors.extend(self._validate_list_collector(block))
                 except KeyError as e:
                     errors.append(f'Missing key in list collector: {e}')
-            elif block['type'] in ['ListAddQuestion', 'ListEditQuestion', 'ListRemoveQuestion']:
-                errors.append(f'Block type: {block["type"]} not allowed outside of ListCollectors')
+            elif block['type'] == 'PrimaryPersonListAddOrEditQuestion':
+                errors.append(f'Block type: {block["type"]} not allowed outside of '
+                              'PrimaryPersonListCollectors')
+            elif block['type'] in ['ListAddQuestion', 'ListEditQuestion',
+                                   'ListRemoveQuestion']:
+                errors.append(f'Block type: {block["type"]} not allowed outside of '
+                              'ListCollectors')
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -377,6 +412,21 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
+    def _validate_primary_person_list_answer_references(self, block):
+
+        main_block_questions = self._get_all_questions_for_block(block)
+        main_block_ids = {
+            answer['id']
+            for question in main_block_questions
+            for answer in question['answers']
+        }
+
+        if block['add_or_edit_answer']['id'] not in main_block_ids:
+            return [self._error_message(
+                f'add_or_edit_answer reference uses id not found in main block question: {block["add_or_edit_answer"]["id"]}'
+            )]
+        return []
+
     def _validate_list_collector(self, block):  # noqa: C901  pylint: disable=too-complex, too-many-locals
         errors = []
         collector_questions = self._get_all_questions_for_block(block)
@@ -422,6 +472,35 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
+    def _validate_primary_person_list_collector(self, block):  # noqa: C901  pylint: disable=too-complex, too-many-locals
+        errors = []
+        collector_questions = self._get_all_questions_for_block(block)
+        errors.extend(self._validate_primary_person_list_answer_references(block))
+        add_or_edit_answer_value = block['add_or_edit_answer']['value']
+
+        for collector_question in collector_questions:
+            for collector_answer in collector_question['answers']:
+                if collector_answer['type'] != 'Radio':
+                    errors.append(self._error_message(f'The primary person list collector block {block["id"]} does not contain a Radio answer type'))
+
+                if not self._options_contain_value(collector_answer['options'], add_or_edit_answer_value):
+                    errors.append(
+                        self._error_message(f'The primary person list collector block {block["id"]} has an add_or_edit_answer value that is not '
+                                            'present in the answer values'))
+
+        nested_block = block['add_or_edit_block']
+        if nested_block['type'] != 'PrimaryPersonListAddOrEditQuestion':
+            errors.append(self._error_message('The type of the add_or_edit_block is incorrect for a nested '
+                                              'PrimaryPersonListCollector block. '
+                                              'Expected: PrimaryPersonListAddOrEditQuestion'))
+        if 'routing_rules' in nested_block:
+            errors.append(self._error_message(f'The primary person list collector block {block["id"]} contains routing rules '
+                                              f'on the {nested_block["id"]} sub block'))
+
+        errors.extend(self._validate_primary_person_list_collector_answer_ids(block))
+
+        return errors
+
     def _validate_list_collector_answer_ids(self, block):
         """
         - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
@@ -450,6 +529,29 @@ class Validator:  # pylint: disable=too-many-lines
         if add_answer_ids.symmetric_difference(edit_answer_ids):
             errors.append(self._error_message('The list collector block {} contains an add block and edit block with different answer ids'
                                               .format(block['id'])))
+
+        return errors
+
+    def _validate_primary_person_list_collector_answer_ids(self, block):
+        """
+        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
+        """
+        errors = []
+        list_name = block['populates_list']
+
+        add_or_edit_block_questions = self._get_all_questions_for_block(block['add_or_edit_block'])
+
+        add_answer_ids = {answer['id'] for question in add_or_edit_block_questions for answer in question['answers']}
+
+        existing_add_ids = self._list_collector_answer_ids.get(list_name)
+
+        if not existing_add_ids:
+            self._list_collector_answer_ids[list_name] = add_answer_ids
+        else:
+            difference = add_answer_ids.symmetric_difference(existing_add_ids)
+            if difference:
+                errors.append(self._error_message(f'Multiple primary person list collectors populate the list: {list_name} using different answer '
+                                                  'ids in the add_or_edit block'))
 
         return errors
 
@@ -580,16 +682,25 @@ class Validator:  # pylint: disable=too-many-lines
         errors = []
 
         condition = when['condition']
-        checkbox_exclusive_conditions = ('contains any', 'contains all', 'contains', 'not contains')
+        checkbox_exclusive_conditions = ('contains any', 'contains all', 'contains',
+                                         'not contains')
         all_checkbox_conditions = checkbox_exclusive_conditions + ('set', 'not set')
         answer_type = answer_ids_with_group_id[when['id']]['answer']['type'] if 'id' in when else None
 
         if answer_type == 'Checkbox':
             if condition not in all_checkbox_conditions:
-                errors.append(self._error_message(f'The condition `{condition}` cannot be used with `Checkbox` answer type.'))
+                errors.append(
+                    self._error_message(f'The condition `{condition}` cannot be used'
+                                        ' with `Checkbox` answer type.',
+                                        answer_ids_with_group_id[
+                                            when['id']]['answer']['id']))
         elif condition in checkbox_exclusive_conditions:
             errors.append(
-                self._error_message(f'The condition `{condition}` can only be used with `Checkbox` answer types. Found answer type: {answer_type}'))
+                self._error_message(f'The condition `{condition}` can only be used with'
+                                    ' `Checkbox` answer types. '
+                                    f'Found answer type: {answer_type}',
+                                    answer_ids_with_group_id[
+                                        when['id']]['answer']['id']))
 
         return errors
 
@@ -817,8 +928,11 @@ class Validator:  # pylint: disable=too-many-lines
         return []
 
     @staticmethod
-    def _error_message(message):
-        return {'message': 'Schema Integrity Error. {}'.format(message)}
+    def _error_message(message, ref=None):
+        error = {'message': f'Schema Integrity Error. {message}'}
+        if isinstance(ref, str):
+            error['id'] = ref
+        return error
 
     def _get_answer_minimum(self, answer, answer_ranges):
         defined_minimum = answer.get('min_value')
@@ -1181,14 +1295,23 @@ class Validator:  # pylint: disable=too-many-lines
         for section in json.get('sections'):
             for group in section.get('groups'):
                 for block in group.get('blocks'):
-                    questions = self._get_all_questions_for_block(block)
-                    for question in questions:
+                    for question in self._get_all_questions_for_block(block):
                         context = {
                             'block': block['id'],
                             'group_id': group['id'],
                             'section': section['id']
                         }
                         yield question, context
+                    for sub_block_type in ('add_block', 'edit_block', 'remove_block', 'add_or_edit_block'):
+                        sub_block = block.get(sub_block_type)
+                        if sub_block:
+                            for question in self._get_all_questions_for_block(sub_block):
+                                context = {
+                                    'block': sub_block['id'],
+                                    'group_id': group['id'],
+                                    'section': section['id']
+                                }
+                                yield question, context
 
     @staticmethod
     def _get_all_questions_for_block(block):
@@ -1213,3 +1336,8 @@ class Validator:  # pylint: disable=too-many-lines
                     if block['type'] == 'ListCollector':
                         list_names.append(block['populates_list'])
         return list_names
+
+    class CoreStructureError(Exception):
+        def __init__(self, message):
+            super().__init__()
+            self.message = message

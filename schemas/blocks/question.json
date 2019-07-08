@@ -11,7 +11,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Question", "ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion"]
+        "enum": ["Question", "ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion", "PrimaryPersonListAddOrEditQuestion"]
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"
