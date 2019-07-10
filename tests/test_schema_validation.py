@@ -533,6 +533,33 @@ def test_invalid_list_name_in_when_rule():
     check_validation_errors(filename, expected_error_messages)
 
 
+def test_invalid_relationship_no_list_specified():
+    filename = 'schemas/invalid/test_invalid_relationship_list_doesnt_exist.json'
+    expected_error_message = [
+        "Schema Integrity Error. for_list 'not-a-list' in RelationshipCollector is not populated by any ListCollector blocks",
+    ]
+
+    check_validation_errors(filename, expected_error_message)
+
+
+def test_invalid_relationship_multiple_answers():
+    filename = 'schemas/invalid/test_invalid_relationship_multiple_answers.json'
+    expected_error_message = [
+        'Schema Integrity Error. RelationshipCollector contains more than one answer.'
+    ]
+
+    check_validation_errors(filename, expected_error_message)
+
+
+def test_invalid_relationship_wrong_answer_type():
+    filename = 'schemas/invalid/test_invalid_relationship_wrong_answer_type.json'
+    expected_error_message = [
+        'Schema Integrity Error. Ony answers of type Relationship are valid in RelationshipCollector blocks.'
+    ]
+
+    check_validation_errors(filename, expected_error_message)
+
+
 def test_invalid_hub_and_spoke_with_summary_confirmation():
     filename = 'schemas/invalid/test_invalid_hub_and_spoke_with_summary_confirmation.json'
     expected_error_messages = [
