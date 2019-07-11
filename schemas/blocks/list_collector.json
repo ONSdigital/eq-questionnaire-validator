@@ -28,7 +28,7 @@
         "type": "string",
         "enum": ["ListCollector"]
       },
-      "populates_list": {
+      "for_list": {
         "type": "string"
       },
       "add_answer": {
@@ -57,7 +57,7 @@
     "required": [
       "id",
       "type",
-      "populates_list",
+      "for_list",
       "add_answer",
       "remove_answer",
       "add_block",
