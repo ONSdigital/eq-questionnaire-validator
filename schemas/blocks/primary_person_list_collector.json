@@ -28,7 +28,7 @@
         "type": "string",
         "enum": ["PrimaryPersonListCollector"]
       },
-      "populates_list": {
+      "for_list": {
         "type": "string"
       },
       "add_or_edit_answer": {
@@ -48,7 +48,7 @@
     "required": [
       "id",
       "type",
-      "populates_list",
+      "for_list",
       "add_or_edit_answer",
       "add_or_edit_block"
     ],

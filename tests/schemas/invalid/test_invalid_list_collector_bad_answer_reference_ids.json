@@ -24,7 +24,7 @@
       "blocks": [{
         "id": "list-collector",
         "type": "ListCollector",
-        "populates_list": "people",
+        "for_list": "people",
         "add_answer": {
           "id": "someone-else",
           "value": "Yes"
@@ -114,7 +114,7 @@
       }, {
         "id": "another-list-collector",
         "type": "ListCollector",
-        "populates_list": "people",
+        "for_list": "people",
         "add_answer": {
           "id": "another-anyone-else",
           "value": "Yes"

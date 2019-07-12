@@ -519,7 +519,7 @@ class Validator:  # pylint: disable=too-many-lines
         - Enforce the same answer_ids on add and edit sub-blocks
         """
         errors = []
-        list_name = block['populates_list']
+        list_name = block['for_list']
 
         add_block_questions = self._get_all_questions_for_block(block['add_block'])
         edit_block_questions = self._get_all_questions_for_block(block['edit_block'])
@@ -549,7 +549,7 @@ class Validator:  # pylint: disable=too-many-lines
         - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
         """
         errors = []
-        list_name = block['populates_list']
+        list_name = block['for_list']
 
         add_or_edit_block_questions = self._get_all_questions_for_block(block['add_or_edit_block'])
 
@@ -1364,7 +1364,7 @@ class Validator:  # pylint: disable=too-many-lines
             for group in section['groups']:
                 for block in group['blocks']:
                     if block['type'] == 'ListCollector':
-                        list_names.append(block['populates_list'])
+                        list_names.append(block['for_list'])
         return list_names
 
     class CoreStructureError(Exception):
