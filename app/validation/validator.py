@@ -215,48 +215,37 @@ class Validator:  # pylint: disable=too-many-lines
         errors = []
 
         question_ids = set()
-        answer_ids = set()
         question_types = set()
+        number_of_answers = set()
+        answer_ids = set()
         default_answers = set()
-
         answer_types = defaultdict(set)
 
-        number_of_answers = set()
+        self._get_question_variant_fields_sets(variants, question_ids, question_types,
+                                               default_answers, answer_ids, answer_types, number_of_answers)
 
-        for variant in variants:
-            question_variant = variant['question']
-            question_ids.add(question_variant['id'])
-            question_types.add(question_variant['type'])
-
-            number_of_answers.add(len(variant['question']['answers']))
-
-            if len(number_of_answers) > 1:
-                errors.append(self._error_message('Variants in block: {} contain different numbers of answers'.format(block['id'])))
-
-            for answer in question_variant['answers']:
-                answer_ids.add(answer['id'])
-                answer_types[answer['id']].add(answer['type'])
-                try:
-                    default_answers.add(answer['default'])
-                except KeyError:
-                    default_answers.add('no default')
+        if len(number_of_answers) > 1:
+            errors.append(
+                self._error_message('Variants in block: {} contain different numbers of answers'.format(block['id'])))
 
         if len(question_ids) != 1:
             errors.append(self._error_message(
-                'Variants contain more than one question_id for block: {}. Found ids: {}'.format(block['id'], question_ids)))
+                'Variants contain more than one question_id for block: {}. Found ids: {}'.format(block['id'],
+                                                                                                 question_ids)))
 
         if len(question_types) != 1:
             errors.append(self._error_message(
-                'Variants have more than one question type for block: {}. Found types: {}'.format(block['id'], question_types)))
+                'Variants have more than one question type for block: {}. Found types: {}'.format(block['id'],
+                                                                                                  question_types)))
 
-        if len(default_answers) != 1:
+        if len(default_answers) > 1:
             errors.append(self._error_message(
-                'Variants contain different default answers for block: {}. Found types: {}'.format(block['id'], default_answers)))
+                'Variants contain different default answers for block: {}. Found types: {}'.format(block['id'],
+                                                                                                   default_answers)))
 
         if len(answer_ids) != next(iter(number_of_answers)):
             errors.append(self._error_message(
                 'Variants have mismatched answer_ids for block: {}. Found ids: {}.'.format(block['id'], answer_ids)))
-
 
         for answer_id, type_set in answer_types.items():
             if len(type_set) != 1:
@@ -268,6 +257,22 @@ class Validator:  # pylint: disable=too-many-lines
                     )
                 )
         return errors
+
+    @staticmethod
+    def _get_question_variant_fields_sets(variants, question_ids, question_types,
+                                          default_answers, answer_ids, answer_types, number_of_answers):
+
+        for variant in variants:
+            question_variant = variant['question']
+            question_ids.add(question_variant['id'])
+            question_types.add(question_variant['type'])
+
+            number_of_answers.add(len(variant['question']['answers']))
+
+            for answer in question_variant['answers']:
+                answer_ids.add(answer['id'])
+                answer_types[answer['id']].add(answer['type'])
+                default_answers.add(answer.get('default', 'no default'))
 
     def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
         errors = []
