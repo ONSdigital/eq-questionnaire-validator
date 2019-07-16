@@ -240,8 +240,8 @@ class Validator:  # pylint: disable=too-many-lines
 
         if len(default_answers) > 1:
             errors.append(self._error_message(
-                'Variants contain different default answers for block: {}. Found types: {}'.format(block['id'],
-                                                                                                   default_answers)))
+                'Variants contain different default answers for block: {}. Found ids: {}'.format(block['id'],
+                                                                                                 question_ids)))
 
         if len(answer_ids) != next(iter(number_of_answers)):
             errors.append(self._error_message(

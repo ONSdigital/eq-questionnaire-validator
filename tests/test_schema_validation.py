@@ -456,6 +456,22 @@ def test_inconsistent_ids_in_variants():
     assert schema_errors == {}
 
 
+def test_inconsistent_default_answers_in_variants():
+    file_name = 'schemas/invalid/test_invalid_inconsistent_default_answers_in_variants.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, _ = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    fuzzy_error_messages = ['Schema Integrity Error. Variants contain different default answers for block: block-2. Found ids',
+                            'question-2']
+
+    for fuzzy_error in fuzzy_error_messages:
+        assert any(fuzzy_error in error_message for error_message in error_messages)
+
+    assert len(validation_errors) == 1
+
+
 def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     filename = 'schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json'
     expected_error_messages = ['Schema Integrity Error. Duplicate id found: add-person',
