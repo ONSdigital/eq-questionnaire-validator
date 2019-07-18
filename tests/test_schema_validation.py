@@ -42,8 +42,7 @@ def check_validation_errors(filename, expected_validation_error_messages, expect
     print(f'schema errors: {schema_errors}')
 
     assert schema_errors == {}
-
-    error_messages = list(error['message'] for error in validation_errors)
+    error_messages = [error['message'] for error in validation_errors if error]
 
     for expected_error_message in expected_validation_error_messages:
         assert expected_error_message in error_messages
@@ -310,6 +309,17 @@ def test_invalid_placeholder_answer_ids():
         'Schema Integrity Error. Invalid answer id reference `invalid-answer0` for placeholder `simple_answer`',
         'Schema Integrity Error. Invalid answer id reference `invalid-answer1` for placeholder `answer1`',
         'Schema Integrity Error. Invalid metadata reference `invalid-metadata-ref` for placeholder `simple_metadata`'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_placeholder_not_mandatory():
+    filename = 'schemas/invalid/test_invalid_placeholder_question_not_mandatory.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. Placeholder references a non-mandatory answer.',
+        'Schema Integrity Error. Placeholder references a non-mandatory answer.'
     ]
 
     check_validation_errors(filename, expected_error_messages)

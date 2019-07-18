@@ -47,7 +47,6 @@ class Validator:  # pylint: disable=too-many-lines
 
             for section in json_to_validate['sections']:
                 for group in section['groups']:
-
                     validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
                     for skip_condition in group.get('skip_conditions', []):
@@ -1207,17 +1206,24 @@ class Validator:  # pylint: disable=too-many-lines
                     placeholder_definition['placeholder']
                 )))
                 continue
+
             answer_block_id = answers_with_parent_ids[answer_id_to_validate]['block']
+
             if answer_block_id == block_id:
                 errors.append(self._error_message('Invalid answer id reference `{}` for placeholder `{}` (self-reference)'.format(
                     answer_id_to_validate,
                     placeholder_definition['placeholder']
                 )))
+                continue
+
+            non_mandatory_error = self._validate_placeholders_reference_mandatory_answers(
+                answers_with_parent_ids[answer_id_to_validate]['answer'])
+            if non_mandatory_error:
+                errors.extend(non_mandatory_error)
         return errors
 
     def _validate_placeholder_metadata_ids(self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name):
         errors = []
-
         for metadata_id_to_validate in metadata_ids_to_validate:
             if metadata_id_to_validate not in valid_metadata_ids:
                 errors.append(self._error_message('Invalid metadata reference `{}` for placeholder `{}`'.format(
@@ -1226,6 +1232,13 @@ class Validator:  # pylint: disable=too-many-lines
                 )))
 
         return errors
+
+    def _validate_placeholders_reference_mandatory_answers(self, answer_dict):
+        mandatory = answer_dict.get('mandatory')
+
+        if not mandatory:
+            return [self._error_message('Placeholder references a non-mandatory answer.')]
+        return []
 
     def _validate_placeholder_transforms(self, transforms, block_id):
         errors = []
