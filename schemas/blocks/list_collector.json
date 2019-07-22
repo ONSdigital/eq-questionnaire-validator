@@ -18,6 +18,18 @@
     "required": ["id", "value"],
     "additionalProperties": false
   },
+  "summary": {
+    "type": "object",
+    "properties":{
+      "item_title": {
+          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+        "item_title"
+    ]
+  },
   "block": {
     "type": "object",
     "properties": {
@@ -51,6 +63,9 @@
       },
       "remove_block": {
         "$ref": "question.json#/block"
+      },
+      "summary": {
+        "$ref": "list_collector.json#/summary"
       }
     },
     "additionalProperties": false,
