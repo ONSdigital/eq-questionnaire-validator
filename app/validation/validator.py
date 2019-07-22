@@ -1216,10 +1216,10 @@ class Validator:  # pylint: disable=too-many-lines
                 )))
                 continue
 
-            non_mandatory_error = self._validate_placeholders_reference_mandatory_answers(
-                answers_with_parent_ids[answer_id_to_validate]['answer'])
-            if non_mandatory_error:
-                errors.extend(non_mandatory_error)
+            answer = answers_with_parent_ids[answer_id_to_validate]['answer']
+            if not answer.get('mandatory'):
+                msg = f'Placeholder references a non-mandatory answer `{answer_id_to_validate}` for placeholder `{placeholder_definition["placeholder"]}`.'
+                errors.append(self._error_message(msg))
         return errors
 
     def _validate_placeholder_metadata_ids(self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name):
@@ -1232,13 +1232,6 @@ class Validator:  # pylint: disable=too-many-lines
                 )))
 
         return errors
-
-    def _validate_placeholders_reference_mandatory_answers(self, answer_dict):
-        mandatory = answer_dict.get('mandatory')
-
-        if not mandatory:
-            return [self._error_message('Placeholder references a non-mandatory answer.')]
-        return []
 
     def _validate_placeholder_transforms(self, transforms, block_id):
         errors = []

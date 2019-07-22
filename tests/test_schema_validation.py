@@ -318,8 +318,8 @@ def test_invalid_placeholder_not_mandatory():
     filename = 'schemas/invalid/test_invalid_placeholder_question_not_mandatory.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. Placeholder references a non-mandatory answer.',
-        'Schema Integrity Error. Placeholder references a non-mandatory answer.'
+        'Schema Integrity Error. Placeholder references a non-mandatory answer `ref-answer0-1` for placeholder `simple_answer`.',
+        'Schema Integrity Error. Placeholder references a non-mandatory answer `ref-answer0-2-detail` for placeholder `detail_answer`.'
     ]
 
     check_validation_errors(filename, expected_error_messages)
