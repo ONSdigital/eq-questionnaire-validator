@@ -266,12 +266,12 @@ class Validator:  # pylint: disable=too-many-lines
             question_ids.add(question_variant['id'])
             question_types.add(question_variant['type'])
 
-            number_of_answers.add(len(variant['question']['answers']))
-
             for answer in question_variant['answers']:
                 answer_ids.add(answer['id'])
                 answer_types[answer['id']].add(answer['type'])
                 default_answers.add(answer.get('default'))
+
+            number_of_answers.add(len(answer_ids))
 
     def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
         errors = []
