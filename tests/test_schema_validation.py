@@ -497,7 +497,6 @@ def test_inconsistent_types_in_variants():
 
     validation_errors, _ = validate_schema(json_to_validate)
     error_messages = [error['message'] for error in validation_errors]
-
     fuzzy_error_messages = (
         'Schema Integrity Error. Variants have more than one question type for block: block-2',
         'Schema Integrity Error. Variants have mismatched answer types for block: block-2. Found types:',
