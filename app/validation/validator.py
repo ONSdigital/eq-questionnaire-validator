@@ -1228,13 +1228,7 @@ class Validator:  # pylint: disable=too-many-lines
                     answer_id_to_validate,
                     placeholder_definition['placeholder']
                 )))
-                continue
 
-            answer = answers_with_parent_ids[answer_id_to_validate]['answer']
-            if not answer.get('mandatory'):
-                msg = (f'Placeholder references a non-mandatory answer `{answer_id_to_validate}`'
-                       f' for placeholder `{placeholder_definition["placeholder"]}`.')
-                errors.append(self._error_message(msg))
         return errors
 
     def _validate_placeholder_metadata_ids(self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name):
