@@ -47,7 +47,6 @@ class Validator:  # pylint: disable=too-many-lines
 
             for section in json_to_validate['sections']:
                 for group in section['groups']:
-
                     validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
 
                     for skip_condition in group.get('skip_conditions', []):
@@ -207,47 +206,52 @@ class Validator:  # pylint: disable=too-many-lines
         - Ensure answer_ids are the same across all variants.
         - Ensure question types are the same across all variants.
         - Ensure answer types are the same across all variants.
+        - Ensure default answers are the same across all variants.
         """
         if not variants:
             return []
 
         errors = []
 
-        question_ids = set()
-        answer_ids = set()
-        question_types = set()
+        results = self._get_question_variant_fields_sets(variants)
 
-        answer_types = defaultdict(set)
+        if len(results['number_of_answers']) > 1:
+            errors.append(
+                self._error_message('Variants in block: {} contain different numbers of answers'.format(block['id'])))
 
-        number_of_answers = set()
-
-        for variant in variants:
-            question_variant = variant['question']
-            question_ids.add(question_variant['id'])
-            question_types.add(question_variant['type'])
-
-            number_of_answers.add(len(variant['question']['answers']))
-
-            if len(number_of_answers) > 1:
-                errors.append(self._error_message('Variants in block: {} contain different numbers of answers'.format(block['id'])))
-
-            for answer in question_variant['answers']:
-                answer_ids.add(answer['id'])
-                answer_types[answer['id']].add(answer['type'])
-
-        if len(question_ids) != 1:
+        if len(results['question_ids']) != 1:
             errors.append(self._error_message(
-                'Variants contain more than one question_id for block: {}. Found ids: {}'.format(block['id'], question_ids)))
+                'Variants contain more than one question_id for block: {}. Found ids: {}'.format(
+                    block['id'],
+                    results['question_ids']
+                )
+            ))
 
-        if len(question_types) != 1:
+        if len(results['question_types']) != 1:
             errors.append(self._error_message(
-                'Variants have more than one question type for block: {}. Found types: {}'.format(block['id'], question_types)))
+                'Variants have more than one question type for block: {}. Found types: {}'.format(
+                    block['id'],
+                    results['question_types'])
+                ))
 
-        if len(answer_ids) != next(iter(number_of_answers)):
+        if len(results['default_answers']) > 1:
             errors.append(self._error_message(
-                'Variants have mismatched answer_ids for block: {}. Found ids: {}.'.format(block['id'], answer_ids)))
+                'Variants contain different default answers for block: {}. Found ids: {}'.format(
+                    block['id'],
+                    results['question_ids']
+                )
+                ))
 
-        for answer_id, type_set in answer_types.items():
+        if len(results['answer_ids']) != next(iter(results['number_of_answers'])):
+            errors.append(self._error_message(
+                'Variants have mismatched answer_ids for block: {}. Found ids: {}.'.format(
+                    block['id'],
+                    results['answer_ids']
+                )
+            ))
+
+        for answer_id, type_set in results['answer_types'].items():
+
             if len(type_set) != 1:
                 errors.append(
                     self._error_message(
@@ -257,6 +261,31 @@ class Validator:  # pylint: disable=too-many-lines
                     )
                 )
         return errors
+
+    @staticmethod
+    def _get_question_variant_fields_sets(variants):
+        results = {
+            'question_ids': set(),
+            'question_types': set(),
+            'answer_ids': set(),
+            'answer_types': defaultdict(set),
+            'default_answers': set(),
+            'number_of_answers': set(),
+        }
+
+        for variant in variants:
+            question_variant = variant['question']
+            results['question_ids'].add(question_variant['id'])
+            results['question_types'].add(question_variant['type'])
+
+            for answer in question_variant['answers']:
+                results['answer_ids'].add(answer['id'])
+                results['answer_types'][answer['id']].add(answer['type'])
+                results['default_answers'].add(answer.get('default'))
+
+            results['number_of_answers'].add(len(results['answer_ids']))
+
+        return results
 
     def _validate_variants(self, block, answer_ids_with_group_id, numeric_answer_ranges):
         errors = []
@@ -1191,17 +1220,25 @@ class Validator:  # pylint: disable=too-many-lines
                     placeholder_definition['placeholder']
                 )))
                 continue
+
             answer_block_id = answers_with_parent_ids[answer_id_to_validate]['block']
+
             if answer_block_id == block_id:
                 errors.append(self._error_message('Invalid answer id reference `{}` for placeholder `{}` (self-reference)'.format(
                     answer_id_to_validate,
                     placeholder_definition['placeholder']
                 )))
+                continue
+
+            answer = answers_with_parent_ids[answer_id_to_validate]['answer']
+            if not answer.get('mandatory'):
+                msg = (f'Placeholder references a non-mandatory answer `{answer_id_to_validate}`'
+                       f' for placeholder `{placeholder_definition["placeholder"]}`.')
+                errors.append(self._error_message(msg))
         return errors
 
     def _validate_placeholder_metadata_ids(self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name):
         errors = []
-
         for metadata_id_to_validate in metadata_ids_to_validate:
             if metadata_id_to_validate not in valid_metadata_ids:
                 errors.append(self._error_message('Invalid metadata reference `{}` for placeholder `{}`'.format(

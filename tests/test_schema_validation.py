@@ -42,8 +42,7 @@ def check_validation_errors(filename, expected_validation_error_messages, expect
     print(f'schema errors: {schema_errors}')
 
     assert schema_errors == {}
-
-    error_messages = list(error['message'] for error in validation_errors)
+    error_messages = [error['message'] for error in validation_errors if error]
 
     for expected_error_message in expected_validation_error_messages:
         assert expected_error_message in error_messages
@@ -315,6 +314,17 @@ def test_invalid_placeholder_answer_ids():
     check_validation_errors(filename, expected_error_messages)
 
 
+def test_invalid_placeholder_not_mandatory():
+    filename = 'schemas/invalid/test_invalid_placeholder_question_not_mandatory.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. Placeholder references a non-mandatory answer `ref-answer0-1` for placeholder `simple_answer`.',
+        'Schema Integrity Error. Placeholder references a non-mandatory answer `ref-answer0-2-detail` for placeholder `detail_answer`.'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
 def test_single_variant_invalid():
     file_name = 'schemas/invalid/test_invalid_single_variant.json'
     json_to_validate = _open_and_load_schema_file(file_name)
@@ -456,6 +466,22 @@ def test_inconsistent_ids_in_variants():
     assert schema_errors == {}
 
 
+def test_inconsistent_default_answers_in_variants():
+    file_name = 'schemas/invalid/test_invalid_inconsistent_default_answers_in_variants.json'
+    json_to_validate = _open_and_load_schema_file(file_name)
+
+    validation_errors, _ = validate_schema(json_to_validate)
+    error_messages = [error['message'] for error in validation_errors]
+
+    fuzzy_error_messages = ['Schema Integrity Error. Variants contain different default answers for block: block-2. Found ids',
+                            'question-2']
+
+    for fuzzy_error in fuzzy_error_messages:
+        assert any(fuzzy_error in error_message for error_message in error_messages)
+
+    assert len(validation_errors) == 1
+
+
 def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     filename = 'schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json'
     expected_error_messages = ['Schema Integrity Error. Duplicate id found: add-person',
@@ -471,7 +497,6 @@ def test_inconsistent_types_in_variants():
 
     validation_errors, _ = validate_schema(json_to_validate)
     error_messages = [error['message'] for error in validation_errors]
-
     fuzzy_error_messages = (
         'Schema Integrity Error. Variants have more than one question type for block: block-2',
         'Schema Integrity Error. Variants have mismatched answer types for block: block-2. Found types:',
