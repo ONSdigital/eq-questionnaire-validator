@@ -153,8 +153,12 @@ class Validator:  # pylint: disable=too-many-lines
                               'ListCollectors')
             elif block['type'] == 'RelationshipCollector':
                 errors.extend(self._validate_relationship_list_exists(block))
-                errors.extend(self._validate_relationship_collector_contains_single_relationship_answer(block))
-                errors.extend(self._validate_relationship_collector_answer_type(block))
+
+                if 'question_variants' in block:
+                    for variant in block['question_variants']:
+                        errors.extend(self._validate_relationship_collector_answers(variant['question']['answers']))
+                else:
+                    errors.extend(self._validate_relationship_collector_answers(block['question']['answers']))
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -676,7 +680,7 @@ class Validator:  # pylint: disable=too-many-lines
     def _validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
         """
         Validates any answer id in a when clause exists within the schema
-        Will also check that comparison_id exists
+        Will also check that comparison exists
         """
         errors = []
 
@@ -693,8 +697,8 @@ class Validator:  # pylint: disable=too-many-lines
             # We know the ids are correct, so can continue to perform validation
             errors.extend(self._validate_checkbox_exclusive_conditions_in_when_rule(when, answer_ids_with_group_id))
 
-            if 'comparison_id' in when:
-                errors.extend(self._validate_comparison_id_in_when_rule(when, answer_ids_with_group_id, referenced_id))
+            if 'comparison' in when:
+                errors.extend(self._validate_comparison_in_when_rule(when, answer_ids_with_group_id, referenced_id))
 
         return errors
 
@@ -705,13 +709,17 @@ class Validator:  # pylint: disable=too-many-lines
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         errors = []
-        answer_reference_id_fields = ('id', 'comparison_id')
-        present_id_ref_keys = [x for x in answer_reference_id_fields if x in when]
+        ids_to_check = []
 
-        for id_ref_key in present_id_ref_keys:
-            if when[id_ref_key] not in answer_ids_with_group_id:
+        if 'id' in when:
+            ids_to_check.append(('id', when['id']))
+        if 'comparison' in when and when['comparison']['source'] == 'answers':
+            ids_to_check.append(('comparison.id', when['comparison']['id']))
+
+        for key, present_id in ids_to_check:
+            if present_id not in answer_ids_with_group_id:
                 errors.append(self._error_message('The answer id - {} in the {} key of the "when" clause for {} does not exist'
-                                                  .format(when[id_ref_key], id_ref_key, referenced_id)))
+                                                  .format(present_id, key, referenced_id)))
 
         return errors
 
@@ -745,7 +753,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
-    def _validate_comparison_id_in_when_rule(self, when, answer_ids_with_group_id, referenced_id):
+    def _validate_comparison_in_when_rule(self, when, answer_ids_with_group_id, referenced_id):
         """
         Validate that conditions requiring list match values define a comparison answer id that is of type Checkbox
         and ensure all other conditions with comparison id match answer types
@@ -753,20 +761,21 @@ class Validator:  # pylint: disable=too-many-lines
         """
         errors = []
 
-        answer_id, comparison_id, condition = when['id'], when['comparison_id'], when['condition']
-        comparison_answer_type = answer_ids_with_group_id[when['comparison_id']]['answer']['type']
-        id_answer_type = answer_ids_with_group_id[when['id']]['answer']['type']
-        conditions_requiring_list_match_values = ('equals any', 'not equals any', 'contains any', 'contains all')
+        if when['comparison']['source'] == 'answers':
+            answer_id, comparison_id, condition = when['id'], when['comparison']['id'], when['condition']
+            comparison_answer_type = answer_ids_with_group_id[comparison_id]['answer']['type']
+            id_answer_type = answer_ids_with_group_id[answer_id]['answer']['type']
+            conditions_requiring_list_match_values = ('equals any', 'not equals any', 'contains any', 'contains all')
 
-        if condition in conditions_requiring_list_match_values:
-            if comparison_answer_type != 'Checkbox':
-                errors.append(self._error_message(
-                    f'The comparison_id `{comparison_id}` is not of answer type `Checkbox`. '
-                    f'The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`'))
+            if condition in conditions_requiring_list_match_values:
+                if comparison_answer_type != 'Checkbox':
+                    errors.append(self._error_message(
+                        f'The comparison id `{comparison_id}` is not of answer type `Checkbox`. '
+                        f'The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`'))
 
-        elif comparison_answer_type != id_answer_type:
-            errors.append(self._error_message(f'The answers used as comparison_id `{comparison_id}` and answer_id `{answer_id}` in the `when` '
-                                              f'clause for `{referenced_id}` have different types'))
+            elif comparison_answer_type != id_answer_type:
+                errors.append(self._error_message(f'The answers used as comparison id `{comparison_id}` and answer_id `{answer_id}` in the `when` '
+                                                  f'clause for `{referenced_id}` have different types'))
 
         return errors
 
@@ -1169,15 +1178,18 @@ class Validator:  # pylint: disable=too-many-lines
             return [self._error_message(msg)]
         return []
 
-    def _validate_relationship_collector_contains_single_relationship_answer(self, block):
-        answers = block['question']['answers']
-        msg = 'RelationshipCollector contains more than one answer.'
+    def _validate_relationship_collector_answers(self, answers):
+        one_answer_msg = 'RelationshipCollector contains more than one answer.'
+        answer_type_msg = 'Only answers of type Relationship are valid in RelationshipCollector blocks.'
 
-        return [self._error_message(msg)] if len(answers) > 1 else []
+        errors = []
 
-    def _validate_relationship_collector_answer_type(self, block):
-        msg = 'Ony answers of type Relationship are valid in RelationshipCollector blocks.'
-        return [self._error_message(msg)] if block['question']['answers'][0]['type'] != 'Relationship' else []
+        if len(answers) > 1:
+            errors.append(self._error_message(one_answer_msg))
+        if answers[0]['type'] != 'Relationship':
+            errors.append(self._error_message(answer_type_msg))
+
+        return errors
 
     @staticmethod
     def _get_placeholder_source_ids(placeholder_definition, transforms):

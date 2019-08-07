@@ -24,8 +24,8 @@
     "value": {
       "$ref": "definitions.json#/comparison_value"
     },
-    "comparison_id": {
-      "$ref": "definitions.json#/comparison_identifier"
+    "comparison": {
+      "$ref": "definitions.json#/answer_comparison_object"
     },
     "date_comparison": {
       "$ref": "definitions.json#/date_comparison_value"
@@ -58,7 +58,7 @@
         },
         {
           "required": [
-            "comparison_id"
+            "comparison"
           ]
         },
         {

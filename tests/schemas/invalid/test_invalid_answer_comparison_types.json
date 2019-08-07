@@ -58,11 +58,17 @@
             "when": [{
               "id": "route-comparison-2-answer",
               "condition": "greater than",
-              "comparison_id": "route-comparison-1-answer"
+              "comparison": {
+                "id": "route-comparison-1-answer",
+                "source": "answers"
+              }
             }, {
               "id": "route-comparison-1-answer",
               "condition": "equals any",
-              "comparison_id": "route-comparison-2-answer"
+              "comparison": {
+                "id": "route-comparison-2-answer",
+                "source": "answers"
+              }
             }]
           }
         }, {
@@ -133,7 +139,10 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "not equals",
-            "comparison_id": "comparison-1-answer"
+            "comparison": {
+              "id": "comparison-1-answer",
+              "source": "answers"
+            }
           }]
         }, {
           "question": {
@@ -151,7 +160,10 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "equals",
-            "comparison_id": "comparison-1-answer"
+            "comparison": {
+              "id": "comparison-1-answer",
+              "source": "answers"
+            }
           }]
         }]
       }, {
@@ -164,7 +176,10 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "not equals",
-            "comparison_id": "comparison-2-answer"
+            "comparison": {
+              "id": "comparison-2-answer",
+              "source": "answers"
+            }
           }]
         }]
       }, {
@@ -177,13 +192,19 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "greater than",
-            "comparison_id": "comparison-2-answer"
+            "comparison": {
+              "id": "comparison-2-answer",
+              "source": "answers"
+            }
           }]
         }, {
           "when": [{
             "id": "comparison-1-answer",
             "condition": "equals",
-            "comparison_id": "comparison-2-answer"
+            "comparison": {
+              "id": "comparison-2-answer",
+              "source": "answers"
+            }
           }]
         }]
       }],

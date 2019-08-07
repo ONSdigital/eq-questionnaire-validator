@@ -1,0 +1,195 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "001",
+  "title": "Test Routing Location Comparisons",
+  "theme": "default",
+  "legal_basis": "StatisticsOfTradeAct",
+  "description": "A test survey for routing based comparison with a location",
+  "metadata": [{
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [{
+      "id": "section",
+      "groups": [{
+        "id": "group",
+        "title": "List",
+        "blocks": [{
+          "id": "list-collector",
+          "type": "ListCollector",
+          "for_list": "people",
+          "add_answer": {
+            "id": "anyone-else",
+            "value": "Yes"
+          },
+          "remove_answer": {
+            "id": "remove-confirmation",
+            "value": "Yeah"
+          },
+          "question": {
+            "id": "confirmation-question",
+            "type": "General",
+            "title": "Does anyone else live here?",
+            "answers": [{
+              "id": "anyone-else",
+              "mandatory": true,
+              "type": "Radio",
+              "options": [{
+                "label": "Yes",
+                "value": "Yes"
+              }, {
+                "label": "No",
+                "value": "No"
+              }]
+            }]
+          },
+          "add_block": {
+            "id": "add-person",
+            "type": "ListAddQuestion",
+            "question": {
+              "id": "add-question",
+              "type": "General",
+              "title": "What is the name of the person?",
+              "answers": [{
+                "id": "first-name",
+                "label": "First name",
+                "mandatory": true,
+                "type": "TextField"
+              }, {
+                "id": "last-name",
+                "label": "Last name",
+                "mandatory": true,
+                "type": "TextField"
+              }]
+            }
+          },
+          "edit_block": {
+            "id": "edit-person",
+            "type": "ListEditQuestion",
+            "question": {
+              "id": "edit-question",
+              "type": "General",
+              "title": "What is the name of the person?",
+              "answers": [{
+                "id": "first-name",
+                "label": "First name",
+                "mandatory": true,
+                "type": "TextField"
+              }, {
+                "id": "last-name",
+                "label": "Last name",
+                "mandatory": true,
+                "type": "TextField"
+              }]
+            }
+          },
+          "remove_block": {
+            "id": "remove-person",
+            "type": "ListRemoveQuestion",
+            "question": {
+              "id": "remove-question",
+              "type": "General",
+              "title": "Are you sure you want to remove this person?",
+              "answers": [{
+                "id": "remove-confirmation",
+                "mandatory": true,
+                "type": "Radio",
+                "options": [{
+                  "label": "Yeah",
+                  "value": "Yeah"
+                }, {
+                  "label": "No",
+                  "value": "No"
+                }]
+              }]
+            }
+          }
+        }]
+      }]
+    },
+    {
+      "id": "default-section",
+      "groups": [{
+          "id": "route-group",
+          "title": "",
+          "blocks": [{
+              "type": "Question",
+              "id": "route-comparison-1",
+              "question": {
+                "answers": [{
+                  "id": "route-comparison-1-answer",
+                  "label": "Number",
+                  "mandatory": true,
+                  "type": "Number"
+                }],
+                "description": "",
+                "id": "route-comparison-1-question",
+                "title": "Enter a number",
+                "type": "General"
+              },
+              "routing_rules": [{
+                  "goto": {
+                    "block": "route-comparison-3",
+                    "when": [{
+                      "list": "people",
+                      "id_selector": "primary_person",
+                      "condition": "equals",
+                      "comparison": {
+                        "id": "from_list_item_id",
+                        "source": "location"
+                      }
+                    }]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "route-comparison-3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-2",
+              "content": {
+                "title": "You are not the primary person",
+                "contents": [{
+                  "description": "This page should be skipped if you are identified as the primary person in the household"
+                }]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-3",
+              "content": {
+                "title": "This will be shown to all household members",
+                "contents": [{
+                  "description": "This page should never be skipped"
+                }]
+              }
+            }
+          ]
+        },
+        {
+          "id": "summary-group",
+          "title": "",
+          "blocks": [{
+            "type": "Summary",
+            "id": "summary"
+          }]
+        }
+      ]
+    }
+  ]
+}

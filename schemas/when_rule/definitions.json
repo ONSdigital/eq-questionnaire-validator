@@ -8,6 +8,9 @@
           "$ref": "compare_to_value.json"
         },
         {
+          "$ref": "compare_to_location.json"
+        },
+        {
           "$ref": "compare_to_multiple_values.json"
         },
         {
@@ -23,6 +26,10 @@
   "answer_identifier": {
     "type": "string",
     "description": "The id of an answer from which to obtain the value"
+  },
+  "location_identifier": {
+    "type": "string",
+    "description": "The id of a location attribute from which to obtain the value"
   },
   "metadata_identifier": {
     "type": "string",
@@ -41,9 +48,35 @@
     "description": "An array of values to compare against",
     "minItems": 1
   },
-  "comparison_identifier": {
-    "type": "string",
-    "description": "The id of an answer from which to obtain the value and compare to"
+  "answer_comparison_object": {
+    "type": "object",
+    "description": "The answer object from which to obtain the value and compare to",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "definitions.json#/answer_identifier"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["answers"]
+      }
+    },
+    "required": ["id", "source"]
+  },
+  "location_comparison_object": {
+    "type": "object",
+    "description": "The location object from which to obtain the value and compare to",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "definitions.json#/location_identifier"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["location"]
+      }
+    },
+    "required": ["id", "source"]
   },
   "date_comparison_value": {
     "type": "object",
@@ -80,5 +113,13 @@
         ]
       }
     ]
+  },
+  "list": {
+    "type": "string",
+    "description": "The name of a list"
+  },
+  "id_selector": {
+    "type": "string",
+    "description": "The attribute to use from the list as the identifier"
   }
 }

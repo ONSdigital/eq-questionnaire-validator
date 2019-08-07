@@ -88,7 +88,10 @@
             "when": [{
               "id": "country-checkbox-answer",
               "condition": "contains any",
-              "comparison_id": "country-checkbox-answer2"
+              "comparison": {
+                "id": "country-checkbox-answer2",
+                "source": "answers"
+              }
             }]
           }
         }, {

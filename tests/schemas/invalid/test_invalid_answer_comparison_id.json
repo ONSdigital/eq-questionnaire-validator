@@ -58,7 +58,10 @@
             "when": [{
               "id": "route-comparison-2-answer",
               "condition": "greater than",
-              "comparison_id": "bad-answer-id-2"
+              "comparison": {
+                "id": "bad-answer-id-2",
+                "source": "answers"
+              }
             }]
           }
         }, {
@@ -117,7 +120,10 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "not equals",
-            "comparison_id": "bad-answer-id-3"
+            "comparison": {
+              "id": "bad-answer-id-3",
+              "source": "answers"
+            }
           }]
         }],
         "content": {
@@ -130,13 +136,19 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "greater than",
-            "comparison_id": "bad-answer-id-4"
+            "comparison": {
+              "id": "bad-answer-id-4",
+              "source": "answers"
+            }
           }]
         }, {
           "when": [{
             "id": "comparison-1-answer",
             "condition": "equals",
-            "comparison_id": "bad-answer-id-5"
+            "comparison": {
+              "id": "bad-answer-id-5",
+              "source": "answers"
+            }
           }]
         }],
         "content": {
@@ -149,13 +161,19 @@
           "when": [{
             "id": "comparison-1-answer",
             "condition": "less than",
-            "comparison_id": "bad-answer-id-6"
+            "comparison": {
+              "id": "bad-answer-id-6",
+              "source": "answers"
+            }
           }]
         }, {
           "when": [{
             "id": "bad-answer-id-7",
             "condition": "equals",
-            "comparison_id": "comparison-2-answer"
+            "comparison": {
+              "id": "comparison-2-answer",
+              "source": "answers"
+            }
           }]
         }],
         "content": {

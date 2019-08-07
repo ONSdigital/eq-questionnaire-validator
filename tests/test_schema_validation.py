@@ -52,7 +52,7 @@ def check_validation_errors(filename, expected_validation_error_messages, expect
 
     assert len(validation_errors) == expected_number_validation_errors
 
-    return (validation_errors, schema_errors)
+    return validation_errors, schema_errors
 
 
 def test_param_valid_schemas(valid_schema_filename):
@@ -85,8 +85,8 @@ def test_invalid_schema_block():
         'default not defined for answer [conditional-routing-answer] '
         "missing options ['no']",
 
-        'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id '
-        'key of the "when" clause for response-yes does not exist',
+        'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id key of the '
+        '"when" clause for response-yes does not exist',
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -225,19 +225,19 @@ def test_answer_comparisons_different_types():
     filename = 'schemas/invalid/test_invalid_answer_comparison_types.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. The answers used as comparison_id `route-comparison-1-answer` and answer_id `route-comparison-2-answer` '
+        'Schema Integrity Error. The answers used as comparison id `route-comparison-1-answer` and answer_id `route-comparison-2-answer` '
         'in the `when` clause for `route-comparison-2` have different types',
 
-        'Schema Integrity Error. The comparison_id `route-comparison-2-answer` is not of answer type `Checkbox`. '
+        'Schema Integrity Error. The comparison id `route-comparison-2-answer` is not of answer type `Checkbox`. '
         'The condition `equals any` can only reference `Checkbox` answers when using `comparison id`',
 
-        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'Schema Integrity Error. The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
         'clause for `equals-answers` have different types',
 
-        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'Schema Integrity Error. The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
         'clause for `less-than-answers` have different types',
 
-        'Schema Integrity Error. The answers used as comparison_id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
+        'Schema Integrity Error. The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` '
         'clause for `less-than-answers` have different types',
     ]
 
@@ -249,15 +249,15 @@ def test_answer_comparisons_invalid_comparison_id():
     filename = 'schemas/invalid/test_invalid_answer_comparison_id.json'
 
     expected_error_messages = [
-        'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison_id key of the "when" '
+        'Schema Integrity Error. The answer id - bad-answer-id-2 in the comparison.id key of the "when" '
         'clause for route-comparison-2 does not exist',
-        'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison_id key of the "when" '
+        'Schema Integrity Error. The answer id - bad-answer-id-3 in the comparison.id key of the "when" '
         'clause for equals-answers does not exist',
-        'Schema Integrity Error. The answer id - bad-answer-id-4 in the comparison_id key of the "when" '
+        'Schema Integrity Error. The answer id - bad-answer-id-4 in the comparison.id key of the "when" '
         'clause for less-than-answers does not exist',
-        'Schema Integrity Error. The answer id - bad-answer-id-5 in the comparison_id key of the "when" '
+        'Schema Integrity Error. The answer id - bad-answer-id-5 in the comparison.id key of the "when" '
         'clause for less-than-answers does not exist',
-        'Schema Integrity Error. The answer id - bad-answer-id-6 in the comparison_id key of the "when" '
+        'Schema Integrity Error. The answer id - bad-answer-id-6 in the comparison.id key of the "when" '
         'clause for greater-than-answers does not exist',
         'Schema Integrity Error. The answer id - bad-answer-id-7 in the id key of the "when" '
         'clause for greater-than-answers does not exist',
@@ -505,7 +505,7 @@ def test_invalid_when_condition_property():
     error_messages = [error['message'] for error in validation_errors]
 
     fuzzy_error_messages = [
-        'Schema Integrity Error. The comparison_id `country-checkbox-answer2` is not of answer type `Checkbox`. '
+        'Schema Integrity Error. The comparison id `country-checkbox-answer2` is not of answer type `Checkbox`. '
         'The condition `contains any` can only reference `Checkbox` answers when using `comparison id`',
 
         'Schema Integrity Error. The condition `equals any` cannot be used with `Checkbox` answer type.'
@@ -568,7 +568,7 @@ def test_invalid_relationship_multiple_answers():
 def test_invalid_relationship_wrong_answer_type():
     filename = 'schemas/invalid/test_invalid_relationship_wrong_answer_type.json'
     expected_error_message = [
-        'Schema Integrity Error. Ony answers of type Relationship are valid in RelationshipCollector blocks.'
+        'Schema Integrity Error. Only answers of type Relationship are valid in RelationshipCollector blocks.'
     ]
 
     check_validation_errors(filename, expected_error_message)
