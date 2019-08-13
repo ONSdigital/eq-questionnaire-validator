@@ -143,6 +143,13 @@
         "enabled": {
           "description": "Whether or not the hub and spoke pattern is enabled for this questionnaire.",
           "type": "boolean"
+        },
+        "required_completed_sections": {
+          "description": "The sections that need to be complete prior to the hub displaying",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [

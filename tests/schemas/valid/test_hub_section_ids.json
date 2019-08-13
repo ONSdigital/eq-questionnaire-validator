@@ -21,9 +21,7 @@
   ],
   "hub": {
     "enabled": true,
-    "required_completed_sections": [
-      "employment-section"
-    ]
+    "required_completed_sections": ["employment-section"]
   },
   "sections": [{
       "id": "employment-section",
@@ -82,18 +80,20 @@
               "type": "MutuallyExclusive"
             },
             "routing_rules": [{
-              "goto": {
-                "group": "checkboxes",
-                "when": [{
-                  "id": "employment-status-answer",
-                  "condition": "set"
-                }]
+                "goto": {
+                  "group": "checkboxes",
+                  "when": [{
+                    "id": "employment-status-answer",
+                    "condition": "set"
+                  }]
+                }
+              },
+              {
+                "goto": {
+                  "block": "employment-type"
+                }
               }
-            }, {
-              "goto": {
-                "block": "employment-type"
-              }
-            }]
+            ]
           },
           {
             "type": "Question",
@@ -136,7 +136,7 @@
     },
     {
       "id": "accommodation-section",
-      "title": "accommodation",
+      "title": "Accommodation",
       "groups": [{
         "blocks": [{
             "id": "proxy",

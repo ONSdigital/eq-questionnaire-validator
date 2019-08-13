@@ -590,3 +590,13 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_hub_section_non_existent():
+    filename = 'schemas/invalid/test_invalid_hub_section_definition.json'
+    expected_error_messages = [
+        'Schema Integrity Error. Required hub completed section "invalid-section-id" '
+        'defined in hub does not appear in schema'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
