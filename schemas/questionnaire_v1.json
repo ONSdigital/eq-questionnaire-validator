@@ -160,6 +160,7 @@
     "sections": {
       "type": "array",
       "items": {
+        "additionalProperties": false,
         "type": "object",
         "properties": {
           "id": {
@@ -172,6 +173,18 @@
           "title_from_answers": {
             "type": "array",
             "description": "Takes a list of answer ids. Title will be generated from answer values concatenated together with spaces."
+          },
+          "repeat": {
+            "type": "object",
+            "properties": {
+              "for_list": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "for_list"
+            ]
           },
           "groups": {
             "type": "array",

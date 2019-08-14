@@ -550,7 +550,7 @@ def test_invalid_list_name_in_when_rule():
 def test_invalid_relationship_no_list_specified():
     filename = 'schemas/invalid/test_invalid_relationship_list_doesnt_exist.json'
     expected_error_message = [
-        "Schema Integrity Error. for_list 'not-a-list' in RelationshipCollector is not populated by any ListCollector blocks",
+        "Schema Integrity Error. for_list 'not-a-list' is not populated by any ListCollector blocks",
     ]
 
     check_validation_errors(filename, expected_error_message)
@@ -587,6 +587,15 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     filename = 'schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json'
     expected_error_messages = [
         'Schema Integrity Error. Schema must contain one of [Confirmation page, Summary page, Hub page]'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_repeating_section_list_name():
+    filename = 'schemas/invalid/test_invalid_repeating_section_list_name.json'
+    expected_error_messages = [
+        "Schema Integrity Error. for_list 'non-existent-list' is not populated by any ListCollector blocks"
     ]
 
     check_validation_errors(filename, expected_error_messages)
