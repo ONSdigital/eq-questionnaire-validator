@@ -21,6 +21,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         self._list_collector_answer_ids = {}
         self._list_names = []
+        self._block_ids = []
 
     def validate_schema(self, json_to_validate):
         """
@@ -46,6 +47,7 @@ class Validator:  # pylint: disable=too-many-lines
             numeric_answer_ranges = {}
             answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
             self._list_names = self._get_list_names(json_to_validate)
+            self._block_ids = self._get_block_ids(json_to_validate)
 
             for section in json_to_validate['sections']:
                 validation_errors.extend(self._validate_section(section))
@@ -139,7 +141,7 @@ class Validator:  # pylint: disable=too-many-lines
             all_groups,
             answers_with_parent_ids,
             numeric_answer_ranges,
-        ):
+    ):
         errors = []
         for block in group.get('blocks'):
             if section == json_to_validate['sections'][-1] \
@@ -216,6 +218,7 @@ class Validator:  # pylint: disable=too-many-lines
                 errors.extend(self._validate_routing_on_answer_options(block_or_variant, answer))
                 errors.extend(self._validate_duplicate_options(answer))
                 errors.extend(self._validate_totaliser_defines_decimal_places(answer))
+                errors.extend(self._validate_answer_actions(answer))
 
                 if answer['type'] == 'Date':
                     if 'minimum' in answer and 'maximum' in answer:
@@ -226,6 +229,27 @@ class Validator:  # pylint: disable=too-many-lines
                         answer, numeric_answer_ranges)
 
                     errors.extend(self._validate_numeric_answer_types(answer, numeric_answer_ranges))
+
+        return errors
+
+    def _validate_answer_actions(self, answer):
+        errors = []
+        answer_options = answer.get('options', {})
+        for option in answer_options:
+
+            action_params = option.get('action', {}).get('params')
+            if not action_params:
+                continue
+
+            list_name = action_params.get('list_name')
+            if list_name and list_name not in self._list_names:
+                errors.append(
+                    (self._error_message(f'List name `{list_name}` defined in action params for answer `{answer["id"]}` does not exist')))
+
+            block_id = action_params.get('block_id')
+            if block_id and block_id not in self._block_ids:
+                errors.append(
+                    (self._error_message(f'The block_id `{block_id}` defined in action params for answer `{answer["id"]}` does not exist')))
 
         return errors
 
@@ -262,7 +286,7 @@ class Validator:  # pylint: disable=too-many-lines
                 'Variants have more than one question type for block: {}. Found types: {}'.format(
                     block['id'],
                     results['question_types'])
-                ))
+            ))
 
         if len(results['default_answers']) > 1:
             errors.append(self._error_message(
@@ -270,7 +294,7 @@ class Validator:  # pylint: disable=too-many-lines
                     block['id'],
                     results['question_ids']
                 )
-                ))
+            ))
 
         if len(results['answer_ids']) != next(iter(results['number_of_answers'])):
             errors.append(self._error_message(
@@ -1433,6 +1457,19 @@ class Validator:  # pylint: disable=too-many-lines
                     if block['type'] == 'ListCollector':
                         list_names.append(block['for_list'])
         return list_names
+
+    @staticmethod
+    def _get_block_ids(json_to_validate):
+        block_ids = []
+        for section in json_to_validate['sections']:
+            for group in section['groups']:
+                for block in group['blocks']:
+                    block_ids.append(block['id'])
+                    for sub_block in {'add_block', 'edit_block', 'remove_block', 'add_or_edit_block'}:
+                        if sub_block in block:
+                            block_ids.append(block[sub_block]['id'])
+
+        return block_ids
 
     class CoreStructureError(Exception):
         def __init__(self, message):

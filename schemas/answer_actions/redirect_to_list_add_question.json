@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "description": "Overrides default behaviour and redirect to the list add question block",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "RedirectToListAddQuestion"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "block_id": {
+          "type": "string"
+        },
+        "list_name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "block_id",
+        "list_name"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "params"
+  ]
+}

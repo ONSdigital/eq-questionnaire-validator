@@ -609,3 +609,17 @@ def test_invalid_hub_section_non_existent():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_answer_action():
+    filename = 'schemas/invalid/test_invalid_answer_action_redirect_to_list_add_question.json'
+    expected_error_messages = [
+        'Schema Integrity Error. List name `non-existent-list-name` defined in action params for '
+        'answer `anyone-else-live-here-answer` does not exist',
+
+        'Schema Integrity Error. The block_id `non-existent-block-id` defined in action params for '
+        'answer `anyone-else-live-here-answer` does not exist'
+
+    ]
+
+    check_validation_errors(filename, expected_error_messages)

@@ -25,6 +25,14 @@
                 "description": {
                     "type": "string",
                     "description": "Descriptive text that appears below the option label"
+                },
+                "action": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "$ref": "../answer_actions/redirect_to_list_add_question.json"
+                    }
+                  ]
                 }
             },
             "additionalProperties": false,
