@@ -202,6 +202,9 @@
           }
         },
         "summary": {
+          "title": "Household members",
+          "add_link_text": "Add another person to this household",
+          "empty_list_text": "There are no people",
           "item_title": {
             "text": "{person_name}",
             "placeholders": [{
@@ -221,7 +224,8 @@
               }]
             }]
           }
-        }
+        },
+        "hide_on_section_summary": false
       }, {
         "type": "Summary",
         "id": "summary"

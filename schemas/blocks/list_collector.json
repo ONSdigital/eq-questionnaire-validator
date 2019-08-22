@@ -23,11 +23,20 @@
     "properties":{
       "item_title": {
           "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "add_link_text": {
+        "type": "string"
+      },
+      "empty_list_text": {
+        "type": "string"
+      },
+      "title": {
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       }
     },
     "additionalProperties": false,
     "required": [
-        "item_title"
+        "item_title", "title"
     ]
   },
   "block": {
@@ -66,6 +75,9 @@
       },
       "summary": {
         "$ref": "list_collector.json#/summary"
+      },
+      "hide_on_section_summary": {
+        "type": "boolean"
       }
     },
     "additionalProperties": false,
