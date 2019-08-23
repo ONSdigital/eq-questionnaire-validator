@@ -23,7 +23,7 @@
                     "$ref": "./text_field.json#/answer"
                 },
                 "description": {
-                    "type": "string",
+                    "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
                     "description": "Descriptive text that appears below the option label"
                 },
                 "action": {
