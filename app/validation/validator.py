@@ -1350,15 +1350,17 @@ class Validator:  # pylint: disable=too-many-lines
             path = ''
 
         ignored_keys = ['routing_rules', 'skip_conditions', 'when']
-        ignored_sub_paths = ['edit_block/question/answers', 'add_block/question/answers', 'remove_block/question/answers']
+        ignored_sub_paths = ['edit_block/question', 'add_block/question', 'remove_block/question',
+                             'edit_block/question_variants', 'add_block/question_variants', 'remove_block/question_variants']
 
         for key, value in schema_json.items():
             new_path = f'{path}/{key}'
+
             if key == parsed_key:
                 yield (path, value)
             elif key in ignored_keys:
                 continue
-            elif any([ignored_path in new_path for ignored_path in ignored_sub_paths]):
+            elif any([ignored_path in new_path for ignored_path in ignored_sub_paths]) and key == 'answers':
                 continue
             elif isinstance(value, dict):
                 yield from self._parse_values(value, parsed_key, new_path)
