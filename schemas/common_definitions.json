@@ -63,7 +63,7 @@
         "list": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
           }
         }
       },

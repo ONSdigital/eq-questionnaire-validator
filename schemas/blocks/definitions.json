@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "title": {
-        "type": "string",
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
         "description": "The top-level heading on the page"
       },
       "contents": {
