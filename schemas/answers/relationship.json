@@ -38,6 +38,10 @@
                         },
                         "playback": {
                             "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+                        },
+                        "description": {
+                            "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
+                            "description": "Descriptive text that appears below the option label"
                         }
                     },
                     "additionalProperties": false,
