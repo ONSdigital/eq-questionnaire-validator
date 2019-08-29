@@ -549,9 +549,14 @@ def test_invalid_list_name_in_when_rule():
 
 def test_invalid_relationship_no_list_specified():
     filename = 'schemas/invalid/test_invalid_relationship_list_doesnt_exist.json'
+    for_list_error = ["Schema Integrity Error. for_list 'not-a-list' is not populated by any ListCollector blocks"]
     expected_error_message = [
-        "Schema Integrity Error. for_list 'not-a-list' is not populated by any ListCollector blocks",
-    ]
+        'Schema Integrity Error. Invalid answer id reference `first-name` for placeholder `first_person_name`',
+        'Schema Integrity Error. Invalid answer id reference `last-name` for placeholder `first_person_name`',
+        'Schema Integrity Error. Invalid answer id reference `first-name` for placeholder `second_person_name`',
+        'Schema Integrity Error. Invalid answer id reference `last-name` for placeholder `second_person_name`',
+        ] * 6
+    expected_error_message = for_list_error + expected_error_message
 
     check_validation_errors(filename, expected_error_message)
 

@@ -1,9 +1,13 @@
 {
+
   "$schema": "http://json-schema.org/draft-04/schema",
   "string_with_placeholders": {
     "oneOf": [{
         "description": "String with no placeholders.",
-        "type": "string"
+        "type": "string",
+        "not": {
+            "pattern": "({[_a-zA-Z0-9]*})+"
+        }
       },
       {
         "description": "An object that represents a string with placeholders.",
@@ -137,6 +141,25 @@
       "identifier": {
         "description": "The identifier of the item in the data source. This would be an answer id for answers, and a metadata property name for metadata. The array option allows multiple values to be passed as a list to a transform.",
         "type": ["string", "array"]
+      },
+      "list_item_selector": {
+        "description": "The identifier and source of the list item.",
+        "type": "object",
+        "properties": {
+            "source": {
+                "description": "The source of the data.",
+                "type": "string",
+                "enum": ["location"]
+            },
+            "id": {
+                "description": "The unique id of the object.",
+                "type": "string",
+                "enum": [
+                  "list_item_id",
+                  "to_list_item_id"
+                ]
+            }
+        }
       }
     },
     "additionalProperties": false,

@@ -53,7 +53,7 @@
                 "type": "boolean"
             },
             "playback": {
-                "type": "string"
+                "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
             }
         },
         "additionalProperties": false,
