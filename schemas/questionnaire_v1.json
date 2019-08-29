@@ -179,11 +179,15 @@
             "properties": {
               "for_list": {
                 "type": "string"
+              },
+              "title": {
+                "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
               }
             },
             "additionalProperties": false,
             "required": [
-              "for_list"
+              "for_list",
+              "title"
             ]
           },
           "groups": {

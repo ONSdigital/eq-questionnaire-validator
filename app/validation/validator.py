@@ -50,7 +50,7 @@ class Validator:  # pylint: disable=too-many-lines
             self._block_ids = self._get_block_ids(json_to_validate)
 
             for section in json_to_validate['sections']:
-                validation_errors.extend(self._validate_section(section))
+                validation_errors.extend(self._validate_section(json_to_validate, section, answers_with_parent_ids))
                 section_ids.append(section['id'])
                 for group in section['groups']:
                     validation_errors.extend(self._validate_routing_rules(group, all_groups, answers_with_parent_ids))
@@ -75,12 +75,21 @@ class Validator:  # pylint: disable=too-many-lines
 
         return all_errors
 
-    def _validate_section(self, section):
+    def _validate_section(self, json_to_validate, section, answers_with_parent_ids):
         errors = []
+        valid_metadata_ids = []
+        if 'metadata' in json_to_validate:
+            valid_metadata_ids = [m['name'] for m in json_to_validate['metadata']]
 
-        if section.get('repeat', {}).get('for_list'):
-            errors.extend(self._validate_list_exists(section['repeat']['for_list']))
+        section_repeat = section.get('repeat', {})
 
+        if section_repeat:
+            errors.extend(self._validate_list_exists(section_repeat['for_list']))
+            errors.extend(
+                self._validate_placeholder_object(
+                    answers_with_parent_ids, valid_metadata_ids, section_repeat['title'], None
+                )
+            )
         return errors
 
     def _validate_required_section_ids(self, section_ids, required_section_ids):
@@ -194,7 +203,7 @@ class Validator:  # pylint: disable=too-many-lines
             if 'metadata' in json_to_validate:
                 valid_metadata_ids = [m['name'] for m in json_to_validate['metadata']]
 
-            errors.extend(self._validate_placeholders(block, answers_with_parent_ids, valid_metadata_ids))
+            errors.extend(self._validate_placeholders(block, answers_with_parent_ids, valid_metadata_ids, block['id']))
 
             errors.extend(self._validate_variants(block, answers_with_parent_ids, numeric_answer_ranges))
 
@@ -1192,31 +1201,39 @@ class Validator:  # pylint: disable=too-many-lines
             for item in input_data:
                 yield from self._get_dicts_with_key(item, key_name)
 
-    def _validate_placeholders(self, block_json, answers_with_parent_ids, valid_metadata_ids):
+    def _validate_placeholder_object(self, answers_with_parent_ids, valid_metadata_ids, placeholder_object, current_block_id):
+        """ Current block id may be None if called outside of a block
+        """
+        errors = []
+        placeholders_in_string = re.compile('{(.*?)}').findall(placeholder_object.get('text'))
+        placeholder_definition_names = []
+        for placeholder_definition in placeholder_object.get('placeholders'):
+            placeholder_definition_names.append(placeholder_definition['placeholder'])
+
+            transforms = placeholder_definition.get('transforms')
+            answer_ids_to_validate, metadata_ids_to_validate = self._get_placeholder_source_ids(placeholder_definition, transforms)
+
+            errors.extend(self._validate_placeholder_answer_ids(current_block_id, placeholder_definition,
+                                                                answers_with_parent_ids, answer_ids_to_validate))
+            errors.extend(self._validate_placeholder_metadata_ids(valid_metadata_ids, metadata_ids_to_validate,
+                                                                  placeholder_definition['placeholder']))
+
+            if transforms:
+                errors.extend(self._validate_placeholder_transforms(transforms, current_block_id))
+
+        placeholder_differences = set(placeholders_in_string) - set(placeholder_definition_names)
+        if placeholder_differences:
+            errors.append(self._error_message(
+                "Placeholders in '{}' don't match definitions. Missing '{}'".format(
+                    placeholder_object['text'], placeholder_differences)))
+
+        return errors
+
+    def _validate_placeholders(self, block_json, answers_with_parent_ids, valid_metadata_ids, current_block_id):
         errors = []
         strings_with_placeholders = self._get_dicts_with_key(block_json, 'placeholders')
-        for string_with_placeholders in strings_with_placeholders or []:
-            regex = re.compile('{(.*?)}')
-            placeholders_in_string = regex.findall(string_with_placeholders.get('text'))
-            placeholder_definition_names = []
-            for placeholder_definition in string_with_placeholders.get('placeholders'):
-                placeholder_definition_names.append(placeholder_definition['placeholder'])
-
-                transforms = placeholder_definition.get('transforms')
-                answer_ids_to_validate, metadata_ids_to_validate = self._get_placeholder_source_ids(placeholder_definition, transforms)
-
-                errors.extend(self._validate_placeholder_answer_ids(block_json['id'], placeholder_definition,
-                                                                    answers_with_parent_ids, answer_ids_to_validate))
-                errors.extend(self._validate_placeholder_metadata_ids(valid_metadata_ids, metadata_ids_to_validate,
-                                                                      placeholder_definition['placeholder']))
-
-                if transforms:
-                    errors.extend(self._validate_placeholder_transforms(transforms, block_json['id']))
-
-            if sorted(placeholders_in_string) != sorted(placeholder_definition_names):
-                errors.append(self._error_message(
-                    "Placeholders in 'text' doesn't match 'placeholders' definition for block id '{}'".format(
-                        block_json['id'])))
+        for placeholder_object in strings_with_placeholders or []:
+            errors.extend(self._validate_placeholder_object(answers_with_parent_ids, valid_metadata_ids, placeholder_object, current_block_id))
 
         return errors
 
