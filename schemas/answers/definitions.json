@@ -20,7 +20,14 @@
                     "$ref": "../common_definitions.json#/q_code"
                 },
                 "detail_answer": {
-                    "$ref": "./text_field.json#/answer"
+                    "oneOf": [
+                        {
+                          "$ref": "./text_field.json#/answer"
+                        },
+                        {
+                          "$ref": "./number.json#/answer"
+                        }
+                      ]
                 },
                 "description": {
                     "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
