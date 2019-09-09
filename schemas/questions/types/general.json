@@ -28,6 +28,9 @@
         "type": "string",
         "enum": ["General"]
       },
+      "show_on_section_summary": {
+          "type": "boolean"
+      },
       "answers": {
         "type": "array",
         "minItems": 1,

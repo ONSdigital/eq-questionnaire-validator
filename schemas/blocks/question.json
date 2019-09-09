@@ -13,6 +13,9 @@
         "type": "string",
         "enum": ["Question", "ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion", "PrimaryPersonListAddOrEditQuestion"]
       },
+      "show_on_section_summary": {
+          "type": "boolean"
+      },
       "question": {
         "$ref": "../questions/definitions.json#/question"
       },

@@ -76,7 +76,7 @@
       "summary": {
         "$ref": "list_collector.json#/summary"
       },
-      "hide_on_section_summary": {
+      "show_on_section_summary": {
         "type": "boolean"
       }
     },

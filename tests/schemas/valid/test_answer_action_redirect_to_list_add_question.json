@@ -176,7 +176,7 @@
                 }]
               }
             },
-            "hide_on_section_summary": false
+            "show_on_section_summary": true
           }
         ]
       }]
