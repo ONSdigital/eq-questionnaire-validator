@@ -236,6 +236,9 @@
                         "$ref": "blocks/list_collector.json#/block"
                       },
                       {
+                        "$ref": "blocks/list_collector_driving_question.json#/block"
+                      },
+                      {
                         "$ref": "blocks/primary_person_list_collector.json#/block"
                       },
                       {

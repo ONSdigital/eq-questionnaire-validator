@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/id"
+      },
+      "number": {
+        "type": "string"
+      },
+      "for_list": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["ListCollectorDrivingQuestion"]
+      },
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      },
+      "question_variants": {
+        "$ref": "definitions.json#/question_variants"
+      },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "for_list",
+      "type"
+    ],
+    "oneOf": [
+      {
+        "required": [
+          "question"
+        ]
+      },
+      {
+        "required": [
+          "question_variants"
+        ]
+      }
+    ]
+  }
+}

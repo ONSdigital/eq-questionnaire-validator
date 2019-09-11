@@ -196,6 +196,8 @@ class Validator:  # pylint: disable=too-many-lines
                         errors.extend(self._validate_relationship_collector_answers(variant['question']['answers']))
                 else:
                     errors.extend(self._validate_relationship_collector_answers(block['question']['answers']))
+            elif block['type'] == 'ListCollectorDrivingQuestion':
+                errors.extend(self._validate_list_collector_driving_question(block, section, json_to_validate))
 
             errors.extend(self._validate_questions(block, numeric_answer_ranges))
 
@@ -238,6 +240,19 @@ class Validator:  # pylint: disable=too-many-lines
                         answer, numeric_answer_ranges)
 
                     errors.extend(self._validate_numeric_answer_types(answer, numeric_answer_ranges))
+
+        return errors
+
+    def _validate_list_collector_driving_question(self, block, section, json_to_validate):
+        errors = []
+        if not self._has_single_list_collector(block['for_list'], section):
+            errors.append(
+                self._error_message(f'ListCollectorDrivingQuestion `{block["id"]}` for list '
+                                    f'`{block["for_list"]}` cannot be used with multiple ListCollectors'))
+
+        if not self._has_single_driving_question(block['for_list'], json_to_validate):
+            errors.append(self._error_message(f'The block_id `{block["id"]}` should be the only '
+                                              f'ListCollectorDrivingQuestion for list `{block["for_list"]}`'))
 
         return errors
 
@@ -1386,6 +1401,30 @@ class Validator:  # pylint: disable=too-many-lines
                     indexed_path = new_path + f'/{index}'
                     if isinstance(schema_item, dict):
                         yield from self._parse_values(schema_item, parsed_key, indexed_path)
+
+    @staticmethod
+    def _has_single_list_collector(list_name, section):
+        return len([block for block in Validator.get_blocks_for_section(section) if block['type'] == 'ListCollector'
+                    and list_name == block['for_list']]) == 1
+
+    @staticmethod
+    def _has_single_driving_question(list_name, json_to_validate):
+        return len(Validator.get_driving_questions(list_name, json_to_validate)) == 1
+
+    @staticmethod
+    def get_driving_questions(list_name, json_to_validate):
+        driving_blocks = []
+
+        for section in json_to_validate.get('sections'):
+            driving_blocks.extend([block for block in Validator.get_blocks_for_section(section)
+                                   if block['type'] == 'ListCollectorDrivingQuestion'
+                                   and block['for_list'] == list_name])
+
+        return driving_blocks
+
+    @staticmethod
+    def get_blocks_for_section(section):
+        return [block for group in section['groups'] for block in group['blocks']]
 
     def _get_offset_date_value(self, answer_min_or_max):
         if answer_min_or_max['value'] == 'now':

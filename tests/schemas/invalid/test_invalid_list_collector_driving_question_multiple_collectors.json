@@ -1,0 +1,469 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test ListCollectorDrivingQuestion",
+  "theme": "default",
+  "description": "A questionnaire to test ListCollectorDrivingQuestion",
+  "metadata": [{
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "hub": {
+    "enabled": true
+  },
+  "sections": [{
+    "id": "section",
+    "title": "People",
+    "groups": [{
+      "id": "group",
+      "title": "List",
+      "blocks": [{
+          "type": "ListCollectorDrivingQuestion",
+          "id": "anyone-usually-live-at",
+          "for_list": "people",
+          "question": {
+            "type": "General",
+            "id": "anyone-usually-live-at-question",
+            "title": "Does anyone usually live at 1 Pleasant Lane?",
+            "guidance": {
+              "contents": [{
+                "title": "Outcomes",
+                "list": [
+                  "“Yes” and list <strong>is</strong> empty - Takes you to the list collector‘s <strong>add</strong> question.",
+                  "“Yes” and list is <strong>not</strong> empty - Takes you directly to the list collector.",
+                  "“No” - Takes you directly to the list collector."
+                ]
+              }]
+            },
+            "answers": [{
+              "type": "Radio",
+              "id": "anyone-usually-live-at-answer",
+              "mandatory": true,
+              "options": [{
+                  "label": "Yes",
+                  "value": "Yes",
+                  "action": {
+                    "type": "RedirectToListAddQuestion",
+                    "params": {
+                      "block_id": "add-person",
+                      "list_name": "people"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            }]
+          },
+          "routing_rules": [{
+              "goto": {
+                "block": "anyone-else-temp-away-list-collector",
+                "when": [{
+                  "id": "anyone-usually-live-at-answer",
+                  "condition": "equals",
+                  "value": "No"
+                }]
+              }
+            },
+            {
+              "goto": {
+                "block": "anyone-else-live-at"
+              }
+            }
+          ]
+        },
+        {
+          "id": "anyone-else-live-at",
+          "type": "ListCollector",
+          "for_list": "people",
+          "add_answer": {
+            "id": "anyone-else-live-at-answer",
+            "value": "Yes"
+          },
+          "remove_answer": {
+            "id": "remove-confirmation",
+            "value": "Yes"
+          },
+          "question": {
+            "id": "confirmation-question",
+            "type": "General",
+            "title": "Does anyone else live at 1 Pleasant Lane?",
+            "answers": [{
+              "id": "anyone-else-live-at-answer",
+              "mandatory": true,
+              "type": "Radio",
+              "options": [{
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            }]
+          },
+          "add_block": {
+            "id": "add-person",
+            "type": "ListAddQuestion",
+            "question": {
+              "id": "add-question",
+              "type": "General",
+              "title": "What is the name of the person?",
+              "answers": [{
+                  "id": "first-name",
+                  "label": "First name",
+                  "mandatory": true,
+                  "type": "TextField"
+                },
+                {
+                  "id": "last-name",
+                  "label": "Last name",
+                  "mandatory": true,
+                  "type": "TextField"
+                }
+              ]
+            }
+          },
+          "edit_block": {
+            "id": "edit-person",
+            "type": "ListEditQuestion",
+            "question": {
+              "id": "edit-question",
+              "type": "General",
+              "title": "What is the name of the person?",
+              "answers": [{
+                  "id": "first-name",
+                  "label": "First name",
+                  "mandatory": true,
+                  "type": "TextField"
+                },
+                {
+                  "id": "last-name",
+                  "label": "Last name",
+                  "mandatory": true,
+                  "type": "TextField"
+                }
+              ]
+            }
+          },
+          "remove_block": {
+            "id": "remove-person",
+            "type": "ListRemoveQuestion",
+            "question": {
+              "id": "remove-question",
+              "type": "General",
+              "title": "Are you sure you want to remove this person?",
+              "answers": [{
+                "id": "remove-confirmation",
+                "mandatory": true,
+                "type": "Radio",
+                "options": [{
+                    "label": "Yes",
+                    "value": "Yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }]
+            }
+          },
+          "summary": {
+            "title": "Household members",
+            "item_title": {
+              "text": "{person_name}",
+              "placeholders": [{
+                "placeholder": "person_name",
+                "transforms": [{
+                  "arguments": {
+                    "delimiter": " ",
+                    "list_to_concatenate": {
+                      "identifier": ["first-name", "last-name"],
+                      "source": "answers"
+                    }
+                  },
+                  "transform": "concatenate_list"
+                }]
+              }]
+            },
+            "add_link_text": "Add someone to this household",
+            "empty_list_text": "There are no householders"
+          }
+        },
+        {
+          "add_answer": {
+            "id": "anyone-else-temp-away-answer",
+            "value": "Yes, I need to add someone"
+          },
+          "add_block": {
+            "id": "anyone-else-temp-away-add-person",
+            "question": {
+              "answers": [{
+                  "id": "first-name",
+                  "label": "First name",
+                  "mandatory": true,
+                  "type": "TextField"
+                },
+                {
+                  "id": "last-name",
+                  "label": "Last name",
+                  "mandatory": true,
+                  "type": "TextField"
+                }
+              ],
+              "id": "anyone-else-temp-away-add-question",
+              "title": "Who do you need to add?",
+              "type": "General"
+            },
+            "type": "ListAddQuestion"
+          },
+          "edit_block": {
+            "id": "anyone-else-temp-away-edit-person",
+            "question_variants": [{
+                "question": {
+                  "answers": [{
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ],
+                  "id": "anyone-else-temp-away-edit-question",
+                  "title": {
+                    "placeholders": [{
+                      "placeholder": "person_name",
+                      "transforms": [{
+                        "arguments": {
+                          "delimiter": " ",
+                          "list_to_concatenate": {
+                            "identifier": [
+                              "first-name",
+                              "last-name"
+                            ],
+                            "source": "answers"
+                          }
+                        },
+                        "transform": "concatenate_list"
+                      }]
+                    }],
+                    "text": "Change details for {person_name} (You)"
+                  },
+                  "type": "General"
+                },
+                "when": [{
+                  "comparison": {
+                    "id": "list_item_id",
+                    "source": "location"
+                  },
+                  "condition": "equals",
+                  "id_selector": "primary_person",
+                  "list": "people"
+                }]
+              },
+              {
+                "question": {
+                  "answers": [{
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ],
+                  "id": "anyone-else-temp-away-edit-question",
+                  "title": {
+                    "placeholders": [{
+                      "placeholder": "person_name",
+                      "transforms": [{
+                        "arguments": {
+                          "delimiter": " ",
+                          "list_to_concatenate": {
+                            "identifier": [
+                              "first-name",
+                              "last-name"
+                            ],
+                            "source": "answers"
+                          }
+                        },
+                        "transform": "concatenate_list"
+                      }]
+                    }],
+                    "text": "Change details for {person_name}"
+                  },
+                  "type": "General"
+                },
+                "when": [{
+                  "comparison": {
+                    "id": "list_item_id",
+                    "source": "location"
+                  },
+                  "condition": "not equals",
+                  "id_selector": "primary_person",
+                  "list": "people"
+                }]
+              }
+            ],
+            "type": "ListEditQuestion"
+          },
+          "for_list": "people",
+          "id": "anyone-else-temp-away-list-collector",
+          "question": {
+            "answers": [{
+              "guidance": {
+                "contents": [{
+                  "description": "We ask this question to help ensure that everyone is correctly counted in the census. This includes people who are staying temporarily or are away."
+                }],
+                "hide_guidance": "Why do we ask this question?",
+                "show_guidance": "Why do we ask this question?"
+              },
+              "id": "anyone-else-temp-away-answer",
+              "mandatory": true,
+              "options": [{
+                  "label": "Yes, I need to add someone",
+                  "value": "Yes, I need to add someone"
+                },
+                {
+                  "label": "No, I do not need to add anyone",
+                  "value": "No, I do not need to add anyone"
+                }
+              ],
+              "type": "Radio"
+            }],
+            "guidance": {
+              "contents": [{
+                  "title": "Include people who are temporarily away"
+                },
+                {
+                  "list": [
+                    "People who work away from home within the UK if this is their permanent or family home",
+                    "Members of the armed forces if this is their permanent or family home",
+                    "People who are temporarily outside the UK for less than <strong>12 months</strong>",
+                    "Other people who usually live here but are temporarily away"
+                  ]
+                },
+                {
+                  "title": "Include people who are temporarily staying"
+                },
+                {
+                  "list": [
+                    "People staying temporarily who usually live in the UK but do not have another UK address for example, relatives, friends",
+                    "People who usually live outside the UK who are staying in the UK for <strong>3 months or more</strong>"
+                  ]
+                }
+              ]
+            },
+            "id": "anyone-else-temp-away-confirmation-question",
+            "title": "Apart from the people already included, is there anyone who is temporarily away or staying that you need to add}?",
+            "type": "General"
+          },
+          "remove_answer": {
+            "id": "anyone-else-temp-away-remove-confirmation",
+            "value": "Yes, I want to remove this person"
+          },
+          "remove_block": {
+            "id": "anyone-else-temp-away-remove-person",
+            "question": {
+              "answers": [{
+                "id": "anyone-else-temp-away-remove-confirmation",
+                "mandatory": true,
+                "options": [{
+                    "label": "Yes, I want to remove this person",
+                    "value": "Yes, I want to remove this person"
+                  },
+                  {
+                    "label": "No, I do not want to remove this person",
+                    "value": "No, I do not want to remove this person"
+                  }
+                ],
+                "type": "Radio"
+              }],
+              "guidance": {
+                "contents": [{
+                  "title": "All of the data entered about this person will be deleted"
+                }]
+              },
+              "id": "anyone-else-temp-away-remove-question",
+              "title": {
+                "placeholders": [{
+                  "placeholder": "person_name",
+                  "transforms": [{
+                    "arguments": {
+                      "delimiter": " ",
+                      "list_to_concatenate": {
+                        "identifier": [
+                          "first-name",
+                          "last-name"
+                        ],
+                        "source": "answers"
+                      }
+                    },
+                    "transform": "concatenate_list"
+                  }]
+                }],
+                "text": "Are you sure you want to remove {person_name}?"
+              },
+              "type": "General"
+            },
+            "type": "ListRemoveQuestion"
+          },
+          "show_on_section_summary": false,
+          "summary": {
+            "add_link_text": "Add another visitor to this household",
+            "empty_list_text": "There are no visitors",
+            "item_title": {
+              "placeholders": [{
+                "placeholder": "person_name",
+                "transforms": [{
+                  "arguments": {
+                    "delimiter": " ",
+                    "list_to_concatenate": {
+                      "identifier": [
+                        "first-name",
+                        "last-name"
+                      ],
+                      "source": "answers"
+                    }
+                  },
+                  "transform": "concatenate_list"
+                }]
+              }],
+              "text": "{person_name}"
+            },
+            "title": "Household members"
+          },
+          "type": "ListCollector"
+        },
+        {
+          "type": "SectionSummary",
+          "id": "summary"
+        }
+      ]
+    }]
+  }]
+}
