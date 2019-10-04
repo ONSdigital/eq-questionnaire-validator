@@ -37,6 +37,9 @@
       "question": {
         "$ref": "../questions/definitions.json#/question"
       },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
       "question_variants": {
         "$ref": "definitions.json#/question_variants"
       },
