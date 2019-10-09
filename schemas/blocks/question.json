@@ -22,6 +22,26 @@
       "question_variants": {
         "$ref": "definitions.json#/question_variants"
       },
+      "list_summary": {
+        "type": "object",
+        "properties": {
+          "for_list": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "object",
+            "properties":{
+              "item_title": {
+                  "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+                "item_title"
+            ]
+          }
+        }
+      },
       "routing_rules": {
         "$ref": "../common_definitions.json#/routing_rules"
       },
