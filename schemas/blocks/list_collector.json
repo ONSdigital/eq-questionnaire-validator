@@ -64,6 +64,9 @@
       "question_variants": {
         "$ref": "definitions.json#/question_variants"
       },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
       "add_block": {
         "$ref": "question.json#/block"
       },

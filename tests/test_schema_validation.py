@@ -360,7 +360,7 @@ def test_primary_person_invalid_list_collector_non_radio():
 
 
 def test_invalid_list_collector_with_routing():
-    filename = 'schemas/invalid/test_invalid_list_collector_with_routing.json'
+    filename = 'schemas/invalid/test_invalid_list_collector_with_routing_in_sub_block.json'
 
     expected_error_messages = [
         'Schema Integrity Error. The list collector block list-collector contains routing rules on the remove-person sub block',
