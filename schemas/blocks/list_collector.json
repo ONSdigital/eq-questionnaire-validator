@@ -92,7 +92,8 @@
       "remove_answer",
       "add_block",
       "edit_block",
-      "remove_block"
+      "remove_block",
+      "summary"
     ],
     "oneOf": [
       {
