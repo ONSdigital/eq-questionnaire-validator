@@ -8,10 +8,11 @@ name = "pypi"
 [packages]
 
 Flask = "*"
-jsonschema = "*"
+jsonschema = "<3"
 structlog = "*"
 python-dateutil = "*"
-
+jsonpointer = "*"
+eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git",ref = "master"}
 
 [dev-packages]
 

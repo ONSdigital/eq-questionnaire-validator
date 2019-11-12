@@ -1,4 +1,8 @@
-FROM python:3.6-alpine
+FROM python:3.6-slim
+
+RUN apt-get update && apt-get install --no-install-recommends -y git=1:2.20.1-2 \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN pip install pipenv==2018.11.26
 

@@ -5,7 +5,7 @@
   "survey_id": "0",
   "title": "Other input fields",
   "theme": "default",
-  "description": "An invalid questionnaire to demo a when condition referencing a list that doesn't exist",
+  "description": "An invalid questionnaire to demo a when condition referencing a list that doesn’t exist",
   "metadata": [{
     "name": "user_id",
     "type": "string"

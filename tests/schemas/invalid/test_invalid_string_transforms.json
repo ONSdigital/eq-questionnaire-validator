@@ -51,7 +51,7 @@
             "id": "answer1",
             "mandatory": false,
             "type": "TextField",
-            "label": "Placeholder in 'text' doesn't have a definition",
+            "label": "Placeholder in ‘text’ doesn’t have a definition",
             "description": {
               "text": "test {answer1}",
               "placeholders": [{
@@ -76,7 +76,7 @@
             "id": "answer2",
             "mandatory": false,
             "type": "TextField",
-            "label": "Number of placeholders in 'text' doesn't match number of definitions",
+            "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
             "description": {
               "text": "test {answer1} and {answer2}",
               "placeholders": [{
@@ -101,7 +101,7 @@
             "id": "answer3",
             "mandatory": false,
             "type": "TextField",
-            "label": "Number of placeholders in 'text' doesn't match number of definitions",
+            "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
             "description": {
               "text": "test {answer1}",
               "placeholders": [{
@@ -132,7 +132,7 @@
             "id": "answer4",
             "mandatory": false,
             "type": "TextField",
-            "label": "Can't reference 'previous_transform' in first transform",
+            "label": "Can’t reference ‘previous_transform’ in first transform",
             "description": {
               "text": "test {answer1}",
               "placeholders": [{

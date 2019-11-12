@@ -658,3 +658,17 @@ def test_invalid_driving_question_multiple_driving_questions():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_quotes_in_schema():
+    filename = 'schemas/invalid/test_invalid_quotes_in_schema_text.json'
+
+    expected_error_messages = [
+        'Schema Integrity Error. Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/0/question/description',
+        'Schema Integrity Error. Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/1/question_variants/0/question/title',
+        'Schema Integrity Error. Found dumb quotes(s) in schema text at '
+        '/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0',
+        'Schema Integrity Error. Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/0/question/answers/0/label'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)

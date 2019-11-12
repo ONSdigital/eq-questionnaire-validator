@@ -5,7 +5,10 @@ from collections import defaultdict
 from datetime import datetime
 from json import load
 
+
 from dateutil.relativedelta import relativedelta
+from eq_translations.survey_schema import SurveySchema
+from jsonpointer import resolve_pointer
 from jsonschema import SchemaError, RefResolver, validate, ValidationError
 from jsonschema.exceptions import best_match
 
@@ -36,6 +39,7 @@ class Validator:  # pylint: disable=too-many-lines
         validation_errors = []
         validation_errors.extend(self._validate_schema_contain_metadata(json_to_validate))
         validation_errors.extend(self._validate_duplicates(json_to_validate))
+        validation_errors.extend(self._validate_smart_quotes(json_to_validate))
 
         section_ids = []
 
@@ -1358,6 +1362,22 @@ class Validator:  # pylint: disable=too-many-lines
                 errors.append(self._error_message(
                     "`previous_transform` not referenced in chained transform in block id '{}'".format(
                         block_id)))
+
+        return errors
+
+    def _validate_smart_quotes(self, json_schema):
+
+        schema_object = SurveySchema()
+        schema_object.schema = json_schema
+        errors = []
+
+        # pylint: disable=invalid-string-quote
+        quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
+
+        for pointer in schema_object.pointers:
+            schema_text = resolve_pointer(json_schema, pointer)
+            if quote_regex.search(schema_text):
+                errors.append(self._error_message(f'Found dumb quotes(s) in schema text at {pointer}'))
 
         return errors
 

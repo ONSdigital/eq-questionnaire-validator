@@ -127,10 +127,10 @@
               "label": "No, I prefer tea",
               "value": "no"
             }, {
-              "label": "I don't like coffee",
+              "label": "I don’t like coffee",
               "value": "I dont like coffee"
             }, {
-              "label": "No, I don't drink any hot drinks",
+              "label": "No, I don’t drink any hot drinks",
               "value": "no hot drinks"
             }],
             "q_code": "1",

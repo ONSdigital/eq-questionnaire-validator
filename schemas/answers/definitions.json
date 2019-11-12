@@ -115,11 +115,11 @@
         "properties": {
             "show_guidance": {
                 "type": "string",
-                "description": "The text that is used for the 'Show guidance' link."
+                "description": "The text that is used for the ‘Show guidance’ link."
             },
             "hide_guidance": {
                 "type": "string",
-                "description": "The text that is used for the 'Hide guidance' link."
+                "description": "The text that is used for the ‘Hide guidance’ link."
             },
             "contents": {
                 "$ref": "../common_definitions.json#/contents"
