@@ -238,6 +238,22 @@
               "additionalProperties": false,
               "required": ["id", "title", "blocks"]
             }
+          },
+          "enabled": {
+            "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "when": {
+                  "$ref": "when_rule/definitions.json#/when"
+                }
+              },
+              "additionalProperties": false
+            },
+            "required": ["when"]
           }
         },
         "required": ["id", "groups"]
