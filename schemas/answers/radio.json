@@ -20,12 +20,11 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "Radio"
-        ]
+        "enum": ["Radio"]
       },
       "options": {
-        "allOf": [{
+        "allOf": [
+          {
             "$ref": "definitions.json#/options"
           },
           {
@@ -52,11 +51,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "options"
-    ]
+    "required": ["id", "type", "mandatory", "options"]
   }
 }

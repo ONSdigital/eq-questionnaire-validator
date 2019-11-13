@@ -11,7 +11,13 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Question", "ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion", "PrimaryPersonListAddOrEditQuestion"]
+        "enum": [
+          "Question",
+          "ListAddQuestion",
+          "ListEditQuestion",
+          "ListRemoveQuestion",
+          "PrimaryPersonListAddOrEditQuestion"
+        ]
       },
       "show_on_section_summary": {
         "type": "boolean"
@@ -36,9 +42,7 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "item_title"
-            ]
+            "required": ["item_title"]
           }
         }
       },
@@ -50,19 +54,13 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type"
-    ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "required": ["id", "type"],
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

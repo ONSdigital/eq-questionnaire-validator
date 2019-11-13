@@ -30,20 +30,13 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "for_list"
-    ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "required": ["id", "type", "for_list"],
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

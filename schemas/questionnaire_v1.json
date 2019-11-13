@@ -27,10 +27,7 @@
       "type": "string"
     },
     "data_version": {
-      "enum": [
-        "0.0.1",
-        "0.0.3"
-      ]
+      "enum": ["0.0.1", "0.0.3"]
     },
     "survey_id": {
       "type": "string",
@@ -64,13 +61,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "boolean",
-              "date",
-              "string",
-              "uuid",
-              "url"
-            ]
+            "enum": ["boolean", "date", "string", "uuid", "url"]
           },
           "min_length": {
             "type": "integer",
@@ -93,10 +84,7 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "name",
-          "type"
-        ]
+        "required": ["name", "type"]
       }
     },
     "view_submitted_response": {
@@ -111,10 +99,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "enabled",
-        "duration"
-      ],
+      "required": ["enabled", "duration"],
       "additionalProperties": false
     },
     "variables": {
@@ -152,9 +137,7 @@
           }
         }
       },
-      "required": [
-        "enabled"
-      ],
+      "required": ["enabled"],
       "additionalProperties": false
     },
     "sections": {
@@ -185,10 +168,7 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "for_list",
-              "title"
-            ]
+            "required": ["for_list", "title"]
           },
           "groups": {
             "type": "array",
@@ -214,7 +194,8 @@
                   "type": "array",
                   "minItems": 1,
                   "items": {
-                    "oneOf": [{
+                    "oneOf": [
+                      {
                         "$ref": "blocks/answer_summary.json#/block"
                       },
                       {
@@ -255,18 +236,11 @@
                 }
               },
               "additionalProperties": false,
-              "required": [
-                "id",
-                "title",
-                "blocks"
-              ]
+              "required": ["id", "title", "blocks"]
             }
           }
         },
-        "required": [
-          "id",
-          "groups"
-        ]
+        "required": ["id", "groups"]
       }
     }
   },

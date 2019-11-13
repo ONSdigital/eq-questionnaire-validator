@@ -11,508 +11,626 @@
   "navigation": {
     "visible": false
   },
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "test_metadata",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section1",
-    "groups": [{
-      "id": "group1",
-      "title": "",
-      "blocks": [{
-        "id": "block0",
-        "type": "Question",
-        "question": {
-          "id": "question0",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
           "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "ref-answer0",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "An answer which transforms may reference",
-            "description": "description with no placeholders"
-          }, {
-            "id": "ref-answer1",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "A second answer which transforms may reference",
-            "description": ""
-          }, {
-            "id": "ref-answer2",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "A third answer which transforms may reference",
-            "description": ""
-          }]
+          "blocks": [
+            {
+              "id": "block0",
+              "type": "Question",
+              "question": {
+                "id": "question0",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "ref-answer0",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "An answer which transforms may reference",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "ref-answer1",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A second answer which transforms may reference",
+                    "description": ""
+                  },
+                  {
+                    "id": "ref-answer2",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A third answer which transforms may reference",
+                    "description": ""
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block1",
+              "type": "Question",
+              "question": {
+                "id": "question1",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer0",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "answer1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": {
+                      "text": "test {simple_answer}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_answer",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer1"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "answer2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store via transform",
+                    "description": {
+                      "text": "test {simple_answer_with_transform}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_answer_with_transform",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer2"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "answer3",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Two values from answer store via transform",
+                    "description": {
+                      "text": "test {date_range}",
+                      "placeholders": [
+                        {
+                          "placeholder": "date_range",
+                          "transforms": [
+                            {
+                              "transform": "format_date_range",
+                              "arguments": {
+                                "start_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer2"
+                                },
+                                "end_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer2"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "answer4",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Two tranforms chained together",
+                    "description": {
+                      "text": "test {multiple_transforms}",
+                      "placeholders": [
+                        {
+                          "placeholder": "multiple_transforms",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                }
+                              }
+                            },
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "previous_transform"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "answer5",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "String value passed to transform",
+                    "description": {
+                      "text": "test {value}",
+                      "placeholders": [
+                        {
+                          "placeholder": "value",
+                          "transforms": [
+                            {
+                              "transform": "format_date",
+                              "arguments": {
+                                "date_to_format": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer2"
+                                },
+                                "date_format": "EEEE d MMMM"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "answer6",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "format_date with fixed value",
+                    "description": {
+                      "text": "test {value}",
+                      "placeholders": [
+                        {
+                          "placeholder": "value",
+                          "transforms": [
+                            {
+                              "transform": "format_date",
+                              "arguments": {
+                                "date_to_format": {
+                                  "value": "2019-01-01"
+                                },
+                                "date_format": "EEEE d MMMM"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block2",
+              "type": "Question",
+              "question": {
+                "id": "question2",
+                "title": "",
+                "description": "Calculate years difference tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q2-answer-1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple calculate years difference",
+                    "description": {
+                      "text": "test {simple_difference}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_difference",
+                          "transforms": [
+                            {
+                              "transform": "calculate_years_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "value": "2018-01-01"
+                                },
+                                "second_date": {
+                                  "value": "2019-01-20"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "q2-answer-2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Calculate years difference with one lookup",
+                    "description": {
+                      "text": "test {one_lookup}",
+                      "placeholders": [
+                        {
+                          "placeholder": "one_lookup",
+                          "transforms": [
+                            {
+                              "transform": "calculate_years_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                },
+                                "second_date": {
+                                  "value": "2019-01-20"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "q2-answer-3",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Calculate years difference with two lookups",
+                    "description": {
+                      "text": "test {two_lookups}",
+                      "placeholders": [
+                        {
+                          "placeholder": "two_lookups",
+                          "transforms": [
+                            {
+                              "transform": "calculate_years_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                },
+                                "second_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer2"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "q2-answer-4",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Calculate years difference to current date",
+                    "description": {
+                      "text": "test {difference_to_current_date}",
+                      "placeholders": [
+                        {
+                          "placeholder": "difference_to_current_date",
+                          "transforms": [
+                            {
+                              "transform": "calculate_years_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                },
+                                "second_date": {
+                                  "value": "now"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block3",
+              "type": "Question",
+              "question": {
+                "id": "question3",
+                "title": "",
+                "description": "Concatenate list tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q3-answer-1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Concatenate list of answer that is a list",
+                    "description": {
+                      "text": "test {concatenated_list}",
+                      "placeholders": [
+                        {
+                          "placeholder": "concatenated_list",
+                          "transforms": [
+                            {
+                              "transform": "concatenate_list",
+                              "arguments": {
+                                "list_to_concatenate": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                },
+                                "delimiter": " "
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "q3-answer-2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Concatenate list of multiple answers",
+                    "description": {
+                      "text": "test {concatenated_list}",
+                      "placeholders": [
+                        {
+                          "placeholder": "concatenated_list",
+                          "transforms": [
+                            {
+                              "transform": "concatenate_list",
+                              "arguments": {
+                                "list_to_concatenate": {
+                                  "source": "answers",
+                                  "identifier": ["ref-answer1", "ref-answer2"]
+                                },
+                                "delimiter": ", "
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block4",
+              "type": "Question",
+              "question": {
+                "id": "question4",
+                "title": "",
+                "description": "Format possessive tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q4-answer-1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple format possessive of answer",
+                    "description": {
+                      "text": "test {possessive_string}",
+                      "placeholders": [
+                        {
+                          "placeholder": "possessive_string",
+                          "transforms": [
+                            {
+                              "transform": "format_possessive",
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer0"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "q4-answer-2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Format possessive of an answer from another transform",
+                    "description": {
+                      "text": "test {possessive_string}",
+                      "placeholders": [
+                        {
+                          "placeholder": "possessive_string",
+                          "transforms": [
+                            {
+                              "transform": "concatenate_list",
+                              "arguments": {
+                                "list_to_concatenate": {
+                                  "source": "answers",
+                                  "identifier": ["ref-answer1", "ref-answer2"]
+                                },
+                                "delimiter": " "
+                              }
+                            },
+                            {
+                              "transform": "format_possessive",
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "previous_transform"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block5",
+              "type": "Question",
+              "question": {
+                "id": "question5",
+                "title": "",
+                "description": "Format list tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q5-answer-1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple format list",
+                    "description": {
+                      "text": "{list}",
+                      "placeholders": [
+                        {
+                          "placeholder": "list",
+                          "transforms": [
+                            {
+                              "transform": "format_list",
+                              "arguments": {
+                                "list_to_format": {
+                                  "source": "answers",
+                                  "identifier": ["ref-answer1", "ref-answer2"]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block6",
+              "type": "Question",
+              "question": {
+                "id": "question6",
+                "title": "",
+                "description": "Radio option label tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q6-answer-1",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "label": "Placeholders in radio option label",
+                    "description": "",
+                    "options": [
+                      {
+                        "label": {
+                          "text": "test {simple_answer}",
+                          "placeholders": [
+                            {
+                              "placeholder": "simple_answer",
+                              "value": {
+                                "source": "answers",
+                                "identifier": "ref-answer1"
+                              }
+                            }
+                          ]
+                        },
+                        "value": "value"
+                      },
+                      {
+                        "label": "Another value",
+                        "value": "value2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block7",
+              "type": "Question",
+              "question": {
+                "id": "question7",
+                "title": "",
+                "description": "Checkbox option label tests",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q7-answer-1",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "label": "Placeholders in checkbox option label",
+                    "description": "",
+                    "options": [
+                      {
+                        "label": {
+                          "text": "test {simple_answer}",
+                          "placeholders": [
+                            {
+                              "placeholder": "simple_answer",
+                              "value": {
+                                "source": "answers",
+                                "identifier": "ref-answer1"
+                              }
+                            }
+                          ]
+                        },
+                        "value": "value"
+                      },
+                      {
+                        "label": "Another value",
+                        "value": "value2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "confirmation",
+              "type": "Confirmation",
+              "content": {
+                "title": "Confirm"
+              }
+            }
+          ]
         }
-      }, {
-        "id": "block1",
-        "type": "Question",
-        "question": {
-          "id": "question1",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer0",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": "description with no placeholders"
-          }, {
-            "id": "answer1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": {
-              "text": "test {simple_answer}",
-              "placeholders": [{
-                "placeholder": "simple_answer",
-                "value": {
-                  "source": "answers",
-                  "identifier": "ref-answer1"
-                }
-              }]
-            }
-          }, {
-            "id": "answer2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store via transform",
-            "description": {
-              "text": "test {simple_answer_with_transform}",
-              "placeholders": [{
-                "placeholder": "simple_answer_with_transform",
-                "transforms": [{
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "answers",
-                      "identifier": "ref-answer2"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "answer3",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Two values from answer store via transform",
-            "description": {
-              "text": "test {date_range}",
-              "placeholders": [{
-                "placeholder": "date_range",
-                "transforms": [{
-                  "transform": "format_date_range",
-                  "arguments": {
-                    "start_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer2"
-                    },
-                    "end_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer2"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "answer4",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Two tranforms chained together",
-            "description": {
-              "text": "test {multiple_transforms}",
-              "placeholders": [{
-                "placeholder": "multiple_transforms",
-                "transforms": [{
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
-                    }
-                  }
-                }, {
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "previous_transform"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "answer5",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "String value passed to transform",
-            "description": {
-              "text": "test {value}",
-              "placeholders": [{
-                "placeholder": "value",
-                "transforms": [{
-                  "transform": "format_date",
-                  "arguments": {
-                    "date_to_format": {
-                      "source": "answers",
-                      "identifier": "ref-answer2"
-                    },
-                    "date_format": "EEEE d MMMM"
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "answer6",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "format_date with fixed value",
-            "description": {
-              "text": "test {value}",
-              "placeholders": [{
-                "placeholder": "value",
-                "transforms": [{
-                  "transform": "format_date",
-                  "arguments": {
-                    "date_to_format": {
-                      "value": "2019-01-01"
-                    },
-                    "date_format": "EEEE d MMMM"
-                  }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block2",
-        "type": "Question",
-        "question": {
-          "id": "question2",
-          "title": "",
-          "description": "Calculate years difference tests",
-          "type": "General",
-          "answers": [{
-            "id": "q2-answer-1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple calculate years difference",
-            "description": {
-              "text": "test {simple_difference}",
-              "placeholders": [{
-                "placeholder": "simple_difference",
-                "transforms": [{
-                  "transform": "calculate_years_difference",
-                  "arguments": {
-                    "first_date": {
-                      "value": "2018-01-01"
-                    },
-                    "second_date": {
-                      "value": "2019-01-20"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "q2-answer-2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Calculate years difference with one lookup",
-            "description": {
-              "text": "test {one_lookup}",
-              "placeholders": [{
-                "placeholder": "one_lookup",
-                "transforms": [{
-                  "transform": "calculate_years_difference",
-                  "arguments": {
-                    "first_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
-                    },
-                    "second_date": {
-                      "value": "2019-01-20"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "q2-answer-3",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Calculate years difference with two lookups",
-            "description": {
-              "text": "test {two_lookups}",
-              "placeholders": [{
-                "placeholder": "two_lookups",
-                "transforms": [{
-                  "transform": "calculate_years_difference",
-                  "arguments": {
-                    "first_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
-                    },
-                    "second_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer2"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "q2-answer-4",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Calculate years difference to current date",
-            "description": {
-              "text": "test {difference_to_current_date}",
-              "placeholders": [{
-                "placeholder": "difference_to_current_date",
-                "transforms": [{
-                  "transform": "calculate_years_difference",
-                  "arguments": {
-                    "first_date": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
-                    },
-                    "second_date": {
-                      "value": "now"
-                    }
-                  }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block3",
-        "type": "Question",
-        "question": {
-          "id": "question3",
-          "title": "",
-          "description": "Concatenate list tests",
-          "type": "General",
-          "answers": [{
-            "id": "q3-answer-1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Concatenate list of answer that is a list",
-            "description": {
-              "text": "test {concatenated_list}",
-              "placeholders": [{
-                "placeholder": "concatenated_list",
-                "transforms": [{
-                  "transform": "concatenate_list",
-                  "arguments": {
-                    "list_to_concatenate": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
-                    },
-                    "delimiter": " "
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "q3-answer-2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Concatenate list of multiple answers",
-            "description": {
-              "text": "test {concatenated_list}",
-              "placeholders": [{
-                "placeholder": "concatenated_list",
-                "transforms": [{
-                  "transform": "concatenate_list",
-                  "arguments": {
-                    "list_to_concatenate": {
-                      "source": "answers",
-                      "identifier": ["ref-answer1", "ref-answer2"]
-                    },
-                    "delimiter": ", "
-                  }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block4",
-        "type": "Question",
-        "question": {
-          "id": "question4",
-          "title": "",
-          "description": "Format possessive tests",
-          "type": "General",
-          "answers": [{
-            "id": "q4-answer-1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple format possessive of answer",
-            "description": {
-              "text": "test {possessive_string}",
-              "placeholders": [{
-                "placeholder": "possessive_string",
-                "transforms": [{
-                  "transform": "format_possessive",
-                  "arguments": {
-                    "string_to_format": {
-                      "source": "answers",
-                      "identifier": "ref-answer0"
-                    }
-                  }
-                }]
-              }]
-            }
-          }, {
-            "id": "q4-answer-2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Format possessive of an answer from another transform",
-            "description": {
-              "text": "test {possessive_string}",
-              "placeholders": [{
-                "placeholder": "possessive_string",
-                "transforms": [{
-                  "transform": "concatenate_list",
-                  "arguments": {
-                    "list_to_concatenate": {
-                      "source": "answers",
-                      "identifier": ["ref-answer1", "ref-answer2"]
-                    },
-                    "delimiter": " "
-                  }
-                }, {
-                  "transform": "format_possessive",
-                  "arguments": {
-                    "string_to_format": {
-                      "source": "previous_transform"
-                    }
-                  }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block5",
-        "type": "Question",
-        "question": {
-          "id": "question5",
-          "title": "",
-          "description": "Format list tests",
-          "type": "General",
-          "answers": [{
-            "id": "q5-answer-1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple format list",
-            "description": {
-              "text": "{list}",
-              "placeholders": [{
-                "placeholder": "list",
-                "transforms": [{
-                  "transform": "format_list",
-                  "arguments": {
-                    "list_to_format": {
-                      "source": "answers",
-                      "identifier": ["ref-answer1", "ref-answer2"]
-                    }
-                  }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block6",
-        "type": "Question",
-        "question": {
-          "id": "question6",
-          "title": "",
-          "description": "Radio option label tests",
-          "type": "General",
-          "answers": [{
-            "id": "q6-answer-1",
-            "mandatory": false,
-            "type": "Radio",
-            "label": "Placeholders in radio option label",
-            "description": "",
-            "options": [{
-              "label": {
-                "text": "test {simple_answer}",
-                "placeholders": [{
-                  "placeholder": "simple_answer",
-                  "value": {
-                    "source": "answers",
-                    "identifier": "ref-answer1"
-                  }
-                }]
-              },
-              "value": "value"
-            }, {
-              "label": "Another value",
-              "value": "value2"
-            }]
-          }]
-        }
-      }, {
-        "id": "block7",
-        "type": "Question",
-        "question": {
-          "id": "question7",
-          "title": "",
-          "description": "Checkbox option label tests",
-          "type": "General",
-          "answers": [{
-            "id": "q7-answer-1",
-            "mandatory": false,
-            "type": "Checkbox",
-            "label": "Placeholders in checkbox option label",
-            "description": "",
-            "options": [{
-              "label": {
-                "text": "test {simple_answer}",
-                "placeholders": [{
-                  "placeholder": "simple_answer",
-                  "value": {
-                    "source": "answers",
-                    "identifier": "ref-answer1"
-                  }
-                }]
-              },
-              "value": "value"
-            }, {
-              "label": "Another value",
-              "value": "value2"
-            }]
-          }]
-        }
-      }, {
-        "id": "confirmation",
-        "type": "Confirmation",
-        "content": {
-          "title": "Confirm"
-        }
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

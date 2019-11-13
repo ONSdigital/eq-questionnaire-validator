@@ -48,11 +48,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "units"
-    ]
+    "required": ["id", "type", "mandatory", "units"]
   }
 }

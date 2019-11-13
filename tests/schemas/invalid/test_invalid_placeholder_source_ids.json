@@ -11,161 +11,198 @@
   "navigation": {
     "visible": false
   },
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "test_metadata",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section1",
-    "groups": [{
-      "id": "group1",
-      "title": "",
-      "blocks": [{
-        "id": "block1",
-        "type": "Question",
-        "question": {
-          "id": "question1",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
           "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer0",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": "description with no placeholders"
-          }, {
-            "id": "answer1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": {
-              "text": "test {simple_answer}",
-              "placeholders": [{
-                "placeholder": "simple_answer",
-                "value": {
-                  "source": "answers",
-                  "identifier": "invalid-answer0"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block2",
-        "type": "Question",
-        "question": {
-          "id": "question2",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": "description with no placeholders"
-          }, {
-            "id": "answer3",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": {
-              "text": "test {answer1}",
-              "placeholders": [{
-                "placeholder": "answer1",
-                "transforms": [{
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "answers",
-                      "identifier": "invalid-answer1"
+          "blocks": [
+            {
+              "id": "block1",
+              "type": "Question",
+              "question": {
+                "id": "question1",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer0",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "answer1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": {
+                      "text": "test {simple_answer}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_answer",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "invalid-answer0"
+                          }
+                        }
+                      ]
                     }
                   }
-                }, {
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "previous_transform"
+                ]
+              }
+            },
+            {
+              "id": "block2",
+              "type": "Question",
+              "question": {
+                "id": "question2",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "answer3",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "invalid-answer1"
+                                }
+                              }
+                            },
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "previous_transform"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   }
-                }]
-              }]
+                ]
+              }
+            },
+            {
+              "id": "block3",
+              "type": "Question",
+              "question": {
+                "id": "question3",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer4",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "answer5",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": {
+                      "text": "test {simple_answer}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_answer",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "answer4"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block4",
+              "type": "Question",
+              "question": {
+                "id": "question4",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer6",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Simple value from answer store",
+                    "description": {
+                      "text": "test {simple_metadata}",
+                      "placeholders": [
+                        {
+                          "placeholder": "simple_metadata",
+                          "value": {
+                            "source": "metadata",
+                            "identifier": "invalid-metadata-ref"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "confirmation",
+              "type": "Confirmation",
+              "content": {
+                "title": "Confirm"
+              }
             }
-          }]
+          ]
         }
-      }, {
-        "id": "block3",
-        "type": "Question",
-        "question": {
-          "id": "question3",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer4",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": "description with no placeholders"
-          }, {
-            "id": "answer5",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": {
-              "text": "test {simple_answer}",
-              "placeholders": [{
-                "placeholder": "simple_answer",
-                "value": {
-                  "source": "answers",
-                  "identifier": "answer4"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block4",
-        "type": "Question",
-        "question": {
-          "id": "question4",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer6",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Simple value from answer store",
-            "description": {
-              "text": "test {simple_metadata}",
-              "placeholders": [{
-                "placeholder": "simple_metadata",
-                "value": {
-                  "source": "metadata",
-                  "identifier": "invalid-metadata-ref"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "confirmation",
-        "type": "Confirmation",
-        "content": {
-          "title": "Confirm"
-        }
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

@@ -15,15 +15,10 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "string_to_format"
-        ]
+        "required": ["string_to_format"]
       }
     },
     "additionalProperties": false,
-    "required": [
-      "transform",
-      "arguments"
-    ]
+    "required": ["transform", "arguments"]
   }
 }

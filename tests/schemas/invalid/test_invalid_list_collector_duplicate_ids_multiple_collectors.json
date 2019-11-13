@@ -6,253 +6,299 @@
   "title": "Test ListCollector",
   "theme": "default",
   "description": "A questionnaire to test ListCollector",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section",
-    "groups": [{
-      "id": "group",
-      "title": "List",
-      "blocks": [{
-        "id": "list-collector",
-        "type": "ListCollector",
-        "for_list": "people",
-        "add_answer": {
-          "id": "anyone-else",
-          "value": "Yes"
-        },
-        "remove_answer": {
-          "id": "remove-confirmation",
-          "value": "Yeah"
-        },
-        "question": {
-          "id": "confirmation-question",
-          "type": "General",
-          "title": "Does anyone else live here?",
-          "answers": [{
-            "id": "anyone-else",
-            "mandatory": true,
-            "type": "Radio",
-            "options": [{
-              "label": "Yes",
-              "value": "Yes"
-            }, {
-              "label": "No",
-              "value": "No"
-            }]
-          }]
-        },
-        "add_block": {
-          "id": "add-person",
-          "type": "ListAddQuestion",
-          "question": {
-            "id": "add-question",
-            "type": "General",
-            "title": "What is the name of the person?",
-            "answers": [{
-              "id": "first-name",
-              "label": "First name",
-              "mandatory": true,
-              "type": "TextField"
-            }, {
-              "id": "last-name",
-              "label": "Last name",
-              "mandatory": true,
-              "type": "TextField"
-            }]
-          }
-        },
-        "edit_block": {
-          "id": "edit-person",
-          "type": "ListEditQuestion",
-          "question": {
-            "id": "edit-question",
-            "type": "General",
-            "title": "What is the name of the person?",
-            "answers": [{
-              "id": "first-name",
-              "label": "First name",
-              "mandatory": true,
-              "type": "TextField"
-            }, {
-              "id": "last-name",
-              "label": "Last name",
-              "mandatory": true,
-              "type": "TextField"
-            }]
-          }
-        },
-        "remove_block": {
-          "id": "remove-person",
-          "type": "ListRemoveQuestion",
-          "question": {
-            "id": "remove-question",
-            "type": "General",
-            "title": "Are you sure you want to remove this person?",
-            "answers": [{
-              "id": "remove-confirmation",
-              "mandatory": true,
-              "type": "Radio",
-              "options": [{
-                "label": "Yeah",
-                "value": "Yeah"
-              }, {
-                "label": "No",
-                "value": "No"
-              }]
-            }]
-          }
-        },
-        "summary": {
-          "title": "Household members",
-          "add_link_text": "Add another person to this household",
-          "empty_list_text": "There are no people",
-          "item_title": {
-            "text": "{person_name}",
-            "placeholders": [{
-              "placeholder": "person_name",
-              "transforms": [{
-                "arguments": {
-                  "delimiter": " ",
-                  "list_to_concatenate": {
-                    "identifier": [
-                      "first-name",
-                      "last-name"
-                    ],
-                    "source": "answers"
-                  }
-                },
-                "transform": "concatenate_list"
-              }]
-            }]
-          }
-        }
-      }, {
-        "id": "another-list-collector",
-        "type": "ListCollector",
-        "for_list": "people",
-        "add_answer": {
-          "id": "another-anyone-else",
-          "value": "Yes"
-        },
-        "remove_answer": {
-          "id": "another-remove-confirmation",
-          "value": "Yes"
-        },
-        "question": {
-          "id": "another-confirmation-question",
-          "type": "General",
-          "title": "Does anyone else live here?",
-          "answers": [{
-            "id": "another-anyone-else",
-            "mandatory": true,
-            "type": "Radio",
-            "options": [{
-              "label": "Yes",
-              "value": "Yes"
-            }, {
-              "label": "No",
-              "value": "No"
-            }]
-          }]
-        },
-        "add_block": {
-          "id": "add-person",
-          "type": "ListAddQuestion",
-          "question": {
-            "id": "another-add-question",
-            "type": "General",
-            "title": "What is the name of the person?",
-            "answers": [{
-              "id": "first-name",
-              "label": "First name",
-              "mandatory": true,
-              "type": "TextField"
-            }, {
-              "id": "last-name",
-              "label": "Last name",
-              "mandatory": true,
-              "type": "TextField"
-            }]
-          }
-        },
-        "edit_block": {
-          "id": "edit-person",
-          "type": "ListEditQuestion",
-          "question": {
-            "id": "another-edit-question",
-            "type": "General",
-            "title": "What is the name of the person?",
-            "answers": [{
-              "id": "first-name",
-              "label": "First name",
-              "mandatory": true,
-              "type": "TextField"
-            }, {
-              "id": "last-name",
-              "label": "Last name",
-              "mandatory": true,
-              "type": "TextField"
-            }]
-          }
-        },
-        "remove_block": {
-          "id": "remove-person",
-          "type": "ListRemoveQuestion",
-          "question": {
-            "id": "another-remove-question",
-            "type": "General",
-            "title": "Are you sure you want to remove this person?",
-            "answers": [{
-              "id": "another-remove-confirmation",
-              "mandatory": true,
-              "type": "Radio",
-              "options": [{
-                "label": "Yes",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "List",
+          "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "add_answer": {
+                "id": "anyone-else",
                 "value": "Yes"
-              }, {
-                "label": "No",
-                "value": "No"
-              }]
-            }]
-          }
-        },
-        "summary": {
-          "title": "Household members",
-          "add_link_text": "Add another person to this household",
-          "empty_list_text": "There are no people",
-          "item_title": {
-            "text": "{person_name}",
-            "placeholders": [{
-              "placeholder": "person_name",
-              "transforms": [{
-                "arguments": {
-                  "delimiter": " ",
-                  "list_to_concatenate": {
-                    "identifier": [
-                      "first-name",
-                      "last-name"
-                    ],
-                    "source": "answers"
+              },
+              "remove_answer": {
+                "id": "remove-confirmation",
+                "value": "Yeah"
+              },
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
                   }
-                },
-                "transform": "concatenate_list"
-              }]
-            }]
-          }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yeah",
+                          "value": "Yeah"
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "add_link_text": "Add another person to this household",
+                "empty_list_text": "There are no people",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": {
+                              "identifier": ["first-name", "last-name"],
+                              "source": "answers"
+                            }
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "another-list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "add_answer": {
+                "id": "another-anyone-else",
+                "value": "Yes"
+              },
+              "remove_answer": {
+                "id": "another-remove-confirmation",
+                "value": "Yes"
+              },
+              "question": {
+                "id": "another-confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "another-anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "another-add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "another-edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "another-remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "another-remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "add_link_text": "Add another person to this household",
+                "empty_list_text": "There are no people",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": {
+                              "identifier": ["first-name", "last-name"],
+                              "source": "answers"
+                            }
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
         }
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

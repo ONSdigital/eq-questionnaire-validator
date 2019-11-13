@@ -2,74 +2,90 @@
   "data_version": "0.0.3",
   "description": "A test schema for different date formats",
   "legal_basis": "StatisticsOfTradeAct",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "ref_p_end_date",
-    "type": "date"
-  }, {
-    "name": "ref_p_start_date",
-    "type": "date"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }],
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "ref_p_end_date",
+      "type": "date"
+    },
+    {
+      "name": "ref_p_start_date",
+      "type": "date"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    }
+  ],
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "sections": [{
-    "groups": [{
-      "blocks": [{
-        "id": "date-range-block",
-        "question": {
-          "answers": [{
-            "id": "date-range-from",
-            "label": "Period from",
-            "mandatory": true,
-            "minimum": {
-              "meta": "ref_p_start_date",
-              "offset_by": {
-                "years": -1
-              }
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "date-range-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "date-range-from",
+                    "label": "Period from",
+                    "mandatory": true,
+                    "minimum": {
+                      "meta": "ref_p_start_date",
+                      "offset_by": {
+                        "years": -1
+                      }
+                    },
+                    "type": "YearDate"
+                  },
+                  {
+                    "id": "date-range-to",
+                    "label": "Period to",
+                    "mandatory": true,
+                    "maximum": {
+                      "meta": "ref_p_end_date",
+                      "offset_by": {
+                        "years": 2
+                      }
+                    },
+                    "type": "YearDate"
+                  }
+                ],
+                "id": "date-range-question",
+                "period_limits": {
+                  "maximum": {
+                    "months": 2
+                  },
+                  "minimum": {
+                    "days": 1
+                  }
+                },
+                "title": "Enter Date Range",
+                "type": "DateRange"
+              },
+              "type": "Question"
             },
-            "type": "YearDate"
-          }, {
-            "id": "date-range-to",
-            "label": "Period to",
-            "mandatory": true,
-            "maximum": {
-              "meta": "ref_p_end_date",
-              "offset_by": {
-                "years": 2
-              }
-            },
-            "type": "YearDate"
-          }],
-          "id": "date-range-question",
-          "period_limits": {
-            "maximum": {
-              "months": 2
-            },
-            "minimum": {
-              "days": 1
+            {
+              "id": "summary",
+              "type": "Summary"
             }
-          },
-          "title": "Enter Date Range",
-          "type": "DateRange"
-        },
-        "type": "Question"
-      }, {
-        "id": "summary",
-        "type": "Summary"
-      }],
-      "id": "dates",
-      "title": "Date Range Validation"
-    }],
-    "id": "default-section"
-  }],
+          ],
+          "id": "dates",
+          "title": "Date Range Validation"
+        }
+      ],
+      "id": "default-section"
+    }
+  ],
   "survey_id": "023",
   "theme": "default",
   "title": "Date formats"

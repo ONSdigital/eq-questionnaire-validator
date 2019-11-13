@@ -33,10 +33,7 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "when",
-      "content"
-    ]
+    "required": ["when", "content"]
   },
   "question_variants": {
     "type": "array",
@@ -57,9 +54,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "when",
-      "question"
-    ]
+    "required": ["when", "question"]
   }
 }

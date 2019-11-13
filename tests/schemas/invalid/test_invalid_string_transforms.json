@@ -6,212 +6,259 @@
   "data_version": "0.0.3",
   "survey_id": "3",
   "title": "Invalid String Transforms",
-  "sections": [{
-    "id": "section1",
-    "groups": [{
-      "id": "group1",
-      "title": "",
-      "blocks": [{
-        "id": "block0",
-        "type": "Question",
-        "question": {
-          "id": "question0",
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
           "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "ref-answer0",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "An answer which transforms may reference",
-            "description": "description with no placeholders"
-          }, {
-            "id": "ref-answer1",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "A second answer which transforms may reference",
-            "description": ""
-          }, {
-            "id": "ref-answer2",
-            "mandatory": true,
-            "type": "TextField",
-            "label": "A third answer which transforms may reference",
-            "description": ""
-          }]
-        }
-      }, {
-        "id": "block1",
-        "type": "Question",
-        "question": {
-          "id": "question1",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer1",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Placeholder in ‘text’ doesn’t have a definition",
-            "description": {
-              "text": "test {answer1}",
-              "placeholders": [{
-                "placeholder": "answer2",
-                "value": {
-                  "source": "answers",
-                  "identifier": "ref-answer0"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block2",
-        "type": "Question",
-        "question": {
-          "id": "question2",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer2",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
-            "description": {
-              "text": "test {answer1} and {answer2}",
-              "placeholders": [{
-                "placeholder": "answer1",
-                "value": {
-                  "source": "answers",
-                  "identifier": "ref-answer1"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block3",
-        "type": "Question",
-        "question": {
-          "id": "question3",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer3",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
-            "description": {
-              "text": "test {answer1}",
-              "placeholders": [{
-                "placeholder": "answer1",
-                "value": {
-                  "source": "answers",
-                  "identifier": "ref-answer1"
-                }
-              }, {
-                "placeholder": "answer2",
-                "value": {
-                  "source": "answers",
-                  "identifier": "ref-answer2"
-                }
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block4",
-        "type": "Question",
-        "question": {
-          "id": "question4",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer4",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Can’t reference ‘previous_transform’ in first transform",
-            "description": {
-              "text": "test {answer1}",
-              "placeholders": [{
-                "placeholder": "answer1",
-                "transforms": [{
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "previous_transform"
+          "blocks": [
+            {
+              "id": "block0",
+              "type": "Question",
+              "question": {
+                "id": "question0",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "ref-answer0",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "An answer which transforms may reference",
+                    "description": "description with no placeholders"
+                  },
+                  {
+                    "id": "ref-answer1",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A second answer which transforms may reference",
+                    "description": ""
+                  },
+                  {
+                    "id": "ref-answer2",
+                    "mandatory": true,
+                    "type": "TextField",
+                    "label": "A third answer which transforms may reference",
+                    "description": ""
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block1",
+              "type": "Question",
+              "question": {
+                "id": "question1",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer1",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Placeholder in ‘text’ doesn’t have a definition",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer2",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer0"
+                          }
+                        }
+                      ]
                     }
                   }
-                }]
-              }]
-            }
-          }]
-        }
-      }, {
-        "id": "block5",
-        "type": "Question",
-        "question": {
-          "id": "question5",
-          "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer5",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Chained transforms must reference previous_transform",
-            "description": {
-              "text": "test {answer1}",
-              "placeholders": [{
-                "placeholder": "answer1",
-                "transforms": [{
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
+                ]
+              }
+            },
+            {
+              "id": "block2",
+              "type": "Question",
+              "question": {
+                "id": "question2",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer2",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
+                    "description": {
+                      "text": "test {answer1} and {answer2}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer1"
+                          }
+                        }
+                      ]
                     }
                   }
-                }, {
-                  "transform": "format_number",
-                  "arguments": {
-                    "number": {
-                      "source": "answers",
-                      "identifier": "ref-answer1"
+                ]
+              }
+            },
+            {
+              "id": "block3",
+              "type": "Question",
+              "question": {
+                "id": "question3",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer3",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Number of placeholders in ‘text’ doesn’t match number of definitions",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer1"
+                          }
+                        },
+                        {
+                          "placeholder": "answer2",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "ref-answer2"
+                          }
+                        }
+                      ]
                     }
                   }
-                }]
-              }]
+                ]
+              }
+            },
+            {
+              "id": "block4",
+              "type": "Question",
+              "question": {
+                "id": "question4",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer4",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Can’t reference ‘previous_transform’ in first transform",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "previous_transform"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "block5",
+              "type": "Question",
+              "question": {
+                "id": "question5",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer5",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Chained transforms must reference previous_transform",
+                    "description": {
+                      "text": "test {answer1}",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer1",
+                          "transforms": [
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                }
+                              }
+                            },
+                            {
+                              "transform": "format_number",
+                              "arguments": {
+                                "number": {
+                                  "source": "answers",
+                                  "identifier": "ref-answer1"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "confirmation",
+              "type": "Confirmation",
+              "content": {
+                "title": "Confirm"
+              }
             }
-          }]
+          ]
         }
-      }, {
-        "id": "confirmation",
-        "type": "Confirmation",
-        "content": {
-          "title": "Confirm"
-        }
-      }]
-    }]
-  }],
+      ]
+    }
+  ],
   "theme": "default",
   "legal_basis": "StatisticsOfTradeAct",
   "navigation": {
     "visible": false
   },
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "test_metadata",
-    "type": "string"
-  }]
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ]
 }

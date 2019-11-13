@@ -6,84 +6,108 @@
   "title": "Mutually Exclusive",
   "theme": "default",
   "description": "A questionnaire to demo mutually exclusive answers with single checkbox override",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-      "id": "mutually-exclusive-group",
-      "title": "Mandatory Exclusive With Single Checkbox Override",
-      "blocks": [{
-        "type": "Question",
-        "id": "mutually-exclusive-checkbox-block",
-        "question": {
-          "id": "mutually-exclusive-checkbox-question",
-          "type": "MutuallyExclusive",
-          "title": "What is your nationality?",
-          "mandatory": true,
-          "answers": [{
-            "id": "checkbox-answer",
-            "label": "Select an answer",
-            "type": "Checkbox",
-            "mandatory": false,
-            "options": [{
-              "label": "British",
-              "value": "British"
-            }, {
-              "label": "Irish",
-              "value": "Irish"
-            }, {
-              "label": "Other",
-              "description": "Choose any other topping",
-              "value": "Other",
-              "detail_answer": {
-                "mandatory": false,
-                "id": "checkbox-child-other-answer",
-                "label": "Please specify other",
-                "type": "TextField"
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "mutually-exclusive-group",
+          "title": "Mandatory Exclusive With Single Checkbox Override",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-checkbox-block",
+              "question": {
+                "id": "mutually-exclusive-checkbox-question",
+                "type": "MutuallyExclusive",
+                "title": "What is your nationality?",
+                "mandatory": true,
+                "answers": [
+                  {
+                    "id": "checkbox-answer",
+                    "label": "Select an answer",
+                    "type": "Checkbox",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "British",
+                        "value": "British"
+                      },
+                      {
+                        "label": "Irish",
+                        "value": "Irish"
+                      },
+                      {
+                        "label": "Other",
+                        "description": "Choose any other topping",
+                        "value": "Other",
+                        "detail_answer": {
+                          "mandatory": false,
+                          "id": "checkbox-child-other-answer",
+                          "label": "Please specify other",
+                          "type": "TextField"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "checkbox-exclusive-answer",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "options": [
+                      {
+                        "label": "I prefer not to say",
+                        "value": "I prefer not to say"
+                      }
+                    ]
+                  }
+                ]
               }
-            }]
-          }, {
-            "id": "checkbox-exclusive-answer",
-            "mandatory": false,
-            "type": "Checkbox",
-            "options": [{
-              "label": "I prefer not to say",
-              "value": "I prefer not to say"
-            }]
-          }]
+            },
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-date-block",
+              "question": {
+                "id": "mutually-exclusive-date-question",
+                "type": "MutuallyExclusive",
+                "title": "When did you leave your last paid job?",
+                "mandatory": false,
+                "answers": [
+                  {
+                    "id": "mutually-exclusive-date-answer-1",
+                    "label": "Enter a date",
+                    "mandatory": true,
+                    "type": "Date"
+                  },
+                  {
+                    "id": "mutually-exclusive-date-answer-2",
+                    "mandatory": false,
+                    "type": "Date"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ]
         }
-      }, {
-        "type": "Question",
-        "id": "mutually-exclusive-date-block",
-        "question": {
-          "id": "mutually-exclusive-date-question",
-          "type": "MutuallyExclusive",
-          "title": "When did you leave your last paid job?",
-          "mandatory": false,
-          "answers": [{
-            "id": "mutually-exclusive-date-answer-1",
-            "label": "Enter a date",
-            "mandatory": true,
-            "type": "Date"
-          }, {
-            "id": "mutually-exclusive-date-answer-2",
-            "mandatory": false,
-            "type": "Date"
-          }]
-        }
-      }, {
-        "id": "summary",
-        "type": "Summary"
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

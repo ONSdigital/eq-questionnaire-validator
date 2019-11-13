@@ -5,9 +5,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "RedirectToListAddQuestion"
-      ]
+      "enum": ["RedirectToListAddQuestion"]
     },
     "params": {
       "type": "object",
@@ -20,15 +18,9 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "block_id",
-        "list_name"
-      ]
+      "required": ["block_id", "list_name"]
     }
   },
   "additionalProperties": false,
-  "required": [
-    "type",
-    "params"
-  ]
+  "required": ["type", "params"]
 }

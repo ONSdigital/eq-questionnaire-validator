@@ -7,87 +7,114 @@
   "title": "Test Question Variants",
   "theme": "default",
   "description": "A questionnaire to test question variants and variant choices",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section",
-    "groups": [{
-      "id": "group",
-      "title": "Variants",
-      "blocks": [{
-        "type": "Question",
-        "id": "block-1",
-        "question": {
-          "id": "question-1",
-          "type": "General",
-          "title": "What is your age?",
-          "answers": [{
-            "id": "answer-1",
-            "label": "Your age?",
-            "mandatory": false,
-            "type": "Number"
-          }]
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Variants",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-1",
+              "question": {
+                "id": "question-1",
+                "type": "General",
+                "title": "What is your age?",
+                "answers": [
+                  {
+                    "id": "answer-1",
+                    "label": "Your age?",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "block-2",
+              "question_variants": [
+                {
+                  "question": {
+                    "id": "question-2",
+                    "type": "General",
+                    "title": "What is your age?",
+                    "answers": [
+                      {
+                        "id": "answer-2",
+                        "label": "Your age?",
+                        "mandatory": false,
+                        "type": "NotANumber"
+                      },
+                      {
+                        "id": "answer-3",
+                        "label": "Your age?",
+                        "mandatory": false,
+                        "type": "Number"
+                      }
+                    ]
+                  },
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "greater than",
+                      "value": "16"
+                    }
+                  ]
+                },
+                {
+                  "question": {
+                    "id": "question-2",
+                    "type": "NotGeneral",
+                    "title": "What is your age?",
+                    "answers": [
+                      {
+                        "id": "answer-2",
+                        "label": "Your age?",
+                        "mandatory": false,
+                        "type": "Number"
+                      },
+                      {
+                        "id": "answer-3",
+                        "label": "Your age?",
+                        "mandatory": false,
+                        "type": "Number"
+                      }
+                    ]
+                  },
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "less than or equal to",
+                      "value": "16"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
         }
-      }, {
-        "type": "Question",
-        "id": "block-2",
-        "question_variants": [{
-          "question": {
-            "id": "question-2",
-            "type": "General",
-            "title": "What is your age?",
-            "answers": [{
-              "id": "answer-2",
-              "label": "Your age?",
-              "mandatory": false,
-              "type": "NotANumber"
-            }, {
-              "id": "answer-3",
-              "label": "Your age?",
-              "mandatory": false,
-              "type": "Number"
-            }]
-          },
-          "when": [{
-            "id": "answer-1",
-            "condition": "greater than",
-            "value": "16"
-          }]
-        }, {
-          "question": {
-            "id": "question-2",
-            "type": "NotGeneral",
-            "title": "What is your age?",
-            "answers": [{
-              "id": "answer-2",
-              "label": "Your age?",
-              "mandatory": false,
-              "type": "Number"
-            }, {
-              "id": "answer-3",
-              "label": "Your age?",
-              "mandatory": false,
-              "type": "Number"
-            }]
-          },
-          "when": [{
-            "id": "answer-1",
-            "condition": "less than or equal to",
-            "value": "16"
-          }]
-        }]
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

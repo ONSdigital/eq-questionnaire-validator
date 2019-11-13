@@ -18,15 +18,10 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "start_date"
-        ]
+        "required": ["start_date"]
       }
     },
     "additionalProperties": false,
-    "required": [
-      "transform",
-      "arguments"
-    ]
+    "required": ["transform", "arguments"]
   }
 }

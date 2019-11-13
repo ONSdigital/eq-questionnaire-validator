@@ -16,10 +16,7 @@
     "minItems": 1,
     "items": {
       "type": "object",
-      "required": [
-        "title",
-        "contents"
-      ],
+      "required": ["title", "contents"],
       "properties": {
         "title": {
           "type": "string"
@@ -37,20 +34,15 @@
     "minItems": 1,
     "items": {
       "type": "object",
-      "anyOf": [{
-          "required": [
-            "title"
-          ]
+      "anyOf": [
+        {
+          "required": ["title"]
         },
         {
-          "required": [
-            "description"
-          ]
+          "required": ["description"]
         },
         {
-          "required": [
-            "list"
-          ]
+          "required": ["list"]
         }
       ],
       "properties": {
@@ -84,9 +76,7 @@
       },
       "additionalProperties": false
     },
-    "required": [
-      "when"
-    ]
+    "required": ["when"]
   },
   "messages": {
     "type": "object",
@@ -166,7 +156,8 @@
       }
     },
     "additionalProperties": false,
-    "anyOf": [{
+    "anyOf": [
+      {
         "required": ["days"]
       },
       {
@@ -198,7 +189,8 @@
       }
     },
     "additionalProperties": false,
-    "anyOf": [{
+    "anyOf": [
+      {
         "required": ["months"]
       },
       {
@@ -237,24 +229,19 @@
               "$ref": "when_rule/definitions.json#/when"
             }
           },
-          "oneOf": [{
-              "required": [
-                "block"
-              ]
+          "oneOf": [
+            {
+              "required": ["block"]
             },
             {
-              "required": [
-                "group"
-              ]
+              "required": ["group"]
             }
           ],
           "additionalProperties": false
         }
       },
       "additionalProperties": false,
-      "required": [
-        "goto"
-      ]
+      "required": ["goto"]
     }
   }
 }

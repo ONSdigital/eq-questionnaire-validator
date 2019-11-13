@@ -8,41 +8,54 @@
   "navigation": {
     "visible": true
   },
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "test_metadata",
-    "type": "string"
-  }],
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ],
   "schema_version": "0.0.1",
   "survey_id": "lms ",
   "theme": "default",
   "title": "Labour Market Survey (Alpha)",
-  "sections": [{
-    "id": "section3",
-    "title": "",
-    "groups": [{
-      "id": "confirmation-group",
-      "title": "confirmation",
-      "blocks": [{
-        "type": "Confirmation",
-        "id": "confirmation",
-        "content": {
-          "contents": [{
-            "list": [
-              "You will not be able to access or change your answers on submitting the questionnaire",
-              "If you wish to review your answers please select the relevant completed sections"
-            ]
-          }]
+  "sections": [
+    {
+      "id": "section3",
+      "title": "",
+      "groups": [
+        {
+          "id": "confirmation-group",
+          "title": "confirmation",
+          "blocks": [
+            {
+              "type": "Confirmation",
+              "id": "confirmation",
+              "content": {
+                "contents": [
+                  {
+                    "list": [
+                      "You will not be able to access or change your answers on submitting the questionnaire",
+                      "If you wish to review your answers please select the relevant completed sections"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
         }
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

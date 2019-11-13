@@ -20,12 +20,11 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "Checkbox"
-        ]
+        "enum": ["Checkbox"]
       },
       "options": {
-        "allOf": [{
+        "allOf": [
+          {
             "$ref": "definitions.json#/options"
           },
           {
@@ -48,11 +47,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "options"
-    ]
+    "required": ["id", "type", "mandatory", "options"]
   }
 }

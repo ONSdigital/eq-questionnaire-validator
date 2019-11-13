@@ -20,7 +20,8 @@
           "$ref": "../common_definitions.json#/q_code"
         },
         "detail_answer": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "./text_field.json#/answer"
             },
             {
@@ -34,16 +35,15 @@
         },
         "action": {
           "type": "object",
-          "oneOf": [{
-            "$ref": "../answer_actions/redirect_to_list_add_question.json"
-          }]
+          "oneOf": [
+            {
+              "$ref": "../answer_actions/redirect_to_list_add_question.json"
+            }
+          ]
         }
       },
       "additionalProperties": false,
-      "required": [
-        "label",
-        "value"
-      ]
+      "required": ["label", "value"]
     }
   },
   "max_value": {
@@ -63,15 +63,12 @@
       }
     },
     "additionalProperties": false,
-    "oneOf": [{
-        "required": [
-          "value"
-        ]
+    "oneOf": [
+      {
+        "required": ["value"]
       },
       {
-        "required": [
-          "answer_id"
-        ]
+        "required": ["answer_id"]
       }
     ]
   },
@@ -92,15 +89,12 @@
       }
     },
     "additionalProperties": false,
-    "oneOf": [{
-        "required": [
-          "value"
-        ]
+    "oneOf": [
+      {
+        "required": ["value"]
       },
       {
-        "required": [
-          "answer_id"
-        ]
+        "required": ["answer_id"]
       }
     ]
   },

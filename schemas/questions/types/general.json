@@ -38,7 +38,8 @@
         "type": "array",
         "minItems": 1,
         "items": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "../../answers/checkbox.json#/answer"
             },
             {
@@ -85,11 +86,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "answers",
-      "title"
-    ]
+    "required": ["id", "type", "answers", "title"]
   }
 }

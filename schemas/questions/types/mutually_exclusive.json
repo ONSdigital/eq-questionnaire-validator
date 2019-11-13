@@ -42,7 +42,8 @@
         "minItems": 2,
         "maxItems": 2,
         "items": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "../../answers/checkbox.json#/answer"
             },
             {
@@ -83,12 +84,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "answers",
-      "title"
-    ]
+    "required": ["id", "type", "mandatory", "answers", "title"]
   }
 }

@@ -50,7 +50,8 @@
               }
             },
             "additionalProperties": false,
-            "anyOf": [{
+            "anyOf": [
+              {
                 "required": ["days"]
               },
               {
@@ -76,7 +77,8 @@
               }
             },
             "additionalProperties": false,
-            "anyOf": [{
+            "anyOf": [
+              {
                 "required": ["days"]
               },
               {
@@ -89,7 +91,8 @@
           }
         },
         "additionalProperties": false,
-        "anyOf": [{
+        "anyOf": [
+          {
             "required": ["minimum"]
           },
           {
@@ -102,7 +105,8 @@
         "minItems": 2,
         "maxItems": 2,
         "items": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "../../answers/date.json#/answer"
             },
             {
@@ -116,11 +120,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "answers",
-      "title"
-    ]
+    "required": ["id", "type", "answers", "title"]
   }
 }

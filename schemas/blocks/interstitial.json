@@ -27,19 +27,13 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type"
-    ],
-    "oneOf": [{
-        "required": [
-          "content"
-        ]
+    "required": ["id", "type"],
+    "oneOf": [
+      {
+        "required": ["content"]
       },
       {
-        "required": [
-          "content_variants"
-        ]
+        "required": ["content_variants"]
       }
     ]
   }

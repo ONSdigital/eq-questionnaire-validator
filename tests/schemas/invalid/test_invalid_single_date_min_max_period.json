@@ -2,60 +2,74 @@
   "data_version": "0.0.3",
   "description": "A test schema for different date formats",
   "legal_basis": "StatisticsOfTradeAct",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }],
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    }
+  ],
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "sections": [{
-    "groups": [{
-      "blocks": [{
-        "id": "date-range-block",
-        "question": {
-          "answers": [{
-            "id": "date-range-from",
-            "label": "Period from",
-            "mandatory": true,
-            "maximum": {
-              "offset_by": {
-                "days": 2
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "date-range-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "date-range-from",
+                    "label": "Period from",
+                    "mandatory": true,
+                    "maximum": {
+                      "offset_by": {
+                        "days": 2
+                      },
+                      "value": "2017-06-11"
+                    },
+                    "minimum": {
+                      "offset_by": {
+                        "days": -19
+                      },
+                      "value": "now"
+                    },
+                    "type": "Date"
+                  },
+                  {
+                    "id": "date-range-to",
+                    "label": "Period to",
+                    "mandatory": true,
+                    "type": "Date"
+                  }
+                ],
+                "id": "date-range-question",
+                "title": "Enter Date Range",
+                "type": "DateRange"
               },
-              "value": "2017-06-11"
+              "type": "Question"
             },
-            "minimum": {
-              "offset_by": {
-                "days": -19
-              },
-              "value": "now"
-            },
-            "type": "Date"
-          }, {
-            "id": "date-range-to",
-            "label": "Period to",
-            "mandatory": true,
-            "type": "Date"
-          }],
-          "id": "date-range-question",
-          "title": "Enter Date Range",
-          "type": "DateRange"
-        },
-        "type": "Question"
-      }, {
-        "id": "summary",
-        "type": "Summary"
-      }],
-      "id": "dates",
-      "title": "Date Range Validation"
-    }],
-    "id": "default-section"
-  }],
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ],
+          "id": "dates",
+          "title": "Date Range Validation"
+        }
+      ],
+      "id": "default-section"
+    }
+  ],
   "survey_id": "023",
   "theme": "default",
   "title": "Date formats"

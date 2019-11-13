@@ -24,7 +24,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-diff": "^1.0.0",
-    "gulp-jsbeautifier": "^3.0.0",
+    "gulp-prettier": "^2.3.0",
     "gulp-util": "^3.0.8"
   }
 }

@@ -62,20 +62,15 @@
           }
         },
         "additionalProperties": false,
-        "oneOf": [{
-            "required": [
-              "value"
-            ]
+        "oneOf": [
+          {
+            "required": ["value"]
           },
           {
-            "required": [
-              "answer_id"
-            ]
+            "required": ["answer_id"]
           },
           {
-            "required": [
-              "meta"
-            ]
+            "required": ["meta"]
           }
         ]
       },
@@ -100,29 +95,20 @@
           }
         },
         "additionalProperties": false,
-        "oneOf": [{
-            "required": [
-              "value"
-            ]
+        "oneOf": [
+          {
+            "required": ["value"]
           },
           {
-            "required": [
-              "answer_id"
-            ]
+            "required": ["answer_id"]
           },
           {
-            "required": [
-              "meta"
-            ]
+            "required": ["meta"]
           }
         ]
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory"
-    ]
+    "required": ["id", "type", "mandatory"]
   }
 }

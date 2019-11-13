@@ -2,74 +2,98 @@
   "data_version": "0.0.3",
   "description": "A survey that tests grouped and calculated answers against a total",
   "legal_basis": "StatisticsOfTradeAct",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }],
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    }
+  ],
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "sections": [{
-    "groups": [{
-      "blocks": [{
-        "id": "total-block",
-        "question": {
-          "answers": [{
-            "decimal_places": 2,
-            "id": "total-answer",
-            "label": "Total",
-            "mandatory": true,
-            "max_value": {
-              "value": 100
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "total-block",
+              "question": {
+                "answers": [
+                  {
+                    "decimal_places": 2,
+                    "id": "total-answer",
+                    "label": "Total",
+                    "mandatory": true,
+                    "max_value": {
+                      "value": 100
+                    },
+                    "type": "Number"
+                  }
+                ],
+                "id": "total-question",
+                "title": "Total",
+                "type": "General"
+              },
+              "type": "Question"
             },
-            "type": "Number"
-          }],
-          "id": "total-question",
-          "title": "Total",
-          "type": "General"
-        },
-        "type": "Question"
-      }, {
-        "id": "breakdown-block",
-        "question": {
-          "answers": [{
-            "decimal_places": 2,
-            "id": "breakdown-1",
-            "label": "Breakdown 1",
-            "mandatory": false,
-            "type": "Number"
-          }, {
-            "decimal_places": 2,
-            "id": "breakdown-2",
-            "label": "Breakdown 2",
-            "mandatory": false,
-            "type": "Number"
-          }],
-          "calculations": [{
-            "answer_id": "total-answer",
-            "answers_to_calculate": ["breakdown-1", "breakdown-2", "breakdown-3", "breakdown-4"],
-            "calculation_type": "sum",
-            "conditions": ["equals"]
-          }],
-          "id": "breakdown-question",
-          "title": "Breakdown",
-          "type": "Calculated"
-        },
-        "type": "Question"
-      }, {
-        "id": "summary",
-        "type": "Summary"
-      }],
-      "id": "group",
-      "title": "Validate sum against total"
-    }],
-    "id": "default-section"
-  }],
+            {
+              "id": "breakdown-block",
+              "question": {
+                "answers": [
+                  {
+                    "decimal_places": 2,
+                    "id": "breakdown-1",
+                    "label": "Breakdown 1",
+                    "mandatory": false,
+                    "type": "Number"
+                  },
+                  {
+                    "decimal_places": 2,
+                    "id": "breakdown-2",
+                    "label": "Breakdown 2",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ],
+                "calculations": [
+                  {
+                    "answer_id": "total-answer",
+                    "answers_to_calculate": [
+                      "breakdown-1",
+                      "breakdown-2",
+                      "breakdown-3",
+                      "breakdown-4"
+                    ],
+                    "calculation_type": "sum",
+                    "conditions": ["equals"]
+                  }
+                ],
+                "id": "breakdown-question",
+                "title": "Breakdown",
+                "type": "Calculated"
+              },
+              "type": "Question"
+            },
+            {
+              "id": "summary",
+              "type": "Summary"
+            }
+          ],
+          "id": "group",
+          "title": "Validate sum against total"
+        }
+      ],
+      "id": "default-section"
+    }
+  ],
   "survey_id": "0",
   "theme": "default",
   "title": "Grouped validation against total test survey"

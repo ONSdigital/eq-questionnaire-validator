@@ -8,10 +8,7 @@
         "description": "The id of an answer to reference"
       },
       "value": {
-        "type": [
-          "string",
-          "integer"
-        ],
+        "type": ["string", "integer"],
         "description": "The value of the answer which should be matched"
       }
     },
@@ -35,9 +32,7 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "item_title", "title"
-    ]
+    "required": ["item_title", "title"]
   },
   "block": {
     "type": "object",
@@ -95,15 +90,12 @@
       "remove_block",
       "summary"
     ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

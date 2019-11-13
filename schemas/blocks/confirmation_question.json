@@ -27,20 +27,13 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "routing_rules"
-    ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "required": ["id", "type", "routing_rules"],
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

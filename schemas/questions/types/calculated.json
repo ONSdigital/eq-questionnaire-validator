@@ -26,9 +26,7 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "Calculated"
-        ]
+        "enum": ["Calculated"]
       },
       "show_on_section_summary": {
         "type": "boolean"
@@ -40,9 +38,7 @@
           "properties": {
             "calculation_type": {
               "type": "string",
-              "enum": [
-                "sum"
-              ]
+              "enum": ["sum"]
             },
             "answer_id": {
               "type": "string",
@@ -66,7 +62,8 @@
               "maxItems": 2,
               "uniqueItems": true,
               "items": {
-                "anyOf": [{
+                "anyOf": [
+                  {
                     "required": "less than"
                   },
                   {
@@ -80,29 +77,23 @@
               "description": "The conditions wanted to used for grouped validations, 2 items adds an 'OR' condition"
             }
           },
-          "oneOf": [{
-              "required": [
-                "answer_id"
-              ]
+          "oneOf": [
+            {
+              "required": ["answer_id"]
             },
             {
-              "required": [
-                "value"
-              ]
+              "required": ["value"]
             }
           ],
-          "required": [
-            "calculation_type",
-            "answers_to_calculate",
-            "conditions"
-          ]
+          "required": ["calculation_type", "answers_to_calculate", "conditions"]
         }
       },
       "answers": {
         "type": "array",
         "minItems": 1,
         "items": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "../../answers/currency.json#/answer"
             },
             {
@@ -118,13 +109,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "id",
-        "type",
-        "calculations",
-        "answers",
-        "title"
-      ]
+      "required": ["id", "type", "calculations", "answers", "title"]
     }
   }
 }

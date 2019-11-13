@@ -7,67 +7,89 @@
   "title": "Test Content Variants",
   "theme": "default",
   "description": "A questionnaire to test content variants and variant choices",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section",
-    "groups": [{
-      "id": "group",
-      "title": "Variants",
-      "blocks": [{
-        "type": "Question",
-        "id": "block",
-        "question": {
-          "id": "question",
-          "type": "General",
-          "title": "What is your age?",
-          "answers": [{
-            "id": "answer-1",
-            "label": "Your age?",
-            "mandatory": false,
-            "type": "Number"
-          }]
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Variants",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block",
+              "question": {
+                "id": "question",
+                "type": "General",
+                "title": "What is your age?",
+                "answers": [
+                  {
+                    "id": "answer-1",
+                    "label": "Your age?",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "block-1",
+              "content": {
+                "title": "The next section is ..."
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "block-2",
+              "content_variants": [
+                {
+                  "content": {
+                    "title": "What is your age?"
+                  },
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "greater than",
+                      "value": "16"
+                    }
+                  ]
+                },
+                {
+                  "content": {
+                    "title": "What is your age?"
+                  },
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "less than or equal to",
+                      "value": "16"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
         }
-      }, {
-        "type": "Interstitial",
-        "id": "block-1",
-        "content": {
-          "title": "The next section is ..."
-        }
-      }, {
-        "type": "Interstitial",
-        "id": "block-2",
-        "content_variants": [{
-          "content": {
-            "title": "What is your age?"
-          },
-          "when": [{
-            "id": "answer-1",
-            "condition": "greater than",
-            "value": "16"
-          }]
-        }, {
-          "content": {
-            "title": "What is your age?"
-          },
-          "when": [{
-            "id": "answer-1",
-            "condition": "less than or equal to",
-            "value": "16"
-          }]
-        }]
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

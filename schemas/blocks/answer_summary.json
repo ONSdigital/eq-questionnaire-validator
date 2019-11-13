@@ -11,9 +11,7 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "AnswerSummary"
-        ]
+        "enum": ["AnswerSummary"]
       },
       "label": {
         "type": "string"
@@ -40,12 +38,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "title",
-      "label",
-      "answer_ids"
-    ]
+    "required": ["id", "type", "title", "label", "answer_ids"]
   }
 }

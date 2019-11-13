@@ -7,7 +7,8 @@
   "theme": "default",
   "legal_basis": "StatisticsOfTradeAct",
   "description": "A test survey for routing based comparison with a location",
-  "metadata": [{
+  "metadata": [
+    {
       "name": "user_id",
       "type": "string"
     },
@@ -20,160 +21,189 @@
       "type": "string"
     }
   ],
-  "sections": [{
+  "sections": [
+    {
       "id": "section",
-      "groups": [{
-        "id": "group",
-        "title": "List",
-        "blocks": [{
-          "id": "list-collector",
-          "type": "ListCollector",
-          "for_list": "people",
-          "add_answer": {
-            "id": "anyone-else",
-            "value": "Yes"
-          },
-          "remove_answer": {
-            "id": "remove-confirmation",
-            "value": "Yeah"
-          },
-          "question": {
-            "id": "confirmation-question",
-            "type": "General",
-            "title": "Does anyone else live here?",
-            "answers": [{
-              "id": "anyone-else",
-              "mandatory": true,
-              "type": "Radio",
-              "options": [{
-                "label": "Yes",
+      "groups": [
+        {
+          "id": "group",
+          "title": "List",
+          "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "add_answer": {
+                "id": "anyone-else",
                 "value": "Yes"
-              }, {
-                "label": "No",
-                "value": "No"
-              }]
-            }]
-          },
-          "add_block": {
-            "id": "add-person",
-            "type": "ListAddQuestion",
-            "question": {
-              "id": "add-question",
-              "type": "General",
-              "title": "What is the name of the person?",
-              "answers": [{
-                "id": "first-name",
-                "label": "First name",
-                "mandatory": true,
-                "type": "TextField"
-              }, {
-                "id": "last-name",
-                "label": "Last name",
-                "mandatory": true,
-                "type": "TextField"
-              }]
-            }
-          },
-          "edit_block": {
-            "id": "edit-person",
-            "type": "ListEditQuestion",
-            "question": {
-              "id": "edit-question",
-              "type": "General",
-              "title": "What is the name of the person?",
-              "answers": [{
-                "id": "first-name",
-                "label": "First name",
-                "mandatory": true,
-                "type": "TextField"
-              }, {
-                "id": "last-name",
-                "label": "Last name",
-                "mandatory": true,
-                "type": "TextField"
-              }]
-            }
-          },
-          "remove_block": {
-            "id": "remove-person",
-            "type": "ListRemoveQuestion",
-            "question": {
-              "id": "remove-question",
-              "type": "General",
-              "title": "Are you sure you want to remove this person?",
-              "answers": [{
+              },
+              "remove_answer": {
                 "id": "remove-confirmation",
-                "mandatory": true,
-                "type": "Radio",
-                "options": [{
-                  "label": "Yeah",
-                  "value": "Yeah"
-                }, {
-                  "label": "No",
-                  "value": "No"
-                }]
-              }]
-            }
-          },
-          "summary": {
-            "title": "Household members",
-            "add_link_text": "Add another person to this household",
-            "empty_list_text": "There are no people",
-            "item_title": {
-              "text": "{person_name}",
-              "placeholders": [{
-                "placeholder": "person_name",
-                "transforms": [{
-                  "arguments": {
-                    "delimiter": " ",
-                    "list_to_concatenate": {
-                      "identifier": [
-                        "first-name",
-                        "last-name"
-                      ],
-                      "source": "answers"
+                "value": "Yeah"
+              },
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
                     }
-                  },
-                  "transform": "concatenate_list"
-                }]
-              }]
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yeah",
+                          "value": "Yeah"
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "add_link_text": "Add another person to this household",
+                "empty_list_text": "There are no people",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": {
+                              "identifier": ["first-name", "last-name"],
+                              "source": "answers"
+                            }
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
             }
-          }
-        }]
-      }]
+          ]
+        }
+      ]
     },
     {
       "id": "default-section",
-      "groups": [{
+      "groups": [
+        {
           "id": "route-group",
           "title": "",
-          "blocks": [{
+          "blocks": [
+            {
               "type": "Question",
               "id": "route-comparison-1",
               "question": {
-                "answers": [{
-                  "id": "route-comparison-1-answer",
-                  "label": "Number",
-                  "mandatory": true,
-                  "type": "Number"
-                }],
+                "answers": [
+                  {
+                    "id": "route-comparison-1-answer",
+                    "label": "Number",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ],
                 "description": "",
                 "id": "route-comparison-1-question",
                 "title": "Enter a number",
                 "type": "General"
               },
-              "routing_rules": [{
+              "routing_rules": [
+                {
                   "goto": {
                     "block": "route-comparison-3",
-                    "when": [{
-                      "list": "people",
-                      "id_selector": "primary_person",
-                      "condition": "equals",
-                      "comparison": {
-                        "id": "from_list_item_id",
-                        "source": "location"
+                    "when": [
+                      {
+                        "list": "people",
+                        "id_selector": "primary_person",
+                        "condition": "equals",
+                        "comparison": {
+                          "id": "from_list_item_id",
+                          "source": "location"
+                        }
                       }
-                    }]
+                    ]
                   }
                 },
                 {
@@ -188,9 +218,11 @@
               "id": "route-comparison-2",
               "content": {
                 "title": "You are not the primary person",
-                "contents": [{
-                  "description": "This page should be skipped if you are identified as the primary person in the household"
-                }]
+                "contents": [
+                  {
+                    "description": "This page should be skipped if you are identified as the primary person in the household"
+                  }
+                ]
               }
             },
             {
@@ -198,9 +230,11 @@
               "id": "route-comparison-3",
               "content": {
                 "title": "This will be shown to all household members",
-                "contents": [{
-                  "description": "This page should never be skipped"
-                }]
+                "contents": [
+                  {
+                    "description": "This page should never be skipped"
+                  }
+                ]
               }
             }
           ]
@@ -208,10 +242,12 @@
         {
           "id": "summary-group",
           "title": "",
-          "blocks": [{
-            "type": "Summary",
-            "id": "summary"
-          }]
+          "blocks": [
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
         }
       ]
     }

@@ -14,9 +14,7 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "Dropdown"
-        ]
+        "enum": ["Dropdown"]
       },
       "mandatory": {
         "type": "boolean"
@@ -28,7 +26,8 @@
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "options": {
-        "allOf": [{
+        "allOf": [
+          {
             "$ref": "definitions.json#/options"
           },
           {
@@ -48,12 +47,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "label",
-      "options"
-    ]
+    "required": ["id", "type", "mandatory", "label", "options"]
   }
 }

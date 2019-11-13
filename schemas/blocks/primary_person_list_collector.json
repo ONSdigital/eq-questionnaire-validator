@@ -8,10 +8,7 @@
         "description": "The id of an answer to reference"
       },
       "value": {
-        "type": [
-          "string",
-          "integer"
-        ],
+        "type": ["string", "integer"],
         "description": "The value of the answer which should be matched"
       }
     },
@@ -55,15 +52,12 @@
       "add_or_edit_answer",
       "add_or_edit_block"
     ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

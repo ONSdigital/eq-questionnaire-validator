@@ -11,7 +11,8 @@
         "type": "object",
         "properties": {
           "first_date": {
-            "oneOf": [{
+            "oneOf": [
+              {
                 "$ref": "../definitions.json#/value_sources"
               },
               {
@@ -20,7 +21,8 @@
             ]
           },
           "second_date": {
-            "oneOf": [{
+            "oneOf": [
+              {
                 "$ref": "../definitions.json#/value_sources"
               },
               {
@@ -30,16 +32,10 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "first_date",
-          "second_date"
-        ]
+        "required": ["first_date", "second_date"]
       }
     },
     "additionalProperties": false,
-    "required": [
-      "transform",
-      "arguments"
-    ]
+    "required": ["transform", "arguments"]
   }
 }

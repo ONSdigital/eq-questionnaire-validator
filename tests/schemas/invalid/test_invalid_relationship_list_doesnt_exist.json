@@ -7,7 +7,8 @@
   "theme": "default",
   "description": "A questionnaire to test capturing of relationships.",
   "messages": {},
-  "metadata": [{
+  "metadata": [
+    {
       "name": "user_id",
       "type": "string"
     },
@@ -20,271 +21,309 @@
       "type": "string"
     }
   ],
-  "sections": [{
-    "id": "section",
-    "groups": [{
-      "id": "group",
-      "title": "Relationships",
-      "blocks": [{
-          "type": "RelationshipCollector",
-          "id": "relationships",
-          "title": "This will iterate over the people list, capturing the one way relationships.",
-          "for_list": "not-a-list",
-          "question": {
-            "id": "relationship-question",
-            "type": "General",
-            "title": {
-              "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
-              "placeholders": [{
-                  "placeholder": "first_person_name",
-                  "transforms": [{
-                    "transform": "concatenate_list",
-                    "arguments": {
-                      "list_to_concatenate": {
-                        "source": "answers",
-                        "identifier": ["first-name", "last-name"],
-                        "list_item_selector": {
-                          "source": "location",
-                          "id": "list_item_id"
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Relationships",
+          "blocks": [
+            {
+              "type": "RelationshipCollector",
+              "id": "relationships",
+              "title": "This will iterate over the people list, capturing the one way relationships.",
+              "for_list": "not-a-list",
+              "question": {
+                "id": "relationship-question",
+                "type": "General",
+                "title": {
+                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+                  "placeholders": [
+                    {
+                      "placeholder": "first_person_name",
+                      "transforms": [
+                        {
+                          "transform": "concatenate_list",
+                          "arguments": {
+                            "list_to_concatenate": {
+                              "source": "answers",
+                              "identifier": ["first-name", "last-name"],
+                              "list_item_selector": {
+                                "source": "location",
+                                "id": "list_item_id"
+                              }
+                            },
+                            "delimiter": " "
+                          }
                         }
-                      },
-                      "delimiter": " "
+                      ]
+                    },
+                    {
+                      "placeholder": "second_person_name",
+                      "transforms": [
+                        {
+                          "transform": "concatenate_list",
+                          "arguments": {
+                            "list_to_concatenate": {
+                              "source": "answers",
+                              "identifier": ["first-name", "last-name"],
+                              "list_item_selector": {
+                                "source": "location",
+                                "id": "to_list_item_id"
+                              }
+                            },
+                            "delimiter": " "
+                          }
+                        }
+                      ]
                     }
-                  }]
+                  ]
                 },
-                {
-                  "placeholder": "second_person_name",
-                  "transforms": [{
-                    "transform": "concatenate_list",
-                    "arguments": {
-                      "list_to_concatenate": {
-                        "source": "answers",
-                        "identifier": ["first-name", "last-name"],
-                        "list_item_selector": {
-                          "source": "location",
-                          "id": "to_list_item_id"
+                "answers": [
+                  {
+                    "id": "relationship-answer",
+                    "mandatory": true,
+                    "type": "Relationship",
+                    "playback": {
+                      "text": "{second_person_name} is {first_person_name} <em>…</em>",
+                      "placeholders": [
+                        {
+                          "placeholder": "first_person_name",
+                          "transforms": [
+                            {
+                              "transform": "concatenate_list",
+                              "arguments": {
+                                "list_to_concatenate": {
+                                  "source": "answers",
+                                  "identifier": ["first-name", "last-name"],
+                                  "list_item_selector": {
+                                    "source": "location",
+                                    "id": "list_item_id"
+                                  }
+                                },
+                                "delimiter": " "
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "placeholder": "second_person_name",
+                          "transforms": [
+                            {
+                              "transform": "concatenate_list",
+                              "arguments": {
+                                "list_to_concatenate": {
+                                  "source": "answers",
+                                  "identifier": ["first-name", "last-name"],
+                                  "list_item_selector": {
+                                    "source": "location",
+                                    "id": "to_list_item_id"
+                                  }
+                                },
+                                "delimiter": " "
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "options": [
+                      {
+                        "value": "Husband or Wife",
+                        "label": "husband or Wife",
+                        "title": {
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "to_list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "playback": {
+                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "to_list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
                         }
                       },
-                      "delimiter": " "
-                    }
-                  }]
-                }
-              ]
-            },
-            "answers": [{
-              "id": "relationship-answer",
-              "mandatory": true,
-              "type": "Relationship",
-              "playback": {
-                "text": "{second_person_name} is {first_person_name} <em>…</em>",
-                "placeholders": [{
-                    "placeholder": "first_person_name",
-                    "transforms": [{
-                      "transform": "concatenate_list",
-                      "arguments": {
-                        "list_to_concatenate": {
-                          "source": "answers",
-                          "identifier": ["first-name", "last-name"],
-                          "list_item_selector": {
-                            "source": "location",
-                            "id": "list_item_id"
-                          }
+                      {
+                        "value": "Legally Registered Civil Partner",
+                        "label": "Legally Registered Civil Partner",
+                        "title": {
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "to_list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
                         },
-                        "delimiter": " "
+                        "playback": {
+                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": {
+                                      "source": "answers",
+                                      "identifier": ["first-name", "last-name"],
+                                      "list_item_selector": {
+                                        "source": "location",
+                                        "id": "to_list_item_id"
+                                      }
+                                    },
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
                       }
-                    }]
-                  },
-                  {
-                    "placeholder": "second_person_name",
-                    "transforms": [{
-                      "transform": "concatenate_list",
-                      "arguments": {
-                        "list_to_concatenate": {
-                          "source": "answers",
-                          "identifier": ["first-name", "last-name"],
-                          "list_item_selector": {
-                            "source": "location",
-                            "id": "to_list_item_id"
-                          }
-                        },
-                        "delimiter": " "
-                      }
-                    }]
+                    ]
                   }
                 ]
-              },
-              "options": [{
-                  "value": "Husband or Wife",
-                  "label": "husband or Wife",
-                  "title": {
-                    "text": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
-                    "placeholders": [{
-                        "placeholder": "first_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      },
-                      {
-                        "placeholder": "second_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "to_list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      }
-                    ]
-                  },
-                  "playback": {
-                    "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
-                    "placeholders": [{
-                        "placeholder": "first_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      },
-                      {
-                        "placeholder": "second_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "to_list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      }
-                    ]
-                  }
-                },
-                {
-                  "value": "Legally Registered Civil Partner",
-                  "label": "Legally Registered Civil Partner",
-                  "title": {
-                    "text": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
-                    "placeholders": [{
-                        "placeholder": "first_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      },
-                      {
-                        "placeholder": "second_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "to_list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      }
-                    ]
-                  },
-                  "playback": {
-                    "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
-                    "placeholders": [{
-                        "placeholder": "first_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      },
-                      {
-                        "placeholder": "second_person_name",
-                        "transforms": [{
-                          "transform": "concatenate_list",
-                          "arguments": {
-                            "list_to_concatenate": {
-                              "source": "answers",
-                              "identifier": ["first-name", "last-name"],
-                              "list_item_selector": {
-                                "source": "location",
-                                "id": "to_list_item_id"
-                              }
-                            },
-                            "delimiter": " "
-                          }
-                        }]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }]
-          }
-        },
-        {
-          "type": "Confirmation",
-          "id": "confirmation",
-          "content": {
-            "title": "Thank you for your answers, do you wish to submit"
-          }
+              }
+            },
+            {
+              "type": "Confirmation",
+              "id": "confirmation",
+              "content": {
+                "title": "Thank you for your answers, do you wish to submit"
+              }
+            }
+          ]
         }
       ]
-    }]
-  }]
+    }
+  ]
 }

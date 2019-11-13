@@ -11,58 +11,76 @@
   "navigation": {
     "visible": false
   },
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }, {
-    "name": "test_metadata",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "section3",
-    "title": "",
-    "groups": [{
-      "id": "group3",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section3",
       "title": "",
-      "blocks": [{
-        "id": "block4",
-        "type": "Question",
-        "question": {
-          "id": "question4",
+      "groups": [
+        {
+          "id": "group3",
           "title": "",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "id": "answer6",
-            "mandatory": false,
-            "type": "TextField",
-            "label": "Text",
-            "description": ""
-          }]
+          "blocks": [
+            {
+              "id": "block4",
+              "type": "Question",
+              "question": {
+                "id": "question4",
+                "title": "",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer6",
+                    "mandatory": false,
+                    "type": "TextField",
+                    "label": "Text",
+                    "description": ""
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "confirmation-group",
+          "title": "Confirmation Group",
+          "blocks": [
+            {
+              "type": "Confirmation",
+              "id": "confirmation",
+              "content": {
+                "title": "Confirmation",
+                "contents": [
+                  {
+                    "list": [
+                      "You will not be able to access or change your answers on submitting the questionnaire",
+                      "If you wish to review your answers please select the relevant completed sections"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
         }
-      }]
-    }, {
-      "id": "confirmation-group",
-      "title": "Confirmation Group",
-      "blocks": [{
-        "type": "Confirmation",
-        "id": "confirmation",
-        "content": {
-          "title": "Confirmation",
-          "contents": [{
-            "list": [
-              "You will not be able to access or change your answers on submitting the questionnaire",
-              "If you wish to review your answers please select the relevant completed sections"
-            ]
-          }]
-        }
-      }]
-    }]
-  }]
+      ]
+    }
+  ]
 }

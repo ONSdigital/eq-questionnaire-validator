@@ -6,122 +6,142 @@
   "title": "Total field test survey",
   "theme": "default",
   "description": "A survey that tests the totalling of percentage input fields",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-      "blocks": [{
-        "type": "Question",
-        "id": "block",
-        "question": {
-          "answers": [{
-            "description": "",
-            "id": "percentage-1",
-            "label": "Percentage 1",
-            "mandatory": false,
-            "q_code": "0810",
-            "type": "Percentage",
-            "max_value": {
-              "value": 100
-            }
-          }, {
-            "description": "",
-            "id": "percentage-2",
-            "label": "Percentage 2",
-            "mandatory": false,
-            "q_code": "0820",
-            "type": "Percentage",
-            "max_value": {
-              "value": 100
-            }
-          }, {
-            "calculated": true,
-            "description": "The total percentages should be 100%",
-            "id": "total-percentage",
-            "label": "Total",
-            "mandatory": false,
-            "q_code": "10002",
-            "type": "Percentage",
-            "max_value": {
-              "value": 100
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block",
+              "question": {
+                "answers": [
+                  {
+                    "description": "",
+                    "id": "percentage-1",
+                    "label": "Percentage 1",
+                    "mandatory": false,
+                    "q_code": "0810",
+                    "type": "Percentage",
+                    "max_value": {
+                      "value": 100
+                    }
+                  },
+                  {
+                    "description": "",
+                    "id": "percentage-2",
+                    "label": "Percentage 2",
+                    "mandatory": false,
+                    "q_code": "0820",
+                    "type": "Percentage",
+                    "max_value": {
+                      "value": 100
+                    }
+                  },
+                  {
+                    "calculated": true,
+                    "description": "The total percentages should be 100%",
+                    "id": "total-percentage",
+                    "label": "Total",
+                    "mandatory": false,
+                    "q_code": "10002",
+                    "type": "Percentage",
+                    "max_value": {
+                      "value": 100
+                    },
+                    "validation": {
+                      "messages": {
+                        "NUMBER_TOO_SMALL": "The total percentages should equal %(min)s",
+                        "NUMBER_TOO_LARGE": "The total percentages should equal %(max)s"
+                      }
+                    }
+                  }
+                ],
+                "description": "",
+                "id": "question",
+                "title": "",
+                "type": "General"
+              },
+              "routing_rules": []
             },
-            "validation": {
-              "messages": {
-                "NUMBER_TOO_SMALL": "The total percentages should equal %(min)s",
-                "NUMBER_TOO_LARGE": "The total percentages should equal %(max)s"
-              }
-            }
-          }],
-          "description": "",
-          "id": "question",
-          "title": "",
-          "type": "General"
-        },
-        "routing_rules": []
-      }, {
-        "type": "Question",
-        "id": "block2",
-        "question": {
-          "answers": [{
-            "description": "",
-            "id": "percentage-1-1",
-            "label": "Percentage 1.1",
-            "mandatory": false,
-            "q_code": "08101",
-            "type": "Percentage",
-            "max_value": {
-              "value": 100
-            }
-          }, {
-            "description": "",
-            "id": "percentage-2-1",
-            "label": "Percentage 2.1",
-            "mandatory": false,
-            "q_code": "08201",
-            "type": "Percentage",
-            "max_value": {
-              "value": 100
-            }
-          }, {
-            "calculated": true,
-            "description": "The total percentages should be 100%",
-            "id": "total-percentage-2",
-            "label": "Total",
-            "mandatory": false,
-            "q_code": "100021",
-            "type": "Percentage",
-            "decimal_places": 1,
-            "max_value": {
-              "value": 100
+            {
+              "type": "Question",
+              "id": "block2",
+              "question": {
+                "answers": [
+                  {
+                    "description": "",
+                    "id": "percentage-1-1",
+                    "label": "Percentage 1.1",
+                    "mandatory": false,
+                    "q_code": "08101",
+                    "type": "Percentage",
+                    "max_value": {
+                      "value": 100
+                    }
+                  },
+                  {
+                    "description": "",
+                    "id": "percentage-2-1",
+                    "label": "Percentage 2.1",
+                    "mandatory": false,
+                    "q_code": "08201",
+                    "type": "Percentage",
+                    "max_value": {
+                      "value": 100
+                    }
+                  },
+                  {
+                    "calculated": true,
+                    "description": "The total percentages should be 100%",
+                    "id": "total-percentage-2",
+                    "label": "Total",
+                    "mandatory": false,
+                    "q_code": "100021",
+                    "type": "Percentage",
+                    "decimal_places": 1,
+                    "max_value": {
+                      "value": 100
+                    },
+                    "validation": {
+                      "messages": {
+                        "NUMBER_TOO_SMALL": "The total percentages should equal %(min)s",
+                        "NUMBER_TOO_LARGE": "The total percentages should equal %(max)s"
+                      }
+                    }
+                  }
+                ],
+                "description": "",
+                "id": "question2",
+                "title": "",
+                "type": "General"
+              },
+              "routing_rules": []
             },
-            "validation": {
-              "messages": {
-                "NUMBER_TOO_SMALL": "The total percentages should equal %(min)s",
-                "NUMBER_TOO_LARGE": "The total percentages should equal %(max)s"
-              }
+            {
+              "type": "Summary",
+              "id": "summary"
             }
-          }],
-          "description": "",
-          "id": "question2",
-          "title": "",
-          "type": "General"
-        },
-        "routing_rules": []
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }],
-      "id": "group",
-      "title": ""
-    }]
-  }]
+          ],
+          "id": "group",
+          "title": ""
+        }
+      ]
+    }
+  ]
 }

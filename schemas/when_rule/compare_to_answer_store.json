@@ -7,15 +7,9 @@
       "$ref": "definitions.json#/answer_identifier"
     },
     "condition": {
-      "enum": [
-        "set",
-        "not set"
-      ]
+      "enum": ["set", "not set"]
     }
   },
-  "required": [
-    "id",
-    "condition"
-  ],
+  "required": ["id", "condition"],
   "additionalProperties": false
 }

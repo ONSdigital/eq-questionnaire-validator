@@ -33,20 +33,13 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "for_list",
-      "type"
-    ],
-    "oneOf": [{
-        "required": [
-          "question"
-        ]
+    "required": ["id", "for_list", "type"],
+    "oneOf": [
+      {
+        "required": ["question"]
       },
       {
-        "required": [
-          "question_variants"
-        ]
+        "required": ["question_variants"]
       }
     ]
   }

@@ -31,37 +31,28 @@
       "$ref": "definitions.json#/date_comparison_value"
     }
   },
-  "required": [
-    "condition"
-  ],
-  "allOf": [{
-      "oneOf": [{
-          "required": [
-            "id"
-          ]
+  "required": ["condition"],
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": ["id"]
         },
         {
-          "required": [
-            "meta"
-          ]
+          "required": ["meta"]
         }
       ]
     },
     {
-      "oneOf": [{
-          "required": [
-            "value"
-          ]
+      "oneOf": [
+        {
+          "required": ["value"]
         },
         {
-          "required": [
-            "comparison"
-          ]
+          "required": ["comparison"]
         },
         {
-          "required": [
-            "date_comparison"
-          ]
+          "required": ["date_comparison"]
         }
       ]
     }

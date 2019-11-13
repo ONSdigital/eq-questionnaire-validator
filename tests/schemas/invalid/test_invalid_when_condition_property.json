@@ -6,187 +6,248 @@
   "title": "Other input fields",
   "theme": "default",
   "description": "A questionnaire to demo checkbox field combined contains routing",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-      "blocks": [{
-        "type": "Question",
-        "id": "country-checkbox",
-        "question": {
-          "id": "country-checkbox-question",
-          "title": "Have you visited any of the following countries?",
-          "type": "General",
-          "answers": [{
-            "id": "country-checkbox-answer",
-            "label": "",
-            "mandatory": false,
-            "type": "Checkbox",
-            "options": [{
-              "label": "India",
-              "value": "India"
-            }, {
-              "label": "Azerbaijan",
-              "value": "Azerbaijan"
-            }, {
-              "label": "Liechtenstein",
-              "value": "Liechtenstein"
-            }, {
-              "label": "Malta",
-              "value": "Malta"
-            }]
-          }, {
-            "id": "country-checkbox-answer2",
-            "label": "",
-            "mandatory": false,
-            "type": "Radio",
-            "options": [{
-              "label": "India",
-              "value": "India"
-            }, {
-              "label": "Azerbaijan",
-              "value": "Azerbaijan"
-            }, {
-              "label": "Liechtenstein",
-              "value": "Liechtenstein"
-            }, {
-              "label": "Malta",
-              "value": "Malta"
-            }]
-          }]
-        },
-        "routing_rules": [{
-          "goto": {
-            "block": "country-interstitial-all",
-            "when": [{
-              "id": "country-checkbox-answer",
-              "condition": "contains all",
-              "value": "Malta"
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "country-interstitial-any",
-            "when": [{
-              "id": "country-checkbox-answer",
-              "condition": "contains any",
-              "values": []
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "country-interstitial-any",
-            "when": [{
-              "id": "country-checkbox-answer",
-              "condition": "contains any",
-              "comparison": {
-                "id": "country-checkbox-answer2",
-                "source": "answers"
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "country-checkbox",
+              "question": {
+                "id": "country-checkbox-question",
+                "title": "Have you visited any of the following countries?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "country-checkbox-answer",
+                    "label": "",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "options": [
+                      {
+                        "label": "India",
+                        "value": "India"
+                      },
+                      {
+                        "label": "Azerbaijan",
+                        "value": "Azerbaijan"
+                      },
+                      {
+                        "label": "Liechtenstein",
+                        "value": "Liechtenstein"
+                      },
+                      {
+                        "label": "Malta",
+                        "value": "Malta"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "country-checkbox-answer2",
+                    "label": "",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "India",
+                        "value": "India"
+                      },
+                      {
+                        "label": "Azerbaijan",
+                        "value": "Azerbaijan"
+                      },
+                      {
+                        "label": "Liechtenstein",
+                        "value": "Liechtenstein"
+                      },
+                      {
+                        "label": "Malta",
+                        "value": "Malta"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "block": "country-interstitial-all",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains all",
+                        "value": "Malta"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains any",
+                        "values": []
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains any",
+                        "comparison": {
+                          "id": "country-checkbox-answer2",
+                          "source": "answers"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "equals any",
+                        "values": ["India"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "summary"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Question",
+              "id": "conditional-routing-block",
+              "question": {
+                "id": "conditional-routing-question",
+                "title": "Do you drink coffee?",
+                "description": "",
+                "type": "General",
+                "answers": [
+                  {
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "yes"
+                      },
+                      {
+                        "label": "Sometimes",
+                        "value": "sometimes"
+                      },
+                      {
+                        "label": "No, I prefer tea",
+                        "value": "no"
+                      },
+                      {
+                        "label": "I don’t like coffee",
+                        "value": "I dont like coffee"
+                      },
+                      {
+                        "label": "No, I don’t drink any hot drinks",
+                        "value": "no hot drinks"
+                      }
+                    ],
+                    "q_code": "1",
+                    "id": "conditional-routing-answer",
+                    "label": "Which conditional question should we jump to?",
+                    "mandatory": true,
+                    "type": "Radio"
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "block": "country-interstitial-all",
+                    "when": [
+                      {
+                        "id": "conditional-routing-answer",
+                        "condition": "equals any",
+                        "value": "yes"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "conditional-routing-answer",
+                        "condition": "not equals any",
+                        "value": "sometimes"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "summary"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "country-interstitial-any",
+              "type": "Interstitial",
+              "content": {
+                "title": "Any",
+                "contents": [
+                  {
+                    "description": "You chose India or Azerbaijan."
+                  }
+                ]
               }
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "country-interstitial-any",
-            "when": [{
-              "id": "country-checkbox-answer",
-              "condition": "equals any",
-              "values": ["India"]
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "summary"
-          }
-        }]
-      }, {
-        "type": "Question",
-        "id": "conditional-routing-block",
-        "question": {
-          "id": "conditional-routing-question",
-          "title": "Do you drink coffee?",
-          "description": "",
-          "type": "General",
-          "answers": [{
-            "options": [{
-              "label": "Yes",
-              "value": "yes"
-            }, {
-              "label": "Sometimes",
-              "value": "sometimes"
-            }, {
-              "label": "No, I prefer tea",
-              "value": "no"
-            }, {
-              "label": "I don’t like coffee",
-              "value": "I dont like coffee"
-            }, {
-              "label": "No, I don’t drink any hot drinks",
-              "value": "no hot drinks"
-            }],
-            "q_code": "1",
-            "id": "conditional-routing-answer",
-            "label": "Which conditional question should we jump to?",
-            "mandatory": true,
-            "type": "Radio"
-          }]
-        },
-        "routing_rules": [{
-          "goto": {
-            "block": "country-interstitial-all",
-            "when": [{
-              "id": "conditional-routing-answer",
-              "condition": "equals any",
-              "value": "yes"
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "country-interstitial-any",
-            "when": [{
-              "id": "conditional-routing-answer",
-              "condition": "not equals any",
-              "value": "sometimes"
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "summary"
-          }
-        }]
-      }, {
-        "id": "country-interstitial-any",
-        "type": "Interstitial",
-        "content": {
-          "title": "Any",
-          "contents": [{
-            "description": "You chose India or Azerbaijan."
-          }]
+            },
+            {
+              "id": "country-interstitial-all",
+              "type": "Interstitial",
+              "content": {
+                "title": "All",
+                "contents": [
+                  {
+                    "description": "You chose India, Azerbaijan and Liechtenstein."
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "checkboxes",
+          "title": ""
         }
-      }, {
-        "id": "country-interstitial-all",
-        "type": "Interstitial",
-        "content": {
-          "title": "All",
-          "contents": [{
-            "description": "You chose India, Azerbaijan and Liechtenstein."
-          }]
-        }
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }],
-      "id": "checkboxes",
-      "title": ""
-    }]
-  }]
+      ]
+    }
+  ]
 }

@@ -85,13 +85,6 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "mandatory",
-      "unit",
-      "unit_length",
-      "label"
-    ]
+    "required": ["id", "type", "mandatory", "unit", "unit_length", "label"]
   }
 }

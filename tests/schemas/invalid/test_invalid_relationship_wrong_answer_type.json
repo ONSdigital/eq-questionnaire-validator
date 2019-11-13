@@ -7,7 +7,8 @@
   "theme": "default",
   "description": "A questionnaire to test capturing of relationships.",
   "messages": {},
-  "metadata": [{
+  "metadata": [
+    {
       "name": "user_id",
       "type": "string"
     },
@@ -20,196 +21,217 @@
       "type": "string"
     }
   ],
-  "sections": [{
-    "id": "section",
-    "groups": [{
-      "id": "group",
-      "title": "Relationships",
-      "blocks": [{
-          "id": "list-collector",
-          "type": "ListCollector",
-          "for_list": "people",
-          "add_answer": {
-            "id": "anyone-else",
-            "value": "Yes"
-          },
-          "remove_answer": {
-            "id": "remove-confirmation",
-            "value": "Yeah"
-          },
-          "question": {
-            "id": "confirmation-question",
-            "type": "General",
-            "title": "Does anyone else live here?",
-            "answers": [{
-              "id": "anyone-else",
-              "mandatory": true,
-              "type": "Radio",
-              "options": [{
-                  "label": "Yes",
-                  "value": "Yes"
-                },
-                {
-                  "label": "No",
-                  "value": "No"
-                }
-              ]
-            }]
-          },
-          "add_block": {
-            "id": "add-person",
-            "type": "ListAddQuestion",
-            "question": {
-              "id": "add-question",
-              "type": "General",
-              "title": "What is the name of the person?",
-              "answers": [{
-                  "id": "first-name",
-                  "label": "First name",
-                  "mandatory": true,
-                  "type": "TextField"
-                },
-                {
-                  "id": "last-name",
-                  "label": "Last name",
-                  "mandatory": true,
-                  "type": "TextField"
-                }
-              ]
-            }
-          },
-          "edit_block": {
-            "id": "edit-person",
-            "type": "ListEditQuestion",
-            "question": {
-              "id": "edit-question",
-              "type": "General",
-              "title": "What is the name of the person?",
-              "answers": [{
-                  "id": "first-name",
-                  "label": "First name",
-                  "mandatory": true,
-                  "type": "TextField"
-                },
-                {
-                  "id": "last-name",
-                  "label": "Last name",
-                  "mandatory": true,
-                  "type": "TextField"
-                }
-              ]
-            }
-          },
-          "remove_block": {
-            "id": "remove-person",
-            "type": "ListRemoveQuestion",
-            "question": {
-              "id": "remove-question",
-              "type": "General",
-              "title": "Are you sure you want to remove this person?",
-              "answers": [{
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Relationships",
+          "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "add_answer": {
+                "id": "anyone-else",
+                "value": "Yes"
+              },
+              "remove_answer": {
                 "id": "remove-confirmation",
-                "mandatory": true,
-                "type": "Radio",
-                "options": [{
-                    "label": "Yeah",
-                    "value": "Yeah"
-                  },
+                "value": "Yeah"
+              },
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
                   {
-                    "label": "No",
-                    "value": "No"
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
                   }
                 ]
-              }]
-            }
-          },
-          "summary": {
-            "title": "Household members",
-            "add_link_text": "Add another person to this household",
-            "empty_list_text": "There are no people",
-            "item_title": {
-              "text": "{person_name}",
-              "placeholders": [{
-                "placeholder": "person_name",
-                "transforms": [{
-                  "arguments": {
-                    "delimiter": " ",
-                    "list_to_concatenate": {
-                      "identifier": [
-                        "first-name",
-                        "last-name"
-                      ],
-                      "source": "answers"
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
                     }
-                  },
-                  "transform": "concatenate_list"
-                }]
-              }]
-            }
-          }
-        },
-        {
-          "type": "RelationshipCollector",
-          "id": "relationships",
-          "title": "This will iterate over the people list, capturing the one way relationships.",
-          "for_list": "people",
-          "question": {
-            "id": "relationship-question",
-            "type": "General",
-            "title": {
-              "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
-              "placeholders": [{
-                  "placeholder": "first_person_name",
-                  "transforms": [{
-                    "transform": "concatenate_list",
-                    "arguments": {
-                      "list_to_concatenate": {
-                        "source": "answers",
-                        "identifier": ["first-name", "last-name"],
-                        "list_item_selector": {
-                          "source": "location",
-                          "id": "list_item_id"
-                        }
-                      },
-                      "delimiter": " "
-                    }
-                  }]
-                },
-                {
-                  "placeholder": "second_person_name",
-                  "transforms": [{
-                    "transform": "concatenate_list",
-                    "arguments": {
-                      "list_to_concatenate": {
-                        "source": "answers",
-                        "identifier": ["first-name", "last-name"],
-                        "list_item_selector": {
-                          "source": "location",
-                          "id": "to_list_item_id"
-                        }
-                      },
-                      "delimiter": " "
-                    }
-                  }]
+                  ]
                 }
-              ]
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yeah",
+                          "value": "Yeah"
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "add_link_text": "Add another person to this household",
+                "empty_list_text": "There are no people",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": {
+                              "identifier": ["first-name", "last-name"],
+                              "source": "answers"
+                            }
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
             },
-            "answers": [{
-              "id": "answer-1",
-              "label": "Your age?",
-              "mandatory": false,
-              "type": "Number"
-            }]
-          }
-        },
-        {
-          "type": "Confirmation",
-          "id": "confirmation",
-          "content": {
-            "title": "Thank you for your answers, do you wish to submit"
-          }
+            {
+              "type": "RelationshipCollector",
+              "id": "relationships",
+              "title": "This will iterate over the people list, capturing the one way relationships.",
+              "for_list": "people",
+              "question": {
+                "id": "relationship-question",
+                "type": "General",
+                "title": {
+                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+                  "placeholders": [
+                    {
+                      "placeholder": "first_person_name",
+                      "transforms": [
+                        {
+                          "transform": "concatenate_list",
+                          "arguments": {
+                            "list_to_concatenate": {
+                              "source": "answers",
+                              "identifier": ["first-name", "last-name"],
+                              "list_item_selector": {
+                                "source": "location",
+                                "id": "list_item_id"
+                              }
+                            },
+                            "delimiter": " "
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "placeholder": "second_person_name",
+                      "transforms": [
+                        {
+                          "transform": "concatenate_list",
+                          "arguments": {
+                            "list_to_concatenate": {
+                              "source": "answers",
+                              "identifier": ["first-name", "last-name"],
+                              "list_item_selector": {
+                                "source": "location",
+                                "id": "to_list_item_id"
+                              }
+                            },
+                            "delimiter": " "
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "answers": [
+                  {
+                    "id": "answer-1",
+                    "label": "Your age?",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Confirmation",
+              "id": "confirmation",
+              "content": {
+                "title": "Thank you for your answers, do you wish to submit"
+              }
+            }
+          ]
         }
       ]
-    }]
-  }]
+    }
+  ]
 }

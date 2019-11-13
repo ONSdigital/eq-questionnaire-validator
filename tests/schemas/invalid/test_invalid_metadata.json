@@ -2,105 +2,129 @@
   "data_version": "0.0.3",
   "description": "Test Schema Context",
   "legal_basis": "Voluntary",
-  "metadata": [{
-    "name": "return_by",
-    "type": "date"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "region_code",
-    "type": "string"
-  }, {
-    "name": "invalid_metadata",
-    "type": "string"
-  }, {
-    "name": "ref_p_start_date",
-    "type": "date"
-  }, {
-    "name": "trad_as_or_ru_name",
-    "type": "string"
-  }, {
-    "name": "trad_as",
-    "type": "string"
-  }, {
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "ref_p_end_date",
-    "type": "date"
-  }, {
-    "name": "employment_date",
-    "type": "date"
-  }, {
-    "name": "flag",
-    "type": "boolean"
-  }, {
-    "name": "period_str",
-    "type": "string"
-  }, {
-    "name": "case_id",
-    "type": "uuid"
-  }],
+  "metadata": [
+    {
+      "name": "return_by",
+      "type": "date"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "region_code",
+      "type": "string"
+    },
+    {
+      "name": "invalid_metadata",
+      "type": "string"
+    },
+    {
+      "name": "ref_p_start_date",
+      "type": "date"
+    },
+    {
+      "name": "trad_as_or_ru_name",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string"
+    },
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "ref_p_end_date",
+      "type": "date"
+    },
+    {
+      "name": "employment_date",
+      "type": "date"
+    },
+    {
+      "name": "flag",
+      "type": "boolean"
+    },
+    {
+      "name": "period_str",
+      "type": "string"
+    },
+    {
+      "name": "case_id",
+      "type": "uuid"
+    }
+  ],
   "mime_type": "application/json/ons/eq",
   "schema_version": "0.0.1",
-  "sections": [{
-    "groups": [{
-      "blocks": [{
-        "id": "introduction",
-        "primary_content": [{
-          "contents": [{
-              "title": "period_str: {{ metadata['period_str'] }}"
+  "sections": [
+    {
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "introduction",
+              "primary_content": [
+                {
+                  "contents": [
+                    {
+                      "title": "period_str: {{ metadata['period_str'] }}"
+                    },
+                    {
+                      "title": "trad_as: {{ metadata['trad_as'] }}"
+                    },
+                    {
+                      "title": "trad_as_or_ru_name: {{ metadata['trad_as_or_ru_name'] }}"
+                    },
+                    {
+                      "title": "ref_p_start_date: {{ metadata['ref_p_start_date'] }}"
+                    },
+                    {
+                      "title": "ref_p_end_date: {{ metadata['ref_p_end_date'] }}"
+                    },
+                    {
+                      "title": "employment_date: {{ metadata['employment_date'] }}"
+                    },
+                    {
+                      "title": "return_by: {{ metadata['return_by'] }}"
+                    },
+                    {
+                      "title": "region_code: {{ metadata['region_code'] }}"
+                    },
+                    {
+                      "title": "flag: {{ metadata['flag'] }}"
+                    },
+                    {
+                      "title": "case_id: {{ metadata['case_id'] }}"
+                    },
+                    {
+                      "title": "started_at: {{ collection_metadata['started_at'] }}"
+                    },
+                    {
+                      "title": "Invalid: {{ metadata['invalid'] }}"
+                    }
+                  ],
+                  "title": ""
+                }
+              ],
+              "type": "Introduction"
             },
             {
-              "title": "trad_as: {{ metadata['trad_as'] }}"
-            },
-            {
-              "title": "trad_as_or_ru_name: {{ metadata['trad_as_or_ru_name'] }}"
-            },
-            {
-              "title": "ref_p_start_date: {{ metadata['ref_p_start_date'] }}"
-            },
-            {
-              "title": "ref_p_end_date: {{ metadata['ref_p_end_date'] }}"
-            },
-            {
-              "title": "employment_date: {{ metadata['employment_date'] }}"
-            },
-            {
-              "title": "return_by: {{ metadata['return_by'] }}"
-            },
-            {
-              "title": "region_code: {{ metadata['region_code'] }}"
-            },
-            {
-              "title": "flag: {{ metadata['flag'] }}"
-            },
-            {
-              "title": "case_id: {{ metadata['case_id'] }}"
-            },
-            {
-              "title": "started_at: {{ collection_metadata['started_at'] }}"
-            },
-            {
-              "title": "Invalid: {{ metadata['invalid'] }}"
+              "id": "confirmation",
+              "type": "Confirmation",
+              "content": {
+                "title": "Confirm"
+              }
             }
           ],
-          "title": ""
-        }],
-        "type": "Introduction"
-      }, {
-        "id": "confirmation",
-        "type": "Confirmation",
-        "content": {
-          "title": "Confirm"
+          "id": "general-business-information",
+          "title": "General Business Information"
         }
-      }],
-      "id": "general-business-information",
-      "title": "General Business Information"
-    }],
-    "id": "default-section"
-  }],
+      ],
+      "id": "default-section"
+    }
+  ],
   "survey_id": "144",
   "theme": "default",
   "title": "Test Schema Context"

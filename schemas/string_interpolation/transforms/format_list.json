@@ -17,15 +17,10 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "list_to_format"
-        ]
+        "required": ["list_to_format"]
       }
     },
     "additionalProperties": false,
-    "required": [
-      "transform",
-      "arguments"
-    ]
+    "required": ["transform", "arguments"]
   }
 }

@@ -13,17 +13,9 @@
       "$ref": "definitions.json#/location_comparison_object"
     },
     "condition": {
-      "enum": [
-        "not equals",
-        "equals"
-      ]
+      "enum": ["not equals", "equals"]
     }
   },
-  "required": [
-    "id_selector",
-    "list",
-    "condition",
-    "comparison"
-  ],
+  "required": ["id_selector", "list", "condition", "comparison"],
   "additionalProperties": false
 }

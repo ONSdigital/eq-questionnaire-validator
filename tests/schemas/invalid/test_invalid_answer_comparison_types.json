@@ -7,216 +7,275 @@
   "theme": "default",
   "legal_basis": "StatisticsOfTradeAct",
   "description": "A test survey for routing based comparison with answers",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-      "id": "route-group",
-      "title": "",
-      "blocks": [{
-        "type": "Question",
-        "id": "route-comparison-1",
-        "question": {
-          "answers": [{
-            "id": "route-comparison-1-answer",
-            "label": "1st Number",
-            "mandatory": true,
-            "type": "Number"
-          }],
-          "description": "",
-          "id": "route-comparison-1-question",
-          "title": "Enter your first number",
-          "type": "General"
-        }
-      }, {
-        "type": "Question",
-        "id": "route-comparison-2",
-        "question": {
-          "answers": [{
-            "id": "route-comparison-2-answer",
-            "label": "2nd Number",
-            "mandatory": true,
-            "type": "TextField"
-          }],
-          "description": "",
-          "id": "route-comparison-2-question",
-          "title": "Enter a higher number to skip the next interstitial",
-          "type": "General"
-        },
-        "routing_rules": [{
-          "goto": {
-            "block": "route-comparison-4",
-            "when": [{
-              "id": "route-comparison-2-answer",
-              "condition": "greater than",
-              "comparison": {
-                "id": "route-comparison-1-answer",
-                "source": "answers"
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "route-group",
+          "title": "",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "route-comparison-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "route-comparison-1-answer",
+                    "label": "1st Number",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ],
+                "description": "",
+                "id": "route-comparison-1-question",
+                "title": "Enter your first number",
+                "type": "General"
               }
-            }, {
-              "id": "route-comparison-1-answer",
-              "condition": "equals any",
-              "comparison": {
-                "id": "route-comparison-2-answer",
-                "source": "answers"
+            },
+            {
+              "type": "Question",
+              "id": "route-comparison-2",
+              "question": {
+                "answers": [
+                  {
+                    "id": "route-comparison-2-answer",
+                    "label": "2nd Number",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ],
+                "description": "",
+                "id": "route-comparison-2-question",
+                "title": "Enter a higher number to skip the next interstitial",
+                "type": "General"
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "block": "route-comparison-4",
+                    "when": [
+                      {
+                        "id": "route-comparison-2-answer",
+                        "condition": "greater than",
+                        "comparison": {
+                          "id": "route-comparison-1-answer",
+                          "source": "answers"
+                        }
+                      },
+                      {
+                        "id": "route-comparison-1-answer",
+                        "condition": "equals any",
+                        "comparison": {
+                          "id": "route-comparison-2-answer",
+                          "source": "answers"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "route-comparison-3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-3",
+              "content": {
+                "title": "Your second number was higher"
               }
-            }]
-          }
-        }, {
-          "goto": {
-            "block": "route-comparison-3"
-          }
-        }]
-      }, {
-        "type": "Interstitial",
-        "id": "route-comparison-3",
-        "content": {
-          "title": "Your second number was higher"
-        }
-      }, {
-        "type": "Interstitial",
-        "id": "route-comparison-4",
-        "content": {
-          "title": "Your second number was higher"
-        }
-      }]
-    }, {
-      "blocks": [{
-        "type": "Question",
-        "id": "comparison-1",
-        "question": {
-          "answers": [{
-            "id": "comparison-1-answer",
-            "label": "1st Number",
-            "mandatory": true,
-            "type": "Number"
-          }],
-          "description": "",
-          "id": "comparison-1-question",
-          "title": "Enter your first number",
-          "type": "General"
-        }
-      }, {
-        "type": "Question",
-        "id": "comparison-2",
-        "question": {
-          "answers": [{
-            "id": "comparison-2-answer",
-            "label": "2nd Number",
-            "mandatory": true,
-            "type": "TextField"
-          }],
-          "description": "",
-          "id": "comparison-2-question",
-          "title": "Enter your second number",
-          "type": "General"
-        }
-      }, {
-        "type": "Question",
-        "id": "comparison-3",
-        "question_variants": [{
-          "question": {
-            "answers": [{
-              "id": "comparison-3-answer",
-              "label": "2nd Number",
-              "mandatory": true,
-              "type": "TextField"
-            }],
-            "description": "",
-            "id": "comparison-3-question",
-            "type": "General",
-            "title": "What is your gender?"
-          },
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "not equals",
-            "comparison": {
-              "id": "comparison-1-answer",
-              "source": "answers"
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-4",
+              "content": {
+                "title": "Your second number was higher"
+              }
             }
-          }]
-        }, {
-          "question": {
-            "answers": [{
-              "id": "comparison-3-answer",
-              "label": "2nd Number",
-              "mandatory": true,
-              "type": "TextField"
-            }],
-            "description": "",
-            "id": "comparison-3-question",
-            "type": "General",
-            "title": "What is their gender?"
-          },
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "equals",
-            "comparison": {
-              "id": "comparison-1-answer",
-              "source": "answers"
-            }
-          }]
-        }]
-      }, {
-        "type": "Interstitial",
-        "id": "equals-answers",
-        "content": {
-          "title": "Second equal first"
+          ]
         },
-        "skip_conditions": [{
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "not equals",
-            "comparison": {
-              "id": "comparison-2-answer",
-              "source": "answers"
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "comparison-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "comparison-1-answer",
+                    "label": "1st Number",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ],
+                "description": "",
+                "id": "comparison-1-question",
+                "title": "Enter your first number",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "comparison-2",
+              "question": {
+                "answers": [
+                  {
+                    "id": "comparison-2-answer",
+                    "label": "2nd Number",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ],
+                "description": "",
+                "id": "comparison-2-question",
+                "title": "Enter your second number",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "comparison-3",
+              "question_variants": [
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "comparison-3-answer",
+                        "label": "2nd Number",
+                        "mandatory": true,
+                        "type": "TextField"
+                      }
+                    ],
+                    "description": "",
+                    "id": "comparison-3-question",
+                    "type": "General",
+                    "title": "What is your gender?"
+                  },
+                  "when": [
+                    {
+                      "id": "comparison-1-answer",
+                      "condition": "not equals",
+                      "comparison": {
+                        "id": "comparison-1-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "comparison-3-answer",
+                        "label": "2nd Number",
+                        "mandatory": true,
+                        "type": "TextField"
+                      }
+                    ],
+                    "description": "",
+                    "id": "comparison-3-question",
+                    "type": "General",
+                    "title": "What is their gender?"
+                  },
+                  "when": [
+                    {
+                      "id": "comparison-1-answer",
+                      "condition": "equals",
+                      "comparison": {
+                        "id": "comparison-1-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "equals-answers",
+              "content": {
+                "title": "Second equal first"
+              },
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "id": "comparison-1-answer",
+                      "condition": "not equals",
+                      "comparison": {
+                        "id": "comparison-2-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "less-than-answers",
+              "content": {
+                "title": "First less than second"
+              },
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "id": "comparison-1-answer",
+                      "condition": "greater than",
+                      "comparison": {
+                        "id": "comparison-2-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "when": [
+                    {
+                      "id": "comparison-1-answer",
+                      "condition": "equals",
+                      "comparison": {
+                        "id": "comparison-2-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                }
+              ]
             }
-          }]
-        }]
-      }, {
-        "type": "Interstitial",
-        "id": "less-than-answers",
-        "content": {
-          "title": "First less than second"
+          ],
+          "id": "skip-group",
+          "title": ""
         },
-        "skip_conditions": [{
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "greater than",
-            "comparison": {
-              "id": "comparison-2-answer",
-              "source": "answers"
+        {
+          "id": "summary-group",
+          "title": "",
+          "blocks": [
+            {
+              "type": "Summary",
+              "id": "summary"
             }
-          }]
-        }, {
-          "when": [{
-            "id": "comparison-1-answer",
-            "condition": "equals",
-            "comparison": {
-              "id": "comparison-2-answer",
-              "source": "answers"
-            }
-          }]
-        }]
-      }],
-      "id": "skip-group",
-      "title": ""
-    }, {
-      "id": "summary-group",
-      "title": "",
-      "blocks": [{
-        "type": "Summary",
-        "id": "summary"
-      }]
-    }]
-  }]
+          ]
+        }
+      ]
+    }
+  ]
 }

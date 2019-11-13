@@ -6,46 +6,63 @@
   "title": "Other input fields",
   "theme": "default",
   "description": "An invalid questionnaire to demo a when condition referencing a list that doesn’t exist",
-  "metadata": [{
-    "name": "user_id",
-    "type": "string"
-  }, {
-    "name": "period_id",
-    "type": "string"
-  }, {
-    "name": "ru_name",
-    "type": "string"
-  }],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-      "blocks": [{
-        "type": "Question",
-        "id": "block",
-        "question": {
-          "id": "question",
-          "title": "What is your favourite list?",
-          "type": "General",
-          "answers": [{
-            "id": "answer",
-            "label": "",
-            "mandatory": false,
-            "type": "TextField"
-          }]
-        },
-        "skip_conditions": [{
-          "when": [{
-            "list": "non-existent-list-name",
-            "condition": "equals",
-            "value": 1
-          }]
-        }]
-      }, {
-        "type": "Summary",
-        "id": "summary"
-      }],
-      "id": "checkboxes",
-      "title": ""
-    }]
-  }]
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block",
+              "question": {
+                "id": "question",
+                "title": "What is your favourite list?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer",
+                    "label": "",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ]
+              },
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "list": "non-existent-list-name",
+                      "condition": "equals",
+                      "value": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "checkboxes",
+          "title": ""
+        }
+      ]
+    }
+  ]
 }

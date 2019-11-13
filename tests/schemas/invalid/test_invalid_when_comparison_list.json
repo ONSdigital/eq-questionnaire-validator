@@ -7,7 +7,8 @@
   "theme": "default",
   "legal_basis": "StatisticsOfTradeAct",
   "description": "A test survey for routing based comparison with a location",
-  "metadata": [{
+  "metadata": [
+    {
       "name": "user_id",
       "type": "string"
     },
@@ -20,77 +21,92 @@
       "type": "string"
     }
   ],
-  "sections": [{
-    "id": "default-section",
-    "groups": [{
-        "id": "route-group",
-        "title": "",
-        "blocks": [{
-            "type": "Question",
-            "id": "route-comparison-1",
-            "question": {
-              "answers": [{
-                "id": "route-comparison-1-answer",
-                "label": "Number",
-                "mandatory": true,
-                "type": "Number"
-              }],
-              "description": "",
-              "id": "route-comparison-1-question",
-              "title": "Enter a number",
-              "type": "General"
-            },
-            "routing_rules": [{
-                "goto": {
-                  "block": "route-comparison-3",
-                  "when": [{
-                    "list": "people",
-                    "id_selector": "primary_person",
-                    "condition": "equals",
-                    "comparison": {
-                      "id": "from_list_item_id",
-                      "source": "location"
-                    }
-                  }]
-                }
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "route-group",
+          "title": "",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "route-comparison-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "route-comparison-1-answer",
+                    "label": "Number",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ],
+                "description": "",
+                "id": "route-comparison-1-question",
+                "title": "Enter a number",
+                "type": "General"
               },
-              {
-                "goto": {
-                  "block": "route-comparison-3"
+              "routing_rules": [
+                {
+                  "goto": {
+                    "block": "route-comparison-3",
+                    "when": [
+                      {
+                        "list": "people",
+                        "id_selector": "primary_person",
+                        "condition": "equals",
+                        "comparison": {
+                          "id": "from_list_item_id",
+                          "source": "location"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "route-comparison-3"
+                  }
                 }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-2",
+              "content": {
+                "title": "You are not the primary person",
+                "contents": [
+                  {
+                    "description": "This page should be skipped if you are identified as the primary person in the household"
+                  }
+                ]
               }
-            ]
-          },
-          {
-            "type": "Interstitial",
-            "id": "route-comparison-2",
-            "content": {
-              "title": "You are not the primary person",
-              "contents": [{
-                "description": "This page should be skipped if you are identified as the primary person in the household"
-              }]
+            },
+            {
+              "type": "Interstitial",
+              "id": "route-comparison-3",
+              "content": {
+                "title": "This will be shown to all household members",
+                "contents": [
+                  {
+                    "description": "This page should never be skipped"
+                  }
+                ]
+              }
             }
-          },
-          {
-            "type": "Interstitial",
-            "id": "route-comparison-3",
-            "content": {
-              "title": "This will be shown to all household members",
-              "contents": [{
-                "description": "This page should never be skipped"
-              }]
+          ]
+        },
+        {
+          "id": "summary-group",
+          "title": "",
+          "blocks": [
+            {
+              "type": "Summary",
+              "id": "summary"
             }
-          }
-        ]
-      },
-      {
-        "id": "summary-group",
-        "title": "",
-        "blocks": [{
-          "type": "Summary",
-          "id": "summary"
-        }]
-      }
-    ]
-  }]
+          ]
+        }
+      ]
+    }
+  ]
 }
