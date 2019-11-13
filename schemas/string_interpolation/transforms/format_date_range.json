@@ -20,7 +20,7 @@
         "additionalProperties": false,
         "required": [
           "start_date"
-        ]    
+        ]
       }
     },
     "additionalProperties": false,

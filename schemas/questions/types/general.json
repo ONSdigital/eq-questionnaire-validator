@@ -32,14 +32,13 @@
         "enum": ["General"]
       },
       "show_on_section_summary": {
-          "type": "boolean"
+        "type": "boolean"
       },
       "answers": {
         "type": "array",
         "minItems": 1,
         "items": {
-          "oneOf": [
-            {
+          "oneOf": [{
               "$ref": "../../answers/checkbox.json#/answer"
             },
             {

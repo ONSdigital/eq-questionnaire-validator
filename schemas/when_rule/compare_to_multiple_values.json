@@ -27,10 +27,8 @@
   "required": [
     "condition"
   ],
-  "allOf": [
-    {
-      "oneOf": [
-        {
+  "allOf": [{
+      "oneOf": [{
           "required": [
             "id"
           ]
@@ -43,8 +41,7 @@
       ]
     },
     {
-      "oneOf": [
-        {
+      "oneOf": [{
           "required": [
             "values"
           ]

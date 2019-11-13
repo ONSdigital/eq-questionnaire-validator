@@ -17,7 +17,7 @@
         "enum": ["ListCollectorDrivingQuestion"]
       },
       "show_on_section_summary": {
-          "type": "boolean"
+        "type": "boolean"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"
@@ -38,8 +38,7 @@
       "for_list",
       "type"
     ],
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "question"
         ]

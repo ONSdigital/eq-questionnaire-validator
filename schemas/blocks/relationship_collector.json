@@ -23,10 +23,10 @@
         "$ref": "definitions.json#/question_variants"
       },
       "routing_rules": {
-          "$ref": "../common_definitions.json#/routing_rules"
+        "$ref": "../common_definitions.json#/routing_rules"
       },
       "skip_conditions": {
-          "$ref": "../common_definitions.json#/skip_conditions"
+        "$ref": "../common_definitions.json#/skip_conditions"
       }
     },
     "additionalProperties": false,
@@ -35,8 +35,7 @@
       "type",
       "for_list"
     ],
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "question"
         ]

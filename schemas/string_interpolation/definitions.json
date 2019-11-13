@@ -6,7 +6,7 @@
         "description": "String with no placeholders.",
         "type": "string",
         "not": {
-            "pattern": "({[_a-zA-Z0-9]*})+"
+          "pattern": "({[_a-zA-Z0-9]*})+"
         }
       },
       {
@@ -146,19 +146,19 @@
         "description": "The identifier and source of the list item.",
         "type": "object",
         "properties": {
-            "source": {
-                "description": "The source of the data.",
-                "type": "string",
-                "enum": ["location"]
-            },
-            "id": {
-                "description": "The unique id of the object.",
-                "type": "string",
-                "enum": [
-                  "list_item_id",
-                  "to_list_item_id"
-                ]
-            }
+          "source": {
+            "description": "The source of the data.",
+            "type": "string",
+            "enum": ["location"]
+          },
+          "id": {
+            "description": "The unique id of the object.",
+            "type": "string",
+            "enum": [
+              "list_item_id",
+              "to_list_item_id"
+            ]
+          }
         }
       }
     },

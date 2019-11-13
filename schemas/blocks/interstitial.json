@@ -31,8 +31,7 @@
       "id",
       "type"
     ],
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "content"
         ]

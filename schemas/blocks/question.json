@@ -14,7 +14,7 @@
         "enum": ["Question", "ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion", "PrimaryPersonListAddOrEditQuestion"]
       },
       "show_on_section_summary": {
-          "type": "boolean"
+        "type": "boolean"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"
@@ -30,14 +30,14 @@
           },
           "summary": {
             "type": "object",
-            "properties":{
+            "properties": {
               "item_title": {
-                  "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+                "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
               }
             },
             "additionalProperties": false,
             "required": [
-                "item_title"
+              "item_title"
             ]
           }
         }
@@ -54,8 +54,7 @@
       "id",
       "type"
     ],
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "question"
         ]

@@ -55,8 +55,7 @@
       "add_or_edit_answer",
       "add_or_edit_block"
     ],
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "question"
         ]

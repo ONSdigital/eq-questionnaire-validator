@@ -11,13 +11,13 @@
         "type": "object",
         "properties": {
           "number": {
-            "$ref": "../definitions.json#/value_sources" 
+            "$ref": "../definitions.json#/value_sources"
           }
         },
         "additionalProperties": false,
         "required": [
           "number"
-        ]    
+        ]
       }
     },
     "additionalProperties": false,

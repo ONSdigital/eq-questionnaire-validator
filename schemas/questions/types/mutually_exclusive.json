@@ -35,15 +35,14 @@
         "type": "boolean"
       },
       "show_on_section_summary": {
-          "type": "boolean"
+        "type": "boolean"
       },
       "answers": {
         "type": "array",
         "minItems": 2,
         "maxItems": 2,
         "items": {
-          "oneOf": [
-            {
+          "oneOf": [{
               "$ref": "../../answers/checkbox.json#/answer"
             },
             {

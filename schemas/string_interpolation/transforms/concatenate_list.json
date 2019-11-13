@@ -13,7 +13,7 @@
         "properties": {
           "list_to_concatenate": {
             "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
-            "$ref": "../definitions.json#/value_sources" 
+            "$ref": "../definitions.json#/value_sources"
           },
           "delimiter": {
             "description": "The delimiter to use, common ones are ' ' for names and ', ' for addresses.",
@@ -24,7 +24,7 @@
         "required": [
           "list_to_concatenate",
           "delimiter"
-        ]    
+        ]
       }
     },
     "additionalProperties": false,

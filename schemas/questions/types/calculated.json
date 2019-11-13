@@ -31,7 +31,7 @@
         ]
       },
       "show_on_section_summary": {
-          "type": "boolean"
+        "type": "boolean"
       },
       "calculations": {
         "type": "array",
@@ -66,8 +66,7 @@
               "maxItems": 2,
               "uniqueItems": true,
               "items": {
-                "anyOf": [
-                  {
+                "anyOf": [{
                     "required": "less than"
                   },
                   {
@@ -81,8 +80,7 @@
               "description": "The conditions wanted to used for grouped validations, 2 items adds an 'OR' condition"
             }
           },
-          "oneOf": [
-            {
+          "oneOf": [{
               "required": [
                 "answer_id"
               ]
@@ -104,8 +102,7 @@
         "type": "array",
         "minItems": 1,
         "items": {
-          "oneOf": [
-            {
+          "oneOf": [{
               "$ref": "../../answers/currency.json#/answer"
             },
             {

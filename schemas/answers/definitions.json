@@ -1,130 +1,125 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema",
-    "calculated": {
-        "type": "boolean",
-        "description": "Indicates that the answer should be treated as the result of a calculation."
-    },
-    "options": {
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-            "type": "object",
-            "properties": {
-                "label": {
-                    "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-                },
-                "value": {
-                    "type": "string"
-                },
-                "q_code": {
-                    "$ref": "../common_definitions.json#/q_code"
-                },
-                "detail_answer": {
-                    "oneOf": [
-                        {
-                          "$ref": "./text_field.json#/answer"
-                        },
-                        {
-                          "$ref": "./number.json#/answer"
-                        }
-                      ]
-                },
-                "description": {
-                    "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
-                    "description": "Descriptive text that appears below the option label"
-                },
-                "action": {
-                  "type": "object",
-                  "oneOf": [
-                    {
-                      "$ref": "../answer_actions/redirect_to_list_add_question.json"
-                    }
-                  ]
-                }
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "calculated": {
+    "type": "boolean",
+    "description": "Indicates that the answer should be treated as the result of a calculation."
+  },
+  "options": {
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+        },
+        "value": {
+          "type": "string"
+        },
+        "q_code": {
+          "$ref": "../common_definitions.json#/q_code"
+        },
+        "detail_answer": {
+          "oneOf": [{
+              "$ref": "./text_field.json#/answer"
             },
-            "additionalProperties": false,
-            "required": [
-                "label",
-                "value"
-            ]
+            {
+              "$ref": "./number.json#/answer"
+            }
+          ]
+        },
+        "description": {
+          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
+          "description": "Descriptive text that appears below the option label"
+        },
+        "action": {
+          "type": "object",
+          "oneOf": [{
+            "$ref": "../answer_actions/redirect_to_list_add_question.json"
+          }]
         }
-    },
-    "max_value": {
-        "type": "object",
-        "properties": {
-            "value": {
-                "type": "integer",
-                "description": "Maximum numeric value allowed."
-            },
-            "answer_id": {
-                "type": "string",
-                "description": "The id of an answer from which to obtain the max_value"
-            },
-            "exclusive": {
-                "type": "boolean",
-                "description": "Whether validation is exclusive of value or not"
-            }
-        },
-        "additionalProperties": false,
-        "oneOf": [
-            {
-                "required": [
-                    "value"
-                ]
-            },
-            {
-                "required": [
-                    "answer_id"
-                ]
-            }
-        ]
-    },
-    "min_value": {
-        "type": "object",
-        "properties": {
-            "value": {
-                "type": "integer",
-                "description": "Minimum numeric value allowed."
-            },
-            "answer_id": {
-                "type": "string",
-                "description": "The id of an answer from which to obtain the min_value"
-            },
-            "exclusive": {
-                "type": "boolean",
-                "description": "Whether validation is exclusive of value or not"
-            }
-        },
-        "additionalProperties": false,
-        "oneOf": [
-            {
-                "required": [
-                    "value"
-                ]
-            },
-            {
-                "required": [
-                    "answer_id"
-                ]
-            }
-        ]
-    },
-    "answer_guidance": {
-        "description": "Answer guidance",
-        "type": "object",
-        "properties": {
-            "show_guidance": {
-                "type": "string",
-                "description": "The text that is used for the ‘Show guidance’ link."
-            },
-            "hide_guidance": {
-                "type": "string",
-                "description": "The text that is used for the ‘Hide guidance’ link."
-            },
-            "contents": {
-                "$ref": "../common_definitions.json#/contents"
-            }
-        },
-        "additionalProperties": false
+      },
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ]
     }
+  },
+  "max_value": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer",
+        "description": "Maximum numeric value allowed."
+      },
+      "answer_id": {
+        "type": "string",
+        "description": "The id of an answer from which to obtain the max_value"
+      },
+      "exclusive": {
+        "type": "boolean",
+        "description": "Whether validation is exclusive of value or not"
+      }
+    },
+    "additionalProperties": false,
+    "oneOf": [{
+        "required": [
+          "value"
+        ]
+      },
+      {
+        "required": [
+          "answer_id"
+        ]
+      }
+    ]
+  },
+  "min_value": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer",
+        "description": "Minimum numeric value allowed."
+      },
+      "answer_id": {
+        "type": "string",
+        "description": "The id of an answer from which to obtain the min_value"
+      },
+      "exclusive": {
+        "type": "boolean",
+        "description": "Whether validation is exclusive of value or not"
+      }
+    },
+    "additionalProperties": false,
+    "oneOf": [{
+        "required": [
+          "value"
+        ]
+      },
+      {
+        "required": [
+          "answer_id"
+        ]
+      }
+    ]
+  },
+  "answer_guidance": {
+    "description": "Answer guidance",
+    "type": "object",
+    "properties": {
+      "show_guidance": {
+        "type": "string",
+        "description": "The text that is used for the ‘Show guidance’ link."
+      },
+      "hide_guidance": {
+        "type": "string",
+        "description": "The text that is used for the ‘Hide guidance’ link."
+      },
+      "contents": {
+        "$ref": "../common_definitions.json#/contents"
+      }
+    },
+    "additionalProperties": false
+  }
 }

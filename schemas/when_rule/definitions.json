@@ -3,8 +3,7 @@
   "when": {
     "type": "array",
     "items": {
-      "anyOf": [
-        {
+      "anyOf": [{
           "$ref": "compare_to_value.json"
         },
         {
@@ -96,8 +95,7 @@
       }
     },
     "additionalProperties": false,
-    "oneOf": [
-      {
+    "oneOf": [{
         "required": [
           "id"
         ]
