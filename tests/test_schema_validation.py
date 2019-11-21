@@ -83,7 +83,7 @@ def test_invalid_schema_block():
 
         'Schema Integrity Error. Routing rule not defined for all answers or '
         'default not defined for answer [conditional-routing-answer] '
-        "missing options ['no']",
+        "missing options ['No, I prefer tea']",
 
         'Schema Integrity Error. The answer id - AnAnswerThatDoesNotExist in the id key of the '
         '"when" clause for response-yes does not exist',
@@ -507,7 +507,7 @@ def test_invalid_when_condition_property():
         'Schema Integrity Error. The comparison id `country-checkbox-answer2` is not of answer type `Checkbox`. '
         'The condition `contains any` can only reference `Checkbox` answers when using `comparison id`',
 
-        'Schema Integrity Error. The condition `equals any` cannot be used with `Checkbox` answer type.'
+        'Schema Integrity Error. The condition `equals any` cannot be used with `Checkbox` answer type.',
     ]
 
     for fuzzy_error in fuzzy_error_messages:
@@ -655,6 +655,16 @@ def test_invalid_driving_question_multiple_driving_questions():
         'ListCollectorDrivingQuestion for list `people`',
         'Schema Integrity Error. The block_id `anyone-usually-live-at` should be the only '
         'ListCollectorDrivingQuestion for list `people`'
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_mismatching_answer_label_and_value():
+    filename = 'schemas/invalid/test_invalid_mismatching_answer_label_and_value.json'
+    expected_error_messages = [
+        'Schema Integrity Error. `Found mismatching answer value for label: Yes it is {name} in answer id: correct-answer`',
+        'Schema Integrity Error. `Found mismatching answer value for label: Nope in answer id: correct-answer`'
     ]
 
     check_validation_errors(filename, expected_error_messages)

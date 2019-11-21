@@ -234,6 +234,7 @@ class Validator:  # pylint: disable=too-many-lines
                 errors.extend(self._validate_duplicate_options(answer))
                 errors.extend(self._validate_totaliser_defines_decimal_places(answer))
                 errors.extend(self._validate_answer_actions(answer))
+                errors.extend(self._ensure_answer_labels_and_values_match(answer))
 
                 if answer['type'] == 'Date':
                     if 'minimum' in answer and 'maximum' in answer:
@@ -279,6 +280,20 @@ class Validator:  # pylint: disable=too-many-lines
                 errors.append(
                     (self._error_message(f'The block_id `{block_id}` defined in action params for answer `{answer["id"]}` does not exist')))
 
+        return errors
+
+    def _ensure_answer_labels_and_values_match(self, answer):
+        errors = []
+        for option in answer.get('options', []):
+            if isinstance(option['label'], str):
+                label = option['label']
+            else:
+                label = option['label']['text']
+
+            if label != option['value']:
+                errors.append(
+                    (self._error_message(f'`Found mismatching answer value for label: {label} '
+                                         f'in answer id: {answer["id"]}`')))
         return errors
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):

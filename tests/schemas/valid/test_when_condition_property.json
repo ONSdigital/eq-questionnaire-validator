@@ -105,15 +105,15 @@
                     "options": [
                       {
                         "label": "Yes",
-                        "value": "yes"
+                        "value": "Yes"
                       },
                       {
                         "label": "Sometimes",
-                        "value": "sometimes"
+                        "value": "Sometimes"
                       },
                       {
                         "label": "No, I prefer tea",
-                        "value": "no"
+                        "value": "No, I prefer tea"
                       },
                       {
                         "label": "I don’t like coffee",
@@ -121,7 +121,7 @@
                       },
                       {
                         "label": "No, I don’t drink any hot drinks",
-                        "value": "no hot drinks"
+                        "value": "No, I don’t drink any hot drinks"
                       }
                     ],
                     "q_code": "1",
@@ -140,7 +140,7 @@
                       {
                         "id": "conditional-routing-answer",
                         "condition": "equals any",
-                        "values": ["yes", "sometimes"]
+                        "values": ["Yes", "Sometimes"]
                       }
                     ]
                   }
@@ -153,10 +153,10 @@
                         "id": "conditional-routing-answer",
                         "condition": "not equals any",
                         "values": [
-                          "yes",
-                          "sometimes",
-                          "I dont like coffee",
-                          "no hot drinks"
+                          "Yes",
+                          "Sometimes",
+                          "I don’t like coffee",
+                          "No, I don’t drink any hot drinks"
                         ]
                       }
                     ]
