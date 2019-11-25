@@ -1,16 +1,17 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/answers/dropdown.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "answer": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../common_definitions.json#/id"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "q_code": {
-        "$ref": "../common_definitions.json#/q_code"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
       },
       "guidance": {
-        "$ref": "definitions.json#/answer_guidance"
+        "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
       },
       "type": {
         "type": "string",
@@ -23,7 +24,7 @@
         "type": "string"
       },
       "description": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "options": {
         "allOf": [

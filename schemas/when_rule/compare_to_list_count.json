@@ -1,10 +1,11 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/when_rule/compare_to_list_count.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "description": "Comparison against a list count",
   "properties": {
     "list": {
-      "$ref": "definitions.json#/list"
+      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/list"
     },
     "condition": {
       "enum": [

@@ -1,13 +1,14 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/questions/types/date_range.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "question": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../../common_definitions.json#/id"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "title": {
-        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
         "type": "string"
@@ -16,13 +17,13 @@
         "type": "string"
       },
       "definitions": {
-        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "guidance": {
-        "$ref": "../definitions.json#/question_guidance"
+        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question_guidance"
       },
       "skip_conditions": {
-        "$ref": "../../common_definitions.json#/skip_conditions"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
       "type": {
         "type": "string",
@@ -107,13 +108,13 @@
         "items": {
           "oneOf": [
             {
-              "$ref": "../../answers/date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/date.json#/answer"
             },
             {
-              "$ref": "../../answers/month_year_date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/month_year_date.json#/answer"
             },
             {
-              "$ref": "../../answers/year_date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/year_date.json#/answer"
             }
           ]
         }

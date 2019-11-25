@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/lists/currencies.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "description": "Currency codes as defined by ISO 4217",
   "currency": {
     "type": "string",

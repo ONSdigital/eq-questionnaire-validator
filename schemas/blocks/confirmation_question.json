@@ -1,10 +1,11 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/blocks/confirmation_question.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../common_definitions.json#/id"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "number": {
         "type": "string"
@@ -14,16 +15,16 @@
         "enum": ["ConfirmationQuestion"]
       },
       "question": {
-        "$ref": "../questions/definitions.json#/question"
+        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
       "question_variants": {
-        "$ref": "definitions.json#/question_variants"
+        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/question_variants"
       },
       "routing_rules": {
-        "$ref": "../common_definitions.json#/routing_rules"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
       },
       "skip_conditions": {
-        "$ref": "../common_definitions.json#/skip_conditions"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       }
     },
     "additionalProperties": false,

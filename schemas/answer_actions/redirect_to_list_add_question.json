@@ -1,11 +1,12 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/answer_actions/redirect_to_list_add_question.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "description": "Overrides default behaviour and redirect to the list add question block",
   "properties": {
     "type": {
       "type": "string",
-      "enum": ["RedirectToListAddQuestion"]
+      "const": "RedirectToListAddQuestion"
     },
     "params": {
       "type": "object",

@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://eq.ons.gov.uk/questionnaire_v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "required": [
     "mime_type",
@@ -12,6 +13,9 @@
     "metadata"
   ],
   "properties": {
+    "messages": {
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/messages"
+    },
     "eq_id": {
       "type": "string",
       "description": "Used in combination with the form_type to uniquely identify a questionnaire."
@@ -119,9 +123,6 @@
         }
       }
     },
-    "messages": {
-      "$ref": "common_definitions.json#/messages"
-    },
     "hub": {
       "type": "object",
       "properties": {
@@ -147,7 +148,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "common_definitions.json#/id"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
           },
           "title": {
             "type": "string",
@@ -164,7 +165,7 @@
                 "type": "string"
               },
               "title": {
-                "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
               }
             },
             "additionalProperties": false,
@@ -176,7 +177,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "$ref": "common_definitions.json#/id"
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
                 },
                 "title": {
                   "type": "string"
@@ -185,10 +186,10 @@
                   "type": "boolean"
                 },
                 "skip_conditions": {
-                  "$ref": "common_definitions.json#/skip_conditions"
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
                 },
                 "routing_rules": {
-                  "$ref": "common_definitions.json#/routing_rules"
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
                 },
                 "blocks": {
                   "type": "array",
@@ -196,40 +197,40 @@
                   "items": {
                     "oneOf": [
                       {
-                        "$ref": "blocks/answer_summary.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/answer_summary.json#/block"
                       },
                       {
-                        "$ref": "blocks/calculated_summary.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/calculated_summary.json#/block"
                       },
                       {
-                        "$ref": "blocks/confirmation.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/confirmation.json#/block"
                       },
                       {
-                        "$ref": "blocks/confirmation_question.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/confirmation_question.json#/block"
                       },
                       {
-                        "$ref": "blocks/interstitial.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/interstitial.json#/block"
                       },
                       {
-                        "$ref": "blocks/introduction.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/introduction.json#/block"
                       },
                       {
-                        "$ref": "blocks/list_collector.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/list_collector.json#/block"
                       },
                       {
-                        "$ref": "blocks/list_collector_driving_question.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/list_collector_driving_question.json#/block"
                       },
                       {
-                        "$ref": "blocks/primary_person_list_collector.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/primary_person_list_collector.json#/block"
                       },
                       {
-                        "$ref": "blocks/question.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/question.json#/block"
                       },
                       {
-                        "$ref": "blocks/relationship_collector.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/relationship_collector.json#/block"
                       },
                       {
-                        "$ref": "blocks/summary.json#/block"
+                        "$ref": "https://eq.ons.gov.uk/blocks/summary.json#/block"
                       }
                     ]
                   }
@@ -248,7 +249,7 @@
               "type": "object",
               "properties": {
                 "when": {
-                  "$ref": "when_rule/definitions.json#/when"
+                  "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
                 }
               },
               "additionalProperties": false

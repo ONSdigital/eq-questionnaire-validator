@@ -1,16 +1,17 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "id": {
-    "type": "string",
-    "description": "Used to identify groups, blocks, questions and answers.",
-    "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
-  },
+  "$id": "https://eq.ons.gov.uk/common_definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "q_code": {
     "type": "string",
     "description": "A question code used by downstream systems to identify answers.",
     "pattern": "^[0-9a-z]+$"
   },
-  "definitions": {
+  "identifier": {
+    "type": "string",
+    "description": "Used to identify groups, blocks, questions and answers.",
+    "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
+  },
+  "question_definitions": {
     "description": "Allows customisation of question definition title and description.",
     "type": "array",
     "minItems": 1,
@@ -22,7 +23,7 @@
           "type": "string"
         },
         "contents": {
-          "$ref": "common_definitions.json#/contents"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
         }
       },
       "additionalProperties": false
@@ -47,15 +48,15 @@
       ],
       "properties": {
         "title": {
-          "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
+          "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
         },
         "description": {
-          "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
+          "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
         },
         "list": {
           "type": "array",
           "items": {
-            "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
           }
         }
       },
@@ -71,7 +72,7 @@
       "type": "object",
       "properties": {
         "when": {
-          "$ref": "when_rule/definitions.json#/when"
+          "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
         }
       },
       "additionalProperties": false
@@ -226,7 +227,7 @@
               "description": "The id of another group. The first block in that group will be routed to."
             },
             "when": {
-              "$ref": "when_rule/definitions.json#/when"
+              "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
             }
           },
           "oneOf": [

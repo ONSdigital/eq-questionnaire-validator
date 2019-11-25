@@ -1,16 +1,17 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/when_rule/compare_to_location.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "description": "Comparison against a location object",
   "properties": {
     "id_selector": {
-      "$ref": "definitions.json#/id_selector"
+      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/id_selector"
     },
     "list": {
-      "$ref": "definitions.json#/list"
+      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/list"
     },
     "comparison": {
-      "$ref": "definitions.json#/location_comparison_object"
+      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/location_comparison_object"
     },
     "condition": {
       "enum": ["not equals", "equals"]

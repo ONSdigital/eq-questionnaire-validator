@@ -1,27 +1,23 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 Flask = "*"
-jsonschema = "<3"
-structlog = "*"
-python-dateutil = "*"
+attrs = "==19.1.0"
 jsonpointer = "*"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git",ref = "master"}
+structlog = "*"
+python-dateutil = "*"
+jsonschema = "*"
 
 [dev-packages]
-
 pytest = "*"
 "flake8" = "*"
 pylint = "*"
 pylint-quotes = "*"
-
+black = "==19.3b0"
 
 [requires]
-
-python_version = "3.6"
+python_version = "3.8"

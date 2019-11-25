@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_currency.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "format_currency": {
     "type": "object",
     "properties": {
@@ -11,7 +12,7 @@
         "type": "object",
         "properties": {
           "number": {
-            "$ref": "../definitions.json#/value_sources"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           }
         },
         "additionalProperties": false,

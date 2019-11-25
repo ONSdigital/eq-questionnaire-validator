@@ -1,6 +1,6 @@
 language: python
-python: 3.6
-dist: trusty
+python: 3.8
+dist: bionic
 sudo: true
 env:
     - PIPENV_IGNORE_VIRTUALENVS=1

@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/answers/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "calculated": {
     "type": "boolean",
     "description": "Indicates that the answer should be treated as the result of a calculation."
@@ -11,33 +12,33 @@
       "type": "object",
       "properties": {
         "label": {
-          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+          "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
         },
         "value": {
           "type": "string"
         },
         "q_code": {
-          "$ref": "../common_definitions.json#/q_code"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
         },
         "detail_answer": {
           "oneOf": [
             {
-              "$ref": "./text_field.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/text_field.json#/answer"
             },
             {
-              "$ref": "./number.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/number.json#/answer"
             }
           ]
         },
         "description": {
-          "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
+          "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
           "description": "Descriptive text that appears below the option label"
         },
         "action": {
           "type": "object",
           "oneOf": [
             {
-              "$ref": "../answer_actions/redirect_to_list_add_question.json"
+              "$ref": "https://eq.ons.gov.uk/answer_actions/redirect_to_list_add_question.json"
             }
           ]
         }
@@ -104,14 +105,14 @@
     "properties": {
       "show_guidance": {
         "type": "string",
-        "description": "The text that is used for the ‘Show guidance’ link."
+        "description": "The text that is used for the 'Show guidance' link."
       },
       "hide_guidance": {
         "type": "string",
-        "description": "The text that is used for the ‘Hide guidance’ link."
+        "description": "The text that is used for the 'Hide guidance' link."
       },
       "contents": {
-        "$ref": "../common_definitions.json#/contents"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
       }
     },
     "additionalProperties": false

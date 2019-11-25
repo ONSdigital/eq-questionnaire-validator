@@ -1,31 +1,32 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/questions/types/mutually_exclusive.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "question": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../../common_definitions.json#/id"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "title": {
-        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
         "type": "string"
       },
       "description": {
-        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "instruction": {
-        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "definitions": {
-        "$ref": "../../common_definitions.json#/definitions"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/question_definitions"
       },
       "guidance": {
-        "$ref": "../definitions.json#/question_guidance"
+        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question_guidance"
       },
       "skip_conditions": {
-        "$ref": "../../common_definitions.json#/skip_conditions"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
       "type": {
         "type": "string",
@@ -44,40 +45,40 @@
         "items": {
           "oneOf": [
             {
-              "$ref": "../../answers/checkbox.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/checkbox.json#/answer"
             },
             {
-              "$ref": "../../answers/currency.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/currency.json#/answer"
             },
             {
-              "$ref": "../../answers/date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/date.json#/answer"
             },
             {
-              "$ref": "../../answers/month_year_date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/month_year_date.json#/answer"
             },
             {
-              "$ref": "../../answers/year_date.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/year_date.json#/answer"
             },
             {
-              "$ref": "../../answers/duration.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/duration.json#/answer"
             },
             {
-              "$ref": "../../answers/number.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/number.json#/answer"
             },
             {
-              "$ref": "../../answers/percentage.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/percentage.json#/answer"
             },
             {
-              "$ref": "../../answers/text_area.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/text_area.json#/answer"
             },
             {
-              "$ref": "../../answers/text_field.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/text_field.json#/answer"
             },
             {
-              "$ref": "../../answers/unit.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/unit.json#/answer"
             },
             {
-              "$ref": "../../answers/dropdown.json#/answer"
+              "$ref": "https://eq.ons.gov.uk/answers/dropdown.json#/answer"
             }
           ]
         }

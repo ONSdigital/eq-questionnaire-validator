@@ -1,20 +1,20 @@
-const gulp = require("gulp");
-const prettier = require("gulp-prettier");
-const diff = require("gulp-diff");
-const gutil = require("gulp-util");
+const gulp = require('gulp')
+const prettier = require('gulp-prettier')
+const diff = require('gulp-diff')
+const gutil = require('gulp-util')
 
-const formatPaths = ["./schemas/**", "./tests/schemas/**"];
+const formatPaths = ['./schemas/**', './tests/schemas/**']
 
-gulp.task("format", () =>
+gulp.task('format', () =>
   gulp
     .src(formatPaths, {
-      base: "./"
+      base: './'
     })
     .pipe(prettier())
-    .pipe(gulp.dest("."))
-);
+    .pipe(gulp.dest('.'))
+)
 
-gulp.task("lint", () =>
+gulp.task('lint', () =>
   gulp
     .src(formatPaths)
     .pipe(prettier())
@@ -25,8 +25,8 @@ gulp.task("lint", () =>
         fail: true
       })
     )
-    .on("error", (err) => {
-      gutil.log("Linting failed try running `gulp format`");
-      throw err;
+    .on('error', (err) => {
+      gutil.log('Linting failed try running `gulp format`')
+      throw err
     })
-);
+)

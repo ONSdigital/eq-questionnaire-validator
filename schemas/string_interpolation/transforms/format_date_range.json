@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "format_date_range": {
     "type": "object",
     "properties": {
@@ -11,10 +12,10 @@
         "type": "object",
         "properties": {
           "start_date": {
-            "$ref": "../definitions.json#/value_sources"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           },
           "end_date": {
-            "$ref": "../definitions.json#/value_sources"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           }
         },
         "additionalProperties": false,

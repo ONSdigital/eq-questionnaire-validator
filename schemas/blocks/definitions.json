@@ -1,15 +1,16 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/blocks/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "content": {
     "description": "Block level content block",
     "type": "object",
     "properties": {
       "title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders",
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
         "description": "The top-level heading on the page"
       },
       "contents": {
-        "$ref": "../common_definitions.json#/contents"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
       }
     },
     "additionalProperties": false,
@@ -26,10 +27,10 @@
     "type": "object",
     "properties": {
       "content": {
-        "$ref": "definitions.json#/content"
+        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/content"
       },
       "when": {
-        "$ref": "../when_rule/definitions.json#/when"
+        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
       }
     },
     "additionalProperties": false,
@@ -47,10 +48,10 @@
     "type": "object",
     "properties": {
       "question": {
-        "$ref": "../questions/definitions.json#/question"
+        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
       "when": {
-        "$ref": "../when_rule/definitions.json#/when"
+        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
       }
     },
     "additionalProperties": false,

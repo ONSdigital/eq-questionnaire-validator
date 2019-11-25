@@ -1,10 +1,11 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/blocks/primary_person_list_collector.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "answer_reference": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../common_definitions.json#/id",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
         "description": "The id of an answer to reference"
       },
       "value": {
@@ -19,7 +20,7 @@
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "../common_definitions.json#/id"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "type": {
         "type": "string",
@@ -32,10 +33,10 @@
         "$ref": "list_collector.json#/answer_reference"
       },
       "question": {
-        "$ref": "../questions/definitions.json#/question"
+        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
       "routing_rules": {
-        "$ref": "../common_definitions.json#/routing_rules"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
       },
       "question_variants": {
         "$ref": "definitions.json#/question_variants"

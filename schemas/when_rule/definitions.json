@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/when_rule/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "when": {
     "type": "array",
     "items": {
@@ -50,7 +51,7 @@
     "additionalProperties": false,
     "properties": {
       "id": {
-        "$ref": "definitions.json#/answer_identifier"
+        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_identifier"
       },
       "source": {
         "type": "string",
@@ -65,7 +66,7 @@
     "additionalProperties": false,
     "properties": {
       "id": {
-        "$ref": "definitions.json#/location_identifier"
+        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/location_identifier"
       },
       "source": {
         "type": "string",
@@ -88,7 +89,7 @@
         "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
       },
       "offset_by": {
-        "$ref": "../common_definitions.json#/offset_by_yyyy_mm_dd"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/offset_by_yyyy_mm_dd"
       }
     },
     "additionalProperties": false,

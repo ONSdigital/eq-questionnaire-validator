@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "string_with_placeholders": {
     "oneOf": [
       {
@@ -53,34 +54,34 @@
           "type": "object",
           "anyOf": [
             {
-              "$ref": "transforms/format_number.json#/format_number"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_number.json#/format_number"
             },
             {
-              "$ref": "transforms/format_currency.json#/format_currency"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_currency.json#/format_currency"
             },
             {
-              "$ref": "transforms/format_date.json#/format_date"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date.json#/format_date"
             },
             {
-              "$ref": "transforms/format_date_range.json#/format_date_range"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json#/format_date_range"
             },
             {
-              "$ref": "transforms/calculate_years_difference.json#/calculate_years_difference"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_years_difference.json#/calculate_years_difference"
             },
             {
-              "$ref": "transforms/concatenate_list.json#/concatenate_list"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/concatenate_list.json#/concatenate_list"
             },
             {
-              "$ref": "transforms/format_list.json#/format_list"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_list.json#/format_list"
             },
             {
-              "$ref": "transforms/format_possessive.json#/format_possessive"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_possessive.json#/format_possessive"
             },
             {
-              "$ref": "transforms/first_non_empty_item.json#/first_non_empty_item"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/first_non_empty_item.json#/first_non_empty_item"
             },
             {
-              "$ref": "transforms/remove_empty.json#/remove_empty"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/remove_empty.json#/remove_empty"
             }
           ]
         }
