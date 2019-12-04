@@ -143,6 +143,7 @@
     },
     "sections": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "additionalProperties": false,
         "type": "object",

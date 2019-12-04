@@ -88,11 +88,7 @@ class Validator:  # pylint: disable=too-many-lines
             self._block_ids = self._get_block_ids(json_to_validate)
 
             for section in json_to_validate["sections"]:
-                validation_errors.extend(
-                    self._validate_section(
-                        json_to_validate, section, answers_with_parent_ids
-                    )
-                )
+                validation_errors.extend(self._validate_section(section))
                 section_ids.append(section["id"])
                 for group in section["groups"]:
                     validation_errors.extend(
@@ -129,23 +125,14 @@ class Validator:  # pylint: disable=too-many-lines
 
         return validation_errors
 
-    def _validate_section(self, json_to_validate, section, answers_with_parent_ids):
+    def _validate_section(self, section):
         errors = []
-        valid_metadata_ids = []
-        if "metadata" in json_to_validate:
-            valid_metadata_ids = [m["name"] for m in json_to_validate["metadata"]]
-
         section_repeat = section.get("repeat", {})
 
         if section_repeat:
             errors.extend(self._validate_list_exists(section_repeat["for_list"]))
             errors.extend(
-                self._validate_placeholder_object(
-                    answers_with_parent_ids,
-                    valid_metadata_ids,
-                    section_repeat["title"],
-                    None,
-                )
+                self._validate_placeholder_object(section_repeat["title"], None)
             )
         return errors
 
@@ -326,10 +313,12 @@ class Validator:  # pylint: disable=too-many-lines
                 valid_metadata_ids = [m["name"] for m in json_to_validate["metadata"]]
 
             errors.extend(
-                self._validate_placeholders(
-                    block, answers_with_parent_ids, valid_metadata_ids, block["id"]
+                self._validate_source_references(
+                    block, answers_with_parent_ids, valid_metadata_ids
                 )
             )
+
+            errors.extend(self._validate_placeholders(block))
 
             errors.extend(
                 self._validate_variants(
@@ -1733,80 +1722,133 @@ class Validator:  # pylint: disable=too-many-lines
         elif isinstance(input_data, list):
             for item in input_data:
                 yield from self._get_dicts_with_key(item, key_name)
+        else:
+            yield from ()
 
-    def _validate_placeholder_object(
-        self,
-        answers_with_parent_ids,
-        valid_metadata_ids,
-        placeholder_object,
-        current_block_id,
-    ):
+    def _validate_placeholder_object(self, placeholder_object, current_block_id):
         """ Current block id may be None if called outside of a block
         """
         errors = []
-        placeholders_in_string = re.compile("{(.*?)}").findall(
-            placeholder_object.get("text")
-        )
-        placeholder_definition_names = []
+        placeholders_in_string = set()
+        placeholder_regex = re.compile("{(.*?)}")
+        if "text" in placeholder_object:
+            placeholders_in_string.update(
+                placeholder_regex.findall(placeholder_object.get("text"))
+            )
+        elif "text_plural" in placeholder_object:
+            for text in placeholder_object["text_plural"]["forms"].values():
+                placeholders_in_string.update(placeholder_regex.findall(text))
+
+        placeholder_definition_names = set()
         for placeholder_definition in placeholder_object.get("placeholders"):
-            placeholder_definition_names.append(placeholder_definition["placeholder"])
+            placeholder_definition_names.add(placeholder_definition["placeholder"])
 
             transforms = placeholder_definition.get("transforms")
-            (
-                answer_ids_to_validate,
-                metadata_ids_to_validate,
-            ) = self._get_placeholder_source_ids(placeholder_definition, transforms)
-
-            errors.extend(
-                self._validate_placeholder_answer_ids(
-                    current_block_id,
-                    placeholder_definition,
-                    answers_with_parent_ids,
-                    answer_ids_to_validate,
-                )
-            )
-            errors.extend(
-                self._validate_placeholder_metadata_ids(
-                    valid_metadata_ids,
-                    metadata_ids_to_validate,
-                    placeholder_definition["placeholder"],
-                )
-            )
-
             if transforms:
                 errors.extend(
                     self._validate_placeholder_transforms(transforms, current_block_id)
                 )
 
-        placeholder_differences = set(placeholders_in_string) - set(
-            placeholder_definition_names
-        )
+        placeholder_differences = placeholders_in_string - placeholder_definition_names
         if placeholder_differences:
+            try:
+                text = placeholder_object["text"]
+            except KeyError:
+                text = placeholder_object["text_plural"]["forms"]["other"]
             errors.append(
                 self._error_message(
                     "Placeholders in '{}' don't match definitions. Missing '{}'".format(
-                        placeholder_object["text"], placeholder_differences
+                        text, placeholder_differences
                     )
                 )
             )
 
         return errors
 
-    def _validate_placeholders(
-        self, block_json, answers_with_parent_ids, valid_metadata_ids, current_block_id
-    ):
+    def _validate_placeholders(self, block_json):
         errors = []
         strings_with_placeholders = self._get_dicts_with_key(block_json, "placeholders")
-        for placeholder_object in strings_with_placeholders or []:
+        for placeholder_object in strings_with_placeholders:
             errors.extend(
-                self._validate_placeholder_object(
-                    answers_with_parent_ids,
-                    valid_metadata_ids,
-                    placeholder_object,
-                    current_block_id,
-                )
+                self._validate_placeholder_object(placeholder_object, block_json["id"])
             )
 
+        return errors
+
+    def _validate_source_references(
+        self, block_json, answers_with_parent_ids, valid_metadata_ids
+    ):
+        errors = []
+        source_references = self._get_dicts_with_key(block_json, "identifier")
+        for source_reference in source_references:
+            source = source_reference["source"]
+            if isinstance(source_reference["identifier"], str):
+                identifiers = [source_reference["identifier"]]
+            else:
+                identifiers = source_reference["identifier"]
+
+            if source == "answers":
+                errors.extend(
+                    self._validate_answer_source_reference(
+                        identifiers, answers_with_parent_ids, block_json["id"]
+                    )
+                )
+            elif source == "metadata":
+                errors.extend(
+                    self._validate_metadata_source_reference(
+                        identifiers, valid_metadata_ids, block_json["id"]
+                    )
+                )
+            elif source == "list":
+                errors.extend(
+                    self._validate_list_source_reference(identifiers, block_json["id"])
+                )
+
+        return errors
+
+    def _validate_answer_source_reference(
+        self, identifiers, answers_with_parent_ids, current_block_id
+    ):
+        errors = []
+        for identifier in identifiers:
+            if identifier not in answers_with_parent_ids:
+                errors.append(
+                    self._error_message(
+                        f"Invalid answer reference '{identifier}' in block '{current_block_id}'"
+                    )
+                )
+            elif answers_with_parent_ids[identifier]["block"] == current_block_id:
+                errors.append(
+                    self._error_message(
+                        "Invalid answer reference '{}' in block '{}' (self-reference)".format(
+                            identifier, current_block_id
+                        )
+                    )
+                )
+        return errors
+
+    def _validate_metadata_source_reference(
+        self, identifiers, valid_metadata_ids, current_block_id
+    ):
+        errors = []
+        for identifier in identifiers:
+            if identifier not in valid_metadata_ids:
+                errors.append(
+                    self._error_message(
+                        f"Invalid metadata reference '{identifier}' in block '{current_block_id}'"
+                    )
+                )
+        return errors
+
+    def _validate_list_source_reference(self, identifiers, current_block_id):
+        errors = []
+        for identifier in identifiers:
+            if identifier not in self._list_names:
+                errors.append(
+                    self._error_message(
+                        f"Invalid list reference '{identifier}' in block '{current_block_id}'"
+                    )
+                )
         return errors
 
     def _validate_list_exists(self, list_name):
@@ -1825,94 +1867,6 @@ class Validator:  # pylint: disable=too-many-lines
             errors.append(self._error_message(one_answer_msg))
         if answers[0]["type"] != "Relationship":
             errors.append(self._error_message(answer_type_msg))
-
-        return errors
-
-    @staticmethod
-    def _get_placeholder_source_ids(placeholder_definition, transforms):
-
-        answer_ids_to_validate = []
-        metadata_ids_to_validate = []
-
-        if transforms:
-            for transform in transforms:
-                for argument in transform["arguments"].values():
-                    if "source" in argument and argument["source"] == "answers":
-                        if isinstance(argument["identifier"], list):
-                            answer_ids_to_validate.extend(argument["identifier"])
-                        else:
-                            answer_ids_to_validate.append(argument["identifier"])
-
-                    if "source" in argument and argument["source"] == "metadata":
-                        if isinstance(argument["identifier"], list):
-                            metadata_ids_to_validate.extend(argument["identifier"])
-                        else:
-                            metadata_ids_to_validate.append(argument["identifier"])
-
-        if (
-            "value" in placeholder_definition
-            and "source" in placeholder_definition["value"]
-            and placeholder_definition["value"]["source"] == "answers"
-        ):
-            answer_ids_to_validate.append(placeholder_definition["value"]["identifier"])
-
-        if (
-            "value" in placeholder_definition
-            and "source" in placeholder_definition["value"]
-            and placeholder_definition["value"]["source"] == "metadata"
-        ):
-            metadata_ids_to_validate.append(
-                placeholder_definition["value"]["identifier"]
-            )
-
-        return answer_ids_to_validate, metadata_ids_to_validate
-
-    def _validate_placeholder_answer_ids(
-        self,
-        block_id,
-        placeholder_definition,
-        answers_with_parent_ids,
-        answer_ids_to_validate,
-    ):
-        errors = []
-
-        for answer_id_to_validate in answer_ids_to_validate:
-            if answer_id_to_validate not in answers_with_parent_ids:
-                errors.append(
-                    self._error_message(
-                        "Invalid answer id reference `{}` for placeholder `{}`".format(
-                            answer_id_to_validate, placeholder_definition["placeholder"]
-                        )
-                    )
-                )
-                continue
-
-            answer_block_id = answers_with_parent_ids[answer_id_to_validate]["block"]
-
-            if answer_block_id == block_id:
-                errors.append(
-                    self._error_message(
-                        "Invalid answer id reference `{}` for placeholder `{}` (self-reference)".format(
-                            answer_id_to_validate, placeholder_definition["placeholder"]
-                        )
-                    )
-                )
-
-        return errors
-
-    def _validate_placeholder_metadata_ids(
-        self, valid_metadata_ids, metadata_ids_to_validate, placeholder_name
-    ):
-        errors = []
-        for metadata_id_to_validate in metadata_ids_to_validate:
-            if metadata_id_to_validate not in valid_metadata_ids:
-                errors.append(
-                    self._error_message(
-                        "Invalid metadata reference `{}` for placeholder `{}`".format(
-                            metadata_id_to_validate, placeholder_name
-                        )
-                    )
-                )
 
         return errors
 

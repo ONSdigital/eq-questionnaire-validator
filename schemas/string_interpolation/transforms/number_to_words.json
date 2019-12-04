@@ -1,0 +1,25 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "number_to_words": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["number_to_words"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["number"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

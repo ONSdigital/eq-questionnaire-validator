@@ -299,10 +299,21 @@ def test_invalid_placeholder_answer_ids():
     filename = "schemas/invalid/test_invalid_placeholder_source_ids.json"
 
     expected_error_messages = [
-        "Invalid answer id reference `answer4` for placeholder `simple_answer` (self-reference)",
-        "Invalid answer id reference `invalid-answer0` for placeholder `simple_answer`",
-        "Invalid answer id reference `invalid-answer1` for placeholder `answer1`",
-        "Invalid metadata reference `invalid-metadata-ref` for placeholder `simple_metadata`",
+        "Invalid answer reference 'answer4' in block 'block3' (self-reference)",
+        "Invalid answer reference 'invalid-answer0' in block 'block1'",
+        "Invalid answer reference 'invalid-answer1' in block 'block2'",
+        "Invalid metadata reference 'invalid-metadata-ref' in block 'block4'",
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_placeholder_list_reference():
+    filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
+
+    expected_error_messages = [
+        "Invalid list reference 'people' in block 'block1'",
+        "Invalid list reference 'people' in block 'block1'",
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -572,10 +583,10 @@ def test_invalid_relationship_no_list_specified():
         "for_list 'not-a-list' is not populated by any ListCollector blocks"
     ]
     expected_error_message = [
-        "Invalid answer id reference `first-name` for placeholder `first_person_name`",
-        "Invalid answer id reference `last-name` for placeholder `first_person_name`",
-        "Invalid answer id reference `first-name` for placeholder `second_person_name`",
-        "Invalid answer id reference `last-name` for placeholder `second_person_name`",
+        "Invalid answer reference 'first-name' in block 'relationships'",
+        "Invalid answer reference 'last-name' in block 'relationships'",
+        "Invalid answer reference 'first-name' in block 'relationships'",
+        "Invalid answer reference 'last-name' in block 'relationships'",
     ] * 6
     expected_error_message = for_list_error + expected_error_message
 

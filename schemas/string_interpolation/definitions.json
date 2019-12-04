@@ -17,12 +17,23 @@
           "text": {
             "type": "string"
           },
+          "text_plural": {
+            "$ref": "#/text_plural"
+          },
           "placeholders": {
             "$ref": "#/placeholders"
           }
         },
         "additionalProperties": false,
-        "required": ["text", "placeholders"]
+        "required": ["placeholders"],
+        "oneOf": [
+          {
+            "required": ["text"]
+          },
+          {
+            "required": ["text_plural"]
+          }
+        ]
       }
     ]
   },
@@ -82,6 +93,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/remove_empty.json#/remove_empty"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/number_to_words"
             }
           ]
         }
@@ -127,10 +141,10 @@
       "source": {
         "description": "The data source.",
         "type": "string",
-        "enum": ["answers", "metadata", "collection_metadata"]
+        "enum": ["answers", "metadata", "collection_metadata", "list"]
       },
       "identifier": {
-        "description": "The identifier of the item in the data source. This would be an answer id for answers, and a metadata property name for metadata. The array option allows multiple values to be passed as a list to a transform.",
+        "description": "The identifier of the item in the data source. This would be an answer id for answers, a metadata property name for metadata, or a list name for lists. The array option allows multiple values to be passed as a list to a transform.",
         "type": ["string", "array"]
       },
       "list_item_selector": {
@@ -152,5 +166,43 @@
     },
     "additionalProperties": false,
     "required": ["source", "identifier"]
+  },
+  "text_plural": {
+    "description": "A mapping of a count to plural strings",
+    "type": "object",
+    "properties": {
+      "forms": {
+        "description": "Plural forms of the text. Uses the CLDR plural categories. One or more of these properties will be present dependent on the language.",
+        "type": "object",
+        "properties": {
+          "zero": {
+            "type": "string"
+          },
+          "one": {
+            "type": "string"
+          },
+          "two": {
+            "type": "string"
+          },
+          "few": {
+            "type": "string"
+          },
+          "many": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["other"]
+      },
+      "count": {
+        "description": "The source to use for the count. Must resolve to a number.",
+        "$ref": "#/lookup_source"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["forms", "count"]
   }
 }

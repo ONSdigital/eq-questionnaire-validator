@@ -1,0 +1,105 @@
+{
+  "eq_id": "3",
+  "form_type": "3",
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "3",
+  "title": "String Transforms",
+  "theme": "default",
+  "legal_basis": "StatisticsOfTradeAct",
+  "navigation": {
+    "visible": false
+  },
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "test_metadata",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
+          "title": "",
+          "blocks": [
+            {
+              "id": "block1",
+              "type": "Question",
+              "question": {
+                "id": "question1",
+                "title": {
+                  "text_plural": {
+                    "forms": {
+                      "one": "You've said one person lives here. Is that correct?",
+                      "other": "You've said {number_of_people} people live here. Is that correct?"
+                    },
+                    "count": {
+                      "source": "list",
+                      "identifier": "people"
+                    }
+                  },
+                  "placeholders": [
+                    {
+                      "placeholder": "number_of_people",
+                      "transforms": [
+                        {
+                          "transform": "number_to_words",
+                          "arguments": {
+                            "number": {
+                              "source": "list",
+                              "identifier": "people"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer2",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "confirmation",
+              "type": "Confirmation",
+              "content": {
+                "title": "Confirm"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
