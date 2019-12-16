@@ -1,0 +1,183 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "schema_version": "0.0.2",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test invalid answer value in when rule",
+  "theme": "default",
+  "description": "A questionnaire to check invalid answer values in when rules",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "country-checkbox",
+              "question": {
+                "id": "country-checkbox-question",
+                "title": "Have you visited any of the following countries?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "country-checkbox-answer",
+                    "label": "",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "options": [
+                      {
+                        "label": "Spain",
+                        "value": "Spain"
+                      },
+                      {
+                        "label": "Italy",
+                        "value": "Italy"
+                      },
+                      {
+                        "label": "Portugal",
+                        "value": "Portugal"
+                      },
+                      {
+                        "label": "Switzerland",
+                        "value": "Switzerland"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "block": "country-interstitial-one",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains",
+                        "value": "France"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains any",
+                        "values": ["France", "Italy"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-any",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains any",
+                        "values": ["France", "Austria"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "country-interstitial-one",
+                    "when": [
+                      {
+                        "id": "country-checkbox-answer",
+                        "condition": "contains",
+                        "value": 7
+                      }
+                    ]
+                  }
+                },
+                {
+                  "goto": {
+                    "block": "summary"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "country-interstitial-any",
+              "type": "Interstitial",
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "id": "country-checkbox-answer",
+                      "condition": "contains",
+                      "value": "French"
+                    }
+                  ]
+                }
+              ],
+              "content_variants": [
+                {
+                  "content": {
+                    "title": "This will be shown only if you chose Italy"
+                  },
+                  "when": [
+                    {
+                      "id": "country-checkbox-answer",
+                      "condition": "contains",
+                      "value": "Italy"
+                    }
+                  ]
+                },
+                {
+                  "content": {
+                    "title": "This will be shown only if you don’t chose Italy."
+                  },
+                  "when": [
+                    {
+                      "id": "country-checkbox-answer",
+                      "condition": "not contains",
+                      "value": "Italian"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "country-interstitial-one",
+              "type": "Interstitial",
+              "content": {
+                "title": "Condition: Contains One",
+                "contents": [
+                  {
+                    "description": "This will never be routed to."
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "checkboxes",
+          "title": ""
+        }
+      ]
+    }
+  ]
+}

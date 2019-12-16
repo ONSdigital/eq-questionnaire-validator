@@ -5,7 +5,6 @@ from collections import defaultdict
 from datetime import datetime
 from json import load
 
-
 from dateutil.relativedelta import relativedelta
 from eq_translations.survey_schema import SurveySchema
 from jsonpointer import resolve_pointer
@@ -25,6 +24,7 @@ class Validator:  # pylint: disable=too-many-lines
         self._list_collector_answer_ids = {}
         self._list_names = []
         self._block_ids = []
+        self.answer_id_to_option_values_map = {}
         resolver = RefResolver(
             base_uri="https://eq.ons.gov.uk/",
             referrer=self.schema,
@@ -84,8 +84,12 @@ class Validator:  # pylint: disable=too-many-lines
             answers_with_parent_ids = self._get_answers_with_parent_ids(
                 json_to_validate
             )
+
             self._list_names = self._get_list_names(json_to_validate)
             self._block_ids = self._get_block_ids(json_to_validate)
+            self.answer_id_to_option_values_map = self._get_answer_id_to_option_values_map(
+                json_to_validate
+            )
 
             for section in json_to_validate["sections"]:
                 validation_errors.extend(self._validate_section(section))
@@ -721,6 +725,27 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
+    def validate_answer_value_in_when_rule(self, when_rule):
+        when_values = when_rule.get("values", [])
+        when_value = when_rule.get("value")
+        if when_value:
+            when_values.append(when_value)
+
+        option_values = self.answer_id_to_option_values_map.get(when_rule["id"])
+        if not option_values:
+            return []
+
+        errors = []
+        for value in when_values:
+            if value not in option_values:
+                errors.append(
+                    Validator._error_message(
+                        f"Answer value in when rule with answer id `{when_rule['id']}` has an invalid value of `{value}`"
+                    )
+                )
+
+        return errors
+
     def _validate_skip_condition(
         self, skip_condition, answer_ids_with_group_id, block_or_group
     ):
@@ -1148,6 +1173,9 @@ class Validator:  # pylint: disable=too-many-lines
                         when, answer_ids_with_group_id, referenced_id
                     )
                 )
+
+            if "id" in when:
+                errors.extend(self.validate_answer_value_in_when_rule(when))
 
         return errors
 
@@ -2064,11 +2092,35 @@ class Validator:  # pylint: disable=too-many-lines
 
         return answers
 
-    def _get_questions_with_context(self, questionnaire_json):
+    @classmethod
+    def _get_answer_id_to_option_values_map(cls, json_to_validate):
+        answer_id_to_option_values_map = defaultdict(set)
+        answers = cls._get_answers(json_to_validate)
+
+        for answer in answers:
+            if "options" not in answer:
+                continue
+
+            answer_id = answer["id"]
+            option_values = [option["value"] for option in answer["options"]]
+
+            answer_id_to_option_values_map[answer_id].update(option_values)
+
+        return answer_id_to_option_values_map
+
+    @classmethod
+    def _get_answers(cls, json_to_validate):
+        questions = cls._get_questions_with_context(json_to_validate)
+        for question, _ in questions:
+            for answer in question["answers"]:
+                yield answer
+
+    @classmethod
+    def _get_questions_with_context(cls, questionnaire_json):
         for section in questionnaire_json.get("sections"):
             for group in section.get("groups"):
                 for block in group.get("blocks"):
-                    for question in self._get_all_questions_for_block(block):
+                    for question in cls._get_all_questions_for_block(block):
                         context = {
                             "block": block["id"],
                             "group_id": group["id"],
@@ -2076,12 +2128,13 @@ class Validator:  # pylint: disable=too-many-lines
                         }
                         yield question, context
 
-                        for sub_block, context in self._get_sub_block_context(
+                        for sub_block, context in cls._get_sub_block_context(
                             section, group, block
                         ):
                             yield sub_block, context
 
-    def _get_sub_block_context(self, section, group, block):
+    @classmethod
+    def _get_sub_block_context(cls, section, group, block):
         for sub_block_type in (
             "add_block",
             "edit_block",
@@ -2090,7 +2143,7 @@ class Validator:  # pylint: disable=too-many-lines
         ):
             sub_block = block.get(sub_block_type)
             if sub_block:
-                for question in self._get_all_questions_for_block(sub_block):
+                for question in cls._get_all_questions_for_block(sub_block):
                     context = {
                         "block": sub_block["id"],
                         "group_id": group["id"],

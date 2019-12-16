@@ -74,13 +74,6 @@ def test_invalid_schema_block():
         "conditional-routing-block must contain a default routing rule "
         "without a when rule",
         "Routing rule routes to invalid block [invalid-location]",
-        "The answer id - fake-answer in the id key of the "
-        '"when" clause for conditional-routing-block does not exist',
-        "Routing rule not defined for all answers or "
-        "default not defined for answer [conditional-routing-answer] "
-        "missing options ['No, I prefer tea']",
-        "The answer id - AnAnswerThatDoesNotExist in the id key of the "
-        '"when" clause for response-yes does not exist',
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -698,6 +691,21 @@ def test_invalid_mismatching_answer_label_and_value():
     expected_error_messages = [
         "Found mismatching answer value for label: Yes it is {name} in answer id: correct-answer",
         "Found mismatching answer value for label: Nope in answer id: correct-answer",
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_answer_value_in_when_rule():
+    filename = "schemas/invalid/test_invalid_answer_value_in_when_rule.json"
+    expected_error_messages = [
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `Austria`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `7`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `French`",
+        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `Italian`",
     ]
 
     check_validation_errors(filename, expected_error_messages)

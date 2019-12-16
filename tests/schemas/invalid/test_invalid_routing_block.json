@@ -71,8 +71,8 @@
                     "when": [
                       {
                         "condition": "equals",
-                        "id": "fake-answer",
-                        "value": "no"
+                        "id": "conditional-routing-answer",
+                        "value": "No, I prefer tea"
                       }
                     ]
                   }
@@ -104,8 +104,8 @@
                     "when": [
                       {
                         "condition": "equals",
-                        "id": "AnAnswerThatDoesNotExist",
-                        "value": 17
+                        "id": "conditional-routing-answer",
+                        "value": "Yes"
                       }
                     ]
                   }

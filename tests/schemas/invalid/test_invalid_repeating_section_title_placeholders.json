@@ -466,7 +466,7 @@
                     {
                       "condition": "equals",
                       "id": "proxy-answer",
-                      "value": "No"
+                      "value": "No, I’m answering for myself"
                     }
                   ]
                 },
@@ -609,7 +609,7 @@
                     {
                       "condition": "equals",
                       "id": "proxy-answer",
-                      "value": "No"
+                      "value": "No, I’m answering for myself"
                     }
                   ]
                 },
@@ -728,7 +728,7 @@
                       {
                         "condition": "equals",
                         "id": "confirm-date-of-birth-answer",
-                        "value": "No"
+                        "value": "No, I need to change my date of birth"
                       }
                     ]
                   }
@@ -778,7 +778,7 @@
                     {
                       "condition": "equals",
                       "id": "proxy-answer",
-                      "value": "No"
+                      "value": "No, I’m answering for myself"
                     },
                     {
                       "condition": "less than or equal to",
@@ -894,7 +894,7 @@
                     {
                       "condition": "equals",
                       "id": "proxy-answer",
-                      "value": "No"
+                      "value": "No, I’m answering for myself"
                     }
                   ]
                 },
