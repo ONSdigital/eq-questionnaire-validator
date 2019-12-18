@@ -1,5 +1,5 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/question.json",
+  "$id": "https://eq.ons.gov.uk/blocks/list_add_edit_remove_question.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "block": {
     "type": "object",
@@ -10,12 +10,12 @@
       "number": {
         "type": "string"
       },
+      "cancel_text": {
+        "type": "string"
+      },
       "type": {
         "type": "string",
-        "enum": ["Question", "PrimaryPersonListAddOrEditQuestion"]
-      },
-      "show_on_section_summary": {
-        "type": "boolean"
+        "enum": ["ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion"]
       },
       "question": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"

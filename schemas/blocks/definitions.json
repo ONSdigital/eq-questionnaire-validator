@@ -56,5 +56,23 @@
     },
     "additionalProperties": false,
     "required": ["when", "question"]
+  },
+  "list_summary": {
+    "type": "object",
+    "properties": {
+      "for_list": {
+        "type": "string"
+      },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "item_title": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["item_title"]
+      }
+    }
   }
 }

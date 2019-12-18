@@ -64,13 +64,13 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
       },
       "add_block": {
-        "$ref": "question.json#/block"
+        "$ref": "list_add_edit_remove_question.json#/block"
       },
       "edit_block": {
-        "$ref": "question.json#/block"
+        "$ref": "list_add_edit_remove_question.json#/block"
       },
       "remove_block": {
-        "$ref": "question.json#/block"
+        "$ref": "list_add_edit_remove_question.json#/block"
       },
       "summary": {
         "$ref": "list_collector.json#/summary"
