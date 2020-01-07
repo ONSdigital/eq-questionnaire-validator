@@ -10,6 +10,10 @@
       "q_code": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
       },
+      "voluntary": {
+        "description": "If set to true, and an option is selected then there will be an option to unselect",
+        "type": "boolean"
+      },
       "label": {
         "type": "string"
       },
@@ -52,6 +56,12 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "mandatory", "options"]
+    "required": ["id", "type", "mandatory", "options"],
+    "if": {
+      "properties": { "mandatory": { "const": true } }
+    },
+    "then": {
+      "properties": { "voluntary": { "not": { "const": true } } }
+    }
   }
 }
