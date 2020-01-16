@@ -68,7 +68,8 @@
                           "id": "ref-answer0-2-detail",
                           "label": "Answer detail",
                           "mandatory": true,
-                          "type": "TextField"
+                          "type": "TextField",
+                          "visible": true
                         },
                         "label": "Other",
                         "value": "Other"
