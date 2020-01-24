@@ -9,7 +9,10 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Summary", "SectionSummary"]
+        "enum": ["Summary", "SectionSummary", "ListCollectorSummary"]
+      },
+      "title": {
+        "type": "string"
       },
       "collapsible": {
         "description": "When True, the summary page will contain a list of collapsible section summaries",
