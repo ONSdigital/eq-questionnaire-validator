@@ -75,9 +75,7 @@ jobs:
       steps:
         - uses: actions/checkout@v2
         - name: Tag
-          run: |
-            export BRANCH=${{ github.event.pull_request.head.ref }}
-            echo "::set-env name=TAG::branch-$BRANCH"
+          run: echo "::set-env name=TAG::${{ github.event.pull_request.head.ref }}"
         - name: Build
           run: docker build -t onsdigital/eq-questionnaire-runner:$TAG .
         - name: Push
