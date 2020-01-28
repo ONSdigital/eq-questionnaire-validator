@@ -31,7 +31,3 @@ display_result $? 2 "Pylint linting check"
 black --check . --exclude node_modules
 
 display_result $? 1 "Python code formatting check"
-
-yarn run lint
-
-display_result $? 3 "JSON linting check"
