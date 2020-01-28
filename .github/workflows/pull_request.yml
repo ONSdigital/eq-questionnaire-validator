@@ -27,7 +27,7 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: pipenv install --dev
       - name: Lint Python
-        run: ./scripts/run_lint_python.sh
+        run: pipenv run ./scripts/run_lint_python.sh
   lint-json:
     runs-on: ubuntu-latest
     steps:
