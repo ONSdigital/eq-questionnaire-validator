@@ -1,7 +1,7 @@
 const gulp = require('gulp')
 const prettier = require('gulp-prettier')
-const diff = require('gulp-diff')
-const gutil = require('gulp-util')
+const diff = require('gulp-diff-4')
+const log = require('fancy-log')
 
 const formatPaths = ['./schemas/**', './tests/schemas/**']
 
@@ -26,7 +26,7 @@ gulp.task('lint', () =>
       })
     )
     .on('error', (err) => {
-      gutil.log('Linting failed try running `gulp format`')
+      log('Linting failed try running `gulp format`')
       throw err
     })
 )
