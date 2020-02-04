@@ -1,4 +1,4 @@
-# eq-schema-validator
+# eq-questionnaire-validator
 
 An API for validating survey schemas.
 
