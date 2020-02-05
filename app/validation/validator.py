@@ -4,6 +4,7 @@ import json
 from collections import defaultdict
 from datetime import datetime
 from json import load
+from urllib.parse import urlparse
 
 from dateutil.relativedelta import relativedelta
 from eq_translations.survey_schema import SurveySchema
@@ -361,6 +362,14 @@ class Validator:  # pylint: disable=too-many-lines
                     if "minimum" in answer and "maximum" in answer:
                         errors.extend(
                             self._validate_minimum_and_maximum_offset_date(answer)
+                        )
+
+                if answer["type"] == "TextField":
+                    if "url" in answer and not self._validate_url(answer["url"]):
+                        errors.append(
+                            self._error_message(
+                                f'Answer lookup url used for TextField `{answer["id"]}` is invalid'
+                            )
                         )
 
                 if answer["type"] in ["Number", "Currency", "Percentage"]:
@@ -2192,6 +2201,12 @@ class Validator:  # pylint: disable=too-many-lines
                             block_ids.append(block[sub_block]["id"])
 
         return block_ids
+
+    @staticmethod
+    def _validate_url(url):
+        parsed_result = urlparse(url)
+
+        return parsed_result.scheme and parsed_result.netloc
 
     class CoreStructureError(Exception):
         def __init__(self, message):
