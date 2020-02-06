@@ -2206,7 +2206,7 @@ class Validator:  # pylint: disable=too-many-lines
     def _validate_url(url):
         parsed_result = urlparse(url)
 
-        return parsed_result.scheme and parsed_result.netloc
+        return parsed_result.netloc or parsed_result.path
 
     class CoreStructureError(Exception):
         def __init__(self, message):
