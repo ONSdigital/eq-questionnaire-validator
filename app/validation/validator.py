@@ -2206,9 +2206,9 @@ class Validator:  # pylint: disable=too-many-lines
     def _validate_url(url):
         parsed_result = urlparse(url)
 
-        matches = re.match(r"^[A-Za-z0-9_.\-/~]+$", url)
-
-        return (parsed_result.scheme and parsed_result.netloc) or matches is not None
+        if parsed_result.scheme and parsed_result.netloc:
+            return True
+        return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None
 
     class CoreStructureError(Exception):
         def __init__(self, message):
