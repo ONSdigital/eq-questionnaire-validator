@@ -726,7 +726,7 @@ def test_invalid_quotes_in_schema():
 
 
 def test_invalid_url_in_answer():
-    filename = "schemas/invalid/test_text_field_typeahead_invalid_url.json"
+    filename = "schemas/invalid/test_text_field_typeahead_invalid_suggestions_url.json"
 
     expected_error_messages = [
         "Answer lookup url used for TextField `country-answer` is invalid"

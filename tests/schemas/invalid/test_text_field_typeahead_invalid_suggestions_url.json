@@ -35,7 +35,7 @@
                     "id": "country-answer",
                     "label": "What is your country of birth?",
                     "mandatory": false,
-                    "url": "this isn't a valid url",
+                    "suggestions_url": "this isn't a valid url",
                     "type": "TextField"
                   }
                 ],

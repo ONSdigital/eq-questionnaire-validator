@@ -19,7 +19,7 @@
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "url": {
+      "suggestions_url": {
         "type": "string"
       },
       "type": {
