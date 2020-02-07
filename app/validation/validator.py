@@ -365,7 +365,9 @@ class Validator:  # pylint: disable=too-many-lines
                         )
 
                 if answer["type"] == "TextField":
-                    if "suggestions_url" in answer and not self._validate_url(answer["suggestions_url"]):
+                    if "suggestions_url" in answer and not self._validate_url(
+                        answer["suggestions_url"]
+                    ):
                         errors.append(
                             self._error_message(
                                 f'Answer lookup url used for TextField `{answer["id"]}` is invalid'
