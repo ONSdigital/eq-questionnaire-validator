@@ -3,7 +3,7 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "001",
-  "title": "Other input fields",
+  "title": "Textfield Typeahead",
   "theme": "default",
   "description": "A questionnaire to test textfields",
   "metadata": [
