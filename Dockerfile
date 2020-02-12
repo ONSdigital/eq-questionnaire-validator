@@ -1,6 +1,6 @@
 FROM python:3.8-slim
 
-RUN apt-get update && apt-get install --no-install-recommends -y git=1:2.20.1-2 \
+RUN apt-get update && apt-get install --no-install-recommends -y git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
