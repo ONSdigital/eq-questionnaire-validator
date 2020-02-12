@@ -370,7 +370,7 @@ class Validator:  # pylint: disable=too-many-lines
                     ):
                         errors.append(
                             self._error_message(
-                                f'Answer lookup url used for TextField `{answer["id"]}` is invalid'
+                                f'Suggestions url used for TextField `{answer["id"]}` is invalid'
                             )
                         )
 

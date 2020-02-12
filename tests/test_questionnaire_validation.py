@@ -729,7 +729,7 @@ def test_invalid_url_in_answer():
     filename = "schemas/invalid/test_text_field_invalid_suggestions_url.json"
 
     expected_error_messages = [
-        "Answer lookup url used for TextField `country-answer` is invalid"
+        "Suggestions url used for TextField `country-answer` is invalid"
     ]
 
     check_validation_errors(filename, expected_error_messages)
