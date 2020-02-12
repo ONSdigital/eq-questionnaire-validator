@@ -174,13 +174,13 @@ Original:
     "id": "confirm-dob-proxy",
     "questions": [{
         "id": "confirm-date-of-birth-proxy",
-        "title": "{{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name}} is {{ calculate_years_difference (answers['date-of-birth-answer'][group_instance], 'now') }} old. Is this correct?",
+        "title": "{{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name}} is {{ calculate_difference (answers['date-of-birth-answer'][group_instance], 'now') }} old. Is this correct?",
         "type": "General",
         "answers": [{
             "id": "confirm-date-of-birth-answer-proxy",
             "mandatory": true,
             "options": [{
-                    "label": "Yes, {{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name}} is {{ calculate_years_difference (answers['date-of-birth-answer'][group_instance], 'now') }} old",
+                    "label": "Yes, {{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name}} is {{ calculate_difference (answers['date-of-birth-answer'][group_instance], 'now') }} old",
                     "value": "Yes"
                 },
                 {
@@ -203,7 +203,7 @@ Proposed:
     "questions": [{
         "id": "confirm-date-of-birth-proxy",
         "title": {
-            "text": "{person_name} is {age_in_years} old. Is this correct?",
+            "text": "{person_name} is {age} old. Is this correct?",
             "placeholders": [
                 {
                     "placeholder": "person_name",
@@ -221,10 +221,10 @@ Proposed:
                     ]
                 },
                 {
-                    "placeholder": "age_in_years",
+                    "placeholder": "age",
                     "transforms": [
                         {
-                            "transform": "calculate_years_difference",
+                            "transform": "calculate_difference",
                             "arguments": {
                                 "first_date": {
                                     "source": "answers",
@@ -245,7 +245,7 @@ Proposed:
             "mandatory": true,
             "options": [{
                     "label": {
-                        "text": "{person_name} is {age_in_years} old. Is this correct?",
+                        "text": "{person_name} is {age} old. Is this correct?",
                         "placeholders": [
                             {
                                 "placeholder": "person_name",
@@ -263,10 +263,10 @@ Proposed:
                                 ]
                             },
                             {
-                                "placeholder": "age_in_years",
+                                "placeholder": "age",
                                 "transforms": [
                                     {
-                                        "transform": "calculate_years_difference",
+                                        "transform": "calculate_difference",
                                         "arguments": {
                                             "first_date": {
                                                 "source": "answers",
