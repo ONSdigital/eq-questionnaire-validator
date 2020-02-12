@@ -19,6 +19,9 @@
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "suggestions_url": {
+        "type": "string"
+      },
       "type": {
         "type": "string",
         "enum": ["TextField"]
