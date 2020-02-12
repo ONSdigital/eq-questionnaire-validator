@@ -5,7 +5,7 @@
   "survey_id": "001",
   "title": "Textfield Suggestions",
   "theme": "default",
-  "description": "A questionnaire to test textfields",
+  "description": "A questionnaire to test textfield suggestions",
   "metadata": [
     {
       "name": "user_id",
