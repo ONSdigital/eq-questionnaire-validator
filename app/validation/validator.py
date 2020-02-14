@@ -79,9 +79,7 @@ class Validator:  # pylint: disable=too-many-lines
         all_groups = [group for section in sections for group in section.get("groups")]
 
         numeric_answer_ranges = {}
-        answers_with_parent_ids = self._get_answers_with_parent_ids(
-            json_to_validate
-        )
+        answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
 
         self._list_names = self._get_list_names(json_to_validate)
         self._block_ids = self._get_block_ids(json_to_validate)
