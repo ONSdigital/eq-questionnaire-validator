@@ -243,15 +243,6 @@ class Validator:  # pylint: disable=too-many-lines
                     errors.extend(self._validate_list_collector(block))
                 except KeyError as e:
                     errors.append(f"Missing key in list collector: {e}")
-            elif block["type"] in [
-                "ListAddQuestion",
-                "ListEditQuestion",
-                "ListRemoveQuestion",
-            ]:
-                errors.append(
-                    f'Block type: {block["type"]} not allowed outside of '
-                    "ListCollectors"
-                )
             elif block["type"] == "RelationshipCollector":
                 errors.extend(self._validate_list_exists(block["for_list"]))
 
