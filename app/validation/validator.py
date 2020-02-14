@@ -845,28 +845,6 @@ class Validator:  # pylint: disable=too-many-lines
                         )
                     )
 
-        nested_blocks = [
-            ("add_block", "ListAddQuestion"),
-            ("edit_block", "ListEditQuestion"),
-            ("remove_block", "ListRemoveQuestion"),
-        ]
-        for nested_block_name, nested_block_type in nested_blocks:
-            nested_block = block[nested_block_name]
-            if nested_block["type"] != nested_block_type:
-                errors.append(
-                    self._error_message(
-                        f"The type of the {nested_block_name} is incorrect for a nested ListCollector block. "
-                        f"Expected: {nested_block_type}"
-                    )
-                )
-            if "routing_rules" in nested_block:
-                errors.append(
-                    self._error_message(
-                        f'The list collector block {block["id"]} contains routing rules '
-                        f'on the {nested_block["id"]} sub block'
-                    )
-                )
-
         errors.extend(self._validate_list_collector_answer_ids(block))
 
         return errors

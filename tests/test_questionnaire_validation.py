@@ -363,18 +363,6 @@ def test_primary_person_invalid_list_collector_non_radio():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_invalid_list_collector_with_routing():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_with_routing_in_sub_block.json"
-    )
-
-    expected_error_messages = [
-        "The list collector block list-collector contains routing rules on the remove-person sub block"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
 
