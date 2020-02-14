@@ -375,17 +375,6 @@ def test_invalid_list_collector_with_routing():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_invalid_primary_person_list_collector_with_routing():
-    filename = "schemas/invalid/test_invalid_primary_person_list_collector_routing.json"
-
-    expected_error_messages = [
-        "The primary person list collector block primary-person-list-collector contains routing rules on the "
-        "add-primary-person sub block"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
 

@@ -243,11 +243,6 @@ class Validator:  # pylint: disable=too-many-lines
                     errors.extend(self._validate_list_collector(block))
                 except KeyError as e:
                     errors.append(f"Missing key in list collector: {e}")
-            elif block["type"] == "PrimaryPersonListAddOrEditQuestion":
-                errors.append(
-                    f'Block type: {block["type"]} not allowed outside of '
-                    "PrimaryPersonListCollectors"
-                )
             elif block["type"] in [
                 "ListAddQuestion",
                 "ListEditQuestion",
@@ -901,23 +896,6 @@ class Validator:  # pylint: disable=too-many-lines
                             "present in the answer values"
                         )
                     )
-
-        nested_block = block["add_or_edit_block"]
-        if nested_block["type"] != "PrimaryPersonListAddOrEditQuestion":
-            errors.append(
-                self._error_message(
-                    "The type of the add_or_edit_block is incorrect for a nested "
-                    "PrimaryPersonListCollector block. "
-                    "Expected: PrimaryPersonListAddOrEditQuestion"
-                )
-            )
-        if "routing_rules" in nested_block:
-            errors.append(
-                self._error_message(
-                    f'The primary person list collector block {block["id"]} contains routing rules '
-                    f'on the {nested_block["id"]} sub block'
-                )
-            )
 
         errors.extend(self._validate_primary_person_list_collector_answer_ids(block))
 
