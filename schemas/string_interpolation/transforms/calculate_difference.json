@@ -1,12 +1,12 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_difference.json",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_date_difference.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "calculate_difference": {
+  "calculate_date_difference": {
     "type": "object",
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["calculate_difference"]
+        "enum": ["calculate_date_difference"]
       },
       "arguments": {
         "type": "object",

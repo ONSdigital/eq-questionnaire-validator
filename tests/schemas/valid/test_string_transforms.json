@@ -266,7 +266,7 @@
                           "placeholder": "simple_difference",
                           "transforms": [
                             {
-                              "transform": "calculate_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "value": "2018-01-01"
@@ -293,7 +293,7 @@
                           "placeholder": "one_lookup",
                           "transforms": [
                             {
-                              "transform": "calculate_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
@@ -321,7 +321,7 @@
                           "placeholder": "two_lookups",
                           "transforms": [
                             {
-                              "transform": "calculate_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
@@ -350,7 +350,7 @@
                           "placeholder": "difference_to_current_date",
                           "transforms": [
                             {
-                              "transform": "calculate_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
