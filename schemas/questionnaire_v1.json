@@ -172,6 +172,10 @@
             "additionalProperties": false,
             "required": ["for_list", "title"]
           },
+          "show_summary_on_completion": {
+            "type": "boolean",
+            "description": "On completion of the section a summary will be shown"
+          },
           "groups": {
             "type": "array",
             "minItems": 1,

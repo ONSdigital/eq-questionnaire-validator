@@ -396,6 +396,9 @@ class Validator:  # pylint: disable=too-many-lines
     def _ensure_answer_labels_and_values_match(self, answer):
         errors = []
         for option in answer.get("options", []):
+            if "text_plural" in option["label"]:
+                continue
+
             if isinstance(option["label"], str):
                 label = option["label"]
             else:
