@@ -80,7 +80,7 @@ Proposed:
         "value": {
             "source": "metadata",
             "identifier": "ref_p_end_date"
-        }
+        },
         "offset_by": {
             "days": 20
         }
