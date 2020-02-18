@@ -45,7 +45,7 @@ Proposed:
         "value": {
             "source": "answers",
             "identifier": "set-maximum"
-        }
+        },
         "exclusive": true
     }
 }
