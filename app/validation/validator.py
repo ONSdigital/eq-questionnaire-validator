@@ -75,50 +75,45 @@ class Validator:  # pylint: disable=too-many-lines
         validation_errors.extend(self._validate_smart_quotes(json_to_validate))
 
         section_ids = []
+        sections = json_to_validate.get("sections", [])
+        all_groups = [group for section in sections for group in section.get("groups")]
 
-        try:
-            all_groups = self._build_groups_list(json_to_validate)
-        except self.CoreStructureError as cve:
-            validation_errors.extend([{"message": cve.message}])
-        else:
-            numeric_answer_ranges = {}
-            answers_with_parent_ids = self._get_answers_with_parent_ids(
-                json_to_validate
-            )
+        numeric_answer_ranges = {}
+        answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
 
-            self._list_names = self._get_list_names(json_to_validate)
-            self._block_ids = self._get_block_ids(json_to_validate)
-            self.answer_id_to_option_values_map = self._get_answer_id_to_option_values_map(
-                json_to_validate
-            )
+        self._list_names = self._get_list_names(json_to_validate)
+        self._block_ids = self._get_block_ids(json_to_validate)
+        self.answer_id_to_option_values_map = self._get_answer_id_to_option_values_map(
+            json_to_validate
+        )
 
-            for section in json_to_validate["sections"]:
-                validation_errors.extend(self._validate_section(section))
-                section_ids.append(section["id"])
-                for group in section["groups"]:
+        for section in sections:
+            validation_errors.extend(self._validate_section(section))
+            section_ids.append(section["id"])
+            for group in section["groups"]:
+                validation_errors.extend(
+                    self._validate_routing_rules(
+                        group, all_groups, answers_with_parent_ids
+                    )
+                )
+
+                for skip_condition in group.get("skip_conditions", []):
                     validation_errors.extend(
-                        self._validate_routing_rules(
-                            group, all_groups, answers_with_parent_ids
+                        self._validate_skip_condition(
+                            skip_condition, answers_with_parent_ids, group
                         )
                     )
 
-                    for skip_condition in group.get("skip_conditions", []):
-                        validation_errors.extend(
-                            self._validate_skip_condition(
-                                skip_condition, answers_with_parent_ids, group
-                            )
-                        )
-
-                    validation_errors.extend(
-                        self._validate_blocks(
-                            json_to_validate,
-                            section,
-                            group,
-                            all_groups,
-                            answers_with_parent_ids,
-                            numeric_answer_ranges,
-                        )
+                validation_errors.extend(
+                    self._validate_blocks(
+                        json_to_validate,
+                        section,
+                        group,
+                        all_groups,
+                        answers_with_parent_ids,
+                        numeric_answer_ranges,
                     )
+                )
 
         required_hub_section_ids = json_to_validate.get("hub", {}).get(
             "required_completed_sections", []
@@ -154,34 +149,6 @@ class Validator:  # pylint: disable=too-many-lines
                 )
 
         return errors
-
-    def _build_groups_list(self, json_to_validate):
-        sections = json_to_validate.get("sections", [])
-        if not sections:
-            raise self.CoreStructureError(
-                "Sections key missing from schema or is empty list"
-            )
-
-        sections_with_empty_groups = [
-            section.get("id", section)
-            for section in sections
-            if not section.get("groups")
-        ]
-        if sections_with_empty_groups:
-            raise self.CoreStructureError(
-                f'Section "{sections_with_empty_groups[0]}" is missing groups key or groups list is empty'
-            )
-
-        all_groups = [group for section in sections for group in section.get("groups")]
-        groups_with_empty_blocks = [
-            group.get("id", group) for group in all_groups if not group.get("blocks")
-        ]
-        if groups_with_empty_blocks:
-            raise self.CoreStructureError(
-                f'Group "{groups_with_empty_blocks[0]}" is missing blocks key or blocks list is empty'
-            )
-
-        return all_groups
 
     def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
         errors = []
@@ -274,20 +241,6 @@ class Validator:  # pylint: disable=too-many-lines
                     errors.extend(self._validate_list_collector(block))
                 except KeyError as e:
                     errors.append(f"Missing key in list collector: {e}")
-            elif block["type"] == "PrimaryPersonListAddOrEditQuestion":
-                errors.append(
-                    f'Block type: {block["type"]} not allowed outside of '
-                    "PrimaryPersonListCollectors"
-                )
-            elif block["type"] in [
-                "ListAddQuestion",
-                "ListEditQuestion",
-                "ListRemoveQuestion",
-            ]:
-                errors.append(
-                    f'Block type: {block["type"]} not allowed outside of '
-                    "ListCollectors"
-                )
             elif block["type"] == "RelationshipCollector":
                 errors.extend(self._validate_list_exists(block["for_list"]))
 
@@ -884,28 +837,6 @@ class Validator:  # pylint: disable=too-many-lines
                         )
                     )
 
-        nested_blocks = [
-            ("add_block", "ListAddQuestion"),
-            ("edit_block", "ListEditQuestion"),
-            ("remove_block", "ListRemoveQuestion"),
-        ]
-        for nested_block_name, nested_block_type in nested_blocks:
-            nested_block = block[nested_block_name]
-            if nested_block["type"] != nested_block_type:
-                errors.append(
-                    self._error_message(
-                        f"The type of the {nested_block_name} is incorrect for a nested ListCollector block. "
-                        f"Expected: {nested_block_type}"
-                    )
-                )
-            if "routing_rules" in nested_block:
-                errors.append(
-                    self._error_message(
-                        f'The list collector block {block["id"]} contains routing rules '
-                        f'on the {nested_block["id"]} sub block'
-                    )
-                )
-
         errors.extend(self._validate_list_collector_answer_ids(block))
 
         return errors
@@ -935,23 +866,6 @@ class Validator:  # pylint: disable=too-many-lines
                             "present in the answer values"
                         )
                     )
-
-        nested_block = block["add_or_edit_block"]
-        if nested_block["type"] != "PrimaryPersonListAddOrEditQuestion":
-            errors.append(
-                self._error_message(
-                    "The type of the add_or_edit_block is incorrect for a nested "
-                    "PrimaryPersonListCollector block. "
-                    "Expected: PrimaryPersonListAddOrEditQuestion"
-                )
-            )
-        if "routing_rules" in nested_block:
-            errors.append(
-                self._error_message(
-                    f'The primary person list collector block {block["id"]} contains routing rules '
-                    f'on the {nested_block["id"]} sub block'
-                )
-            )
 
         errors.extend(self._validate_primary_person_list_collector_answer_ids(block))
 
@@ -2214,8 +2128,3 @@ class Validator:  # pylint: disable=too-many-lines
         if parsed_result.scheme and parsed_result.netloc:
             return True
         return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None
-
-    class CoreStructureError(Exception):
-        def __init__(self, message):
-            super().__init__()
-            self.message = message
