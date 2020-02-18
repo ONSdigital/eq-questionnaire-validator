@@ -7,9 +7,6 @@
       "id": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
-      "number": {
-        "type": "string"
-      },
       "cancel_text": {
         "type": "string"
       },
@@ -22,15 +19,6 @@
       },
       "question_variants": {
         "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/question_variants"
-      },
-      "list_summary": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/list_summary"
-      },
-      "routing_rules": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
-      },
-      "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       }
     },
     "additionalProperties": false,
