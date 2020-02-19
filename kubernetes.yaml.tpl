@@ -32,7 +32,7 @@ spec:
       - name: eq-questionnaire-validator
         image: eu.gcr.io/GOOGLE_CLOUD_PROJECT/eq-questionnaire-validator:COMMIT_SHA
         ports:
-        - containerPort: 5000
+        - containerPort: 5001
 ---
 kind: Service
 apiVersion: v1
@@ -44,5 +44,5 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 5000
+    targetPort: 5001
   type: LoadBalancer
