@@ -6,8 +6,8 @@ We reference dynamic values (metadata, answers) in placeholders, validation, and
 
 ```json
 {
-    “source”: “”,
-    “identifier”: “”
+    "source": "",
+    "identifier": ""
 }
 ```
 
