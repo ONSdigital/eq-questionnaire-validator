@@ -4,7 +4,7 @@
 
 We reference dynamic values (metadata, answers) in placeholders, validation, and routing. The agreed structure for referencing dynamic values is:
 
-```
+```json
 {
     “source”: “”,
     “identifier”: “”
