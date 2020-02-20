@@ -22,12 +22,6 @@
       "item_title": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "add_link_text": {
-        "type": "string"
-      },
-      "empty_list_text": {
-        "type": "string"
-      },
       "title": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       }
