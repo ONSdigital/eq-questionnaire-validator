@@ -9,7 +9,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Summary", "SectionSummary", "ListCollectorSummary"]
+        "enum": ["Summary", "SectionSummary"]
       },
       "title": {
         "type": "string"
