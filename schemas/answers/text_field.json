@@ -32,6 +32,9 @@
       "visible": {
         "type": "boolean"
       },
+      "max_length": {
+        "type": "integer"
+      },
       "validation": {
         "type": "object",
         "properties": {
