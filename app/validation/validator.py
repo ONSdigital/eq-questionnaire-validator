@@ -1302,7 +1302,12 @@ class Validator:  # pylint: disable=too-many-lines
         # Validates if a date answer has a minimum and maximum
         errors = []
 
-        if "value" in answer["minimum"] and "value" in answer["maximum"]:
+        if (
+            "value" in answer["minimum"]
+            and "value" in answer["maximum"]
+            and not isinstance(answer["minimum"]["value"], dict)
+            and not isinstance(answer["maximum"]["value"], dict)
+        ):
             minimum_date = self._get_offset_date_value(answer["minimum"])
             maximum_date = self._get_offset_date_value(answer["maximum"])
 
@@ -1527,7 +1532,7 @@ class Validator:  # pylint: disable=too-many-lines
 
     @staticmethod
     def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
-        if isinstance(defined_value, int):
+        if not isinstance(defined_value, dict):
             return defined_value
         if "source" in defined_value and defined_value["source"] == "answers":
             referred_answer = answer_ranges.get(defined_value["identifier"])
