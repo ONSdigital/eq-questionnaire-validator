@@ -11,6 +11,11 @@
     "description": "Used to identify groups, blocks, questions and answers.",
     "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
   },
+  "metadata_identifier": {
+    "type": "string",
+    "description": "Used to identify groups, blocks, questions and answers.",
+    "pattern": "^[a-z0-9][a-z0-9\\-_]*[a-z0-9]$"
+  },
   "question_definitions": {
     "description": "Allows customisation of question definition title and description.",
     "type": "array",
@@ -216,16 +221,32 @@
         "type": ["integer", "string"]
       },
       {
-        "description": "A reference to an answer or piece of metadata",
+        "description": "A reference to an answer",
         "type": "object",
         "properties": {
           "identifier": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
-            "description": "The id of an answer or metadata to reference"
+            "description": "The id of an answer to reference"
           },
           "source": {
             "type": "string",
-            "description": "The source of the identifier to look up"
+            "enum": ["answers"]
+          }
+        },
+        "required": ["identifier", "source"],
+        "additionalProperties": false
+      },
+      {
+        "description": "A reference to a piece of metadata",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
+            "description": "The id of the metadata to reference"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["metadata"]
           }
         },
         "required": ["identifier", "source"],
