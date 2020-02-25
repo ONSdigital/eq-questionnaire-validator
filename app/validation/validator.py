@@ -1380,10 +1380,10 @@ class Validator:  # pylint: disable=too-many-lines
             ),
             "decimal_places": decimal_places,
             "min_referred": min_value.get("identifier")
-            if type(min_value) is dict
+            if isinstance(min_value, dict)
             else None,
             "max_referred": max_value.get("identifier")
-            if type(max_value) is dict
+            if isinstance(max_value, dict)
             else None,
             "default": answer.get("default"),
         }
@@ -1527,17 +1527,16 @@ class Validator:  # pylint: disable=too-many-lines
 
     @staticmethod
     def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
-        if type(defined_value) is int:
+        if isinstance(defined_value, int):
             return defined_value
         if "source" in defined_value and defined_value["source"] == "answers":
             referred_answer = answer_ranges.get(defined_value["identifier"])
             if referred_answer is None:
                 # Referred answer is not  valid (picked up by _validate_referred_numeric_answer)
                 return None
-            elif referred_answer.get("default") is not None:
+            if referred_answer.get("default") is not None:
                 return system_default
-            else:
-                return referred_answer["min"] + referred_answer["max"]
+            return referred_answer["min"] + referred_answer["max"]
         return system_default
 
     @staticmethod
@@ -1547,8 +1546,7 @@ class Validator:  # pylint: disable=too-many-lines
         if exclusive and fallback_value:
             if min_or_max == "min":
                 return fallback_value + (1 / 10 ** decimal_places)
-            else:
-                return fallback_value - (1 / 10 ** decimal_places)
+            return fallback_value - (1 / 10 ** decimal_places)
         return fallback_value
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
@@ -1589,13 +1587,13 @@ class Validator:  # pylint: disable=too-many-lines
         min_value = answer.get("minimum", {}).get("value", 0)
         max_value = answer.get("maximum", {}).get("value", 0)
 
-        if type(min_value) is int and min_value < MIN_NUMBER:
+        if isinstance(min_value, int) and min_value < MIN_NUMBER:
             error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
                 min_value, answer["id"], MIN_NUMBER
             )
             errors.append(self._error_message(error_message))
 
-        if type(max_value) is int and max_value > MAX_NUMBER:
+        if isinstance(max_value, int) and max_value > MAX_NUMBER:
             error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
                 max_value, answer["id"], MAX_NUMBER
             )
