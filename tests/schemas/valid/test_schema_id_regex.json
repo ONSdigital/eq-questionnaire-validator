@@ -28,15 +28,10 @@
               "question": {
                 "answers": [
                   {
-                    "description": "Enter percentage of growth",
+                    "label": "Enter your age",
                     "id": "answer",
-                    "label": "New to the market 2012-2014",
                     "mandatory": false,
-                    "max_value": {
-                      "value": 100
-                    },
-                    "q_code": "0",
-                    "type": "Percentage"
+                    "type": "Number"
                   }
                 ],
                 "id": "question",

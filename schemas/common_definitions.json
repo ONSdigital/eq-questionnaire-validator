@@ -209,6 +209,30 @@
     "additionalProperties": false,
     "required": ["years"]
   },
+  "value_reference": {
+    "oneOf": [
+      {
+        "description": "A string or integer value",
+        "type": ["integer", "string"]
+      },
+      {
+        "description": "A reference to an answer or piece of metadata",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+            "description": "The id of an answer or metadata to reference"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the identifier to look up"
+          }
+        },
+        "required": ["identifier", "source"],
+        "additionalProperties": false
+      }
+    ]
+  },
   "routing_rules": {
     "type": "array",
     "description": "Used to direct the journey through a survey (in conjunction with navigation).",

@@ -32,7 +32,7 @@
                     "id": "total-answer",
                     "label": "Total",
                     "mandatory": true,
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     },
                     "type": "Number"
