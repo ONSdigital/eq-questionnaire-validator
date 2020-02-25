@@ -178,7 +178,7 @@
           },
           "show_on_hub": {
             "type": "boolean",
-            "description": "When the hub is enabled, this will determine if the section appears. Default is True"
+            "description": "When the hub is enabled, this will determine if the section appears. Default is true"
           },
           "groups": {
             "type": "array",
