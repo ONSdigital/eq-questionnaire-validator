@@ -1512,9 +1512,8 @@ class Validator:  # pylint: disable=too-many-lines
         minimum_value = self._get_defined_numeric_value(
             defined_minimum, 0, answer_ranges
         )
-        if minimum_value:
+        if exclusive:
             return minimum_value + (1 / 10 ** decimal_places)
-
         return minimum_value
 
     def _get_answer_maximum(
@@ -1525,7 +1524,6 @@ class Validator:  # pylint: disable=too-many-lines
         )
         if exclusive:
             return maximum_value - (1 / 10 ** decimal_places)
-
         return maximum_value
 
     @staticmethod
