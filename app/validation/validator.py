@@ -1376,7 +1376,7 @@ class Validator:  # pylint: disable=too-many-lines
             min_value.get("identifier") if isinstance(min_value, dict) else None
         )
         max_referred = (
-            min_value.get("identifier") if isinstance(max_value, dict) else None
+            max_value.get("identifier") if isinstance(max_value, dict) else None
         )
 
         exclusive = answer.get("exclusive", False)
