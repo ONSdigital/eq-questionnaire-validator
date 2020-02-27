@@ -32,10 +32,6 @@
     "type": "string",
     "description": "The id of a location attribute from which to obtain the value"
   },
-  "metadata_identifier": {
-    "type": "string",
-    "description": "The id of a metadata provided by the calling service from which to obtain the value"
-  },
   "comparison_value": {
     "type": ["string", "boolean", "integer"],
     "description": "The value to compare against"

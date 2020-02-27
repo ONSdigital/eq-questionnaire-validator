@@ -13,7 +13,7 @@
   },
   "metadata_identifier": {
     "type": "string",
-    "description": "Used to identify groups, blocks, questions and answers.",
+    "description": "The id of a metadata provided by the calling service from which to obtain the value",
     "pattern": "^[a-z0-9][a-z0-9\\-_]*[a-z0-9]$"
   },
   "question_definitions": {
