@@ -78,7 +78,7 @@
         "$ref": "#/answer_identifier"
       },
       "meta": {
-        "$ref": "#/metadata_identifier"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier"
       },
       "value": {
         "type": "string",
