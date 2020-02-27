@@ -1512,9 +1512,8 @@ class Validator:  # pylint: disable=too-many-lines
         minimum_value = self._get_defined_numeric_value(
             defined_minimum, 0, answer_ranges
         )
-        minimum_value = self._convert_numeric_value_to_exclusive(
-            minimum_value, "min", exclusive, decimal_places
-        )
+        if minimum_value:
+            return minimum_value + (1 / 10 ** decimal_places)
 
         return minimum_value
 
@@ -1524,9 +1523,8 @@ class Validator:  # pylint: disable=too-many-lines
         maximum_value = self._get_defined_numeric_value(
             defined_maximum, MAX_NUMBER, answer_ranges
         )
-        maximum_value = self._convert_numeric_value_to_exclusive(
-            maximum_value, "max", exclusive, decimal_places
-        )
+        if exclusive:
+            return maximum_value - (1 / 10 ** decimal_places)
 
         return maximum_value
 
@@ -1543,16 +1541,6 @@ class Validator:  # pylint: disable=too-many-lines
                 return system_default
             return referred_answer["min"] + referred_answer["max"]
         return system_default
-
-    @staticmethod
-    def _convert_numeric_value_to_exclusive(
-        fallback_value, min_or_max, exclusive, decimal_places
-    ):
-        if exclusive and fallback_value:
-            if min_or_max == "min":
-                return fallback_value + (1 / 10 ** decimal_places)
-            return fallback_value - (1 / 10 ** decimal_places)
-        return fallback_value
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
