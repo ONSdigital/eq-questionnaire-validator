@@ -1372,6 +1372,12 @@ class Validator:  # pylint: disable=too-many-lines
     def _get_numeric_range_values(self, answer, answer_ranges):
         min_value = answer.get("minimum", {}).get("value", {})
         max_value = answer.get("maximum", {}).get("value", {})
+        min_referred = (
+            min_value.get("identifier") if isinstance(min_value, dict) else None
+        )
+        max_referred = (
+            min_value.get("identifier") if isinstance(max_value, dict) else None
+        )
 
         exclusive = answer.get("exclusive", False)
         decimal_places = answer.get("decimal_places", 0)
@@ -1384,12 +1390,8 @@ class Validator:  # pylint: disable=too-many-lines
                 max_value, decimal_places, exclusive, answer_ranges
             ),
             "decimal_places": decimal_places,
-            "min_referred": min_value.get("identifier")
-            if isinstance(min_value, dict)
-            else None,
-            "max_referred": max_value.get("identifier")
-            if isinstance(max_value, dict)
-            else None,
+            "min_referred": min_referred,
+            "max_referred": max_referred,
             "default": answer.get("default"),
         }
 
