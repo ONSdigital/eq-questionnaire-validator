@@ -1537,7 +1537,6 @@ class Validator:  # pylint: disable=too-many-lines
                 return None
             if referred_answer.get("default") is not None:
                 return system_default
-            return referred_answer["min"] + referred_answer["max"]
         return system_default
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
