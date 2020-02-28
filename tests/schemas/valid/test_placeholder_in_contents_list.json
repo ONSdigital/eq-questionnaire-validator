@@ -21,51 +21,51 @@
       "type": "string"
     }
   ],
-   "sections": [
-      {
-         "id": "section1",
-         "groups": [
+  "sections": [
+    {
+      "id": "section1",
+      "groups": [
+        {
+          "id": "group1",
+          "title": "",
+          "blocks": [
             {
-               "id": "group1",
-               "title": "",
-               "blocks": [
+              "content": {
+                "contents": [
                   {
-                     "content": {
-                        "contents": [
-                           {
-                              "description": "In this section, we’re going to ask you about the people living or staying at 68 Abingdon Road, Goathill."
-                           },
-                           {
-                              "list": [
-                                 "Names of the people living at this address including anyone temporarily away or who has been or intends to be in the UK for 3 months or more.",
-                                 {
-                                    "placeholders": [
-                                       {
-                                          "placeholder": "census_date",
-                                          "transforms": [
-                                             {
-                                                "arguments": {
-                                                   "date_format": "d MMMM yyyy",
-                                                   "date_to_format": {
-                                                      "value": "2021-03-21"
-                                                   }
-                                                },
-                                                "transform": "format_date"
-                                             }
-                                          ]
-                                       }
-                                    ],
-                                    "text": "Names of visitors staying overnight at this address on {census_date}"
-                                 }
-                              ],
-                              "title": "You will need to know"
-                           }
-                        ],
-                        "title": "People who live here"
-                     },
-                     "id": "who-lives-here-interstitial",
-                     "type": "Interstitial"
+                    "description": "In this section, we’re going to ask you about the people living or staying at 68 Abingdon Road, Goathill."
                   },
+                  {
+                    "list": [
+                      "Names of the people living at this address including anyone temporarily away or who has been or intends to be in the UK for 3 months or more.",
+                      {
+                        "placeholders": [
+                          {
+                            "placeholder": "census_date",
+                            "transforms": [
+                              {
+                                "arguments": {
+                                  "date_format": "d MMMM yyyy",
+                                  "date_to_format": {
+                                    "value": "2021-03-21"
+                                  }
+                                },
+                                "transform": "format_date"
+                              }
+                            ]
+                          }
+                        ],
+                        "text": "Names of visitors staying overnight at this address on {census_date}"
+                      }
+                    ],
+                    "title": "You will need to know"
+                  }
+                ],
+                "title": "People who live here"
+              },
+              "id": "who-lives-here-interstitial",
+              "type": "Interstitial"
+            },
             {
               "type": "Summary",
               "id": "summary"
