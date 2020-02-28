@@ -4,9 +4,9 @@
   "data_version": "0.0.3",
   "survey_id": "0",
   "session_timeout_in_seconds": 3,
-  "title": "Test Content Variants",
+  "title": "Test List Placeholder",
   "theme": "default",
-  "description": "A questionnaire to test content variants and variant choices",
+  "description": "A questionnaire to test content list placeholders",
   "metadata": [
     {
       "name": "user_id",
