@@ -2,19 +2,14 @@ import re
 import glob
 import json
 from collections import defaultdict
-from datetime import datetime
 from json import load
-from urllib.parse import urlparse
 
-from dateutil.relativedelta import relativedelta
 from eq_translations.survey_schema import SurveySchema
 from jsonpointer import resolve_pointer
 from jsonschema import SchemaError, RefResolver, ValidationError, Draft7Validator
 from jsonschema.exceptions import best_match
 
-MAX_NUMBER = 9999999999
-MIN_NUMBER = -999999999
-MAX_DECIMAL_PLACES = 6
+from app.validation.answer_validator import AnswerValidator
 
 
 class Validator:  # pylint: disable=too-many-lines
@@ -304,40 +299,21 @@ class Validator:  # pylint: disable=too-many-lines
             errors.extend(self._validate_mutually_exclusive(question))
 
             for answer in question.get("answers", []):
-                errors.extend(
-                    self._validate_routing_on_answer_options(block_or_variant, answer)
+                answer_validator = AnswerValidator(
+                    answer, block_or_variant, self._list_names, self._block_ids
                 )
-                errors.extend(self._validate_duplicate_options(answer))
-                errors.extend(self._validate_totaliser_defines_decimal_places(answer))
-                errors.extend(self._validate_answer_actions(answer))
-                errors.extend(self._ensure_answer_labels_and_values_match(answer))
-
-                if answer["type"] == "Date":
-                    if "minimum" in answer and "maximum" in answer:
-                        errors.extend(
-                            self._validate_minimum_and_maximum_offset_date(answer)
-                        )
-
-                if answer["type"] == "TextField":
-                    if "suggestions_url" in answer and not self._validate_url(
-                        answer["suggestions_url"]
-                    ):
-                        errors.append(
-                            self._error_message(
-                                f'Suggestions url used for TextField `{answer["id"]}` is invalid'
-                            )
-                        )
-
+                answer_errors = answer_validator.validate()
                 if answer["type"] in ["Number", "Currency", "Percentage"]:
                     numeric_answer_ranges[
-                        answer.get("id")
-                    ] = self._get_numeric_range_values(answer, numeric_answer_ranges)
+                        answer["id"]
+                    ] = answer_validator.get_numeric_range_values(numeric_answer_ranges)
 
-                    errors.extend(
-                        self._validate_numeric_answer_types(
-                            answer, numeric_answer_ranges
+                    answer_errors.extend(
+                        answer_validator.validate_numeric_answer_types(
+                            numeric_answer_ranges
                         )
                     )
+                errors.extend([self._error_message(error) for error in answer_errors])
 
         return errors
 
@@ -361,59 +337,6 @@ class Validator:  # pylint: disable=too-many-lines
                 )
             )
 
-        return errors
-
-    def _validate_answer_actions(self, answer):
-        errors = []
-        answer_options = answer.get("options", {})
-        for option in answer_options:
-
-            action_params = option.get("action", {}).get("params")
-            if not action_params:
-                continue
-
-            list_name = action_params.get("list_name")
-            if list_name and list_name not in self._list_names:
-                errors.append(
-                    (
-                        self._error_message(
-                            f'List name `{list_name}` defined in action params for answer `{answer["id"]}` does not exist'
-                        )
-                    )
-                )
-
-            block_id = action_params.get("block_id")
-            if block_id and block_id not in self._block_ids:
-                errors.append(
-                    (
-                        self._error_message(
-                            f'The block_id `{block_id}` defined in action params for answer `{answer["id"]}` does not exist'
-                        )
-                    )
-                )
-
-        return errors
-
-    def _ensure_answer_labels_and_values_match(self, answer):
-        errors = []
-        for option in answer.get("options", []):
-            if "text_plural" in option["label"]:
-                continue
-
-            if isinstance(option["label"], str):
-                label = option["label"]
-            else:
-                label = option["label"]["text"]
-
-            if label != option["value"]:
-                errors.append(
-                    (
-                        self._error_message(
-                            f"Found mismatching answer value for label: {label} "
-                            f'in answer id: {answer["id"]}'
-                        )
-                    )
-                )
         return errors
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
@@ -1032,44 +955,6 @@ class Validator:  # pylint: disable=too-many-lines
 
         return []
 
-    def _validate_routing_on_answer_options(self, block, answer):
-        answer_errors = []
-        if "routing_rules" in block and block["routing_rules"] and "options" in answer:
-            options = [option["value"] for option in answer["options"]]
-            has_default_route = False
-
-            for rule in block["routing_rules"]:
-                if "goto" in rule and "when" in rule["goto"].keys():
-                    when_clause = rule["goto"]["when"]
-                    for when in when_clause:
-                        if (
-                            "id" in when
-                            and "value" in when
-                            and when["id"] == answer["id"]
-                            and when["value"] in options
-                        ):
-                            options.remove(when["value"])
-                else:
-                    options = []
-                    has_default_route = True
-
-            has_unrouted_options = options and len(options) != len(answer["options"])
-
-            if answer["mandatory"] is False and not has_default_route:
-                default_route_not_defined = "Default route not defined for optional question [{}]".format(
-                    answer["id"]
-                )
-                answer_errors.append(self._error_message(default_route_not_defined))
-
-            if has_unrouted_options:
-                unrouted_error_template = (
-                    "Routing rule not defined for all answers or default not defined "
-                    "for answer [{}] missing options {}"
-                )
-                unrouted_error = unrouted_error_template.format(answer["id"], options)
-                answer_errors.append(self._error_message(unrouted_error))
-        return answer_errors
-
     def _validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
         """
         Validates any answer id in a when clause exists within the schema
@@ -1161,20 +1046,20 @@ class Validator:  # pylint: disable=too-many-lines
 
         if answer_type == "Checkbox":
             if condition not in all_checkbox_conditions:
+                answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
                 errors.append(
                     self._error_message(
                         f"The condition `{condition}` cannot be used"
-                        " with `Checkbox` answer type.",
-                        answer_ids_with_group_id[when["id"]]["answer"]["id"],
+                        f" with `Checkbox` answer type ({answer_id})."
                     )
                 )
         elif condition in checkbox_exclusive_conditions:
+            answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
             errors.append(
                 self._error_message(
                     f"The condition `{condition}` can only be used with"
                     " `Checkbox` answer types. "
-                    f"Found answer type: {answer_type}",
-                    answer_ids_with_group_id[when["id"]]["answer"]["id"],
+                    f"Found answer type: {answer_type} ({answer_id})."
                 )
             )
 
@@ -1254,10 +1139,10 @@ class Validator:  # pylint: disable=too-many-lines
                 example_date = "2016-05-10"
 
                 # Get minimum and maximum possible dates
-                minimum_date = self._get_relative_date(
+                minimum_date = AnswerValidator.get_relative_date(
                     example_date, period_limits["minimum"]
                 )
-                maximum_date = self._get_relative_date(
+                maximum_date = AnswerValidator.get_relative_date(
                     example_date, period_limits["maximum"]
                 )
 
@@ -1297,103 +1182,6 @@ class Validator:  # pylint: disable=too-many-lines
                 )
 
         return errors
-
-    def _validate_minimum_and_maximum_offset_date(self, answer):
-        # Validates if a date answer has a minimum and maximum
-        errors = []
-
-        if (
-            "value" in answer["minimum"]
-            and "value" in answer["maximum"]
-            and not isinstance(answer["minimum"]["value"], dict)
-            and not isinstance(answer["maximum"]["value"], dict)
-        ):
-            minimum_date = self._get_offset_date_value(answer["minimum"])
-            maximum_date = self._get_offset_date_value(answer["maximum"])
-
-            if minimum_date > maximum_date:
-                errors.append(
-                    self._error_message(
-                        "The minimum offset date is greater than the maximum offset date"
-                    )
-                )
-
-        return errors
-
-    def _validate_numeric_answer_types(self, numeric_answer, answer_ranges):
-        """
-        Validate numeric answer types are valid.
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        errors = []
-
-        # Validate referred numeric answer exists (skip further tests for answer if error is returned)
-        referred_errors = self._validate_referred_numeric_answer(
-            numeric_answer, answer_ranges
-        )
-        errors.extend(referred_errors)
-        if referred_errors:
-            return errors
-
-        # Validate numeric answer has a positive range of possible responses
-        errors.extend(self._validate_numeric_range(numeric_answer, answer_ranges))
-
-        # Validate numeric answer value within system limits
-        errors.extend(self._validate_numeric_answer_value(numeric_answer))
-
-        # Validate numeric answer decimal places within system limits
-        errors.extend(self._validate_numeric_answer_decimals(numeric_answer))
-
-        # Validate referred numeric answer decimals
-        errors.extend(
-            self._validate_referred_numeric_answer_decimals(
-                numeric_answer, answer_ranges
-            )
-        )
-
-        # Validate default is only used with non mandatory answers
-        errors.extend(self._validate_numeric_default(numeric_answer))
-
-        return errors
-
-    def _validate_numeric_default(self, answer):
-        error = []
-        if answer.get("mandatory") and answer.get("default") is not None:
-            error.append(
-                self._error_message(
-                    "Default is being used with a mandatory answer: {}".format(
-                        answer["id"]
-                    )
-                )
-            )
-
-        return error
-
-    def _get_numeric_range_values(self, answer, answer_ranges):
-        min_value = answer.get("minimum", {}).get("value", {})
-        max_value = answer.get("maximum", {}).get("value", {})
-        min_referred = (
-            min_value.get("identifier") if isinstance(min_value, dict) else None
-        )
-        max_referred = (
-            max_value.get("identifier") if isinstance(max_value, dict) else None
-        )
-
-        exclusive = answer.get("exclusive", False)
-        decimal_places = answer.get("decimal_places", 0)
-
-        return {
-            "min": self._get_answer_minimum(
-                min_value, decimal_places, exclusive, answer_ranges
-            ),
-            "max": self._get_answer_maximum(
-                max_value, decimal_places, exclusive, answer_ranges
-            ),
-            "decimal_places": decimal_places,
-            "min_referred": min_referred,
-            "max_referred": max_referred,
-            "default": answer.get("default"),
-        }
 
     def _validate_duplicates(self, json_to_validate):
         """
@@ -1445,37 +1233,6 @@ class Validator:  # pylint: disable=too-many-lines
                 yield item
             seen.add(item)
 
-    def _validate_duplicate_options(self, answer):
-        errors = []
-
-        labels = set()
-        values = set()
-
-        for option in answer.get("options", []):
-
-            # labels can have placeholders in, in which case we won't know if they are a duplicate or not
-            if isinstance(option["label"], dict):
-                continue
-
-            if option["label"] in labels:
-                errors.append(
-                    self._error_message(
-                        "Duplicate label found - {}".format(option["label"])
-                    )
-                )
-
-            if option["value"] in values:
-                errors.append(
-                    self._error_message(
-                        "Duplicate value found - {}".format(option["value"])
-                    )
-                )
-
-            labels.add(option["label"])
-            values.add(option["value"])
-
-        return errors
-
     def _validate_schema_contains_submission_page(self, schema, last_block):
         """
         Validate that the final block is of type Summary or Confirmation.
@@ -1502,128 +1259,9 @@ class Validator:  # pylint: disable=too-many-lines
         return []
 
     @staticmethod
-    def _error_message(message, ref=None):
+    def _error_message(message):
         error = {"message": message}
-        if isinstance(ref, str):
-            error["id"] = ref
         return error
-
-    def _get_answer_minimum(
-        self, defined_minimum, decimal_places, exclusive, answer_ranges
-    ):
-        minimum_value = self._get_defined_numeric_value(
-            defined_minimum, 0, answer_ranges
-        )
-        if exclusive:
-            return minimum_value + (1 / 10 ** decimal_places)
-        return minimum_value
-
-    def _get_answer_maximum(
-        self, defined_maximum, decimal_places, exclusive, answer_ranges
-    ):
-        maximum_value = self._get_defined_numeric_value(
-            defined_maximum, MAX_NUMBER, answer_ranges
-        )
-        if exclusive:
-            return maximum_value - (1 / 10 ** decimal_places)
-        return maximum_value
-
-    @staticmethod
-    def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
-        if not isinstance(defined_value, dict):
-            return defined_value
-        if "source" in defined_value and defined_value["source"] == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-            if referred_answer is None:
-                # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
-                return None
-            if referred_answer.get("default") is not None:
-                return system_default
-        return system_default
-
-    def _validate_referred_numeric_answer(self, answer, answer_ranges):
-        """
-        Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
-        If either of the above is true then it will not have been given a value by _get_numeric_range_values
-        """
-        errors = []
-        if answer_ranges[answer.get("id")]["min"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                answer["minimum"]["value"]["identifier"], answer["id"]
-            )
-            errors.append(self._error_message(error_message))
-        if answer_ranges[answer.get("id")]["max"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                answer["maximum"]["value"]["identifier"], answer["id"]
-            )
-            errors.append(self._error_message(error_message))
-
-        return errors
-
-    def _validate_numeric_range(self, answer, answer_ranges):
-        errors = []
-        max_value = answer_ranges[answer.get("id")]["max"]
-        min_value = answer_ranges[answer.get("id")]["min"]
-
-        if max_value - min_value < 0:
-            error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
-                min_value, max_value, answer["id"]
-            )
-            errors.append(self._error_message(error_message))
-
-        return errors
-
-    def _validate_numeric_answer_value(self, answer):
-        errors = []
-
-        min_value = answer.get("minimum", {}).get("value", 0)
-        max_value = answer.get("maximum", {}).get("value", 0)
-
-        if isinstance(min_value, int) and min_value < MIN_NUMBER:
-            error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
-                min_value, answer["id"], MIN_NUMBER
-            )
-            errors.append(self._error_message(error_message))
-
-        if isinstance(max_value, int) and max_value > MAX_NUMBER:
-            error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
-                max_value, answer["id"], MAX_NUMBER
-            )
-            errors.append(self._error_message(error_message))
-
-        return errors
-
-    def _validate_numeric_answer_decimals(self, answer):
-        errors = []
-        if answer.get("decimal_places", 0) > MAX_DECIMAL_PLACES:
-            error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
-                answer["decimal_places"], answer["id"], MAX_DECIMAL_PLACES
-            )
-            errors.append(self._error_message(error_message))
-
-        return errors
-
-    def _validate_referred_numeric_answer_decimals(self, answer, answer_ranges):
-        errors = []
-        answer_values = answer_ranges[answer["id"]]
-
-        if answer_values["min_referred"] is not None:
-            referred_values = answer_ranges[answer_values["min_referred"]]
-            if answer_values["decimal_places"] < referred_values["decimal_places"]:
-                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["min_referred"], answer["id"]
-                )
-                errors.append(self._error_message(error_message))
-
-        if answer_values["max_referred"] is not None:
-            referred_values = answer_ranges[answer_values["max_referred"]]
-            if answer_values["decimal_places"] < referred_values["decimal_places"]:
-                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["max_referred"], answer["id"]
-                )
-                errors.append(self._error_message(error_message))
-
-        return errors
 
     def _validate_mutually_exclusive(self, question):
         errors = []
@@ -1644,22 +1282,6 @@ class Validator:  # pylint: disable=too-many-lines
                         "{} is not of type Checkbox.".format(answers[-1]["id"])
                     )
                 )
-
-        return errors
-
-    def _validate_totaliser_defines_decimal_places(self, answer):
-        errors = []
-
-        if "calculated" in answer and (
-            "decimal_places" not in answer or answer["decimal_places"] != 2
-        ):
-            errors.append(
-                self._error_message(
-                    "'decimal_places' must be defined and set to 2 for the answer_id - {}".format(
-                        answer["id"]
-                    )
-                )
-            )
 
         return errors
 
@@ -1978,34 +1600,6 @@ class Validator:  # pylint: disable=too-many-lines
     def get_blocks_for_section(section):
         return [block for group in section["groups"] for block in group["blocks"]]
 
-    def _get_offset_date_value(self, answer_min_or_max):
-        if answer_min_or_max["value"] == "now":
-            value = datetime.utcnow().strftime("%Y-%m-%d")
-        else:
-            value = answer_min_or_max["value"]
-
-        if "offset_by" in answer_min_or_max:
-            offset = answer_min_or_max["offset_by"]
-            value = self._get_relative_date(value, offset).strftime("%Y-%m-%d")
-
-        return value
-
-    def _get_relative_date(self, date_string, offset_object):
-        # Returns a relative date given an offset or period object
-        return self._convert_to_datetime(date_string) + relativedelta(
-            years=offset_object.get("years", 0),
-            months=offset_object.get("months", 0),
-            days=offset_object.get("days", 0),
-        )
-
-    @staticmethod
-    def _convert_to_datetime(value):
-        date_format = "%Y-%m"
-        if value and re.match(r"\d{4}-\d{2}-\d{2}", value):
-            date_format = "%Y-%m-%d"
-
-        return datetime.strptime(value, date_format) if value else None
-
     def _get_answers_with_parent_ids(self, json_to_validate):
         answers = {}
         for question, context in self._get_questions_with_context(json_to_validate):
@@ -2121,11 +1715,3 @@ class Validator:  # pylint: disable=too-many-lines
                             block_ids.append(block[sub_block]["id"])
 
         return block_ids
-
-    @staticmethod
-    def _validate_url(url):
-        parsed_result = urlparse(url)
-
-        if parsed_result.scheme and parsed_result.netloc:
-            return True
-        return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None

@@ -503,7 +503,7 @@ def test_invalid_when_condition_property():
     fuzzy_error_messages = [
         "The comparison id `country-checkbox-answer2` is not of answer type `Checkbox`. "
         "The condition `contains any` can only reference `Checkbox` answers when using `comparison id`",
-        "The condition `equals any` cannot be used with `Checkbox` answer type.",
+        "The condition `equals any` cannot be used with `Checkbox` answer type (country-checkbox-answer).",
     ]
 
     for fuzzy_error in fuzzy_error_messages:
