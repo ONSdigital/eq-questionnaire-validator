@@ -12,7 +12,7 @@ from jsonschema.exceptions import best_match
 from app.validation.answer_validator import AnswerValidator
 
 
-class Validator:  # pylint: disable=too-many-lines
+class QuestionnaireValidator:  # pylint: disable=too-many-lines
     def __init__(self):
         with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
             self.schema = load(schema_data)
@@ -586,14 +586,14 @@ class Validator:  # pylint: disable=too-many-lines
 
         if not default_routing_rule_count:
             errors.append(
-                Validator._error_message(
+                QuestionnaireValidator._error_message(
                     "The routing rules for group or block: {} must contain a default "
                     "routing rule without a when rule".format(block_or_group["id"])
                 )
             )
         elif default_routing_rule_count > 1:
             errors.append(
-                Validator._error_message(
+                QuestionnaireValidator._error_message(
                     "The routing rules for group or block: {} contain multiple default "
                     "routing rules. Some of them will not be used".format(
                         block_or_group["id"]
@@ -630,7 +630,7 @@ class Validator:  # pylint: disable=too-many-lines
         for value in when_values:
             if value not in option_values:
                 errors.append(
-                    Validator._error_message(
+                    QuestionnaireValidator._error_message(
                         f"Answer value in when rule with answer id `{when_rule['id']}` has an invalid value of `{value}`"
                     )
                 )
@@ -1214,7 +1214,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         all_ids.extend(non_block_ids)
 
-        duplicates = Validator._find_duplicates(all_ids)
+        duplicates = QuestionnaireValidator._find_duplicates(all_ids)
 
         for duplicate in duplicates:
             duplicate_errors.append(
@@ -1568,7 +1568,7 @@ class Validator:  # pylint: disable=too-many-lines
             len(
                 [
                     block
-                    for block in Validator.get_blocks_for_section(section)
+                    for block in QuestionnaireValidator.get_blocks_for_section(section)
                     if block["type"] == "ListCollector"
                     and list_name == block["for_list"]
                 ]
@@ -1578,7 +1578,14 @@ class Validator:  # pylint: disable=too-many-lines
 
     @staticmethod
     def _has_single_driving_question(list_name, json_to_validate):
-        return len(Validator.get_driving_questions(list_name, json_to_validate)) == 1
+        return (
+            len(
+                QuestionnaireValidator.get_driving_questions(
+                    list_name, json_to_validate
+                )
+            )
+            == 1
+        )
 
     @staticmethod
     def get_driving_questions(list_name, json_to_validate):
@@ -1588,7 +1595,7 @@ class Validator:  # pylint: disable=too-many-lines
             driving_blocks.extend(
                 [
                     block
-                    for block in Validator.get_blocks_for_section(section)
+                    for block in QuestionnaireValidator.get_blocks_for_section(section)
                     if block["type"] == "ListCollectorDrivingQuestion"
                     and block["for_list"] == list_name
                 ]

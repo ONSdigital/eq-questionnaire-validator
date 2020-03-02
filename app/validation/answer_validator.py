@@ -12,39 +12,42 @@ MAX_DECIMAL_PLACES = 6
 
 
 class AnswerValidator:
-    schema_element = {}
+    answer = {}
 
     def __init__(self, schema_element, block, list_names, block_ids):
-        self.schema_element = schema_element
+        self.answer = schema_element
         self.block = block
         self.list_names = list_names
         self.block_ids = block_ids
 
     @cached_property
     def options(self):
-        return self.schema_element.get("options", [])
+        return self.answer.get("options", [])
 
     def validate(self):
         errors = []
         errors.extend(self._validate_duplicate_options())
-        errors.extend(self._validate_totaliser_defines_decimal_places())
         errors.extend(self._validate_answer_actions())
         errors.extend(self._ensure_answer_labels_and_values_match())
 
         errors.extend(self._validate_routing_on_answer_options())
 
-        if self.schema_element["type"] == "Date" and not self.is_offset_date_valid():
+        if not self.are_decimal_places_valid():
+            errors.append(
+                "'decimal_places' must be defined and set to 2 for the answer_id - {}".format(
+                    self.answer["id"]
+                )
+            )
+
+        if self.answer["type"] == "Date" and not self.is_offset_date_valid():
             errors.append(
                 "The minimum offset date is greater than the maximum offset date"
             )
 
-        if (
-            self.schema_element["type"] == "TextField"
-            and "suggestions_url" in self.schema_element
-        ):
+        if self.answer["type"] == "TextField" and "suggestions_url" in self.answer:
             if not self.is_suggestion_url_valid():
                 errors.append(
-                    f'Suggestions url used for TextField `{self.schema_element["id"]}` is invalid'
+                    f'Suggestions url used for TextField `{self.answer["id"]}` is invalid'
                 )
         return errors
 
@@ -71,20 +74,10 @@ class AnswerValidator:
 
         return errors
 
-    def _validate_totaliser_defines_decimal_places(self):
-        errors = []
-
-        if "calculated" in self.schema_element and (
-            "decimal_places" not in self.schema_element
-            or self.schema_element["decimal_places"] != 2
-        ):
-            errors.append(
-                "'decimal_places' must be defined and set to 2 for the answer_id - {}".format(
-                    self.schema_element["id"]
-                )
-            )
-
-        return errors
+    def are_decimal_places_valid(self):
+        if "calculated" in self.answer:
+            return "decimal_places" in self.answer and self.answer["decimal_places"] == 2
+        return True
 
     def _validate_answer_actions(self):
         errors = []
@@ -98,13 +91,13 @@ class AnswerValidator:
 
             if list_name and list_name not in self.list_names:
                 errors.append(
-                    f'List name `{list_name}` defined in action params for answer `{self.schema_element["id"]}` does not exist'
+                    f'List name `{list_name}` defined in action params for answer `{self.answer["id"]}` does not exist'
                 )
 
             block_id = action_params.get("block_id")
             if block_id and block_id not in self.block_ids:
                 errors.append(
-                    f'The block_id `{block_id}` defined in action params for answer `{self.schema_element["id"]}` does not exist'
+                    f'The block_id `{block_id}` defined in action params for answer `{self.answer["id"]}` does not exist'
                 )
 
         return errors
@@ -124,23 +117,29 @@ class AnswerValidator:
             if label != option["value"]:
                 errors.append(
                     f"Found mismatching answer value for label: {label} "
-                    f'in answer id: {self.schema_element["id"]}'
+                    f'in answer id: {self.answer["id"]}'
                 )
         return errors
 
     def is_offset_date_valid(self):
-        if "minimum" in self.schema_element and "maximum" in self.schema_element:
+        if "minimum" in self.answer and "maximum" in self.answer:
             if (
-                "value" in self.schema_element["minimum"]
-                and "value" in self.schema_element["maximum"]
-                and not isinstance(self.schema_element["minimum"]["value"], dict)
-                and not isinstance(self.schema_element["maximum"]["value"], dict)
+                "value" in self.answer["minimum"]
+                and "value" in self.answer["maximum"]
+                and not isinstance(self.answer["minimum"]["value"], dict)
+                and not isinstance(self.answer["maximum"]["value"], dict)
             ):
-                minimum_date = self._get_offset_date(self.schema_element["minimum"])
-                maximum_date = self._get_offset_date(self.schema_element["maximum"])
+                minimum_date = self._get_offset_date(self.answer["minimum"])
+                maximum_date = self._get_offset_date(self.answer["maximum"])
 
                 return minimum_date < maximum_date
         return True
+
+    def has_default_route(self):
+        for rule in self.block["routing_rules"]:
+            if "goto" not in rule or "when" not in rule["goto"].keys():
+                return True
+        return False
 
     def _validate_routing_on_answer_options(self):
         answer_errors = []
@@ -150,7 +149,6 @@ class AnswerValidator:
             and self.options
         ):
             option_values = [option["value"] for option in self.options]
-            has_default_route = False
 
             for rule in self.block["routing_rules"]:
                 if "goto" in rule and "when" in rule["goto"].keys():
@@ -159,21 +157,20 @@ class AnswerValidator:
                         if (
                             "id" in when
                             and "value" in when
-                            and when["id"] == self.schema_element["id"]
+                            and when["id"] == self.answer["id"]
                             and when["value"] in option_values
                         ):
                             option_values.remove(when["value"])
                 else:
                     option_values = []
-                    has_default_route = True
 
             has_unrouted_options = option_values and len(option_values) != len(
                 self.options
             )
 
-            if self.schema_element["mandatory"] is False and not has_default_route:
+            if self.answer["mandatory"] is False and not self.has_default_route():
                 default_route_not_defined = "Default route not defined for optional question [{}]".format(
-                    self.schema_element["id"]
+                    self.answer["id"]
                 )
                 answer_errors.append(default_route_not_defined)
 
@@ -183,7 +180,7 @@ class AnswerValidator:
                     "for answer [{}] missing options {}"
                 )
                 unrouted_error = unrouted_error_template.format(
-                    self.schema_element["id"], option_values
+                    self.answer["id"], option_values
                 )
                 answer_errors.append(unrouted_error)
         return answer_errors
@@ -224,16 +221,14 @@ class AnswerValidator:
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
         errors = []
-        if answer_ranges[self.schema_element.get("id")]["min"] is None:
+        if answer_ranges[self.answer.get("id")]["min"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                self.schema_element["minimum"]["value"]["identifier"],
-                self.schema_element["id"],
+                self.answer["minimum"]["value"]["identifier"], self.answer["id"]
             )
             errors.append(error_message)
-        if answer_ranges[self.schema_element.get("id")]["max"] is None:
+        if answer_ranges[self.answer.get("id")]["max"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                self.schema_element["maximum"]["value"]["identifier"],
-                self.schema_element["id"],
+                self.answer["maximum"]["value"]["identifier"], self.answer["id"]
             )
             errors.append(error_message)
 
@@ -241,12 +236,12 @@ class AnswerValidator:
 
     def _validate_numeric_range(self, answer_ranges):
         errors = []
-        max_value = answer_ranges[self.schema_element.get("id")]["max"]
-        min_value = answer_ranges[self.schema_element.get("id")]["min"]
+        max_value = answer_ranges[self.answer.get("id")]["max"]
+        min_value = answer_ranges[self.answer.get("id")]["min"]
 
         if max_value - min_value < 0:
             error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
-                min_value, max_value, self.schema_element["id"]
+                min_value, max_value, self.answer["id"]
             )
             errors.append(error_message)
 
@@ -255,18 +250,18 @@ class AnswerValidator:
     def _validate_numeric_answer_value(self):
         errors = []
 
-        min_value = self.schema_element.get("minimum", {}).get("value", 0)
-        max_value = self.schema_element.get("maximum", {}).get("value", 0)
+        min_value = self.answer.get("minimum", {}).get("value", 0)
+        max_value = self.answer.get("maximum", {}).get("value", 0)
 
         if isinstance(min_value, int) and min_value < MIN_NUMBER:
             error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
-                min_value, self.schema_element["id"], MIN_NUMBER
+                min_value, self.answer["id"], MIN_NUMBER
             )
             errors.append(error_message)
 
         if isinstance(max_value, int) and max_value > MAX_NUMBER:
             error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
-                max_value, self.schema_element["id"], MAX_NUMBER
+                max_value, self.answer["id"], MAX_NUMBER
             )
             errors.append(error_message)
 
@@ -274,11 +269,9 @@ class AnswerValidator:
 
     def _validate_numeric_answer_decimals(self):
         errors = []
-        if self.schema_element.get("decimal_places", 0) > MAX_DECIMAL_PLACES:
+        if self.answer.get("decimal_places", 0) > MAX_DECIMAL_PLACES:
             error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
-                self.schema_element["decimal_places"],
-                self.schema_element["id"],
-                MAX_DECIMAL_PLACES,
+                self.answer["decimal_places"], self.answer["id"], MAX_DECIMAL_PLACES
             )
             errors.append(error_message)
 
@@ -286,13 +279,13 @@ class AnswerValidator:
 
     def _validate_referred_numeric_answer_decimals(self, answer_ranges):
         errors = []
-        answer_values = answer_ranges[self.schema_element["id"]]
+        answer_values = answer_ranges[self.answer["id"]]
 
         if answer_values["min_referred"] is not None:
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["min_referred"], self.schema_element["id"]
+                    answer_values["min_referred"], self.answer["id"]
                 )
                 errors.append(error_message)
 
@@ -300,20 +293,17 @@ class AnswerValidator:
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["max_referred"], self.schema_element["id"]
+                    answer_values["max_referred"], self.answer["id"]
                 )
                 errors.append(error_message)
 
         return errors
 
     def _validate_numeric_default(self):
-        if (
-            self.schema_element.get("mandatory")
-            and self.schema_element.get("default") is not None
-        ):
+        if self.answer.get("mandatory") and self.answer.get("default") is not None:
             return [
                 "Default is being used with a mandatory answer: {}".format(
-                    self.schema_element["id"]
+                    self.answer["id"]
                 )
             ]
 
@@ -330,8 +320,8 @@ class AnswerValidator:
         return self.get_relative_date(value, offset)
 
     def get_numeric_range_values(self, answer_ranges):
-        min_value = self.schema_element.get("minimum", {}).get("value", {})
-        max_value = self.schema_element.get("maximum", {}).get("value", {})
+        min_value = self.answer.get("minimum", {}).get("value", {})
+        max_value = self.answer.get("maximum", {}).get("value", {})
         min_referred = (
             min_value.get("identifier") if isinstance(min_value, dict) else None
         )
@@ -339,8 +329,8 @@ class AnswerValidator:
             max_value.get("identifier") if isinstance(max_value, dict) else None
         )
 
-        exclusive = self.schema_element.get("exclusive", False)
-        decimal_places = self.schema_element.get("decimal_places", 0)
+        exclusive = self.answer.get("exclusive", False)
+        decimal_places = self.answer.get("decimal_places", 0)
 
         return {
             "min": self._get_answer_minimum(
@@ -352,15 +342,13 @@ class AnswerValidator:
             "decimal_places": decimal_places,
             "min_referred": min_referred,
             "max_referred": max_referred,
-            "default": self.schema_element.get("default"),
+            "default": self.answer.get("default"),
         }
 
     def _get_answer_minimum(
         self, defined_minimum, decimal_places, exclusive, answer_ranges
     ):
-        minimum_value = self._get_defined_numeric_value(
-            defined_minimum, 0, answer_ranges
-        )
+        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
             return minimum_value + (1 / 10 ** decimal_places)
         return minimum_value
@@ -368,7 +356,7 @@ class AnswerValidator:
     def _get_answer_maximum(
         self, defined_maximum, decimal_places, exclusive, answer_ranges
     ):
-        maximum_value = self._get_defined_numeric_value(
+        maximum_value = self._get_numeric_value(
             defined_maximum, MAX_NUMBER, answer_ranges
         )
         if exclusive:
@@ -385,7 +373,7 @@ class AnswerValidator:
         )
 
     @staticmethod
-    def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
+    def _get_numeric_value(defined_value, system_default, answer_ranges):
         if not isinstance(defined_value, dict):
             return defined_value
         if "source" in defined_value and defined_value["source"] == "answers":
@@ -406,7 +394,7 @@ class AnswerValidator:
         return datetime.strptime(value, date_format) if value else None
 
     def is_suggestion_url_valid(self):
-        parsed_result = urlparse(self.schema_element["suggestions_url"])
+        parsed_result = urlparse(self.answer["suggestions_url"])
 
         if parsed_result.scheme and parsed_result.netloc:
             return True

@@ -1,8 +1,8 @@
 import json
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
-validator = Validator()
+validator = QuestionnaireValidator()
 
 
 def create_schema_with_answer_id(answer_id):

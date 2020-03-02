@@ -5,13 +5,13 @@ from structlog import configure
 from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = getLogger()
 
 configure(logger_factory=LoggerFactory())
 
-validator = Validator()
+validator = QuestionnaireValidator()
 
 
 def _open_and_load_schema_file(file):

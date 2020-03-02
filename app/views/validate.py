@@ -6,13 +6,13 @@ from json import JSONDecodeError
 from flask import Blueprint, request, jsonify, Response
 from structlog import get_logger
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = get_logger()
 
 validate_blueprint = Blueprint("validate", __name__)
 
-validator = Validator()
+validator = QuestionnaireValidator()
 
 
 @validate_blueprint.route("/validate", methods=["POST"])
