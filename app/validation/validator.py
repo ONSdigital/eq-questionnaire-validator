@@ -1511,7 +1511,7 @@ class Validator:  # pylint: disable=too-many-lines
     def _get_answer_minimum(
         self, defined_minimum, decimal_places, exclusive, answer_ranges
     ):
-        minimum_value = self._get_defined_numeric_value(
+        minimum_value = self._get_numeric_value(
             defined_minimum, 0, answer_ranges
         )
         if exclusive:
@@ -1521,7 +1521,7 @@ class Validator:  # pylint: disable=too-many-lines
     def _get_answer_maximum(
         self, defined_maximum, decimal_places, exclusive, answer_ranges
     ):
-        maximum_value = self._get_defined_numeric_value(
+        maximum_value = self._get_numeric_value(
             defined_maximum, MAX_NUMBER, answer_ranges
         )
         if exclusive:
@@ -1529,11 +1529,11 @@ class Validator:  # pylint: disable=too-many-lines
         return maximum_value
 
     @staticmethod
-    def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
-        if not isinstance(defined_value, dict):
-            return defined_value
-        if "source" in defined_value and defined_value["source"] == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
+    def _get_numeric_value(value, system_default, answer_ranges):
+        if not isinstance(value, dict):
+            return value
+        if "source" in value and value["source"] == "answers":
+            referred_answer = answer_ranges.get(value["identifier"])
             if referred_answer is None:
                 # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
                 return None
