@@ -8,7 +8,7 @@
       "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_identifier"
     },
     "meta": {
-      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/metadata_identifier"
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier"
     },
     "condition": {
       "enum": ["contains all", "contains any", "equals any", "not equals any"]
