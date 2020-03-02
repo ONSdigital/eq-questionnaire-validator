@@ -47,16 +47,7 @@
         "description": "minimum offset date for user entered date to be larger than.",
         "properties": {
           "value": {
-            "type": "string",
-            "description": "date string or 'now'."
-          },
-          "answer_id": {
-            "type": "string",
-            "description": "The id of an answer from which to obtain the date"
-          },
-          "meta": {
-            "type": "string",
-            "description": "Metadata provided by the calling service. This will vary between surveys."
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/value_reference"
           },
           "offset_by": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/offset_by_yyyy"
@@ -80,16 +71,7 @@
         "description": "maximum offset date for user entered date to be lower than.",
         "properties": {
           "value": {
-            "type": "string",
-            "description": "date string or 'now'."
-          },
-          "answer_id": {
-            "type": "string",
-            "description": "The id of an answer from which to obtain the date"
-          },
-          "meta": {
-            "type": "string",
-            "description": "Metadata provided by the calling service. This will vary between surveys."
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/value_reference"
           },
           "offset_by": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/offset_by_yyyy"

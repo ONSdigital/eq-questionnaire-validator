@@ -52,9 +52,10 @@ class Validator:  # pylint: disable=too-many-lines
             self.schema_validator.validate(json_to_validate)
             return {}
         except ValidationError as e:
+            match = best_match([e])
             return {
                 "message": e.message,
-                "predicted_cause": best_match([e]).message,
+                "predicted_cause": match.message,
                 "path": str(e.path),
             }
         except SchemaError as e:
@@ -1301,7 +1302,12 @@ class Validator:  # pylint: disable=too-many-lines
         # Validates if a date answer has a minimum and maximum
         errors = []
 
-        if "value" in answer["minimum"] and "value" in answer["maximum"]:
+        if (
+            "value" in answer["minimum"]
+            and "value" in answer["maximum"]
+            and not isinstance(answer["minimum"]["value"], dict)
+            and not isinstance(answer["maximum"]["value"], dict)
+        ):
             minimum_date = self._get_offset_date_value(answer["minimum"])
             maximum_date = self._get_offset_date_value(answer["maximum"])
 
@@ -1364,13 +1370,28 @@ class Validator:  # pylint: disable=too-many-lines
         return error
 
     def _get_numeric_range_values(self, answer, answer_ranges):
+        min_value = answer.get("minimum", {}).get("value", {})
+        max_value = answer.get("maximum", {}).get("value", {})
+        min_referred = (
+            min_value.get("identifier") if isinstance(min_value, dict) else None
+        )
+        max_referred = (
+            max_value.get("identifier") if isinstance(max_value, dict) else None
+        )
+
+        exclusive = answer.get("exclusive", False)
+        decimal_places = answer.get("decimal_places", 0)
 
         return {
-            "min": self._get_answer_minimum(answer, answer_ranges),
-            "max": self._get_answer_maximum(answer, answer_ranges),
-            "decimal_places": answer.get("decimal_places", 0),
-            "min_referred": answer.get("min_value", {}).get("answer_id"),
-            "max_referred": answer.get("max_value", {}).get("answer_id"),
+            "min": self._get_answer_minimum(
+                min_value, decimal_places, exclusive, answer_ranges
+            ),
+            "max": self._get_answer_maximum(
+                max_value, decimal_places, exclusive, answer_ranges
+            ),
+            "decimal_places": decimal_places,
+            "min_referred": min_referred,
+            "max_referred": max_referred,
             "default": answer.get("default"),
         }
 
@@ -1487,63 +1508,36 @@ class Validator:  # pylint: disable=too-many-lines
             error["id"] = ref
         return error
 
-    def _get_answer_minimum(self, answer, answer_ranges):
-        defined_minimum = answer.get("min_value")
-        minimum_values = self._get_defined_numeric_value(
-            defined_minimum, 0, answer_ranges
-        )
-        minimum_values = self._convert_numeric_values_to_exclusive(
-            defined_minimum, minimum_values, "min", answer.get("decimal_places", 0)
-        )
+    def _get_answer_minimum(
+        self, defined_minimum, decimal_places, exclusive, answer_ranges
+    ):
+        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
+        if exclusive:
+            return minimum_value + (1 / 10 ** decimal_places)
+        return minimum_value
 
-        return minimum_values
-
-    def _get_answer_maximum(self, answer, answer_ranges):
-        defined_maximum = answer.get("max_value")
-        maximum_values = self._get_defined_numeric_value(
+    def _get_answer_maximum(
+        self, defined_maximum, decimal_places, exclusive, answer_ranges
+    ):
+        maximum_value = self._get_numeric_value(
             defined_maximum, MAX_NUMBER, answer_ranges
         )
-        maximum_values = self._convert_numeric_values_to_exclusive(
-            defined_maximum, maximum_values, "max", answer.get("decimal_places", 0)
-        )
-
-        return maximum_values
+        if exclusive:
+            return maximum_value - (1 / 10 ** decimal_places)
+        return maximum_value
 
     @staticmethod
-    def _get_defined_numeric_value(defined_value, system_default, answer_ranges):
-        values = None
-
-        if defined_value is None:
-            values = [system_default]
-        elif "value" in defined_value:
-            values = [defined_value.get("value")]
-        elif "answer_id" in defined_value:
-            referred_answer = answer_ranges.get(defined_value["answer_id"])
+    def _get_numeric_value(value, system_default, answer_ranges):
+        if not isinstance(value, dict):
+            return value
+        if "source" in value and value["source"] == "answers":
+            referred_answer = answer_ranges.get(value["identifier"])
             if referred_answer is None:
-                values = (
-                    None
-                )  # Referred answer is not  valid (picked up by _validate_referred_numeric_answer)
-            elif referred_answer.get("default") is not None:
-                values = [system_default]
-            else:
-                values = referred_answer["min"] + referred_answer["max"]
-
-        return values
-
-    @staticmethod
-    def _convert_numeric_values_to_exclusive(
-        defined_value, values, min_or_max, decimal_places
-    ):
-        exclusive_values = values
-        if defined_value and defined_value.get("exclusive") and values:
-            exclusive_values = []
-            for value in values:
-                if min_or_max == "min":
-                    exclusive_values.append(value + (1 / 10 ** decimal_places))
-                else:
-                    exclusive_values.append(value - (1 / 10 ** decimal_places))
-
-        return exclusive_values
+                # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
+                return None
+            if referred_answer.get("default") is not None:
+                return system_default
+        return system_default
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
@@ -1553,12 +1547,12 @@ class Validator:  # pylint: disable=too-many-lines
         errors = []
         if answer_ranges[answer.get("id")]["min"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                answer["min_value"]["answer_id"], answer["id"]
+                answer["minimum"]["value"]["identifier"], answer["id"]
             )
             errors.append(self._error_message(error_message))
         if answer_ranges[answer.get("id")]["max"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                answer["max_value"]["answer_id"], answer["id"]
+                answer["maximum"]["value"]["identifier"], answer["id"]
             )
             errors.append(self._error_message(error_message))
 
@@ -1566,27 +1560,32 @@ class Validator:  # pylint: disable=too-many-lines
 
     def _validate_numeric_range(self, answer, answer_ranges):
         errors = []
-        for max_value in answer_ranges[answer.get("id")]["max"]:
-            for min_value in answer_ranges[answer.get("id")]["min"]:
-                if max_value - min_value < 0:
-                    error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
-                        min_value, max_value, answer["id"]
-                    )
-                    errors.append(self._error_message(error_message))
+        max_value = answer_ranges[answer.get("id")]["max"]
+        min_value = answer_ranges[answer.get("id")]["min"]
+
+        if max_value - min_value < 0:
+            error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
+                min_value, max_value, answer["id"]
+            )
+            errors.append(self._error_message(error_message))
 
         return errors
 
     def _validate_numeric_answer_value(self, answer):
         errors = []
-        if answer.get("min_value") and answer["min_value"].get("value", 0) < MIN_NUMBER:
+
+        min_value = answer.get("minimum", {}).get("value", 0)
+        max_value = answer.get("maximum", {}).get("value", 0)
+
+        if isinstance(min_value, int) and min_value < MIN_NUMBER:
             error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
-                answer["min_value"]["value"], answer["id"], MIN_NUMBER
+                min_value, answer["id"], MIN_NUMBER
             )
             errors.append(self._error_message(error_message))
 
-        if answer.get("max_value") and answer["max_value"].get("value", 0) > MAX_NUMBER:
+        if isinstance(max_value, int) and max_value > MAX_NUMBER:
             error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
-                answer["max_value"]["value"], answer["id"], MAX_NUMBER
+                max_value, answer["id"], MAX_NUMBER
             )
             errors.append(self._error_message(error_message))
 
