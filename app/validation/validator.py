@@ -1511,9 +1511,7 @@ class Validator:  # pylint: disable=too-many-lines
     def _get_answer_minimum(
         self, defined_minimum, decimal_places, exclusive, answer_ranges
     ):
-        minimum_value = self._get_numeric_value(
-            defined_minimum, 0, answer_ranges
-        )
+        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
             return minimum_value + (1 / 10 ** decimal_places)
         return minimum_value
