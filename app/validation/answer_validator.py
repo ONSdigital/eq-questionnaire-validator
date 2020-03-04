@@ -251,15 +251,15 @@ class AnswerValidator:
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
-        if isinstance(min_value, int) and min_value < MIN_NUMBER:
+        if isinstance(min_value, int) and min_value < self.MIN_NUMBER:
             error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
-                min_value, self.answer["id"], MIN_NUMBER
+                min_value, self.answer["id"], self.MIN_NUMBER
             )
             errors.append(error_message)
 
-        if isinstance(max_value, int) and max_value > MAX_NUMBER:
+        if isinstance(max_value, int) and max_value > self.MAX_NUMBER:
             error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
-                max_value, self.answer["id"], MAX_NUMBER
+                max_value, self.answer["id"], self.MAX_NUMBER
             )
             errors.append(error_message)
 
@@ -267,9 +267,9 @@ class AnswerValidator:
 
     def _validate_numeric_answer_decimals(self):
         errors = []
-        if self.answer.get("decimal_places", 0) > MAX_DECIMAL_PLACES:
+        if self.answer.get("decimal_places", 0) > self.MAX_DECIMAL_PLACES:
             error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
-                self.answer["decimal_places"], self.answer["id"], MAX_DECIMAL_PLACES
+                self.answer["decimal_places"], self.answer["id"], self.MAX_DECIMAL_PLACES
             )
             errors.append(error_message)
 
@@ -355,7 +355,7 @@ class AnswerValidator:
         self, defined_maximum, decimal_places, exclusive, answer_ranges
     ):
         maximum_value = self._get_numeric_value(
-            defined_maximum, MAX_NUMBER, answer_ranges
+            defined_maximum, self.MAX_NUMBER, answer_ranges
         )
         if exclusive:
             return maximum_value - (1 / 10 ** decimal_places)
