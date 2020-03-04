@@ -83,7 +83,6 @@ def test_invalid_numeric_answers():
     filename = "schemas/invalid/test_invalid_numeric_answers.json"
 
     expected_error_messages = [
-        'Invalid range of min = 0 and max = -1.0 is possible for answer "answer-2".',
         'The referenced answer "answer-1" has a greater number of decimal places than '
         'answer "answer-2"',
         'The referenced answer "answer-4" can not be used to set the minimum of answer '

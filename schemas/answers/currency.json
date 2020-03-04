@@ -37,10 +37,10 @@
         "type": "integer",
         "description": "Default value if no answer given"
       },
-      "max_value": {
+      "maximum": {
         "$ref": "definitions.json#/max_value"
       },
-      "min_value": {
+      "minimum": {
         "$ref": "definitions.json#/min_value"
       },
       "currency": {

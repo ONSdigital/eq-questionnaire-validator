@@ -50,8 +50,11 @@
                     "id": "answer-2",
                     "label": "Invalid Range",
                     "mandatory": false,
-                    "max_value": {
-                      "answer_id": "answer-1",
+                    "maximum": {
+                      "value": {
+                        "identifier": "answer-1",
+                        "source": "answers"
+                      },
                       "exclusive": true
                     },
                     "type": "Currency"
@@ -71,11 +74,17 @@
                     "id": "answer-3",
                     "label": "Invalid References",
                     "mandatory": false,
-                    "max_value": {
-                      "answer_id": "answer-5"
+                    "maximum": {
+                      "value": {
+                        "identifier": "answer-5",
+                        "source": "answers"
+                      }
                     },
-                    "min_value": {
-                      "answer_id": "answer-4"
+                    "minimum": {
+                      "value": {
+                        "identifier": "answer-4",
+                        "source": "answers"
+                      }
                     },
                     "type": "Percentage"
                   }
@@ -94,10 +103,10 @@
                     "id": "answer-4",
                     "label": "Max/Min out of system limits",
                     "mandatory": false,
-                    "max_value": {
+                    "maximum": {
                       "value": 99999999999
                     },
-                    "min_value": {
+                    "minimum": {
                       "value": -99999999999
                     },
                     "type": "Number"
@@ -137,8 +146,11 @@
                     "id": "answer-6",
                     "label": "Invalid Range",
                     "mandatory": false,
-                    "max_value": {
-                      "answer_id": "answer-1"
+                    "maximum": {
+                      "value": {
+                        "identifier": "answer-1",
+                        "source": "answers"
+                      }
                     },
                     "type": "Currency"
                   }

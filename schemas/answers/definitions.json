@@ -47,57 +47,31 @@
       "required": ["label", "value"]
     }
   },
-  "max_value": {
-    "type": "object",
-    "properties": {
-      "value": {
-        "type": "integer",
-        "description": "Maximum numeric value allowed."
-      },
-      "answer_id": {
-        "type": "string",
-        "description": "The id of an answer from which to obtain the max_value"
-      },
-      "exclusive": {
-        "type": "boolean",
-        "description": "Whether validation is exclusive of value or not"
-      }
-    },
-    "additionalProperties": false,
-    "oneOf": [
-      {
-        "required": ["value"]
-      },
-      {
-        "required": ["answer_id"]
-      }
-    ]
-  },
   "min_value": {
     "type": "object",
     "properties": {
       "value": {
-        "type": "integer",
-        "description": "Minimum numeric value allowed."
-      },
-      "answer_id": {
-        "type": "string",
-        "description": "The id of an answer from which to obtain the min_value"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/value_reference"
       },
       "exclusive": {
         "type": "boolean",
         "description": "Whether validation is exclusive of value or not"
       }
     },
-    "additionalProperties": false,
-    "oneOf": [
-      {
-        "required": ["value"]
+    "additionalProperties": false
+  },
+  "max_value": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/value_reference"
       },
-      {
-        "required": ["answer_id"]
+      "exclusive": {
+        "type": "boolean",
+        "description": "Whether validation is exclusive of value or not"
       }
-    ]
+    },
+    "additionalProperties": false
   },
   "answer_guidance": {
     "description": "Answer guidance",
