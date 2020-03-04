@@ -6,12 +6,10 @@ from urllib.parse import urlparse
 from dateutil.relativedelta import relativedelta
 
 
-MAX_NUMBER = 9999999999
-MIN_NUMBER = -999999999
-MAX_DECIMAL_PLACES = 6
-
-
 class AnswerValidator:
+    MAX_NUMBER = 9999999999
+    MIN_NUMBER = -999999999
+    MAX_DECIMAL_PLACES = 6
     answer = {}
 
     def __init__(self, schema_element, block, list_names, block_ids):

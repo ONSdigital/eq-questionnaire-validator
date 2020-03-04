@@ -321,6 +321,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         self, block, section, json_to_validate
     ):
         errors = []
+
         if not self._has_single_list_collector(block["for_list"], section):
             errors.append(
                 self._error_message(
@@ -1183,6 +1184,103 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         return errors
 
+    def _validate_minimum_and_maximum_offset_date(self, answer):
+        # Validates if a date answer has a minimum and maximum
+        errors = []
+
+        if (
+            "value" in answer["minimum"]
+            and "value" in answer["maximum"]
+            and not isinstance(answer["minimum"]["value"], dict)
+            and not isinstance(answer["maximum"]["value"], dict)
+        ):
+            minimum_date = self._get_offset_date_value(answer["minimum"])
+            maximum_date = self._get_offset_date_value(answer["maximum"])
+
+            if minimum_date > maximum_date:
+                errors.append(
+                    self._error_message(
+                        "The minimum offset date is greater than the maximum offset date"
+                    )
+                )
+
+        return errors
+
+    def _validate_numeric_answer_types(self, numeric_answer, answer_ranges):
+        """
+        Validate numeric answer types are valid.
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
+        errors = []
+
+        # Validate referred numeric answer exists (skip further tests for answer if error is returned)
+        referred_errors = self._validate_referred_numeric_answer(
+            numeric_answer, answer_ranges
+        )
+        errors.extend(referred_errors)
+        if referred_errors:
+            return errors
+
+        # Validate numeric answer has a positive range of possible responses
+        errors.extend(self._validate_numeric_range(numeric_answer, answer_ranges))
+
+        # Validate numeric answer value within system limits
+        errors.extend(self._validate_numeric_answer_value(numeric_answer))
+
+        # Validate numeric answer decimal places within system limits
+        errors.extend(self._validate_numeric_answer_decimals(numeric_answer))
+
+        # Validate referred numeric answer decimals
+        errors.extend(
+            self._validate_referred_numeric_answer_decimals(
+                numeric_answer, answer_ranges
+            )
+        )
+
+        # Validate default is only used with non mandatory answers
+        errors.extend(self._validate_numeric_default(numeric_answer))
+
+        return errors
+
+    def _validate_numeric_default(self, answer):
+        error = []
+        if answer.get("mandatory") and answer.get("default") is not None:
+            error.append(
+                self._error_message(
+                    "Default is being used with a mandatory answer: {}".format(
+                        answer["id"]
+                    )
+                )
+            )
+
+        return error
+
+    def _get_numeric_range_values(self, answer, answer_ranges):
+        min_value = answer.get("minimum", {}).get("value", {})
+        max_value = answer.get("maximum", {}).get("value", {})
+        min_referred = (
+            min_value.get("identifier") if isinstance(min_value, dict) else None
+        )
+        max_referred = (
+            max_value.get("identifier") if isinstance(max_value, dict) else None
+        )
+
+        exclusive = answer.get("exclusive", False)
+        decimal_places = answer.get("decimal_places", 0)
+
+        return {
+            "min": self._get_answer_minimum(
+                min_value, decimal_places, exclusive, answer_ranges
+            ),
+            "max": self._get_answer_maximum(
+                max_value, decimal_places, exclusive, answer_ranges
+            ),
+            "decimal_places": decimal_places,
+            "min_referred": min_referred,
+            "max_referred": max_referred,
+            "default": answer.get("default"),
+        }
+
     def _validate_duplicates(self, json_to_validate):
         """
         question_id & answer_id should be globally unique with some exceptions:
@@ -1262,6 +1360,121 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
     def _error_message(message):
         error = {"message": message}
         return error
+
+    def _get_answer_minimum(
+        self, defined_minimum, decimal_places, exclusive, answer_ranges
+    ):
+        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
+        if exclusive:
+            return minimum_value + (1 / 10 ** decimal_places)
+        return minimum_value
+
+    def _get_answer_maximum(
+        self, defined_maximum, decimal_places, exclusive, answer_ranges
+    ):
+        maximum_value = self._get_numeric_value(
+            defined_maximum, AnswerValidator.MAX_NUMBER, answer_ranges
+        )
+        if exclusive:
+            return maximum_value - (1 / 10 ** decimal_places)
+        return maximum_value
+
+    @staticmethod
+    def _get_numeric_value(value, system_default, answer_ranges):
+        if not isinstance(value, dict):
+            return value
+        if "source" in value and value["source"] == "answers":
+            referred_answer = answer_ranges.get(value["identifier"])
+            if referred_answer is None:
+                # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
+                return None
+            if referred_answer.get("default") is not None:
+                return system_default
+        return system_default
+
+    def _validate_referred_numeric_answer(self, answer, answer_ranges):
+        """
+        Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
+        If either of the above is true then it will not have been given a value by _get_numeric_range_values
+        """
+        errors = []
+        if answer_ranges[answer.get("id")]["min"] is None:
+            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
+                answer["minimum"]["value"]["identifier"], answer["id"]
+            )
+            errors.append(self._error_message(error_message))
+        if answer_ranges[answer.get("id")]["max"] is None:
+            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
+                answer["maximum"]["value"]["identifier"], answer["id"]
+            )
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_range(self, answer, answer_ranges):
+        errors = []
+        max_value = answer_ranges[answer.get("id")]["max"]
+        min_value = answer_ranges[answer.get("id")]["min"]
+
+        if max_value - min_value < 0:
+            error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
+                min_value, max_value, answer["id"]
+            )
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_answer_value(self, answer):
+        errors = []
+
+        min_value = answer.get("minimum", {}).get("value", 0)
+        max_value = answer.get("maximum", {}).get("value", 0)
+
+        if isinstance(min_value, int) and min_value < AnswerValidator.MIN_NUMBER:
+            error_message = 'Minimum value {} for answer "{}" is less than system limit of {}'.format(
+                min_value, answer["id"], AnswerValidator.MIN_NUMBER
+            )
+            errors.append(self._error_message(error_message))
+
+        if isinstance(max_value, int) and max_value > AnswerValidator.MAX_NUMBER:
+            error_message = 'Maximum value {} for answer "{}" is greater than system limit of {}'.format(
+                max_value, answer["id"], AnswerValidator.MAX_NUMBER
+            )
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_numeric_answer_decimals(self, answer):
+        errors = []
+        if answer.get("decimal_places", 0) > AnswerValidator.MAX_DECIMAL_PLACES:
+            error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
+                answer["decimal_places"], answer["id"], AnswerValidator.MAX_DECIMAL_PLACES
+            )
+            errors.append(self._error_message(error_message))
+
+        return errors
+
+    def _validate_referred_numeric_answer_decimals(self, answer, answer_ranges):
+        errors = []
+        answer_values = answer_ranges[answer["id"]]
+
+        if answer_values["min_referred"] is not None:
+            referred_values = answer_ranges[answer_values["min_referred"]]
+            if answer_values["decimal_places"] < referred_values["decimal_places"]:
+                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
+                    answer_values["min_referred"], answer["id"]
+                )
+                errors.append(self._error_message(error_message))
+
+        if answer_values["max_referred"] is not None:
+            referred_values = answer_ranges[answer_values["max_referred"]]
+            if answer_values["decimal_places"] < referred_values["decimal_places"]:
+                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
+                    answer_values["max_referred"], answer["id"]
+                )
+                errors.append(self._error_message(error_message))
+
+        return errors
 
     def _validate_mutually_exclusive(self, question):
         errors = []
@@ -1501,7 +1714,12 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         for pointer in schema_object.pointers:
             schema_text = resolve_pointer(json_schema, pointer)
-            if quote_regex.search(schema_text):
+            try:
+                found = quote_regex.search(schema_text.get("text"))
+            except AttributeError:
+                found = quote_regex.search(schema_text)
+
+            if found:
                 errors.append(
                     self._error_message(
                         f"Found dumb quotes(s) in schema text at {pointer}"
