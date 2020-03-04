@@ -193,11 +193,9 @@
                 },
                 "empty_list_text": {
                   "type": "string"
-                },
-                "item_title": {
-                  "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#string_with_placeholders"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "show_summary_on_completion": {
