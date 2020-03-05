@@ -2,7 +2,7 @@ import json
 
 from jsonschema import RefResolver, validators
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
 
 def test_schema():
@@ -11,7 +11,7 @@ def test_schema():
         resolver = RefResolver(
             base_uri="https://eq.ons.gov.uk/",
             referrer=schema,
-            store=Validator.lookup_ref_store(),
+            store=QuestionnaireValidator.lookup_ref_store(),
         )
 
         validator = validators.validator_for(schema)

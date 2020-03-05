@@ -6,7 +6,7 @@ from json import JSONDecodeError
 from flask import Blueprint, request, jsonify, Response
 from structlog import get_logger
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = get_logger()
 
@@ -35,7 +35,7 @@ def validate_schema_from_url():
 
 
 def validate_schema(data):
-    validator = Validator()
+    validator = QuestionnaireValidator()
 
     try:
         json_to_validate = json.loads(data)
