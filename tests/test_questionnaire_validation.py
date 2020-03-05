@@ -5,13 +5,13 @@ from structlog import configure
 from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
-from app.validation.validator import Validator
+from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = getLogger()
 
 configure(logger_factory=LoggerFactory())
 
-validator = Validator()
+validator = QuestionnaireValidator()
 
 
 def _open_and_load_schema_file(file):
@@ -513,7 +513,7 @@ def test_invalid_when_condition_property():
     fuzzy_error_messages = [
         "The comparison id `country-checkbox-answer2` is not of answer type `Checkbox`. "
         "The condition `contains any` can only reference `Checkbox` answers when using `comparison id`",
-        "The condition `equals any` cannot be used with `Checkbox` answer type.",
+        "The condition `equals any` cannot be used with `Checkbox` answer type (country-checkbox-answer).",
     ]
 
     for fuzzy_error in fuzzy_error_messages:
