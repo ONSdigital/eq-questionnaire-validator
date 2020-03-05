@@ -75,7 +75,7 @@
                 },
                 {
                   "question": {
-                    "id": "question-2-1",
+                    "id": "question-2",
                     "type": "General",
                     "title": "What is your age?",
                     "answers": [

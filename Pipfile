@@ -11,6 +11,8 @@ eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git",ref
 structlog = "*"
 python-dateutil = "*"
 jsonschema = "*"
+jsonpath-rw = "*"
+jsonpath-rw-ext = "*"
 
 [dev-packages]
 pytest = "*"
@@ -18,6 +20,7 @@ pytest = "*"
 pylint = "*"
 pylint-quotes = "*"
 black = "==19.3b0"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.8"

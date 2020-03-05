@@ -6,7 +6,8 @@ from json import JSONDecodeError
 from flask import Blueprint, request, jsonify, Response
 from structlog import get_logger
 
-from app.validation.validator import Validator
+from app.validators.questionnaire_validator import QuestionnaireValidator
+from app.validators.schema_validator import SchemaValidator
 
 logger = get_logger()
 
@@ -35,8 +36,6 @@ def validate_schema_from_url():
 
 
 def validate_schema(data):
-    validator = Validator()
-
     try:
         json_to_validate = json.loads(data)
     except JSONDecodeError:
@@ -45,19 +44,22 @@ def validate_schema(data):
 
     response = {}
 
-    schema_errors = validator.validate_json_schema(json_to_validate)
+    schema_validator = SchemaValidator(json_to_validate)
+    schema_validator.validate()
 
-    if len(schema_errors) > 0:
-        response["errors"] = {"schema_errors": schema_errors}
+    if len(schema_validator.errors) > 0:
+        response["errors"] = schema_validator.errors
         logger.info("Schema validator returned errors", status=400)
         return jsonify(response), 400
 
-    validation_errors = validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    validator.validate()
 
-    if len(validation_errors) > 0:
-        response["errors"] = {"validation_errors": validation_errors}
-        logger.info("Schema validator returned errors", status=400)
+    if len(validator.errors) > 0:
+        response["errors"] = validator.errors
+        logger.info("Questionnaire validator returned errors", status=400)
         return jsonify(response), 400
 
     logger.info("Schema validation passed", status=200)
+
     return jsonify(response), 200

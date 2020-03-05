@@ -19,5 +19,6 @@ function display_result {
   fi
 }
 
-pipenv run py.test "$@"
+py.test --cov=app --cov-report html --cov-fail-under=90 "$@"
+
 display_result $? 3 "Unit tests"
