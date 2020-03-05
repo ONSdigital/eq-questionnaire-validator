@@ -74,7 +74,9 @@ class AnswerValidator:
 
     def are_decimal_places_valid(self):
         if "calculated" in self.answer:
-            return "decimal_places" in self.answer and self.answer["decimal_places"] == 2
+            return (
+                "decimal_places" in self.answer and self.answer["decimal_places"] == 2
+            )
         return True
 
     def _validate_answer_actions(self):
@@ -269,7 +271,9 @@ class AnswerValidator:
         errors = []
         if self.answer.get("decimal_places", 0) > self.MAX_DECIMAL_PLACES:
             error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
-                self.answer["decimal_places"], self.answer["id"], self.MAX_DECIMAL_PLACES
+                self.answer["decimal_places"],
+                self.answer["id"],
+                self.MAX_DECIMAL_PLACES,
             )
             errors.append(error_message)
 
