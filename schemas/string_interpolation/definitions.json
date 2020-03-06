@@ -96,6 +96,12 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/number_to_words"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/add"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/format_ordinal"
             }
           ]
         }
