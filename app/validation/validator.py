@@ -1877,7 +1877,12 @@ class Validator:  # pylint: disable=too-many-lines
 
         for pointer in schema_object.pointers:
             schema_text = resolve_pointer(json_schema, pointer)
-            if quote_regex.search(schema_text):
+            try:
+                found = quote_regex.search(schema_text.get("text"))
+            except AttributeError:
+                found = quote_regex.search(schema_text)
+
+            if found:
                 errors.append(
                     self._error_message(
                         f"Found dumb quotes(s) in schema text at {pointer}"
