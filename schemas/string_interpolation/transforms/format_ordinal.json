@@ -15,7 +15,12 @@
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           },
           "determiner": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
           }
         },
         "additionalProperties": false,
