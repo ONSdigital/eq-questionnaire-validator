@@ -15,7 +15,19 @@
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           },
           "rhs": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "oneOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
           }
         },
         "additionalProperties": false,

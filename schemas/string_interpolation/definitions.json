@@ -98,10 +98,10 @@
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/number_to_words"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/add"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/add.json#/add"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/format_ordinal"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json#/format_ordinal"
             }
           ]
         }

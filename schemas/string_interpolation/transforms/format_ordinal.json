@@ -1,7 +1,7 @@
 {
   "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "add": {
+  "format_ordinal": {
     "type": "object",
     "properties": {
       "transform": {
