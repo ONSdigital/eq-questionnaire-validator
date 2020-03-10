@@ -12,10 +12,22 @@
         "type": "object",
         "properties": {
           "lhs": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "anyOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
           },
           "rhs": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
               },
