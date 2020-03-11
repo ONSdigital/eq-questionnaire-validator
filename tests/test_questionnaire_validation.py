@@ -96,47 +96,6 @@ def test_invalid_numeric_answers():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_invalid_id_in_answers_to_calculate():
-    filename = "schemas/invalid/test_invalid_id_in_grouped_answers_to_calculate.json"
-
-    expected_error_messages = [
-        "Answer id - breakdown-3 does not exist within this question - breakdown-question",
-        "Answer id - breakdown-4 does not exist within this question - breakdown-question",
-    ]
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_date_range_period():
-    filename = "schemas/invalid/test_invalid_date_range_period.json"
-
-    expected_error_messages = [
-        "The minimum period is greater than the maximum period for date-range-question"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_mm_yyyy_date_range_period():
-    filename = "schemas/invalid/test_invalid_mm_yyyy_date_range_period.json"
-
-    expected_error_messages = [
-        "Days can not be used in period_limit for yyyy-mm date range for date-range-question"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_yyyy_date_range_period():
-    filename = "schemas/invalid/test_invalid_yyyy_date_range_period.json"
-
-    expected_error_messages = [
-        ""
-        "Days/Months can not be used in period_limit for yyyy date range for date-range-question"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_metadata():
     filename = "schemas/invalid/test_invalid_metadata.json"
 
