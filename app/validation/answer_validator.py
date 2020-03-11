@@ -12,7 +12,7 @@ class AnswerValidator:
     MAX_DECIMAL_PLACES = 6
     answer = {}
 
-    def __init__(self, schema_element, block, list_names, block_ids):
+    def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
         self.answer = schema_element
         self.block = block
         self.list_names = list_names
@@ -26,7 +26,7 @@ class AnswerValidator:
         errors = []
         errors.extend(self._validate_duplicate_options())
         errors.extend(self._validate_answer_actions())
-        errors.extend(self._ensure_answer_labels_and_values_match())
+        errors.extend(self.validate_labels_and_values_match())
 
         errors.extend(self._validate_routing_on_answer_options())
 
@@ -102,7 +102,7 @@ class AnswerValidator:
 
         return errors
 
-    def _ensure_answer_labels_and_values_match(self):
+    def validate_labels_and_values_match(self):
         errors = []
 
         for option in self.options:
@@ -202,16 +202,16 @@ class AnswerValidator:
         errors.extend(self._validate_numeric_range(answer_ranges))
 
         # Validate numeric answer value within system limits
-        errors.extend(self._validate_numeric_answer_value())
+        errors.extend(self.validate_numeric_answer_value())
 
         # Validate numeric answer decimal places within system limits
-        errors.extend(self._validate_numeric_answer_decimals())
+        errors.extend(self.validate_numeric_answer_decimals())
 
         # Validate referred numeric answer decimals
         errors.extend(self._validate_referred_numeric_answer_decimals(answer_ranges))
 
         # Validate default is only used with non mandatory answers
-        errors.extend(self._validate_numeric_default())
+        errors.extend(self.validate_numeric_default())
 
         return errors
 
@@ -247,7 +247,7 @@ class AnswerValidator:
 
         return errors
 
-    def _validate_numeric_answer_value(self):
+    def validate_numeric_answer_value(self):
         errors = []
 
         min_value = self.answer.get("minimum", {}).get("value", 0)
@@ -267,7 +267,7 @@ class AnswerValidator:
 
         return errors
 
-    def _validate_numeric_answer_decimals(self):
+    def validate_numeric_answer_decimals(self):
         errors = []
         if self.answer.get("decimal_places", 0) > self.MAX_DECIMAL_PLACES:
             error_message = 'Number of decimal places {} for answer "{}" is greater than system limit of {}'.format(
@@ -301,7 +301,7 @@ class AnswerValidator:
 
         return errors
 
-    def _validate_numeric_default(self):
+    def validate_numeric_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             return [
                 "Default is being used with a mandatory answer: {}".format(

@@ -10,6 +10,7 @@ from jsonschema import SchemaError, RefResolver, ValidationError, Draft7Validato
 from jsonschema.exceptions import best_match
 
 from app.validation.answer_validator import AnswerValidator
+from app.validation.question_validator import QuestionValidator
 
 
 class QuestionnaireValidator:  # pylint: disable=too-many-lines
@@ -298,11 +299,10 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
             questions.append(question)
 
         for question in questions:
-            errors.extend(
-                self._validate_calculated_ids_in_answers_to_calculate_exists(question)
-            )
-            errors.extend(self._validate_date_range(question))
-            errors.extend(self._validate_mutually_exclusive(question))
+            question_validator = QuestionValidator(question)
+            question_errors = question_validator.validate()
+
+            errors.extend([self._error_message(error) for error in question_errors])
 
             for answer in question.get("answers", []):
                 answer_validator = AnswerValidator(
@@ -536,26 +536,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                         "Metadata - {} not specified in metadata field".format(metadata)
                     )
                 )
-
-        return errors
-
-    def _validate_calculated_ids_in_answers_to_calculate_exists(self, question):
-        """
-        Validates that any answer ids within the 'answer_to_group'
-        list are existing answers within the question
-        """
-
-        errors = []
-
-        if question["type"] == "Calculated":
-            answer_ids = [answer["id"] for answer in question.get("answers")]
-            for calculation in question.get("calculations"):
-                for answer_id in calculation["answers_to_calculate"]:
-                    if answer_id not in answer_ids:
-                        invalid_answer_id_error = "Answer id - {} does not exist within this question - {}".format(
-                            answer_id, question["id"]
-                        )
-                        errors.append(self._error_message(invalid_answer_id_error))
 
         return errors
 
@@ -1133,63 +1113,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         return errors
 
-    def _validate_date_range(self, question):
-        """
-        If period_limits object is present in the DateRange question validates that a date range
-        does not have a negative period and days can not be used to define limits for yyyy-mm date ranges
-        """
-        errors = []
-
-        if question["type"] == "DateRange" and question.get("period_limits"):
-            period_limits = question["period_limits"]
-            if "minimum" in period_limits and "maximum" in period_limits:
-                example_date = "2016-05-10"
-
-                # Get minimum and maximum possible dates
-                minimum_date = AnswerValidator.get_relative_date(
-                    example_date, period_limits["minimum"]
-                )
-                maximum_date = AnswerValidator.get_relative_date(
-                    example_date, period_limits["maximum"]
-                )
-
-                if minimum_date > maximum_date:
-                    errors.append(
-                        self._error_message(
-                            "The minimum period is greater than the maximum period for {}".format(
-                                question["id"]
-                            )
-                        )
-                    )
-
-            first_answer_type = question["answers"][0]["type"]
-
-            has_days_limit = "days" in period_limits.get(
-                "minimum", []
-            ) or "days" in period_limits.get("maximum", [])
-            has_months_limit = "months" in period_limits.get(
-                "minimum", []
-            ) or "months" in period_limits.get("maximum", [])
-
-            if first_answer_type == "MonthYearDate" and has_days_limit:
-                errors.append(
-                    self._error_message(
-                        "Days can not be used in period_limit for yyyy-mm date range for {}".format(
-                            question["id"]
-                        )
-                    )
-                )
-
-            if first_answer_type == "YearDate" and (has_days_limit or has_months_limit):
-                errors.append(
-                    self._error_message(
-                        "Days/Months can not be used in period_limit for yyyy date range"
-                        " for {}".format(question["id"])
-                    )
-                )
-
-        return errors
-
     def _validate_duplicates(self, json_to_validate):
         """
         question_id & answer_id should be globally unique with some exceptions:
@@ -1267,39 +1190,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
     @staticmethod
     def _error_message(message):
-        error = {"message": message}
-        return error
-
-    def _get_answer_minimum(
-        self, defined_minimum, decimal_places, exclusive, answer_ranges
-    ):
-        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
-        if exclusive:
-            return minimum_value + (1 / 10 ** decimal_places)
-        return minimum_value
-
-    def _get_answer_maximum(
-        self, defined_maximum, decimal_places, exclusive, answer_ranges
-    ):
-        maximum_value = self._get_numeric_value(
-            defined_maximum, AnswerValidator.MAX_NUMBER, answer_ranges
-        )
-        if exclusive:
-            return maximum_value - (1 / 10 ** decimal_places)
-        return maximum_value
-
-    @staticmethod
-    def _get_numeric_value(value, system_default, answer_ranges):
-        if not isinstance(value, dict):
-            return value
-        if "source" in value and value["source"] == "answers":
-            referred_answer = answer_ranges.get(value["identifier"])
-            if referred_answer is None:
-                # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
-                return None
-            if referred_answer.get("default") is not None:
-                return system_default
-        return system_default
+        return {"message": message}
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
@@ -1317,28 +1208,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 answer["maximum"]["value"]["identifier"], answer["id"]
             )
             errors.append(self._error_message(error_message))
-
-        return errors
-
-    def _validate_mutually_exclusive(self, question):
-        errors = []
-
-        if question["type"] == "MutuallyExclusive":
-            answers = question["answers"]
-
-            if any(answer["mandatory"] is True for answer in answers):
-                errors.append(
-                    self._error_message(
-                        "MutuallyExclusive question type cannot contain mandatory answers."
-                    )
-                )
-
-            if answers[-1]["type"] != "Checkbox":
-                errors.append(
-                    self._error_message(
-                        "{} is not of type Checkbox.".format(answers[-1]["id"])
-                    )
-                )
 
         return errors
 

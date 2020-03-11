@@ -89,15 +89,8 @@ def test_invalid_numeric_answers():
         '"answer-3"',
         'The referenced answer "answer-5" can not be used to set the maximum of answer '
         '"answer-3"',
-        'Minimum value -99999999999 for answer "answer-4" is less than system limit of '
-        "-999999999",
-        'Maximum value 99999999999 for answer "answer-4" is greater than system limit of '
-        "9999999999",
-        'Number of decimal places 10 for answer "answer-5" is greater than system limit '
-        "of 6",
-        'The referenced answer "answer-1" has a greater number of decimal places than '
-        'answer "answer-6"',
-        "Default is being used with a mandatory answer: answer-7",
+        "Invalid answer reference 'answer-4' in block 'block-3'",
+        "Invalid answer reference 'answer-5' in block 'block-3'",
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -139,16 +132,6 @@ def test_invalid_yyyy_date_range_period():
     expected_error_messages = [
         ""
         "Days/Months can not be used in period_limit for yyyy date range for date-range-question"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_single_date_period():
-    filename = "schemas/invalid/test_invalid_single_date_min_max_period.json"
-
-    expected_error_messages = [
-        "The minimum offset date is greater than the maximum offset date"
     ]
 
     check_validation_errors(filename, expected_error_messages)
@@ -667,16 +650,6 @@ def test_invalid_driving_question_multiple_driving_questions():
         "ListCollectorDrivingQuestion for list `people`",
         "The block_id `anyone-usually-live-at` should be the only "
         "ListCollectorDrivingQuestion for list `people`",
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_mismatching_answer_label_and_value():
-    filename = "schemas/invalid/test_invalid_mismatching_answer_label_and_value.json"
-    expected_error_messages = [
-        "Found mismatching answer value for label: Yes it is {name} in answer id: correct-answer",
-        "Found mismatching answer value for label: Nope in answer id: correct-answer",
     ]
 
     check_validation_errors(filename, expected_error_messages)
