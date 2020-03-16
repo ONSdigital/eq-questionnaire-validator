@@ -1,0 +1,52 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/add.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "add": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["add"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "lhs": {
+            "anyOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          },
+          "rhs": {
+            "anyOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["lhs", "rhs"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

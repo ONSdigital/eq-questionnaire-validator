@@ -1,0 +1,34 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "format_ordinal": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_ordinal"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "number_to_format": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+          },
+          "determiner": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string",
+                "enum": ["a_or_an"]
+              }
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["number_to_format"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}
