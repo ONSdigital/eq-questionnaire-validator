@@ -53,48 +53,62 @@
               }
             },
             {
-              "id": "add-item-interstitial",
-              "content": {
-                "title": "Additional Item",
-                "contents": [
+              "id": "add-item",
+              "question": {
+                "answers": [
                   {
-                    "description": {
-                      "text": "Do you want to add <em>{item}</em> item?",
-                      "placeholders": [
+                    "id": "add-item-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "add-item-question",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "item",
+                      "transforms": [
                         {
-                          "placeholder": "item",
-                          "transforms": [
-                            {
-                              "transform": "add",
-                              "arguments": {
-                                "lhs": {
-                                  "source": "answers",
-                                  "identifier": "total-items-answer"
-                                },
-                                "rhs": {
-                                  "value": 1
-                                }
-                              }
+                          "transform": "add",
+                          "arguments": {
+                            "lhs": {
+                              "source": "answers",
+                              "identifier": "total-items-answer"
                             },
-                            {
-                              "arguments": {
-                                "number_to_format": {
-                                  "source": "previous_transform"
-                                },
-                                "determiner": {
-                                  "value": "a_or_an"
-                                }
-                              },
-                              "transform": "format_ordinal"
+                            "rhs": {
+                              "value": 1
                             }
-                          ]
+                          }
+                        },
+                        {
+                          "arguments": {
+                            "number_to_format": {
+                              "source": "previous_transform"
+                            },
+                            "determiner": {
+                              "value": "a_or_an"
+                            }
+                          },
+                          "transform": "format_ordinal"
                         }
                       ]
                     }
-                  }
-                ]
+                  ],
+                  "text": "Do you want to add <em>{item}</em> item?"
+                },
+                "type": "General"
               },
-              "type": "Interstitial"
+              "type": "Question"
             }
           ]
         }
