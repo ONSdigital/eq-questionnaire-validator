@@ -643,16 +643,6 @@ def test_invalid_quotes_in_schema():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_invalid_url_in_answer():
-    filename = "schemas/invalid/test_text_field_invalid_suggestions_url.json"
-
-    expected_error_messages = [
-        "Suggestions url used for TextField `country-answer` is invalid"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_non_textfield_question_concatenation():
     filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
 

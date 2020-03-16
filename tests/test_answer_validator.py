@@ -93,3 +93,17 @@ def test_invalid_answer_default():
     errors = answer_validator.validate_numeric_default()
 
     assert errors == ["Default is being used with a mandatory answer: answer-7"]
+
+
+def test_invalid_url_in_answer():
+    answer = {
+        "id": "country-answer",
+        "label": "What is your country of birth?",
+        "mandatory": False,
+        "suggestions_url": "this isn't a valid url",
+        "type": "TextField"
+    }
+
+    answer_validator = AnswerValidator(answer)
+
+    assert not answer_validator.is_suggestion_url_valid()
