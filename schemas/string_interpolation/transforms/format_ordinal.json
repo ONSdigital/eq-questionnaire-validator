@@ -18,7 +18,8 @@
             "type": "object",
             "properties": {
               "value": {
-                "type": "string"
+                "type": "string",
+                "enum": ["a_or_an"]
               }
             }
           }
