@@ -26,6 +26,7 @@
       "type": "string"
     }
   ],
+  "language": "en",
   "schema_version": "0.0.1",
   "survey_id": "lms ",
   "theme": "default",
