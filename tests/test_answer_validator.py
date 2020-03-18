@@ -101,7 +101,7 @@ def test_invalid_url_in_answer():
         "label": "What is your country of birth?",
         "mandatory": False,
         "suggestions_url": "this isn't a valid url",
-        "type": "TextField"
+        "type": "TextField",
     }
 
     answer_validator = AnswerValidator(answer)
