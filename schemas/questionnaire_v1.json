@@ -15,7 +15,7 @@
   ],
   "properties": {
     "language": {
-      "enum": ["en", "cy", "ga", "eo"]
+      "enum": ["cy", "en", "eo", "ga"]
     },
     "messages": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/messages"
