@@ -18,6 +18,16 @@ class AnswerValidator:
         self.list_names = list_names
         self.block_ids = block_ids
 
+    UNDEFINED_DECIMAL_PLACES = "'decimal_places' must be defined and set to 2"
+    OFFSET_DATE_INVALID = (
+        "The minimum offset date is greater than the maximum offset date"
+    )
+    SUGGESTION_URL_INVALID = "Suggestions url is invalid"
+    LIST_NAME_MISSING = "List name defined in action params does not exist"
+    BLOCK_ID_MISSING = "Block id defined in action params does not exist"
+    VALUE_MISMATCH = "Found mismatching answer value"
+    DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
+
     @cached_property
     def options(self):
         return self.answer.get("options", [])
@@ -31,22 +41,25 @@ class AnswerValidator:
         errors.extend(self._validate_routing_on_answer_options())
 
         if not self.are_decimal_places_valid():
-            errors.append(
-                "'decimal_places' must be defined and set to 2 for the answer_id - {}".format(
-                    self.answer["id"]
-                )
-            )
+            errors.append(self.UNDEFINED_DECIMAL_PLACES)
 
         if self.answer["type"] == "Date" and not self.is_offset_date_valid():
-            errors.append(
-                "The minimum offset date is greater than the maximum offset date"
-            )
+            errors.append(self.OFFSET_DATE_INVALID)
 
         if self.answer["type"] == "TextField" and "suggestions_url" in self.answer:
             if not self.is_suggestion_url_valid():
-                errors.append(
-                    f'Suggestions url used for TextField `{self.answer["id"]}` is invalid'
-                )
+                errors.append(self.SUGGESTION_URL_INVALID)
+
+        if self.answer["type"] in ["Number", "Currency", "Percentage"]:
+            # Validate default is only used with non mandatory answers
+            errors.extend(self.validate_numeric_default())
+
+            # Validate numeric answer value within system limits
+            errors.extend(self.validate_numeric_answer_value())
+
+            # Validate numeric answer decimal places within system limits
+            errors.extend(self.validate_numeric_answer_decimals())
+
         return errors
 
     def _validate_duplicate_options(self):
@@ -144,7 +157,8 @@ class AnswerValidator:
     def _validate_routing_on_answer_options(self):
         answer_errors = []
         if (
-            "routing_rules" in self.block
+            self.block
+            and "routing_rules" in self.block
             and self.block["routing_rules"]
             and self.options
         ):
@@ -201,17 +215,8 @@ class AnswerValidator:
         # Validate numeric answer has a positive range of possible responses
         errors.extend(self._validate_numeric_range(answer_ranges))
 
-        # Validate numeric answer value within system limits
-        errors.extend(self.validate_numeric_answer_value())
-
-        # Validate numeric answer decimal places within system limits
-        errors.extend(self.validate_numeric_answer_decimals())
-
         # Validate referred numeric answer decimals
         errors.extend(self._validate_referred_numeric_answer_decimals(answer_ranges))
-
-        # Validate default is only used with non mandatory answers
-        errors.extend(self.validate_numeric_default())
 
         return errors
 
@@ -303,11 +308,7 @@ class AnswerValidator:
 
     def validate_numeric_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
-            return [
-                "Default is being used with a mandatory answer: {}".format(
-                    self.answer["id"]
-                )
-            ]
+            return [self.DEFAULT_ON_MANDATORY]
 
         return []
 

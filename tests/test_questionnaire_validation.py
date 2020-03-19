@@ -206,16 +206,6 @@ def test_invalid_mutually_exclusive_conditions():
     check_validation_errors(filename, expected_error_messages)
 
 
-def test_decimal_places_must_be_defined_when_using_totaliser():
-    filename = "schemas/invalid/test_invalid_decimal_places_must_be_defined_when_using_totaliser.json"
-    expected_error_messages = [
-        "'decimal_places' must be defined and set to 2 for the answer_id - total-percentage",
-        "'decimal_places' must be defined and set to 2 for the answer_id - total-percentage-2",
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
 def test_invalid_string_transforms():
     filename = "schemas/invalid/test_invalid_string_transforms.json"
 
