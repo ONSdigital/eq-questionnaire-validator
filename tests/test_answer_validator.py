@@ -90,9 +90,11 @@ def test_invalid_answer_default():
     }
 
     answer_validator = AnswerValidator(answer)
-    errors = answer_validator.validate_numeric_default()
 
-    assert errors == ["Default is being used with a mandatory answer: answer-7"]
+    assert (
+        answer_validator.validate()[0]
+        == "Default is being used with a mandatory answer"
+    )
 
 
 def test_invalid_url_in_answer():
@@ -107,3 +109,21 @@ def test_invalid_url_in_answer():
     answer_validator = AnswerValidator(answer)
 
     assert not answer_validator.is_suggestion_url_valid()
+
+
+def test_are_decimal_places_valid():
+    answer = {
+        "calculated": True,
+        "description": "The total percentages should be 100%",
+        "id": "total-percentage",
+        "label": "Total",
+        "mandatory": False,
+        "q_code": "10002",
+        "type": "Percentage",
+        "maximum": {"value": 100},
+    }
+
+    answer_validator = AnswerValidator(answer)
+
+    assert not answer_validator.are_decimal_places_valid()
+    assert answer_validator.validate()[0] == AnswerValidator.UNDEFINED_DECIMAL_PLACES
