@@ -10,9 +10,13 @@
     "title",
     "sections",
     "theme",
-    "metadata"
+    "metadata",
+    "language"
   ],
   "properties": {
+    "language": {
+      "enum": ["cy", "en", "eo", "ga"]
+    },
     "messages": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/messages"
     },
