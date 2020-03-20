@@ -83,7 +83,6 @@ def test_invalid_numeric_answers():
     filename = "schemas/invalid/test_invalid_numeric_answers.json"
 
     expected_error_messages = [
-        'Invalid range of min = 0 and max = -1.0 is possible for answer "answer-2".',
         'The referenced answer "answer-1" has a greater number of decimal places than '
         'answer "answer-2"',
         'The referenced answer "answer-4" can not be used to set the minimum of answer '
@@ -358,29 +357,6 @@ def test_primary_person_invalid_list_collector_non_radio():
 
     expected_error_messages = [
         "The primary person list collector block primary-person-list-collector does not contain a Radio answer type"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_list_collector_with_routing():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_with_routing_in_sub_block.json"
-    )
-
-    expected_error_messages = [
-        "The list collector block list-collector contains routing rules on the remove-person sub block"
-    ]
-
-    check_validation_errors(filename, expected_error_messages)
-
-
-def test_invalid_primary_person_list_collector_with_routing():
-    filename = "schemas/invalid/test_invalid_primary_person_list_collector_routing.json"
-
-    expected_error_messages = [
-        "The primary person list collector block primary-person-list-collector contains routing rules on the "
-        "add-primary-person sub block"
     ]
 
     check_validation_errors(filename, expected_error_messages)

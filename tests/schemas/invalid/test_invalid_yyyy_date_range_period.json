@@ -25,6 +25,7 @@
     }
   ],
   "mime_type": "application/json/ons/eq",
+  "language": "en",
   "schema_version": "0.0.1",
   "sections": [
     {
@@ -40,7 +41,10 @@
                     "label": "Period from",
                     "mandatory": true,
                     "minimum": {
-                      "meta": "ref_p_start_date",
+                      "value": {
+                        "source": "metadata",
+                        "identifier": "ref_p_start_date"
+                      },
                       "offset_by": {
                         "years": -1
                       }
@@ -52,7 +56,10 @@
                     "label": "Period to",
                     "mandatory": true,
                     "maximum": {
-                      "meta": "ref_p_end_date",
+                      "value": {
+                        "source": "metadata",
+                        "identifier": "ref_p_end_date"
+                      },
                       "offset_by": {
                         "years": 2
                       }

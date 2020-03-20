@@ -17,6 +17,7 @@
     }
   ],
   "mime_type": "application/json/ons/eq",
+  "language": "en",
   "schema_version": "0.0.1",
   "sections": [
     {
@@ -32,7 +33,7 @@
                     "id": "total-answer",
                     "label": "Total",
                     "mandatory": true,
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     },
                     "type": "Number"

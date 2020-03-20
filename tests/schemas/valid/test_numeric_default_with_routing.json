@@ -17,6 +17,7 @@
     }
   ],
   "mime_type": "application/json/ons/eq",
+  "language": "en",
   "schema_version": "0.0.1",
   "sections": [
     {
@@ -69,8 +70,11 @@
                     "id": "answer-2",
                     "label": "Invalid Range",
                     "mandatory": false,
-                    "max_value": {
-                      "answer_id": "answer-1",
+                    "maximum": {
+                      "value": {
+                        "identifier": "answer-1",
+                        "source": "answers"
+                      },
                       "exclusive": true
                     },
                     "type": "Currency"

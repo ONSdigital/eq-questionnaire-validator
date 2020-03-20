@@ -1,5 +1,6 @@
 {
   "mime_type": "application/json/ons/eq",
+  "language": "en",
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
@@ -38,7 +39,7 @@
                     "mandatory": false,
                     "q_code": "0810",
                     "type": "Percentage",
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     }
                   },
@@ -49,7 +50,7 @@
                     "mandatory": false,
                     "q_code": "0820",
                     "type": "Percentage",
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     }
                   },
@@ -61,7 +62,7 @@
                     "mandatory": false,
                     "q_code": "10002",
                     "type": "Percentage",
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     },
                     "validation": {
@@ -91,7 +92,7 @@
                     "mandatory": false,
                     "q_code": "08101",
                     "type": "Percentage",
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     }
                   },
@@ -102,7 +103,7 @@
                     "mandatory": false,
                     "q_code": "08201",
                     "type": "Percentage",
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     }
                   },
@@ -115,7 +116,7 @@
                     "q_code": "100021",
                     "type": "Percentage",
                     "decimal_places": 1,
-                    "max_value": {
+                    "maximum": {
                       "value": 100
                     },
                     "validation": {

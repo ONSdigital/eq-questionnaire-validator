@@ -10,9 +10,13 @@
     "title",
     "sections",
     "theme",
-    "metadata"
+    "metadata",
+    "language"
   ],
   "properties": {
+    "language": {
+      "enum": ["cy", "en", "eo", "ga"]
+    },
     "messages": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/messages"
     },
@@ -176,8 +180,13 @@
             "type": "boolean",
             "description": "On completion of the section a summary will be shown"
           },
+          "show_on_hub": {
+            "type": "boolean",
+            "description": "When the hub is enabled, this will determine if the section appears. Default is true"
+          },
           "groups": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
               "properties": {

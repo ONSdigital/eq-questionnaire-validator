@@ -1,0 +1,42 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_date_difference.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "calculate_date_difference": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["calculate_date_difference"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "first_date": {
+            "oneOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value"
+              }
+            ]
+          },
+          "second_date": {
+            "oneOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["first_date", "second_date"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

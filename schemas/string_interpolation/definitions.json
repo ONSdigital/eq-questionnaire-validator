@@ -77,7 +77,7 @@
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json#/format_date_range"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_years_difference.json#/calculate_years_difference"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/calculate_date_difference.json#/calculate_date_difference"
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/concatenate_list.json#/concatenate_list"
@@ -96,6 +96,12 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/number_to_words.json#/number_to_words"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/add.json#/add"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json#/format_ordinal"
             }
           ]
         }

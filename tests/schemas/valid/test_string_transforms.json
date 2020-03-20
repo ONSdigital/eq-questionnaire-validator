@@ -2,6 +2,7 @@
   "eq_id": "3",
   "form_type": "3",
   "mime_type": "application/json/ons/eq",
+  "language": "en",
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "3",
@@ -266,7 +267,7 @@
                           "placeholder": "simple_difference",
                           "transforms": [
                             {
-                              "transform": "calculate_years_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "value": "2018-01-01"
@@ -293,7 +294,7 @@
                           "placeholder": "one_lookup",
                           "transforms": [
                             {
-                              "transform": "calculate_years_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
@@ -321,7 +322,7 @@
                           "placeholder": "two_lookups",
                           "transforms": [
                             {
-                              "transform": "calculate_years_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
@@ -350,7 +351,7 @@
                           "placeholder": "difference_to_current_date",
                           "transforms": [
                             {
-                              "transform": "calculate_years_difference",
+                              "transform": "calculate_date_difference",
                               "arguments": {
                                 "first_date": {
                                   "source": "answers",
