@@ -25,14 +25,16 @@
   "sections": [
     {
       "id": "section",
-      "summary": [
-        {
-          "type": "List",
-          "for_list": "household",
-          "add_link_text": "Add another person to this household",
-          "empty_list_text": "There are no people"
-        }
-      ],
+      "summary": {
+        "items": [
+          {
+            "type": "List",
+            "for_list": "household",
+            "add_link_text": "Add another person to this household",
+            "empty_list_text": "There are no people"
+          }
+        ]
+      },
       "groups": [
         {
           "id": "group",

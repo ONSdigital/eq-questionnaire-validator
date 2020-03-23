@@ -477,7 +477,6 @@
                 },
                 "type": "ListRemoveQuestion"
               },
-              "show_on_section_summary": false,
               "summary": {
                 "item_title": {
                   "placeholders": [

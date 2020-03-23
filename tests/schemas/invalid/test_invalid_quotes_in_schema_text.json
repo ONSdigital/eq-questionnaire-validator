@@ -61,7 +61,6 @@
             {
               "type": "Question",
               "id": "block-2",
-              "show_on_section_summary": true,
               "question_variants": [
                 {
                   "question": {

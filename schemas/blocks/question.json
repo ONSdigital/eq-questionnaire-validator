@@ -14,9 +14,6 @@
         "type": "string",
         "enum": ["Question"]
       },
-      "show_on_section_summary": {
-        "type": "boolean"
-      },
       "question": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },

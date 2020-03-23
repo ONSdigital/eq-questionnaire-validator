@@ -29,9 +29,6 @@
         "type": "string",
         "enum": ["DateRange"]
       },
-      "show_on_section_summary": {
-        "type": "boolean"
-      },
       "period_limits": {
         "type": "object",
         "description": "minimum and/or maximum time limit for the period to be in days/months/years.",

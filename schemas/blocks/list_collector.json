@@ -68,9 +68,6 @@
       },
       "summary": {
         "$ref": "list_collector.json#/summary"
-      },
-      "show_on_section_summary": {
-        "type": "boolean"
       }
     },
     "additionalProperties": false,
