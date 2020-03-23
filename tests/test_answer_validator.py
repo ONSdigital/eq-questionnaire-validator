@@ -35,12 +35,14 @@ def test_number_of_decimals():
 
     answer_validator = AnswerValidator(answer)
 
-    errors = answer_validator.validate_numeric_answer_decimals()
+    answer_validator.validate_numeric_answer_decimals()
 
-    assert errors == [
-        'Number of decimal places 10 for answer "answer-5" is greater than system limit '
-        "of 6"
-    ]
+    assert answer_validator.errors[0] == {
+        "message": AnswerValidator.DECIMAL_PLACES_TOO_LONG,
+        "decimal_places": 10,
+        "limit": 6,
+        "id": "answer-5",
+    }
 
 
 def test_minimum_value():
@@ -55,14 +57,21 @@ def test_minimum_value():
 
     answer_validator = AnswerValidator(answer)
 
-    errors = answer_validator.validate_numeric_answer_value()
+    answer_validator.validate_numeric_answer_value()
 
-    assert errors == [
-        'Minimum value -99999999999 for answer "answer-4" is less than system limit of '
-        "-999999999",
-        'Maximum value 99999999999 for answer "answer-4" is greater than system limit of '
-        "9999999999",
-    ]
+    assert answer_validator.errors[0] == {
+        "message": "Minimum value is less than system limit",
+        "value": -99999999999,
+        "limit": -999999999,
+        "id": "answer-4",
+    }
+
+    assert answer_validator.errors[1] == {
+        "message": "Maximum value is greater than system limit",
+        "value": 99999999999,
+        "limit": 9999999999,
+        "id": "answer-4",
+    }
 
 
 def test_invalid_single_date_period():
@@ -90,11 +99,12 @@ def test_invalid_answer_default():
     }
 
     answer_validator = AnswerValidator(answer)
+    answer_validator.validate()
 
-    assert (
-        answer_validator.validate()[0]
-        == "Default is being used with a mandatory answer"
-    )
+    assert answer_validator.errors[0] == {
+        "message": AnswerValidator.DEFAULT_ON_MANDATORY,
+        "id": "answer-7",
+    }
 
 
 def test_invalid_url_in_answer():
@@ -124,6 +134,9 @@ def test_are_decimal_places_valid():
     }
 
     answer_validator = AnswerValidator(answer)
+    answer_validator.validate()
 
-    assert not answer_validator.are_decimal_places_valid()
-    assert answer_validator.validate()[0] == AnswerValidator.UNDEFINED_DECIMAL_PLACES
+    assert answer_validator.errors[0] == {
+        "message": AnswerValidator.DECIMAL_PLACES_UNDEFINED,
+        "id": "total-percentage",
+    }

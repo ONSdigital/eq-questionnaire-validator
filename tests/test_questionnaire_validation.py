@@ -573,10 +573,8 @@ def test_invalid_answer_action():
         "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_question.json"
     )
     expected_error_messages = [
-        "List name `non-existent-list-name` defined in action params for "
-        "answer `anyone-else-live-here-answer` does not exist",
-        "The block_id `non-existent-block-id` defined in action params for "
-        "answer `anyone-else-live-here-answer` does not exist",
+        "List name defined in action params does not exist",
+        "Block id defined in action params does not exist",
     ]
 
     check_validation_errors(filename, expected_error_messages)
