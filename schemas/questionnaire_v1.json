@@ -279,6 +279,9 @@
                         "$ref": "https://eq.ons.gov.uk/blocks/relationship_collector.json#/block"
                       },
                       {
+                        "$ref": "https://eq.ons.gov.uk/blocks/section_summary.json#/block"
+                      },
+                      {
                         "$ref": "https://eq.ons.gov.uk/blocks/summary.json#/block"
                       }
                     ]
