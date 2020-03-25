@@ -136,12 +136,10 @@ class Validator:  # pylint: disable=too-many-lines
                 self._validate_placeholder_object(section_repeat["title"], None)
             )
 
-        custom_section_summary = section.get("summary")
-        if custom_section_summary:
-            for custom_section_element in custom_section_summary.get("items", []):
-                errors.extend(
-                    self._validate_list_exists(custom_section_element.get("for_list"))
-                )
+        section_summary = section.get("summary")
+        if section_summary:
+            for item in section_summary.get("items", []):
+                errors.extend(self._validate_list_exists(item.get("for_list")))
 
         return errors
 
