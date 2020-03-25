@@ -28,7 +28,8 @@
               "EEEE d MMMM",
               "EEEE d MMMM yyyy",
               "d MMMM yyyy",
-              "MMMM yyyy"
+              "MMMM yyyy",
+              "yyyy"
             ]
           }
         },
