@@ -15,6 +15,7 @@
         "equals",
         "not equals",
         "contains",
+        "contains any",
         "not contains",
         "greater than",
         "less than",
