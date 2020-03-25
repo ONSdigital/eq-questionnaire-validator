@@ -32,7 +32,7 @@
         "items": [
           {
             "type": "List",
-            "for_list": "household",
+            "for_list": "people",
             "add_link_text": "Add another person to this household",
             "empty_list_text": "There are no people"
           }

@@ -414,6 +414,16 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
     check_validation_errors(filename, expected_error_messages)
 
 
+def test_invalid_list_reference_in_custom_summary():
+    filename = "schemas/invalid/test_invalid_custom_list_summary.json"
+
+    expected_error_messages = [
+        "for_list 'household' is not populated by any ListCollector blocks"
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
+
+
 def test_inconsistent_ids_in_variants():
     file_name = "schemas/invalid/test_invalid_inconsistent_ids_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
