@@ -1,5 +1,5 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/summary.json",
+  "$id": "https://eq.ons.gov.uk/blocks/section_summary.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "block": {
     "type": "object",
@@ -9,14 +9,10 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Summary"]
+        "enum": ["SectionSummary"]
       },
       "title": {
         "type": "string"
-      },
-      "collapsible": {
-        "description": "When True, the summary page will contain a list of collapsible section summaries",
-        "type": "boolean"
       }
     },
     "additionalProperties": false,

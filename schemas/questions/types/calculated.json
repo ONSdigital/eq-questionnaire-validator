@@ -29,9 +29,6 @@
         "type": "string",
         "enum": ["Calculated"]
       },
-      "show_on_section_summary": {
-        "type": "boolean"
-      },
       "calculations": {
         "type": "array",
         "items": {

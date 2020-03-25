@@ -176,6 +176,41 @@
             "additionalProperties": false,
             "required": ["for_list", "title"]
           },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "collapsible": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["List"]
+                    },
+                    "for_list": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#string_with_placeholders"
+                    },
+                    "add_link_text": {
+                      "type": "string"
+                    },
+                    "empty_list_text": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
           "show_summary_on_completion": {
             "type": "boolean",
             "description": "On completion of the section a summary will be shown"
@@ -242,6 +277,9 @@
                       },
                       {
                         "$ref": "https://eq.ons.gov.uk/blocks/relationship_collector.json#/block"
+                      },
+                      {
+                        "$ref": "https://eq.ons.gov.uk/blocks/section_summary.json#/block"
                       },
                       {
                         "$ref": "https://eq.ons.gov.uk/blocks/summary.json#/block"

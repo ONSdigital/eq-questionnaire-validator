@@ -24,6 +24,17 @@
   "sections": [
     {
       "id": "section",
+      "title": "Who Lives Here",
+      "summary": {
+        "items": [
+          {
+            "type": "List",
+            "for_list": "household",
+            "add_link_text": "Add someone to this household",
+            "empty_list_text": "There are no householders"
+          }
+        ]
+      },
       "groups": [
         {
           "id": "group",
@@ -34,12 +45,12 @@
               "type": "ListCollector",
               "for_list": "people",
               "add_answer": {
-                "id": "someone-else",
+                "id": "anyone-else",
                 "value": "Yes"
               },
               "remove_answer": {
-                "id": "delete-confirmation",
-                "value": "Yeah"
+                "id": "remove-confirmation",
+                "value": "Yes"
               },
               "question": {
                 "id": "confirmation-question",
@@ -123,8 +134,8 @@
                       "type": "Radio",
                       "options": [
                         {
-                          "label": "Yeah",
-                          "value": "Yeah"
+                          "label": "Yes",
+                          "value": "Yes"
                         },
                         {
                           "label": "No",
@@ -158,9 +169,27 @@
                   ]
                 }
               }
+            }
+          ]
+        },
+        {
+          "id": "extra-list-group",
+          "title": "Another List",
+          "blocks": [
+            {
+              "id": "next-interstitial",
+              "content": {
+                "title": "Another list",
+                "contents": [
+                  {
+                    "description": "You have added some people to the ‘people’ list. Next we‘ll test another list collector adding to the same list. This should still have the same list of people."
+                  }
+                ]
+              },
+              "type": "Interstitial"
             },
             {
-              "id": "another-list-collector",
+              "id": "another-list-collector-block",
               "type": "ListCollector",
               "for_list": "people",
               "add_answer": {
@@ -174,7 +203,7 @@
               "question": {
                 "id": "another-confirmation-question",
                 "type": "General",
-                "title": "Does anyone else live here?",
+                "title": "This list collector will add to the same ‘people’ list. Add someone else?",
                 "answers": [
                   {
                     "id": "another-anyone-else",
@@ -290,10 +319,80 @@
               }
             },
             {
-              "type": "Summary",
-              "id": "summary"
+              "type": "Question",
+              "id": "radio-placeholder",
+              "question": {
+                "type": "General",
+                "id": "radio-placeholder-question",
+                "title": "Are any of these people related to one another?",
+                "answers": [
+                  {
+                    "mandatory": false,
+                    "type": "Radio",
+                    "id": "radio-mandatory-answer",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No, all household members are unrelated",
+                        "value": "No, all household members are unrelated"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "list_summary": {
+                "for_list": "people",
+                "summary": {
+                  "item_title": {
+                    "text": "{person_name}",
+                    "placeholders": [
+                      {
+                        "placeholder": "person_name",
+                        "transforms": [
+                          {
+                            "arguments": {
+                              "delimiter": " ",
+                              "list_to_concatenate": {
+                                "identifier": ["first-name", "last-name"],
+                                "source": "answers"
+                              }
+                            },
+                            "transform": "concatenate_list"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "id": "group-summary",
+              "type": "SectionSummary"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "submit-answers",
+      "title": "Submit answers",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Confirmation",
+              "id": "confirmation",
+              "content": {
+                "title": "Thank you for your answers, do you wish to submit"
+              }
+            }
+          ],
+          "id": "confirmation-group",
+          "title": "Submit answers"
         }
       ]
     }

@@ -28,6 +28,16 @@
     {
       "id": "section",
       "title": "Household",
+      "summary": {
+        "items": [
+          {
+            "type": "List",
+            "for_list": "people",
+            "add_link_text": "Add another person to this household",
+            "empty_list_text": "There are no people"
+          }
+        ]
+      },
       "groups": [
         {
           "id": "group",
@@ -195,8 +205,6 @@
               },
               "summary": {
                 "title": "Household members",
-                "add_link_text": "Add another person to this household",
-                "empty_list_text": "There are no people",
                 "item_title": {
                   "text": "{person_name}",
                   "placeholders": [
@@ -345,8 +353,6 @@
               },
               "summary": {
                 "title": "Household members",
-                "add_link_text": "Add another person to this household",
-                "empty_list_text": "There are no people",
                 "item_title": {
                   "text": "{person_name}",
                   "placeholders": [
