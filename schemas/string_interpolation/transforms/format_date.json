@@ -24,7 +24,12 @@
           "date_format": {
             "type": "string",
             "description": "See https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
-            "enum": ["EEEE d MMMM", "EEEE d MMMM yyyy", "d MMMM yyyy", "MMMM yyyy"]
+            "enum": [
+              "EEEE d MMMM",
+              "EEEE d MMMM yyyy",
+              "d MMMM yyyy",
+              "MMMM yyyy"
+            ]
           }
         },
         "additionalProperties": false,
