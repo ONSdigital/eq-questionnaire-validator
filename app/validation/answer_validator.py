@@ -5,8 +5,10 @@ from urllib.parse import urlparse
 
 from dateutil.relativedelta import relativedelta
 
+from app.validation.validator import Validator
 
-class AnswerValidator:
+
+class AnswerValidator(Validator):
     MAX_NUMBER = 9999999999
     MIN_NUMBER = -999999999
     MAX_DECIMAL_PLACES = 6
@@ -25,21 +27,15 @@ class AnswerValidator:
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
 
     def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
+        super().__init__(schema_element)
         self.answer = schema_element
         self.block = block
         self.list_names = list_names
         self.block_ids = block_ids
 
-        self.errors = []
-
     @cached_property
     def options(self):
         return self.answer.get("options", [])
-
-    def add_error(self, message, **context):
-        context["id"] = self.answer["id"]
-
-        self.errors.append({"message": message, **context})
 
     def validate(self):
         self._validate_duplicate_options()

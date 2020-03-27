@@ -2,8 +2,6 @@ import json
 
 from app.validation.questionnaire_validator import QuestionnaireValidator
 
-validator = QuestionnaireValidator()
-
 
 def create_schema_with_answer_id(answer_id):
     """
@@ -27,7 +25,8 @@ def test_valid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        schema_errors = validator.validate_json_schema(json_to_validate)
+        validator = QuestionnaireValidator(json_to_validate)
+        schema_errors = validator.validate_json_schema()
 
         assert schema_errors == {}
 
@@ -42,7 +41,8 @@ def test_invalid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        schema_errors = validator.validate_json_schema(json_to_validate)
+        validator = QuestionnaireValidator(json_to_validate)
+        schema_errors = validator.validate_json_schema()
 
         expected_message = f"'{answer_id}' does not match"
 

@@ -8,7 +8,7 @@ def test_validate_answer_value_in_when_rule_invalid():
         "answer-2": {"Yes", "No"},
     }
 
-    validator = QuestionnaireValidator()
+    validator = QuestionnaireValidator({"id": "test-questionnaire"})
     validator.answer_id_to_option_values_map = option_value_to_answer_id_map
 
     validator.validate_answer_value_in_when_rule(when_rule)
@@ -26,7 +26,7 @@ def test_validate_answer_value_in_when_rule_valid():
         "answer-2": {"Yes", "No"},
     }
 
-    validator = QuestionnaireValidator()
+    validator = QuestionnaireValidator({"id": "test-questionnaire"})
     validator.answer_id_to_option_values_map = option_value_to_answer_id_map
 
     error_message = validator.validate_answer_value_in_when_rule(when_rule)

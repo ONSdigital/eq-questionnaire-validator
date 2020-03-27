@@ -36,17 +36,17 @@ def validate_schema_from_url():
 
 def validate_schema(data):
 
-    validator = QuestionnaireValidator()
-
     try:
         json_to_validate = json.loads(data)
     except JSONDecodeError:
         logger.info("Could not parse JSON", status=400)
         return Response(status=400, response="Could not parse JSON")
 
+    validator = QuestionnaireValidator(json_to_validate)
+
     response = {}
 
-    schema_errors = validator.validate_json_schema(json_to_validate)
+    schema_errors = validator.validate_json_schema()
 
     if len(schema_errors) > 0:
         response["errors"] = {"schema_errors": schema_errors}
@@ -61,4 +61,5 @@ def validate_schema(data):
         return jsonify(response), 400
 
     logger.info("Schema validation passed", status=200)
+
     return jsonify(response), 200
