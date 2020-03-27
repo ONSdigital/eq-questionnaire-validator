@@ -6,14 +6,17 @@ class QuestionValidator:
 
     def __init__(self, schema_element):
         self.question = schema_element
+        self.errors = []
+
+    def add_error(self, message, **context):
+        context["id"] = self.question["id"]
+
+        self.errors.append({"message": message, **context})
 
     def validate(self):
-        errors = []
-        errors.extend(self.validate_answers_to_calculate())
-        errors.extend(self.validate_date_range())
-        errors.extend(self.validate_mutually_exclusive())
-
-        return errors
+        self.validate_answers_to_calculate()
+        self.validate_date_range()
+        self.validate_mutually_exclusive()
 
     def validate_answers_to_calculate(self):
         """
@@ -21,27 +24,22 @@ class QuestionValidator:
         list are existing answers within the question
         """
 
-        errors = []
-
         if self.question["type"] == "Calculated":
             answer_ids = [answer["id"] for answer in self.question.get("answers")]
             for calculation in self.question.get("calculations"):
                 for answer_id in calculation["answers_to_calculate"]:
                     if answer_id not in answer_ids:
-                        invalid_answer_id_error = "Answer id - {} does not exist within this question - {}".format(
-                            answer_id, self.question["id"]
+                        self.add_error(
+                            "Answer id - {} does not exist within this question".format(
+                                answer_id
+                            )
                         )
-                        errors.append(invalid_answer_id_error)
-
-        return errors
 
     def validate_date_range(self):
         """
         If period_limits object is present in the DateRange question validates that a date range
         does not have a negative period and days can not be used to define limits for yyyy-mm date ranges
         """
-        errors = []
-
         if self.question["type"] == "DateRange" and self.question.get("period_limits"):
             period_limits = self.question["period_limits"]
             if "minimum" in period_limits and "maximum" in period_limits:
@@ -56,10 +54,8 @@ class QuestionValidator:
                 )
 
                 if minimum_date > maximum_date:
-                    errors.append(
-                        "The minimum period is greater than the maximum period for {}".format(
-                            self.question["id"]
-                        )
+                    self.add_error(
+                        "The minimum period is greater than the maximum period"
                     )
 
             first_answer_type = self.question["answers"][0]["type"]
@@ -72,33 +68,23 @@ class QuestionValidator:
             ) or "months" in period_limits.get("maximum", [])
 
             if first_answer_type == "MonthYearDate" and has_days_limit:
-                errors.append(
-                    "Days can not be used in period_limit for yyyy-mm date range for {}".format(
-                        self.question["id"]
-                    )
+                self.add_error(
+                    "Days can not be used in period_limit for yyyy-mm date range"
                 )
 
             if first_answer_type == "YearDate" and (has_days_limit or has_months_limit):
-                errors.append(
-                    "Days/Months can not be used in period_limit for yyyy date range for {}".format(
-                        self.question["id"]
-                    )
+                self.add_error(
+                    "Days/Months can not be used in period_limit for yyyy date range"
                 )
 
-        return errors
-
     def validate_mutually_exclusive(self):
-        errors = []
-
         if self.question["type"] == "MutuallyExclusive":
             answers = self.question["answers"]
 
             if any(answer["mandatory"] is True for answer in answers):
-                errors.append(
+                self.add_error(
                     "MutuallyExclusive question type cannot contain mandatory answers."
                 )
 
             if answers[-1]["type"] != "Checkbox":
-                errors.append("{} is not of type Checkbox.".format(answers[-1]["id"]))
-
-        return errors
+                self.add_error("{} is not of type Checkbox.".format(answers[-1]["id"]))

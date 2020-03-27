@@ -35,13 +35,20 @@ def test_invalid_id_in_answers_to_calculate():
         "type": "Calculated",
     }
     question_validator = QuestionValidator(question)
+    question_validator.validate_answers_to_calculate()
 
     expected_error_messages = [
-        "Answer id - breakdown-3 does not exist within this question - breakdown-question",
-        "Answer id - breakdown-4 does not exist within this question - breakdown-question",
+        {
+            "message": "Answer id - breakdown-3 does not exist within this question",
+            "id": "breakdown-question",
+        },
+        {
+            "message": "Answer id - breakdown-4 does not exist within this question",
+            "id": "breakdown-question",
+        },
     ]
 
-    assert expected_error_messages == question_validator.validate_answers_to_calculate()
+    assert expected_error_messages == question_validator.errors
 
 
 def test_invalid_date_range():
@@ -70,12 +77,16 @@ def test_invalid_date_range():
     }
 
     question_validator = QuestionValidator(question)
+    question_validator.validate_date_range()
 
     expected_error_messages = [
-        "The minimum period is greater than the maximum period for date-range-question"
+        {
+            "message": "The minimum period is greater than the maximum period",
+            "id": "date-range-question",
+        }
     ]
 
-    assert expected_error_messages == question_validator.validate_date_range()
+    assert expected_error_messages == expected_error_messages
 
 
 def test_invalid_yyyy_date_range_period():
@@ -109,12 +120,16 @@ def test_invalid_yyyy_date_range_period():
     }
 
     question_validator = QuestionValidator(question)
+    question_validator.validate_date_range()
 
     expected_error_messages = [
-        "Days/Months can not be used in period_limit for yyyy date range for date-range-question"
+        {
+            "message": "Days/Months can not be used in period_limit for yyyy date range",
+            "id": "date-range-question",
+        }
     ]
 
-    assert expected_error_messages == question_validator.validate_date_range()
+    assert expected_error_messages == question_validator.errors
 
 
 def test_invalid_mm_yyyy_date_range_period():
@@ -151,9 +166,13 @@ def test_invalid_mm_yyyy_date_range_period():
     }
 
     question_validator = QuestionValidator(question)
+    question_validator.validate_date_range()
 
     expected_error_messages = [
-        "Days can not be used in period_limit for yyyy-mm date range for date-range-question"
+        {
+            "message": "Days can not be used in period_limit for yyyy-mm date range",
+            "id": "date-range-question",
+        }
     ]
 
-    assert expected_error_messages == question_validator.validate_date_range()
+    assert expected_error_messages == question_validator.errors
