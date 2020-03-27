@@ -654,61 +654,97 @@ def test_invalid_repeating_section_title_placeholders():
 
 def test_invalid_hub_section_non_existent():
     filename = "schemas/invalid/test_invalid_hub_section_definition.json"
-    expected_error_messages = [
-        'Required hub completed section "invalid-section-id" '
-        "defined in hub does not appear in schema"
-    ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_message = {
+        "message": 'Required hub completed section "invalid-section-id" defined in hub does not appear in schema'
+    }
+
+    validator.validate_questionnaire()
+
+    assert expected_error_message == validator.errors[0]
 
 
 def test_invalid_answer_action():
     filename = (
         "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_question.json"
     )
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
     expected_error_messages = [
-        "List name defined in action params does not exist",
-        "Block id defined in action params does not exist",
+        {
+            "message": "List name defined in action params does not exist",
+            "id": "anyone-else-live-here-answer",
+            "list_name": "non-existent-list-name",
+        },
+        {
+            "message": "Block id defined in action params does not exist",
+            "block_id": "non-existent-block-id",
+            "id": "anyone-else-live-here-answer",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert expected_error_messages == validator.errors
 
 
 def test_invalid_driving_question_multiple_collectors():
     filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_collectors.json"
-    expected_error_messages = [
-        "ListCollectorDrivingQuestion `anyone-usually-live-at` for list `people` cannot be "
-        "used with multiple ListCollectors"
-    ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_message = (
+        "ListCollectorDrivingQuestion `anyone-usually-live-at` for list "
+        "`people` cannot be used with multiple ListCollectors"
+    )
+
+    validator.validate_questionnaire()
+
+    assert expected_error_message == validator.errors[0]["message"]
 
 
 def test_invalid_driving_question_multiple_driving_questions():
     filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_driving_questions.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
     expected_error_messages = [
-        "The block_id `anyone-usually-live-at-preceding` should be the only "
-        "ListCollectorDrivingQuestion for list `people`",
-        "The block_id `anyone-usually-live-at` should be the only "
-        "ListCollectorDrivingQuestion for list `people`",
+        {
+            "message": "The block_id should be the only ListCollectorDrivingQuestion for list",
+            "block_id": "anyone-usually-live-at-preceding",
+            "for_list": "people",
+        },
+        {
+            "message": "The block_id should be the only ListCollectorDrivingQuestion for list",
+            "block_id": "anyone-usually-live-at",
+            "for_list": "people",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert expected_error_messages == validator.errors
 
 
 def test_invalid_answer_value_in_when_rule():
     filename = "schemas/invalid/test_invalid_answer_value_in_when_rule.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
     expected_error_messages = [
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `France`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `Austria`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `7`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `French`",
-        "Answer value in when rule with answer id `country-checkbox-answer` has an invalid value of `Italian`",
+        {
+            "message": QuestionnaireValidator.INVALID_WHEN_RULE_ANSWER_VALUE,
+            "answer_id": "country-checkbox-answer",
+            "value": value,
+        }
+        for value in ["France", "France", "France", "Austria", 7, "French", "Italian"]
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_error_messages
 
 
 def test_invalid_quotes_in_schema():
