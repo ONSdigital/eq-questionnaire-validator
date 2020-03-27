@@ -15,6 +15,9 @@ from app.validation.validator import Validator
 
 
 class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
+
+    INVALID_WHEN_RULE_ANSWER_VALUE = "Answer value in when rule has an invalid value"
+
     def __init__(self, schema_element):
         super().__init__(schema_element)
         with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
@@ -276,8 +279,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if not self._has_single_driving_question(block["for_list"], json_to_validate):
             self.add_error(
-                f'The block_id `{block["id"]}` should be the only '
-                f'ListCollectorDrivingQuestion for list `{block["for_list"]}`'
+                f"The block_id should be the only ListCollectorDrivingQuestion for list",
+                block_id=block["id"],
+                for_list=block["for_list"],
             )
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
@@ -484,7 +488,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for value in when_values:
             if value not in option_values:
                 self.add_error(
-                    f"Answer value in when rule with answer id `{when_rule['id']}` has an invalid value of `{value}`"
+                    self.INVALID_WHEN_RULE_ANSWER_VALUE,
+                    answer_id=when_rule["id"],
+                    value=value,
                 )
 
     def _validate_skip_condition(
