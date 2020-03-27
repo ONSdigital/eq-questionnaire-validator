@@ -17,6 +17,10 @@ from app.validation.validator import Validator
 class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     INVALID_WHEN_RULE_ANSWER_VALUE = "Answer value in when rule has an invalid value"
+    NON_EXISTENT_WHEN_KEY = (
+        'The answer id in the key of the "when" clause does not exist'
+    )
+    DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 
     def __init__(self, schema_element):
         super().__init__(schema_element)
@@ -804,7 +808,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for key, present_id in ids_to_check:
             if present_id not in answer_ids_with_group_id:
                 self.add_error(
-                    'The answer id in the key of the "when" clause does not exist',
+                    self.NON_EXISTENT_WHEN_KEY,
                     answer_id=present_id,
                     key=key,
                     referenced_id=referenced_id,
@@ -1152,7 +1156,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 found = quote_regex.search(schema_text)
 
             if found:
-                self.add_error(f"Found dumb quotes(s) in schema text at {pointer}")
+                self.add_error(self.DUMB_QUOTES_FOUND, pointer=pointer)
 
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):
