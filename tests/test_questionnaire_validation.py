@@ -240,37 +240,37 @@ def test_answer_comparisons_invalid_comparison_id():
 
     expected_error_messages = [
         {
-            "message": 'The answer id in the key of the "when" clause does not exist',
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-2",
             "key": "comparison.id",
             "referenced_id": "route-comparison-2",
         },
         {
-            "message": 'The answer id in the key of the "when" clause does not exist',
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-3",
             "key": "comparison.id",
             "referenced_id": "equals-answers",
         },
         {
-            "message": 'The answer id in the key of the "when" clause does not exist',
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-4",
             "key": "comparison.id",
             "referenced_id": "less-than-answers",
         },
         {
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-5",
             "key": "comparison.id",
-            "message": 'The answer id in the key of the "when" clause does not exist',
             "referenced_id": "less-than-answers",
         },
         {
-            "message": 'The answer id in the key of the "when" clause does not exist',
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-6",
             "key": "comparison.id",
             "referenced_id": "greater-than-answers",
         },
         {
-            "message": 'The answer id in the key of the "when" clause does not exist',
+            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-7",
             "key": "id",
             "referenced_id": "greater-than-answers",
@@ -750,12 +750,18 @@ def test_invalid_answer_value_in_when_rule():
 def test_invalid_quotes_in_schema():
     filename = "schemas/invalid/test_invalid_quotes_in_schema_text.json"
 
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
     expected_error_messages = [
-        "Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/0/question/description",
-        "Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/1/question_variants/0/question/title",
-        "Found dumb quotes(s) in schema text at "
-        "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
-        "Found dumb quotes(s) in schema text at /sections/0/groups/0/blocks/0/question/answers/0/label",
+        {"message": QuestionnaireValidator.DUMB_QUOTES_FOUND, "pointer": pointer}
+        for pointer in [
+            "/sections/0/groups/0/blocks/0/question/description",
+            "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+            "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+            "/sections/0/groups/0/blocks/0/question/answers/0/label",
+        ]
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_error_messages
