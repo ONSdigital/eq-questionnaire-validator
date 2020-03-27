@@ -236,10 +236,10 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         for question in questions:
             question_validator = QuestionValidator(question)
-            question_errors = question_validator.validate()
 
-            for error in question_errors:
-                self.add_error(error)
+            question_validator.validate()
+
+            self.errors += question_validator.errors
 
             for answer in question.get("answers", []):
                 answer_validator = AnswerValidator(
