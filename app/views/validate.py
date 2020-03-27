@@ -53,7 +53,7 @@ def validate_schema(data):
         logger.info("Schema validator returned errors", status=400)
         return jsonify(response), 400
 
-    validator.validate_questionnaire(json_to_validate)
+    validator.validate_questionnaire()
 
     if len(validator.errors) > 0:
         response["errors"] = {"validation_errors": validator.errors}

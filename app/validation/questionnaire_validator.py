@@ -767,7 +767,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 self._validate_list_name_in_when_rule(when)
                 break
 
-            valid_answer_ids = self._validate_answer_ids_present_in_schema(
+            valid_answer_ids = self.validate_answer_ids_present_in_schema(
                 when, answer_ids_with_group_id, referenced_id
             )
             if not valid_answer_ids:
@@ -786,7 +786,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if "id" in when:
                 self.validate_answer_value_in_when_rule(when)
 
-    def _validate_answer_ids_present_in_schema(
+    def validate_answer_ids_present_in_schema(
         self, when, answer_ids_with_group_id, referenced_id
     ):
         """
@@ -804,9 +804,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for key, present_id in ids_to_check:
             if present_id not in answer_ids_with_group_id:
                 self.add_error(
-                    'The answer id - {} in the {} key of the "when" clause for {} does not exist'.format(
-                        present_id, key, referenced_id
-                    )
+                    'The answer id in the key of the "when" clause does not exist',
+                    answer_id=present_id,
+                    key=key,
+                    referenced_id=referenced_id,
                 )
                 return False
         return True
@@ -960,9 +961,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             ]
 
         return []
-
-    def add_error(self, message):
-        self.errors.append({"message": message})
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
