@@ -18,16 +18,18 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
-        self._list_collector_answer_ids = {}
-        self._list_names = []
-        self._block_ids = []
-        self.answer_id_to_option_values_map = {}
         resolver = RefResolver(
             base_uri="https://eq.ons.gov.uk/",
             referrer=self.schema,
             store=self.lookup_ref_store(),
         )
         self.schema_validator = Draft7Validator(self.schema, resolver=resolver)
+
+        self.errors = []
+        self._list_collector_answer_ids = {}
+        self._list_names = []
+        self._block_ids = []
+        self.answer_id_to_option_values_map = {}
 
     @staticmethod
     def lookup_ref_store():
@@ -64,12 +66,9 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
 
-        validation_errors = []
-        validation_errors.extend(
-            self._validate_schema_contain_metadata(json_to_validate)
-        )
-        validation_errors.extend(self._validate_duplicates(json_to_validate))
-        validation_errors.extend(self._validate_smart_quotes(json_to_validate))
+        self._validate_schema_contain_metadata(json_to_validate)
+        self._validate_duplicates(json_to_validate)
+        self._validate_smart_quotes(json_to_validate)
 
         section_ids = []
         sections = json_to_validate.get("sections", [])
@@ -85,97 +84,75 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         )
 
         for section in sections:
-            validation_errors.extend(self._validate_section(section))
+            self._validate_section(section)
             section_ids.append(section["id"])
             for group in section["groups"]:
-                validation_errors.extend(
-                    self._validate_routing_rules(
-                        group, all_groups, answers_with_parent_ids
-                    )
+                self._validate_group_routing_rules(
+                    group, all_groups, answers_with_parent_ids
                 )
 
                 for skip_condition in group.get("skip_conditions", []):
-                    validation_errors.extend(
-                        self._validate_skip_condition(
-                            skip_condition, answers_with_parent_ids, group
-                        )
+                    self._validate_skip_condition(
+                        skip_condition, answers_with_parent_ids, group
                     )
 
-                validation_errors.extend(
-                    self._validate_blocks(
-                        json_to_validate,
-                        section,
-                        group,
-                        all_groups,
-                        answers_with_parent_ids,
-                        numeric_answer_ranges,
-                    )
+                self._validate_blocks(
+                    json_to_validate,
+                    section,
+                    group,
+                    all_groups,
+                    answers_with_parent_ids,
+                    numeric_answer_ranges,
                 )
 
         required_hub_section_ids = json_to_validate.get("hub", {}).get(
             "required_completed_sections", []
         )
 
-        validation_errors.extend(
-            self._validate_required_section_ids(section_ids, required_hub_section_ids)
-        )
-
-        return validation_errors
+        self._validate_required_section_ids(section_ids, required_hub_section_ids)
 
     def _validate_section(self, section):
-        errors = []
         section_repeat = section.get("repeat")
 
         if section_repeat:
-            errors.extend(self._validate_list_exists(section_repeat["for_list"]))
-            errors.extend(
-                self._validate_placeholder_object(section_repeat["title"], None)
-            )
+            self._validate_list_exists(section_repeat["for_list"])
+            self._validate_placeholder_object(section_repeat["title"], None)
 
         section_summary = section.get("summary")
         if section_summary:
             for item in section_summary.get("items", []):
-                errors.extend(self._validate_list_exists(item.get("for_list")))
-
-        return errors
+                self._validate_list_exists(item.get("for_list"))
 
     def _validate_required_section_ids(self, section_ids, required_section_ids):
-        errors = []
 
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
-                errors.append(
-                    self._error_message(
-                        'Required hub completed section "{}" defined in hub does not '
-                        "appear in schema".format(required_section_id)
-                    )
+                self.add_error(
+                    'Required hub completed section "{}" defined in hub does not '
+                    "appear in schema".format(required_section_id)
                 )
 
-        return errors
-
-    def _validate_routing_rules(self, group, all_groups, answers_with_parent_ids):
-        errors = []
-
-        errors.extend(
-            self._validate_routing_rules_default(group.get("routing_rules", []), group)
+    def _validate_group_routing_rules(self, group, all_groups, answers_with_parent_ids):
+        self.validate_routing_rules_have_default(
+            group.get("routing_rules", []), group["id"]
         )
 
         for rule in group.get("routing_rules", []):
-            errors.extend(
-                self._validate_schema_routing_rule_routes_to_valid_target(
-                    group["blocks"], "block", rule
-                )
-            )
-            errors.extend(
-                self._validate_schema_routing_rule_routes_to_valid_target(
-                    all_groups, "group", rule
-                )
-            )
-            errors.extend(
-                self._validate_routing_rule(rule, answers_with_parent_ids, group)
-            )
+            self.validate_routing_rule_target(group["blocks"], "block", rule)
+            self.validate_routing_rule_target(all_groups, "group", rule)
+            self._validate_routing_rule(rule, answers_with_parent_ids, group)
 
-        return errors
+    def validate_block_routing_rules(
+        self, block, group, all_groups, answers_with_parent_ids
+    ):
+        self.validate_routing_rules_have_default(
+            block.get("routing_rules", []), block["id"]
+        )
+
+        for rule in block.get("routing_rules", []):
+            self.validate_routing_rule_target(group["blocks"], "block", rule)
+            self.validate_routing_rule_target(all_groups, "group", rule)
+            self._validate_routing_rule(rule, answers_with_parent_ids, block)
 
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
@@ -187,111 +164,70 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         answers_with_parent_ids,
         numeric_answer_ranges,
     ):
-        errors = []
         for block in group.get("blocks"):
             if (
                 section == json_to_validate["sections"][-1]
                 and group == section["groups"][-1]
                 and block == group["blocks"][-1]
             ):
-                errors.extend(
-                    self._validate_schema_contains_submission_page(
-                        schema=json_to_validate, last_block=block
-                    )
+                self._validate_schema_contains_submission_page(
+                    schema=json_to_validate, last_block=block
                 )
 
-            errors.extend(
-                self._validate_routing_rules_default(
-                    block.get("routing_rules", []), block
-                )
+            self.validate_block_routing_rules(
+                block, group, all_groups, answers_with_parent_ids
             )
 
-            for rule in block.get("routing_rules", []):
-                errors.extend(
-                    self._validate_schema_routing_rule_routes_to_valid_target(
-                        group["blocks"], "block", rule
-                    )
-                )
-                errors.extend(
-                    self._validate_schema_routing_rule_routes_to_valid_target(
-                        all_groups, "group", rule
-                    )
-                )
-                errors.extend(
-                    self._validate_routing_rule(rule, answers_with_parent_ids, block)
-                )
-
             for skip_condition in block.get("skip_conditions", []):
-                errors.extend(
-                    self._validate_skip_condition(
-                        skip_condition, answers_with_parent_ids, block
-                    )
+                self._validate_skip_condition(
+                    skip_condition, answers_with_parent_ids, block
                 )
 
             if block["type"] == "CalculatedSummary":
-                errors.extend(
-                    self._validate_calculated_summary_type(
-                        block, answers_with_parent_ids
-                    )
-                )
+                self._validate_calculated_summary_type(block, answers_with_parent_ids)
             elif block["type"] == "PrimaryPersonListCollector":
                 try:
-                    errors.extend(self._validate_primary_person_list_collector(block))
+                    self._validate_primary_person_list_collector(block)
                 except KeyError as e:
-                    errors.append(f"Missing key in list collector: {e}")
+                    self.add_error(f"Missing key in list collector: {e}")
             elif block["type"] == "ListCollector":
                 try:
-                    errors.extend(self._validate_list_collector(block))
+                    self._validate_list_collector(block)
                 except KeyError as e:
-                    errors.append(f"Missing key in list collector: {e}")
+                    self.add_error(f"Missing key in list collector: {e}")
             elif block["type"] == "RelationshipCollector":
-                errors.extend(self._validate_list_exists(block["for_list"]))
+                self._validate_list_exists(block["for_list"])
 
                 if "question_variants" in block:
                     for variant in block["question_variants"]:
-                        errors.extend(
-                            self._validate_relationship_collector_answers(
-                                variant["question"]["answers"]
-                            )
+                        self._validate_relationship_collector_answers(
+                            variant["question"]["answers"]
                         )
                 else:
-                    errors.extend(
-                        self._validate_relationship_collector_answers(
-                            block["question"]["answers"]
-                        )
+                    self._validate_relationship_collector_answers(
+                        block["question"]["answers"]
                     )
             elif block["type"] == "ListCollectorDrivingQuestion":
-                errors.extend(
-                    self._validate_list_collector_driving_question(
-                        block, section, json_to_validate
-                    )
+                self._validate_list_collector_driving_question(
+                    block, section, json_to_validate
                 )
 
-            errors.extend(self._validate_questions(block, numeric_answer_ranges))
+            self._validate_questions(block, numeric_answer_ranges)
 
             valid_metadata_ids = []
             if "metadata" in json_to_validate:
                 valid_metadata_ids = [m["name"] for m in json_to_validate["metadata"]]
 
-            errors.extend(
-                self._validate_source_references(
-                    block, answers_with_parent_ids, valid_metadata_ids
-                )
+            self._validate_source_references(
+                block, answers_with_parent_ids, valid_metadata_ids
             )
 
-            errors.extend(self._validate_placeholders(block))
-
-            errors.extend(
-                self._validate_variants(
-                    block, answers_with_parent_ids, numeric_answer_ranges
-                )
+            self._validate_placeholders(block)
+            self._validate_variants(
+                block, answers_with_parent_ids, numeric_answer_ranges
             )
-
-        return errors
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
-        errors = []
-
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
 
@@ -302,49 +238,41 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
             question_validator = QuestionValidator(question)
             question_errors = question_validator.validate()
 
-            errors.extend([self._error_message(error) for error in question_errors])
+            for error in question_errors:
+                self.add_error(error)
 
             for answer in question.get("answers", []):
                 answer_validator = AnswerValidator(
                     answer, block_or_variant, self._list_names, self._block_ids
                 )
-                answer_errors = answer_validator.validate()
+
+                answer_validator.validate()
+
                 if answer["type"] in ["Number", "Currency", "Percentage"]:
                     numeric_answer_ranges[
                         answer["id"]
                     ] = answer_validator.get_numeric_range_values(numeric_answer_ranges)
 
-                    answer_errors.extend(
-                        answer_validator.validate_numeric_answer_types(
-                            numeric_answer_ranges
-                        )
+                    answer_validator.validate_numeric_answer_types(
+                        numeric_answer_ranges
                     )
-                errors.extend([self._error_message(error) for error in answer_errors])
 
-        return errors
+                self.errors += answer_validator.errors
 
     def _validate_list_collector_driving_question(
         self, block, section, json_to_validate
     ):
-        errors = []
-
         if not self._has_single_list_collector(block["for_list"], section):
-            errors.append(
-                self._error_message(
-                    f'ListCollectorDrivingQuestion `{block["id"]}` for list '
-                    f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
-                )
+            self.add_error(
+                f'ListCollectorDrivingQuestion `{block["id"]}` for list '
+                f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
             )
 
         if not self._has_single_driving_question(block["for_list"], json_to_validate):
-            errors.append(
-                self._error_message(
-                    f'The block_id `{block["id"]}` should be the only '
-                    f'ListCollectorDrivingQuestion for list `{block["for_list"]}`'
-                )
+            self.add_error(
+                f'The block_id `{block["id"]}` should be the only '
+                f'ListCollectorDrivingQuestion for list `{block["for_list"]}`'
             )
-
-        return errors
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
         """ Ensure consistency between relevant fields in variants
@@ -356,68 +284,52 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         - Ensure default answers are the same across all variants.
         """
         if not variants:
-            return []
-
-        errors = []
+            return
 
         results = self._get_question_variant_fields_sets(variants)
 
         if len(results["number_of_answers"]) > 1:
-            errors.append(
-                self._error_message(
-                    "Variants in block: {} contain different numbers of answers".format(
-                        block["id"]
-                    )
+            self.add_error(
+                "Variants in block: {} contain different numbers of answers".format(
+                    block["id"]
                 )
             )
 
         if len(results["question_ids"]) != 1:
-            errors.append(
-                self._error_message(
-                    "Variants contain more than one question_id for block: {}. Found ids: {}".format(
-                        block["id"], results["question_ids"]
-                    )
+            self.add_error(
+                "Variants contain more than one question_id for block: {}. Found ids: {}".format(
+                    block["id"], results["question_ids"]
                 )
             )
 
         if len(results["question_types"]) != 1:
-            errors.append(
-                self._error_message(
-                    "Variants have more than one question type for block: {}. Found types: {}".format(
-                        block["id"], results["question_types"]
-                    )
+            self.add_error(
+                "Variants have more than one question type for block: {}. Found types: {}".format(
+                    block["id"], results["question_types"]
                 )
             )
 
         if len(results["default_answers"]) > 1:
-            errors.append(
-                self._error_message(
-                    "Variants contain different default answers for block: {}. Found ids: {}".format(
-                        block["id"], results["question_ids"]
-                    )
+            self.add_error(
+                "Variants contain different default answers for block: {}. Found ids: {}".format(
+                    block["id"], results["question_ids"]
                 )
             )
 
         if len(results["answer_ids"]) != next(iter(results["number_of_answers"])):
-            errors.append(
-                self._error_message(
-                    "Variants have mismatched answer_ids for block: {}. Found ids: {}.".format(
-                        block["id"], results["answer_ids"]
-                    )
+            self.add_error(
+                "Variants have mismatched answer_ids for block: {}. Found ids: {}.".format(
+                    block["id"], results["answer_ids"]
                 )
             )
 
         for answer_id, type_set in results["answer_types"].items():
-
             if len(type_set) != 1:
-                errors.append(
-                    self._error_message(
-                        "Variants have mismatched answer types for block: {}. Found types: {} for answer ID: {}.".format(
-                            block["id"], type_set, answer_id
-                        )
+                self.add_error(
+                    "Variants have mismatched answer types for block: {}. Found types: {} for answer ID: {}.".format(
+                        block["id"], type_set, answer_id
                     )
                 )
-        return errors
 
     @staticmethod
     def _get_question_variant_fields_sets(variants):
@@ -447,45 +359,30 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
     def _validate_variants(
         self, block, answer_ids_with_group_id, numeric_answer_ranges
     ):
-        errors = []
-
         question_variants = block.get("question_variants", [])
         content_variants = block.get("content_variants", [])
 
         all_variants = question_variants + content_variants
 
         for variant in question_variants:
-            errors.extend(self._validate_questions(variant, numeric_answer_ranges))
+            self._validate_questions(variant, numeric_answer_ranges)
 
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
-            errors.append(
-                self._error_message(
-                    "Variants contains fewer than two variants - block: {}".format(
-                        block["id"]
-                    )
+            self.add_error(
+                "Variants contains fewer than two variants - block: {}".format(
+                    block["id"]
                 )
             )
 
         for variant in all_variants:
-            errors.extend(
-                self._validate_when_rule(
-                    variant.get("when", []), answer_ids_with_group_id, block["id"]
-                )
+            self._validate_when_rule(
+                variant.get("when", []), answer_ids_with_group_id, block["id"]
             )
 
-        errors.extend(
-            self._ensure_relevant_variant_fields_are_consistent(
-                block, question_variants
-            )
-        )
-
-        return errors
+        self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
 
     def _validate_schema_contain_metadata(self, schema):
-
-        errors = []
-
         # user_id and period_id required downstream for receipting
         # ru_name required for template rendering in default and NI theme
         default_metadata = ["user_id", "period_id"]
@@ -494,28 +391,20 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         ]
 
         if len(schema_metadata) != len(set(schema_metadata)):
-            errors.append(
-                self._error_message("Mandatory Metadata - contains duplicates")
-            )
+            self.add_error("Mandatory Metadata - contains duplicates")
 
         required_metadata_names = ["user_id", "period_id"]
         for metadata_name in required_metadata_names:
             if metadata_name not in schema_metadata:
-                errors.append(
-                    self._error_message(
-                        "Mandatory Metadata - `{}` not specified in metadata field".format(
-                            metadata_name
-                        )
+                self.add_error(
+                    "Mandatory Metadata - `{}` not specified in metadata field".format(
+                        metadata_name
                     )
                 )
 
         if schema["theme"] in ["default", "northernireland"]:
             if "ru_name" not in schema_metadata:
-                errors.append(
-                    self._error_message(
-                        "Metadata - ru_name not specified in metadata field"
-                    )
-                )
+                self.add_error("Metadata - ru_name not specified in metadata field")
             default_metadata.append("ru_name")
 
         # Find all words that precede any of:
@@ -531,19 +420,11 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         # Checks if piped/routed metadata is defined in the schema
         for metadata in all_metadata:
             if metadata not in schema_metadata:
-                errors.append(
-                    self._error_message(
-                        "Metadata - {} not specified in metadata field".format(metadata)
-                    )
+                self.add_error(
+                    "Metadata - {} not specified in metadata field".format(metadata)
                 )
 
-        return errors
-
-    def _validate_schema_routing_rule_routes_to_valid_target(
-        self, dict_list, goto_key, rule
-    ):
-        errors = []
-
+    def validate_routing_rule_target(self, dict_list, goto_key, rule):
         if "goto" in rule and goto_key in rule["goto"].keys():
             referenced_id = rule["goto"][goto_key]
 
@@ -551,57 +432,38 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 invalid_block_error = "Routing rule routes to invalid {} [{}]".format(
                     goto_key, referenced_id
                 )
-                errors.append(self._error_message(invalid_block_error))
-        return errors
+                self.add_error(invalid_block_error)
 
-    @staticmethod
-    def _validate_routing_rules_default(rules, block_or_group):
+    def validate_routing_rules_have_default(self, rules, block_or_group_id):
         """
         Ensure that a set of routing rules contains a default, without a when clause.
         """
-        errors = []
 
-        if not rules or all(("goto" not in rule for rule in rules)):
-            return errors
+        if rules and all(("goto" in rule for rule in rules)):
+            default_routing_rule_count = 0
 
-        default_routing_rule_count = 0
+            for rule in rules:
+                rule_directive = rule.get("goto")
+                if rule_directive and "when" not in rule_directive:
+                    default_routing_rule_count += 1
 
-        for rule in rules:
-            rule_directive = rule.get("goto")
-            if rule_directive and "when" not in rule_directive:
-                default_routing_rule_count += 1
-
-        if not default_routing_rule_count:
-            errors.append(
-                QuestionnaireValidator._error_message(
-                    "The routing rules for group or block: {} must contain a default "
-                    "routing rule without a when rule".format(block_or_group["id"])
+            if not default_routing_rule_count:
+                self.add_error(
+                    f"The routing rules for group or block: {block_or_group_id} "
+                    f"must contain a default routing rule without a when rule"
                 )
-            )
-        elif default_routing_rule_count > 1:
-            errors.append(
-                QuestionnaireValidator._error_message(
-                    "The routing rules for group or block: {} contain multiple default "
-                    "routing rules. Some of them will not be used".format(
-                        block_or_group["id"]
-                    )
+            elif default_routing_rule_count > 1:
+                self.add_error(
+                    f"The routing rules for group or block: {block_or_group_id} "
+                    f"contain multiple default routing rules. Some of them will not be used"
                 )
-            )
-
-        return errors
 
     def _validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
-        errors = []
-
         rule = rule.get("goto")
         if "when" in rule:
-            errors.extend(
-                self._validate_when_rule(
-                    rule["when"], answer_ids_with_group_id, block_or_group["id"]
-                )
+            self._validate_when_rule(
+                rule["when"], answer_ids_with_group_id, block_or_group["id"]
             )
-
-        return errors
 
     def validate_answer_value_in_when_rule(self, when_rule):
         when_values = when_rule.get("values", [])
@@ -613,16 +475,11 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         if not option_values:
             return []
 
-        errors = []
         for value in when_values:
             if value not in option_values:
-                errors.append(
-                    QuestionnaireValidator._error_message(
-                        f"Answer value in when rule with answer id `{when_rule['id']}` has an invalid value of `{value}`"
-                    )
+                self.add_error(
+                    f"Answer value in when rule with answer id `{when_rule['id']}` has an invalid value of `{value}`"
                 )
-
-        return errors
 
     def _validate_skip_condition(
         self, skip_condition, answer_ids_with_group_id, block_or_group
@@ -631,18 +488,11 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         Validate skip condition is valid
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        errors = []
         when = skip_condition.get("when")
-        errors.extend(
-            self._validate_when_rule(
-                when, answer_ids_with_group_id, block_or_group["id"]
-            )
-        )
-        return errors
+
+        self._validate_when_rule(when, answer_ids_with_group_id, block_or_group["id"])
 
     def _validate_list_answer_references(self, block):
-        errors = []
-
         main_block_questions = self._get_all_questions_for_block(block)
         main_block_ids = {
             answer["id"]
@@ -659,23 +509,17 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         }
 
         if block["add_answer"]["id"] not in main_block_ids:
-            errors.append(
-                self._error_message(
-                    "add_answer reference uses id not found in main block question: {}".format(
-                        block["add_answer"]["id"]
-                    )
+            self.add_error(
+                "add_answer reference uses id not found in main block question: {}".format(
+                    block["add_answer"]["id"]
                 )
             )
         if block["remove_answer"]["id"] not in remove_block_ids:
-            errors.append(
-                self._error_message(
-                    "remove_answer reference uses id not found in remove_block: {}".format(
-                        block["remove_answer"]["id"]
-                    )
+            self.add_error(
+                "remove_answer reference uses id not found in remove_block: {}".format(
+                    block["remove_answer"]["id"]
                 )
             )
-
-        return errors
 
     def _validate_primary_person_list_answer_references(self, block):
 
@@ -688,7 +532,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         if block["add_or_edit_answer"]["id"] not in main_block_ids:
             return [
-                self._error_message(
+                self.add_error(
                     f'add_or_edit_answer reference uses id not found in main block question: {block["add_or_edit_answer"]["id"]}'
                 )
             ]
@@ -697,9 +541,8 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
     def _validate_list_collector(  # noqa: C901  pylint: disable=too-complex, too-many-locals
         self, block
     ):
-        errors = []
         collector_questions = self._get_all_questions_for_block(block)
-        errors.extend(self._validate_list_answer_references(block))
+        self._validate_list_answer_references(block)
         remove_questions = self._get_all_questions_for_block(block["remove_block"])
         add_answer_value = block["add_answer"]["value"]
         remove_answer_value = block["remove_answer"]["value"]
@@ -707,87 +550,69 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         for collector_question in collector_questions:
             for collector_answer in collector_question["answers"]:
                 if collector_answer["type"] != "Radio":
-                    errors.append(
-                        self._error_message(
-                            "The list collector block {} does not contain a Radio answer type".format(
-                                block["id"]
-                            )
+                    self.add_error(
+                        "The list collector block {} does not contain a Radio answer type".format(
+                            block["id"]
                         )
                     )
 
                 if not self._options_contain_value(
                     collector_answer["options"], add_answer_value
                 ):
-                    errors.append(
-                        self._error_message(
-                            "The list collector block {} has an add_answer_value that is not present in the answer values".format(
-                                block["id"]
-                            )
+                    self.add_error(
+                        "The list collector block {} has an add_answer_value that is not present in the answer values".format(
+                            block["id"]
                         )
                     )
 
         for remove_question in remove_questions:
             for remove_answer in remove_question["answers"]:
                 if remove_answer["type"] != "Radio":
-                    errors.append(
-                        self._error_message(
-                            "The list collector remove block {} does not contain a Radio answer type".format(
-                                block["id"]
-                            )
+                    self.add_error(
+                        "The list collector remove block {} does not contain a Radio answer type".format(
+                            block["id"]
                         )
                     )
 
                 if not self._options_contain_value(
                     remove_answer["options"], remove_answer_value
                 ):
-                    errors.append(
-                        self._error_message(
-                            "The list collector block {} has a remove_answer_value that is not present in the answer values".format(
-                                block["id"]
-                            )
+                    self.add_error(
+                        "The list collector block {} has a remove_answer_value that is not present in the answer values".format(
+                            block["id"]
                         )
                     )
 
-        errors.extend(self._validate_list_collector_answer_ids(block))
-
-        return errors
+        self._validate_list_collector_answer_ids(block)
 
     # noqa: C901  pylint: disable=too-complex, too-many-locals
     def _validate_primary_person_list_collector(self, block):
-        errors = []
         collector_questions = self._get_all_questions_for_block(block)
-        errors.extend(self._validate_primary_person_list_answer_references(block))
+        self._validate_primary_person_list_answer_references(block)
         add_or_edit_answer_value = block["add_or_edit_answer"]["value"]
 
         for collector_question in collector_questions:
             for collector_answer in collector_question["answers"]:
                 if collector_answer["type"] != "Radio":
-                    errors.append(
-                        self._error_message(
-                            f'The primary person list collector block {block["id"]} does not contain a Radio answer type'
-                        )
+                    self.add_error(
+                        f'The primary person list collector block {block["id"]} does not contain a Radio answer type'
                     )
 
                 if not self._options_contain_value(
                     collector_answer["options"], add_or_edit_answer_value
                 ):
-                    errors.append(
-                        self._error_message(
-                            f'The primary person list collector block {block["id"]} has an add_or_edit_answer value that is not '
-                            "present in the answer values"
-                        )
+                    self.add_error(
+                        f'The primary person list collector block {block["id"]} has an add_or_edit_answer value that is not '
+                        "present in the answer values"
                     )
 
-        errors.extend(self._validate_primary_person_list_collector_answer_ids(block))
-
-        return errors
+        self._validate_primary_person_list_collector_answer_ids(block)
 
     def _validate_list_collector_answer_ids(self, block):
         """
         - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
         - Enforce the same answer_ids on add and edit sub-blocks
         """
-        errors = []
         list_name = block["for_list"]
 
         add_block_questions = self._get_all_questions_for_block(block["add_block"])
@@ -812,30 +637,23 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         else:
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
-                errors.append(
-                    self._error_message(
-                        "Multiple list collectors populate the list: {} using different answer_ids in the add block".format(
-                            list_name
-                        )
+                self.add_error(
+                    "Multiple list collectors populate the list: {} using different answer_ids in the add block".format(
+                        list_name
                     )
                 )
 
         if add_answer_ids.symmetric_difference(edit_answer_ids):
-            errors.append(
-                self._error_message(
-                    "The list collector block {} contains an add block and edit block with different answer ids".format(
-                        block["id"]
-                    )
+            self.add_error(
+                "The list collector block {} contains an add block and edit block with different answer ids".format(
+                    block["id"]
                 )
             )
-
-        return errors
 
     def _validate_primary_person_list_collector_answer_ids(self, block):
         """
         - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
         """
-        errors = []
         list_name = block["for_list"]
 
         add_or_edit_block_questions = self._get_all_questions_for_block(
@@ -855,14 +673,10 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         else:
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
-                errors.append(
-                    self._error_message(
-                        f"Multiple primary person list collectors populate the list: {list_name} using different answer "
-                        "ids in the add_or_edit block"
-                    )
+                self.add_error(
+                    f"Multiple primary person list collectors populate the list: {list_name} using different answer "
+                    "ids in the add_or_edit block"
                 )
-
-        return errors
 
     @staticmethod
     def _options_contain_value(options, value):
@@ -880,7 +694,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
             ]
         except KeyError as e:
             return [
-                self._error_message(
+                self.add_error(
                     "Invalid answer id {} in block {}'s answers_to_calculate".format(
                         e, block["id"]
                     )
@@ -894,7 +708,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         }
         if duplicates:
             return [
-                self._error_message(
+                self.add_error(
                     "Duplicate answers: {} in block {}'s answers_to_calculate".format(
                         duplicates, block["id"]
                     )
@@ -903,7 +717,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         if not all(answer_type == answer_types[0] for answer_type in answer_types):
             return [
-                self._error_message(
+                self.add_error(
                     "All answers in block {}'s answers_to_calculate must be of the same type".format(
                         block["id"]
                     )
@@ -917,7 +731,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
             ]
             if not all(unit_type == unit_types[0] for unit_type in unit_types):
                 return [
-                    self._error_message(
+                    self.add_error(
                         "All answers in block {}'s answers_to_calculate must be of the same unit".format(
                             block["id"]
                         )
@@ -933,7 +747,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 currency_type == currency_types[0] for currency_type in currency_types
             ):
                 return [
-                    self._error_message(
+                    self.add_error(
                         "All answers in block {}'s answers_to_calculate must be of the same currency".format(
                             block["id"]
                         )
@@ -947,38 +761,29 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         Validates any answer id in a when clause exists within the schema
         Will also check that comparison exists
         """
-        errors = []
-
         for when in when_clause:
             if "list" in when:
-                errors.extend(self._validate_list_name_in_when_rule(when))
+                self._validate_list_name_in_when_rule(when)
                 break
 
-            answer_errors = self._validate_answer_ids_present_in_schema(
+            valid_answer_ids = self._validate_answer_ids_present_in_schema(
                 when, answer_ids_with_group_id, referenced_id
             )
-            if answer_errors:
-                errors.extend(answer_errors)
+            if not valid_answer_ids:
                 break
 
             # We know the ids are correct, so can continue to perform validation
-            errors.extend(
-                self._validate_checkbox_exclusive_conditions_in_when_rule(
-                    when, answer_ids_with_group_id
-                )
+            self._validate_checkbox_exclusive_conditions_in_when_rule(
+                when, answer_ids_with_group_id
             )
 
             if "comparison" in when:
-                errors.extend(
-                    self._validate_comparison_in_when_rule(
-                        when, answer_ids_with_group_id, referenced_id
-                    )
+                self._validate_comparison_in_when_rule(
+                    when, answer_ids_with_group_id, referenced_id
                 )
 
             if "id" in when:
-                errors.extend(self.validate_answer_value_in_when_rule(when))
-
-        return errors
+                self.validate_answer_value_in_when_rule(when)
 
     def _validate_answer_ids_present_in_schema(
         self, when, answer_ids_with_group_id, referenced_id
@@ -988,7 +793,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         when conditions against id's that don't exist.
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        errors = []
         ids_to_check = []
 
         if "id" in when:
@@ -998,15 +802,13 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         for key, present_id in ids_to_check:
             if present_id not in answer_ids_with_group_id:
-                errors.append(
-                    self._error_message(
-                        'The answer id - {} in the {} key of the "when" clause for {} does not exist'.format(
-                            present_id, key, referenced_id
-                        )
+                self.add_error(
+                    'The answer id - {} in the {} key of the "when" clause for {} does not exist'.format(
+                        present_id, key, referenced_id
                     )
                 )
-
-        return errors
+                return False
+        return True
 
     def _validate_checkbox_exclusive_conditions_in_when_rule(
         self, when, answer_ids_with_group_id
@@ -1015,8 +817,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         Validate checkbox exclusive conditions are only used when answer type is Checkbox
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        errors = []
-
         condition = when["condition"]
         checkbox_exclusive_conditions = (
             "contains any",
@@ -1034,23 +834,17 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         if answer_type == "Checkbox":
             if condition not in all_checkbox_conditions:
                 answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
-                errors.append(
-                    self._error_message(
-                        f"The condition `{condition}` cannot be used"
-                        f" with `Checkbox` answer type ({answer_id})."
-                    )
+                self.add_error(
+                    f"The condition `{condition}` cannot be used"
+                    f" with `Checkbox` answer type ({answer_id})."
                 )
         elif condition in checkbox_exclusive_conditions:
             answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
-            errors.append(
-                self._error_message(
-                    f"The condition `{condition}` can only be used with"
-                    " `Checkbox` answer types. "
-                    f"Found answer type: {answer_type} ({answer_id})."
-                )
+            self.add_error(
+                f"The condition `{condition}` can only be used with"
+                " `Checkbox` answer types. "
+                f"Found answer type: {answer_type} ({answer_id})."
             )
-
-        return errors
 
     def _validate_comparison_in_when_rule(
         self, when, answer_ids_with_group_id, referenced_id
@@ -1060,8 +854,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         and ensure all other conditions with comparison id match answer types
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        errors = []
-
         if when["comparison"]["source"] == "answers":
             answer_id, comparison_id, condition = (
                 when["id"],
@@ -1081,37 +873,24 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
             if condition in conditions_requiring_list_match_values:
                 if comparison_answer_type != "Checkbox":
-                    errors.append(
-                        self._error_message(
-                            f"The comparison id `{comparison_id}` is not of answer type `Checkbox`. "
-                            f"The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`"
-                        )
+                    self.add_error(
+                        f"The comparison id `{comparison_id}` is not of answer type `Checkbox`. "
+                        f"The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`"
                     )
 
             elif comparison_answer_type != id_answer_type:
-                errors.append(
-                    self._error_message(
-                        f"The answers used as comparison id `{comparison_id}` and answer_id `{answer_id}` in the `when` "
-                        f"clause for `{referenced_id}` have different types"
-                    )
+                self.add_error(
+                    f"The answers used as comparison id `{comparison_id}` and answer_id `{answer_id}` in the `when` "
+                    f"clause for `{referenced_id}` have different types"
                 )
-
-        return errors
 
     def _validate_list_name_in_when_rule(self, when):
         """
         Validate that the list referenced in the when rule is defined in the schema
         """
-        errors = []
         list_name = when["list"]
         if list_name not in self._list_names:
-            errors.append(
-                self._error_message(
-                    f"The list `{list_name}` is not defined in the schema"
-                )
-            )
-
-        return errors
+            self.add_error(f"The list `{list_name}` is not defined in the schema")
 
     def _validate_duplicates(self, json_to_validate):
         """
@@ -1119,9 +898,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
             - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
             - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
         """
-
-        duplicate_errors = []
-
         unique_ids_per_block = defaultdict(set)
         non_block_ids = []
         all_ids = []
@@ -1147,11 +923,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         duplicates = QuestionnaireValidator._find_duplicates(all_ids)
 
         for duplicate in duplicates:
-            duplicate_errors.append(
-                self._error_message("Duplicate id found: {}".format(duplicate))
-            )
-
-        return duplicate_errors
+            self.add_error("Duplicate id found: {}".format(duplicate))
 
     @staticmethod
     def _find_duplicates(values):
@@ -1174,42 +946,38 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
         if is_last_block_valid and is_hub_enabled:
             return [
-                self._error_message(
+                self.add_error(
                     "Schema can only contain one of [Confirmation page, Summary page, Hub page]"
                 )
             ]
 
         if not is_last_block_valid and not is_hub_enabled:
             return [
-                self._error_message(
+                self.add_error(
                     "Schema must contain one of [Confirmation page, Summary page, Hub page]"
                 )
             ]
 
         return []
 
-    @staticmethod
-    def _error_message(message):
-        return {"message": message}
+    def add_error(self, message):
+        self.errors.append({"message": message})
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
         Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
-        errors = []
         if answer_ranges[answer.get("id")]["min"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
                 answer["minimum"]["value"]["identifier"], answer["id"]
             )
-            errors.append(self._error_message(error_message))
+            self.add_error(error_message)
         if answer_ranges[answer.get("id")]["max"] is None:
             error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
                 answer["maximum"]["value"]["identifier"], answer["id"]
             )
-            errors.append(self._error_message(error_message))
-
-        return errors
+            self.add_error(error_message)
 
     def _get_dicts_with_key(self, input_data, key_name):
         """
@@ -1233,7 +1001,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
     def _validate_placeholder_object(self, placeholder_object, current_block_id):
         """ Current block id may be None if called outside of a block
         """
-        errors = []
         placeholders_in_string = set()
         placeholder_regex = re.compile("{(.*?)}")
         if "text" in placeholder_object:
@@ -1250,9 +1017,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
 
             transforms = placeholder_definition.get("transforms")
             if transforms:
-                errors.extend(
-                    self._validate_placeholder_transforms(transforms, current_block_id)
-                )
+                self._validate_placeholder_transforms(transforms, current_block_id)
 
         placeholder_differences = placeholders_in_string - placeholder_definition_names
         if placeholder_differences:
@@ -1260,30 +1025,19 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 text = placeholder_object["text"]
             except KeyError:
                 text = placeholder_object["text_plural"]["forms"]["other"]
-            errors.append(
-                self._error_message(
-                    "Placeholders in '{}' don't match definitions. Missing '{}'".format(
-                        text, placeholder_differences
-                    )
-                )
-            )
 
-        return errors
+            self.add_error(
+                f"Placeholders in '{text}' don't match definitions. Missing '{placeholder_differences}'"
+            )
 
     def _validate_placeholders(self, block_json):
-        errors = []
         strings_with_placeholders = self._get_dicts_with_key(block_json, "placeholders")
         for placeholder_object in strings_with_placeholders:
-            errors.extend(
-                self._validate_placeholder_object(placeholder_object, block_json["id"])
-            )
-
-        return errors
+            self._validate_placeholder_object(placeholder_object, block_json["id"])
 
     def _validate_source_references(
         self, block_json, answers_with_parent_ids, valid_metadata_ids
     ):
-        errors = []
         source_references = self._get_dicts_with_key(block_json, "identifier")
         for source_reference in source_references:
             source = source_reference["source"]
@@ -1293,91 +1047,64 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                errors.extend(
-                    self._validate_answer_source_reference(
-                        identifiers, answers_with_parent_ids, block_json["id"]
-                    )
-                )
-            elif source == "metadata":
-                errors.extend(
-                    self._validate_metadata_source_reference(
-                        identifiers, valid_metadata_ids, block_json["id"]
-                    )
-                )
-            elif source == "list":
-                errors.extend(
-                    self._validate_list_source_reference(identifiers, block_json["id"])
+                self._validate_answer_source_reference(
+                    identifiers, answers_with_parent_ids, block_json["id"]
                 )
 
-        return errors
+            elif source == "metadata":
+                self._validate_metadata_source_reference(
+                    identifiers, valid_metadata_ids, block_json["id"]
+                )
+
+            elif source == "list":
+                self._validate_list_source_reference(identifiers, block_json["id"])
 
     def _validate_answer_source_reference(
         self, identifiers, answers_with_parent_ids, current_block_id
     ):
-        errors = []
         for identifier in identifiers:
             if identifier not in answers_with_parent_ids:
-                errors.append(
-                    self._error_message(
-                        f"Invalid answer reference '{identifier}' in block '{current_block_id}'"
-                    )
+                self.add_error(
+                    f"Invalid answer reference '{identifier}' in block '{current_block_id}'"
                 )
             elif answers_with_parent_ids[identifier]["block"] == current_block_id:
-                errors.append(
-                    self._error_message(
-                        "Invalid answer reference '{}' in block '{}' (self-reference)".format(
-                            identifier, current_block_id
-                        )
+                self.add_error(
+                    "Invalid answer reference '{}' in block '{}' (self-reference)".format(
+                        identifier, current_block_id
                     )
                 )
-        return errors
 
     def _validate_metadata_source_reference(
         self, identifiers, valid_metadata_ids, current_block_id
     ):
-        errors = []
         for identifier in identifiers:
             if identifier not in valid_metadata_ids:
-                errors.append(
-                    self._error_message(
-                        f"Invalid metadata reference '{identifier}' in block '{current_block_id}'"
-                    )
+                self.add_error(
+                    f"Invalid metadata reference '{identifier}' in block '{current_block_id}'"
                 )
-        return errors
 
     def _validate_list_source_reference(self, identifiers, current_block_id):
-        errors = []
         for identifier in identifiers:
             if identifier not in self._list_names:
-                errors.append(
-                    self._error_message(
-                        f"Invalid list reference '{identifier}' in block '{current_block_id}'"
-                    )
+                self.add_error(
+                    f"Invalid list reference '{identifier}' in block '{current_block_id}'"
                 )
-        return errors
 
     def _validate_list_exists(self, list_name):
         if list_name not in self._list_names:
             msg = f"for_list '{list_name}' is not populated by any ListCollector blocks"
-            return [self._error_message(msg)]
-        return []
+            self.add_error(msg)
 
     def _validate_relationship_collector_answers(self, answers):
         one_answer_msg = "RelationshipCollector contains more than one answer."
         answer_type_msg = "Only answers of type Relationship are valid in RelationshipCollector blocks."
 
-        errors = []
-
         if len(answers) > 1:
-            errors.append(self._error_message(one_answer_msg))
+            self.add_error(one_answer_msg)
         if answers[0]["type"] != "Relationship":
-            errors.append(self._error_message(answer_type_msg))
-
-        return errors
+            self.add_error(answer_type_msg)
 
     def _validate_placeholder_transforms(self, transforms, block_id):
-        errors = []
-
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
@@ -1386,11 +1113,9 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 isinstance(argument, dict)
                 and argument.get("source") == "previous_transform"
             ):
-                errors.append(
-                    self._error_message(
-                        "Can't reference `previous_transform` in a first transform in block id '{}'".format(
-                            block_id
-                        )
+                self.add_error(
+                    "Can't reference `previous_transform` in a first transform in block id '{}'".format(
+                        block_id
                     )
                 )
 
@@ -1406,21 +1131,16 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                     previous_transform_used = True
 
             if not previous_transform_used:
-                errors.append(
-                    self._error_message(
-                        "`previous_transform` not referenced in chained transform in block id '{}'".format(
-                            block_id
-                        )
+                self.add_error(
+                    "`previous_transform` not referenced in chained transform in block id '{}'".format(
+                        block_id
                     )
                 )
-
-        return errors
 
     def _validate_smart_quotes(self, json_schema):
 
         schema_object = SurveySchema()
         schema_object.schema = json_schema
-        errors = []
 
         # pylint: disable=invalid-string-quote
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
@@ -1433,13 +1153,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                 found = quote_regex.search(schema_text)
 
             if found:
-                errors.append(
-                    self._error_message(
-                        f"Found dumb quotes(s) in schema text at {pointer}"
-                    )
-                )
-
-        return errors
+                self.add_error(f"Found dumb quotes(s) in schema text at {pointer}")
 
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):

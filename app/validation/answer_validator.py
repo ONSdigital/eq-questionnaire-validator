@@ -71,8 +71,6 @@ class AnswerValidator:
             # Validate numeric answer decimal places within system limits
             self.validate_numeric_answer_decimals()
 
-        return [error["message"] for error in self.errors]
-
     def _validate_duplicate_options(self):
         errors = []
 
@@ -236,75 +234,70 @@ class AnswerValidator:
         Validate numeric answer types are valid.
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
-        errors = []
-
         # Validate referred numeric answer exists (skip further tests for answer if error is returned)
         referred_errors = self._validate_referred_numeric_answer(answer_ranges)
-        errors.extend(referred_errors)
+
         if referred_errors:
-            return errors
+            return
 
         # Validate numeric answer has a positive range of possible responses
-        errors.extend(self._validate_numeric_range(answer_ranges))
+        self._validate_numeric_range(answer_ranges)
 
         # Validate referred numeric answer decimals
-        errors.extend(self._validate_referred_numeric_answer_decimals(answer_ranges))
-
-        return errors
+        self._validate_referred_numeric_answer_decimals(answer_ranges)
 
     def _validate_referred_numeric_answer(self, answer_ranges):
         """
         Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
-        errors = []
         if answer_ranges[self.answer.get("id")]["min"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                self.answer["minimum"]["value"]["identifier"], self.answer["id"]
+            self.add_error(
+                'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
+                    self.answer["minimum"]["value"]["identifier"], self.answer["id"]
+                )
             )
-            errors.append(error_message)
+            return True
         if answer_ranges[self.answer.get("id")]["max"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                self.answer["maximum"]["value"]["identifier"], self.answer["id"]
+            self.add_error(
+                'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
+                    self.answer["maximum"]["value"]["identifier"], self.answer["id"]
+                )
             )
-            errors.append(error_message)
-
-        return errors
+            return True
+        return False
 
     def _validate_numeric_range(self, answer_ranges):
-        errors = []
         max_value = answer_ranges[self.answer.get("id")]["max"]
         min_value = answer_ranges[self.answer.get("id")]["min"]
 
         if max_value - min_value < 0:
-            error_message = 'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
-                min_value, max_value, self.answer["id"]
+            self.add_error(
+                'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
+                    min_value, max_value, self.answer["id"]
+                )
             )
-            errors.append(error_message)
-
-        return errors
 
     def _validate_referred_numeric_answer_decimals(self, answer_ranges):
-        errors = []
         answer_values = answer_ranges[self.answer["id"]]
 
         if answer_values["min_referred"] is not None:
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
-                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["min_referred"], self.answer["id"]
+                self.add_error(
+                    'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
+                        answer_values["min_referred"], self.answer["id"]
+                    )
                 )
-                errors.append(error_message)
 
         if answer_values["max_referred"] is not None:
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
-                error_message = 'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                    answer_values["max_referred"], self.answer["id"]
+                self.add_error(
+                    'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
+                        answer_values["max_referred"], self.answer["id"]
+                    )
                 )
-                errors.append(error_message)
-
-        return errors
 
     def get_numeric_range_values(self, answer_ranges):
         min_value = self.answer.get("minimum", {}).get("value", {})
