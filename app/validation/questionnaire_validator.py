@@ -11,10 +11,12 @@ from jsonschema.exceptions import best_match
 
 from app.validation.answer_validator import AnswerValidator
 from app.validation.question_validator import QuestionValidator
+from app.validation.validator import Validator
 
 
-class QuestionnaireValidator:  # pylint: disable=too-many-lines
-    def __init__(self):
+class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
+    def __init__(self, schema_element):
+        super().__init__(schema_element)
         with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
@@ -25,7 +27,6 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         )
         self.schema_validator = Draft7Validator(self.schema, resolver=resolver)
 
-        self.errors = []
         self._list_collector_answer_ids = {}
         self._list_names = []
         self._block_ids = []
@@ -45,9 +46,9 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                     store[json_data["$id"]] = json_data
         return store
 
-    def validate_json_schema(self, json_to_validate):
+    def validate_json_schema(self):
         try:
-            self.schema_validator.validate(json_to_validate)
+            self.schema_validator.validate(self.schema_element)
             return {}
         except ValidationError as e:
             match = best_match([e])
@@ -59,28 +60,28 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
         except SchemaError as e:
             return "{}".format(e)
 
-    def validate_questionnaire(self, json_to_validate):
+    def validate_questionnaire(self):
         """
         Validates the json schema provided is correct
         :param json_to_validate: json schema to be validated
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
 
-        self._validate_schema_contain_metadata(json_to_validate)
-        self._validate_duplicates(json_to_validate)
-        self._validate_smart_quotes(json_to_validate)
+        self._validate_schema_contain_metadata(self.schema_element)
+        self._validate_duplicates(self.schema_element)
+        self._validate_smart_quotes(self.schema_element)
 
         section_ids = []
-        sections = json_to_validate.get("sections", [])
+        sections = self.schema_element.get("sections", [])
         all_groups = [group for section in sections for group in section.get("groups")]
 
         numeric_answer_ranges = {}
-        answers_with_parent_ids = self._get_answers_with_parent_ids(json_to_validate)
+        answers_with_parent_ids = self._get_answers_with_parent_ids(self.schema_element)
 
-        self._list_names = self._get_list_names(json_to_validate)
-        self._block_ids = self._get_block_ids(json_to_validate)
+        self._list_names = self._get_list_names(self.schema_element)
+        self._block_ids = self._get_block_ids(self.schema_element)
         self.answer_id_to_option_values_map = self._get_answer_id_to_option_values_map(
-            json_to_validate
+            self.schema_element
         )
 
         for section in sections:
@@ -97,7 +98,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                     )
 
                 self._validate_blocks(
-                    json_to_validate,
+                    self.schema_element,
                     section,
                     group,
                     all_groups,
@@ -105,7 +106,7 @@ class QuestionnaireValidator:  # pylint: disable=too-many-lines
                     numeric_answer_ranges,
                 )
 
-        required_hub_section_ids = json_to_validate.get("hub", {}).get(
+        required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
         )
 

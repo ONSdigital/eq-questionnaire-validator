@@ -1,17 +1,13 @@
 from app.validation.answer_validator import AnswerValidator
+from app.validation.validator import Validator
 
 
-class QuestionValidator:
+class QuestionValidator(Validator):
     question = {}
 
     def __init__(self, schema_element):
+        super().__init__(schema_element)
         self.question = schema_element
-        self.errors = []
-
-    def add_error(self, message, **context):
-        context["id"] = self.question["id"]
-
-        self.errors.append({"message": message, **context})
 
     def validate(self):
         self.validate_answers_to_calculate()

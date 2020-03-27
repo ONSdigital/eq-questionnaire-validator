@@ -27,13 +27,12 @@ def check_validation_errors(
     """
     Helper function to automate tests which are just checking validation errors against a known list.
     """
-
-    validator = QuestionnaireValidator()
-
     json_to_validate = _open_and_load_schema_file(filename)
 
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     print(f"validation errors: {validator.errors}")
     print(f"schema errors: {schema_errors}")
@@ -60,10 +59,10 @@ def test_param_valid_schemas(valid_schema_filename):
     with open(valid_schema_filename, encoding="utf8") as json_file:
         json_to_validate = load(json_file)
 
-        validator = QuestionnaireValidator()
+        validator = QuestionnaireValidator(json_to_validate)
 
-        schema_errors = validator.validate_json_schema(json_to_validate)
-        validator.validate_questionnaire(json_to_validate)
+        schema_errors = validator.validate_json_schema()
+        validator.validate_questionnaire()
 
         assert not validator.errors
         assert not schema_errors
@@ -96,7 +95,7 @@ def test_invalid_routing_default_block():
             }
         },
     ]
-    questionnaire_validator = QuestionnaireValidator()
+    questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
 
     questionnaire_validator.validate_routing_rules_have_default(
         rules, "conditional-routing-block"
@@ -125,7 +124,7 @@ def test_invalid_routing_block_id():
             ],
         }
     }
-    questionnaire_validator = QuestionnaireValidator()
+    questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
 
     expected_error = "Routing rule routes to invalid block [invalid-location]"
 
@@ -166,10 +165,10 @@ def test_invalid_survey_id_whitespace():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = QuestionnaireValidator()
+    validator = QuestionnaireValidator(json_to_validate)
 
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     assert validator.errors == []
 
@@ -190,9 +189,9 @@ def test_invalid_calculated_summary():
 
     expected_fuzzy_error_messages = ["Duplicate answers"]
 
-    validator = QuestionnaireValidator()
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     assert schema_errors == {}
     assert len(validator.errors) == len(expected_error_messages) + len(
@@ -305,9 +304,9 @@ def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator()
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     assert "'when' is a required property" in schema_errors["predicted_cause"]
 
@@ -419,9 +418,9 @@ def test_inconsistent_ids_in_variants():
     file_name = "schemas/invalid/test_invalid_inconsistent_ids_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator()
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     error_messages = [error["message"] for error in validator.errors]
 
@@ -451,8 +450,8 @@ def test_inconsistent_default_answers_in_variants():
     )
     json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator()
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    validator.validate_questionnaire()
     error_messages = [error["message"] for error in validator.errors]
 
     fuzzy_error_messages = [
@@ -481,8 +480,8 @@ def test_inconsistent_types_in_variants():
     file_name = "schemas/invalid/test_invalid_inconsistent_types_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator()
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    validator.validate_questionnaire()
     error_messages = [error["message"] for error in validator.errors]
     fuzzy_error_messages = (
         "Variants have more than one question type for block: block-2",
@@ -499,9 +498,9 @@ def test_invalid_when_condition_property():
     file_name = "schemas/invalid/test_invalid_when_condition_property.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator()
-    schema_errors = validator.validate_json_schema(json_to_validate)
-    validator.validate_questionnaire(json_to_validate)
+    validator = QuestionnaireValidator(json_to_validate)
+    schema_errors = validator.validate_json_schema()
+    validator.validate_questionnaire()
 
     error_messages = [error["message"] for error in validator.errors]
 
