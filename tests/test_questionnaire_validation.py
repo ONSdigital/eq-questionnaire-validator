@@ -235,21 +235,49 @@ def test_answer_comparisons_invalid_comparison_id():
     filename = "schemas/invalid/test_invalid_answer_comparison_id.json"
 
     expected_error_messages = [
-        'The answer id - bad-answer-id-2 in the comparison.id key of the "when" '
-        "clause for route-comparison-2 does not exist",
-        'The answer id - bad-answer-id-3 in the comparison.id key of the "when" '
-        "clause for equals-answers does not exist",
-        'The answer id - bad-answer-id-4 in the comparison.id key of the "when" '
-        "clause for less-than-answers does not exist",
-        'The answer id - bad-answer-id-5 in the comparison.id key of the "when" '
-        "clause for less-than-answers does not exist",
-        'The answer id - bad-answer-id-6 in the comparison.id key of the "when" '
-        "clause for greater-than-answers does not exist",
-        'The answer id - bad-answer-id-7 in the id key of the "when" '
-        "clause for greater-than-answers does not exist",
+        {
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "answer_id": "bad-answer-id-2",
+            "key": "comparison.id",
+            "referenced_id": "route-comparison-2",
+        },
+        {
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "answer_id": "bad-answer-id-3",
+            "key": "comparison.id",
+            "referenced_id": "equals-answers",
+        },
+        {
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "answer_id": "bad-answer-id-4",
+            "key": "comparison.id",
+            "referenced_id": "less-than-answers",
+        },
+        {
+            "answer_id": "bad-answer-id-5",
+            "key": "comparison.id",
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "referenced_id": "less-than-answers",
+        },
+        {
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "answer_id": "bad-answer-id-6",
+            "key": "comparison.id",
+            "referenced_id": "greater-than-answers",
+        },
+        {
+            "message": 'The answer id in the key of the "when" clause does not exist',
+            "answer_id": "bad-answer-id-7",
+            "key": "id",
+            "referenced_id": "greater-than-answers",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    json_to_validate = _open_and_load_schema_file(filename)
+    questionnaire_validator = QuestionnaireValidator(json_to_validate)
+    questionnaire_validator.validate_questionnaire()
+
+    assert expected_error_messages == questionnaire_validator.errors
 
 
 def test_invalid_mutually_exclusive_conditions():

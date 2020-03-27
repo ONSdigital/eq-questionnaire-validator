@@ -7,6 +7,7 @@ class Validator(ABC):
         self.errors = []
 
     def add_error(self, message, **context):
-        context["id"] = self.schema_element["id"]
+        if "id" in self.schema_element:
+            context["id"] = self.schema_element["id"]
 
         self.errors.append({"message": message, **context})
