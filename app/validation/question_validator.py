@@ -26,9 +26,8 @@ class QuestionValidator(Validator):
                 for answer_id in calculation["answers_to_calculate"]:
                     if answer_id not in answer_ids:
                         self.add_error(
-                            "Answer id - {} does not exist within this question".format(
-                                answer_id
-                            )
+                            "Answer does not exist within this question",
+                            answer_id=answer_id,
                         )
 
     def validate_date_range(self):

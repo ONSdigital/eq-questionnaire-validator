@@ -694,13 +694,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 for answer_id in answers_to_calculate
             ]
         except KeyError as e:
-            return [
-                self.add_error(
-                    "Invalid answer id {} in block {}'s answers_to_calculate".format(
-                        e, block["id"]
-                    )
-                )
-            ]
+            self.add_error(
+                "Invalid answer id in block's answers_to_calculate",
+                answer_id=str(e).strip("'"),
+                block_id=block["id"],
+            )
+            return
 
         duplicates = {
             answer
@@ -708,22 +707,19 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if answers_to_calculate.count(answer) > 1
         }
         if duplicates:
-            return [
-                self.add_error(
-                    "Duplicate answers: {} in block {}'s answers_to_calculate".format(
-                        duplicates, block["id"]
-                    )
-                )
-            ]
+            self.add_error(
+                "Duplicate answers in block's answers_to_calculate",
+                duplicate_answers=duplicates,
+                block_id=block["id"],
+            )
+            return
 
         if not all(answer_type == answer_types[0] for answer_type in answer_types):
-            return [
-                self.add_error(
-                    "All answers in block {}'s answers_to_calculate must be of the same type".format(
-                        block["id"]
-                    )
-                )
-            ]
+            self.add_error(
+                "All answers in block's answers_to_calculate must be of the same type",
+                block_id=block["id"],
+            )
+            return
 
         if answer_types[0] == "Unit":
             unit_types = [
@@ -731,13 +727,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 for answer_id in answers_to_calculate
             ]
             if not all(unit_type == unit_types[0] for unit_type in unit_types):
-                return [
-                    self.add_error(
-                        "All answers in block {}'s answers_to_calculate must be of the same unit".format(
-                            block["id"]
-                        )
-                    )
-                ]
+                self.add_error(
+                    "All answers in block's answers_to_calculate must be of the same unit",
+                    block_id=block["id"],
+                )
+                return
 
         if answer_types[0] == "Currency":
             currency_types = [
@@ -747,15 +741,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if not all(
                 currency_type == currency_types[0] for currency_type in currency_types
             ):
-                return [
-                    self.add_error(
-                        "All answers in block {}'s answers_to_calculate must be of the same currency".format(
-                            block["id"]
-                        )
-                    )
-                ]
-
-        return []
+                self.add_error(
+                    "All answers in block's answers_to_calculate must be of the same currency",
+                    block_id=block["id"],
+                )
 
     def _validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
         """

@@ -101,13 +101,13 @@ def test_invalid_routing_default_block():
         rules, "conditional-routing-block"
     )
 
-    expected_error = (
-        "The routing rules for group or block: "
-        "conditional-routing-block must contain a default "
-        "routing rule without a when rule"
-    )
+    expected_error = {
+        "message": "The routing rules for group or block: conditional-routing-block must contain a default routing "
+        "rule without a when rule",
+        "id": "test-questionnaire",
+    }
 
-    assert questionnaire_validator.errors[0]["message"] == expected_error
+    assert questionnaire_validator.errors[0] == expected_error
 
 
 def test_invalid_routing_block_id():
@@ -126,13 +126,16 @@ def test_invalid_routing_block_id():
     }
     questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
 
-    expected_error = "Routing rule routes to invalid block [invalid-location]"
+    expected_error = {
+        "message": "Routing rule routes to invalid block [invalid-location]",
+        "id": "test-questionnaire",
+    }
 
     questionnaire_validator.validate_routing_rule_target(
         [{"id": "a-valid-location"}], "block", rule
     )
 
-    assert questionnaire_validator.errors[0]["message"] == expected_error
+    assert questionnaire_validator.errors[0] == expected_error
 
 
 def test_invalid_numeric_answers():
@@ -181,33 +184,34 @@ def test_invalid_calculated_summary():
     json_to_validate = _open_and_load_schema_file(filename)
 
     expected_error_messages = [
-        "All answers in block total-playback-type-error's answers_to_calculate must be of the same type",
-        "All answers in block total-playback-currency-error's answers_to_calculate must be of the same currency",
-        "All answers in block total-playback-unit-error's answers_to_calculate must be of the same unit",
-        "Invalid answer id 'seventh-number-answer' in block total-playback-answer-error's answers_to_calculate",
+        {
+            "message": "All answers in block's answers_to_calculate must be of the same type",
+            "block_id": "total-playback-type-error",
+        },
+        {
+            "message": "All answers in block's answers_to_calculate must be of the same currency",
+            "block_id": "total-playback-currency-error",
+        },
+        {
+            "message": "All answers in block's answers_to_calculate must be of the same unit",
+            "block_id": "total-playback-unit-error",
+        },
+        {
+            "message": "Invalid answer id in block's answers_to_calculate",
+            "answer_id": "seventh-number-answer",
+            "block_id": "total-playback-answer-error",
+        },
+        {
+            "message": "Duplicate answers in block's answers_to_calculate",
+            "block_id": "total-playback-duplicate-error",
+            "duplicate_answers": {"sixth-number-answer", "fourth-number-answer"},
+        },
     ]
 
-    expected_fuzzy_error_messages = ["Duplicate answers"]
-
     validator = QuestionnaireValidator(json_to_validate)
-    schema_errors = validator.validate_json_schema()
     validator.validate_questionnaire()
 
-    assert schema_errors == {}
-    assert len(validator.errors) == len(expected_error_messages) + len(
-        expected_fuzzy_error_messages
-    )
-
-    validation_error_messages = [error["message"] for error in validator.errors]
-
-    for expected_error in expected_error_messages:
-        assert expected_error in validation_error_messages
-
-    for fuzzy_error in expected_fuzzy_error_messages:
-        assert any(
-            fuzzy_error in validation_error_message
-            for validation_error_message in validation_error_messages
-        )
+    assert validator.errors == expected_error_messages
 
 
 def test_answer_comparisons_different_types():
