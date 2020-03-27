@@ -22,8 +22,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     )
     DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 
-    def __init__(self, schema_element):
+    def __init__(self, schema_element=None):
         super().__init__(schema_element)
+
         with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
