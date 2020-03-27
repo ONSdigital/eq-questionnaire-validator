@@ -11,10 +11,10 @@ def test_validate_answer_value_in_when_rule_invalid():
     validator = QuestionnaireValidator()
     validator.answer_id_to_option_values_map = option_value_to_answer_id_map
 
-    error_message = validator.validate_answer_value_in_when_rule(when_rule)
+    validator.validate_answer_value_in_when_rule(when_rule)
 
     assert (
-        error_message[0]["message"]
+        validator.errors[0]["message"]
         == "Answer value in when rule with answer id `answer-1` has an invalid value of `Yes`"
     )
 
