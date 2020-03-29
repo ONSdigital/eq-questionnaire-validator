@@ -88,7 +88,7 @@ def test_invalid_date_range():
         }
     ]
 
-    assert expected_error_messages == expected_error_messages
+    assert expected_error_messages == question_validator.errors
 
 
 def test_invalid_yyyy_date_range_period():
