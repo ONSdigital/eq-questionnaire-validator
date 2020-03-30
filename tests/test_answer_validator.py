@@ -148,34 +148,25 @@ def test_unique_answer_options():
         "label": "",
         "type": "Checkbox",
         "options": [
-          {
-            "label": "India",
-            "value": "India"
-          },
-          {
-            "label": "Azerbaijan",
-            "value": "Azerbaijan"
-          },
-          {
-            "label": "India",
-            "value": "India"
-          },
-          {
-            "label": "Malta",
-            "value": "Malta"
-          }
-        ]
-      }
+            {"label": "India", "value": "India"},
+            {"label": "Azerbaijan", "value": "Azerbaijan"},
+            {"label": "India", "value": "India"},
+            {"label": "Malta", "value": "Malta"},
+        ],
+    }
 
     answer_validator = AnswerValidator(answer)
     answer_validator.validate_duplicate_options()
 
-    assert answer_validator.errors == [{
-        "message": AnswerValidator.DUPLICATE_LABEL_FOUND,
-        "id": "duplicate-country-answer",
-        "label": "India"
-    }, {
-        "message": AnswerValidator.DUPLICATE_VALUE_FOUND,
-        "id": "duplicate-country-answer",
-        "value": "India"
-    }]
+    assert answer_validator.errors == [
+        {
+            "message": AnswerValidator.DUPLICATE_LABEL_FOUND,
+            "id": "duplicate-country-answer",
+            "label": "India",
+        },
+        {
+            "message": AnswerValidator.DUPLICATE_VALUE_FOUND,
+            "id": "duplicate-country-answer",
+            "value": "India",
+        },
+    ]

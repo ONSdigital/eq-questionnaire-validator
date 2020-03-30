@@ -21,6 +21,28 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         'The answer id in the key of the "when" clause does not exist'
     )
     DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
+    DUPLICATE_ID_FOUND = "Duplicate id found"
+    NO_RADIO_FOR_LIST_COLLECTOR = (
+        "The list collector block does not contain a Radio answer type"
+    )
+    NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
+        "The list collector remove block does not contain a Radio answer type"
+    )
+
+    NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE = (
+        "The list collector block has an add_answer_value that is not "
+        "present in the answer values"
+    )
+    NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE = "The list collector block has a remove_answer_value that is not present in the answer values"
+
+    NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
+        "The primary person list collector block does not contain a Radio "
+        "answer type"
+    )
+    NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE = (
+        "The primary person list collector block has an "
+        "add_or_edit_answer value that is not present in the answer values"
+    )
 
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
@@ -76,7 +98,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
 
         self._validate_schema_contain_metadata(self.schema_element)
-        self._validate_duplicates(self.schema_element)
+        self.validate_duplicates()
         self._validate_smart_quotes(self.schema_element)
 
         section_ids = []
@@ -558,72 +580,50 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def _validate_list_collector(  # noqa: C901  pylint: disable=too-complex, too-many-locals
         self, block
     ):
-        collector_questions = self._get_all_questions_for_block(block)
         self._validate_list_answer_references(block)
-        remove_questions = self._get_all_questions_for_block(block["remove_block"])
-        add_answer_value = block["add_answer"]["value"]
-        remove_answer_value = block["remove_answer"]["value"]
 
-        for collector_question in collector_questions:
-            for collector_answer in collector_question["answers"]:
-                if collector_answer["type"] != "Radio":
-                    self.add_error(
-                        "The list collector block {} does not contain a Radio answer type".format(
-                            block["id"]
-                        )
-                    )
+        self.validate_collector_questions(
+            block,
+            block["add_answer"]["value"],
+            self.NO_RADIO_FOR_LIST_COLLECTOR,
+            self.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+        )
 
-                if not self._options_contain_value(
-                    collector_answer["options"], add_answer_value
-                ):
-                    self.add_error(
-                        "The list collector block {} has an add_answer_value that is not present in the answer values".format(
-                            block["id"]
-                        )
-                    )
-
-        for remove_question in remove_questions:
-            for remove_answer in remove_question["answers"]:
-                if remove_answer["type"] != "Radio":
-                    self.add_error(
-                        "The list collector remove block {} does not contain a Radio answer type".format(
-                            block["id"]
-                        )
-                    )
-
-                if not self._options_contain_value(
-                    remove_answer["options"], remove_answer_value
-                ):
-                    self.add_error(
-                        "The list collector block {} has a remove_answer_value that is not present in the answer values".format(
-                            block["id"]
-                        )
-                    )
+        self.validate_collector_questions(
+            block["remove_answer"],
+            block["remove_answer"]["value"],
+            self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
+            self.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
+        )
 
         self._validate_list_collector_answer_ids(block)
 
-    # noqa: C901  pylint: disable=too-complex, too-many-locals
     def _validate_primary_person_list_collector(self, block):
-        collector_questions = self._get_all_questions_for_block(block)
         self._validate_primary_person_list_answer_references(block)
-        add_or_edit_answer_value = block["add_or_edit_answer"]["value"]
+
+        self.validate_collector_questions(
+            block,
+            block["add_or_edit_answer"]["value"],
+            self.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
+            self.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+        )
+
+        self._validate_primary_person_list_collector_answer_ids(block)
+
+    def validate_collector_questions(
+        self, block, answer_value, missing_radio_error, missing_value_error
+    ):
+        collector_questions = self._get_all_questions_for_block(block)
 
         for collector_question in collector_questions:
             for collector_answer in collector_question["answers"]:
                 if collector_answer["type"] != "Radio":
-                    self.add_error(
-                        f'The primary person list collector block {block["id"]} does not contain a Radio answer type'
-                    )
+                    self.add_error(missing_radio_error, block_id=block["id"])
 
                 if not self._options_contain_value(
-                    collector_answer["options"], add_or_edit_answer_value
+                    collector_answer["options"], answer_value
                 ):
-                    self.add_error(
-                        f'The primary person list collector block {block["id"]} has an add_or_edit_answer value that is not '
-                        "present in the answer values"
-                    )
-
-        self._validate_primary_person_list_collector_answer_ids(block)
+                    self.add_error(missing_value_error, block_id=block["id"])
 
     def _validate_list_collector_answer_ids(self, block):
         """
@@ -899,7 +899,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         if list_name not in self._list_names:
             self.add_error(f"The list `{list_name}` is not defined in the schema")
 
-    def _validate_duplicates(self, json_to_validate):
+    def validate_duplicates(self):
         """
         question_id & answer_id should be globally unique with some exceptions:
             - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
@@ -909,7 +909,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         non_block_ids = []
         all_ids = []
 
-        for path, value in self._parse_values(json_to_validate, "id"):
+        for path, value in self._parse_values(self.schema_element, "id"):
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split("/")
@@ -930,7 +930,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         duplicates = QuestionnaireValidator._find_duplicates(all_ids)
 
         for duplicate in duplicates:
-            self.add_error("Duplicate id found: {}".format(duplicate))
+            self.add_error("Duplicate id found", id=duplicate)
 
     @staticmethod
     def _find_duplicates(values):
