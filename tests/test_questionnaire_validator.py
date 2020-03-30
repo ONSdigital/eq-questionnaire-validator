@@ -334,9 +334,8 @@ def test_invalid_placeholder_list_reference():
 
 def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
-    json_to_validate = _open_and_load_schema_file(file_name)
 
-    validator = QuestionnaireValidator(json_to_validate)
+    validator = QuestionnaireValidator(_open_and_load_schema_file(file_name))
     schema_errors = validator.validate_json_schema()
     validator.validate_questionnaire()
 
@@ -350,26 +349,35 @@ def test_single_variant_invalid():
 def test_duplicate_answer_ids():
     filename = "schemas/invalid/test_invalid_duplicate_ids.json"
 
-    expected_error_messages = [
-        "Duplicate id found: block-1",
-        "Duplicate id found: answer-2",
-        "Duplicate id found: question-1",
-        "Duplicate id found: block-2",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "block-1"},
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "answer-2"},
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "question-1"},
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "block-2"},
     ]
 
-    check_validation_errors(
-        filename, expected_error_messages, expected_number_validation_errors=5
+    assert all(
+        [expected_error in validator.errors for expected_error in expected_errors]
     )
 
 
 def test_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
 
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
     expected_error_messages = [
-        "The list collector block list-collector does not contain a Radio answer type"
+        {
+            "message": QuestionnaireValidator.NO_RADIO_FOR_LIST_COLLECTOR,
+            "block_id": "list-collector",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_error_messages == validator.errors
 
 
 def test_primary_person_invalid_list_collector_non_radio():
@@ -377,32 +385,49 @@ def test_primary_person_invalid_list_collector_non_radio():
         "schemas/invalid/test_invalid_primary_person_list_collector_no_radio.json"
     )
 
-    expected_error_messages = [
-        "The primary person list collector block primary-person-list-collector does not contain a Radio answer type"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
+            "block_id": "primary-person-list-collector",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
 
-    expected_error_messages = [
-        "The list collector block list-collector has an add_answer_value that is not present in the answer values"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            "block_id": "list-collector",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_primary_person_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_value.json"
 
-    expected_error_messages = [
-        "The primary person list collector block primary-person-list-collector has an add_or_edit_answer value that is not "
-        "present in the answer values"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+            "block_id": "primary-person-list-collector",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_list_collector_with_different_add_block_answer_ids():
@@ -499,13 +524,19 @@ def test_inconsistent_default_answers_in_variants():
 
 def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     filename = "schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json"
-    expected_error_messages = [
-        "Duplicate id found: add-person",
-        "Duplicate id found: remove-person",
-        "Duplicate id found: edit-person",
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "add-person"},
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "remove-person"},
+        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "edit-person"},
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert all(
+        [expected_error in validator.errors for expected_error in expected_errors]
+    )
 
 
 def test_inconsistent_types_in_variants():
