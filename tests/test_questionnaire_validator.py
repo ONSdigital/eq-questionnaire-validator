@@ -298,14 +298,31 @@ def test_invalid_mutually_exclusive_conditions():
 def test_invalid_string_transforms():
     filename = "schemas/invalid/test_invalid_string_transforms.json"
 
-    expected_error_messages = [
-        "Placeholders in 'test {answer1}' don't match definitions. Missing '{'answer1'}'",
-        "Placeholders in 'test {answer1} and {answer2}' don't match definitions. Missing '{'answer2'}'",
-        "Can't reference `previous_transform` in a first transform in block id 'block4'",
-        "`previous_transform` not referenced in chained transform in block id 'block5'",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "text": "test {answer1}",
+            "differences": {"answer1"},
+        },
+        {
+            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "text": "test {answer1} and {answer2}",
+            "differences": {"answer2"},
+        },
+        {
+            "message": QuestionnaireValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+            "block_id": "block4",
+        },
+        {
+            "message": QuestionnaireValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
+            "block_id": "block5",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_placeholder_answer_ids():
@@ -433,22 +450,33 @@ def test_invalid_primary_person_list_collector_with_no_add_option():
 def test_invalid_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json"
 
-    expected_error_messages = [
-        "Multiple list collectors populate the list: people using different answer_ids in the add block"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "list_name": "people",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_primary_person_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
 
-    expected_error_messages = [
-        "Multiple primary person list collectors populate the list: people using different answer ids in the add_or_edit "
-        "block"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
+            "list_name": "people",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
@@ -676,11 +704,20 @@ def test_invalid_repeating_section_list_name():
 
 def test_invalid_repeating_section_title_placeholders():
     filename = "schemas/invalid/test_invalid_repeating_section_title_placeholders.json"
-    expected_error_messages = [
-        "Placeholders in '{person}' don't match definitions. Missing '{'person'}'"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "text": "{person}",
+            "differences": {"person"},
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_hub_section_non_existent():

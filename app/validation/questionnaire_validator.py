@@ -43,6 +43,21 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         "The primary person list collector block has an "
         "add_or_edit_answer value that is not present in the answer values"
     )
+    NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = (
+        "Multiple list collectors populate a list using different "
+        "answer_ids in the add block"
+    )
+    NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT = (
+        "Multiple primary person list collectors "
+        "populate a list using different answer ids in the add_or_edit block"
+    )
+    PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
+    FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = (
+        "Can't reference `previous_transform` in a first transform"
+    )
+    NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
+        "`previous_transform` not referenced in chained transform"
+    )
 
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
@@ -655,9 +670,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
                 self.add_error(
-                    "Multiple list collectors populate the list: {} using different answer_ids in the add block".format(
-                        list_name
-                    )
+                    self.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+                    list_name=list_name,
                 )
 
         if add_answer_ids.symmetric_difference(edit_answer_ids):
@@ -691,8 +705,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
                 self.add_error(
-                    f"Multiple primary person list collectors populate the list: {list_name} using different answer "
-                    "ids in the add_or_edit block"
+                    self.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
+                    list_name=list_name,
                 )
 
     @staticmethod
@@ -1024,6 +1038,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 self._validate_placeholder_transforms(transforms, current_block_id)
 
         placeholder_differences = placeholders_in_string - placeholder_definition_names
+
         if placeholder_differences:
             try:
                 text = placeholder_object["text"]
@@ -1031,7 +1046,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 text = placeholder_object["text_plural"]["forms"]["other"]
 
             self.add_error(
-                f"Placeholders in '{text}' don't match definitions. Missing '{placeholder_differences}'"
+                self.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+                text=text,
+                differences=placeholder_differences,
             )
 
     def _validate_placeholders(self, block_json):
@@ -1118,9 +1135,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 and argument.get("source") == "previous_transform"
             ):
                 self.add_error(
-                    "Can't reference `previous_transform` in a first transform in block id '{}'".format(
-                        block_id
-                    )
+                    self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+                    block_id=block_id,
                 )
 
         # Previous transform must be referenced in all subsequent transforms
@@ -1136,9 +1152,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
             if not previous_transform_used:
                 self.add_error(
-                    "`previous_transform` not referenced in chained transform in block id '{}'".format(
-                        block_id
-                    )
+                    self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
                 )
 
     def _validate_smart_quotes(self, json_schema):
