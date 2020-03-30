@@ -25,6 +25,8 @@ class AnswerValidator(Validator):
     DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
+    DUPLICATE_LABEL_FOUND = "Duplicate label found"
+    DUPLICATE_VALUE_FOUND = "Duplicate value found"
 
     def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
         super().__init__(schema_element)
@@ -38,7 +40,7 @@ class AnswerValidator(Validator):
         return self.answer.get("options", [])
 
     def validate(self):
-        self._validate_duplicate_options()
+        self.validate_duplicate_options()
         self._validate_answer_actions()
         self.validate_labels_and_values_match()
 
@@ -67,28 +69,24 @@ class AnswerValidator(Validator):
             # Validate numeric answer decimal places within system limits
             self.validate_numeric_answer_decimals()
 
-    def _validate_duplicate_options(self):
-        errors = []
-
+    def validate_duplicate_options(self):
         labels = set()
         values = set()
 
         for option in self.options:
 
-            # labels can have placeholders in, in which case we won't know if they are a duplicate or not
+            # labels can have placeholders, in which case we won't know if they are a duplicate or not
             if isinstance(option["label"], dict):
                 continue
 
             if option["label"] in labels:
-                errors.append("Duplicate label found - {}".format(option["label"]))
+                self.add_error(self.DUPLICATE_LABEL_FOUND, label=option["label"])
 
             if option["value"] in values:
-                errors.append("Duplicate value found - {}".format(option["value"]))
+                self.add_error(self.DUPLICATE_VALUE_FOUND, value=option["value"])
 
             labels.add(option["label"])
             values.add(option["value"])
-
-        return errors
 
     def are_decimal_places_valid(self):
         if "calculated" in self.answer:

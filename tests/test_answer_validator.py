@@ -140,3 +140,42 @@ def test_are_decimal_places_valid():
         "message": AnswerValidator.DECIMAL_PLACES_UNDEFINED,
         "id": "total-percentage",
     }
+
+
+def test_unique_answer_options():
+    answer = {
+        "id": "duplicate-country-answer",
+        "label": "",
+        "type": "Checkbox",
+        "options": [
+          {
+            "label": "India",
+            "value": "India"
+          },
+          {
+            "label": "Azerbaijan",
+            "value": "Azerbaijan"
+          },
+          {
+            "label": "India",
+            "value": "India"
+          },
+          {
+            "label": "Malta",
+            "value": "Malta"
+          }
+        ]
+      }
+
+    answer_validator = AnswerValidator(answer)
+    answer_validator.validate_duplicate_options()
+
+    assert answer_validator.errors == [{
+        "message": AnswerValidator.DUPLICATE_LABEL_FOUND,
+        "id": "duplicate-country-answer",
+        "label": "India"
+    }, {
+        "message": AnswerValidator.DUPLICATE_VALUE_FOUND,
+        "id": "duplicate-country-answer",
+        "value": "India"
+    }]
