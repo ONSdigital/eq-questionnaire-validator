@@ -58,6 +58,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
         "`previous_transform` not referenced in chained transform"
     )
+    FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
+    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+    ANSWER_REFERENCE_INVALID = "Invalid answer reference"
+    ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
+    LIST_REFERENCE_INVALID = "Invalid list reference"
 
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
@@ -1086,13 +1091,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for identifier in identifiers:
             if identifier not in answers_with_parent_ids:
                 self.add_error(
-                    f"Invalid answer reference '{identifier}' in block '{current_block_id}'"
+                    self.ANSWER_REFERENCE_INVALID,
+                    referenced_id=identifier,
+                    block_id=current_block_id,
                 )
             elif answers_with_parent_ids[identifier]["block"] == current_block_id:
                 self.add_error(
-                    "Invalid answer reference '{}' in block '{}' (self-reference)".format(
-                        identifier, current_block_id
-                    )
+                    self.ANSWER_SELF_REFERENCE,
+                    referenced_id=identifier,
+                    block_id=current_block_id,
                 )
 
     def _validate_metadata_source_reference(
@@ -1101,20 +1108,23 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for identifier in identifiers:
             if identifier not in valid_metadata_ids:
                 self.add_error(
-                    f"Invalid metadata reference '{identifier}' in block '{current_block_id}'"
+                    self.METADATA_REFERENCE_INVALID,
+                    referenced_id=identifier,
+                    block_id=current_block_id,
                 )
 
     def _validate_list_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
             if identifier not in self._list_names:
                 self.add_error(
-                    f"Invalid list reference '{identifier}' in block '{current_block_id}'"
+                    self.LIST_REFERENCE_INVALID,
+                    id=identifier,
+                    block_id=current_block_id,
                 )
 
     def _validate_list_exists(self, list_name):
         if list_name not in self._list_names:
-            msg = f"for_list '{list_name}' is not populated by any ListCollector blocks"
-            self.add_error(msg)
+            self.add_error(self.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def _validate_relationship_collector_answers(self, answers):
         one_answer_msg = "RelationshipCollector contains more than one answer."
@@ -1207,7 +1217,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             new_path = f"{path}/{key}"
 
             if key == parsed_key:
-                yield (path, value)
+                yield path, value
             elif key in ignored_keys:
                 continue
             elif (
