@@ -9,71 +9,13 @@ from jsonpointer import resolve_pointer
 from jsonschema import SchemaError, RefResolver, ValidationError, Draft7Validator
 from jsonschema.exceptions import best_match
 
+from app.validation import error_messages
 from app.validation.answer_validator import AnswerValidator
 from app.validation.question_validator import QuestionValidator
 from app.validation.validator import Validator
 
 
 class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
-
-    INVALID_WHEN_RULE_ANSWER_VALUE = "Answer value in when rule has an invalid value"
-    NON_EXISTENT_WHEN_KEY = (
-        'The answer id in the key of the "when" clause does not exist'
-    )
-    DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
-    DUPLICATE_ID_FOUND = "Duplicate id found"
-    NO_RADIO_FOR_LIST_COLLECTOR = (
-        "The list collector block does not contain a Radio answer type"
-    )
-    NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
-        "The list collector remove block does not contain a Radio answer type"
-    )
-
-    NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE = (
-        "The list collector block has an add_answer_value that is not "
-        "present in the answer values"
-    )
-    NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE = "The list collector block has a remove_answer_value that is not present in the answer values"
-
-    NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
-        "The primary person list collector block does not contain a Radio "
-        "answer type"
-    )
-    NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE = (
-        "The primary person list collector block has an "
-        "add_or_edit_answer value that is not present in the answer values"
-    )
-    NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = (
-        "Multiple list collectors populate a list using different "
-        "answer_ids in the add block"
-    )
-    NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT = (
-        "Multiple primary person list collectors "
-        "populate a list using different answer ids in the add_or_edit block"
-    )
-    PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
-    FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = (
-        "Can't reference `previous_transform` in a first transform"
-    )
-    NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
-        "`previous_transform` not referenced in chained transform"
-    )
-    FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
-    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
-    ANSWER_REFERENCE_INVALID = "Invalid answer reference"
-    ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
-    LIST_REFERENCE_INVALID = "Invalid list reference"
-    QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
-        "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
-    )
-    QUESTIONNAIRE_ONLY_ONE_PAGE = "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
-    RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE = (
-        "Only answers of type Relationship are valid in RelationshipCollector blocks."
-    )
-    RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS = (
-        "RelationshipCollector contains more than one answer."
-    )
-
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
@@ -466,7 +408,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if schema["theme"] in ["default", "northernireland"]:
             if "ru_name" not in schema_metadata:
-                self.add_error("Metadata - ru_name not specified in metadata field")
+                self.add_error(error_messages.MISSING_METADATA, metadata="ru_name")
             default_metadata.append("ru_name")
 
         # Find all words that precede any of:
@@ -482,9 +424,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         # Checks if piped/routed metadata is defined in the schema
         for metadata in all_metadata:
             if metadata not in schema_metadata:
-                self.add_error(
-                    "Metadata - {} not specified in metadata field".format(metadata)
-                )
+                self.add_error(error_messages.MISSING_METADATA, metadata=metadata)
 
     def validate_routing_rule_target(self, dict_list, goto_key, rule):
         if "goto" in rule and goto_key in rule["goto"].keys():
@@ -540,7 +480,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for value in when_values:
             if value not in option_values:
                 self.add_error(
-                    self.INVALID_WHEN_RULE_ANSWER_VALUE,
+                    error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
                     answer_id=when_rule["id"],
                     value=value,
                 )
@@ -574,15 +514,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if block["add_answer"]["id"] not in main_block_ids:
             self.add_error(
-                "add_answer reference uses id not found in main block question: {}".format(
-                    block["add_answer"]["id"]
-                )
+                error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
+                referenced_id=block["add_answer"]["id"],
             )
         if block["remove_answer"]["id"] not in remove_block_ids:
             self.add_error(
-                "remove_answer reference uses id not found in remove_block: {}".format(
-                    block["remove_answer"]["id"]
-                )
+                error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
+                referenced_id=block["remove_answer"]["id"],
             )
 
     def _validate_primary_person_list_answer_references(self, block):
@@ -595,12 +533,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         }
 
         if block["add_or_edit_answer"]["id"] not in main_block_ids:
-            return [
-                self.add_error(
-                    f'add_or_edit_answer reference uses id not found in main block question: {block["add_or_edit_answer"]["id"]}'
-                )
-            ]
-        return []
+            self.add_error(
+                error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
+                referenced_id=block["add_or_edit_answer"]["id"],
+            )
 
     def _validate_list_collector(  # noqa: C901  pylint: disable=too-complex, too-many-locals
         self, block
@@ -610,15 +546,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self.validate_collector_questions(
             block,
             block["add_answer"]["value"],
-            self.NO_RADIO_FOR_LIST_COLLECTOR,
-            self.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
+            error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
         )
 
         self.validate_collector_questions(
             block["remove_answer"],
             block["remove_answer"]["value"],
-            self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-            self.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
+            error_messages.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
+            error_messages.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
         )
 
         self._validate_list_collector_answer_ids(block)
@@ -629,8 +565,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self.validate_collector_questions(
             block,
             block["add_or_edit_answer"]["value"],
-            self.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
-            self.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+            error_messages.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
+            error_messages.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
         )
 
         self._validate_primary_person_list_collector_answer_ids(block)
@@ -680,15 +616,14 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
                 self.add_error(
-                    self.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+                    error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
                     list_name=list_name,
                 )
 
         if add_answer_ids.symmetric_difference(edit_answer_ids):
             self.add_error(
-                "The list collector block {} contains an add block and edit block with different answer ids".format(
-                    block["id"]
-                )
+                error_messages.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
+                block_id=block["id"],
             )
 
     def _validate_primary_person_list_collector_answer_ids(self, block):
@@ -715,7 +650,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             difference = add_answer_ids.symmetric_difference(existing_add_ids)
             if difference:
                 self.add_error(
-                    self.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
+                    error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
                     list_name=list_name,
                 )
 
@@ -833,7 +768,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for key, present_id in ids_to_check:
             if present_id not in answer_ids_with_group_id:
                 self.add_error(
-                    self.NON_EXISTENT_WHEN_KEY,
+                    error_messages.NON_EXISTENT_WHEN_KEY,
                     answer_id=present_id,
                     key=key,
                     referenced_id=referenced_id,
@@ -866,8 +801,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if condition not in all_checkbox_conditions:
                 answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
                 self.add_error(
-                    f"The condition `{condition}` cannot be used"
-                    f" with `Checkbox` answer type ({answer_id})."
+                    error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
+                    condition=condition,
+                    answer_id=answer_id,
                 )
         elif condition in checkbox_exclusive_conditions:
             answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
@@ -905,14 +841,17 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if condition in conditions_requiring_list_match_values:
                 if comparison_answer_type != "Checkbox":
                     self.add_error(
-                        f"The comparison id `{comparison_id}` is not of answer type `Checkbox`. "
-                        f"The condition `{condition}` can only reference `Checkbox` answers when using `comparison id`"
+                        error_messages.NON_CHECKBOX_COMPARISON_ID,
+                        comparison_id=comparison_id,
+                        condition=condition,
                     )
 
             elif comparison_answer_type != id_answer_type:
                 self.add_error(
-                    f"The answers used as comparison id `{comparison_id}` and answer_id `{answer_id}` in the `when` "
-                    f"clause for `{referenced_id}` have different types"
+                    error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+                    comparison_id=comparison_id,
+                    answer_id=answer_id,
+                    referenced_id=referenced_id,
                 )
 
     def _validate_list_name_in_when_rule(self, when):
@@ -921,7 +860,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
         list_name = when["list"]
         if list_name not in self._list_names:
-            self.add_error(self.LIST_REFERENCE_INVALID, list_name=list_name)
+            self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
         """
@@ -976,10 +915,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         is_hub_enabled = schema.get("hub", {}).get("enabled")
 
         if is_last_block_valid and is_hub_enabled:
-            return [self.add_error(self.QUESTIONNAIRE_ONLY_ONE_PAGE)]
+            return [self.add_error(error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE)]
 
         if not is_last_block_valid and not is_hub_enabled:
-            return [self.add_error(self.QUESTIONNAIRE_MUST_CONTAIN_PAGE)]
+            return [self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)]
 
         return []
 
@@ -1048,7 +987,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 text = placeholder_object["text_plural"]["forms"]["other"]
 
             self.add_error(
-                self.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+                error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
                 text=text,
                 differences=placeholder_differences,
             )
@@ -1088,13 +1027,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for identifier in identifiers:
             if identifier not in answers_with_parent_ids:
                 self.add_error(
-                    self.ANSWER_REFERENCE_INVALID,
+                    error_messages.ANSWER_REFERENCE_INVALID,
                     referenced_id=identifier,
                     block_id=current_block_id,
                 )
             elif answers_with_parent_ids[identifier]["block"] == current_block_id:
                 self.add_error(
-                    self.ANSWER_SELF_REFERENCE,
+                    error_messages.ANSWER_SELF_REFERENCE,
                     referenced_id=identifier,
                     block_id=current_block_id,
                 )
@@ -1105,7 +1044,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for identifier in identifiers:
             if identifier not in valid_metadata_ids:
                 self.add_error(
-                    self.METADATA_REFERENCE_INVALID,
+                    error_messages.METADATA_REFERENCE_INVALID,
                     referenced_id=identifier,
                     block_id=current_block_id,
                 )
@@ -1114,20 +1053,22 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for identifier in identifiers:
             if identifier not in self._list_names:
                 self.add_error(
-                    self.LIST_REFERENCE_INVALID,
+                    error_messages.LIST_REFERENCE_INVALID,
                     id=identifier,
                     block_id=current_block_id,
                 )
 
     def _validate_list_exists(self, list_name):
         if list_name not in self._list_names:
-            self.add_error(self.FOR_LIST_NEVER_POPULATED, list_name=list_name)
+            self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def _validate_relationship_collector_answers(self, answers):
         if len(answers) > 1:
-            self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
+            self.add_error(error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
         if answers[0]["type"] != "Relationship":
-            self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE)
+            self.add_error(
+                error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
+            )
 
     def _validate_placeholder_transforms(self, transforms, block_id):
         # First transform can't reference a previous transform
@@ -1139,7 +1080,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 and argument.get("source") == "previous_transform"
             ):
                 self.add_error(
-                    self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+                    error_messages.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
                     block_id=block_id,
                 )
 
@@ -1156,7 +1097,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
             if not previous_transform_used:
                 self.add_error(
-                    self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
+                    error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
                 )
 
     def _validate_smart_quotes(self, json_schema):
@@ -1175,7 +1116,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 found = quote_regex.search(schema_text)
 
             if found:
-                self.add_error(self.DUMB_QUOTES_FOUND, pointer=pointer)
+                self.add_error(error_messages.DUMB_QUOTES_FOUND, pointer=pointer)
 
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):

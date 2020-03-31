@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 
 from dateutil.relativedelta import relativedelta
 
+from app.validation import error_messages
 from app.validation.validator import Validator
 
 
@@ -12,30 +13,6 @@ class AnswerValidator(Validator):
     MAX_NUMBER = 9999999999
     MIN_NUMBER = -999999999
     MAX_DECIMAL_PLACES = 6
-
-    DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
-    DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
-    INVALID_OFFSET_DATE = (
-        "The minimum offset date is greater than the maximum offset date"
-    )
-    INVALID_SUGGESTION_URL = "Suggestions url is invalid"
-    LIST_NAME_MISSING = "List name defined in action params does not exist"
-    BLOCK_ID_MISSING = "Block id defined in action params does not exist"
-    VALUE_MISMATCH = "Found mismatching answer value"
-    DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
-    MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
-    MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
-    DUPLICATE_LABEL_FOUND = "Duplicate label found"
-    DUPLICATE_VALUE_FOUND = "Duplicate value found"
-    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
-        "The referenced answer cannot be used to set the minimum of answer"
-    )
-    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = (
-        "The referenced answer cannot be used to set the maximum of answer"
-    )
-    GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
-        "The referenced answer has a greater number of decimal places than answer"
-    )
 
     def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
         super().__init__(schema_element)
@@ -56,17 +33,17 @@ class AnswerValidator(Validator):
         self._validate_routing_on_answer_options()
 
         if not self.are_decimal_places_valid():
-            self.add_error(self.DECIMAL_PLACES_UNDEFINED)
+            self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
 
         if not self.is_offset_date_valid():
-            self.add_error(self.INVALID_OFFSET_DATE)
+            self.add_error(error_messages.INVALID_OFFSET_DATE)
 
         if (
             self.answer["type"] == "TextField"
             and "suggestions_url" in self.answer
             and not self.is_suggestion_url_valid()
         ):
-            self.add_error(self.INVALID_SUGGESTION_URL)
+            self.add_error(error_messages.INVALID_SUGGESTION_URL)
 
         if self.answer["type"] in ["Number", "Currency", "Percentage"]:
             # Validate default is only used with non mandatory answers
@@ -89,10 +66,14 @@ class AnswerValidator(Validator):
                 continue
 
             if option["label"] in labels:
-                self.add_error(self.DUPLICATE_LABEL_FOUND, label=option["label"])
+                self.add_error(
+                    error_messages.DUPLICATE_LABEL_FOUND, label=option["label"]
+                )
 
             if option["value"] in values:
-                self.add_error(self.DUPLICATE_VALUE_FOUND, value=option["value"])
+                self.add_error(
+                    error_messages.DUPLICATE_VALUE_FOUND, value=option["value"]
+                )
 
             labels.add(option["label"])
             values.add(option["value"])
@@ -147,19 +128,23 @@ class AnswerValidator(Validator):
 
         if isinstance(min_value, int) and min_value < self.MIN_NUMBER:
             self.add_error(
-                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=self.MIN_NUMBER
+                error_messages.MINIMUM_LESS_THAN_LIMIT,
+                value=min_value,
+                limit=self.MIN_NUMBER,
             )
 
         if isinstance(max_value, int) and max_value > self.MAX_NUMBER:
             self.add_error(
-                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=self.MAX_NUMBER
+                error_messages.MAXIMUM_GREATER_THAN_LIMIT,
+                value=max_value,
+                limit=self.MAX_NUMBER,
             )
 
     def validate_numeric_answer_decimals(self):
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > self.MAX_DECIMAL_PLACES:
             self.add_error(
-                self.DECIMAL_PLACES_TOO_LONG,
+                error_messages.DECIMAL_PLACES_TOO_LONG,
                 decimal_places=decimal_places,
                 limit=self.MAX_DECIMAL_PLACES,
             )
@@ -174,12 +159,12 @@ class AnswerValidator(Validator):
             list_name = action_params.get("list_name")
 
             if list_name and list_name not in self.list_names:
-                self.add_error(self.LIST_NAME_MISSING, list_name=list_name)
+                self.add_error(error_messages.LIST_NAME_MISSING, list_name=list_name)
 
             block_id = action_params.get("block_id")
 
             if block_id and block_id not in self.block_ids:
-                self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
+                self.add_error(error_messages.BLOCK_ID_MISSING, block_id=block_id)
 
     def has_default_route(self):
         for rule in self.block["routing_rules"]:
@@ -256,13 +241,13 @@ class AnswerValidator(Validator):
         """
         if answer_ranges[self.answer.get("id")]["min"] is None:
             self.add_error(
-                self.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["minimum"]["value"]["identifier"],
             )
             return True
         if answer_ranges[self.answer.get("id")]["max"] is None:
             self.add_error(
-                self.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["maximum"]["value"]["identifier"],
             )
             return True
@@ -286,7 +271,7 @@ class AnswerValidator(Validator):
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
                     referenced_id=answer_values["min_referred"],
                 )
 
@@ -294,7 +279,7 @@ class AnswerValidator(Validator):
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
                     referenced_id=answer_values["max_referred"],
                 )
 
@@ -357,7 +342,7 @@ class AnswerValidator(Validator):
 
     def validate_numeric_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
-            self.add_error(self.DEFAULT_ON_MANDATORY)
+            self.add_error(error_messages.DEFAULT_ON_MANDATORY)
 
     def _get_offset_date(self, answer_min_or_max):
         if answer_min_or_max["value"] == "now":

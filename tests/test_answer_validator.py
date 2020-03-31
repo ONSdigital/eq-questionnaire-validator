@@ -1,3 +1,4 @@
+from app.validation import error_messages
 from app.validation.answer_validator import AnswerValidator
 
 
@@ -38,7 +39,7 @@ def test_number_of_decimals():
     answer_validator.validate_numeric_answer_decimals()
 
     assert answer_validator.errors[0] == {
-        "message": AnswerValidator.DECIMAL_PLACES_TOO_LONG,
+        "message": error_messages.DECIMAL_PLACES_TOO_LONG,
         "decimal_places": 10,
         "limit": 6,
         "id": "answer-5",
@@ -102,7 +103,7 @@ def test_invalid_answer_default():
     answer_validator.validate()
 
     assert answer_validator.errors[0] == {
-        "message": AnswerValidator.DEFAULT_ON_MANDATORY,
+        "message": error_messages.DEFAULT_ON_MANDATORY,
         "id": "answer-7",
     }
 
@@ -137,7 +138,7 @@ def test_are_decimal_places_valid():
     answer_validator.validate()
 
     assert answer_validator.errors[0] == {
-        "message": AnswerValidator.DECIMAL_PLACES_UNDEFINED,
+        "message": error_messages.DECIMAL_PLACES_UNDEFINED,
         "id": "total-percentage",
     }
 
@@ -160,12 +161,12 @@ def test_unique_answer_options():
 
     assert answer_validator.errors == [
         {
-            "message": AnswerValidator.DUPLICATE_LABEL_FOUND,
+            "message": error_messages.DUPLICATE_LABEL_FOUND,
             "id": "duplicate-country-answer",
             "label": "India",
         },
         {
-            "message": AnswerValidator.DUPLICATE_VALUE_FOUND,
+            "message": error_messages.DUPLICATE_VALUE_FOUND,
             "id": "duplicate-country-answer",
             "value": "India",
         },

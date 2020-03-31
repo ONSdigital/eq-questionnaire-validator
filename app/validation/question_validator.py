@@ -1,3 +1,4 @@
+from app.validation import error_messages
 from app.validation.answer_validator import AnswerValidator
 from app.validation.validator import Validator
 
@@ -77,9 +78,9 @@ class QuestionValidator(Validator):
             answers = self.question["answers"]
 
             if any(answer["mandatory"] is True for answer in answers):
-                self.add_error(
-                    "MutuallyExclusive question type cannot contain mandatory answers."
-                )
+                self.add_error(error_messages.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY)
 
             if answers[-1]["type"] != "Checkbox":
-                self.add_error("{} is not of type Checkbox.".format(answers[-1]["id"]))
+                self.add_error(
+                    error_messages.NON_CHECKBOX_ANSWER, answer_id=answers[-1]["id"]
+                )
