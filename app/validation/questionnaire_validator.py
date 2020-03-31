@@ -5,7 +5,6 @@ from collections import defaultdict
 from json import load
 
 from eq_translations.survey_schema import SurveySchema
-from jsonpointer import resolve_pointer
 from jsonschema import SchemaError, RefResolver, ValidationError, Draft7Validator
 from jsonschema.exceptions import best_match
 
