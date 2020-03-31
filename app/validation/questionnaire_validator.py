@@ -1120,7 +1120,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 found = quote_regex.search(schema_text)
 
                 if found:
-                    self.add_error(error_messages.DUMB_QUOTES_FOUND, pointer=translatable_item.pointer)
+                    self.add_error(
+                        error_messages.DUMB_QUOTES_FOUND,
+                        pointer=translatable_item.pointer,
+                    )
 
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):
