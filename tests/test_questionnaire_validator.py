@@ -5,7 +5,9 @@ from structlog import configure
 from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
+from app.validation import error_messages
 from app.validation.answer_validator import AnswerValidator
+from app.validation.question_validator import QuestionValidator
 from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = getLogger()
@@ -20,37 +22,6 @@ def _open_and_load_schema_file(file):
     json_to_validate = load(json_file)
 
     return json_to_validate
-
-
-def check_validation_errors(
-    filename, expected_validation_error_messages, expected_number_validation_errors=None
-):
-    """
-    Helper function to automate tests which are just checking validation errors against a known list.
-    """
-    json_to_validate = _open_and_load_schema_file(filename)
-
-    validator = QuestionnaireValidator(json_to_validate)
-
-    schema_errors = validator.validate_json_schema()
-    validator.validate_questionnaire()
-
-    print(f"validation errors: {validator.errors}")
-    print(f"schema errors: {schema_errors}")
-
-    assert schema_errors == {}
-
-    error_messages = [error["message"] for error in validator.errors if error]
-
-    for expected_error_message in expected_validation_error_messages:
-        assert expected_error_message in error_messages
-
-    if not expected_number_validation_errors:
-        expected_number_validation_errors = len(expected_validation_error_messages)
-
-    assert len(validator.errors) == expected_number_validation_errors
-
-    return validator.errors, schema_errors
 
 
 def test_param_valid_schemas(valid_schema_filename):
@@ -145,41 +116,44 @@ def test_invalid_numeric_answers():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
     validator.validate_questionnaire()
 
-    error_messages = [
+    expected_errors = [
         {
-            "message": AnswerValidator.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+            "message": error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
             "referenced_id": "answer-1",
             "id": "answer-2",
         },
         {
-            "message": AnswerValidator.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "message": error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-4",
             "id": "answer-3",
         },
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "referenced_id": "answer-5",
             "block_id": "block-3",
         },
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "referenced_id": "answer-4",
             "block_id": "block-3",
         },
     ]
 
-    assert validator.errors == error_messages
+    assert validator.errors == expected_errors
 
 
 def test_invalid_metadata():
     filename = "schemas/invalid/test_invalid_metadata.json"
 
-    expected_error_messages = [
-        "Metadata - ru_name not specified in metadata field",
-        "Metadata - invalid not specified in metadata field",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {"message": error_messages.MISSING_METADATA, "metadata": "ru_name"},
+        {"message": error_messages.MISSING_METADATA, "metadata": "invalid"},
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_survey_id_whitespace():
@@ -236,20 +210,42 @@ def test_answer_comparisons_different_types():
     """ Ensures that when answer comparison is used, the type of the variables must be the same """
     filename = "schemas/invalid/test_invalid_answer_comparison_types.json"
 
-    expected_error_messages = [
-        "The answers used as comparison id `route-comparison-1-answer` and answer_id `route-comparison-2-answer` "
-        "in the `when` clause for `route-comparison-2` have different types",
-        "The comparison id `route-comparison-2-answer` is not of answer type `Checkbox`. "
-        "The condition `equals any` can only reference `Checkbox` answers when using `comparison id`",
-        "The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` "
-        "clause for `equals-answers` have different types",
-        "The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` "
-        "clause for `less-than-answers` have different types",
-        "The answers used as comparison id `comparison-2-answer` and answer_id `comparison-1-answer` in the `when` "
-        "clause for `less-than-answers` have different types",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "comparison_id": "route-comparison-1-answer",
+            "answer_id": "route-comparison-2-answer",
+            "referenced_id": "route-comparison-2",
+        },
+        {
+            "message": error_messages.NON_CHECKBOX_COMPARISON_ID,
+            "comparison_id": "route-comparison-2-answer",
+            "condition": "equals any",
+        },
+        {
+            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "comparison_id": "comparison-2-answer",
+            "answer_id": "comparison-1-answer",
+            "referenced_id": "equals-answers",
+        },
+        {
+            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "comparison_id": "comparison-2-answer",
+            "answer_id": "comparison-1-answer",
+            "referenced_id": "less-than-answers",
+        },
+        {
+            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "comparison_id": "comparison-2-answer",
+            "answer_id": "comparison-1-answer",
+            "referenced_id": "less-than-answers",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_answer_comparisons_invalid_comparison_id():
@@ -258,37 +254,37 @@ def test_answer_comparisons_invalid_comparison_id():
 
     expected_error_messages = [
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-2",
             "key": "comparison.id",
             "referenced_id": "route-comparison-2",
         },
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-3",
             "key": "comparison.id",
             "referenced_id": "equals-answers",
         },
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-4",
             "key": "comparison.id",
             "referenced_id": "less-than-answers",
         },
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-5",
             "key": "comparison.id",
             "referenced_id": "less-than-answers",
         },
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-6",
             "key": "comparison.id",
             "referenced_id": "greater-than-answers",
         },
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_WHEN_KEY,
+            "message": error_messages.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-7",
             "key": "id",
             "referenced_id": "greater-than-answers",
@@ -305,12 +301,22 @@ def test_answer_comparisons_invalid_comparison_id():
 def test_invalid_mutually_exclusive_conditions():
     filename = "schemas/invalid/test_invalid_mutually_exclusive_conditions.json"
 
-    expected_error_messages = [
-        "MutuallyExclusive question type cannot contain mandatory answers.",
-        "mutually-exclusive-date-answer-2 is not of type Checkbox.",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": error_messages.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY,
+            "id": "mutually-exclusive-date-question",
+        },
+        {
+            "message": error_messages.NON_CHECKBOX_ANSWER,
+            "id": "mutually-exclusive-date-question",
+            "answer_id": "mutually-exclusive-date-answer-2",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_invalid_string_transforms():
@@ -321,21 +327,21 @@ def test_invalid_string_transforms():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "test {answer1}",
             "differences": {"answer1"},
         },
         {
-            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "test {answer1} and {answer2}",
             "differences": {"answer2"},
         },
         {
-            "message": QuestionnaireValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+            "message": error_messages.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
             "block_id": "block4",
         },
         {
-            "message": QuestionnaireValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
+            "message": error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
             "block_id": "block5",
         },
     ]
@@ -351,22 +357,22 @@ def test_invalid_placeholder_answer_ids():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "block_id": "block1",
             "referenced_id": "invalid-answer0",
         },
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "block_id": "block2",
             "referenced_id": "invalid-answer1",
         },
         {
-            "message": QuestionnaireValidator.ANSWER_SELF_REFERENCE,
+            "message": error_messages.ANSWER_SELF_REFERENCE,
             "block_id": "block3",
             "referenced_id": "answer4",
         },
         {
-            "message": QuestionnaireValidator.METADATA_REFERENCE_INVALID,
+            "message": error_messages.METADATA_REFERENCE_INVALID,
             "block_id": "block4",
             "referenced_id": "invalid-metadata-ref",
         },
@@ -383,12 +389,12 @@ def test_invalid_placeholder_list_reference():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "message": error_messages.LIST_REFERENCE_INVALID,
             "block_id": "block1",
             "id": "people",
         },
         {
-            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "message": error_messages.LIST_REFERENCE_INVALID,
             "block_id": "block1",
             "id": "people",
         },
@@ -418,10 +424,10 @@ def test_duplicate_answer_ids():
     validator.validate_questionnaire()
 
     expected_errors = [
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "block-1"},
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "answer-2"},
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "question-1"},
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "block-2"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-1"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "answer-2"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "question-1"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-2"},
     ]
 
     assert all(
@@ -437,7 +443,7 @@ def test_invalid_list_collector_non_radio():
 
     expected_error_messages = [
         {
-            "message": QuestionnaireValidator.NO_RADIO_FOR_LIST_COLLECTOR,
+            "message": error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
             "block_id": "list-collector",
         }
     ]
@@ -455,7 +461,7 @@ def test_primary_person_invalid_list_collector_non_radio():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
+            "message": error_messages.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
             "block_id": "primary-person-list-collector",
         }
     ]
@@ -471,7 +477,7 @@ def test_invalid_list_collector_with_no_add_option():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            "message": error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
             "block_id": "list-collector",
         }
     ]
@@ -487,7 +493,7 @@ def test_invalid_primary_person_list_collector_with_no_add_option():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+            "message": error_messages.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
             "block_id": "primary-person-list-collector",
         }
     ]
@@ -503,7 +509,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
             "list_name": "people",
         }
     ]
@@ -519,7 +525,7 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
+            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
             "list_name": "people",
         }
     ]
@@ -530,11 +536,18 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
 def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_answer_ids_in_add_and_edit.json"
 
-    expected_error_messages = [
-        "The list collector block list-collector contains an add block and edit block with different answer ids"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": error_messages.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
+            "block_id": "list-collector",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_list_reference_in_custom_summary():
@@ -543,10 +556,7 @@ def test_invalid_list_reference_in_custom_summary():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        {
-            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
-            "list_name": "household",
-        }
+        {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "household"}
     ]
 
     validator.validate_questionnaire()
@@ -612,9 +622,9 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     validator.validate_questionnaire()
 
     expected_errors = [
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "add-person"},
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "remove-person"},
-        {"message": QuestionnaireValidator.DUPLICATE_ID_FOUND, "id": "edit-person"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "add-person"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "remove-person"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "edit-person"},
     ]
 
     assert all(
@@ -641,50 +651,66 @@ def test_inconsistent_types_in_variants():
 
 
 def test_invalid_when_condition_property():
-    file_name = "schemas/invalid/test_invalid_when_condition_property.json"
-    json_to_validate = _open_and_load_schema_file(file_name)
+    filename = "schemas/invalid/test_invalid_when_condition_property.json"
 
-    validator = QuestionnaireValidator(json_to_validate)
-    schema_errors = validator.validate_json_schema()
-    validator.validate_questionnaire()
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    error_messages = [error["message"] for error in validator.errors]
-
-    fuzzy_error_messages = [
-        "The comparison id `country-checkbox-answer2` is not of answer type `Checkbox`. "
-        "The condition `contains any` can only reference `Checkbox` answers when using `comparison id`",
-        "The condition `equals any` cannot be used with `Checkbox` answer type (country-checkbox-answer).",
+    expected_errors = [
+        {
+            "message": error_messages.NON_CHECKBOX_COMPARISON_ID,
+            "comparison_id": "country-checkbox-answer2",
+            "condition": "contains any",
+        },
+        {
+            "message": error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
+            "condition": "equals any",
+            "answer_id": "country-checkbox-answer",
+        },
     ]
 
-    for fuzzy_error in fuzzy_error_messages:
-        assert any(fuzzy_error in error_message for error_message in error_messages)
+    validator.validate_questionnaire()
 
-    assert len(validator.errors) == 2
-
-    assert schema_errors != {}
+    assert validator.errors == expected_errors
 
 
 def test_invalid_list_collector_bad_answer_reference_ids():
     filename = (
         "schemas/invalid/test_invalid_list_collector_bad_answer_reference_ids.json"
     )
-    expected_error_messages = [
-        "add_answer reference uses id not found in main block question: someone-else",
-        "remove_answer reference uses id not found in remove_block: delete-confirmation",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
+            "referenced_id": "someone-else",
+        },
+        {
+            "message": error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
+            "referenced_id": "delete-confirmation",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
     filename = (
         "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_id.json"
     )
-    expected_error_messages = [
-        "add_or_edit_answer reference uses id not found in main block question: fake-answer-id"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
+            "referenced_id": "fake-answer-id",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_list_name_in_when_rule():
@@ -693,7 +719,7 @@ def test_invalid_list_name_in_when_rule():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "message": error_messages.LIST_REFERENCE_INVALID,
             "list_name": "non-existent-list-name",
         }
     ]
@@ -710,20 +736,17 @@ def test_invalid_relationship_no_list_specified():
     validator.validate_questionnaire()
 
     expected_for_list_error = [
-        {
-            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
-            "list_name": "not-a-list",
-        }
+        {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "not-a-list"}
     ]
 
     expected_answer_errors = [
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "referenced_id": "first-name",
             "block_id": "relationships",
         },
         {
-            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "message": error_messages.ANSWER_REFERENCE_INVALID,
             "referenced_id": "last-name",
             "block_id": "relationships",
         },
@@ -737,7 +760,7 @@ def test_invalid_relationship_multiple_answers():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        {"message": QuestionnaireValidator.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS}
+        {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS}
     ]
 
     validator.validate_questionnaire()
@@ -750,9 +773,7 @@ def test_invalid_relationship_wrong_answer_type():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        {
-            "message": QuestionnaireValidator.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
-        }
+        {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE}
     ]
 
     validator.validate_questionnaire()
@@ -766,7 +787,7 @@ def test_invalid_hub_and_spoke_with_summary_confirmation():
     )
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    expected_errors = [{"message": QuestionnaireValidator.QUESTIONNAIRE_ONLY_ONE_PAGE}]
+    expected_errors = [{"message": error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE}]
 
     validator.validate_questionnaire()
 
@@ -777,9 +798,7 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     filename = "schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    expected_errors = [
-        {"message": QuestionnaireValidator.QUESTIONNAIRE_MUST_CONTAIN_PAGE}
-    ]
+    expected_errors = [{"message": error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE}]
 
     validator.validate_questionnaire()
 
@@ -792,7 +811,7 @@ def test_invalid_repeating_section_list_name():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
+            "message": error_messages.FOR_LIST_NEVER_POPULATED,
             "list_name": "non-existent-list",
         }
     ]
@@ -809,7 +828,7 @@ def test_invalid_repeating_section_title_placeholders():
 
     expected_errors = [
         {
-            "message": QuestionnaireValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "{person}",
             "differences": {"person"},
         }
@@ -903,7 +922,7 @@ def test_invalid_answer_value_in_when_rule():
 
     expected_error_messages = [
         {
-            "message": QuestionnaireValidator.INVALID_WHEN_RULE_ANSWER_VALUE,
+            "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
             "answer_id": "country-checkbox-answer",
             "value": value,
         }
@@ -921,7 +940,7 @@ def test_invalid_quotes_in_schema():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_error_messages = [
-        {"message": QuestionnaireValidator.DUMB_QUOTES_FOUND, "pointer": pointer}
+        {"message": error_messages.DUMB_QUOTES_FOUND, "pointer": pointer}
         for pointer in [
             "/sections/0/groups/0/blocks/0/question/description",
             "/sections/0/groups/0/blocks/1/question_variants/0/question/title",

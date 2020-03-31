@@ -1,3 +1,4 @@
+from app.validation import error_messages
 from app.validation.questionnaire_validator import QuestionnaireValidator
 
 
@@ -14,7 +15,7 @@ def test_validate_answer_value_in_when_rule_invalid():
     validator.validate_answer_value_in_when_rule(when_rule)
 
     assert validator.errors[0] == {
-        "message": QuestionnaireValidator.INVALID_WHEN_RULE_ANSWER_VALUE,
+        "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
         "answer_id": "answer-1",
         "value": "Yes",
     }
