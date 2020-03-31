@@ -1113,15 +1113,19 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         # pylint: disable=invalid-string-quote
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
 
-        for pointer in schema_object.pointers:
-            schema_text = resolve_pointer(json_schema, pointer)
-            try:
-                found = quote_regex.search(schema_text.get("text"))
-            except AttributeError:
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for schema_text in values_to_check:
                 found = quote_regex.search(schema_text)
 
-            if found:
-                self.add_error(error_messages.DUMB_QUOTES_FOUND, pointer=pointer)
+                if found:
+                    self.add_error(error_messages.DUMB_QUOTES_FOUND, pointer=translatable_item.pointer)
 
     @staticmethod
     def _is_contained_in_list(dict_list, key_id):
