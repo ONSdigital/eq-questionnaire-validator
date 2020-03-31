@@ -5,6 +5,7 @@ from structlog import configure
 from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
+from app.validation.answer_validator import AnswerValidator
 from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = getLogger()
@@ -141,16 +142,33 @@ def test_invalid_routing_block_id():
 def test_invalid_numeric_answers():
     filename = "schemas/invalid/test_invalid_numeric_answers.json"
 
-    expected_error_messages = [
-        'The referenced answer "answer-1" has a greater number of decimal places than '
-        'answer "answer-2"',
-        'The referenced answer "answer-4" can not be used to set the minimum of answer '
-        '"answer-3"',
-        "Invalid answer reference 'answer-4' in block 'block-3'",
-        "Invalid answer reference 'answer-5' in block 'block-3'",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    error_messages = [
+        {
+            "message": AnswerValidator.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+            "referenced_id": "answer-1",
+            "id": "answer-2",
+        },
+        {
+            "message": AnswerValidator.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "referenced_id": "answer-4",
+            "id": "answer-3",
+        },
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "referenced_id": "answer-5",
+            "block_id": "block-3",
+        },
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "referenced_id": "answer-4",
+            "block_id": "block-3",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert validator.errors == error_messages
 
 
 def test_invalid_metadata():
@@ -328,25 +346,55 @@ def test_invalid_string_transforms():
 def test_invalid_placeholder_answer_ids():
     filename = "schemas/invalid/test_invalid_placeholder_source_ids.json"
 
-    expected_error_messages = [
-        "Invalid answer reference 'answer4' in block 'block3' (self-reference)",
-        "Invalid answer reference 'invalid-answer0' in block 'block1'",
-        "Invalid answer reference 'invalid-answer1' in block 'block2'",
-        "Invalid metadata reference 'invalid-metadata-ref' in block 'block4'",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "block_id": "block1",
+            "referenced_id": "invalid-answer0",
+        },
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "block_id": "block2",
+            "referenced_id": "invalid-answer1",
+        },
+        {
+            "message": QuestionnaireValidator.ANSWER_SELF_REFERENCE,
+            "block_id": "block3",
+            "referenced_id": "answer4",
+        },
+        {
+            "message": QuestionnaireValidator.METADATA_REFERENCE_INVALID,
+            "block_id": "block4",
+            "referenced_id": "invalid-metadata-ref",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert validator.errors == expected_errors
 
 
 def test_invalid_placeholder_list_reference():
     filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
 
-    expected_error_messages = [
-        "Invalid list reference 'people' in block 'block1'",
-        "Invalid list reference 'people' in block 'block1'",
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "block_id": "block1",
+            "id": "people",
+        },
+        {
+            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "block_id": "block1",
+            "id": "people",
+        },
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    assert expected_errors == validator.errors
 
 
 def test_single_variant_invalid():
@@ -492,11 +540,18 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
 def test_invalid_list_reference_in_custom_summary():
     filename = "schemas/invalid/test_invalid_custom_list_summary.json"
 
-    expected_error_messages = [
-        "for_list 'household' is not populated by any ListCollector blocks"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
+            "list_name": "household",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_inconsistent_ids_in_variants():
@@ -643,18 +698,31 @@ def test_invalid_list_name_in_when_rule():
 
 def test_invalid_relationship_no_list_specified():
     filename = "schemas/invalid/test_invalid_relationship_list_doesnt_exist.json"
-    for_list_error = [
-        "for_list 'not-a-list' is not populated by any ListCollector blocks"
-    ]
-    expected_error_message = [
-        "Invalid answer reference 'first-name' in block 'relationships'",
-        "Invalid answer reference 'last-name' in block 'relationships'",
-        "Invalid answer reference 'first-name' in block 'relationships'",
-        "Invalid answer reference 'last-name' in block 'relationships'",
-    ] * 6
-    expected_error_message = for_list_error + expected_error_message
 
-    check_validation_errors(filename, expected_error_message)
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate_questionnaire()
+
+    expected_for_list_error = [
+        {
+            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
+            "list_name": "not-a-list",
+        }
+    ]
+
+    expected_answer_errors = [
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "referenced_id": "first-name",
+            "block_id": "relationships",
+        },
+        {
+            "message": QuestionnaireValidator.ANSWER_REFERENCE_INVALID,
+            "referenced_id": "last-name",
+            "block_id": "relationships",
+        },
+    ] * 12
+
+    assert validator.errors == expected_for_list_error + expected_answer_errors
 
 
 def test_invalid_relationship_multiple_answers():
@@ -695,11 +763,18 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
 
 def test_invalid_repeating_section_list_name():
     filename = "schemas/invalid/test_invalid_repeating_section_list_name.json"
-    expected_error_messages = [
-        "for_list 'non-existent-list' is not populated by any ListCollector blocks"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.FOR_LIST_NEVER_POPULATED,
+            "list_name": "non-existent-list",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_repeating_section_title_placeholders():

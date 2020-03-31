@@ -27,6 +27,15 @@ class AnswerValidator(Validator):
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
     DUPLICATE_LABEL_FOUND = "Duplicate label found"
     DUPLICATE_VALUE_FOUND = "Duplicate value found"
+    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the minimum of answer"
+    )
+    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the maximum of answer"
+    )
+    GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
+        "The referenced answer has a greater number of decimal places than answer"
+    )
 
     def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
         super().__init__(schema_element)
@@ -247,16 +256,14 @@ class AnswerValidator(Validator):
         """
         if answer_ranges[self.answer.get("id")]["min"] is None:
             self.add_error(
-                'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                    self.answer["minimum"]["value"]["identifier"], self.answer["id"]
-                )
+                self.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                referenced_id=self.answer["minimum"]["value"]["identifier"],
             )
             return True
         if answer_ranges[self.answer.get("id")]["max"] is None:
             self.add_error(
-                'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                    self.answer["maximum"]["value"]["identifier"], self.answer["id"]
-                )
+                self.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                referenced_id=self.answer["maximum"]["value"]["identifier"],
             )
             return True
         return False
@@ -279,18 +286,16 @@ class AnswerValidator(Validator):
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                        answer_values["min_referred"], self.answer["id"]
-                    )
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    referenced_id=answer_values["min_referred"],
                 )
 
         if answer_values["max_referred"] is not None:
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    'The referenced answer "{}" has a greater number of decimal places than answer "{}"'.format(
-                        answer_values["max_referred"], self.answer["id"]
-                    )
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    referenced_id=answer_values["max_referred"],
                 )
 
     def get_numeric_range_values(self, answer_ranges):
