@@ -6,8 +6,6 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app.validation import error_messages
-from app.validation.answer_validator import AnswerValidator
-from app.validation.question_validator import QuestionValidator
 from app.validation.questionnaire_validator import QuestionnaireValidator
 
 logger = getLogger()
@@ -572,7 +570,7 @@ def test_inconsistent_ids_in_variants():
     schema_errors = validator.validate_json_schema()
     validator.validate_questionnaire()
 
-    error_messages = [error["message"] for error in validator.errors]
+    expected_error_messages = [error["message"] for error in validator.errors]
 
     fuzzy_error_messages = [
         "Variants contain more than one question_id for block: block-2. Found ids",
@@ -582,11 +580,13 @@ def test_inconsistent_ids_in_variants():
     ]
 
     for fuzzy_error in fuzzy_error_messages:
-        assert any(fuzzy_error in error_message for error_message in error_messages)
+        assert any(
+            fuzzy_error in error_message for error_message in expected_error_messages
+        )
 
     assert (
         "Variants in block: block-2 contain different numbers of answers"
-        in error_messages
+        in expected_error_messages
     )
 
     assert len(validator.errors) == 3
@@ -602,7 +602,7 @@ def test_inconsistent_default_answers_in_variants():
 
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate_questionnaire()
-    error_messages = [error["message"] for error in validator.errors]
+    expected_error_messages = [error["message"] for error in validator.errors]
 
     fuzzy_error_messages = [
         "Variants contain different default answers for block: block-2. Found ids",
@@ -610,7 +610,9 @@ def test_inconsistent_default_answers_in_variants():
     ]
 
     for fuzzy_error in fuzzy_error_messages:
-        assert any(fuzzy_error in error_message for error_message in error_messages)
+        assert any(
+            fuzzy_error in error_message for error_message in expected_error_messages
+        )
 
     assert len(validator.errors) == 1
 
@@ -638,14 +640,16 @@ def test_inconsistent_types_in_variants():
 
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate_questionnaire()
-    error_messages = [error["message"] for error in validator.errors]
+    expected_error_messages = [error["message"] for error in validator.errors]
     fuzzy_error_messages = (
         "Variants have more than one question type for block: block-2",
         "Variants have mismatched answer types for block: block-2. Found types:",
     )
 
     for fuzzy_error in fuzzy_error_messages:
-        assert any(fuzzy_error in error_message for error_message in error_messages)
+        assert any(
+            fuzzy_error in error_message for error_message in expected_error_messages
+        )
 
     assert len(validator.errors) == 2
 
