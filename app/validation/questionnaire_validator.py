@@ -63,6 +63,16 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     ANSWER_REFERENCE_INVALID = "Invalid answer reference"
     ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
     LIST_REFERENCE_INVALID = "Invalid list reference"
+    QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
+        "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
+    )
+    QUESTIONNAIRE_ONLY_ONE_PAGE = "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
+    RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE = (
+        "Only answers of type Relationship are valid in RelationshipCollector blocks."
+    )
+    RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS = (
+        "RelationshipCollector contains more than one answer."
+    )
 
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
@@ -916,7 +926,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
         list_name = when["list"]
         if list_name not in self._list_names:
-            self.add_error(f"The list `{list_name}` is not defined in the schema")
+            self.add_error(self.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
         """
@@ -971,18 +981,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         is_hub_enabled = schema.get("hub", {}).get("enabled")
 
         if is_last_block_valid and is_hub_enabled:
-            return [
-                self.add_error(
-                    "Schema can only contain one of [Confirmation page, Summary page, Hub page]"
-                )
-            ]
+            return [self.add_error(self.QUESTIONNAIRE_ONLY_ONE_PAGE)]
 
         if not is_last_block_valid and not is_hub_enabled:
-            return [
-                self.add_error(
-                    "Schema must contain one of [Confirmation page, Summary page, Hub page]"
-                )
-            ]
+            return [self.add_error(self.QUESTIONNAIRE_MUST_CONTAIN_PAGE)]
 
         return []
 
@@ -1127,13 +1129,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self.add_error(self.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def _validate_relationship_collector_answers(self, answers):
-        one_answer_msg = "RelationshipCollector contains more than one answer."
-        answer_type_msg = "Only answers of type Relationship are valid in RelationshipCollector blocks."
-
         if len(answers) > 1:
-            self.add_error(one_answer_msg)
+            self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
         if answers[0]["type"] != "Relationship":
-            self.add_error(answer_type_msg)
+            self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE)
 
     def _validate_placeholder_transforms(self, transforms, block_id):
         # First transform can't reference a previous transform

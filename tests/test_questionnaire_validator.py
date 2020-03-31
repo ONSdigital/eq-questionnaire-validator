@@ -689,11 +689,18 @@ def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
 
 def test_invalid_list_name_in_when_rule():
     filename = "schemas/invalid/test_invalid_when_condition_list_property.json"
-    expected_error_messages = [
-        "The list `non-existent-list-name` is not defined in the schema"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.LIST_REFERENCE_INVALID,
+            "list_name": "non-existent-list-name",
+        }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_relationship_no_list_specified():
@@ -727,38 +734,56 @@ def test_invalid_relationship_no_list_specified():
 
 def test_invalid_relationship_multiple_answers():
     filename = "schemas/invalid/test_invalid_relationship_multiple_answers.json"
-    expected_error_message = ["RelationshipCollector contains more than one answer."]
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    check_validation_errors(filename, expected_error_message)
+    expected_errors = [
+        {"message": QuestionnaireValidator.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS}
+    ]
+
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_relationship_wrong_answer_type():
     filename = "schemas/invalid/test_invalid_relationship_wrong_answer_type.json"
-    expected_error_message = [
-        "Only answers of type Relationship are valid in RelationshipCollector blocks."
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": QuestionnaireValidator.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
+        }
     ]
 
-    check_validation_errors(filename, expected_error_message)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_hub_and_spoke_with_summary_confirmation():
     filename = (
         "schemas/invalid/test_invalid_hub_and_spoke_with_summary_confirmation.json"
     )
-    expected_error_messages = [
-        "Schema can only contain one of [Confirmation page, Summary page, Hub page]"
-    ]
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    check_validation_errors(filename, expected_error_messages)
+    expected_errors = [{"message": QuestionnaireValidator.QUESTIONNAIRE_ONLY_ONE_PAGE}]
+
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     filename = "schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json"
-    expected_error_messages = [
-        "Schema must contain one of [Confirmation page, Summary page, Hub page]"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {"message": QuestionnaireValidator.QUESTIONNAIRE_MUST_CONTAIN_PAGE}
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate_questionnaire()
+
+    assert validator.errors == expected_errors
 
 
 def test_invalid_repeating_section_list_name():
