@@ -46,6 +46,9 @@
                 "title": "",
                 "description": "",
                 "type": "General",
+                "summary": {
+                  "concatenation_type": "NewLine"
+                },
                 "answers": [
                   {
                     "id": "ref-answer0",
@@ -79,6 +82,9 @@
                 "title": "",
                 "description": "",
                 "type": "General",
+                "summary": {
+                  "concatenation_type": "Space"
+                },
                 "answers": [
                   {
                     "id": "answer0",

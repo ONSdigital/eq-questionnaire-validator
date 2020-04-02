@@ -16,6 +16,9 @@
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "summary": {
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/summary"
+      },
       "instruction": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -31,6 +34,9 @@
       "type": {
         "type": "string",
         "enum": ["General"]
+      },
+      "show_on_section_summary": {
+        "type": "boolean"
       },
       "answers": {
         "type": "array",

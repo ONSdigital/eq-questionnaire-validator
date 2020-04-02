@@ -140,7 +140,6 @@ class Validator:  # pylint: disable=too-many-lines
         if section_summary:
             for item in section_summary.get("items", []):
                 errors.extend(self._validate_list_exists(item.get("for_list")))
-
         return errors
 
     def _validate_required_section_ids(self, section_ids, required_section_ids):
@@ -342,6 +341,13 @@ class Validator:  # pylint: disable=too-many-lines
                     errors.extend(
                         self._validate_numeric_answer_types(
                             answer, numeric_answer_ranges
+                        )
+                    )
+
+                if question.get("summary") and answer["type"] != "TextField":
+                    errors.append(
+                        self._error_message(
+                            f'Summary concatenation can only be used for TextFields, `{answer["id"]}` is invalid'
                         )
                     )
 

@@ -37,6 +37,18 @@
       }
     ]
   },
+  "summary": {
+    "description": "TextField string concatenations for the summary page",
+    "properties": {
+      "concatenation_type": {
+        "enum": [
+          "NewLine",
+          "Space"
+        ]
+      }
+    },
+    "maxItems": 1
+  },
   "placeholders": {
     "description": "A mapping of string placeholders to their values.",
     "type": "array",
