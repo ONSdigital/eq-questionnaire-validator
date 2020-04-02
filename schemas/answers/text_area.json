@@ -29,6 +29,10 @@
       "max_length": {
         "type": "integer"
       },
+      "rows": {
+        "type": "integer",
+        "minimum": 2
+      },
       "validation": {
         "type": "object",
         "properties": {
