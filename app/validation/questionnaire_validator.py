@@ -1,12 +1,7 @@
 import re
-import glob
-import json
 from collections import defaultdict
-from json import load
 
 from eq_translations.survey_schema import SurveySchema
-from jsonschema import SchemaError, RefResolver, ValidationError, Draft7Validator
-from jsonschema.exceptions import best_match
 
 from app.validation import error_messages
 from app.validation.answer_validator import AnswerValidator
@@ -18,54 +13,14 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
-        with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
-            self.schema = load(schema_data)
-
-        resolver = RefResolver(
-            base_uri="https://eq.ons.gov.uk/",
-            referrer=self.schema,
-            store=self.lookup_ref_store(),
-        )
-        self.schema_validator = Draft7Validator(self.schema, resolver=resolver)
-
         self._list_collector_answer_ids = {}
         self._list_names = []
         self._block_ids = []
         self.answer_id_to_option_values_map = {}
 
-    @staticmethod
-    def lookup_ref_store():
-        store = {}
-        for glob_path in [
-            "schemas/**/**/*.json",
-            "schemas/**/*.json",
-            "schemas/*.json",
-        ]:
-            for filename in glob.glob(glob_path):
-                with open(filename) as schema_file:
-                    json_data = json.load(schema_file)
-                    store[json_data["$id"]] = json_data
-        return store
-
-    def validate_json_schema(self):
-        try:
-            self.schema_validator.validate(self.schema_element)
-            return {}
-        except ValidationError as e:
-            match = best_match([e])
-            return {
-                "message": e.message,
-                "predicted_cause": match.message,
-                "path": str(e.path),
-            }
-        except SchemaError as e:
-            return "{}".format(e)
-
-    def validate_questionnaire(self):
+    def validate(self):
         """
         Validates the json schema provided is correct
-        :param json_to_validate: json schema to be validated
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
 
         self._validate_schema_contain_metadata(self.schema_element)

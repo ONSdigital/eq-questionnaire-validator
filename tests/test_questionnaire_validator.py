@@ -7,6 +7,7 @@ from structlog.stdlib import LoggerFactory
 
 from app.validation import error_messages
 from app.validation.questionnaire_validator import QuestionnaireValidator
+from app.validation.schema_validator import SchemaValidator
 
 logger = getLogger()
 
@@ -30,9 +31,10 @@ def test_param_valid_schemas(valid_schema_filename):
         json_to_validate = load(json_file)
 
         validator = QuestionnaireValidator(json_to_validate)
+        schema_validator = SchemaValidator(json_to_validate)
 
-        schema_errors = validator.validate_json_schema()
-        validator.validate_questionnaire()
+        schema_errors = schema_validator.validate()
+        validator.validate()
 
         assert not validator.errors
         assert not schema_errors
@@ -112,7 +114,7 @@ def test_invalid_numeric_answers():
     filename = "schemas/invalid/test_invalid_numeric_answers.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -144,7 +146,7 @@ def test_invalid_metadata():
     filename = "schemas/invalid/test_invalid_metadata.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {"message": error_messages.MISSING_METADATA, "metadata": "ru_name"},
@@ -152,20 +154,6 @@ def test_invalid_metadata():
     ]
 
     assert expected_errors == validator.errors
-
-
-def test_invalid_survey_id_whitespace():
-    file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
-    json_to_validate = _open_and_load_schema_file(file)
-
-    validator = QuestionnaireValidator(json_to_validate)
-
-    schema_errors = validator.validate_json_schema()
-    validator.validate_questionnaire()
-
-    assert validator.errors == []
-
-    assert "'lms ' does not match '^[0-9a-z]+$'" in schema_errors.get("message")
 
 
 def test_invalid_calculated_summary():
@@ -199,7 +187,7 @@ def test_invalid_calculated_summary():
     ]
 
     validator = QuestionnaireValidator(json_to_validate)
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_error_messages
 
@@ -209,7 +197,7 @@ def test_answer_comparisons_different_types():
     filename = "schemas/invalid/test_invalid_answer_comparison_types.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -291,7 +279,7 @@ def test_answer_comparisons_invalid_comparison_id():
 
     json_to_validate = _open_and_load_schema_file(filename)
     questionnaire_validator = QuestionnaireValidator(json_to_validate)
-    questionnaire_validator.validate_questionnaire()
+    questionnaire_validator.validate()
 
     assert expected_error_messages == questionnaire_validator.errors
 
@@ -300,7 +288,7 @@ def test_invalid_mutually_exclusive_conditions():
     filename = "schemas/invalid/test_invalid_mutually_exclusive_conditions.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -321,7 +309,7 @@ def test_invalid_string_transforms():
     filename = "schemas/invalid/test_invalid_string_transforms.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -351,7 +339,7 @@ def test_invalid_placeholder_answer_ids():
     filename = "schemas/invalid/test_invalid_placeholder_source_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -383,7 +371,7 @@ def test_invalid_placeholder_list_reference():
     filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -405,10 +393,7 @@ def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(file_name))
-    schema_errors = validator.validate_json_schema()
-    validator.validate_questionnaire()
-
-    assert "'when' is a required property" in schema_errors["predicted_cause"]
+    validator.validate()
 
     assert len(validator.errors) == 1
 
@@ -419,7 +404,7 @@ def test_duplicate_answer_ids():
     filename = "schemas/invalid/test_invalid_duplicate_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-1"},
@@ -437,7 +422,7 @@ def test_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_error_messages = [
         {
@@ -455,7 +440,7 @@ def test_primary_person_invalid_list_collector_non_radio():
     )
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -471,7 +456,7 @@ def test_invalid_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -487,7 +472,7 @@ def test_invalid_primary_person_list_collector_with_no_add_option():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_value.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -503,7 +488,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -519,7 +504,7 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {
@@ -543,7 +528,7 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
         }
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -557,7 +542,7 @@ def test_invalid_list_reference_in_custom_summary():
         {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "household"}
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -567,8 +552,7 @@ def test_inconsistent_ids_in_variants():
     json_to_validate = _open_and_load_schema_file(file_name)
 
     validator = QuestionnaireValidator(json_to_validate)
-    schema_errors = validator.validate_json_schema()
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_error_messages = [error["message"] for error in validator.errors]
 
@@ -591,8 +575,6 @@ def test_inconsistent_ids_in_variants():
 
     assert len(validator.errors) == 3
 
-    assert schema_errors == {}
-
 
 def test_inconsistent_default_answers_in_variants():
     file_name = (
@@ -601,7 +583,7 @@ def test_inconsistent_default_answers_in_variants():
     json_to_validate = _open_and_load_schema_file(file_name)
 
     validator = QuestionnaireValidator(json_to_validate)
-    validator.validate_questionnaire()
+    validator.validate()
     expected_error_messages = [error["message"] for error in validator.errors]
 
     fuzzy_error_messages = [
@@ -621,7 +603,7 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     filename = "schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_errors = [
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "add-person"},
@@ -639,7 +621,7 @@ def test_inconsistent_types_in_variants():
     json_to_validate = _open_and_load_schema_file(file_name)
 
     validator = QuestionnaireValidator(json_to_validate)
-    validator.validate_questionnaire()
+    validator.validate()
     expected_error_messages = [error["message"] for error in validator.errors]
     fuzzy_error_messages = (
         "Variants have more than one question type for block: block-2",
@@ -672,7 +654,7 @@ def test_invalid_when_condition_property():
         },
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -694,7 +676,7 @@ def test_invalid_list_collector_bad_answer_reference_ids():
         },
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -712,7 +694,7 @@ def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
         }
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -728,7 +710,7 @@ def test_invalid_list_name_in_when_rule():
         }
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -737,7 +719,7 @@ def test_invalid_relationship_no_list_specified():
     filename = "schemas/invalid/test_invalid_relationship_list_doesnt_exist.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate_questionnaire()
+    validator.validate()
 
     expected_for_list_error = [
         {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "not-a-list"}
@@ -767,7 +749,7 @@ def test_invalid_relationship_multiple_answers():
         {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS}
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -780,7 +762,7 @@ def test_invalid_relationship_wrong_answer_type():
         {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE}
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -793,7 +775,7 @@ def test_invalid_hub_and_spoke_with_summary_confirmation():
 
     expected_errors = [{"message": error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE}]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -804,7 +786,7 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
 
     expected_errors = [{"message": error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE}]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -820,7 +802,7 @@ def test_invalid_repeating_section_list_name():
         }
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -838,7 +820,7 @@ def test_invalid_repeating_section_title_placeholders():
         }
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_errors
 
@@ -852,7 +834,7 @@ def test_invalid_hub_section_non_existent():
         "message": 'Required hub completed section "invalid-section-id" defined in hub does not appear in schema'
     }
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert expected_error_message == validator.errors[0]
 
@@ -876,7 +858,7 @@ def test_invalid_answer_action():
         },
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert expected_error_messages == validator.errors
 
@@ -891,7 +873,7 @@ def test_invalid_driving_question_multiple_collectors():
         "`people` cannot be used with multiple ListCollectors"
     )
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert expected_error_message == validator.errors[0]["message"]
 
@@ -914,7 +896,7 @@ def test_invalid_driving_question_multiple_driving_questions():
         },
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert expected_error_messages == validator.errors
 
@@ -933,7 +915,7 @@ def test_invalid_answer_value_in_when_rule():
         for value in ["France", "France", "France", "Austria", 7, "French", "Italian"]
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_error_messages
 
@@ -953,6 +935,6 @@ def test_invalid_quotes_in_schema():
         ]
     ]
 
-    validator.validate_questionnaire()
+    validator.validate()
 
     assert validator.errors == expected_error_messages
