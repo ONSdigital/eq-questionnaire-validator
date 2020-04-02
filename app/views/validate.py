@@ -7,6 +7,7 @@ from flask import Blueprint, request, jsonify, Response
 from structlog import get_logger
 
 from app.validation.questionnaire_validator import QuestionnaireValidator
+from app.validation.schema_validator import SchemaValidator
 
 logger = get_logger()
 
@@ -45,18 +46,19 @@ def validate_schema(data):
 
     response = {}
 
-    schema_errors = validator.validate_json_schema()
+    schema_validator = SchemaValidator(json_to_validate)
+    schema_validator.validate()
 
-    if len(schema_errors) > 0:
-        response["errors"] = {"schema_errors": schema_errors}
+    if len(schema_validator.errors) > 0:
+        response["errors"] = schema_validator.errors
         logger.info("Schema validator returned errors", status=400)
         return jsonify(response), 400
 
     validator.validate()
 
     if len(validator.errors) > 0:
-        response["errors"] = {"validation_errors": validator.errors}
-        logger.info("Schema validator returned errors", status=400)
+        response["errors"] = validator.errors
+        logger.info("Questionnaire validator returned errors", status=400)
         return jsonify(response), 400
 
     logger.info("Schema validation passed", status=200)

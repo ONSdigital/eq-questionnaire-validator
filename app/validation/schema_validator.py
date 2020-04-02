@@ -1,10 +1,10 @@
 import glob
+from json import load
 
 from jsonschema import Draft7Validator, ValidationError, RefResolver
 from jsonschema.exceptions import best_match, SchemaError
 
 from app.validation.validator import Validator
-from json import load
 
 
 class SchemaValidator(Validator):
