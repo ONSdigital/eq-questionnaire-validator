@@ -72,7 +72,7 @@ def test_single_variant_invalid():
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
-    assert "'when' is a required property" == validator.errors[0]["message"]
+    assert validator.errors[0]["message"] == "'when' is a required property"
 
     assert len(validator.errors) == 1
 
@@ -85,4 +85,4 @@ def test_invalid_survey_id_whitespace():
 
     validator.validate()
 
-    assert "'lms ' does not match '^[0-9a-z]+$'" == validator.errors[0]["message"]
+    assert validator.errors[0]["message"] == "'lms ' does not match '^[0-9a-z]+$'"
