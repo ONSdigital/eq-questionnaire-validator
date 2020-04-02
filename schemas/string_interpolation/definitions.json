@@ -41,10 +41,7 @@
     "description": "TextField string concatenations for the summary page",
     "properties": {
       "concatenation_type": {
-        "enum": [
-          "NewLine",
-          "Space"
-        ]
+        "enum": ["NewLine", "Space"]
       }
     },
     "maxItems": 1
