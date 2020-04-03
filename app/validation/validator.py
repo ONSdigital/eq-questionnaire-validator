@@ -140,6 +140,7 @@ class Validator:  # pylint: disable=too-many-lines
         if section_summary:
             for item in section_summary.get("items", []):
                 errors.extend(self._validate_list_exists(item.get("for_list")))
+
         return errors
 
     def _validate_required_section_ids(self, section_ids, required_section_ids):
