@@ -23,7 +23,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         self._validate_schema_contain_metadata(self.schema_element)
         self.validate_duplicates()
-        self._validate_smart_quotes(self.schema_element)
+        self.validate_smart_quotes()
 
         section_ids = []
         sections = self.schema_element.get("sections", [])
@@ -192,7 +192,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if not self.has_single_driving_question(block["for_list"]):
             self.add_error(
-                f"The block_id should be the only ListCollectorDrivingQuestion for list",
+                error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
                 block_id=block["id"],
                 for_list=block["for_list"],
             )
@@ -996,10 +996,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
                 )
 
-    def _validate_smart_quotes(self, json_schema):
+    def validate_smart_quotes(self):
 
-        schema_object = SurveySchema()
-        schema_object.schema = json_schema
+        schema_object = SurveySchema(self.schema_element)
 
         # pylint: disable=invalid-string-quote
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")

@@ -29,9 +29,9 @@ def test_valid_answer_ids():
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
         validator = SchemaValidator(json_to_validate)
-        schema_errors = validator.validate()
+        validator.validate()
 
-        assert schema_errors == {}
+        assert len(validator.errors) == 0
 
 
 def test_invalid_answer_ids():
