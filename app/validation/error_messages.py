@@ -79,6 +79,9 @@ MISSING_METADATA = "Metadata not specified in metadata field"
 CHECKBOX_MUST_USE_CORRECT_CONDITION = (
     "The condition cannot be used with `Checkbox` answer type"
 )
+MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
+    "The block_id should be the only ListCollectorDrivingQuestion for list"
+)
 
 # QuestionValidator
 MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (

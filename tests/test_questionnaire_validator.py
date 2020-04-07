@@ -33,11 +33,11 @@ def test_param_valid_schemas(valid_schema_filename):
         validator = QuestionnaireValidator(json_to_validate)
         schema_validator = SchemaValidator(json_to_validate)
 
-        schema_errors = schema_validator.validate()
+        schema_validator.validate()
         validator.validate()
 
         assert not validator.errors
-        assert not schema_errors
+        assert not schema_validator.errors
 
 
 def test_invalid_routing_default_block():
@@ -885,15 +885,11 @@ def test_invalid_driving_question_multiple_driving_questions():
 
     expected_error_messages = [
         {
-            "message": "The block_id should be the only ListCollectorDrivingQuestion for list",
-            "block_id": "anyone-usually-live-at-preceding",
+            "message": error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
+            "block_id": block_id,
             "for_list": "people",
-        },
-        {
-            "message": "The block_id should be the only ListCollectorDrivingQuestion for list",
-            "block_id": "anyone-usually-live-at",
-            "for_list": "people",
-        },
+        }
+        for block_id in ["anyone-usually-live-at-preceding", "anyone-usually-live-at"]
     ]
 
     validator.validate()
@@ -939,6 +935,6 @@ def test_invalid_quotes_in_schema():
         ]
     ]
 
-    validator.validate()
+    validator.validate_smart_quotes()
 
     assert validator.errors == expected_error_messages
