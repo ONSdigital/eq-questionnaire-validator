@@ -31,6 +31,6 @@ def test_validate_answer_value_in_when_rule_valid():
     validator = QuestionnaireValidator()
     validator.answer_id_to_option_values_map = option_value_to_answer_id_map
 
-    error_message = validator.validate_answer_value_in_when_rule(when_rule)
+    validator.validate_answer_value_in_when_rule(when_rule)
 
-    assert not error_message
+    assert not validator.errors

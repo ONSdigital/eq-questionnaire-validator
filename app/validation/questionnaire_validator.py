@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from functools import cached_property
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -14,9 +15,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         super().__init__(schema_element)
 
         self._list_collector_answer_ids = {}
-        self._list_names = []
-        self._block_ids = []
-        self.answer_id_to_option_values_map = {}
 
     def validate(self):
         """
@@ -32,33 +30,25 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         all_groups = [group for section in sections for group in section.get("groups")]
 
         numeric_answer_ranges = {}
-        answers_with_parent_ids = self._get_answers_with_parent_ids(self.schema_element)
-
-        self._list_names = self._get_list_names(self.schema_element)
-        self._block_ids = self._get_block_ids(self.schema_element)
-        self.answer_id_to_option_values_map = self._get_answer_id_to_option_values_map(
-            self.schema_element
-        )
 
         for section in sections:
             self._validate_section(section)
             section_ids.append(section["id"])
             for group in section["groups"]:
                 self._validate_group_routing_rules(
-                    group, all_groups, answers_with_parent_ids
+                    group, all_groups, self.answers_with_parent_ids
                 )
 
                 for skip_condition in group.get("skip_conditions", []):
                     self._validate_skip_condition(
-                        skip_condition, answers_with_parent_ids, group
+                        skip_condition, self.answers_with_parent_ids, group
                     )
 
                 self._validate_blocks(
-                    self.schema_element,
                     section,
                     group,
                     all_groups,
-                    answers_with_parent_ids,
+                    self.answers_with_parent_ids,
                     numeric_answer_ranges,
                 )
 
@@ -113,23 +103,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
-        self,
-        json_to_validate,
-        section,
-        group,
-        all_groups,
-        answers_with_parent_ids,
-        numeric_answer_ranges,
+        self, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges
     ):
         for block in group.get("blocks"):
             if (
-                section == json_to_validate["sections"][-1]
+                section == self.schema_element["sections"][-1]
                 and group == section["groups"][-1]
                 and block == group["blocks"][-1]
             ):
-                self._validate_schema_contains_submission_page(
-                    schema=json_to_validate, last_block=block
-                )
+                self.validate_block_is_submission(block)
 
             self.validate_block_routing_rules(
                 block, group, all_groups, answers_with_parent_ids
@@ -165,15 +147,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         block["question"]["answers"]
                     )
             elif block["type"] == "ListCollectorDrivingQuestion":
-                self._validate_list_collector_driving_question(
-                    block, section, json_to_validate
-                )
+                self._validate_list_collector_driving_question(block, section)
 
             self._validate_questions(block, numeric_answer_ranges)
 
             valid_metadata_ids = []
-            if "metadata" in json_to_validate:
-                valid_metadata_ids = [m["name"] for m in json_to_validate["metadata"]]
+            if "metadata" in self.schema_element:
+                valid_metadata_ids = [
+                    m["name"] for m in self.schema_element["metadata"]
+                ]
 
             self._validate_source_references(
                 block, answers_with_parent_ids, valid_metadata_ids
@@ -200,7 +182,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
             for answer in question.get("answers", []):
                 answer_validator = AnswerValidator(
-                    answer, block_or_variant, self._list_names, self._block_ids
+                    answer, block_or_variant, self.list_names, self.block_ids
                 )
 
                 answer_validator.validate()
@@ -216,16 +198,14 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
                 self.errors += answer_validator.errors
 
-    def _validate_list_collector_driving_question(
-        self, block, section, json_to_validate
-    ):
+    def _validate_list_collector_driving_question(self, block, section):
         if not self._has_single_list_collector(block["for_list"], section):
             self.add_error(
                 f'ListCollectorDrivingQuestion `{block["id"]}` for list '
                 f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
             )
 
-        if not self._has_single_driving_question(block["for_list"], json_to_validate):
+        if not self.has_single_driving_question(block["for_list"]):
             self.add_error(
                 f"The block_id should be the only ListCollectorDrivingQuestion for list",
                 block_id=block["id"],
@@ -813,7 +793,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         Validate that the list referenced in the when rule is defined in the schema
         """
         list_name = when["list"]
-        if list_name not in self._list_names:
+        if list_name not in self.list_names:
             self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
@@ -859,22 +839,23 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 yield item
             seen.add(item)
 
-    def _validate_schema_contains_submission_page(self, schema, last_block):
+    def validate_block_is_submission(self, last_block):
         """
         Validate that the final block is of type Summary or Confirmation.
         :param last_block: The final block in the schema
         :return: List of dictionaries containing error messages, otherwise it returns an empty list
         """
         is_last_block_valid = last_block["type"] in {"Summary", "Confirmation"}
-        is_hub_enabled = schema.get("hub", {}).get("enabled")
 
-        if is_last_block_valid and is_hub_enabled:
-            return [self.add_error(error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE)]
+        if is_last_block_valid and self.is_hub_enabled:
+            self.add_error(error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE)
 
-        if not is_last_block_valid and not is_hub_enabled:
-            return [self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)]
+        if not is_last_block_valid and not self.is_hub_enabled:
+            self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)
 
-        return []
+    @cached_property
+    def is_hub_enabled(self):
+        return self.schema_element.get("hub", {}).get("enabled")
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
@@ -1005,7 +986,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     def _validate_list_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
-            if identifier not in self._list_names:
+            if identifier not in self.list_names:
                 self.add_error(
                     error_messages.LIST_REFERENCE_INVALID,
                     id=identifier,
@@ -1013,7 +994,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 )
 
     def _validate_list_exists(self, list_name):
-        if list_name not in self._list_names:
+        if list_name not in self.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def _validate_relationship_collector_answers(self, answers):
@@ -1145,22 +1126,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             == 1
         )
 
-    @staticmethod
-    def _has_single_driving_question(list_name, json_to_validate):
-        return (
-            len(
-                QuestionnaireValidator.get_driving_questions(
-                    list_name, json_to_validate
-                )
-            )
-            == 1
-        )
+    def has_single_driving_question(self, list_name):
+        return len(self.get_driving_questions(list_name)) == 1
 
-    @staticmethod
-    def get_driving_questions(list_name, json_to_validate):
+    def get_driving_questions(self, list_name):
         driving_blocks = []
 
-        for section in json_to_validate.get("sections"):
+        for section in self.schema_element.get("sections"):
             driving_blocks.extend(
                 [
                     block
@@ -1176,9 +1148,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def get_blocks_for_section(section):
         return [block for group in section["groups"] for block in group["blocks"]]
 
-    def _get_answers_with_parent_ids(self, json_to_validate):
+    @cached_property
+    def answers_with_parent_ids(self):
         answers = {}
-        for question, context in self._get_questions_with_context(json_to_validate):
+        for question, context in self.questions_with_context:
             for answer in question.get("answers", []):
                 answers[answer["id"]] = {"answer": answer, **context}
                 for option in answer.get("options", []):
@@ -1190,47 +1163,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         }
 
         return answers
-
-    @classmethod
-    def _get_answer_id_to_option_values_map(cls, json_to_validate):
-        answer_id_to_option_values_map = defaultdict(set)
-        answers = cls._get_answers(json_to_validate)
-
-        for answer in answers:
-            if "options" not in answer:
-                continue
-
-            answer_id = answer["id"]
-            option_values = [option["value"] for option in answer["options"]]
-
-            answer_id_to_option_values_map[answer_id].update(option_values)
-
-        return answer_id_to_option_values_map
-
-    @classmethod
-    def _get_answers(cls, json_to_validate):
-        questions = cls._get_questions_with_context(json_to_validate)
-        for question, _ in questions:
-            for answer in question["answers"]:
-                yield answer
-
-    @classmethod
-    def _get_questions_with_context(cls, questionnaire_json):
-        for section in questionnaire_json.get("sections"):
-            for group in section.get("groups"):
-                for block in group.get("blocks"):
-                    for question in cls._get_all_questions_for_block(block):
-                        context = {
-                            "block": block["id"],
-                            "group_id": group["id"],
-                            "section": section["id"],
-                        }
-                        yield question, context
-
-                        for sub_block, context in cls._get_sub_block_context(
-                            section, group, block
-                        ):
-                            yield sub_block, context
 
     @classmethod
     def _get_sub_block_context(cls, section, group, block):
@@ -1264,30 +1196,68 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         return questions
 
-    @staticmethod
-    def _get_list_names(json_to_validate):
+    @cached_property
+    def answer_id_to_option_values_map(self):
+        answer_id_to_option_values_map = defaultdict(set)
+
+        for answer in self.answers:
+            if "options" not in answer:
+                continue
+
+            answer_id = answer["id"]
+            option_values = [option["value"] for option in answer["options"]]
+
+            answer_id_to_option_values_map[answer_id].update(option_values)
+
+        return answer_id_to_option_values_map
+
+    @cached_property
+    def answers(self):
+        for question, _ in self.questions_with_context:
+            for answer in question["answers"]:
+                yield answer
+
+    @cached_property
+    def questions_with_context(self):
+        for section in self.schema_element.get("sections"):
+            for group in section.get("groups"):
+                for block in group.get("blocks"):
+                    for question in self._get_all_questions_for_block(block):
+                        context = {
+                            "block": block["id"],
+                            "group_id": group["id"],
+                            "section": section["id"],
+                        }
+                        yield question, context
+
+                        for sub_block, context in self._get_sub_block_context(
+                            section, group, block
+                        ):
+                            yield sub_block, context
+
+    @cached_property
+    def list_names(self):
         list_names = []
-        for section in json_to_validate["sections"]:
+        for section in self.schema_element["sections"]:
             for group in section["groups"]:
                 for block in group["blocks"]:
                     if block["type"] == "ListCollector":
                         list_names.append(block["for_list"])
         return list_names
 
-    @staticmethod
-    def _get_block_ids(json_to_validate):
+    @cached_property
+    def block_ids(self):
         block_ids = []
-        for section in json_to_validate["sections"]:
-            for group in section["groups"]:
-                for block in group["blocks"]:
-                    block_ids.append(block["id"])
-                    for sub_block in {
-                        "add_block",
-                        "edit_block",
-                        "remove_block",
-                        "add_or_edit_block",
-                    }:
-                        if sub_block in block:
-                            block_ids.append(block[sub_block]["id"])
+        for section in self.schema_element["sections"]:
+            for block in self.get_blocks_for_section(section):
+                block_ids.append(block["id"])
+                for sub_block in {
+                    "add_block",
+                    "edit_block",
+                    "remove_block",
+                    "add_or_edit_block",
+                }:
+                    if sub_block in block:
+                        block_ids.append(block[sub_block]["id"])
 
         return block_ids
