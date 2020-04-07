@@ -35,22 +35,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self._validate_section(section)
             section_ids.append(section["id"])
             for group in section["groups"]:
-                self._validate_group_routing_rules(
-                    group, all_groups, self.answers_with_parent_ids
-                )
+                self._validate_group_routing_rules(group, all_groups)
 
                 for skip_condition in group.get("skip_conditions", []):
-                    self._validate_skip_condition(
-                        skip_condition, self.answers_with_parent_ids, group
-                    )
+                    self._validate_skip_condition(skip_condition, group)
 
-                self._validate_blocks(
-                    section,
-                    group,
-                    all_groups,
-                    self.answers_with_parent_ids,
-                    numeric_answer_ranges,
-                )
+                self._validate_blocks(section, group, all_groups, numeric_answer_ranges)
 
         required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
@@ -79,7 +69,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     "appear in schema".format(required_section_id)
                 )
 
-    def _validate_group_routing_rules(self, group, all_groups, answers_with_parent_ids):
+    def _validate_group_routing_rules(self, group, all_groups):
         self.validate_routing_rules_have_default(
             group.get("routing_rules", []), group["id"]
         )
@@ -87,11 +77,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for rule in group.get("routing_rules", []):
             self.validate_routing_rule_target(group["blocks"], "block", rule)
             self.validate_routing_rule_target(all_groups, "group", rule)
-            self._validate_routing_rule(rule, answers_with_parent_ids, group)
+            self._validate_routing_rule(rule, group)
 
-    def validate_block_routing_rules(
-        self, block, group, all_groups, answers_with_parent_ids
-    ):
+    def validate_block_routing_rules(self, block, group, all_groups):
         self.validate_routing_rules_have_default(
             block.get("routing_rules", []), block["id"]
         )
@@ -99,11 +87,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for rule in block.get("routing_rules", []):
             self.validate_routing_rule_target(group["blocks"], "block", rule)
             self.validate_routing_rule_target(all_groups, "group", rule)
-            self._validate_routing_rule(rule, answers_with_parent_ids, block)
+            self._validate_routing_rule(rule, block)
 
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
-        self, section, group, all_groups, answers_with_parent_ids, numeric_answer_ranges
+        self, section, group, all_groups, numeric_answer_ranges
     ):
         for block in group.get("blocks"):
             if (
@@ -113,17 +101,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             ):
                 self.validate_block_is_submission(block)
 
-            self.validate_block_routing_rules(
-                block, group, all_groups, answers_with_parent_ids
-            )
+            self.validate_block_routing_rules(block, group, all_groups)
 
             for skip_condition in block.get("skip_conditions", []):
-                self._validate_skip_condition(
-                    skip_condition, answers_with_parent_ids, block
-                )
+                self._validate_skip_condition(skip_condition, block)
 
             if block["type"] == "CalculatedSummary":
-                self._validate_calculated_summary_type(block, answers_with_parent_ids)
+                self._validate_calculated_summary_type(block)
             elif block["type"] == "PrimaryPersonListCollector":
                 try:
                     self._validate_primary_person_list_collector(block)
@@ -157,14 +141,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     m["name"] for m in self.schema_element["metadata"]
                 ]
 
-            self._validate_source_references(
-                block, answers_with_parent_ids, valid_metadata_ids
-            )
+            self._validate_source_references(block, valid_metadata_ids)
 
             self._validate_placeholders(block)
-            self._validate_variants(
-                block, answers_with_parent_ids, numeric_answer_ranges
-            )
+            self._validate_variants(block, numeric_answer_ranges)
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
         questions = block_or_variant.get("questions", [])
@@ -294,9 +274,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         return results
 
-    def _validate_variants(
-        self, block, answer_ids_with_group_id, numeric_answer_ranges
-    ):
+    def _validate_variants(self, block, numeric_answer_ranges):
         question_variants = block.get("question_variants", [])
         content_variants = block.get("content_variants", [])
 
@@ -314,9 +292,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             )
 
         for variant in all_variants:
-            self._validate_when_rule(
-                variant.get("when", []), answer_ids_with_group_id, block["id"]
-            )
+            self._validate_when_rule(variant.get("when", []), block["id"])
 
         self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
 
@@ -394,12 +370,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     f"contain multiple default routing rules. Some of them will not be used"
                 )
 
-    def _validate_routing_rule(self, rule, answer_ids_with_group_id, block_or_group):
+    def _validate_routing_rule(self, rule, block_or_group):
         rule = rule.get("goto")
         if "when" in rule:
-            self._validate_when_rule(
-                rule["when"], answer_ids_with_group_id, block_or_group["id"]
-            )
+            self._validate_when_rule(rule["when"], block_or_group["id"])
 
     def validate_answer_value_in_when_rule(self, when_rule):
         when_values = when_rule.get("values", [])
@@ -419,16 +393,14 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     value=value,
                 )
 
-    def _validate_skip_condition(
-        self, skip_condition, answer_ids_with_group_id, block_or_group
-    ):
+    def _validate_skip_condition(self, skip_condition, block_or_group):
         """
         Validate skip condition is valid
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         when = skip_condition.get("when")
 
-        self._validate_when_rule(when, answer_ids_with_group_id, block_or_group["id"])
+        self._validate_when_rule(when, block_or_group["id"])
 
     def _validate_list_answer_references(self, block):
         main_block_questions = self._get_all_questions_for_block(block)
@@ -594,12 +566,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             if option["value"] == value:
                 return True
 
-    def _validate_calculated_summary_type(self, block, answers_with_parent_ids):
+    def _validate_calculated_summary_type(self, block):
         answers_to_calculate = block["calculation"]["answers_to_calculate"]
 
         try:
             answer_types = [
-                answers_with_parent_ids[answer_id]["answer"]["type"]
+                self.answers_with_parent_ids[answer_id]["answer"]["type"]
                 for answer_id in answers_to_calculate
             ]
         except KeyError as e:
@@ -632,7 +604,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if answer_types[0] == "Unit":
             unit_types = [
-                answers_with_parent_ids[answer_id]["answer"]["unit"]
+                self.answers_with_parent_ids[answer_id]["answer"]["unit"]
                 for answer_id in answers_to_calculate
             ]
             if not all(unit_type == unit_types[0] for unit_type in unit_types):
@@ -644,7 +616,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if answer_types[0] == "Currency":
             currency_types = [
-                answers_with_parent_ids[answer_id]["answer"]["currency"]
+                self.answers_with_parent_ids[answer_id]["answer"]["currency"]
                 for answer_id in answers_to_calculate
             ]
             if not all(
@@ -655,7 +627,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     block_id=block["id"],
                 )
 
-    def _validate_when_rule(self, when_clause, answer_ids_with_group_id, referenced_id):
+    def _validate_when_rule(self, when_clause, referenced_id):
         """
         Validates any answer id in a when clause exists within the schema
         Will also check that comparison exists
@@ -666,30 +638,24 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 break
 
             valid_answer_ids = self.validate_answer_ids_present_in_schema(
-                when, answer_ids_with_group_id, referenced_id
+                when, referenced_id
             )
             if not valid_answer_ids:
                 break
 
             # We know the ids are correct, so can continue to perform validation
-            self._validate_checkbox_exclusive_conditions_in_when_rule(
-                when, answer_ids_with_group_id
-            )
+            self._validate_checkbox_exclusive_conditions_in_when_rule(when)
 
             if "comparison" in when:
-                self._validate_comparison_in_when_rule(
-                    when, answer_ids_with_group_id, referenced_id
-                )
+                self._validate_comparison_in_when_rule(when, referenced_id)
 
             if "id" in when:
                 self.validate_answer_value_in_when_rule(when)
 
-    def validate_answer_ids_present_in_schema(
-        self, when, answer_ids_with_group_id, referenced_id
-    ):
+    def validate_answer_ids_present_in_schema(self, when, referenced_id):
         """
-        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents writing
-        when conditions against id's that don't exist.
+        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
+        writing when conditions against id's that don't exist.
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         ids_to_check = []
@@ -700,7 +666,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             ids_to_check.append(("comparison.id", when["comparison"]["id"]))
 
         for key, present_id in ids_to_check:
-            if present_id not in answer_ids_with_group_id:
+            if present_id not in self.answers_with_parent_ids:
                 self.add_error(
                     error_messages.NON_EXISTENT_WHEN_KEY,
                     answer_id=present_id,
@@ -710,9 +676,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 return False
         return True
 
-    def _validate_checkbox_exclusive_conditions_in_when_rule(
-        self, when, answer_ids_with_group_id
-    ):
+    def _validate_checkbox_exclusive_conditions_in_when_rule(self, when):
         """
         Validate checkbox exclusive conditions are only used when answer type is Checkbox
         :return: list of dictionaries containing error messages, otherwise it returns an empty list
@@ -726,30 +690,28 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         )
         all_checkbox_conditions = checkbox_exclusive_conditions + ("set", "not set")
         answer_type = (
-            answer_ids_with_group_id[when["id"]]["answer"]["type"]
+            self.answers_with_parent_ids[when["id"]]["answer"]["type"]
             if "id" in when
             else None
         )
 
         if answer_type == "Checkbox":
             if condition not in all_checkbox_conditions:
-                answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
+                answer_id = self.answers_with_parent_ids[when["id"]]["answer"]["id"]
                 self.add_error(
                     error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
                     condition=condition,
                     answer_id=answer_id,
                 )
         elif condition in checkbox_exclusive_conditions:
-            answer_id = answer_ids_with_group_id[when["id"]]["answer"]["id"]
+            answer_id = self.answers_with_parent_ids[when["id"]]["answer"]["id"]
             self.add_error(
                 f"The condition `{condition}` can only be used with"
                 " `Checkbox` answer types. "
                 f"Found answer type: {answer_type} ({answer_id})."
             )
 
-    def _validate_comparison_in_when_rule(
-        self, when, answer_ids_with_group_id, referenced_id
-    ):
+    def _validate_comparison_in_when_rule(self, when, referenced_id):
         """
         Validate that conditions requiring list match values define a comparison answer id that is of type Checkbox
         and ensure all other conditions with comparison id match answer types
@@ -761,10 +723,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 when["comparison"]["id"],
                 when["condition"],
             )
-            comparison_answer_type = answer_ids_with_group_id[comparison_id]["answer"][
-                "type"
-            ]
-            id_answer_type = answer_ids_with_group_id[answer_id]["answer"]["type"]
+            comparison_answer_type = self.answers_with_parent_ids[comparison_id][
+                "answer"
+            ]["type"]
+            id_answer_type = self.answers_with_parent_ids[answer_id]["answer"]["type"]
             conditions_requiring_list_match_values = (
                 "equals any",
                 "not equals any",
@@ -932,9 +894,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for placeholder_object in strings_with_placeholders:
             self._validate_placeholder_object(placeholder_object, block_json["id"])
 
-    def _validate_source_references(
-        self, block_json, answers_with_parent_ids, valid_metadata_ids
-    ):
+    def _validate_source_references(self, block_json, valid_metadata_ids):
         source_references = self._get_dicts_with_key(block_json, "identifier")
         for source_reference in source_references:
             source = source_reference["source"]
@@ -944,9 +904,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                self._validate_answer_source_reference(
-                    identifiers, answers_with_parent_ids, block_json["id"]
-                )
+                self._validate_answer_source_reference(identifiers, block_json["id"])
 
             elif source == "metadata":
                 self._validate_metadata_source_reference(
@@ -956,17 +914,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             elif source == "list":
                 self._validate_list_source_reference(identifiers, block_json["id"])
 
-    def _validate_answer_source_reference(
-        self, identifiers, answers_with_parent_ids, current_block_id
-    ):
+    def _validate_answer_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
-            if identifier not in answers_with_parent_ids:
+            if identifier not in self.answers_with_parent_ids:
                 self.add_error(
                     error_messages.ANSWER_REFERENCE_INVALID,
                     referenced_id=identifier,
                     block_id=current_block_id,
                 )
-            elif answers_with_parent_ids[identifier]["block"] == current_block_id:
+            elif self.answers_with_parent_ids[identifier]["block"] == current_block_id:
                 self.add_error(
                     error_messages.ANSWER_SELF_REFERENCE,
                     referenced_id=identifier,
