@@ -905,17 +905,21 @@ def test_invalid_answer_value_in_when_rule():
     filename = "schemas/invalid/test_invalid_answer_value_in_when_rule.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
+    when = {
+        "id": "country-checkbox-answer",
+        "condition": "contains any",
+        "values": ["France", 7, "Italian"],
+    }
     expected_error_messages = [
         {
             "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
             "answer_id": "country-checkbox-answer",
             "value": value,
         }
-        for value in ["France", "France", "France", "Austria", 7, "French", "Italian"]
+        for value in ["France", 7, "Italian"]
     ]
 
-    validator.validate()
+    validator.validate_answer_value_in_when_rule(when)
 
     assert validator.errors == expected_error_messages
 
