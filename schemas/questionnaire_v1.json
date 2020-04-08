@@ -196,7 +196,7 @@
                       "type": "string"
                     },
                     "title": {
-                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#string_with_placeholders"
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
                     },
                     "add_link_text": {
                       "type": "string"
