@@ -1,0 +1,72 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Other input fields",
+  "theme": "default",
+  "description": "A questionnaire to demo invalid question summary concatenation.",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "checkbox",
+              "question": {
+                "answers": [
+                  {
+                    "id": "checkbox-answer",
+                    "label": "",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "description": "",
+                "id": "checkbox-question",
+                "title": "",
+                "type": "General",
+                "summary": {
+                  "concatenation_type": "Newline"
+                }
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "checkboxes",
+          "title": ""
+        }
+      ]
+    }
+  ]
+}

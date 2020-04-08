@@ -345,6 +345,13 @@ class Validator:  # pylint: disable=too-many-lines
                         )
                     )
 
+                if question.get("summary") and answer["type"] != "TextField":
+                    errors.append(
+                        self._error_message(
+                            f'Summary concatenation can only be used for TextFields, `{answer["id"]}` is invalid'
+                        )
+                    )
+
         return errors
 
     def _validate_list_collector_driving_question(

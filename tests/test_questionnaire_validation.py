@@ -719,3 +719,13 @@ def test_invalid_url_in_answer():
     ]
 
     check_validation_errors(filename, expected_error_messages)
+
+
+def test_invalid_non_textfield_question_concatenation():
+    filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
+
+    expected_error_messages = [
+        "Summary concatenation can only be used for TextFields, `checkbox-answer` is invalid"
+    ]
+
+    check_validation_errors(filename, expected_error_messages)
