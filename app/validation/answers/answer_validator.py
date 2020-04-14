@@ -1,9 +1,4 @@
-import re
-from datetime import datetime
 from functools import cached_property
-from urllib.parse import urlparse
-
-from dateutil.relativedelta import relativedelta
 
 from app.validation import error_messages
 from app.validation.validator import Validator
@@ -27,33 +22,13 @@ class AnswerValidator(Validator):
 
     def validate(self):
         self.validate_duplicate_options()
-        self._validate_answer_actions()
         self.validate_labels_and_values_match()
+        self._validate_answer_actions()
 
         self._validate_routing_on_answer_options()
 
         if not self.are_decimal_places_valid():
             self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
-
-        if not self.is_offset_date_valid():
-            self.add_error(error_messages.INVALID_OFFSET_DATE)
-
-        if (
-            self.answer["type"] == "TextField"
-            and "suggestions_url" in self.answer
-            and not self.is_suggestion_url_valid()
-        ):
-            self.add_error(error_messages.INVALID_SUGGESTION_URL)
-
-        if self.answer["type"] in ["Number", "Currency", "Percentage"]:
-            # Validate default is only used with non mandatory answers
-            self.validate_numeric_default()
-
-            # Validate numeric answer value within system limits
-            self.validate_numeric_answer_value()
-
-            # Validate numeric answer decimal places within system limits
-            self.validate_numeric_answer_decimals()
 
     def validate_duplicate_options(self):
         labels = set()
@@ -101,51 +76,6 @@ class AnswerValidator(Validator):
                     f'in answer id: {self.answer["id"]}'
                 )
         return errors
-
-    def is_offset_date_valid(self):
-        if (
-            self.answer["type"] == "Date"
-            and "minimum" in self.answer
-            and "maximum" in self.answer
-        ):
-            if (
-                "value" in self.answer["minimum"]
-                and "value" in self.answer["maximum"]
-                and not isinstance(self.answer["minimum"]["value"], dict)
-                and not isinstance(self.answer["maximum"]["value"], dict)
-            ):
-                minimum_date = self._get_offset_date(self.answer["minimum"])
-                maximum_date = self._get_offset_date(self.answer["maximum"])
-
-                return minimum_date < maximum_date
-        return True
-
-    def validate_numeric_answer_value(self):
-        min_value = self.answer.get("minimum", {}).get("value", 0)
-        max_value = self.answer.get("maximum", {}).get("value", 0)
-
-        if isinstance(min_value, int) and min_value < self.MIN_NUMBER:
-            self.add_error(
-                error_messages.MINIMUM_LESS_THAN_LIMIT,
-                value=min_value,
-                limit=self.MIN_NUMBER,
-            )
-
-        if isinstance(max_value, int) and max_value > self.MAX_NUMBER:
-            self.add_error(
-                error_messages.MAXIMUM_GREATER_THAN_LIMIT,
-                value=max_value,
-                limit=self.MAX_NUMBER,
-            )
-
-    def validate_numeric_answer_decimals(self):
-        decimal_places = self.answer.get("decimal_places", 0)
-        if decimal_places > self.MAX_DECIMAL_PLACES:
-            self.add_error(
-                error_messages.DECIMAL_PLACES_TOO_LONG,
-                decimal_places=decimal_places,
-                limit=self.MAX_DECIMAL_PLACES,
-            )
 
     def _validate_answer_actions(self):
         for option in self.options:
@@ -280,98 +210,3 @@ class AnswerValidator(Validator):
                     error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
                     referenced_id=answer_values["max_referred"],
                 )
-
-    def get_numeric_range_values(self, answer_ranges):
-        min_value = self.answer.get("minimum", {}).get("value", {})
-        max_value = self.answer.get("maximum", {}).get("value", {})
-        min_referred = (
-            min_value.get("identifier") if isinstance(min_value, dict) else None
-        )
-        max_referred = (
-            max_value.get("identifier") if isinstance(max_value, dict) else None
-        )
-
-        exclusive = self.answer.get("exclusive", False)
-        decimal_places = self.answer.get("decimal_places", 0)
-
-        return {
-            "min": self._get_answer_minimum(
-                min_value, decimal_places, exclusive, answer_ranges
-            ),
-            "max": self._get_answer_maximum(
-                max_value, decimal_places, exclusive, answer_ranges
-            ),
-            "decimal_places": decimal_places,
-            "min_referred": min_referred,
-            "max_referred": max_referred,
-            "default": self.answer.get("default"),
-        }
-
-    def _get_answer_minimum(
-        self, defined_minimum, decimal_places, exclusive, answer_ranges
-    ):
-        minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
-        if exclusive:
-            return minimum_value + (1 / 10 ** decimal_places)
-        return minimum_value
-
-    def _get_answer_maximum(
-        self, defined_maximum, decimal_places, exclusive, answer_ranges
-    ):
-        maximum_value = self._get_numeric_value(
-            defined_maximum, self.MAX_NUMBER, answer_ranges
-        )
-        if exclusive:
-            return maximum_value - (1 / 10 ** decimal_places)
-        return maximum_value
-
-    @staticmethod
-    def _get_numeric_value(defined_value, system_default, answer_ranges):
-        if not isinstance(defined_value, dict):
-            return defined_value
-        if "source" in defined_value and defined_value["source"] == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-            if referred_answer is None:
-                # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
-                return None
-            if referred_answer.get("default") is not None:
-                return system_default
-        return system_default
-
-    def validate_numeric_default(self):
-        if self.answer.get("mandatory") and self.answer.get("default") is not None:
-            self.add_error(error_messages.DEFAULT_ON_MANDATORY)
-
-    def _get_offset_date(self, answer_min_or_max):
-        if answer_min_or_max["value"] == "now":
-            value = datetime.utcnow().strftime("%Y-%m-%d")
-        else:
-            value = answer_min_or_max["value"]
-
-        offset = answer_min_or_max.get("offset_by", {})
-
-        return self.get_relative_date(value, offset)
-
-    @staticmethod
-    def get_relative_date(date_string, offset_object):
-        # Returns a relative date given an offset or period object
-        return AnswerValidator._convert_to_datetime(date_string) + relativedelta(
-            years=offset_object.get("years", 0),
-            months=offset_object.get("months", 0),
-            days=offset_object.get("days", 0),
-        )
-
-    @staticmethod
-    def _convert_to_datetime(value):
-        date_format = "%Y-%m"
-        if value and re.match(r"\d{4}-\d{2}-\d{2}", value):
-            date_format = "%Y-%m-%d"
-
-        return datetime.strptime(value, date_format) if value else None
-
-    def is_suggestion_url_valid(self):
-        parsed_result = urlparse(self.answer["suggestions_url"])
-
-        if parsed_result.scheme and parsed_result.netloc:
-            return True
-        return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None

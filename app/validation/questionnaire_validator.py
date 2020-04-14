@@ -5,9 +5,43 @@ from functools import cached_property
 from eq_translations.survey_schema import SurveySchema
 
 from app.validation import error_messages
-from app.validation.answer_validator import AnswerValidator
-from app.validation.question_validator import QuestionValidator
+from app.validation.answers.answer_validator import AnswerValidator
+from app.validation.answers.date_answer_validator import DateAnswerValidator
+from app.validation.answers.number_answer_validator import NumberAnswerValidator
+from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app.validation.questions.calculated_question_validator import (
+    CalculatedQuestionValidator,
+)
+from app.validation.questions.date_range_question_validator import (
+    DateRangeQuestionValidator,
+)
+from app.validation.questions.mutually_exclusive_validator import (
+    MutuallyExclusiveQuestionValidator,
+)
+from app.validation.questions.question_validator import QuestionValidator
 from app.validation.validator import Validator
+
+
+def get_question_validator(question):
+    validators = {
+        "Calculated": CalculatedQuestionValidator,
+        "DateRange": DateRangeQuestionValidator,
+        "MutuallyExclusive": MutuallyExclusiveQuestionValidator,
+    }
+    return validators.get(question["type"], QuestionValidator)(question)
+
+
+def get_answer_validator(answer, block_or_variant, list_names, block_ids):
+    validators = {
+        "TextField": TextFieldAnswerValidator,
+        "Date": DateAnswerValidator,
+        "Number": NumberAnswerValidator,
+        "Currency": NumberAnswerValidator,
+        "Percentage": NumberAnswerValidator,
+    }
+    return validators.get(answer["type"], AnswerValidator)(
+        answer, block_or_variant, list_names, block_ids
+    )
 
 
 class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
@@ -17,11 +51,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self._list_collector_answer_ids = {}
 
     def validate(self):
-        """
-        Validates the json schema provided is correct
-        """
-
-        self._validate_schema_contain_metadata(self.schema_element)
+        self._validate_schema_contain_metadata()
         self.validate_duplicates()
         self.validate_smart_quotes()
 
@@ -154,14 +184,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             questions.append(question)
 
         for question in questions:
-            question_validator = QuestionValidator(question)
-
+            question_validator = get_question_validator(question)
             question_validator.validate()
 
             self.errors += question_validator.errors
 
             for answer in question.get("answers", []):
-                answer_validator = AnswerValidator(
+                answer_validator = get_answer_validator(
                     answer, block_or_variant, self.list_names, self.block_ids
                 )
 
@@ -302,12 +331,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
 
-    def _validate_schema_contain_metadata(self, schema):
+    def _validate_schema_contain_metadata(self):
         # user_id and period_id required downstream for receipting
         # ru_name required for template rendering in default and NI theme
         default_metadata = ["user_id", "period_id"]
         schema_metadata = [
-            metadata_field["name"] for metadata_field in schema["metadata"]
+            metadata_field["name"] for metadata_field in self.schema_element["metadata"]
         ]
 
         if len(schema_metadata) != len(set(schema_metadata)):
@@ -322,7 +351,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     )
                 )
 
-        if schema["theme"] in ["default", "northernireland"]:
+        if self.schema_element["theme"] in ["default", "northernireland"]:
             if "ru_name" not in schema_metadata:
                 self.add_error(error_messages.MISSING_METADATA, metadata="ru_name")
             default_metadata.append("ru_name")
@@ -333,7 +362,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 r"((?<!collection_metadata\[\')(?<=metadata\[\')\w+"  # metadata[' not _metadata['
                 r"|(?<!collection_metadata\.)(?<=metadata\.)\w+"  # metadata. not _metadata.
                 r"|(?<=meta\': \')\w+)",
-                str(schema),
+                str(self.schema_element),
             )
         )  # meta': '
 
