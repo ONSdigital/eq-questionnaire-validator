@@ -178,7 +178,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
                 if question.get("summary") and answer["type"] != "TextField":
                     self.add_error(
-                        f'Summary concatenation can only be used for TextFields, `{answer["id"]}` is invalid'
+                        error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
+                        answer_id=answer["id"]
                     )
 
                 self.errors += answer_validator.errors

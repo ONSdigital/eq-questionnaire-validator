@@ -943,7 +943,10 @@ def test_invalid_non_textfield_question_concatenation():
     filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
 
     expected_error_messages = [
-        "Summary concatenation can only be used for TextFields, `checkbox-answer` is invalid"
+        {
+            "message": error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
+            "answer_id": "checkbox-answer",
+        }
     ]
 
     check_validation_errors(filename, expected_error_messages)
