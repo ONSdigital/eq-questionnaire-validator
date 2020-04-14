@@ -80,9 +80,7 @@ class AnswerValidator(Validator):
 
     def are_decimal_places_valid(self):
         if "calculated" in self.answer:
-            return (
-                "decimal_places" in self.answer and self.answer["decimal_places"] == 2
-            )
+            return self.answer.get("decimal_places") == 2
         return True
 
     def validate_labels_and_values_match(self):
