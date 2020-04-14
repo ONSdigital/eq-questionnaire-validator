@@ -948,7 +948,7 @@ def test_invalid_non_textfield_question_concatenation():
     expected_error_messages = [
         {
             "message": error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
-            "answer_id": "checkbox-answer"
+            "answer_id": "checkbox-answer",
         }
     ]
 
