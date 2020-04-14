@@ -13,3 +13,6 @@ class Validator(ABC):
             context["id"] = self.schema_element["id"]
 
         self.errors.append({"message": message, **context})
+
+    def validate(self):
+        pass

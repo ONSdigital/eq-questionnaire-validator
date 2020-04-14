@@ -1,5 +1,8 @@
 from app.validation import error_messages
-from app.validation.answer_validator import AnswerValidator
+from app.validation.answers.answer_validator import AnswerValidator
+from app.validation.answers.date_answer_validator import DateAnswerValidator
+from app.validation.answers.number_answer_validator import NumberAnswerValidator
+from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
 
 
 def test_invalid_mismatching_answer_label_and_value():
@@ -34,7 +37,7 @@ def test_number_of_decimals():
         "type": "Number",
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = NumberAnswerValidator(answer)
 
     answer_validator.validate_numeric_answer_decimals()
 
@@ -56,7 +59,7 @@ def test_minimum_value():
         "type": "Number",
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = NumberAnswerValidator(answer)
 
     answer_validator.validate_numeric_answer_value()
 
@@ -85,7 +88,7 @@ def test_invalid_single_date_period():
         "type": "Date",
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = DateAnswerValidator(answer)
 
     assert not answer_validator.is_offset_date_valid()
 
@@ -99,7 +102,7 @@ def test_invalid_answer_default():
         "type": "Number",
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = NumberAnswerValidator(answer)
     answer_validator.validate()
 
     assert answer_validator.errors[0] == {
@@ -117,7 +120,7 @@ def test_invalid_url_in_answer():
         "type": "TextField",
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = TextFieldAnswerValidator(answer)
 
     assert not answer_validator.is_suggestion_url_valid()
 
@@ -134,7 +137,7 @@ def test_are_decimal_places_valid():
         "maximum": {"value": 100},
     }
 
-    answer_validator = AnswerValidator(answer)
+    answer_validator = NumberAnswerValidator(answer)
     answer_validator.validate()
 
     assert answer_validator.errors[0] == {
