@@ -176,6 +176,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         numeric_answer_ranges
                     )
 
+                if question.get("summary") and answer["type"] != "TextField":
+                    self.add_error(
+                        error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
+                        answer_id=answer["id"]
+                    )
+
                 self.errors += answer_validator.errors
 
     def _validate_list_collector_driving_question(self, block, section):

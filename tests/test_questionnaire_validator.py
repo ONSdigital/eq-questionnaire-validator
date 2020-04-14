@@ -938,3 +938,20 @@ def test_invalid_quotes_in_schema():
     validator.validate_smart_quotes()
 
     assert validator.errors == expected_error_messages
+
+
+def test_invalid_non_textfield_question_concatenation():
+    filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_messages = [
+        {
+            "message": error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
+            "answer_id": "checkbox-answer"
+        }
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_error_messages

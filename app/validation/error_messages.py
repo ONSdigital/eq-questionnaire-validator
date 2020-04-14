@@ -82,6 +82,7 @@ CHECKBOX_MUST_USE_CORRECT_CONDITION = (
 MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
     "The block_id should be the only ListCollectorDrivingQuestion for list"
 )
+SUMMARY_HAS_NON_TEXTFIELD_ANSWER = "Summary concatenation can only be used for TextField answer types"
 
 # QuestionValidator
 MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (

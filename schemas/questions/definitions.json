@@ -32,5 +32,14 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
       }
     }
+  },
+  "summary": {
+    "description": "TextField string concatenations for the summary page",
+    "properties": {
+      "concatenation_type": {
+        "enum": ["Newline", "Space"]
+      }
+    },
+    "maxItems": 1
   }
 }
