@@ -267,7 +267,7 @@ class Validator:  # pylint: disable=too-many-lines
             elif block["type"] == "ListCollectorDrivingQuestion":
                 errors.extend(
                     self._validate_list_collector_driving_question(
-                        block, section, json_to_validate
+                        block, json_to_validate
                     )
                 )
 
@@ -354,9 +354,7 @@ class Validator:  # pylint: disable=too-many-lines
 
         return errors
 
-    def _validate_list_collector_driving_question(
-        self, block, section, json_to_validate
-    ):
+    def _validate_list_collector_driving_question(self, block, json_to_validate):
         errors = []
         if not self._has_single_driving_question(block["for_list"], json_to_validate):
             errors.append(
