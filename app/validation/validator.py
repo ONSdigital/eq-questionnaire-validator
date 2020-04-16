@@ -358,14 +358,6 @@ class Validator:  # pylint: disable=too-many-lines
         self, block, section, json_to_validate
     ):
         errors = []
-        if not self._has_single_list_collector(block["for_list"], section):
-            errors.append(
-                self._error_message(
-                    f'ListCollectorDrivingQuestion `{block["id"]}` for list '
-                    f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
-                )
-            )
-
         if not self._has_single_driving_question(block["for_list"], json_to_validate):
             errors.append(
                 self._error_message(
@@ -1955,20 +1947,6 @@ class Validator:  # pylint: disable=too-many-lines
                         yield from self._parse_values(
                             schema_item, parsed_key, indexed_path
                         )
-
-    @staticmethod
-    def _has_single_list_collector(list_name, section):
-        return (
-            len(
-                [
-                    block
-                    for block in Validator.get_blocks_for_section(section)
-                    if block["type"] == "ListCollector"
-                    and list_name == block["for_list"]
-                ]
-            )
-            == 1
-        )
 
     @staticmethod
     def _has_single_driving_question(list_name, json_to_validate):
