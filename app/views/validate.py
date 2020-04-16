@@ -12,8 +12,6 @@ logger = get_logger()
 
 validate_blueprint = Blueprint("validate", __name__)
 
-validator = Validator()
-
 
 @validate_blueprint.route("/validate", methods=["POST"])
 def validate_schema_request_body():
@@ -37,6 +35,8 @@ def validate_schema_from_url():
 
 
 def validate_schema(data):
+    validator = Validator()
+
     try:
         json_to_validate = json.loads(data)
     except JSONDecodeError:
