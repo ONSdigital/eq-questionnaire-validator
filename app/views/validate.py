@@ -36,7 +36,6 @@ def validate_schema_from_url():
 
 
 def validate_schema(data):
-
     try:
         json_to_validate = json.loads(data)
     except JSONDecodeError:
