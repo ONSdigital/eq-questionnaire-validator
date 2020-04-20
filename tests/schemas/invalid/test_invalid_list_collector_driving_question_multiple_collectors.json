@@ -28,6 +28,7 @@
     {
       "id": "section",
       "title": "People",
+      "summary": {},
       "groups": [
         {
           "id": "group",
@@ -501,10 +502,6 @@
                 "title": "Household members"
               },
               "type": "ListCollector"
-            },
-            {
-              "type": "SectionSummary",
-              "id": "summary"
             }
           ]
         }

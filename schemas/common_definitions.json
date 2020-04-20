@@ -271,6 +271,11 @@
               "type": "string",
               "description": "The id of another group. The first block in that group will be routed to."
             },
+            "section": {
+              "type": "string",
+              "description": "Routes to the end of a section",
+              "enum": ["end"]
+            },
             "when": {
               "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
             }
@@ -281,6 +286,9 @@
             },
             {
               "required": ["group"]
+            },
+            {
+              "required": ["section"]
             }
           ],
           "additionalProperties": false

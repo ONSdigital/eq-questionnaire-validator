@@ -28,6 +28,7 @@
     {
       "id": "employment-section",
       "title": "Employment",
+      "summary": {},
       "groups": [
         {
           "id": "radio",
@@ -183,10 +184,6 @@
                 "type": "General"
               },
               "type": "Question"
-            },
-            {
-              "id": "accommodation-details-summary",
-              "type": "SectionSummary"
             }
           ],
           "id": "checkboxes",
