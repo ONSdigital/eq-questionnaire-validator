@@ -942,6 +942,8 @@ def test_invalid_quotes_in_schema():
 def test_invalid_non_textfield_question_concatenation():
     filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
 
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
     expected_error_messages = [
         {
             "message": error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
@@ -949,4 +951,6 @@ def test_invalid_non_textfield_question_concatenation():
         }
     ]
 
-    check_validation_errors(filename, expected_error_messages)
+    validator.validate()
+
+    assert validator.errors == expected_error_messages
