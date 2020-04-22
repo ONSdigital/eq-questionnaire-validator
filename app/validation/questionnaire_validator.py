@@ -9,6 +9,7 @@ from app.validation.answers.answer_validator import AnswerValidator
 from app.validation.answers.date_answer_validator import DateAnswerValidator
 from app.validation.answers.number_answer_validator import NumberAnswerValidator
 from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app.validation.metadata_validator import MetadataValidator
 from app.validation.questions.calculated_question_validator import (
     CalculatedQuestionValidator,
 )
@@ -51,7 +52,13 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self._list_collector_answer_ids = {}
 
     def validate(self):
-        self._validate_schema_contain_metadata()
+        metadata_validator = MetadataValidator(
+            self.schema_element["metadata"], self.schema_element["theme"]
+        )
+        metadata_validator.validate()
+
+        self.errors += metadata_validator.errors
+
         self.validate_duplicates()
         self.validate_smart_quotes()
 
@@ -208,7 +215,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 if question.get("summary") and answer["type"] != "TextField":
                     self.add_error(
                         error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
-                        answer_id=answer["id"]
+                        answer_id=answer["id"],
                     )
 
                 self.errors += answer_validator.errors
@@ -330,46 +337,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self._validate_when_rule(variant.get("when", []), block["id"])
 
         self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
-
-    def _validate_schema_contain_metadata(self):
-        # user_id and period_id required downstream for receipting
-        # ru_name required for template rendering in default and NI theme
-        default_metadata = ["user_id", "period_id"]
-        schema_metadata = [
-            metadata_field["name"] for metadata_field in self.schema_element["metadata"]
-        ]
-
-        if len(schema_metadata) != len(set(schema_metadata)):
-            self.add_error("Mandatory Metadata - contains duplicates")
-
-        required_metadata_names = ["user_id", "period_id"]
-        for metadata_name in required_metadata_names:
-            if metadata_name not in schema_metadata:
-                self.add_error(
-                    "Mandatory Metadata - `{}` not specified in metadata field".format(
-                        metadata_name
-                    )
-                )
-
-        if self.schema_element["theme"] in ["default", "northernireland"]:
-            if "ru_name" not in schema_metadata:
-                self.add_error(error_messages.MISSING_METADATA, metadata="ru_name")
-            default_metadata.append("ru_name")
-
-        # Find all words that precede any of:
-        all_metadata = set(
-            re.findall(
-                r"((?<!collection_metadata\[\')(?<=metadata\[\')\w+"  # metadata[' not _metadata['
-                r"|(?<!collection_metadata\.)(?<=metadata\.)\w+"  # metadata. not _metadata.
-                r"|(?<=meta\': \')\w+)",
-                str(self.schema_element),
-            )
-        )  # meta': '
-
-        # Checks if piped/routed metadata is defined in the schema
-        for metadata in all_metadata:
-            if metadata not in schema_metadata:
-                self.add_error(error_messages.MISSING_METADATA, metadata=metadata)
 
     def validate_routing_rule_target(self, dict_list, goto_key, rule):
         if "goto" in rule and goto_key in rule["goto"].keys():

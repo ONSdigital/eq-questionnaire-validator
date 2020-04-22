@@ -75,7 +75,8 @@ NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES = (
     "The answers used as comparison id and answer id in the `when` clause have "
     "different types"
 )
-MISSING_METADATA = "Metadata not specified in metadata field"
+FOUND_MISSING_METADATA = "Metadata not specified in metadata field"
+FOUND_DUPLICATE_METADATA = "Metadata contains duplicates"
 CHECKBOX_MUST_USE_CORRECT_CONDITION = (
     "The condition cannot be used with `Checkbox` answer type"
 )

@@ -142,20 +142,6 @@ def test_invalid_numeric_answers():
     assert validator.errors == expected_errors
 
 
-def test_invalid_metadata():
-    filename = "schemas/invalid/test_invalid_metadata.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {"message": error_messages.MISSING_METADATA, "metadata": "ru_name"},
-        {"message": error_messages.MISSING_METADATA, "metadata": "invalid"},
-    ]
-
-    assert expected_errors == validator.errors
-
-
 def test_invalid_calculated_summary():
     """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
     filename = "schemas/invalid/test_invalid_calculated_summary.json"
