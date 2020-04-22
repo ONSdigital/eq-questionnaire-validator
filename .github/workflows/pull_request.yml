@@ -70,7 +70,7 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: pipenv install --dev
       - name: Running unit tests
-        run: pipenv run py.test
+        run: pipenv run ./scripts/run_tests_unit.sh
   docker-push:
       runs-on: ubuntu-latest
       steps:
