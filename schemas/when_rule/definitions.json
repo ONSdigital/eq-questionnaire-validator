@@ -24,10 +24,6 @@
     },
     "minItems": 1
   },
-  "section": {
-    "type": "string",
-    "enum": ["end"]
-  },
   "answer_identifier": {
     "type": "string",
     "description": "The id of an answer from which to obtain the value"

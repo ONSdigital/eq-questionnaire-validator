@@ -273,8 +273,8 @@
             },
             "section": {
               "type": "string",
-              "description": "Routes to the end of a section",
-              "enum": ["end"]
+              "description": "Routes to the end of the current section",
+              "enum": ["End"]
             },
             "when": {
               "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
