@@ -1,5 +1,7 @@
+import collections
 import re
 from collections import defaultdict
+from functools import lru_cache
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -348,7 +350,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         if "goto" in rule and goto_key in rule["goto"].keys():
             referenced_id = rule["goto"][goto_key]
 
-            if not self._is_contained_in_list(dict_list, referenced_id):
+            if not is_contained_in_list(dict_list, referenced_id):
                 invalid_block_error = "Routing rule routes to invalid {} [{}]".format(
                     goto_key, referenced_id
                 )
@@ -800,7 +802,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         non_block_ids = []
         all_ids = []
 
-        for path, value in self._parse_values(self.schema_element, "id"):
+        for path, value in self.questionnaire_schema.find_key(
+            self.schema_element, "id"
+        ):
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split("/")
@@ -815,23 +819,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         for block_ids in unique_ids_per_block.values():
             all_ids.extend(block_ids)
-
         all_ids.extend(non_block_ids)
 
-        duplicates = QuestionnaireValidator._find_duplicates(all_ids)
-
-        for duplicate in duplicates:
+        for duplicate in find_duplicates(all_ids):
             self.add_error("Duplicate id found", id=duplicate)
-
-    @staticmethod
-    def _find_duplicates(values):
-        """ Yield any elements in the input iterator which occur more than once
-        """
-        seen = set()
-        for item in values:
-            if item in seen:
-                yield item
-            seen.add(item)
 
     def validate_block_is_submission(self, last_block):
         """
@@ -899,12 +890,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             )
 
     def _validate_placeholders(self, block_json):
-        strings_with_placeholders = self._get_dicts_with_key(block_json, "placeholders")
+        strings_with_placeholders = get_dicts_with_key(block_json, "placeholders")
         for placeholder_object in strings_with_placeholders:
             self._validate_placeholder_object(placeholder_object, block_json["id"])
 
     def _validate_source_references(self, block_json, valid_metadata_ids):
-        source_references = self._get_dicts_with_key(block_json, "identifier")
+        source_references = get_dicts_with_key(block_json, "identifier")
         for source_reference in source_references:
             source = source_reference["source"]
             if isinstance(source_reference["identifier"], str):
@@ -1027,73 +1018,33 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         pointer=translatable_item.pointer,
                     )
 
-    @staticmethod
-    def _is_contained_in_list(dict_list, key_id):
-        for dict_to_check in dict_list:
-            if dict_to_check["id"] == key_id:
-                return True
 
-        return False
+def is_contained_in_list(dict_list, key_id):
+    for dict_to_check in dict_list:
+        if dict_to_check["id"] == key_id:
+            return True
+    return False
 
-    def _parse_values(self, schema_json, parsed_key, path=None):
-        """ generate a list of values with a key of `parsed_key`.
 
-        These values will be returned with the json pointer path to them through the object e.g.
-            - '/sections/0/groups/0/blocks/1/question_variants/0/question/question-2'
+def find_duplicates(values):
+    return [item for item, count in collections.Counter(values).items() if count > 1]
 
-        Returns: generator yielding (path, value) tuples
-        """
 
-        if path is None:
-            path = ""
-
-        ignored_keys = ["routing_rules", "skip_conditions", "when"]
-        ignored_sub_paths = [
-            "edit_block/question",
-            "add_block/question",
-            "remove_block/question",
-            "edit_block/question_variants",
-            "add_block/question_variants",
-            "remove_block/question_variants",
-        ]
-
-        for key, value in schema_json.items():
-            new_path = f"{path}/{key}"
-
-            if key == parsed_key:
-                yield path, value
-            elif key in ignored_keys:
-                continue
-            elif (
-                any([ignored_path in new_path for ignored_path in ignored_sub_paths])
-                and key == "answers"
-            ):
-                continue
-            elif isinstance(value, dict):
-                yield from self._parse_values(value, parsed_key, new_path)
-            elif isinstance(value, list):
-                for index, schema_item in enumerate(value):
-                    indexed_path = new_path + f"/{index}"
-                    if isinstance(schema_item, dict):
-                        yield from self._parse_values(
-                            schema_item, parsed_key, indexed_path
-                        )
-
-    def _get_dicts_with_key(self, input_data, key_name):
-        """
-        Get all dicts that contain `key_name`.
-        :param input_data: the input data to search
-        :param key_name: the key to find
-        :return: list of dicts containing the key name, otherwise returns None
-        """
-        if isinstance(input_data, dict):
-            for k, v in input_data.items():
-                if k == key_name:
-                    yield input_data
-                else:
-                    yield from self._get_dicts_with_key(v, key_name)
-        elif isinstance(input_data, list):
-            for item in input_data:
-                yield from self._get_dicts_with_key(item, key_name)
-        else:
-            yield from ()
+def get_dicts_with_key(input_data, key_name):
+    """
+    Get all dicts that contain `key_name`.
+    :param input_data: the input data to search
+    :param key_name: the key to find
+    :return: list of dicts containing the key name, otherwise returns None
+    """
+    if isinstance(input_data, dict):
+        for k, v in input_data.items():
+            if k == key_name:
+                yield input_data
+            else:
+                yield from get_dicts_with_key(v, key_name)
+    elif isinstance(input_data, list):
+        for item in input_data:
+            yield from get_dicts_with_key(item, key_name)
+    else:
+        yield from ()
