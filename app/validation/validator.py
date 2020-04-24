@@ -3,10 +3,8 @@ from abc import ABC
 
 class Validator(ABC):
     def __init__(self, schema_element=None):
-        if schema_element is None:
-            schema_element = {}
-        self.schema_element = schema_element
         self.errors = []
+        self.schema_element = {} if schema_element is None else schema_element
 
     def add_error(self, message, **context):
         if "id" in self.schema_element:
