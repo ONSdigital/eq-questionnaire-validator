@@ -1,5 +1,5 @@
 import collections
-import re
+
 from functools import cached_property
 
 from app.validation import error_messages
@@ -26,7 +26,7 @@ class MetadataValidator(Validator):
             if count > 1
         ]
 
-        if len(duplicates):
+        if len(duplicates) > 0:
             self.add_error(
                 error_messages.FOUND_DUPLICATE_METADATA, duplicates=duplicates
             )

@@ -38,7 +38,10 @@ def test_duplicate_metadata():
     validator.validate_duplicates()
 
     expected_errors = [
-        {"message": error_messages.FOUND_DUPLICATE_METADATA, "duplicates": ["period_id"]}
+        {
+            "message": error_messages.FOUND_DUPLICATE_METADATA,
+            "duplicates": ["period_id"],
+        }
     ]
 
     assert validator.errors == expected_errors
