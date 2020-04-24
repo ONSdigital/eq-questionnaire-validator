@@ -10,7 +10,9 @@ def test_validate_answer_value_in_when_rule_invalid():
     }
 
     validator = QuestionnaireValidator()
-    validator.answer_id_to_option_values_map = option_value_to_answer_id_map
+    validator.questionnaire_schema.answer_id_to_option_values_map = (
+        option_value_to_answer_id_map
+    )
 
     validator.validate_answer_value_in_when_rule(when_rule)
 
@@ -29,7 +31,9 @@ def test_validate_answer_value_in_when_rule_valid():
     }
 
     validator = QuestionnaireValidator()
-    validator.answer_id_to_option_values_map = option_value_to_answer_id_map
+    validator.questionnaire_schema.answer_id_to_option_values_map = (
+        option_value_to_answer_id_map
+    )
 
     validator.validate_answer_value_in_when_rule(when_rule)
 

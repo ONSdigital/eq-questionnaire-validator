@@ -1,6 +1,5 @@
 import re
 from collections import defaultdict
-from functools import cached_property
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -10,6 +9,7 @@ from app.validation.answers.date_answer_validator import DateAnswerValidator
 from app.validation.answers.number_answer_validator import NumberAnswerValidator
 from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
 from app.validation.metadata_validator import MetadataValidator
+from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questions.calculated_question_validator import (
     CalculatedQuestionValidator,
 )
@@ -49,6 +49,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
+        self.questionnaire_schema = QuestionnaireSchema(schema_element)
         self._list_collector_answer_ids = {}
 
     def validate(self):
@@ -198,7 +199,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
             for answer in question.get("answers", []):
                 answer_validator = get_answer_validator(
-                    answer, block_or_variant, self.list_names, self.block_ids
+                    answer,
+                    block_or_variant,
+                    self.questionnaire_schema.list_names,
+                    self.questionnaire_schema.block_ids,
                 )
 
                 answer_validator.validate()
@@ -221,13 +225,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 self.errors += answer_validator.errors
 
     def _validate_list_collector_driving_question(self, block, section):
-        if not self._has_single_list_collector(block["for_list"], section):
+        if not self.questionnaire_schema.has_single_list_collector(
+            block["for_list"], section
+        ):
             self.add_error(
                 f'ListCollectorDrivingQuestion `{block["id"]}` for list '
                 f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
             )
 
-        if not self.has_single_driving_question(block["for_list"]):
+        if not self.questionnaire_schema.has_single_driving_question(block["for_list"]):
             self.add_error(
                 error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
                 block_id=block["id"],
@@ -383,7 +389,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         if when_value:
             when_values.append(when_value)
 
-        option_values = self.answer_id_to_option_values_map.get(when_rule["id"])
+        option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
+            when_rule["id"]
+        )
         if not option_values:
             return []
 
@@ -405,13 +413,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self._validate_when_rule(when, block_or_group["id"])
 
     def _validate_list_answer_references(self, block):
-        main_block_questions = self._get_all_questions_for_block(block)
+        main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
+            block
+        )
         main_block_ids = {
             answer["id"]
             for question in main_block_questions
             for answer in question["answers"]
         }
-        remove_block_questions = self._get_all_questions_for_block(
+        remove_block_questions = self.questionnaire_schema.get_all_questions_for_block(
             block["remove_block"]
         )
         remove_block_ids = {
@@ -433,7 +443,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     def _validate_primary_person_list_answer_references(self, block):
 
-        main_block_questions = self._get_all_questions_for_block(block)
+        main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
+            block
+        )
         main_block_ids = {
             answer["id"]
             for question in main_block_questions
@@ -482,7 +494,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def validate_collector_questions(
         self, block, answer_value, missing_radio_error, missing_value_error
     ):
-        collector_questions = self._get_all_questions_for_block(block)
+        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
+            block
+        )
 
         for collector_question in collector_questions:
             for collector_answer in collector_question["answers"]:
@@ -501,8 +515,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
         list_name = block["for_list"]
 
-        add_block_questions = self._get_all_questions_for_block(block["add_block"])
-        edit_block_questions = self._get_all_questions_for_block(block["edit_block"])
+        add_block_questions = self.questionnaire_schema.get_all_questions_for_block(
+            block["add_block"]
+        )
+        edit_block_questions = self.questionnaire_schema.get_all_questions_for_block(
+            block["edit_block"]
+        )
 
         add_answer_ids = {
             answer["id"]
@@ -540,7 +558,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
         list_name = block["for_list"]
 
-        add_or_edit_block_questions = self._get_all_questions_for_block(
+        add_or_edit_block_questions = self.questionnaire_schema.get_all_questions_for_block(
             block["add_or_edit_block"]
         )
 
@@ -573,7 +591,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         try:
             answer_types = [
-                self.answers_with_parent_ids[answer_id]["answer"]["type"]
+                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+                    "type"
+                ]
                 for answer_id in answers_to_calculate
             ]
         except KeyError as e:
@@ -606,7 +626,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if answer_types[0] == "Unit":
             unit_types = [
-                self.answers_with_parent_ids[answer_id]["answer"]["unit"]
+                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+                    "unit"
+                ]
                 for answer_id in answers_to_calculate
             ]
             if not all(unit_type == unit_types[0] for unit_type in unit_types):
@@ -618,7 +640,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         if answer_types[0] == "Currency":
             currency_types = [
-                self.answers_with_parent_ids[answer_id]["answer"]["currency"]
+                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+                    "currency"
+                ]
                 for answer_id in answers_to_calculate
             ]
             if not all(
@@ -668,7 +692,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             ids_to_check.append(("comparison.id", when["comparison"]["id"]))
 
         for key, present_id in ids_to_check:
-            if present_id not in self.answers_with_parent_ids:
+            if present_id not in self.questionnaire_schema.answers_with_context:
                 self.add_error(
                     error_messages.NON_EXISTENT_WHEN_KEY,
                     answer_id=present_id,
@@ -692,21 +716,25 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         )
         all_checkbox_conditions = checkbox_exclusive_conditions + ("set", "not set")
         answer_type = (
-            self.answers_with_parent_ids[when["id"]]["answer"]["type"]
+            self.questionnaire_schema.answers_with_context[when["id"]]["answer"]["type"]
             if "id" in when
             else None
         )
 
         if answer_type == "Checkbox":
             if condition not in all_checkbox_conditions:
-                answer_id = self.answers_with_parent_ids[when["id"]]["answer"]["id"]
+                answer_id = self.questionnaire_schema.answers_with_context[when["id"]][
+                    "answer"
+                ]["id"]
                 self.add_error(
                     error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
                     condition=condition,
                     answer_id=answer_id,
                 )
         elif condition in checkbox_exclusive_conditions:
-            answer_id = self.answers_with_parent_ids[when["id"]]["answer"]["id"]
+            answer_id = self.questionnaire_schema.answers_with_context[when["id"]][
+                "answer"
+            ]["id"]
             self.add_error(
                 f"The condition `{condition}` can only be used with"
                 " `Checkbox` answer types. "
@@ -725,10 +753,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 when["comparison"]["id"],
                 when["condition"],
             )
-            comparison_answer_type = self.answers_with_parent_ids[comparison_id][
+            comparison_answer_type = self.questionnaire_schema.answers_with_context[
+                comparison_id
+            ]["answer"]["type"]
+            id_answer_type = self.questionnaire_schema.answers_with_context[answer_id][
                 "answer"
             ]["type"]
-            id_answer_type = self.answers_with_parent_ids[answer_id]["answer"]["type"]
             conditions_requiring_list_match_values = (
                 "equals any",
                 "not equals any",
@@ -757,7 +787,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         Validate that the list referenced in the when rule is defined in the schema
         """
         list_name = when["list"]
-        if list_name not in self.list_names:
+        if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
@@ -811,15 +841,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         """
         is_last_block_valid = last_block["type"] in {"Summary", "Confirmation"}
 
-        if is_last_block_valid and self.is_hub_enabled:
+        if is_last_block_valid and self.questionnaire_schema.is_hub_enabled:
             self.add_error(error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE)
 
-        if not is_last_block_valid and not self.is_hub_enabled:
+        if not is_last_block_valid and not self.questionnaire_schema.is_hub_enabled:
             self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)
-
-    @cached_property
-    def is_hub_enabled(self):
-        return self.schema_element.get("hub", {}).get("enabled")
 
     def _validate_referred_numeric_answer(self, answer, answer_ranges):
         """
@@ -836,25 +862,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 answer["maximum"]["value"]["identifier"], answer["id"]
             )
             self.add_error(error_message)
-
-    def _get_dicts_with_key(self, input_data, key_name):
-        """
-        Get all dicts that contain `key_name`.
-        :param input_data: the input data to search
-        :param key_name: the key to find
-        :return: list of dicts containing the key name, otherwise returns None
-        """
-        if isinstance(input_data, dict):
-            for k, v in input_data.items():
-                if k == key_name:
-                    yield input_data
-                else:
-                    yield from self._get_dicts_with_key(v, key_name)
-        elif isinstance(input_data, list):
-            for item in input_data:
-                yield from self._get_dicts_with_key(item, key_name)
-        else:
-            yield from ()
 
     def _validate_placeholder_object(self, placeholder_object, current_block_id):
         """ Current block id may be None if called outside of a block
@@ -918,13 +925,16 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     def _validate_answer_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
-            if identifier not in self.answers_with_parent_ids:
+            if identifier not in self.questionnaire_schema.answers_with_context:
                 self.add_error(
                     error_messages.ANSWER_REFERENCE_INVALID,
                     referenced_id=identifier,
                     block_id=current_block_id,
                 )
-            elif self.answers_with_parent_ids[identifier]["block"] == current_block_id:
+            elif (
+                self.questionnaire_schema.answers_with_context[identifier]["block"]
+                == current_block_id
+            ):
                 self.add_error(
                     error_messages.ANSWER_SELF_REFERENCE,
                     referenced_id=identifier,
@@ -944,7 +954,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     def _validate_list_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
-            if identifier not in self.list_names:
+            if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(
                     error_messages.LIST_REFERENCE_INVALID,
                     id=identifier,
@@ -952,7 +962,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 )
 
     def _validate_list_exists(self, list_name):
-        if list_name not in self.list_names:
+        if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def _validate_relationship_collector_answers(self, answers):
@@ -1069,152 +1079,21 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                             schema_item, parsed_key, indexed_path
                         )
 
-    @staticmethod
-    def _has_single_list_collector(list_name, section):
-        return (
-            len(
-                [
-                    block
-                    for block in QuestionnaireValidator.get_blocks_for_section(section)
-                    if block["type"] == "ListCollector"
-                    and list_name == block["for_list"]
-                ]
-            )
-            == 1
-        )
-
-    def has_single_driving_question(self, list_name):
-        return len(self.get_driving_questions(list_name)) == 1
-
-    def get_driving_questions(self, list_name):
-        driving_blocks = []
-
-        for section in self.schema_element.get("sections"):
-            driving_blocks.extend(
-                [
-                    block
-                    for block in QuestionnaireValidator.get_blocks_for_section(section)
-                    if block["type"] == "ListCollectorDrivingQuestion"
-                    and block["for_list"] == list_name
-                ]
-            )
-
-        return driving_blocks
-
-    @staticmethod
-    def get_blocks_for_section(section):
-        return [block for group in section["groups"] for block in group["blocks"]]
-
-    @cached_property
-    def answers_with_parent_ids(self):
-        answers = {}
-        for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                answers[answer["id"]] = {"answer": answer, **context}
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer:
-                        answers[detail_answer["id"]] = {
-                            "answer": detail_answer,
-                            **context,
-                        }
-
-        return answers
-
-    @classmethod
-    def _get_sub_block_context(cls, section, group, block):
-        for sub_block_type in (
-            "add_block",
-            "edit_block",
-            "remove_block",
-            "add_or_edit_block",
-        ):
-            sub_block = block.get(sub_block_type)
-            if sub_block:
-                for question in cls._get_all_questions_for_block(sub_block):
-                    context = {
-                        "block": sub_block["id"],
-                        "group_id": group["id"],
-                        "section": section["id"],
-                    }
-                    yield question, context
-
-    @staticmethod
-    def _get_all_questions_for_block(block):
-        """ Get all questions on a block including variants"""
-        questions = []
-
-        for variant in block.get("question_variants", []):
-            questions.append(variant["question"])
-
-        single_question = block.get("question")
-        if single_question:
-            questions.append(single_question)
-
-        return questions
-
-    @cached_property
-    def answer_id_to_option_values_map(self):
-        answer_id_to_option_values_map = defaultdict(set)
-
-        for answer in self.answers:
-            if "options" not in answer:
-                continue
-
-            answer_id = answer["id"]
-            option_values = [option["value"] for option in answer["options"]]
-
-            answer_id_to_option_values_map[answer_id].update(option_values)
-
-        return answer_id_to_option_values_map
-
-    @cached_property
-    def answers(self):
-        for question, _ in self.questions_with_context:
-            for answer in question["answers"]:
-                yield answer
-
-    @cached_property
-    def questions_with_context(self):
-        for section in self.schema_element.get("sections"):
-            for group in section.get("groups"):
-                for block in group.get("blocks"):
-                    for question in self._get_all_questions_for_block(block):
-                        context = {
-                            "block": block["id"],
-                            "group_id": group["id"],
-                            "section": section["id"],
-                        }
-                        yield question, context
-
-                        for sub_block, context in self._get_sub_block_context(
-                            section, group, block
-                        ):
-                            yield sub_block, context
-
-    @cached_property
-    def list_names(self):
-        list_names = []
-        for section in self.schema_element["sections"]:
-            for group in section["groups"]:
-                for block in group["blocks"]:
-                    if block["type"] == "ListCollector":
-                        list_names.append(block["for_list"])
-        return list_names
-
-    @cached_property
-    def block_ids(self):
-        block_ids = []
-        for section in self.schema_element["sections"]:
-            for block in self.get_blocks_for_section(section):
-                block_ids.append(block["id"])
-                for sub_block in {
-                    "add_block",
-                    "edit_block",
-                    "remove_block",
-                    "add_or_edit_block",
-                }:
-                    if sub_block in block:
-                        block_ids.append(block[sub_block]["id"])
-
-        return block_ids
+    def _get_dicts_with_key(self, input_data, key_name):
+        """
+        Get all dicts that contain `key_name`.
+        :param input_data: the input data to search
+        :param key_name: the key to find
+        :return: list of dicts containing the key name, otherwise returns None
+        """
+        if isinstance(input_data, dict):
+            for k, v in input_data.items():
+                if k == key_name:
+                    yield input_data
+                else:
+                    yield from self._get_dicts_with_key(v, key_name)
+        elif isinstance(input_data, list):
+            for item in input_data:
+                yield from self._get_dicts_with_key(item, key_name)
+        else:
+            yield from ()
