@@ -1,7 +1,6 @@
 import collections
 import re
 from collections import defaultdict
-from functools import lru_cache
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -171,7 +170,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         block["question"]["answers"]
                     )
             elif block["type"] == "ListCollectorDrivingQuestion":
-                self._validate_list_collector_driving_question(block, section)
+                self._validate_list_collector_driving_question(block, section["id"])
 
             self._validate_questions(block, numeric_answer_ranges)
 
@@ -226,9 +225,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
                 self.errors += answer_validator.errors
 
-    def _validate_list_collector_driving_question(self, block, section):
+    def _validate_list_collector_driving_question(self, block, section_id):
         if not self.questionnaire_schema.has_single_list_collector(
-            block["for_list"], section
+            block["for_list"], section_id
         ):
             self.add_error(
                 f'ListCollectorDrivingQuestion `{block["id"]}` for list '

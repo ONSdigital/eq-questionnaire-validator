@@ -1,47 +1,37 @@
 from collections import defaultdict
 from functools import cached_property, lru_cache
+import jsonpath_rw_ext as jp
 
 
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
 
-    def has_single_list_collector(self, list_name, section):
-        return (
-            len(
-                [
-                    True
-                    for block in self.get_blocks_for_section(section)
-                    if block["type"] == "ListCollector"
-                    and list_name == block["for_list"]
-                ]
-            )
-            == 1
+        self.section_ids = jp.match("$.sections[*].id", self.schema)
+        self.block_ids = jp.match("$..blocks[*].id", self.schema)
+        self.block_ids += jp.match(
+            "$..[add_block, edit_block, add_or_edit_block, remove_block].id",
+            self.schema,
+        )
+        self.list_names = jp.match('$..blocks[?(@.type=="ListCollector")].for_list', self.schema)
+
+    @lru_cache
+    def has_single_list_collector(self, list_name, section_id):
+        return len(jp.match(
+            f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
+            self.schema,
+        )) == 1
+
+    @lru_cache
+    def get_driving_question_blocks(self, list_name):
+        return jp.match(
+            f'$..blocks[?(@.type=="ListCollectorDrivingQuestion" & @.for_list=="{list_name}")]',
+            self.schema,
         )
 
     @lru_cache
     def has_single_driving_question(self, list_name):
-        return len(self.get_driving_questions(list_name)) == 1
-
-    @lru_cache
-    def get_driving_questions(self, list_name):
-        driving_blocks = []
-
-        for section in self.schema.get("sections"):
-            driving_blocks.extend(
-                [
-                    block
-                    for block in self.get_blocks_for_section(section)
-                    if block["type"] == "ListCollectorDrivingQuestion"
-                    and block["for_list"] == list_name
-                ]
-            )
-
-        return driving_blocks
-
-    @staticmethod
-    def get_blocks_for_section(section):
-        return [block for group in section["groups"] for block in group["blocks"]]
+        return len(self.get_driving_question_blocks(list_name)) == 1
 
     @cached_property
     def answers_with_context(self):
@@ -129,32 +119,6 @@ class QuestionnaireSchema:
                             section, group, block
                         ):
                             yield sub_block, context
-
-    @cached_property
-    def list_names(self):
-        list_names = []
-        for section in self.schema["sections"]:
-            for block in self.get_blocks_for_section(section):
-                if block["type"] == "ListCollector":
-                    list_names.append(block["for_list"])
-        return list_names
-
-    @cached_property
-    def block_ids(self):
-        block_ids = []
-        for section in self.schema["sections"]:
-            for block in self.get_blocks_for_section(section):
-                block_ids.append(block["id"])
-                for sub_block in {
-                    "add_block",
-                    "edit_block",
-                    "remove_block",
-                    "add_or_edit_block",
-                }:
-                    if sub_block in block:
-                        block_ids.append(block[sub_block]["id"])
-
-        return block_ids
 
     @cached_property
     def is_hub_enabled(self):
