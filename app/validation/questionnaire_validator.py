@@ -203,7 +203,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     answer,
                     block_or_variant,
                     self.questionnaire_schema.list_names,
-                    self.questionnaire_schema.block_ids,
+                    self.questionnaire_schema.block_ids
+                    + self.questionnaire_schema.sub_block_ids,
                 )
 
                 answer_validator.validate()

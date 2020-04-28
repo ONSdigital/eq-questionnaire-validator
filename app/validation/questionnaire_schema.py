@@ -1,26 +1,38 @@
 from collections import defaultdict
 from functools import cached_property, lru_cache
 import jsonpath_rw_ext as jp
+from jsonpath_rw import parse
 
 
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
 
+        self.blocks = jp.match("$..blocks[*]", self.schema)
+        self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.section_ids = jp.match("$.sections[*].id", self.schema)
-        self.block_ids = jp.match("$..blocks[*].id", self.schema)
-        self.block_ids += jp.match(
+        self.group_ids = jp.match("$..groups[*].id", self.schema)
+        self.block_ids = [block["id"] for block in self.blocks]
+
+        self.sub_block_ids = jp.match(
             "$..[add_block, edit_block, add_or_edit_block, remove_block].id",
             self.schema,
         )
-        self.list_names = jp.match('$..blocks[?(@.type=="ListCollector")].for_list', self.schema)
+        self.list_names = jp.match(
+            '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
+        )
 
     @lru_cache
     def has_single_list_collector(self, list_name, section_id):
-        return len(jp.match(
-            f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
-            self.schema,
-        )) == 1
+        return (
+            len(
+                jp.match(
+                    f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
+                    self.schema,
+                )
+            )
+            == 1
+        )
 
     @lru_cache
     def get_driving_question_blocks(self, list_name):
@@ -48,24 +60,6 @@ class QuestionnaireSchema:
                         }
 
         return answers
-
-    @classmethod
-    def _get_sub_block_context(cls, section, group, block):
-        for sub_block_type in (
-            "add_block",
-            "edit_block",
-            "remove_block",
-            "add_or_edit_block",
-        ):
-            sub_block = block.get(sub_block_type)
-            if sub_block:
-                for question in cls.get_all_questions_for_block(sub_block):
-                    context = {
-                        "block": sub_block["id"],
-                        "group_id": group["id"],
-                        "section": section["id"],
-                    }
-                    yield question, context
 
     @staticmethod
     def get_all_questions_for_block(block):
@@ -102,23 +96,51 @@ class QuestionnaireSchema:
             for answer in question["answers"]:
                 yield answer
 
+    @staticmethod
+    def get_key_index_from_path(key, path):
+        position = path.find(key) + len(key + ".[")
+        return int(path[position : position + 1])
+
+    @staticmethod
+    def get_element_path(key, path):
+        position = path.find(key)
+        return path[: position + len(key + ".[0]")]
+
+    @lru_cache
+    def get_context_from_path(self, full_path):
+        section_index = self.get_key_index_from_path("sections", full_path)
+
+        block_path = self.get_element_path("blocks", full_path)
+        group_path = self.get_element_path("groups", full_path)
+
+        group_id = jp.match1(group_path + ".id", self.schema)
+        block_id = jp.match1(block_path + ".id", self.schema)
+
+        if any(
+            sub_block in full_path
+            for sub_block in [
+                "add_block",
+                "edit_block",
+                "add_or_edit_block",
+                "remove_block",
+            ]
+        ):
+            key_path = full_path[len(block_path) + 1 :]
+            key = key_path[: key_path.find(".question")]
+            block_id = self.blocks_by_id[block_id][key]["id"]
+
+        return {
+            "section": self.section_ids[section_index],
+            "block": block_id,
+            "group_id": group_id,
+        }
+
     @cached_property
     def questions_with_context(self):
-        for section in self.schema.get("sections"):
-            for group in section.get("groups"):
-                for block in group.get("blocks"):
-                    for question in self.get_all_questions_for_block(block):
-                        context = {
-                            "block": block["id"],
-                            "group_id": group["id"],
-                            "section": section["id"],
-                        }
-                        yield question, context
-
-                        for sub_block, context in self._get_sub_block_context(
-                            section, group, block
-                        ):
-                            yield sub_block, context
+        return [
+            (match.value, self.get_context_from_path(str(match.full_path)))
+            for match in parse("$..question").find(self.schema)
+        ]
 
     @cached_property
     def is_hub_enabled(self):
