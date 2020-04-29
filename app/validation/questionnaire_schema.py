@@ -137,53 +137,61 @@ class QuestionnaireSchema:
 
     @cached_property
     def questions_with_context(self):
-        return [
-            (match.value, self.get_context_from_path(str(match.full_path)))
-            for match in parse("$..question").find(self.schema)
-        ]
+        for match in parse("$..question").find(self.schema):
+            yield match.value, self.get_context_from_path(str(match.full_path))
 
     @cached_property
     def is_hub_enabled(self):
         return self.schema.get("hub", {}).get("enabled")
 
-    def find_key(self, schema_json, key_to_find, path=None):
-        """ generate a list of values with a key of `key_to_find`.
+    def get_ids(self):
+        """
+        question_id & answer_id should be globally unique with some exceptions:
+            - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
+            - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
+        """
+        unique_ids_per_block = defaultdict(set)
+        non_block_ids = []
+        all_ids = []
 
-        These values will be returned with the json pointer path to them through the object e.g.
-            - '/sections/0/groups/0/blocks/1/question_variants/0/question/question-2'
+        for path, value in self.find_ids():
+            if "blocks" in path:
+                # Generate a string path and add it to the set representing the ids in that path
+                path_list = path.split(".")
+
+                block_path = path_list[: path_list.index("blocks") + 2]
+
+                string_path = ".".join(block_path)
+                # Since unique_ids_per_block is a set, duplicate ids will only be recorded once within the block.
+                unique_ids_per_block[string_path].add(value)
+            else:
+                non_block_ids.append(value)
+
+        for block_ids in unique_ids_per_block.values():
+            all_ids.extend(block_ids)
+        all_ids.extend(non_block_ids)
+
+        return all_ids
+
+    def find_ids(self):
+        """
+        These values will be returned with the json path to them through the object e.g.
+            - 'sections.[0].groups[0].blocks[1].question_variants[0].question.question-2'
 
         Returns: generator yielding (path, value) tuples
         """
-
-        if path is None:
-            path = ""
-
-        ignored_keys = ["routing_rules", "skip_conditions", "when"]
-        ignored_sub_paths = [
-            "edit_block/question",
-            "add_block/question",
-            "remove_block/question",
-            "edit_block/question_variants",
-            "add_block/question_variants",
-            "remove_block/question_variants",
+        ignored_paths = [
+            "routing_rules" "skip_conditions",
+            "when",
+            "edit_block.question.answers",
+            "add_block.question.answers",
+            "remove_block.question.answers",
+            "edit_block.question_variants.answers",
+            "add_block.question_variants.answers",
+            "remove_block.question_variants.answers",
         ]
 
-        for key, value in schema_json.items():
-            new_path = f"{path}/{key}"
-
-            if key == key_to_find:
-                yield path, value
-            elif key in ignored_keys:
-                continue
-            elif (
-                any([ignored_path in new_path for ignored_path in ignored_sub_paths])
-                and key == "answers"
-            ):
-                continue
-            elif isinstance(value, dict):
-                yield from self.find_key(value, key_to_find, new_path)
-            elif isinstance(value, list):
-                for index, schema_item in enumerate(value):
-                    indexed_path = new_path + f"/{index}"
-                    if isinstance(schema_item, dict):
-                        yield from self.find_key(schema_item, key_to_find, indexed_path)
+        for match in parse("$..id").find(self.schema):
+            full_path = str(match.full_path)
+            if not any(ignored_path in full_path for ignored_path in ignored_paths):
+                yield str(match.full_path)[:-3], match.value

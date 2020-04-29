@@ -793,35 +793,8 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
-        """
-        question_id & answer_id should be globally unique with some exceptions:
-            - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
-            - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
-        """
-        unique_ids_per_block = defaultdict(set)
-        non_block_ids = []
-        all_ids = []
 
-        for path, value in self.questionnaire_schema.find_key(
-            self.schema_element, "id"
-        ):
-            if "blocks" in path:
-                # Generate a string path and add it to the set representing the ids in that path
-                path_list = path.split("/")
-
-                block_path = path_list[: path_list.index("blocks") + 2]
-
-                string_path = "/".join(block_path)
-                # Since unique_ids_per_block is a set, duplicate ids will only be recorded once within the block.
-                unique_ids_per_block[string_path].add(value)
-            else:
-                non_block_ids.append(value)
-
-        for block_ids in unique_ids_per_block.values():
-            all_ids.extend(block_ids)
-        all_ids.extend(non_block_ids)
-
-        for duplicate in find_duplicates(all_ids):
+        for duplicate in find_duplicates(self.questionnaire_schema.get_ids()):
             self.add_error("Duplicate id found", id=duplicate)
 
     def validate_block_is_submission(self, last_block):

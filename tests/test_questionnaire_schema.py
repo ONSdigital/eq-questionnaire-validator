@@ -30,7 +30,7 @@ def test_questions_with_context():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert questionnaire_schema.questions_with_context == [
+    assert list(questionnaire_schema.questions_with_context) == [
         (
             {
                 "id": "question-1",
@@ -114,4 +114,57 @@ def test_get_sub_block_context():
             "remove-question",
             {"group_id": "group", "section": "section", "block": "remove-person"},
         ),
+    ]
+
+
+def test_find_key():
+    filename = "schemas/valid/test_list_collector.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    found_pointers = list(questionnaire_schema.find_ids())
+
+    assert found_pointers == [
+        ("sections.[0]", "section"),
+        ("sections.[0].groups.[0]", "group"),
+        ("sections.[0].groups.[0].blocks.[0]", "list-collector"),
+        ("sections.[0].groups.[0].blocks.[0].add_answer", "anyone-else"),
+        ("sections.[0].groups.[0].blocks.[0].remove_answer", "remove-confirmation"),
+        ("sections.[0].groups.[0].blocks.[0].question", "confirmation-question"),
+        ("sections.[0].groups.[0].blocks.[0].question.answers.[0]", "anyone-else"),
+        ("sections.[0].groups.[0].blocks.[0].add_block", "add-person"),
+        ("sections.[0].groups.[0].blocks.[0].add_block.question", "add-question"),
+        ("sections.[0].groups.[0].blocks.[0].edit_block", "edit-person"),
+        ("sections.[0].groups.[0].blocks.[0].edit_block.question", "edit-question"),
+        ("sections.[0].groups.[0].blocks.[0].remove_block", "remove-person"),
+        ("sections.[0].groups.[0].blocks.[0].remove_block.question", "remove-question"),
+        ("sections.[0].groups.[0].blocks.[1]", "another-list-collector"),
+        ("sections.[0].groups.[0].blocks.[1].add_answer", "another-anyone-else"),
+        (
+            "sections.[0].groups.[0].blocks.[1].remove_answer",
+            "another-remove-confirmation",
+        ),
+        (
+            "sections.[0].groups.[0].blocks.[1].question",
+            "another-confirmation-question",
+        ),
+        (
+            "sections.[0].groups.[0].blocks.[1].question.answers.[0]",
+            "another-anyone-else",
+        ),
+        ("sections.[0].groups.[0].blocks.[1].add_block", "another-add-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].add_block.question",
+            "another-add-question",
+        ),
+        ("sections.[0].groups.[0].blocks.[1].edit_block", "another-edit-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].edit_block.question",
+            "another-edit-question",
+        ),
+        ("sections.[0].groups.[0].blocks.[1].remove_block", "another-remove-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].remove_block.question",
+            "another-remove-question",
+        ),
+        ("sections.[0].groups.[0].blocks.[2]", "summary"),
     ]
