@@ -204,7 +204,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self.errors += question_validator.errors
 
             for answer in question.get("answers", []):
-                self._validate_routing_on_answer_options(routing_rules, answer)
+                if routing_rules:
+                    default_route = self.has_default_route(routing_rules)
+                    self.validate_default_route(answer, default_route)
+                    self._validate_routing_on_answer_options(answer, routing_rules)
 
                 answer_validator = get_answer_validator(
                     answer,
@@ -240,25 +243,31 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def get_routing_when_list(self, routing_rules):
         when_list = []
         for rule in routing_rules:
-            when_clause = rule.get("goto", {}).get("when", {})
+            when_clause = rule.get("goto", {})
             when_list.append(when_clause)
         return when_list
 
-    def _validate_routing_on_answer_options(self, routing_rules, answer):
-        routing_errors = []
+    def validate_default_route(self, answer, has_default_route):
+        if answer["mandatory"] and not has_default_route:
+            default_route_not_defined = "Default route not defined for optional question [{}]".format(
+                answer["id"]
+            )
+            self.errors.append(default_route_not_defined)
+
+    def _validate_routing_on_answer_options(self, answer, routing_rules):
         answer_options = answer.get("options", [])
         option_values = [option["value"] for option in answer_options]
         routing_when_list = self.get_routing_when_list(routing_rules)
 
         if routing_rules and answer_options:
             for when_clause in routing_when_list:
-                for when in when_clause:
-                    if when:
-                        if (
-                            when.get("id", "") == answer["id"]
-                            and when.get("value", "") in option_values
-                        ):
-                            option_values.remove(when["value"])
+                for when in when_clause.get("when", []):
+                    if (
+                        when
+                        and when.get("id", "") == answer["id"]
+                        and when.get("value", "") in option_values
+                    ):
+                        option_values.remove(when["value"])
                     else:
                         option_values = []
 
@@ -266,24 +275,12 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 answer_options
             )
 
-            if answer["mandatory"] is False and not self.has_default_route(
-                routing_rules
-            ):
-                default_route_not_defined = "Default route not defined for optional question [{}]".format(
-                    answer["id"]
+            if has_unrouted_options and not self.has_default_route(routing_rules):
+                self.errors.append(
+                    "Routing rule not defined for answer [{}] missing options {}".format(
+                        answer["id"], option_values
+                    )
                 )
-                routing_errors.append(default_route_not_defined)
-
-            if has_unrouted_options:
-                unrouted_error_template = (
-                    "Routing rule not defined for all answers or default not defined "
-                    "for answer [{}] missing options {}"
-                )
-                unrouted_error = unrouted_error_template.format(
-                    answer["id"], option_values
-                )
-                routing_errors.append(unrouted_error)
-        return routing_errors
 
     def _validate_list_collector_driving_question(self, block, section_id):
         if not self.questionnaire_schema.has_single_list_collector(
