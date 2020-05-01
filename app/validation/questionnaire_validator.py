@@ -794,7 +794,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     def validate_duplicates(self):
 
-        for duplicate in find_duplicates(self.questionnaire_schema.get_ids()):
+        for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error("Duplicate id found", id=duplicate)
 
     def validate_block_is_submission(self, last_block):

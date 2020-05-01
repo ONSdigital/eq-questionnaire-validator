@@ -121,9 +121,9 @@ def test_find_key():
     filename = "schemas/valid/test_list_collector.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    found_pointers = list(questionnaire_schema.find_ids())
+    found_paths = list(questionnaire_schema.id_paths())
 
-    assert found_pointers == [
+    assert found_paths == [
         ("sections.[0]", "section"),
         ("sections.[0].groups.[0]", "group"),
         ("sections.[0].groups.[0].blocks.[0]", "list-collector"),

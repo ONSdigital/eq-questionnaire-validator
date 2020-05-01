@@ -144,7 +144,8 @@ class QuestionnaireSchema:
     def is_hub_enabled(self):
         return self.schema.get("hub", {}).get("enabled")
 
-    def get_ids(self):
+    @cached_property
+    def ids(self):
         """
         question_id & answer_id should be globally unique with some exceptions:
             - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
@@ -154,7 +155,7 @@ class QuestionnaireSchema:
         non_block_ids = []
         all_ids = []
 
-        for path, value in self.find_ids():
+        for path, value in self.id_paths:
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split(".")
@@ -173,7 +174,8 @@ class QuestionnaireSchema:
 
         return all_ids
 
-    def find_ids(self):
+    @cached_property
+    def id_paths(self):
         """
         These values will be returned with the json path to them through the object e.g.
             - 'sections.[0].groups[0].blocks[1].question_variants[0].question.question-2'
