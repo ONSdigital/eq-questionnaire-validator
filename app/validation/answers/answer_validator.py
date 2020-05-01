@@ -9,10 +9,9 @@ class AnswerValidator(Validator):
     MIN_NUMBER = -999999999
     MAX_DECIMAL_PLACES = 6
 
-    def __init__(self, schema_element, block=None, list_names=None, block_ids=None):
+    def __init__(self, schema_element, list_names=None, block_ids=None):
         super().__init__(schema_element)
         self.answer = schema_element
-        self.block = block
         self.list_names = list_names
         self.block_ids = block_ids
 
@@ -20,12 +19,14 @@ class AnswerValidator(Validator):
     def options(self):
         return self.answer.get("options", [])
 
+    @cached_property
+    def option_values(self):
+        return [option["value"] for option in self.options]
+
     def validate(self):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self._validate_answer_actions()
-
-        self._validate_routing_on_answer_options()
 
         if not self.are_decimal_places_valid():
             self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
@@ -93,57 +94,6 @@ class AnswerValidator(Validator):
 
             if block_id and block_id not in self.block_ids:
                 self.add_error(error_messages.BLOCK_ID_MISSING, block_id=block_id)
-
-    def has_default_route(self):
-        for rule in self.block["routing_rules"]:
-            if "goto" not in rule or "when" not in rule["goto"].keys():
-                return True
-        return False
-
-    def _validate_routing_on_answer_options(self):
-        answer_errors = []
-        if (
-            self.block
-            and "routing_rules" in self.block
-            and self.block["routing_rules"]
-            and self.options
-        ):
-            option_values = [option["value"] for option in self.options]
-
-            for rule in self.block["routing_rules"]:
-                if "goto" in rule and "when" in rule["goto"].keys():
-                    when_clause = rule["goto"]["when"]
-                    for when in when_clause:
-                        if (
-                            "id" in when
-                            and "value" in when
-                            and when["id"] == self.answer["id"]
-                            and when["value"] in option_values
-                        ):
-                            option_values.remove(when["value"])
-                else:
-                    option_values = []
-
-            has_unrouted_options = option_values and len(option_values) != len(
-                self.options
-            )
-
-            if self.answer["mandatory"] is False and not self.has_default_route():
-                default_route_not_defined = "Default route not defined for optional question [{}]".format(
-                    self.answer["id"]
-                )
-                answer_errors.append(default_route_not_defined)
-
-            if has_unrouted_options:
-                unrouted_error_template = (
-                    "Routing rule not defined for all answers or default not defined "
-                    "for answer [{}] missing options {}"
-                )
-                unrouted_error = unrouted_error_template.format(
-                    self.answer["id"], option_values
-                )
-                answer_errors.append(unrouted_error)
-        return answer_errors
 
     def validate_numeric_answer_types(self, answer_ranges):
         """

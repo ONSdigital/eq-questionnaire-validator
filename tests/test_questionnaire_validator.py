@@ -390,7 +390,7 @@ def test_duplicate_answer_ids():
     filename = "schemas/invalid/test_invalid_duplicate_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
+    validator.validate_duplicates()
 
     expected_errors = [
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-1"},

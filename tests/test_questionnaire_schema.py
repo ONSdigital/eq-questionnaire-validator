@@ -117,11 +117,11 @@ def test_get_sub_block_context():
     ]
 
 
-def test_find_key():
+def test_id_paths():
     filename = "schemas/valid/test_list_collector.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    found_paths = list(questionnaire_schema.id_paths())
+    found_paths = list(questionnaire_schema.id_paths)
 
     assert found_paths == [
         ("sections.[0]", "section"),

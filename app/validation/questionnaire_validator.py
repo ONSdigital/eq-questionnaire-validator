@@ -1,6 +1,7 @@
 import collections
 import re
 from collections import defaultdict
+from functools import cached_property, lru_cache
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -33,7 +34,7 @@ def get_question_validator(question):
     return validators.get(question["type"], QuestionValidator)(question)
 
 
-def get_answer_validator(answer, block_or_variant, list_names, block_ids):
+def get_answer_validator(answer, list_names, block_ids):
     validators = {
         "TextField": TextFieldAnswerValidator,
         "Date": DateAnswerValidator,
@@ -42,7 +43,7 @@ def get_answer_validator(answer, block_or_variant, list_names, block_ids):
         "Percentage": NumberAnswerValidator,
     }
     return validators.get(answer["type"], AnswerValidator)(
-        answer, block_or_variant, list_names, block_ids
+        answer, list_names, block_ids
     )
 
 
@@ -180,14 +181,18 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     m["name"] for m in self.schema_element["metadata"]
                 ]
 
-            self._validate_source_references(block, valid_metadata_ids)
+            source_references = get_dicts_with_key(block, "identifier")
 
+            self._validate_source_references(
+                source_references, valid_metadata_ids, block["id"]
+            )
             self._validate_placeholders(block)
             self._validate_variants(block, numeric_answer_ranges)
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
+        routing_rules = block_or_variant.get("routing_rules", {})
 
         if question:
             questions.append(question)
@@ -199,9 +204,10 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self.errors += question_validator.errors
 
             for answer in question.get("answers", []):
+                self._validate_routing_on_answer_options(routing_rules, answer)
+
                 answer_validator = get_answer_validator(
                     answer,
-                    block_or_variant,
                     self.questionnaire_schema.list_names,
                     self.questionnaire_schema.block_ids
                     + self.questionnaire_schema.sub_block_ids,
@@ -223,8 +229,61 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
                         answer_id=answer["id"],
                     )
-
                 self.errors += answer_validator.errors
+
+    def has_default_route(self, routing_rules):
+        for rule in routing_rules:
+            if "goto" not in rule or "when" not in rule["goto"].keys():
+                return True
+        return False
+
+    def get_routing_when_list(self, routing_rules):
+        when_list = []
+        for rule in routing_rules:
+            when_clause = rule.get("goto", {}).get("when", {})
+            when_list.append(when_clause)
+        return when_list
+
+    def _validate_routing_on_answer_options(self, routing_rules, answer):
+        routing_errors = []
+        answer_options = answer.get("options", [])
+        option_values = [option["value"] for option in answer_options]
+        routing_when_list = self.get_routing_when_list(routing_rules)
+
+        if routing_rules and answer_options:
+            for when_clause in routing_when_list:
+                for when in when_clause:
+                    if when:
+                        if (
+                            when.get("id", "") == answer["id"]
+                            and when.get("value", "") in option_values
+                        ):
+                            option_values.remove(when["value"])
+                    else:
+                        option_values = []
+
+            has_unrouted_options = option_values and len(option_values) != len(
+                answer_options
+            )
+
+            if answer["mandatory"] is False and not self.has_default_route(
+                routing_rules
+            ):
+                default_route_not_defined = "Default route not defined for optional question [{}]".format(
+                    answer["id"]
+                )
+                routing_errors.append(default_route_not_defined)
+
+            if has_unrouted_options:
+                unrouted_error_template = (
+                    "Routing rule not defined for all answers or default not defined "
+                    "for answer [{}] missing options {}"
+                )
+                unrouted_error = unrouted_error_template.format(
+                    answer["id"], option_values
+                )
+                routing_errors.append(unrouted_error)
+        return routing_errors
 
     def _validate_list_collector_driving_question(self, block, section_id):
         if not self.questionnaire_schema.has_single_list_collector(
@@ -793,7 +852,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
-
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error("Duplicate id found", id=duplicate)
 
@@ -867,8 +925,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for placeholder_object in strings_with_placeholders:
             self._validate_placeholder_object(placeholder_object, block_json["id"])
 
-    def _validate_source_references(self, block_json, valid_metadata_ids):
-        source_references = get_dicts_with_key(block_json, "identifier")
+    def _validate_source_references(
+        self, source_references, valid_metadata_ids, block_id
+    ):
         for source_reference in source_references:
             source = source_reference["source"]
             if isinstance(source_reference["identifier"], str):
@@ -877,15 +936,15 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                self._validate_answer_source_reference(identifiers, block_json["id"])
+                self._validate_answer_source_reference(identifiers, block_id)
 
             elif source == "metadata":
                 self._validate_metadata_source_reference(
-                    identifiers, valid_metadata_ids, block_json["id"]
+                    identifiers, valid_metadata_ids, block_id
                 )
 
             elif source == "list":
-                self._validate_list_source_reference(identifiers, block_json["id"])
+                self._validate_list_source_reference(identifiers, block_id)
 
     def _validate_answer_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:

@@ -10,130 +10,17 @@ class QuestionnaireSchema:
 
         self.blocks = jp.match("$..blocks[*]", self.schema)
         self.blocks_by_id = {block["id"]: block for block in self.blocks}
-        self.section_ids = jp.match("$.sections[*].id", self.schema)
-        self.group_ids = jp.match("$..groups[*].id", self.schema)
-        self.block_ids = [block["id"] for block in self.blocks]
-
+        self.block_ids = list(self.blocks_by_id.keys())
         self.sub_block_ids = jp.match(
             "$..[add_block, edit_block, add_or_edit_block, remove_block].id",
             self.schema,
         )
+
+        self.section_ids = jp.match("$.sections[*].id", self.schema)
+        self.group_ids = jp.match("$..groups[*].id", self.schema)
         self.list_names = jp.match(
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
-
-    @lru_cache
-    def has_single_list_collector(self, list_name, section_id):
-        return (
-            len(
-                jp.match(
-                    f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
-                    self.schema,
-                )
-            )
-            == 1
-        )
-
-    @lru_cache
-    def get_driving_question_blocks(self, list_name):
-        return jp.match(
-            f'$..blocks[?(@.type=="ListCollectorDrivingQuestion" & @.for_list=="{list_name}")]',
-            self.schema,
-        )
-
-    @lru_cache
-    def has_single_driving_question(self, list_name):
-        return len(self.get_driving_question_blocks(list_name)) == 1
-
-    @cached_property
-    def answers_with_context(self):
-        answers = {}
-        for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                answers[answer["id"]] = {"answer": answer, **context}
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer:
-                        answers[detail_answer["id"]] = {
-                            "answer": detail_answer,
-                            **context,
-                        }
-
-        return answers
-
-    @staticmethod
-    def get_all_questions_for_block(block):
-        """ Get all questions on a block including variants"""
-        questions = []
-
-        for variant in block.get("question_variants", []):
-            questions.append(variant["question"])
-
-        single_question = block.get("question")
-        if single_question:
-            questions.append(single_question)
-
-        return questions
-
-    @cached_property
-    def answer_id_to_option_values_map(self):
-        answer_id_to_option_values_map = defaultdict(set)
-
-        for answer in self.answers:
-            if "options" not in answer:
-                continue
-
-            answer_id = answer["id"]
-            option_values = [option["value"] for option in answer["options"]]
-
-            answer_id_to_option_values_map[answer_id].update(option_values)
-
-        return answer_id_to_option_values_map
-
-    @cached_property
-    def answers(self):
-        for question, _ in self.questions_with_context:
-            for answer in question["answers"]:
-                yield answer
-
-    @staticmethod
-    def get_key_index_from_path(key, path):
-        position = path.find(key) + len(key + ".[")
-        return int(path[position : position + 1])
-
-    @staticmethod
-    def get_element_path(key, path):
-        position = path.find(key)
-        return path[: position + len(key + ".[0]")]
-
-    @lru_cache
-    def get_context_from_path(self, full_path):
-        section_index = self.get_key_index_from_path("sections", full_path)
-
-        block_path = self.get_element_path("blocks", full_path)
-        group_path = self.get_element_path("groups", full_path)
-
-        group_id = jp.match1(group_path + ".id", self.schema)
-        block_id = jp.match1(block_path + ".id", self.schema)
-
-        if any(
-            sub_block in full_path
-            for sub_block in [
-                "add_block",
-                "edit_block",
-                "add_or_edit_block",
-                "remove_block",
-            ]
-        ):
-            key_path = full_path[len(block_path) + 1 :]
-            key = key_path[: key_path.find(".question")]
-            block_id = self.blocks_by_id[block_id][key]["id"]
-
-        return {
-            "section": self.section_ids[section_index],
-            "block": block_id,
-            "group_id": group_id,
-        }
 
     @cached_property
     def questions_with_context(self):
@@ -197,3 +84,120 @@ class QuestionnaireSchema:
             full_path = str(match.full_path)
             if not any(ignored_path in full_path for ignored_path in ignored_paths):
                 yield str(match.full_path)[:-3], match.value
+
+    @cached_property
+    def answers_with_context(self):
+        answers = {}
+        for question, context in self.questions_with_context:
+            for answer in question.get("answers", []):
+                answers[answer["id"]] = {"answer": answer, **context}
+                for option in answer.get("options", []):
+                    detail_answer = option.get("detail_answer")
+                    if detail_answer:
+                        answers[detail_answer["id"]] = {
+                            "answer": detail_answer,
+                            **context,
+                        }
+
+        return answers
+
+    @cached_property
+    def answer_id_to_option_values_map(self):
+        answer_id_to_option_values_map = defaultdict(set)
+
+        for answer in self.answers:
+            if "options" not in answer:
+                continue
+
+            answer_id = answer["id"]
+            option_values = [option["value"] for option in answer["options"]]
+
+            answer_id_to_option_values_map[answer_id].update(option_values)
+
+        return answer_id_to_option_values_map
+
+    @cached_property
+    def answers(self):
+        for question, _ in self.questions_with_context:
+            for answer in question["answers"]:
+                yield answer
+
+    @lru_cache
+    def has_single_list_collector(self, list_name, section_id):
+        return (
+            len(
+                jp.match(
+                    f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
+                    self.schema,
+                )
+            )
+            == 1
+        )
+
+    @lru_cache
+    def get_driving_question_blocks(self, list_name):
+        return jp.match(
+            f'$..blocks[?(@.type=="ListCollectorDrivingQuestion" & @.for_list=="{list_name}")]',
+            self.schema,
+        )
+
+    @lru_cache
+    def has_single_driving_question(self, list_name):
+        return len(self.get_driving_question_blocks(list_name)) == 1
+
+    @staticmethod
+    def get_all_questions_for_block(block):
+        """ Get all questions on a block including variants"""
+        questions = []
+
+        for variant in block.get("question_variants", []):
+            questions.append(variant["question"])
+
+        single_question = block.get("question")
+        if single_question:
+            questions.append(single_question)
+
+        return questions
+
+    @staticmethod
+    def get_key_index_from_path(key, path):
+        position = path.find(key) + len(key + ".[")
+        return int(path[position : position + 1])
+
+    @lru_cache
+    def get_element_path(self, key, path):
+        position = path.find(key)
+        return path[: position + len(key + ".[0]")]
+
+    @lru_cache
+    def get_path_id(self, path):
+        return jp.match1(path + ".id", self.schema)
+
+    @lru_cache
+    def get_context_from_path(self, full_path):
+        section_index = self.get_key_index_from_path("sections", full_path)
+
+        block_path = self.get_element_path("blocks", full_path)
+        group_path = self.get_element_path("groups", full_path)
+
+        group_id = self.get_path_id(group_path)
+        block_id = self.get_path_id(block_path)
+
+        if any(
+            sub_block in full_path
+            for sub_block in [
+                "add_block",
+                "edit_block",
+                "add_or_edit_block",
+                "remove_block",
+            ]
+        ):
+            key_path = full_path[len(block_path) + 1 :]
+            key = key_path[: key_path.find(".question")]
+            block_id = self.blocks_by_id[block_id][key]["id"]
+
+        return {
+            "section": self.section_ids[section_index],
+            "block": block_id,
+            "group_id": group_id,
+        }
