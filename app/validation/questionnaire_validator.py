@@ -259,7 +259,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         option_values = [option["value"] for option in answer_options]
         routing_when_list = self.get_routing_when_list(routing_rules)
 
-        if routing_rules and answer_options:
+        if answer_options:
             for when_clause in routing_when_list:
                 for when in when_clause.get("when", []):
                     if (
@@ -933,7 +933,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                self._validate_answer_source_reference(identifiers, block_id)
+                self.validate_answer_source_reference(identifiers, block_id)
 
             elif source == "metadata":
                 self._validate_metadata_source_reference(
@@ -943,7 +943,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             elif source == "list":
                 self._validate_list_source_reference(identifiers, block_id)
 
-    def _validate_answer_source_reference(self, identifiers, current_block_id):
+    def validate_answer_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
             if identifier not in self.questionnaire_schema.answers_with_context:
                 self.add_error(

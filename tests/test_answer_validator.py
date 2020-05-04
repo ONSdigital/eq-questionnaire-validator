@@ -174,3 +174,66 @@ def test_unique_answer_options():
             "value": "India",
         },
     ]
+
+
+def test_invalid_range():
+    answer = {
+        "id": "answer-3",
+        "label": "Invalid References",
+        "mandatory": False,
+        "maximum": {"value": {"identifier": "answer-5", "source": "answers"}},
+        "minimum": {"value": {"identifier": "answer-4", "source": "answers"}},
+        "type": "Percentage",
+    }
+    validator = AnswerValidator(answer)
+
+    validator._validate_referred_numeric_answer(
+        {"answer-3": {"min": None, "max": None}}
+    )
+
+    expected_errors = [
+        {
+            "message": error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "referenced_id": "answer-4",
+            "id": "answer-3",
+        },
+        {
+            "message": error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "referenced_id": "answer-5",
+            "id": "answer-3",
+        },
+    ]
+
+    assert validator.errors == expected_errors
+
+
+def test_invalid_numeric_answers():
+    validator = AnswerValidator(
+        {
+            "decimal_places": 2,
+            "id": "answer-1",
+            "label": "Answer 1",
+            "mandatory": False,
+            "type": "Number",
+        }
+    )
+    validator.validate_referred_numeric_answer_decimals(
+        {
+            "answer-1": {
+                "min_referred": "answer-2",
+                "max_referred": None,
+                "decimal_places": 2,
+            },
+            "answer-2": {"decimal_places": 3},
+        }
+    )
+
+    expected_errors = [
+        {
+            "message": error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+            "referenced_id": "answer-2",
+            "id": "answer-1",
+        }
+    ]
+
+    assert validator.errors == expected_errors

@@ -98,7 +98,6 @@ class AnswerValidator(Validator):
     def validate_numeric_answer_types(self, answer_ranges):
         """
         Validate numeric answer types are valid.
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
         """
         # Validate referred numeric answer exists (skip further tests for answer if error is returned)
         referred_errors = self._validate_referred_numeric_answer(answer_ranges)
@@ -110,26 +109,27 @@ class AnswerValidator(Validator):
         self._validate_numeric_range(answer_ranges)
 
         # Validate referred numeric answer decimals
-        self._validate_referred_numeric_answer_decimals(answer_ranges)
+        self.validate_referred_numeric_answer_decimals(answer_ranges)
 
     def _validate_referred_numeric_answer(self, answer_ranges):
         """
         Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
+        errors_found = False
         if answer_ranges[self.answer.get("id")]["min"] is None:
             self.add_error(
                 error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["minimum"]["value"]["identifier"],
             )
-            return True
+            errors_found = True
         if answer_ranges[self.answer.get("id")]["max"] is None:
             self.add_error(
                 error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["maximum"]["value"]["identifier"],
             )
-            return True
-        return False
+            errors_found = True
+        return errors_found
 
     def _validate_numeric_range(self, answer_ranges):
         max_value = answer_ranges[self.answer.get("id")]["max"]
@@ -142,7 +142,7 @@ class AnswerValidator(Validator):
                 )
             )
 
-    def _validate_referred_numeric_answer_decimals(self, answer_ranges):
+    def validate_referred_numeric_answer_decimals(self, answer_ranges):
         answer_values = answer_ranges[self.answer["id"]]
 
         if answer_values["min_referred"] is not None:
