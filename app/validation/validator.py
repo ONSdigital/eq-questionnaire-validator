@@ -515,6 +515,20 @@ class Validator:  # pylint: disable=too-many-lines
 
             results["number_of_answers"].add(len(results["answer_ids"]))
 
+        # Code to handle comparison of variants which contain a MutuallyExclusive answer type
+        if len(results["question_types"]) > 1 and "MutuallyExclusive" in results["question_types"]:
+            results["question_types"].remove("MutuallyExclusive")
+
+            answer_id_to_remove = ""
+
+            for answer_id in results["answer_ids"]:
+                if "-exclusive" in answer_id:
+                    answer_id_to_remove = answer_id
+
+            results["answer_ids"].remove(answer_id_to_remove)
+
+            results["number_of_answers"].remove(2)
+
         return results
 
     def _validate_variants(
