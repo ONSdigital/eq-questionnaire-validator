@@ -5,17 +5,15 @@ from app.validation.blocks.block_validator import BlockValidator
 class CalculatedSummaryBlockValidator(BlockValidator):
     def __init__(self, block, questionnaire_schema):
         self.questionnaire_schema = questionnaire_schema
+        self.answers_to_calculate = self.block["calculation"]["answers_to_calculate"]
         super(CalculatedSummaryBlockValidator, self).__init__(block)
 
     def validate(self):
-        answers_to_calculate = self.block["calculation"]["answers_to_calculate"]
 
         try:
-            answer_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "type"
-                ]
-                for answer_id in answers_to_calculate
+            answers = [
+                self.questionnaire_schema.answers_with_context[answer_id]["answer"]
+                for answer_id in self.answers_to_calculate
             ]
         except KeyError as e:
             self.add_error(
@@ -25,9 +23,9 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             return
 
         duplicates = {
-            answer
-            for answer in answers_to_calculate
-            if answers_to_calculate.count(answer) > 1
+            answer_id
+            for answer_id in self.answers_to_calculate
+            if self.answers_to_calculate.count(answer_id) > 1
         }
         if duplicates:
             self.add_error(
@@ -36,30 +34,18 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             )
             return
 
-        if not all(answer_type == answer_types[0] for answer_type in answer_types):
+        if not all(answer["type"] == answers[0]["type"] for answer in answers):
             self.add_error(error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE)
             return
 
-        if answer_types[0] == "Unit":
-            unit_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "unit"
-                ]
-                for answer_id in answers_to_calculate
-            ]
-            if not all(unit_type == unit_types[0] for unit_type in unit_types):
+        if answers[0]["type"] == "Unit":
+            if not all(answer["unit"] == answers[0]["unit"] for answer in answers):
                 self.add_error(error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT)
                 return
 
-        if answer_types[0] == "Currency":
-            currency_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "currency"
-                ]
-                for answer_id in answers_to_calculate
-            ]
+        if answers[0]["type"] == "Currency":
             if not all(
-                currency_type == currency_types[0] for currency_type in currency_types
+                answer["currency"] == answers[0]["currency"] for answer in answers
             ):
                 self.add_error(
                     error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY
