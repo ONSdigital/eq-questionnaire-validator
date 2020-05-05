@@ -153,11 +153,19 @@ class QuestionnaireSchema:
         )
 
     @lru_cache
+    def get_blocks(self, **filters):
+        conditions = []
+        for key, value in filters.items():
+            conditions.append(f'@.{key}=="{value}"')
+
+        if conditions:
+            final_condition = " & ".join(conditions)
+            return jp.match(f"$..blocks[?({final_condition})]", self.schema)
+        return self.blocks
+
+    @lru_cache
     def get_list_collectors(self, list_name):
-        return jp.match(
-            f'$..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
-            self.schema,
-        )
+        return self.get_blocks(type="ListCollector", for_list=list_name)
 
     @lru_cache
     def get_other_list_collectors(self, list_name, block_id_to_filter):
@@ -175,10 +183,7 @@ class QuestionnaireSchema:
 
     @lru_cache
     def get_driving_question_blocks(self, list_name):
-        return jp.match(
-            f'$..blocks[?(@.type=="ListCollectorDrivingQuestion" & @.for_list=="{list_name}")]',
-            self.schema,
-        )
+        return self.get_blocks(type="ListCollectorDrivingQuestion", for_list=list_name)
 
     @lru_cache
     def has_single_driving_question(self, list_name):
