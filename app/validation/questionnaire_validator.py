@@ -13,6 +13,10 @@ from app.validation.answers.text_field_answer_validator import TextFieldAnswerVa
 from app.validation.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
+from app.validation.blocks.list_collector_validator import ListCollectorValidator
+from app.validation.blocks.primary_person_list_collector_validator import (
+    PrimaryPersonListCollectorValidator,
+)
 from app.validation.metadata_validator import MetadataValidator
 from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questions.calculated_question_validator import (
@@ -163,14 +167,22 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 self.errors += block_validator.errors
             elif block["type"] == "PrimaryPersonListCollector":
                 try:
-                    self._validate_primary_person_list_collector(block)
+                    primary_person_validator = PrimaryPersonListCollectorValidator(
+                        block, self.questionnaire_schema
+                    )
+                    primary_person_validator.validate()
+                    self.errors += primary_person_validator.errors
                 except KeyError as e:
-                    self.add_error(f"Missing key in list collector: {e}")
+                    self.add_error(f"Missing key in PrimaryPersonListCollector: {e}")
             elif block["type"] == "ListCollector":
                 try:
-                    self._validate_list_collector(block)
+                    list_collector_validator = ListCollectorValidator(
+                        block, self.questionnaire_schema
+                    )
+                    list_collector_validator.validate()
+                    self.errors += list_collector_validator.errors
                 except KeyError as e:
-                    self.add_error(f"Missing key in list collector: {e}")
+                    self.add_error(f"Missing key in ListCollector: {e}")
             elif block["type"] == "RelationshipCollector":
                 self._validate_list_exists(block["for_list"])
 
@@ -225,8 +237,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 answer_validator = get_answer_validator(
                     answer,
                     self.questionnaire_schema.list_names,
-                    self.questionnaire_schema.block_ids
-                    + self.questionnaire_schema.sub_block_ids,
+                    self.questionnaire_schema.block_ids,
                 )
 
                 answer_validator.validate()
@@ -483,35 +494,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
         self._validate_when_rule(when, block_or_group["id"])
 
-    def _validate_list_answer_references(self, block):
-        main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block
-        )
-        main_block_ids = {
-            answer["id"]
-            for question in main_block_questions
-            for answer in question["answers"]
-        }
-        remove_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block["remove_block"]
-        )
-        remove_block_ids = {
-            answer["id"]
-            for question in remove_block_questions
-            for answer in question["answers"]
-        }
-
-        if block["add_answer"]["id"] not in main_block_ids:
-            self.add_error(
-                error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-                referenced_id=block["add_answer"]["id"],
-            )
-        if block["remove_answer"]["id"] not in remove_block_ids:
-            self.add_error(
-                error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
-                referenced_id=block["remove_answer"]["id"],
-            )
-
     def _validate_primary_person_list_answer_references(self, block):
 
         main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -528,134 +510,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
                 referenced_id=block["add_or_edit_answer"]["id"],
             )
-
-    def _validate_list_collector(  # noqa: C901  pylint: disable=too-complex, too-many-locals
-        self, block
-    ):
-        self._validate_list_answer_references(block)
-
-        self.validate_collector_questions(
-            block,
-            block["add_answer"]["value"],
-            error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
-            error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
-        )
-
-        self.validate_collector_questions(
-            block["remove_answer"],
-            block["remove_answer"]["value"],
-            error_messages.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-            error_messages.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
-        )
-
-        self._validate_list_collector_answer_ids(block)
-
-    def _validate_primary_person_list_collector(self, block):
-        self._validate_primary_person_list_answer_references(block)
-
-        self.validate_collector_questions(
-            block,
-            block["add_or_edit_answer"]["value"],
-            error_messages.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
-            error_messages.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
-        )
-
-        self._validate_primary_person_list_collector_answer_ids(block)
-
-    def validate_collector_questions(
-        self, block, answer_value, missing_radio_error, missing_value_error
-    ):
-        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block
-        )
-
-        for collector_question in collector_questions:
-            for collector_answer in collector_question["answers"]:
-                if collector_answer["type"] != "Radio":
-                    self.add_error(missing_radio_error, block_id=block["id"])
-
-                if not self._options_contain_value(
-                    collector_answer["options"], answer_value
-                ):
-                    self.add_error(missing_value_error, block_id=block["id"])
-
-    def _validate_list_collector_answer_ids(self, block):
-        """
-        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
-        - Enforce the same answer_ids on add and edit sub-blocks
-        """
-        list_name = block["for_list"]
-
-        add_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block["add_block"]
-        )
-        edit_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block["edit_block"]
-        )
-
-        add_answer_ids = {
-            answer["id"]
-            for question in add_block_questions
-            for answer in question["answers"]
-        }
-
-        edit_answer_ids = {
-            answer["id"]
-            for question in edit_block_questions
-            for answer in question["answers"]
-        }
-
-        existing_add_ids = self._list_collector_answer_ids.get(list_name)
-
-        if not existing_add_ids:
-            self._list_collector_answer_ids[list_name] = add_answer_ids
-        else:
-            difference = add_answer_ids.symmetric_difference(existing_add_ids)
-            if difference:
-                self.add_error(
-                    error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
-                    list_name=list_name,
-                )
-
-        if add_answer_ids.symmetric_difference(edit_answer_ids):
-            self.add_error(
-                error_messages.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
-                block_id=block["id"],
-            )
-
-    def _validate_primary_person_list_collector_answer_ids(self, block):
-        """
-        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
-        """
-        list_name = block["for_list"]
-
-        add_or_edit_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block["add_or_edit_block"]
-        )
-
-        add_answer_ids = {
-            answer["id"]
-            for question in add_or_edit_block_questions
-            for answer in question["answers"]
-        }
-
-        existing_add_ids = self._list_collector_answer_ids.get(list_name)
-
-        if not existing_add_ids:
-            self._list_collector_answer_ids[list_name] = add_answer_ids
-        else:
-            difference = add_answer_ids.symmetric_difference(existing_add_ids)
-            if difference:
-                self.add_error(
-                    error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
-                    list_name=list_name,
-                )
-
-    @staticmethod
-    def _options_contain_value(options, value):
-        for option in options:
-            if option["value"] == value:
-                return True
 
     def _validate_when_rule(self, when_clause, referenced_id):
         """

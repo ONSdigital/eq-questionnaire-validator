@@ -45,7 +45,7 @@ def test_number_of_decimals():
         "message": error_messages.DECIMAL_PLACES_TOO_LONG,
         "decimal_places": 10,
         "limit": 6,
-        "id": "answer-5",
+        "answer_id": "answer-5",
     }
 
 
@@ -67,14 +67,14 @@ def test_minimum_value():
         "message": "Minimum value is less than system limit",
         "value": -99999999999,
         "limit": -999999999,
-        "id": "answer-4",
+        "answer_id": "answer-4",
     }
 
     assert answer_validator.errors[1] == {
         "message": "Maximum value is greater than system limit",
         "value": 99999999999,
         "limit": 9999999999,
-        "id": "answer-4",
+        "answer_id": "answer-4",
     }
 
 
@@ -107,7 +107,7 @@ def test_invalid_answer_default():
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DEFAULT_ON_MANDATORY,
-        "id": "answer-7",
+        "answer_id": "answer-7",
     }
 
 
@@ -142,7 +142,7 @@ def test_are_decimal_places_valid():
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DECIMAL_PLACES_UNDEFINED,
-        "id": "total-percentage",
+        "answer_id": "total-percentage",
     }
 
 
@@ -165,12 +165,12 @@ def test_unique_answer_options():
     assert answer_validator.errors == [
         {
             "message": error_messages.DUPLICATE_LABEL_FOUND,
-            "id": "duplicate-country-answer",
+            "answer_id": "duplicate-country-answer",
             "label": "India",
         },
         {
             "message": error_messages.DUPLICATE_VALUE_FOUND,
-            "id": "duplicate-country-answer",
+            "answer_id": "duplicate-country-answer",
             "value": "India",
         },
     ]
@@ -195,12 +195,12 @@ def test_invalid_range():
         {
             "message": error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-4",
-            "id": "answer-3",
+            "answer_id": "answer-3",
         },
         {
             "message": error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-5",
-            "id": "answer-3",
+            "answer_id": "answer-3",
         },
     ]
 
@@ -232,7 +232,7 @@ def test_invalid_numeric_answers():
         {
             "message": error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
             "referenced_id": "answer-2",
-            "id": "answer-1",
+            "answer_id": "answer-1",
         }
     ]
 

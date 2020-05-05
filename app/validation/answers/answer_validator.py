@@ -14,6 +14,7 @@ class AnswerValidator(Validator):
         self.answer = schema_element
         self.list_names = list_names
         self.block_ids = block_ids
+        self.context["answer_id"] = self.answer["id"]
 
     @cached_property
     def options(self):

@@ -34,7 +34,7 @@ def test_invalid_date_range():
     expected_error_messages = [
         {
             "message": "The minimum period is greater than the maximum period",
-            "id": "date-range-question",
+            "question_id": "date-range-question",
         }
     ]
 
@@ -77,7 +77,7 @@ def test_invalid_yyyy_date_range_period():
     expected_error_messages = [
         {
             "message": "Days/Months can not be used in period_limit for yyyy date range",
-            "id": "date-range-question",
+            "question_id": "date-range-question",
         }
     ]
 
@@ -123,7 +123,7 @@ def test_invalid_mm_yyyy_date_range_period():
     expected_error_messages = [
         {
             "message": "Days can not be used in period_limit for yyyy-mm date range",
-            "id": "date-range-question",
+            "question_id": "date-range-question",
         }
     ]
 

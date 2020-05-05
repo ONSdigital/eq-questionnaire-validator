@@ -75,8 +75,7 @@ def test_invalid_routing_default_block():
 
     expected_error = {
         "message": "The routing rules for group or block: conditional-routing-block must contain a default routing "
-        "rule without a when rule",
-        "id": "test-questionnaire",
+        "rule without a when rule"
     }
 
     assert questionnaire_validator.errors[0] == expected_error
@@ -99,8 +98,7 @@ def test_invalid_routing_block_id():
     questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
 
     expected_error = {
-        "message": "Routing rule routes to invalid block [invalid-location]",
-        "id": "test-questionnaire",
+        "message": "Routing rule routes to invalid block [invalid-location]"
     }
 
     questionnaire_validator.validate_routing_rule_target(
@@ -247,12 +245,12 @@ def test_invalid_mutually_exclusive_conditions():
     expected_errors = [
         {
             "message": error_messages.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY,
-            "id": "mutually-exclusive-date-question",
+            "question_id": "mutually-exclusive-date-question",
         },
         {
             "message": error_messages.NON_CHECKBOX_ANSWER,
-            "id": "mutually-exclusive-date-question",
             "answer_id": "mutually-exclusive-date-answer-2",
+            "question_id": "mutually-exclusive-date-question",
         },
     ]
 
@@ -448,7 +446,13 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
         {
             "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
             "list_name": "people",
-        }
+            "block_id": "list-collector",
+        },
+        {
+            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "list_name": "people",
+            "block_id": "another-list-collector",
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -464,7 +468,13 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
         {
             "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
             "list_name": "people",
-        }
+            "block_id": "primary-person-list-collector",
+        },
+        {
+            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
+            "list_name": "people",
+            "block_id": "primary-person-list-collector2",
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -623,10 +633,12 @@ def test_invalid_list_collector_bad_answer_reference_ids():
         {
             "message": error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
             "referenced_id": "someone-else",
+            "block_id": "list-collector",
         },
         {
             "message": error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
             "referenced_id": "delete-confirmation",
+            "block_id": "list-collector",
         },
     ]
 
@@ -645,6 +657,7 @@ def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
         {
             "message": error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
             "referenced_id": "fake-answer-id",
+            "block_id": "primary-person-list-collector",
         }
     ]
 
@@ -802,13 +815,13 @@ def test_invalid_answer_action():
     expected_error_messages = [
         {
             "message": "List name defined in action params does not exist",
-            "id": "anyone-else-live-here-answer",
+            "answer_id": "anyone-else-live-here-answer",
             "list_name": "non-existent-list-name",
         },
         {
             "message": "Block id defined in action params does not exist",
             "block_id": "non-existent-block-id",
-            "id": "anyone-else-live-here-answer",
+            "answer_id": "anyone-else-live-here-answer",
         },
     ]
 

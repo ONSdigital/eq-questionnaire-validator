@@ -14,24 +14,24 @@ def test_invalid_calculated_summary():
     expected_error_messages = [
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE,
-            "id": "total-playback-type-error",
+            "block_id": "total-playback-type-error",
         },
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY,
-            "id": "total-playback-currency-error",
+            "block_id": "total-playback-currency-error",
         },
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT,
-            "id": "total-playback-unit-error",
+            "block_id": "total-playback-unit-error",
         },
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_HAS_INVALID_ID,
             "answer_id": "seventh-number-answer",
-            "id": "total-playback-answer-error",
+            "block_id": "total-playback-answer-error",
         },
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
-            "id": "total-playback-duplicate-error",
+            "block_id": "total-playback-duplicate-error",
             "duplicate_answers": {"sixth-number-answer", "fourth-number-answer"},
         },
     ]

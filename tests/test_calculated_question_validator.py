@@ -42,12 +42,12 @@ def test_invalid_id_in_answers_to_calculate():
     expected_error_messages = [
         {
             "message": "Answer does not exist within this question",
-            "id": "breakdown-question",
+            "question_id": "breakdown-question",
             "answer_id": "breakdown-3",
         },
         {
             "message": "Answer does not exist within this question",
-            "id": "breakdown-question",
+            "question_id": "breakdown-question",
             "answer_id": "breakdown-4",
         },
     ]

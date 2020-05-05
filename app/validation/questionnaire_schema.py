@@ -9,12 +9,13 @@ class QuestionnaireSchema:
         self.schema = schema
 
         self.blocks = jp.match("$..blocks[*]", self.schema)
-        self.blocks_by_id = {block["id"]: block for block in self.blocks}
-        self.block_ids = list(self.blocks_by_id.keys())
-        self.sub_block_ids = jp.match(
-            "$..[add_block, edit_block, add_or_edit_block, remove_block].id",
-            self.schema,
+        self.sub_blocks = jp.match(
+            "$..[add_block, edit_block, add_or_edit_block, remove_block]", self.schema
         )
+        self.blocks_by_id = {
+            block["id"]: block for block in self.blocks + self.sub_blocks
+        }
+        self.block_ids = list(self.blocks_by_id.keys())
         self.sections = jp.match("$.sections[*]", self.schema)
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
@@ -152,6 +153,27 @@ class QuestionnaireSchema:
         )
 
     @lru_cache
+    def get_list_collectors(self, list_name):
+        return jp.match(
+            f'$..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
+            self.schema,
+        )
+
+    @lru_cache
+    def get_other_list_collectors(self, list_name, block_id_to_filter):
+        return jp.match(
+            f'$..blocks[?(@.id!="{block_id_to_filter}" & @.type=="ListCollector" & @.for_list=="{list_name}")]',
+            self.schema,
+        )
+
+    @lru_cache
+    def get_other_primary_person_list_collectors(self, list_name, block_id_to_filter):
+        return jp.match(
+            f'$..blocks[?(@.id!="{block_id_to_filter}" & @.type=="PrimaryPersonListCollector" & @.for_list=="{list_name}")]',
+            self.schema,
+        )
+
+    @lru_cache
     def get_driving_question_blocks(self, list_name):
         return jp.match(
             f'$..blocks[?(@.type=="ListCollectorDrivingQuestion" & @.for_list=="{list_name}")]',
@@ -175,6 +197,13 @@ class QuestionnaireSchema:
             questions.append(single_question)
 
         return questions
+
+    @lru_cache
+    def get_all_answer_ids(self, block_id):
+        questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
+        return {
+            answer["id"] for question in questions for answer in question["answers"]
+        }
 
     @staticmethod
     def get_key_index_from_path(key, path):
