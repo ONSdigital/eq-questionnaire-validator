@@ -210,6 +210,11 @@ class QuestionnaireSchema:
             answer["id"] for question in questions for answer in question["answers"]
         }
 
+    @lru_cache
+    def get_first_answer_in_block(self, block_id):
+        questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
+        return questions[0]["answers"][0]
+
     @staticmethod
     def get_key_index_from_path(key, path):
         position = path.find(key) + len(key + ".[")

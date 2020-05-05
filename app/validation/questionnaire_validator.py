@@ -20,6 +20,9 @@ from app.validation.blocks.list_collector_validator import ListCollectorValidato
 from app.validation.blocks.primary_person_list_collector_validator import (
     PrimaryPersonListCollectorValidator,
 )
+from app.validation.blocks.relationship_collector_validator import (
+    RelationshipCollectorValidator,
+)
 from app.validation.metadata_validator import MetadataValidator
 from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questions.calculated_question_validator import (
@@ -189,15 +192,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             elif block["type"] == "RelationshipCollector":
                 self._validate_list_exists(block["for_list"])
 
-                if "question_variants" in block:
-                    for variant in block["question_variants"]:
-                        self._validate_relationship_collector_answers(
-                            variant["question"]["answers"]
-                        )
-                else:
-                    self._validate_relationship_collector_answers(
-                        block["question"]["answers"]
-                    )
+                relationship_collector_validator = RelationshipCollectorValidator(
+                    block, self.questionnaire_schema
+                )
+                relationship_collector_validator.validate()
+                self.errors += relationship_collector_validator.errors
             elif block["type"] == "ListCollectorDrivingQuestion":
                 driving_question_validator = ListCollectorDrivingQuestionValidator(
                     block, section["id"], self.questionnaire_schema
@@ -775,14 +774,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def _validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
-
-    def _validate_relationship_collector_answers(self, answers):
-        if len(answers) > 1:
-            self.add_error(error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
-        if answers[0]["type"] != "Relationship":
-            self.add_error(
-                error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
-            )
 
     def _validate_placeholder_transforms(self, transforms, block_id):
         # First transform can't reference a previous transform

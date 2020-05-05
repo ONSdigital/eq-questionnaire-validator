@@ -713,7 +713,10 @@ def test_invalid_relationship_multiple_answers():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS}
+        {
+            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
+            "block_id": "relationships",
+        }
     ]
 
     validator.validate()
@@ -726,7 +729,10 @@ def test_invalid_relationship_wrong_answer_type():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        {"message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE}
+        {
+            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
+            "block_id": "relationships",
+        }
     ]
 
     validator.validate()
