@@ -519,7 +519,7 @@ class Validator:  # pylint: disable=too-many-lines
         if len(results["question_types"]) > 1 and "MutuallyExclusive" in results["question_types"]:
             results["question_types"].remove("MutuallyExclusive")
 
-            answer_id_to_remove = ""
+            answer_id_to_remove = None
 
             for answer_id in results["answer_ids"]:
                 if "-exclusive" in answer_id:
