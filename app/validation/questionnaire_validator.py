@@ -13,6 +13,9 @@ from app.validation.answers.text_field_answer_validator import TextFieldAnswerVa
 from app.validation.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
+from app.validation.blocks.list_collector_driving_question_validator import (
+    ListCollectorDrivingQuestionValidator,
+)
 from app.validation.blocks.list_collector_validator import ListCollectorValidator
 from app.validation.blocks.primary_person_list_collector_validator import (
     PrimaryPersonListCollectorValidator,
@@ -196,7 +199,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         block["question"]["answers"]
                     )
             elif block["type"] == "ListCollectorDrivingQuestion":
-                self._validate_list_collector_driving_question(block, section["id"])
+                driving_question_validator = ListCollectorDrivingQuestionValidator(
+                    block, section["id"], self.questionnaire_schema
+                )
+                driving_question_validator.validate()
+                self.errors += driving_question_validator.errors
 
             self._validate_questions(block, numeric_answer_ranges)
 
@@ -305,22 +312,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         answer["id"], option_values
                     )
                 )
-
-    def _validate_list_collector_driving_question(self, block, section_id):
-        if not self.questionnaire_schema.has_single_list_collector(
-            block["for_list"], section_id
-        ):
-            self.add_error(
-                f'ListCollectorDrivingQuestion `{block["id"]}` for list '
-                f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
-            )
-
-        if not self.questionnaire_schema.has_single_driving_question(block["for_list"]):
-            self.add_error(
-                error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
-                block_id=block["id"],
-                for_list=block["for_list"],
-            )
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
         """ Ensure consistency between relevant fields in variants
