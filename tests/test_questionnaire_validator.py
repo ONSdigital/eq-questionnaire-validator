@@ -6,6 +6,10 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app.validation import error_messages
+from app.validation.blocks.calculated_summary_block_validator import (
+    CalculatedSummaryBlockValidator,
+)
+from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questionnaire_validator import QuestionnaireValidator
 from app.validation.schema_validator import SchemaValidator
 
@@ -153,33 +157,44 @@ def test_invalid_calculated_summary():
 
     expected_error_messages = [
         {
-            "message": "All answers in block's answers_to_calculate must be of the same type",
-            "block_id": "total-playback-type-error",
+            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE,
+            "id": "total-playback-type-error",
         },
         {
-            "message": "All answers in block's answers_to_calculate must be of the same currency",
-            "block_id": "total-playback-currency-error",
+            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY,
+            "id": "total-playback-currency-error",
         },
         {
-            "message": "All answers in block's answers_to_calculate must be of the same unit",
-            "block_id": "total-playback-unit-error",
+            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT,
+            "id": "total-playback-unit-error",
         },
         {
-            "message": "Invalid answer id in block's answers_to_calculate",
+            "message": error_messages.ANSWERS_TO_CALCULATE_HAS_INVALID_ID,
             "answer_id": "seventh-number-answer",
-            "block_id": "total-playback-answer-error",
+            "id": "total-playback-answer-error",
         },
         {
-            "message": "Duplicate answers in block's answers_to_calculate",
-            "block_id": "total-playback-duplicate-error",
+            "message": error_messages.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
+            "id": "total-playback-duplicate-error",
             "duplicate_answers": {"sixth-number-answer", "fourth-number-answer"},
         },
     ]
 
-    validator = QuestionnaireValidator(json_to_validate)
-    validator.validate()
+    questionnaire_schema = QuestionnaireSchema(json_to_validate)
+    errors = []
+    for block_id in [
+        "total-playback-type-error",
+        "total-playback-currency-error",
+        "total-playback-unit-error",
+        "total-playback-answer-error",
+        "total-playback-duplicate-error",
+    ]:
+        block = questionnaire_schema.get_block(block_id)
+        validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
+        validator.validate()
+        errors += validator.errors
 
-    assert validator.errors == expected_error_messages
+    assert errors == expected_error_messages
 
 
 def test_answer_comparisons_different_types():

@@ -15,9 +15,14 @@ class QuestionnaireSchema:
             "$..[add_block, edit_block, add_or_edit_block, remove_block].id",
             self.schema,
         )
+        self.sections = jp.match("$.sections[*]", self.schema)
+        self.sections_by_id = {section["id"]: section for section in self.sections}
+        self.section_ids = list(self.sections_by_id.keys())
 
-        self.section_ids = jp.match("$.sections[*].id", self.schema)
-        self.group_ids = jp.match("$..groups[*].id", self.schema)
+        self.groups = jp.match("$..groups[*]", self.schema)
+        self.groups_by_id = {group["id"]: group for group in self.groups}
+        self.group_ids = list(self.groups_by_id.keys())
+
         self.list_names = jp.match(
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
@@ -26,6 +31,22 @@ class QuestionnaireSchema:
     def questions_with_context(self):
         for match in parse("$..question").find(self.schema):
             yield match.value, self.get_context_from_path(str(match.full_path))
+
+    @cached_property
+    def answers_with_context(self):
+        answers = {}
+        for question, context in self.questions_with_context:
+            for answer in question.get("answers", []):
+                answers[answer["id"]] = {"answer": answer, **context}
+                for option in answer.get("options", []):
+                    detail_answer = option.get("detail_answer")
+                    if detail_answer:
+                        answers[detail_answer["id"]] = {
+                            "answer": detail_answer,
+                            **context,
+                        }
+
+        return answers
 
     @cached_property
     def is_hub_enabled(self):
@@ -86,22 +107,6 @@ class QuestionnaireSchema:
                 yield str(match.full_path)[:-3], match.value
 
     @cached_property
-    def answers_with_context(self):
-        answers = {}
-        for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                answers[answer["id"]] = {"answer": answer, **context}
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer:
-                        answers[detail_answer["id"]] = {
-                            "answer": detail_answer,
-                            **context,
-                        }
-
-        return answers
-
-    @cached_property
     def answer_id_to_option_values_map(self):
         answer_id_to_option_values_map = defaultdict(set)
 
@@ -121,6 +126,18 @@ class QuestionnaireSchema:
         for question, _ in self.questions_with_context:
             for answer in question["answers"]:
                 yield answer
+
+    @lru_cache
+    def get_group(self, group_id):
+        return self.groups_by_id[group_id]
+
+    @lru_cache
+    def get_section(self, section_id):
+        return self.sections_by_id[section_id]
+
+    @lru_cache
+    def get_block(self, block_id):
+        return self.blocks_by_id[block_id]
 
     @lru_cache
     def has_single_list_collector(self, list_name, section_id):

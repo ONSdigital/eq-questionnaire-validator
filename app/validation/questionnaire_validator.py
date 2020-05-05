@@ -10,6 +10,9 @@ from app.validation.answers.answer_validator import AnswerValidator
 from app.validation.answers.date_answer_validator import DateAnswerValidator
 from app.validation.answers.number_answer_validator import NumberAnswerValidator
 from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app.validation.blocks.calculated_summary_block_validator import (
+    CalculatedSummaryBlockValidator,
+)
 from app.validation.metadata_validator import MetadataValidator
 from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questions.calculated_question_validator import (
@@ -65,28 +68,31 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         self.validate_duplicates()
         self.validate_smart_quotes()
 
-        section_ids = []
         sections = self.schema_element.get("sections", [])
         all_groups = [group for section in sections for group in section.get("groups")]
 
         numeric_answer_ranges = {}
 
-        for section in sections:
+        for section in self.questionnaire_schema.sections:
             self._validate_section(section)
-            section_ids.append(section["id"])
+
             for group in section["groups"]:
                 self._validate_group_routing_rules(group, all_groups)
 
                 for skip_condition in group.get("skip_conditions", []):
                     self._validate_skip_condition(skip_condition, group)
 
-                self._validate_blocks(section, group, all_groups, numeric_answer_ranges)
+                self._validate_blocks(
+                    section["id"], group["id"], all_groups, numeric_answer_ranges
+                )
 
         required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
         )
 
-        self._validate_required_section_ids(section_ids, required_hub_section_ids)
+        self._validate_required_section_ids(
+            self.questionnaire_schema.section_ids, required_hub_section_ids
+        )
 
     def _validate_section(self, section):
         section_repeat = section.get("repeat")
@@ -131,13 +137,16 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
-        self, section, group, all_groups, numeric_answer_ranges
+        self, section_id, group_id, all_groups, numeric_answer_ranges
     ):
+        section = self.questionnaire_schema.get_section(section_id)
+        group = self.questionnaire_schema.get_group(group_id)
+
         for block in group.get("blocks"):
             if (
-                section == self.schema_element["sections"][-1]
-                and group == section["groups"][-1]
-                and block == group["blocks"][-1]
+                section_id == self.schema_element["sections"][-1]["id"]
+                and group_id == section["groups"][-1]["id"]
+                and block["id"] == group["blocks"][-1]["id"]
             ):
                 self.validate_block_is_submission(block)
 
@@ -147,7 +156,11 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 self._validate_skip_condition(skip_condition, block)
 
             if block["type"] == "CalculatedSummary":
-                self._validate_calculated_summary_type(block)
+                block_validator = CalculatedSummaryBlockValidator(
+                    block, self.questionnaire_schema
+                )
+                block_validator.validate()
+                self.errors += block_validator.errors
             elif block["type"] == "PrimaryPersonListCollector":
                 try:
                     self._validate_primary_person_list_collector(block)
@@ -643,73 +656,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         for option in options:
             if option["value"] == value:
                 return True
-
-    def _validate_calculated_summary_type(self, block):
-        answers_to_calculate = block["calculation"]["answers_to_calculate"]
-
-        try:
-            answer_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "type"
-                ]
-                for answer_id in answers_to_calculate
-            ]
-        except KeyError as e:
-            self.add_error(
-                "Invalid answer id in block's answers_to_calculate",
-                answer_id=str(e).strip("'"),
-                block_id=block["id"],
-            )
-            return
-
-        duplicates = {
-            answer
-            for answer in answers_to_calculate
-            if answers_to_calculate.count(answer) > 1
-        }
-        if duplicates:
-            self.add_error(
-                "Duplicate answers in block's answers_to_calculate",
-                duplicate_answers=duplicates,
-                block_id=block["id"],
-            )
-            return
-
-        if not all(answer_type == answer_types[0] for answer_type in answer_types):
-            self.add_error(
-                "All answers in block's answers_to_calculate must be of the same type",
-                block_id=block["id"],
-            )
-            return
-
-        if answer_types[0] == "Unit":
-            unit_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "unit"
-                ]
-                for answer_id in answers_to_calculate
-            ]
-            if not all(unit_type == unit_types[0] for unit_type in unit_types):
-                self.add_error(
-                    "All answers in block's answers_to_calculate must be of the same unit",
-                    block_id=block["id"],
-                )
-                return
-
-        if answer_types[0] == "Currency":
-            currency_types = [
-                self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "currency"
-                ]
-                for answer_id in answers_to_calculate
-            ]
-            if not all(
-                currency_type == currency_types[0] for currency_type in currency_types
-            ):
-                self.add_error(
-                    "All answers in block's answers_to_calculate must be of the same currency",
-                    block_id=block["id"],
-                )
 
     def _validate_when_rule(self, when_clause, referenced_id):
         """

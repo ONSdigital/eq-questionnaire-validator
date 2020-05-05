@@ -86,6 +86,22 @@ MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
 SUMMARY_HAS_NON_TEXTFIELD_ANSWER = (
     "Summary concatenation can only be used for TextField answer types"
 )
+ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE = (
+    "All answers in block's answers_to_calculate must be of the same type"
+)
+ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY = (
+    "All answers in block's answers_to_calculate must be of the same currency"
+)
+ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT = (
+    "All answers in block's answers_to_calculate must be of the same unit"
+)
+ANSWERS_TO_CALCULATE_HAS_INVALID_ID = (
+    "Invalid answer id in block's answers_to_calculate"
+)
+ANSWERS_TO_CALCULATE_HAS_DUPLICATES = (
+    "Duplicate answers in block's answers_to_calculate"
+)
+
 
 # QuestionValidator
 MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (
