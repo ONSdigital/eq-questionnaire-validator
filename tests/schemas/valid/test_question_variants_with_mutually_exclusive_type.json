@@ -90,13 +90,12 @@
                         "id": "answer-2-exclusive",
                         "mandatory": false,
                         "type": "Checkbox",
-                        "options":
-                          [
-                            {
-                              "label": "I don’t know",
-                              "value": "I don’t know"
-                            }
-                          ]
+                        "options": [
+                          {
+                            "label": "I don’t know",
+                            "value": "I don’t know"
+                          }
+                        ]
                       }
                     ]
                   },
