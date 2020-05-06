@@ -522,15 +522,16 @@ class Validator:  # pylint: disable=too-many-lines
         ):
             results["question_types"].remove("MutuallyExclusive")
 
-            answer_id_to_remove = None
+            results["answer_ids"].clear()
 
-            for answer_id in results["answer_ids"]:
-                if "-exclusive" in answer_id:
-                    answer_id_to_remove = answer_id
+            results["number_of_answers"].clear()
 
-            results["answer_ids"].remove(answer_id_to_remove)
+            for variant in variants:
+                for answer in variant["question"]["answers"]:
+                    if "-exclusive" not in answer["id"]:
+                        results["answer_ids"].add(answer["id"])
 
-            results["number_of_answers"].remove(2)
+                results["number_of_answers"].add(len(results["answer_ids"]))
 
         return results
 
