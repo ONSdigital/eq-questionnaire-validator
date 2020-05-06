@@ -25,17 +25,17 @@
     "enabled": true,
     "required_completed_sections": ["employment-section"],
     "guidance": {
-            "COMPLETE": {
-                "description": "Description text displayed on hub when complete",
-                "submit_button": "Submit button text displayed on hub when complete",
-                "title": "title text displayed on hub when complete"
-            },
-            "INCOMPLETE": {
-                 "description": "Description text displayed on hub when incomplete",
-                "submit_button": "Submit button text displayed on hub when incomplete",
-                "title": "title text displayed on hub when incomplete"
-            }
-        }
+      "COMPLETE": {
+        "description": "Description text displayed on hub when complete",
+        "submit_button": "Submit button text displayed on hub when complete",
+        "title": "title text displayed on hub when complete"
+      },
+      "INCOMPLETE": {
+        "description": "Description text displayed on hub when incomplete",
+        "submit_button": "Submit button text displayed on hub when incomplete",
+        "title": "title text displayed on hub when incomplete"
+      }
+    }
   },
   "sections": [
     {
