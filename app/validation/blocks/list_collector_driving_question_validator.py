@@ -3,15 +3,9 @@ from app.validation.blocks.block_validator import BlockValidator
 
 
 class ListCollectorDrivingQuestionValidator(BlockValidator):
-    def __init__(self, block, section_id, questionnaire_schema):
-        self.block = block
-        self.section_id = section_id
-        super(ListCollectorDrivingQuestionValidator, self).__init__(block)
-        self.questionnaire_schema = questionnaire_schema
-
     def validate(self):
         if not self.questionnaire_schema.has_single_list_collector(
-            self.block["for_list"], self.section_id
+            self.block["for_list"]
         ):
             block = self.block
             self.add_error(

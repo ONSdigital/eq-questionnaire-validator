@@ -3,12 +3,9 @@ from app.validation.blocks.block_validator import BlockValidator
 
 
 class RelationshipCollectorValidator(BlockValidator):
-    def __init__(self, block, questionnaire_schema):
-        self.block = block
-        self.questionnaire_schema = questionnaire_schema
-        super(RelationshipCollectorValidator, self).__init__(block)
-
     def validate(self):
+        self.validate_list_exists()
+
         answer_ids = self.questionnaire_schema.get_all_answer_ids(self.block["id"])
 
         if len(answer_ids) > 1:
@@ -22,3 +19,9 @@ class RelationshipCollectorValidator(BlockValidator):
             self.add_error(
                 error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
             )
+
+    def validate_list_exists(self):
+        list_name = self.block["for_list"]
+
+        if list_name not in self.questionnaire_schema.list_names:
+            self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)

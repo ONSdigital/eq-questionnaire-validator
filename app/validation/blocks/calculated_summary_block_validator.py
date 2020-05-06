@@ -4,8 +4,9 @@ from app.validation.blocks.block_validator import BlockValidator
 
 class CalculatedSummaryBlockValidator(BlockValidator):
     def __init__(self, block, questionnaire_schema):
-        super(CalculatedSummaryBlockValidator, self).__init__(block)
-        self.questionnaire_schema = questionnaire_schema
+        super(CalculatedSummaryBlockValidator, self).__init__(
+            block, questionnaire_schema
+        )
         self.answers_to_calculate = self.block["calculation"]["answers_to_calculate"]
 
     def validate(self):

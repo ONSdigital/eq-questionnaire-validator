@@ -1,7 +1,6 @@
 import collections
 import re
 from collections import defaultdict
-from functools import cached_property, lru_cache
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -10,6 +9,7 @@ from app.validation.answers.answer_validator import AnswerValidator
 from app.validation.answers.date_answer_validator import DateAnswerValidator
 from app.validation.answers.number_answer_validator import NumberAnswerValidator
 from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app.validation.blocks.block_validator import BlockValidator
 from app.validation.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
@@ -58,6 +58,17 @@ def get_answer_validator(answer, list_names, block_ids):
     return validators.get(answer["type"], AnswerValidator)(
         answer, list_names, block_ids
     )
+
+
+def get_block_validator(block, questionnaire_schema):
+    validators = {
+        "CalculatedSummary": CalculatedSummaryBlockValidator,
+        "PrimaryPersonListCollector": PrimaryPersonListCollectorValidator,
+        "ListCollector": ListCollectorValidator,
+        "ListCollectorDrivingQuestion": ListCollectorDrivingQuestionValidator,
+        "RelationshipCollector": RelationshipCollectorValidator,
+    }
+    return validators.get(block["type"], BlockValidator)(block, questionnaire_schema)
 
 
 class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
@@ -165,44 +176,9 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
             for skip_condition in block.get("skip_conditions", []):
                 self._validate_skip_condition(skip_condition, block)
 
-            if block["type"] == "CalculatedSummary":
-                block_validator = CalculatedSummaryBlockValidator(
-                    block, self.questionnaire_schema
-                )
-                block_validator.validate()
-                self.errors += block_validator.errors
-            elif block["type"] == "PrimaryPersonListCollector":
-                try:
-                    primary_person_validator = PrimaryPersonListCollectorValidator(
-                        block, self.questionnaire_schema
-                    )
-                    primary_person_validator.validate()
-                    self.errors += primary_person_validator.errors
-                except KeyError as e:
-                    self.add_error(f"Missing key in PrimaryPersonListCollector: {e}")
-            elif block["type"] == "ListCollector":
-                try:
-                    list_collector_validator = ListCollectorValidator(
-                        block, self.questionnaire_schema
-                    )
-                    list_collector_validator.validate()
-                    self.errors += list_collector_validator.errors
-                except KeyError as e:
-                    self.add_error(f"Missing key in ListCollector: {e}")
-            elif block["type"] == "RelationshipCollector":
-                self._validate_list_exists(block["for_list"])
-
-                relationship_collector_validator = RelationshipCollectorValidator(
-                    block, self.questionnaire_schema
-                )
-                relationship_collector_validator.validate()
-                self.errors += relationship_collector_validator.errors
-            elif block["type"] == "ListCollectorDrivingQuestion":
-                driving_question_validator = ListCollectorDrivingQuestionValidator(
-                    block, section["id"], self.questionnaire_schema
-                )
-                driving_question_validator.validate()
-                self.errors += driving_question_validator.errors
+            block_validator = get_block_validator(block, self.questionnaire_schema)
+            block_validator.validate()
+            self.errors += block_validator.errors
 
             self._validate_questions(block, numeric_answer_ranges)
 

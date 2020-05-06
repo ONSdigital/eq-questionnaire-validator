@@ -3,29 +3,28 @@ from app.validation.blocks.block_validator import BlockValidator
 
 
 class ListCollectorValidator(BlockValidator):
-    def __init__(self, block, questionnaire_schema):
-        super(ListCollectorValidator, self).__init__(block)
-        self.questionnaire_schema = questionnaire_schema
-
     def validate(self):
-        self._validate_list_answer_references(self.block)
+        try:
+            self._validate_list_answer_references(self.block)
 
-        self.validate_collector_questions(
-            self.block,
-            self.block["add_answer"]["value"],
-            error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
-            error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
-        )
+            self.validate_collector_questions(
+                self.block,
+                self.block["add_answer"]["value"],
+                error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
+                error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            )
 
-        self.validate_collector_questions(
-            self.block["remove_answer"],
-            self.block["remove_answer"]["value"],
-            error_messages.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-            error_messages.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
-        )
+            self.validate_collector_questions(
+                self.block["remove_answer"],
+                self.block["remove_answer"]["value"],
+                error_messages.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
+                error_messages.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
+            )
 
-        self.validate_list_collector_answer_ids(self.block)
-        self.validate_other_list_collectors()
+            self.validate_list_collector_answer_ids(self.block)
+            self.validate_other_list_collectors()
+        except KeyError as e:
+            self.add_error(f"Missing key in ListCollector: {e}")
 
     def _validate_list_answer_references(self, block):
         main_block_ids = self.questionnaire_schema.get_all_answer_ids(block["id"])

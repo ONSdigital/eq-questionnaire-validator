@@ -141,11 +141,11 @@ class QuestionnaireSchema:
         return self.blocks_by_id[block_id]
 
     @lru_cache
-    def has_single_list_collector(self, list_name, section_id):
+    def has_single_list_collector(self, list_name):
         return (
             len(
                 jp.match(
-                    f'$..sections[?(@.id=={section_id})]..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
+                    f'$..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
                     self.schema,
                 )
             )

@@ -2,7 +2,8 @@ from app.validation.validator import Validator
 
 
 class BlockValidator(Validator):
-    def __init__(self, block_element):
+    def __init__(self, block_element, questionnaire_schema):
         super().__init__(block_element)
+        self.questionnaire_schema = questionnaire_schema
         self.block = block_element
         self.context["block_id"] = self.block["id"]

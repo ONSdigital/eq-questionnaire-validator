@@ -689,7 +689,11 @@ def test_invalid_relationship_no_list_specified():
     validator.validate()
 
     expected_for_list_error = [
-        {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "not-a-list"}
+        {
+            "message": error_messages.FOR_LIST_NEVER_POPULATED,
+            "list_name": "not-a-list",
+            "block_id": "relationships",
+        }
     ]
 
     expected_answer_errors = [
