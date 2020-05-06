@@ -1,0 +1,42 @@
+from app.validation import error_messages
+from app.validation.blocks import RelationshipCollectorValidator
+from app.validation.questionnaire_schema import QuestionnaireSchema
+from tests.test_questionnaire_validator import _open_and_load_schema_file
+
+
+def test_invalid_relationship_multiple_answers():
+    filename = "schemas/invalid/test_invalid_relationship_multiple_answers.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("relationships")
+    validator = RelationshipCollectorValidator(block, questionnaire_schema)
+
+    expected_errors = [
+        {
+            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
+            "block_id": "relationships",
+        }
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors
+
+
+def test_invalid_relationship_wrong_answer_type():
+    filename = "schemas/invalid/test_invalid_relationship_wrong_answer_type.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("relationships")
+    validator = RelationshipCollectorValidator(block, questionnaire_schema)
+
+    expected_errors = [
+        {
+            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
+            "block_id": "relationships",
+        }
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors

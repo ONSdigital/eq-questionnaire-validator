@@ -436,67 +436,6 @@ def test_invalid_primary_person_list_collector_with_no_add_option():
     assert expected_errors == validator.errors
 
 
-def test_invalid_list_collector_with_different_add_block_answer_ids():
-    filename = "schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
-            "list_name": "people",
-            "block_id": "list-collector",
-        },
-        {
-            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
-            "list_name": "people",
-            "block_id": "another-list-collector",
-        },
-    ]
-
-    assert expected_errors == validator.errors
-
-
-def test_invalid_primary_person_list_collector_with_different_add_block_answer_ids():
-    filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
-            "list_name": "people",
-            "block_id": "primary-person-list-collector",
-        },
-        {
-            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT,
-            "list_name": "people",
-            "block_id": "primary-person-list-collector2",
-        },
-    ]
-
-    assert expected_errors == validator.errors
-
-
-def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
-    filename = "schemas/invalid/test_invalid_list_collector_with_different_answer_ids_in_add_and_edit.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
-            "block_id": "list-collector",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_invalid_list_reference_in_custom_summary():
     filename = "schemas/invalid/test_invalid_custom_list_summary.json"
 
@@ -623,49 +562,6 @@ def test_invalid_when_condition_property():
     assert validator.errors == expected_errors
 
 
-def test_invalid_list_collector_bad_answer_reference_ids():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_bad_answer_reference_ids.json"
-    )
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-            "referenced_id": "someone-else",
-            "block_id": "list-collector",
-        },
-        {
-            "message": error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
-            "referenced_id": "delete-confirmation",
-            "block_id": "list-collector",
-        },
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
-def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
-    filename = (
-        "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_id.json"
-    )
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-            "referenced_id": "fake-answer-id",
-            "block_id": "primary-person-list-collector",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_invalid_list_name_in_when_rule():
     filename = "schemas/invalid/test_invalid_when_condition_list_property.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -710,38 +606,6 @@ def test_invalid_relationship_no_list_specified():
     ] * 12
 
     assert validator.errors == expected_for_list_error + expected_answer_errors
-
-
-def test_invalid_relationship_multiple_answers():
-    filename = "schemas/invalid/test_invalid_relationship_multiple_answers.json"
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
-            "block_id": "relationships",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
-def test_invalid_relationship_wrong_answer_type():
-    filename = "schemas/invalid/test_invalid_relationship_wrong_answer_type.json"
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
-            "block_id": "relationships",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
 
 
 def test_invalid_hub_and_spoke_with_summary_confirmation():
@@ -833,40 +697,6 @@ def test_invalid_answer_action():
             "block_id": "non-existent-block-id",
             "answer_id": "anyone-else-live-here-answer",
         },
-    ]
-
-    validator.validate()
-
-    assert expected_error_messages == validator.errors
-
-
-def test_invalid_driving_question_multiple_collectors():
-    filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_collectors.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_error_message = (
-        "ListCollectorDrivingQuestion `anyone-usually-live-at` for list "
-        "`people` cannot be used with multiple ListCollectors"
-    )
-
-    validator.validate()
-
-    assert expected_error_message == validator.errors[0]["message"]
-
-
-def test_invalid_driving_question_multiple_driving_questions():
-    filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_driving_questions.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_error_messages = [
-        {
-            "message": error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
-            "block_id": block_id,
-            "for_list": "people",
-        }
-        for block_id in ["anyone-usually-live-at-preceding", "anyone-usually-live-at"]
     ]
 
     validator.validate()

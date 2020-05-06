@@ -5,78 +5,65 @@ from collections import defaultdict
 from eq_translations.survey_schema import SurveySchema
 
 from app.validation import error_messages
-from app.validation.answers.answer_validator import AnswerValidator
-from app.validation.answers.date_answer_validator import DateAnswerValidator
-from app.validation.answers.number_answer_validator import NumberAnswerValidator
-from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
-from app.validation.blocks.block_validator import BlockValidator
-from app.validation.blocks.calculated_summary_block_validator import (
-    CalculatedSummaryBlockValidator,
-)
-from app.validation.blocks.list_collector_driving_question_validator import (
-    ListCollectorDrivingQuestionValidator,
-)
-from app.validation.blocks.list_collector_validator import ListCollectorValidator
-from app.validation.blocks.primary_person_list_collector_validator import (
-    PrimaryPersonListCollectorValidator,
-)
-from app.validation.blocks.relationship_collector_validator import (
-    RelationshipCollectorValidator,
-)
+from app.validation.answers import get_answer_validator
+from app.validation.blocks import get_block_validator
 from app.validation.metadata_validator import MetadataValidator
 from app.validation.questionnaire_schema import QuestionnaireSchema
-from app.validation.questions.calculated_question_validator import (
-    CalculatedQuestionValidator,
-)
-from app.validation.questions.date_range_question_validator import (
-    DateRangeQuestionValidator,
-)
-from app.validation.questions.mutually_exclusive_validator import (
-    MutuallyExclusiveQuestionValidator,
-)
-from app.validation.questions.question_validator import QuestionValidator
+from app.validation.questions import get_question_validator
 from app.validation.validator import Validator
 
 
-def get_question_validator(question):
-    validators = {
-        "Calculated": CalculatedQuestionValidator,
-        "DateRange": DateRangeQuestionValidator,
-        "MutuallyExclusive": MutuallyExclusiveQuestionValidator,
-    }
-    return validators.get(question["type"], QuestionValidator)(question)
+def has_default_route(routing_rules):
+    for rule in routing_rules:
+        if "goto" not in rule or "when" not in rule["goto"].keys():
+            return True
+    return False
 
 
-def get_answer_validator(answer, list_names, block_ids):
-    validators = {
-        "TextField": TextFieldAnswerValidator,
-        "Date": DateAnswerValidator,
-        "Number": NumberAnswerValidator,
-        "Currency": NumberAnswerValidator,
-        "Percentage": NumberAnswerValidator,
-    }
-    return validators.get(answer["type"], AnswerValidator)(
-        answer, list_names, block_ids
-    )
+def get_routing_when_list(routing_rules):
+    when_list = []
+    for rule in routing_rules:
+        when_clause = rule.get("goto", {})
+        when_list.append(when_clause)
+    return when_list
 
 
-def get_block_validator(block, questionnaire_schema):
-    validators = {
-        "CalculatedSummary": CalculatedSummaryBlockValidator,
-        "PrimaryPersonListCollector": PrimaryPersonListCollectorValidator,
-        "ListCollector": ListCollectorValidator,
-        "ListCollectorDrivingQuestion": ListCollectorDrivingQuestionValidator,
-        "RelationshipCollector": RelationshipCollectorValidator,
-    }
-    return validators.get(block["type"], BlockValidator)(block, questionnaire_schema)
+def is_contained_in_list(dict_list, key_id):
+    for dict_to_check in dict_list:
+        if dict_to_check["id"] == key_id:
+            return True
+    return False
 
 
-class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
+def find_duplicates(values):
+    return [item for item, count in collections.Counter(values).items() if count > 1]
+
+
+def get_dicts_with_key(input_data, key_name):
+    """
+    Get all dicts that contain `key_name`.
+    :param input_data: the input data to search
+    :param key_name: the key to find
+    :return: list of dicts containing the key name, otherwise returns None
+    """
+    if isinstance(input_data, dict):
+        for k, v in input_data.items():
+            if k == key_name:
+                yield input_data
+            else:
+                yield from get_dicts_with_key(v, key_name)
+    elif isinstance(input_data, list):
+        for item in input_data:
+            yield from get_dicts_with_key(item, key_name)
+    else:
+        yield from ()
+
+
+class QuestionnaireValidator(Validator):
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
         self.questionnaire_schema = QuestionnaireSchema(schema_element)
-        self._list_collector_answer_ids = {}
 
     def validate(self):
         metadata_validator = MetadataValidator(
@@ -200,6 +187,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
         routing_rules = block_or_variant.get("routing_rules", {})
+        default_route = has_default_route(routing_rules)
 
         if question:
             questions.append(question)
@@ -212,7 +200,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
 
             for answer in question.get("answers", []):
                 if routing_rules:
-                    default_route = self.has_default_route(routing_rules)
                     self.validate_default_route(answer, default_route)
                     self._validate_routing_on_answer_options(answer, routing_rules)
 
@@ -240,19 +227,6 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                     )
                 self.errors += answer_validator.errors
 
-    def has_default_route(self, routing_rules):
-        for rule in routing_rules:
-            if "goto" not in rule or "when" not in rule["goto"].keys():
-                return True
-        return False
-
-    def get_routing_when_list(self, routing_rules):
-        when_list = []
-        for rule in routing_rules:
-            when_clause = rule.get("goto", {})
-            when_list.append(when_clause)
-        return when_list
-
     def validate_default_route(self, answer, has_default_route):
         if answer["mandatory"] and not has_default_route:
             default_route_not_defined = "Default route not defined for optional question [{}]".format(
@@ -263,7 +237,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
     def _validate_routing_on_answer_options(self, answer, routing_rules):
         answer_options = answer.get("options", [])
         option_values = [option["value"] for option in answer_options]
-        routing_when_list = self.get_routing_when_list(routing_rules)
+        routing_when_list = get_routing_when_list(routing_rules)
 
         if answer_options:
             for when_clause in routing_when_list:
@@ -281,7 +255,7 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                 answer_options
             )
 
-            if has_unrouted_options and not self.has_default_route(routing_rules):
+            if has_unrouted_options and not has_default_route(routing_rules):
                 self.errors.append(
                     "Routing rule not defined for answer [{}] missing options {}".format(
                         answer["id"], option_values
@@ -804,34 +778,3 @@ class QuestionnaireValidator(Validator):  # pylint: disable=too-many-lines
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
-
-
-def is_contained_in_list(dict_list, key_id):
-    for dict_to_check in dict_list:
-        if dict_to_check["id"] == key_id:
-            return True
-    return False
-
-
-def find_duplicates(values):
-    return [item for item, count in collections.Counter(values).items() if count > 1]
-
-
-def get_dicts_with_key(input_data, key_name):
-    """
-    Get all dicts that contain `key_name`.
-    :param input_data: the input data to search
-    :param key_name: the key to find
-    :return: list of dicts containing the key name, otherwise returns None
-    """
-    if isinstance(input_data, dict):
-        for k, v in input_data.items():
-            if k == key_name:
-                yield input_data
-            else:
-                yield from get_dicts_with_key(v, key_name)
-    elif isinstance(input_data, list):
-        for item in input_data:
-            yield from get_dicts_with_key(item, key_name)
-    else:
-        yield from ()

@@ -7,10 +7,9 @@ class ListCollectorDrivingQuestionValidator(BlockValidator):
         if not self.questionnaire_schema.has_single_list_collector(
             self.block["for_list"]
         ):
-            block = self.block
             self.add_error(
-                f'ListCollectorDrivingQuestion `{block["id"]}` for list '
-                f'`{block["for_list"]}` cannot be used with multiple ListCollectors'
+                error_messages.MULTIPLE_LIST_COLLECTORS_FOR_DRIVING_QUESTION,
+                list_name=self.block["for_list"],
             )
 
         if not self.questionnaire_schema.has_single_driving_question(

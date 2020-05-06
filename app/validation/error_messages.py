@@ -67,6 +67,9 @@ LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
     "The list collector block contains an add block and edit block"
     " with different answer ids"
 )
+MULTIPLE_LIST_COLLECTORS_FOR_DRIVING_QUESTION = (
+    "ListCollectorDrivingQuestion for list cannot be used with multiple ListCollectors"
+)
 NON_CHECKBOX_COMPARISON_ID = (
     "The comparison id is not of answer type `Checkbox`. The condition can only reference "
     "`Checkbox` answers when using `comparison id`"
