@@ -188,8 +188,8 @@ class QuestionnaireValidator(Validator):
                     )
                 self.errors += answer_validator.errors
 
-    def validate_default_route(self, answer, has_default_route):
-        if answer["mandatory"] and not has_default_route:
+    def validate_default_route(self, answer, default_route_found):
+        if answer["mandatory"] and not default_route_found:
             default_route_not_defined = "Default route not defined for optional question [{}]".format(
                 answer["id"]
             )

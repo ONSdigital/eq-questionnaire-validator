@@ -101,7 +101,7 @@ class AnswerValidator(Validator):
         Validate numeric answer types are valid.
         """
         # Validate referred numeric answer exists (skip further tests for answer if error is returned)
-        referred_errors = self._validate_referred_numeric_answer(answer_ranges)
+        referred_errors = self.validate_referred_numeric_answer(answer_ranges)
 
         if referred_errors:
             return
@@ -112,7 +112,7 @@ class AnswerValidator(Validator):
         # Validate referred numeric answer decimals
         self.validate_referred_numeric_answer_decimals(answer_ranges)
 
-    def _validate_referred_numeric_answer(self, answer_ranges):
+    def validate_referred_numeric_answer(self, answer_ranges):
         """
         Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values

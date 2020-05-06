@@ -2,14 +2,15 @@ from app.validation.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
-def test_get_driving_question_blocks():
+def test_get_blocks():
     filename = "schemas/valid/test_list_collector_driving_question.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    driving_question_blocks = questionnaire_schema.get_driving_question_blocks("people")
+    driving_question_blocks = questionnaire_schema.get_blocks(
+        type="ListCollectorDrivingQuestion", for_list="people"
+    )
 
-    assert questionnaire_schema.list_names == ["people"]
     assert len(driving_question_blocks) == 1
     assert driving_question_blocks[0]["id"] == "anyone-usually-live-at"
 

@@ -31,6 +31,12 @@ def find_duplicates(values):
     return [item for item, count in collections.Counter(values).items() if count > 1]
 
 
+@lru_cache
+def get_element_path(key, path):
+    position = path.find(key)
+    return path[: position + len(key + ".[0]")]
+
+
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
@@ -119,7 +125,8 @@ class QuestionnaireSchema:
         Returns: generator yielding (path, value) tuples
         """
         ignored_paths = [
-            "routing_rules" "skip_conditions",
+            "routing_rules",
+            "skip_conditions",
             "when",
             "edit_block.question.answers",
             "add_block.question.answers",
@@ -193,7 +200,7 @@ class QuestionnaireSchema:
     @lru_cache
     def get_block_key_context(self, block_id, key_name):
         """
-        Get all dicts that contain `key_name`.
+        Get all dicts that contain `key_name` within a block
         :param block_id: the id of the block to search
         :param key_name: the key to find
         :return: list of dicts containing the key name, otherwise returns None
@@ -202,10 +209,6 @@ class QuestionnaireSchema:
         for match in parse(f"$..{key_name}").find(self.blocks_by_id[block_id]):
             matches.append(match.context.value)
         return matches
-
-    @lru_cache
-    def get_list_collectors(self, list_name):
-        return self.get_blocks(type="ListCollector", for_list=list_name)
 
     @lru_cache
     def get_other_list_collectors(self, list_name, block_id_to_filter):
@@ -222,12 +225,13 @@ class QuestionnaireSchema:
         )
 
     @lru_cache
-    def get_driving_question_blocks(self, list_name):
-        return self.get_blocks(type="ListCollectorDrivingQuestion", for_list=list_name)
-
-    @lru_cache
     def has_single_driving_question(self, list_name):
-        return len(self.get_driving_question_blocks(list_name)) == 1
+        return (
+            len(
+                self.get_blocks(type="ListCollectorDrivingQuestion", for_list=list_name)
+            )
+            == 1
+        )
 
     @staticmethod
     def get_all_questions_for_block(block):
@@ -256,28 +260,23 @@ class QuestionnaireSchema:
         return questions[0]["answers"][0]
 
     @staticmethod
-    def get_key_index_from_path(key, path):
+    def _get_key_index_from_path(key, path):
         position = path.find(key) + len(key + ".[")
         return int(path[position : position + 1])
 
     @lru_cache
-    def get_element_path(self, key, path):
-        position = path.find(key)
-        return path[: position + len(key + ".[0]")]
-
-    @lru_cache
-    def get_path_id(self, path):
+    def _get_path_id(self, path):
         return jp.match1(path + ".id", self.schema)
 
     @lru_cache
     def get_context_from_path(self, full_path):
-        section_index = self.get_key_index_from_path("sections", full_path)
+        section_index = self._get_key_index_from_path("sections", full_path)
 
-        block_path = self.get_element_path("blocks", full_path)
-        group_path = self.get_element_path("groups", full_path)
+        block_path = get_element_path("blocks", full_path)
+        group_path = get_element_path("groups", full_path)
 
-        group_id = self.get_path_id(group_path)
-        block_id = self.get_path_id(block_path)
+        group_id = self._get_path_id(group_path)
+        block_id = self._get_path_id(block_path)
 
         if any(
             sub_block in full_path

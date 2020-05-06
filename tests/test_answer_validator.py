@@ -187,9 +187,7 @@ def test_invalid_range():
     }
     validator = AnswerValidator(answer)
 
-    validator._validate_referred_numeric_answer(
-        {"answer-3": {"min": None, "max": None}}
-    )
+    validator.validate_referred_numeric_answer({"answer-3": {"min": None, "max": None}})
 
     expected_errors = [
         {
