@@ -1,0 +1,49 @@
+{
+  "$id": "https://eq.ons.gov.uk/hub/definitions.json",
+  "hub": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "description": "Whether or not the hub and spoke pattern is enabled for this questionnaire.",
+        "type": "boolean"
+      },
+      "guidance": {
+        "type": "object",
+        "description": "Override guidance messages for the hub.",
+        "properties": {
+          "COMPLETE": {
+            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/messages"
+          },
+          "INCOMPLETE": {
+            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/messages"
+          }
+        },
+        "additionalProperties": false
+      },
+      "required_completed_sections": {
+        "description": "The sections that need to be complete prior to the hub displaying",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["enabled"],
+    "additionalProperties": false
+  },
+  "messages": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "submit_button": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  }
+}
