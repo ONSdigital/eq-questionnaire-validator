@@ -1,4 +1,3 @@
-import collections
 import re
 from collections import defaultdict
 
@@ -8,55 +7,15 @@ from app.validation import error_messages
 from app.validation.answers import get_answer_validator
 from app.validation.blocks import get_block_validator
 from app.validation.metadata_validator import MetadataValidator
-from app.validation.questionnaire_schema import QuestionnaireSchema
+from app.validation.questionnaire_schema import (
+    QuestionnaireSchema,
+    has_default_route,
+    is_contained_in_list,
+    get_routing_when_list,
+    find_duplicates,
+)
 from app.validation.questions import get_question_validator
 from app.validation.validator import Validator
-
-
-def has_default_route(routing_rules):
-    for rule in routing_rules:
-        if "goto" not in rule or "when" not in rule["goto"].keys():
-            return True
-    return False
-
-
-def get_routing_when_list(routing_rules):
-    when_list = []
-    for rule in routing_rules:
-        when_clause = rule.get("goto", {})
-        when_list.append(when_clause)
-    return when_list
-
-
-def is_contained_in_list(dict_list, key_id):
-    for dict_to_check in dict_list:
-        if dict_to_check["id"] == key_id:
-            return True
-    return False
-
-
-def find_duplicates(values):
-    return [item for item, count in collections.Counter(values).items() if count > 1]
-
-
-def get_dicts_with_key(input_data, key_name):
-    """
-    Get all dicts that contain `key_name`.
-    :param input_data: the input data to search
-    :param key_name: the key to find
-    :return: list of dicts containing the key name, otherwise returns None
-    """
-    if isinstance(input_data, dict):
-        for k, v in input_data.items():
-            if k == key_name:
-                yield input_data
-            else:
-                yield from get_dicts_with_key(v, key_name)
-    elif isinstance(input_data, list):
-        for item in input_data:
-            yield from get_dicts_with_key(item, key_name)
-    else:
-        yield from ()
 
 
 class QuestionnaireValidator(Validator):
@@ -131,7 +90,7 @@ class QuestionnaireValidator(Validator):
         for rule in group.get("routing_rules", []):
             self.validate_routing_rule_target(group["blocks"], "block", rule)
             self.validate_routing_rule_target(all_groups, "group", rule)
-            self._validate_routing_rule(rule, group)
+            self.validate_routing_rule(rule, group)
 
     def validate_block_routing_rules(self, block, group, all_groups):
         self.validate_routing_rules_have_default(
@@ -141,7 +100,7 @@ class QuestionnaireValidator(Validator):
         for rule in block.get("routing_rules", []):
             self.validate_routing_rule_target(group["blocks"], "block", rule)
             self.validate_routing_rule_target(all_groups, "group", rule)
-            self._validate_routing_rule(rule, block)
+            self.validate_routing_rule(rule, block)
 
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
@@ -175,12 +134,14 @@ class QuestionnaireValidator(Validator):
                     m["name"] for m in self.schema_element["metadata"]
                 ]
 
-            source_references = get_dicts_with_key(block, "identifier")
+            source_references = self.questionnaire_schema.get_block_key_context(
+                block["id"], "identifier"
+            )
 
             self._validate_source_references(
                 source_references, valid_metadata_ids, block["id"]
             )
-            self._validate_placeholders(block)
+            self._validate_placeholders(block["id"])
             self._validate_variants(block, numeric_answer_ranges)
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
@@ -400,7 +361,7 @@ class QuestionnaireValidator(Validator):
                     f"contain multiple default routing rules. Some of them will not be used"
                 )
 
-    def _validate_routing_rule(self, rule, block_or_group):
+    def validate_routing_rule(self, rule, block_or_group):
         rule = rule.get("goto")
         if "when" in rule:
             self._validate_when_rule(rule["when"], block_or_group["id"])
@@ -657,10 +618,12 @@ class QuestionnaireValidator(Validator):
                 differences=placeholder_differences,
             )
 
-    def _validate_placeholders(self, block_json):
-        strings_with_placeholders = get_dicts_with_key(block_json, "placeholders")
+    def _validate_placeholders(self, block_id):
+        strings_with_placeholders = self.questionnaire_schema.get_block_key_context(
+            block_id, "placeholders"
+        )
         for placeholder_object in strings_with_placeholders:
-            self._validate_placeholder_object(placeholder_object, block_json["id"])
+            self._validate_placeholder_object(placeholder_object, block_id)
 
     def _validate_source_references(
         self, source_references, valid_metadata_ids, block_id
