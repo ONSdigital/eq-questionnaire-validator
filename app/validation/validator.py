@@ -527,11 +527,14 @@ class Validator:  # pylint: disable=too-many-lines
             results["number_of_answers"].clear()
 
             for variant in variants:
-                for answer in variant["question"]["answers"]:
-                    if "-exclusive" not in answer["id"]:
+                if variant["question"]["type"] == "MutuallyExclusive":
+                    non_exclusive_answer = variant["question"]["answers"][0]
+                    results["answer_ids"].add(non_exclusive_answer["id"])
+                else:
+                    for answer in variant["question"]["answers"]:
                         results["answer_ids"].add(answer["id"])
 
-                results["number_of_answers"].add(len(results["answer_ids"]))
+            results["number_of_answers"].add(len(results["answer_ids"]))
 
         return results
 
