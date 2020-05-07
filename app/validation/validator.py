@@ -534,7 +534,7 @@ class Validator:  # pylint: disable=too-many-lines
                     for answer in variant["question"]["answers"]:
                         results["answer_ids"].add(answer["id"])
 
-            results["number_of_answers"].add(len(results["answer_ids"]))
+                results["number_of_answers"].add(len(results["answer_ids"]))
 
         return results
 
