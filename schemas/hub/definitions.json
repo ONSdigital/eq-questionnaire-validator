@@ -7,43 +7,40 @@
         "description": "Whether or not the hub and spoke pattern is enabled for this questionnaire.",
         "type": "boolean"
       },
-      "guidance": {
-        "type": "object",
-        "description": "Override guidance messages for the hub.",
-        "properties": {
-          "COMPLETE": {
-            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/messages"
-          },
-          "INCOMPLETE": {
-            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/messages"
-          }
-        },
-        "additionalProperties": false
-      },
       "required_completed_sections": {
         "description": "The sections that need to be complete prior to the hub displaying",
         "type": "array",
         "items": {
           "type": "string"
         }
+      },
+      "complete": {
+        "type": "object",
+        "description": "The title/guidance that will appear on the hub, when the questionnaire is complete",
+        "anyOf": [
+          {
+            "required": ["title"]
+          },
+          {
+            "required": ["guidance"]
+          }
+        ]
+      },
+      "incomplete": {
+        "type": "object",
+        "description": "The guidance that will appear on the hub, when the questionnaire is incomplete.",
+        "properties": {
+          "guidance": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "submission": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/submission"
       }
     },
     "required": ["enabled"],
-    "additionalProperties": false
-  },
-  "messages": {
-    "type": "object",
-    "properties": {
-      "title": {
-        "type": "string"
-      },
-      "submit_button": {
-        "type": "string"
-      },
-      "description": {
-        "type": "string"
-      }
-    },
     "additionalProperties": false
   }
 }
