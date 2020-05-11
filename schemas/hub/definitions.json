@@ -37,7 +37,14 @@
         "additionalProperties": false
       },
       "submission": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/submission"
+        "type": "object",
+        "properties": {
+          "button": {
+            "type": "string",
+            "description": "The text that appears on the submit button, when the questionnaire is ready to be submitted"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "required": ["enabled"],
