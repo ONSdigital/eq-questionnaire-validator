@@ -7,7 +7,7 @@
   "session_timeout_in_seconds": 3,
   "title": "Test Question Variants",
   "theme": "default",
-  "description": "A questionnaire to test default values in question variants",
+  "description": "A questionnaire to test question variants with MutuallyExclusive types",
   "metadata": [
     {
       "name": "user_id",
@@ -58,7 +58,6 @@
                     "title": "What is your age?",
                     "answers": [
                       {
-                        "default": 0,
                         "id": "answer-2",
                         "label": "Your age?",
                         "mandatory": false,
@@ -77,15 +76,26 @@
                 {
                   "question": {
                     "id": "question-2",
-                    "type": "General",
+                    "type": "MutuallyExclusive",
+                    "mandatory": false,
                     "title": "What is your age?",
                     "answers": [
                       {
-                        "default": 1,
                         "id": "answer-2",
                         "label": "Your age?",
                         "mandatory": false,
                         "type": "Number"
+                      },
+                      {
+                        "id": "answer-2-exclusive",
+                        "mandatory": false,
+                        "type": "Checkbox",
+                        "options": [
+                          {
+                            "label": "I don’t know",
+                            "value": "I don’t know"
+                          }
+                        ]
                       }
                     ]
                   },
