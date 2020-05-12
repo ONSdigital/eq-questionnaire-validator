@@ -19,7 +19,7 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "The title that will appear on the hub, when the questionnaire is incomplete."
+            "description": "The title that will appear on the hub, when the questionnaire is complete."
           },
           "guidance": {
             "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
@@ -32,7 +32,8 @@
           {
             "required": ["title"]
           }
-        ]
+        ],
+        "additionalProperties": false
       },
       "incomplete": {
         "type": "object",
