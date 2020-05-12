@@ -52,7 +52,8 @@
             "description": "The text that appears on the submit button, when the questionnaire is ready to be submitted"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [ "button" ]
       }
     },
     "required": ["enabled"],
