@@ -17,20 +17,20 @@
       "complete": {
         "type": "object",
         "properties": {
-           "title": {
-              "type": "string",
-              "description": "The title that will appear on the hub, when the questionnaire is incomplete."
-            },
+          "title": {
+            "type": "string",
+            "description": "The title that will appear on the hub, when the questionnaire is incomplete."
+          },
           "guidance": {
-             "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
+            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
           }
         },
         "anyOf": [
           {
-            "required": [ "guidance" ]
+            "required": ["guidance"]
           },
           {
-            "required": [ "title" ]
+            "required": ["title"]
           }
         ]
       },
@@ -38,7 +38,7 @@
         "type": "object",
         "properties": {
           "guidance": {
-             "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
+            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
           }
         },
         "additionalProperties": false,
@@ -53,13 +53,13 @@
           }
         },
         "additionalProperties": false,
-        "required": [ "button" ]
+        "required": ["button"]
       }
     },
     "required": ["enabled"],
     "additionalProperties": false
   },
-  "guidance" :{
+  "guidance": {
     "type": "string",
     "description": "The guidance that will appear on the hub"
   }
