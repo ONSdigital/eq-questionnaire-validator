@@ -16,25 +16,33 @@
       },
       "complete": {
         "type": "object",
-        "description": "The title/guidance that will appear on the hub, when the questionnaire is complete",
+        "properties": {
+           "title": {
+              "type": "string",
+              "description": "The title that will appear on the hub, when the questionnaire is incomplete."
+            },
+          "guidance": {
+             "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
+          }
+        },
         "anyOf": [
           {
-            "required": ["title"]
+            "required": [ "guidance" ]
           },
           {
-            "required": ["guidance"]
+            "required": [ "title" ]
           }
         ]
       },
       "incomplete": {
         "type": "object",
-        "description": "The guidance that will appear on the hub, when the questionnaire is incomplete.",
         "properties": {
           "guidance": {
-            "type": "string"
+             "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": ["guidance"]
       },
       "submission": {
         "type": "object",
@@ -49,5 +57,9 @@
     },
     "required": ["enabled"],
     "additionalProperties": false
+  },
+  "guidance" :{
+    "type": "string",
+    "description": "The guidance that will appear on the hub"
   }
 }
