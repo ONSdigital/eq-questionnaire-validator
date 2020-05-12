@@ -62,6 +62,12 @@ class QuestionnaireSchema:
         )
 
     @cached_property
+    def metadata_ids(self):
+        if "metadata" in self.schema:
+            return [m["name"] for m in self.schema["metadata"]]
+        return []
+
+    @cached_property
     def questions_with_context(self):
         for match in parse("$..question").find(self.schema):
             yield match.value, self.get_context_from_path(str(match.full_path))

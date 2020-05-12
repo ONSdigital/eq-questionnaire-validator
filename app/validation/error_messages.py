@@ -104,7 +104,9 @@ ANSWERS_TO_CALCULATE_HAS_INVALID_ID = (
 ANSWERS_TO_CALCULATE_HAS_DUPLICATES = (
     "Duplicate answers in block's answers_to_calculate"
 )
-
+REQUIRED_HUB_SECTION_UNDEFINED = (
+    "Required defined section hub does not appear in schema"
+)
 
 # QuestionValidator
 MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (

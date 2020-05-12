@@ -4,6 +4,8 @@ from app.validation.blocks.block_validator import BlockValidator
 
 class RelationshipCollectorValidator(BlockValidator):
     def validate(self):
+        super(RelationshipCollectorValidator, self).validate()
+
         self.validate_list_exists()
 
         answer_ids = self.questionnaire_schema.get_all_answer_ids(self.block["id"])

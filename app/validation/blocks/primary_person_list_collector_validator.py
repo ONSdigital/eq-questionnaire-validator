@@ -4,6 +4,9 @@ from app.validation.blocks.list_collector_validator import ListCollectorValidato
 
 class PrimaryPersonListCollectorValidator(ListCollectorValidator):
     def validate(self):
+        # Call validate on block validator, not list collector
+        super(ListCollectorValidator, self).validate()
+
         self._validate_primary_person_list_answer_references(self.block)
 
         self.validate_collector_questions(

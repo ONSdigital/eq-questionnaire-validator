@@ -7,6 +7,7 @@ from app.validation import error_messages
 from app.validation.answers import get_answer_validator
 from app.validation.blocks import get_block_validator
 from app.validation.metadata_validator import MetadataValidator
+from app.validation.placeholders.placeholder_validator import PlaceholderValidator
 from app.validation.questionnaire_schema import (
     QuestionnaireSchema,
     has_default_route,
@@ -64,9 +65,16 @@ class QuestionnaireValidator(Validator):
 
         if section_repeat:
             self._validate_list_exists(section_repeat["for_list"])
-            self._validate_placeholder_object(section_repeat["title"], None)
+            placeholder_validator = PlaceholderValidator(
+                section, self.questionnaire_schema
+            )
+            placeholder_validator.validate_placeholder_object(
+                section_repeat["title"], None
+            )
+            self.errors += placeholder_validator.errors
 
         section_summary = section.get("summary")
+
         if section_summary:
             for item in section_summary.get("items", []):
                 self._validate_list_exists(item.get("for_list"))
@@ -76,8 +84,8 @@ class QuestionnaireValidator(Validator):
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
                 self.add_error(
-                    'Required hub completed section "{}" defined in hub does not '
-                    "appear in schema".format(required_section_id)
+                    error_messages.REQUIRED_HUB_SECTION_UNDEFINED,
+                    required_section_id=required_section_id,
                 )
 
     # pylint: disable=too-complex
@@ -106,21 +114,6 @@ class QuestionnaireValidator(Validator):
             self.errors += block_validator.errors
 
             self._validate_questions(block, numeric_answer_ranges)
-
-            valid_metadata_ids = []
-            if "metadata" in self.schema_element:
-                valid_metadata_ids = [
-                    m["name"] for m in self.schema_element["metadata"]
-                ]
-
-            source_references = self.questionnaire_schema.get_block_key_context(
-                block["id"], "identifier"
-            )
-
-            self._validate_source_references(
-                source_references, valid_metadata_ids, block["id"]
-            )
-            self._validate_placeholders(block["id"])
             self._validate_variants(block, numeric_answer_ranges)
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
@@ -330,140 +323,9 @@ class QuestionnaireValidator(Validator):
             )
             self.add_error(error_message)
 
-    def _validate_placeholder_object(self, placeholder_object, current_block_id):
-        """ Current block id may be None if called outside of a block
-        """
-        placeholders_in_string = set()
-        placeholder_regex = re.compile("{(.*?)}")
-        if "text" in placeholder_object:
-            placeholders_in_string.update(
-                placeholder_regex.findall(placeholder_object.get("text"))
-            )
-        elif "text_plural" in placeholder_object:
-            for text in placeholder_object["text_plural"]["forms"].values():
-                placeholders_in_string.update(placeholder_regex.findall(text))
-
-        placeholder_definition_names = set()
-        for placeholder_definition in placeholder_object.get("placeholders"):
-            placeholder_definition_names.add(placeholder_definition["placeholder"])
-
-            transforms = placeholder_definition.get("transforms")
-            if transforms:
-                self._validate_placeholder_transforms(transforms, current_block_id)
-
-        placeholder_differences = placeholders_in_string - placeholder_definition_names
-
-        if placeholder_differences:
-            try:
-                text = placeholder_object["text"]
-            except KeyError:
-                text = placeholder_object["text_plural"]["forms"]["other"]
-
-            self.add_error(
-                error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
-                text=text,
-                differences=placeholder_differences,
-            )
-
-    def _validate_placeholders(self, block_id):
-        strings_with_placeholders = self.questionnaire_schema.get_block_key_context(
-            block_id, "placeholders"
-        )
-        for placeholder_object in strings_with_placeholders:
-            self._validate_placeholder_object(placeholder_object, block_id)
-
-    def _validate_source_references(
-        self, source_references, valid_metadata_ids, block_id
-    ):
-        for source_reference in source_references:
-            source = source_reference["source"]
-            if isinstance(source_reference["identifier"], str):
-                identifiers = [source_reference["identifier"]]
-            else:
-                identifiers = source_reference["identifier"]
-
-            if source == "answers":
-                self.validate_answer_source_reference(identifiers, block_id)
-
-            elif source == "metadata":
-                self._validate_metadata_source_reference(
-                    identifiers, valid_metadata_ids, block_id
-                )
-
-            elif source == "list":
-                self._validate_list_source_reference(identifiers, block_id)
-
-    def validate_answer_source_reference(self, identifiers, current_block_id):
-        for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.answers_with_context:
-                self.add_error(
-                    error_messages.ANSWER_REFERENCE_INVALID,
-                    referenced_id=identifier,
-                    block_id=current_block_id,
-                )
-            elif (
-                self.questionnaire_schema.answers_with_context[identifier]["block"]
-                == current_block_id
-            ):
-                self.add_error(
-                    error_messages.ANSWER_SELF_REFERENCE,
-                    referenced_id=identifier,
-                    block_id=current_block_id,
-                )
-
-    def _validate_metadata_source_reference(
-        self, identifiers, valid_metadata_ids, current_block_id
-    ):
-        for identifier in identifiers:
-            if identifier not in valid_metadata_ids:
-                self.add_error(
-                    error_messages.METADATA_REFERENCE_INVALID,
-                    referenced_id=identifier,
-                    block_id=current_block_id,
-                )
-
-    def _validate_list_source_reference(self, identifiers, current_block_id):
-        for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.list_names:
-                self.add_error(
-                    error_messages.LIST_REFERENCE_INVALID,
-                    id=identifier,
-                    block_id=current_block_id,
-                )
-
     def _validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
-
-    def _validate_placeholder_transforms(self, transforms, block_id):
-        # First transform can't reference a previous transform
-        first_transform = transforms[0]
-        for argument_name in first_transform.get("arguments"):
-            argument = first_transform["arguments"][argument_name]
-            if (
-                isinstance(argument, dict)
-                and argument.get("source") == "previous_transform"
-            ):
-                self.add_error(
-                    error_messages.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
-                    block_id=block_id,
-                )
-
-        # Previous transform must be referenced in all subsequent transforms
-        for transform in transforms[1:]:
-            previous_transform_used = False
-            for argument_name in transform.get("arguments"):
-                argument = transform["arguments"][argument_name]
-                if (
-                    isinstance(argument, dict)
-                    and argument.get("source") == "previous_transform"
-                ):
-                    previous_transform_used = True
-
-            if not previous_transform_used:
-                self.add_error(
-                    error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
-                )
 
     def validate_smart_quotes(self):
 

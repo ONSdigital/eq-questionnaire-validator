@@ -10,6 +10,7 @@ class CalculatedSummaryBlockValidator(BlockValidator):
         self.answers_to_calculate = self.block["calculation"]["answers_to_calculate"]
 
     def validate(self):
+        super(CalculatedSummaryBlockValidator, self).validate()
 
         try:
             answers = [

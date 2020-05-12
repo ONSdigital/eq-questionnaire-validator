@@ -4,6 +4,8 @@ from app.validation.blocks.block_validator import BlockValidator
 
 class ListCollectorDrivingQuestionValidator(BlockValidator):
     def validate(self):
+        super(ListCollectorDrivingQuestionValidator, self).validate()
+
         if not self.questionnaire_schema.has_single_list_collector(
             self.block["for_list"]
         ):

@@ -6,6 +6,9 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app.validation import error_messages
+from app.validation.blocks import BlockValidator
+from app.validation.placeholders.placeholder_validator import PlaceholderValidator
+from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questionnaire_validator import QuestionnaireValidator
 from app.validation.schema_validator import SchemaValidator
 
@@ -38,42 +41,6 @@ def test_param_valid_schemas(valid_schema_filename):
 
         assert not validator.errors
         assert not schema_validator.errors
-
-
-def test_invalid_reference():
-    known_identifiers = ["answer-1", "answer-2"]
-
-    validator = QuestionnaireValidator({})
-    validator.questionnaire_schema.answers_with_context = {
-        "answer-1": {
-            "answer": {
-                "decimal_places": 2,
-                "id": "answer-1",
-                "label": "Answer 1",
-                "mandatory": False,
-                "type": "Number",
-            },
-            "block": "block-1",
-        }
-    }
-
-    validator.validate_answer_source_reference(
-        identifiers=known_identifiers, current_block_id="block-1"
-    )
-
-    expected_errors = [
-        {
-            "message": error_messages.ANSWER_SELF_REFERENCE,
-            "referenced_id": "answer-1",
-            "block_id": "block-1",
-        },
-        {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
-            "referenced_id": "answer-2",
-            "block_id": "block-1",
-        },
-    ]
-    assert validator.errors == expected_errors
 
 
 def test_answer_comparisons_different_types():
@@ -537,7 +504,7 @@ def test_invalid_relationship_no_list_specified():
         },
     ] * 12
 
-    assert validator.errors == expected_for_list_error + expected_answer_errors
+    assert validator.errors == expected_answer_errors + expected_for_list_error
 
 
 def test_invalid_hub_and_spoke_with_summary_confirmation():
@@ -604,7 +571,8 @@ def test_invalid_hub_section_non_existent():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_error_message = {
-        "message": 'Required hub completed section "invalid-section-id" defined in hub does not appear in schema'
+        "message": error_messages.REQUIRED_HUB_SECTION_UNDEFINED,
+        "required_section_id": "invalid-section-id",
     }
 
     validator.validate()

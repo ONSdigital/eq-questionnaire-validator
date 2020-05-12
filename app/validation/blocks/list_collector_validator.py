@@ -4,6 +4,8 @@ from app.validation.blocks.block_validator import BlockValidator
 
 class ListCollectorValidator(BlockValidator):
     def validate(self):
+        super(ListCollectorValidator, self).validate()
+
         try:
             self._validate_list_answer_references(self.block)
 
