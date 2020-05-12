@@ -10,11 +10,13 @@ from app.validation.metadata_validator import MetadataValidator
 from app.validation.questionnaire_schema import (
     QuestionnaireSchema,
     has_default_route,
-    is_contained_in_list,
-    get_routing_when_list,
     find_duplicates,
 )
 from app.validation.questions import get_question_validator
+from app.validation.routing.answer_routing_validator import AnswerRoutingValidator
+from app.validation.routing.routing_validator import RoutingValidator
+
+from app.validation.routing.when_validator import WhenValidator
 from app.validation.validator import Validator
 
 
@@ -35,23 +37,19 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
 
-        sections = self.schema_element.get("sections", [])
-        all_groups = [group for section in sections for group in section.get("groups")]
-
         numeric_answer_ranges = {}
 
         for section in self.questionnaire_schema.sections:
             self._validate_section(section)
 
             for group in section["groups"]:
-                self._validate_group_routing_rules(group, all_groups)
-
-                for skip_condition in group.get("skip_conditions", []):
-                    self._validate_skip_condition(skip_condition, group)
-
-                self._validate_blocks(
-                    section["id"], group["id"], all_groups, numeric_answer_ranges
+                group_routing_validator = RoutingValidator(
+                    group, group, self.questionnaire_schema
                 )
+                group_routing_validator.validate()
+                self.errors += group_routing_validator.errors
+
+                self._validate_blocks(section["id"], group["id"], numeric_answer_ranges)
 
         required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
@@ -82,29 +80,9 @@ class QuestionnaireValidator(Validator):
                     "appear in schema".format(required_section_id)
                 )
 
-    def _validate_group_routing_rules(self, group, all_groups):
-        self.validate_routing_rules_have_default(
-            group.get("routing_rules", []), group["id"]
-        )
-
-        for rule in group.get("routing_rules", []):
-            self.validate_routing_rule_target(group["blocks"], "block", rule)
-            self.validate_routing_rule_target(all_groups, "group", rule)
-            self.validate_routing_rule(rule, group)
-
-    def validate_block_routing_rules(self, block, group, all_groups):
-        self.validate_routing_rules_have_default(
-            block.get("routing_rules", []), block["id"]
-        )
-
-        for rule in block.get("routing_rules", []):
-            self.validate_routing_rule_target(group["blocks"], "block", rule)
-            self.validate_routing_rule_target(all_groups, "group", rule)
-            self.validate_routing_rule(rule, block)
-
     # pylint: disable=too-complex
     def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
-        self, section_id, group_id, all_groups, numeric_answer_ranges
+        self, section_id, group_id, numeric_answer_ranges
     ):
         section = self.questionnaire_schema.get_section(section_id)
         group = self.questionnaire_schema.get_group(group_id)
@@ -117,10 +95,11 @@ class QuestionnaireValidator(Validator):
             ):
                 self.validate_block_is_submission(block)
 
-            self.validate_block_routing_rules(block, group, all_groups)
-
-            for skip_condition in block.get("skip_conditions", []):
-                self._validate_skip_condition(skip_condition, block)
+            block_routing_validator = RoutingValidator(
+                block, group, self.questionnaire_schema
+            )
+            block_routing_validator.validate()
+            self.errors += block_routing_validator.errors
 
             block_validator = get_block_validator(block, self.questionnaire_schema)
             block_validator.validate()
@@ -161,8 +140,11 @@ class QuestionnaireValidator(Validator):
 
             for answer in question.get("answers", []):
                 if routing_rules:
-                    self.validate_default_route(answer, default_route)
-                    self._validate_routing_on_answer_options(answer, routing_rules)
+                    answer_routing_validator = AnswerRoutingValidator(
+                        answer, routing_rules, default_route
+                    )
+                    answer_routing_validator.validate()
+                    self.errors += answer_routing_validator.errors
 
                 answer_validator = get_answer_validator(
                     answer,
@@ -187,41 +169,6 @@ class QuestionnaireValidator(Validator):
                         answer_id=answer["id"],
                     )
                 self.errors += answer_validator.errors
-
-    def validate_default_route(self, answer, default_route_found):
-        if answer["mandatory"] and not default_route_found:
-            default_route_not_defined = "Default route not defined for optional question [{}]".format(
-                answer["id"]
-            )
-            self.errors.append(default_route_not_defined)
-
-    def _validate_routing_on_answer_options(self, answer, routing_rules):
-        answer_options = answer.get("options", [])
-        option_values = [option["value"] for option in answer_options]
-        routing_when_list = get_routing_when_list(routing_rules)
-
-        if answer_options:
-            for when_clause in routing_when_list:
-                for when in when_clause.get("when", []):
-                    if (
-                        when
-                        and when.get("id", "") == answer["id"]
-                        and when.get("value", "") in option_values
-                    ):
-                        option_values.remove(when["value"])
-                    else:
-                        option_values = []
-
-            has_unrouted_options = option_values and len(option_values) != len(
-                answer_options
-            )
-
-            if has_unrouted_options and not has_default_route(routing_rules):
-                self.errors.append(
-                    "Routing rule not defined for answer [{}] missing options {}".format(
-                        answer["id"], option_values
-                    )
-                )
 
     def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
         """ Ensure consistency between relevant fields in variants
@@ -323,77 +270,14 @@ class QuestionnaireValidator(Validator):
             )
 
         for variant in all_variants:
-            self._validate_when_rule(variant.get("when", []), block["id"])
+            when_clause = variant.get("when", [])
+            when_validator = WhenValidator(
+                when_clause, block["id"], self.questionnaire_schema
+            )
+            when_validator.validate()
+            self.errors += when_validator.errors
 
         self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
-
-    def validate_routing_rule_target(self, dict_list, goto_key, rule):
-        if "goto" in rule and goto_key in rule["goto"].keys():
-            referenced_id = rule["goto"][goto_key]
-
-            if not is_contained_in_list(dict_list, referenced_id):
-                invalid_block_error = "Routing rule routes to invalid {} [{}]".format(
-                    goto_key, referenced_id
-                )
-                self.add_error(invalid_block_error)
-
-    def validate_routing_rules_have_default(self, rules, block_or_group_id):
-        """
-        Ensure that a set of routing rules contains a default, without a when clause.
-        """
-
-        if rules and all(("goto" in rule for rule in rules)):
-            default_routing_rule_count = 0
-
-            for rule in rules:
-                rule_directive = rule.get("goto")
-                if rule_directive and "when" not in rule_directive:
-                    default_routing_rule_count += 1
-
-            if not default_routing_rule_count:
-                self.add_error(
-                    f"The routing rules for group or block: {block_or_group_id} "
-                    f"must contain a default routing rule without a when rule"
-                )
-            elif default_routing_rule_count > 1:
-                self.add_error(
-                    f"The routing rules for group or block: {block_or_group_id} "
-                    f"contain multiple default routing rules. Some of them will not be used"
-                )
-
-    def validate_routing_rule(self, rule, block_or_group):
-        rule = rule.get("goto")
-        if "when" in rule:
-            self._validate_when_rule(rule["when"], block_or_group["id"])
-
-    def validate_answer_value_in_when_rule(self, when_rule):
-        when_values = when_rule.get("values", [])
-        when_value = when_rule.get("value")
-        if when_value:
-            when_values.append(when_value)
-
-        option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
-            when_rule["id"]
-        )
-        if not option_values:
-            return []
-
-        for value in when_values:
-            if value not in option_values:
-                self.add_error(
-                    error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
-                    answer_id=when_rule["id"],
-                    value=value,
-                )
-
-    def _validate_skip_condition(self, skip_condition, block_or_group):
-        """
-        Validate skip condition is valid
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        when = skip_condition.get("when")
-
-        self._validate_when_rule(when, block_or_group["id"])
 
     def _validate_primary_person_list_answer_references(self, block):
 
@@ -411,143 +295,6 @@ class QuestionnaireValidator(Validator):
                 error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
                 referenced_id=block["add_or_edit_answer"]["id"],
             )
-
-    def _validate_when_rule(self, when_clause, referenced_id):
-        """
-        Validates any answer id in a when clause exists within the schema
-        Will also check that comparison exists
-        """
-        for when in when_clause:
-            if "list" in when:
-                self._validate_list_name_in_when_rule(when)
-                break
-
-            valid_answer_ids = self.validate_answer_ids_present_in_schema(
-                when, referenced_id
-            )
-            if not valid_answer_ids:
-                break
-
-            # We know the ids are correct, so can continue to perform validation
-            self._validate_checkbox_exclusive_conditions_in_when_rule(when)
-
-            if "comparison" in when:
-                self._validate_comparison_in_when_rule(when, referenced_id)
-
-            if "id" in when:
-                self.validate_answer_value_in_when_rule(when)
-
-    def validate_answer_ids_present_in_schema(self, when, referenced_id):
-        """
-        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
-        writing when conditions against id's that don't exist.
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        ids_to_check = []
-
-        if "id" in when:
-            ids_to_check.append(("id", when["id"]))
-        if "comparison" in when and when["comparison"]["source"] == "answers":
-            ids_to_check.append(("comparison.id", when["comparison"]["id"]))
-
-        for key, present_id in ids_to_check:
-            if present_id not in self.questionnaire_schema.answers_with_context:
-                self.add_error(
-                    error_messages.NON_EXISTENT_WHEN_KEY,
-                    answer_id=present_id,
-                    key=key,
-                    referenced_id=referenced_id,
-                )
-                return False
-        return True
-
-    def _validate_checkbox_exclusive_conditions_in_when_rule(self, when):
-        """
-        Validate checkbox exclusive conditions are only used when answer type is Checkbox
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        condition = when["condition"]
-        checkbox_exclusive_conditions = (
-            "contains any",
-            "contains all",
-            "contains",
-            "not contains",
-        )
-        all_checkbox_conditions = checkbox_exclusive_conditions + ("set", "not set")
-        answer_type = (
-            self.questionnaire_schema.answers_with_context[when["id"]]["answer"]["type"]
-            if "id" in when
-            else None
-        )
-
-        if answer_type == "Checkbox":
-            if condition not in all_checkbox_conditions:
-                answer_id = self.questionnaire_schema.answers_with_context[when["id"]][
-                    "answer"
-                ]["id"]
-                self.add_error(
-                    error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
-                    condition=condition,
-                    answer_id=answer_id,
-                )
-        elif condition in checkbox_exclusive_conditions:
-            answer_id = self.questionnaire_schema.answers_with_context[when["id"]][
-                "answer"
-            ]["id"]
-            self.add_error(
-                f"The condition `{condition}` can only be used with"
-                " `Checkbox` answer types. "
-                f"Found answer type: {answer_type} ({answer_id})."
-            )
-
-    def _validate_comparison_in_when_rule(self, when, referenced_id):
-        """
-        Validate that conditions requiring list match values define a comparison answer id that is of type Checkbox
-        and ensure all other conditions with comparison id match answer types
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        if when["comparison"]["source"] == "answers":
-            answer_id, comparison_id, condition = (
-                when["id"],
-                when["comparison"]["id"],
-                when["condition"],
-            )
-            comparison_answer_type = self.questionnaire_schema.answers_with_context[
-                comparison_id
-            ]["answer"]["type"]
-            id_answer_type = self.questionnaire_schema.answers_with_context[answer_id][
-                "answer"
-            ]["type"]
-            conditions_requiring_list_match_values = (
-                "equals any",
-                "not equals any",
-                "contains any",
-                "contains all",
-            )
-
-            if condition in conditions_requiring_list_match_values:
-                if comparison_answer_type != "Checkbox":
-                    self.add_error(
-                        error_messages.NON_CHECKBOX_COMPARISON_ID,
-                        comparison_id=comparison_id,
-                        condition=condition,
-                    )
-
-            elif comparison_answer_type != id_answer_type:
-                self.add_error(
-                    error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
-                    comparison_id=comparison_id,
-                    answer_id=answer_id,
-                    referenced_id=referenced_id,
-                )
-
-    def _validate_list_name_in_when_rule(self, when):
-        """
-        Validate that the list referenced in the when rule is defined in the schema
-        """
-        list_name = when["list"]
-        if list_name not in self.questionnaire_schema.list_names:
-            self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
 
     def validate_duplicates(self):
         for duplicate in find_duplicates(self.questionnaire_schema.ids):

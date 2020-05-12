@@ -40,74 +40,6 @@ def test_param_valid_schemas(valid_schema_filename):
         assert not schema_validator.errors
 
 
-def test_invalid_routing_default_block():
-    rules = [
-        {
-            "goto": {
-                "block": "response-yes",
-                "when": [
-                    {
-                        "condition": "equals",
-                        "id": "conditional-routing-answer",
-                        "value": "Yes",
-                    }
-                ],
-            }
-        },
-        {
-            "goto": {
-                "block": "invalid-location",
-                "when": [
-                    {
-                        "condition": "equals",
-                        "id": "conditional-routing-answer",
-                        "value": "No, I prefer tea",
-                    }
-                ],
-            }
-        },
-    ]
-    questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
-
-    questionnaire_validator.validate_routing_rules_have_default(
-        rules, "conditional-routing-block"
-    )
-
-    expected_error = {
-        "message": "The routing rules for group or block: conditional-routing-block must contain a default routing "
-        "rule without a when rule"
-    }
-
-    assert questionnaire_validator.errors[0] == expected_error
-
-
-def test_invalid_routing_block_id():
-
-    rule = {
-        "goto": {
-            "block": "invalid-location",
-            "when": [
-                {
-                    "condition": "equals",
-                    "id": "conditional-routing-answer",
-                    "value": "No, I prefer tea",
-                }
-            ],
-        }
-    }
-    questionnaire_validator = QuestionnaireValidator({"id": "test-questionnaire"})
-
-    expected_error = {
-        "message": "Routing rule routes to invalid block [invalid-location]"
-    }
-
-    questionnaire_validator.validate_routing_rule_target(
-        [{"id": "a-valid-location"}], "block", rule
-    )
-
-    assert questionnaire_validator.errors[0] == expected_error
-
-
 def test_invalid_reference():
     known_identifiers = ["answer-1", "answer-2"]
 
@@ -702,29 +634,6 @@ def test_invalid_answer_action():
     validator.validate()
 
     assert expected_error_messages == validator.errors
-
-
-def test_invalid_answer_value_in_when_rule():
-    filename = "schemas/invalid/test_invalid_answer_value_in_when_rule.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    when = {
-        "id": "country-checkbox-answer",
-        "condition": "contains any",
-        "values": ["France", 7, "Italian"],
-    }
-    expected_error_messages = [
-        {
-            "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
-            "answer_id": "country-checkbox-answer",
-            "value": value,
-        }
-        for value in ["France", 7, "Italian"]
-    ]
-
-    validator.validate_answer_value_in_when_rule(when)
-
-    assert validator.errors == expected_error_messages
 
 
 def test_invalid_quotes_in_schema():
