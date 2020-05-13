@@ -1,16 +1,24 @@
 from app.validation import error_messages
-from app.validation.blocks.list_collector_validator import ListCollectorValidator
+from app.validation.blocks import BlockValidator
+from app.validation.blocks.validate_collector_quesitons_mixin import (
+    ValidateCollectorQuestionsMixin,
+)
 
 
-class PrimaryPersonListCollectorValidator(ListCollectorValidator):
+class PrimaryPersonListCollectorValidator(
+    BlockValidator, ValidateCollectorQuestionsMixin
+):
     def validate(self):
-        # Call validate on block validator, not list collector
-        super(ListCollectorValidator, self).validate()
+        super(PrimaryPersonListCollectorValidator, self).validate()
 
         self._validate_primary_person_list_answer_references(self.block)
 
+        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
+            self.block
+        )
+
         self.validate_collector_questions(
-            self.block,
+            collector_questions,
             self.block["add_or_edit_answer"]["value"],
             error_messages.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
             error_messages.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
@@ -37,8 +45,8 @@ class PrimaryPersonListCollectorValidator(ListCollectorValidator):
             block["add_or_edit_block"]["id"]
         )
 
-        other_list_collectors = self.questionnaire_schema.get_other_primary_person_list_collectors(
-            list_name, block_id_to_filter=self.block["id"]
+        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+            self.block["id"], for_list=list_name, type="PrimaryPersonListCollector"
         )
 
         for other_list_collector in other_list_collectors:

@@ -1,23 +1,34 @@
 from app.validation import error_messages
 from app.validation.blocks.block_validator import BlockValidator
+from app.validation.blocks.validate_collector_quesitons_mixin import (
+    ValidateCollectorQuestionsMixin,
+)
 
 
-class ListCollectorValidator(BlockValidator):
+class ListCollectorValidator(BlockValidator, ValidateCollectorQuestionsMixin):
     def validate(self):
         super(ListCollectorValidator, self).validate()
 
         try:
             self._validate_list_answer_references(self.block)
 
+            collector_questions = self.questionnaire_schema.get_all_questions_for_block(
+                self.block
+            )
+
             self.validate_collector_questions(
-                self.block,
+                collector_questions,
                 self.block["add_answer"]["value"],
                 error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
                 error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
             )
 
+            collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
+                self.block["remove_answer"]
+            )
+
             self.validate_collector_questions(
-                self.block["remove_answer"],
+                collector_remove_questions,
                 self.block["remove_answer"]["value"],
                 error_messages.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
                 error_messages.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
@@ -45,23 +56,6 @@ class ListCollectorValidator(BlockValidator):
                 referenced_id=block["remove_answer"]["id"],
             )
 
-    def validate_collector_questions(
-        self, block, answer_value, missing_radio_error, missing_value_error
-    ):
-        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block
-        )
-
-        for collector_question in collector_questions:
-            for collector_answer in collector_question["answers"]:
-                if collector_answer["type"] != "Radio":
-                    self.add_error(missing_radio_error)
-
-                if not _options_contain_value(
-                    collector_answer["options"], answer_value
-                ):
-                    self.add_error(missing_value_error)
-
     def validate_list_collector_answer_ids(self, block):
         """
         - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
@@ -86,8 +80,8 @@ class ListCollectorValidator(BlockValidator):
             self.block["add_block"]["id"]
         )
 
-        other_list_collectors = self.questionnaire_schema.get_other_list_collectors(
-            list_name, block_id_to_filter=self.block["id"]
+        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+            self.block["id"], for_list=list_name, type="ListCollector"
         )
 
         for other_list_collector in other_list_collectors:
@@ -100,9 +94,3 @@ class ListCollectorValidator(BlockValidator):
                     error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
                     list_name=list_name,
                 )
-
-
-def _options_contain_value(options, value):
-    for option in options:
-        if option["value"] == value:
-            return True

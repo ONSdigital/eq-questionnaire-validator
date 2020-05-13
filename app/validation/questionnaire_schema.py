@@ -32,6 +32,12 @@ def find_duplicates(values):
 
 
 @lru_cache
+def get_key_index_from_path(key, path):
+    position = path.find(key) + len(key + ".[")
+    return int(path[position : position + 1])
+
+
+@lru_cache
 def get_element_path(key, path):
     position = path.find(key)
     return path[: position + len(key + ".[0]")]
@@ -217,18 +223,18 @@ class QuestionnaireSchema:
         return matches
 
     @lru_cache
-    def get_other_list_collectors(self, list_name, block_id_to_filter):
-        return jp.match(
-            f'$..blocks[?(@.id!="{block_id_to_filter}" & @.type=="ListCollector" & @.for_list=="{list_name}")]',
-            self.schema,
-        )
+    def get_other_blocks(self, block_id_to_filter, **filters):
+        conditions = []
+        for key, value in filters.items():
+            conditions.append(f'@.{key}=="{value}"')
 
-    @lru_cache
-    def get_other_primary_person_list_collectors(self, list_name, block_id_to_filter):
-        return jp.match(
-            f'$..blocks[?(@.id!="{block_id_to_filter}" & @.type=="PrimaryPersonListCollector" & @.for_list=="{list_name}")]',
-            self.schema,
-        )
+        if conditions:
+            final_condition = " & ".join(conditions)
+            return jp.match(
+                f'$..blocks[?(@.id!="{block_id_to_filter}" & {final_condition})]',
+                self.schema,
+            )
+        return self.blocks
 
     @lru_cache
     def has_single_driving_question(self, list_name):
@@ -265,18 +271,13 @@ class QuestionnaireSchema:
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return questions[0]["answers"][0]
 
-    @staticmethod
-    def _get_key_index_from_path(key, path):
-        position = path.find(key) + len(key + ".[")
-        return int(path[position : position + 1])
-
     @lru_cache
     def _get_path_id(self, path):
         return jp.match1(path + ".id", self.schema)
 
     @lru_cache
     def get_context_from_path(self, full_path):
-        section_index = self._get_key_index_from_path("sections", full_path)
+        section_index = get_key_index_from_path("sections", full_path)
 
         block_path = get_element_path("blocks", full_path)
         group_path = get_element_path("groups", full_path)

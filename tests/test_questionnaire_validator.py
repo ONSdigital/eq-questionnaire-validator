@@ -6,9 +6,6 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app.validation import error_messages
-from app.validation.blocks import BlockValidator
-from app.validation.placeholders.placeholder_validator import PlaceholderValidator
-from app.validation.questionnaire_schema import QuestionnaireSchema
 from app.validation.questionnaire_validator import QuestionnaireValidator
 from app.validation.schema_validator import SchemaValidator
 

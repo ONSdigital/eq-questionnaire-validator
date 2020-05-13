@@ -1,5 +1,3 @@
-import re
-
 from app.validation import error_messages
 from app.validation.placeholders.block_placeholder_validator import (
     BlockPlaceholderValidator,
