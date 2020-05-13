@@ -23,7 +23,17 @@
   ],
   "hub": {
     "enabled": true,
-    "required_completed_sections": ["employment-section"]
+    "required_completed_sections": ["employment-section"],
+    "complete": {
+      "title": "Title displayed on hub, when the questionnaire is complete",
+      "guidance": "Guidance displayed on hub, when the questionnaire is complete"
+    },
+    "incomplete": {
+      "guidance": "Guidance displayed on hub, when the questionnaire is incomplete"
+    },
+    "submission": {
+      "button": "Submit button text"
+    }
   },
   "sections": [
     {
