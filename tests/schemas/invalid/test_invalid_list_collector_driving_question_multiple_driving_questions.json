@@ -28,7 +28,7 @@
     {
       "id": "section",
       "title": "People",
-      "summary": {},
+      "summary": {"show_on_completion": true},
       "groups": [
         {
           "id": "group",

@@ -165,7 +165,7 @@
     {
       "id": "accommodation-section",
       "title": "accommodation",
-      "summary": {},
+      "summary": {"show_on_completion": true},
       "groups": [
         {
           "blocks": [

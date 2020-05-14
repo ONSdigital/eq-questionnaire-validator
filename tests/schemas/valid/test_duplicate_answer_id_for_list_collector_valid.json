@@ -271,6 +271,7 @@
         }
       ],
       "summary": {
+        "show_on_completion": true,
         "items": [
           {
             "type": "List",
