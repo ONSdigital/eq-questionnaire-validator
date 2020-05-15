@@ -1,8 +1,8 @@
-from app.validation import error_messages
-from app.validation.answers.answer_validator import AnswerValidator
-from app.validation.answers.date_answer_validator import DateAnswerValidator
-from app.validation.answers.number_answer_validator import NumberAnswerValidator
-from app.validation.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app import error_messages
+from app.validators.answers.answer_validator import AnswerValidator
+from app.validators.answers.date_answer_validator import DateAnswerValidator
+from app.validators.answers.number_answer_validator import NumberAnswerValidator
+from app.validators.answers.text_field_answer_validator import TextFieldAnswerValidator
 
 
 def test_invalid_mismatching_answer_label_and_value():

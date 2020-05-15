@@ -6,8 +6,8 @@ from json import JSONDecodeError
 from flask import Blueprint, request, jsonify, Response
 from structlog import get_logger
 
-from app.validation.questionnaire_validator import QuestionnaireValidator
-from app.validation.schema_validator import SchemaValidator
+from app.validators.questionnaire_validator import QuestionnaireValidator
+from app.validators.schema_validator import SchemaValidator
 
 logger = get_logger()
 

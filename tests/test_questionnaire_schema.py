@@ -1,4 +1,4 @@
-from app.validation.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 

@@ -1,5 +1,5 @@
-from app.validation import error_messages
-from app.validation.metadata_validator import MetadataValidator
+from app import error_messages
+from app.validators.metadata_validator import MetadataValidator
 
 
 def test_mandatory_metadata():

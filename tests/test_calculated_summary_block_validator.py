@@ -1,8 +1,8 @@
-from app.validation import error_messages
-from app.validation.blocks.calculated_summary_block_validator import (
+from app import error_messages
+from app.validators.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
-from app.validation.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 

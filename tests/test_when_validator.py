@@ -1,6 +1,6 @@
-from app.validation import error_messages
-from app.validation.questionnaire_schema import QuestionnaireSchema
-from app.validation.routing.when_validator import WhenValidator
+from app import error_messages
+from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.routing.when_validator import WhenValidator
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 

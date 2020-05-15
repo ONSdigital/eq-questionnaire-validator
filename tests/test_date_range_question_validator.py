@@ -1,4 +1,4 @@
-from app.validation.questions.date_range_question_validator import (
+from app.validators.questions.date_range_question_validator import (
     DateRangeQuestionValidator,
 )
 

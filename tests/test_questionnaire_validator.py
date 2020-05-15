@@ -5,9 +5,9 @@ from structlog import configure
 from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
-from app.validation import error_messages
-from app.validation.questionnaire_validator import QuestionnaireValidator
-from app.validation.schema_validator import SchemaValidator
+from app import error_messages
+from app.validators.questionnaire_validator import QuestionnaireValidator
+from app.validators.schema_validator import SchemaValidator
 
 logger = getLogger()
 
@@ -353,24 +353,22 @@ def test_inconsistent_ids_in_variants():
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate()
 
-    expected_error_messages = [error["message"] for error in validator.errors]
-
-    fuzzy_error_messages = [
-        "Variants contain more than one question_id for block: block-2. Found ids",
-        "question-2",
-        "question-2-variant",
-        "Variants have mismatched answer_ids for block: block-2.",
-    ]
-
-    for fuzzy_error in fuzzy_error_messages:
-        assert any(
-            fuzzy_error in error_message for error_message in expected_error_messages
-        )
-
-    assert (
-        "Variants in block: block-2 contain different numbers of answers"
-        in expected_error_messages
-    )
+    assert [
+        {
+            "message": error_messages.VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS,
+            "block_id": "block-2",
+        },
+        {
+            "message": error_messages.VARIANTS_HAVE_DIFFERENT_QUESTION_IDS,
+            "block_id": "block-2",
+            "question_ids": {"question-2", "question-2-variant"},
+        },
+        {
+            "message": error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_IDS,
+            "block_id": "block-2",
+            "answer_ids": {'answer-2', 'answer-2-variant', 'answer-3'}
+        },
+    ] == validator.errors
 
     assert len(validator.errors) == 3
 

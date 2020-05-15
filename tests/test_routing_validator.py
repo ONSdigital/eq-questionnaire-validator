@@ -1,5 +1,5 @@
-from app.validation.questionnaire_schema import QuestionnaireSchema
-from app.validation.routing.routing_validator import RoutingValidator
+from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.routing.routing_validator import RoutingValidator
 
 
 def test_invalid_routing_default_block():

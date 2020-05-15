@@ -2,7 +2,7 @@ import json
 
 from jsonschema import RefResolver, validators
 
-from app.validation.schema_validator import SchemaValidator
+from app.validators.schema_validator import SchemaValidator
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 

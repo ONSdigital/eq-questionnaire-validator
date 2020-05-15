@@ -1,4 +1,4 @@
-from app.validation.questions.calculated_question_validator import (
+from app.validators.questions.calculated_question_validator import (
     CalculatedQuestionValidator,
 )
 

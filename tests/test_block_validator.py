@@ -1,6 +1,6 @@
-from app.validation import error_messages
-from app.validation.blocks import BlockValidator
-from app.validation.questionnaire_schema import QuestionnaireSchema
+from app import error_messages
+from app.validators.blocks import BlockValidator
+from app.validators.questionnaire_schema import QuestionnaireSchema
 
 
 def test_invalid_reference():
