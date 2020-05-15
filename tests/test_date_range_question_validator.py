@@ -6,20 +6,6 @@ from app.validators.questions.date_range_question_validator import (
 
 def test_invalid_date_range():
     question = {
-        "answers": [
-            {
-                "id": "date-range-from",
-                "label": "Period from",
-                "mandatory": True,
-                "type": "Date",
-            },
-            {
-                "id": "date-range-to",
-                "label": "Period to",
-                "mandatory": True,
-                "type": "Date",
-            },
-        ],
         "id": "date-range-question",
         "period_limits": {
             "maximum": {"days": 20, "months": 1},
@@ -30,7 +16,7 @@ def test_invalid_date_range():
     }
 
     question_validator = DateRangeQuestionValidator(question)
-    question_validator.validate()
+    question_validator.validate_range()
 
     expected_error_messages = [
         {
@@ -73,7 +59,7 @@ def test_invalid_yyyy_date_range_period():
     }
 
     question_validator = DateRangeQuestionValidator(question)
-    question_validator.validate()
+    question_validator.validate_period_limits()
 
     expected_error_messages = [
         {
@@ -119,7 +105,7 @@ def test_invalid_mm_yyyy_date_range_period():
     }
 
     question_validator = DateRangeQuestionValidator(question)
-    question_validator.validate()
+    question_validator.validate_period_limits()
 
     expected_error_messages = [
         {

@@ -6,6 +6,7 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app import error_messages
+from app.validators.blocks import BlockValidator, ListCollectorValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.schema_validator import SchemaValidator
 
@@ -215,28 +216,6 @@ def test_invalid_placeholder_answer_ids():
     assert validator.errors == expected_errors
 
 
-def test_invalid_placeholder_list_reference():
-    filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.LIST_REFERENCE_INVALID,
-            "block_id": "block1",
-            "id": "people",
-        },
-        {
-            "message": error_messages.LIST_REFERENCE_INVALID,
-            "block_id": "block1",
-            "id": "people",
-        },
-    ]
-
-    assert expected_errors == validator.errors
-
-
 def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
@@ -265,56 +244,6 @@ def test_duplicate_answer_ids():
     assert all(
         [expected_error in validator.errors for expected_error in expected_errors]
     )
-
-
-def test_invalid_list_collector_non_radio():
-    filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_error_messages = [
-        {
-            "message": error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
-            "block_id": "list-collector",
-        }
-    ]
-
-    assert expected_error_messages == validator.errors
-
-
-def test_primary_person_invalid_list_collector_non_radio():
-    filename = (
-        "schemas/invalid/test_invalid_primary_person_list_collector_no_radio.json"
-    )
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
-            "block_id": "primary-person-list-collector",
-        }
-    ]
-
-    assert expected_errors == validator.errors
-
-
-def test_invalid_list_collector_with_no_add_option():
-    filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
-            "block_id": "list-collector",
-        }
-    ]
-
-    assert expected_errors == validator.errors
 
 
 def test_invalid_primary_person_list_collector_with_no_add_option():

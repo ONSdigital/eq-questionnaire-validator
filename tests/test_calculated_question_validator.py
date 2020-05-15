@@ -1,3 +1,4 @@
+from app import error_messages
 from app.validators.questions.calculated_question_validator import (
     CalculatedQuestionValidator,
 )
@@ -41,12 +42,12 @@ def test_invalid_id_in_answers_to_calculate():
 
     expected_error_messages = [
         {
-            "message": "Answer does not exist within this question",
+            "message": error_messages.ANSWER_NOT_IN_QUESTION,
             "question_id": "breakdown-question",
             "answer_id": "breakdown-3",
         },
         {
-            "message": "Answer does not exist within this question",
+            "message": error_messages.ANSWER_NOT_IN_QUESTION,
             "question_id": "breakdown-question",
             "answer_id": "breakdown-4",
         },

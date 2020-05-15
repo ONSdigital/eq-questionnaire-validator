@@ -1,6 +1,7 @@
 from app import error_messages
 from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
+from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_invalid_reference():
@@ -38,3 +39,23 @@ def test_invalid_reference():
         },
     ]
     assert validator.errors == expected_errors
+
+
+def test_invalid_placeholder_list_reference():
+    filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = BlockValidator(
+        questionnaire_schema.get_block("block1"), questionnaire_schema
+    )
+    validator.validate_list_source_reference(["people"], "block1")
+
+    expected_errors = [
+        {
+            "message": error_messages.LIST_REFERENCE_INVALID,
+            "block_id": "block1",
+            "id": "people",
+        }
+    ]
+
+    assert expected_errors == validator.errors

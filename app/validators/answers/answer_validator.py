@@ -29,9 +29,6 @@ class AnswerValidator(Validator):
         self.validate_labels_and_values_match()
         self.validate_answer_actions()
 
-        if not self.are_decimal_places_valid():
-            self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
-
     def validate_duplicate_options(self):
         labels = set()
         values = set()
@@ -59,6 +56,10 @@ class AnswerValidator(Validator):
         if "calculated" in self.answer:
             return self.answer.get("decimal_places") == 2
         return True
+
+    def validate_decimal_places(self):
+        if not self.are_decimal_places_valid():
+            self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
 
     def validate_labels_and_values_match(self):
         for option in self.options:

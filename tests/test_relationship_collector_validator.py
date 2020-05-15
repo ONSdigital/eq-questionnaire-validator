@@ -37,6 +37,6 @@ def test_invalid_relationship_wrong_answer_type():
         }
     ]
 
-    validator.validate()
+    validator.validate_answer_type()
 
     assert validator.errors == expected_errors

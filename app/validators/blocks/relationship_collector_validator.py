@@ -7,11 +7,10 @@ class RelationshipCollectorValidator(BlockValidator):
         super(RelationshipCollectorValidator, self).validate()
 
         self.validate_list_exists()
+        self.validate_multiple_answers()
+        self.validate_answer_type()
 
-        answer_ids = self.questionnaire_schema.get_all_answer_ids(self.block["id"])
-
-        if len(answer_ids) > 1:
-            self.add_error(error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
+    def validate_answer_type(self):
         if (
             self.questionnaire_schema.get_first_answer_in_block(self.block["id"])[
                 "type"
@@ -21,6 +20,12 @@ class RelationshipCollectorValidator(BlockValidator):
             self.add_error(
                 error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE
             )
+
+    def validate_multiple_answers(self):
+        answer_ids = self.questionnaire_schema.get_all_answer_ids(self.block["id"])
+
+        if len(answer_ids) > 1:
+            self.add_error(error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)
 
     def validate_list_exists(self):
         list_name = self.block["for_list"]

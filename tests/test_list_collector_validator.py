@@ -66,3 +66,40 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
     ]
 
     assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_non_radio():
+    filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = ListCollectorValidator(
+        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+    )
+    validator.validate()
+
+    expected_error_messages = [
+        {
+            "message": error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
+            "block_id": "list-collector",
+        }
+    ]
+
+    assert expected_error_messages == validator.errors
+
+
+def test_invalid_list_collector_with_no_add_option():
+    filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = ListCollectorValidator(
+        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            "block_id": "list-collector",
+        }
+    ]
+
+    assert expected_errors == validator.errors

@@ -113,7 +113,7 @@ def test_invalid_answer_default():
     }
 
     answer_validator = NumberAnswerValidator(answer)
-    answer_validator.validate()
+    answer_validator.validate_numeric_default()
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DEFAULT_ON_MANDATORY,
@@ -148,7 +148,7 @@ def test_are_decimal_places_valid():
     }
 
     answer_validator = NumberAnswerValidator(answer)
-    answer_validator.validate()
+    answer_validator.validate_decimal_places()
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DECIMAL_PLACES_UNDEFINED,

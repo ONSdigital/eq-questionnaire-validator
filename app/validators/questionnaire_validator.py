@@ -114,7 +114,7 @@ class QuestionnaireValidator(Validator):
             self.errors += block_validator.errors
 
             self._validate_questions(block, numeric_answer_ranges)
-            self._validate_variants(block, numeric_answer_ranges)
+            self.validate_variants(block, numeric_answer_ranges)
 
     def _validate_questions(self, block_or_variant, numeric_answer_ranges):
         questions = block_or_variant.get("questions", [])
@@ -245,7 +245,7 @@ class QuestionnaireValidator(Validator):
 
         return results
 
-    def _validate_variants(self, block, numeric_answer_ranges):
+    def validate_variants(self, block, numeric_answer_ranges):
         question_variants = block.get("question_variants", [])
         content_variants = block.get("content_variants", [])
 

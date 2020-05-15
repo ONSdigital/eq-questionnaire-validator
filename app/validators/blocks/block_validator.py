@@ -43,7 +43,7 @@ class BlockValidator(Validator):
                 self._validate_metadata_source_reference(identifiers, block_id)
 
             elif source == "list":
-                self._validate_list_source_reference(identifiers, block_id)
+                self.validate_list_source_reference(identifiers, block_id)
 
     def _validate_metadata_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
@@ -54,7 +54,7 @@ class BlockValidator(Validator):
                     block_id=current_block_id,
                 )
 
-    def _validate_list_source_reference(self, identifiers, current_block_id):
+    def validate_list_source_reference(self, identifiers, current_block_id):
         for identifier in identifiers:
             if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(
