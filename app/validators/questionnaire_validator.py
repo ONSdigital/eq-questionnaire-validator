@@ -192,16 +192,16 @@ class QuestionnaireValidator(Validator):
 
         if len(results["question_types"]) != 1:
             self.add_error(
-                "Variants have more than one question type for block: {}. Found types: {}".format(
-                    block["id"], results["question_types"]
-                )
+                error_messages.VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES,
+                block_id=block["id"],
+                question_types=results["question_types"]
             )
 
         if len(results["default_answers"]) > 1:
             self.add_error(
-                "Variants contain different default answers for block: {}. Found ids: {}".format(
-                    block["id"], results["question_ids"]
-                )
+                error_messages.VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS,
+                block_id=block["id"],
+                question_ids=results["question_ids"]
             )
 
         if len(results["answer_ids"]) != next(iter(results["number_of_answers"])):
@@ -214,9 +214,10 @@ class QuestionnaireValidator(Validator):
         for answer_id, type_set in results["answer_types"].items():
             if len(type_set) != 1:
                 self.add_error(
-                    "Variants have mismatched answer types for block: {}. Found types: {} for answer ID: {}.".format(
-                        block["id"], type_set, answer_id
-                    )
+                    error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES,
+                    block_id=block["id"],
+                    answer_types=type_set,
+                    answer_id=answer_id
                 )
 
     @staticmethod

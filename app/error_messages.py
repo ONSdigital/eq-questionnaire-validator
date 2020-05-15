@@ -144,4 +144,7 @@ VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
 VARIANTS_HAVE_DIFFERENT_QUESTION_IDS = (
     "Variants contain more than one question_id for block"
 )
+VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS = "Variants contain different default answers for block"
 VARIANTS_HAVE_MISMATCHED_ANSWER_IDS = "Variants have mismatched answer_ids for block"
+VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = "Variants have mismatched answer types for block"
+VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = "Variants have more than one question type for block."
