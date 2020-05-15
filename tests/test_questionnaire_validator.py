@@ -243,9 +243,10 @@ def test_single_variant_invalid():
     validator = QuestionnaireValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
-    assert len(validator.errors) == 1
-
-    assert "contains fewer than two variants" in validator.errors[0]["message"]
+    assert {
+        "message": error_messages.VARIANTS_HAS_ONE_VARIANT,
+        "block_id": "block-2"
+    } in validator.errors
 
 
 def test_duplicate_answer_ids():

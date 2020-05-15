@@ -257,9 +257,8 @@ class QuestionnaireValidator(Validator):
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
             self.add_error(
-                "Variants contains fewer than two variants - block: {}".format(
-                    block["id"]
-                )
+                error_messages.VARIANTS_HAS_ONE_VARIANT,
+                block_id=block["id"]
             )
 
         for variant in all_variants:
@@ -313,15 +312,17 @@ class QuestionnaireValidator(Validator):
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
         if answer_ranges[answer.get("id")]["min"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the minimum of answer "{}"'.format(
-                answer["minimum"]["value"]["identifier"], answer["id"]
+            self.add_error(
+                error_messages.ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN,
+                reference_id=answer["minimum"]["value"]["identifier"],
+                answer_id=answer['id']
             )
-            self.add_error(error_message)
         if answer_ranges[answer.get("id")]["max"] is None:
-            error_message = 'The referenced answer "{}" can not be used to set the maximum of answer "{}"'.format(
-                answer["maximum"]["value"]["identifier"], answer["id"]
+            self.add_error(
+                error_messages.ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX,
+                reference_id=answer["maximum"]["value"]["identifier"],
+                answer_id=answer['id']
             )
-            self.add_error(error_message)
 
     def _validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:

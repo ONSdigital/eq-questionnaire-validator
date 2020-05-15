@@ -40,6 +40,8 @@ NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
 METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 ANSWER_REFERENCE_INVALID = "Invalid answer reference"
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = 'The referenced answer cannot be used to set the minimum of answer'
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = 'The referenced answer cannot be used to set the maximum of answer'
 ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
 LIST_REFERENCE_INVALID = "Invalid list reference"
 QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
@@ -138,6 +140,7 @@ GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
 )
 
 # Variants
+VARIANTS_HAS_ONE_VARIANT = "Variants list only contains one variant"
 VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
     "Variants in block contain different numbers of answers"
 )
