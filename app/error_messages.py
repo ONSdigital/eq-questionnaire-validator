@@ -40,10 +40,25 @@ NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
 METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 ANSWER_REFERENCE_INVALID = "Invalid answer reference"
-ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = 'The referenced answer cannot be used to set the minimum of answer'
-ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = 'The referenced answer cannot be used to set the maximum of answer'
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
+    "The referenced answer cannot be used to set the minimum of answer"
+)
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
+    "The referenced answer cannot be used to set the maximum of answer"
+)
 ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
+ANSWER_LABEL_VALUE_MISMATCH = "Found mismatching answer value for label"
+ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
+ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
+PERIOD_MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
+PERIOD_LIMIT_CANNOT_USE_DAYS = (
+    "Days can not be used in period_limit for yyyy-mm date range"
+)
+PERIOD_LIMIT_CANNOT_USE_DAYS_MONTHS = (
+    "Days/Months can not be used in period_limit for yyyy date range"
+)
 LIST_REFERENCE_INVALID = "Invalid list reference"
+LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
 QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
     "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
 )
@@ -147,7 +162,25 @@ VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
 VARIANTS_HAVE_DIFFERENT_QUESTION_IDS = (
     "Variants contain more than one question_id for block"
 )
-VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS = "Variants contain different default answers for block"
+VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS = (
+    "Variants contain different default answers for block"
+)
 VARIANTS_HAVE_MISMATCHED_ANSWER_IDS = "Variants have mismatched answer_ids for block"
-VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = "Variants have mismatched answer types for block"
-VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = "Variants have more than one question type for block."
+VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = (
+    "Variants have mismatched answer types for block"
+)
+VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = (
+    "Variants have more than one question type for block."
+)
+
+# Routing
+ROUTE_TARGET_INVALID = "Routing rule routes to invalid"
+ROUTE_MUST_CONTAIN_DEFAULT = (
+    "The routing rules for group or block must contain a default routing rule without a "
+    "when rule"
+)
+ROUTE_HAS_TOO_MANY_DEFAULTS = "The routing rules for group or block cannot contain multiple default routing rules."
+# AnswerRouting
+UNDEFINED_QUESTION_DEFAULT_ROUTE = "Default route not defined for optional question"
+UNDEFINED_ANSWER_ROUTING_RULE = "Routing rule not defined for answer missing options"
+CHECKBOX_CONDITION_ONLY = "This condition can only be used with `Checkbox` answer types"

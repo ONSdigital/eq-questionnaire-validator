@@ -1,3 +1,4 @@
+from app import error_messages
 from app.validators.questions.question_validator import QuestionValidator
 
 
@@ -12,6 +13,5 @@ class CalculatedQuestionValidator(QuestionValidator):
             for answer_id in calculation["answers_to_calculate"]:
                 if answer_id not in answer_ids:
                     self.add_error(
-                        "Answer does not exist within this question",
-                        answer_id=answer_id,
+                        error_messages.ANSWER_NOT_IN_QUESTION, answer_id=answer_id
                     )

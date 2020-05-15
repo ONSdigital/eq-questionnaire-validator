@@ -68,9 +68,10 @@ class WhenValidator(Validator):
                 "answer"
             ]["id"]
             self.add_error(
-                f"The condition `{condition}` can only be used with"
-                " `Checkbox` answer types. "
-                f"Found answer type: {answer_type} ({answer_id})."
+                error_messages.CHECKBOX_CONDITION_ONLY,
+                condition=condition,
+                answer_type=answer_type,
+                answer_id=answer_id,
             )
 
     def validate_comparison_in_when_rule(self, when, referenced_id):

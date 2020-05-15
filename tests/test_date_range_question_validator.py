@@ -1,3 +1,4 @@
+from app import error_messages
 from app.validators.questions.date_range_question_validator import (
     DateRangeQuestionValidator,
 )
@@ -33,7 +34,7 @@ def test_invalid_date_range():
 
     expected_error_messages = [
         {
-            "message": "The minimum period is greater than the maximum period",
+            "message": error_messages.PERIOD_MIN_GREATER_THAN_MAX,
             "question_id": "date-range-question",
         }
     ]
@@ -76,7 +77,7 @@ def test_invalid_yyyy_date_range_period():
 
     expected_error_messages = [
         {
-            "message": "Days/Months can not be used in period_limit for yyyy date range",
+            "message": error_messages.PERIOD_LIMIT_CANNOT_USE_DAYS_MONTHS,
             "question_id": "date-range-question",
         }
     ]
@@ -122,7 +123,7 @@ def test_invalid_mm_yyyy_date_range_period():
 
     expected_error_messages = [
         {
-            "message": "Days can not be used in period_limit for yyyy-mm date range",
+            "message": error_messages.PERIOD_LIMIT_CANNOT_USE_DAYS,
             "question_id": "date-range-question",
         }
     ]

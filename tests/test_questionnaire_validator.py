@@ -245,7 +245,7 @@ def test_single_variant_invalid():
 
     assert {
         "message": error_messages.VARIANTS_HAS_ONE_VARIANT,
-        "block_id": "block-2"
+        "block_id": "block-2",
     } in validator.errors
 
 
@@ -367,7 +367,7 @@ def test_inconsistent_ids_in_variants():
         {
             "message": error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_IDS,
             "block_id": "block-2",
-            "answer_ids": {'answer-2', 'answer-2-variant', 'answer-3'}
+            "answer_ids": {"answer-2", "answer-2-variant", "answer-3"},
         },
     ] == validator.errors
 
@@ -383,11 +383,13 @@ def test_inconsistent_default_answers_in_variants():
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate()
 
-    assert [{
-        'message': error_messages.VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS,
-        'block_id': 'block-2',
-        'question_ids': {'question-2'}
-    }] == validator.errors
+    assert [
+        {
+            "message": error_messages.VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS,
+            "block_id": "block-2",
+            "question_ids": {"question-2"},
+        }
+    ] == validator.errors
 
 
 def test_invalid_list_collector_duplicate_ids_between_list_collectors():
@@ -417,15 +419,15 @@ def test_inconsistent_types_in_variants():
     expected_errors = [
         {
             "message": error_messages.VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES,
-            'block_id': 'block-2',
-            'question_types': {'NotGeneral', 'General'}
+            "block_id": "block-2",
+            "question_types": {"NotGeneral", "General"},
         },
         {
             "message": error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES,
-            'block_id': 'block-2',
-            'answer_id': 'answer-2',
-            'answer_types': {'NotANumber', 'Number'}
-        }
+            "block_id": "block-2",
+            "answer_id": "answer-2",
+            "answer_types": {"NotANumber", "Number"},
+        },
     ]
 
     assert expected_errors == validator.errors

@@ -1,3 +1,4 @@
+from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.routing_validator import RoutingValidator
 
@@ -37,8 +38,8 @@ def test_invalid_routing_default_block():
     )
 
     expected_error = {
-        "message": "The routing rules for group or block: conditional-routing-block must contain a default routing "
-        "rule without a when rule"
+        "message": error_messages.ROUTE_MUST_CONTAIN_DEFAULT,
+        "block_or_group_id": "conditional-routing-block",
     }
 
     assert questionnaire_validator.errors[0] == expected_error
@@ -60,13 +61,13 @@ def test_invalid_routing_block_id():
     }
     questionnaire_schema = QuestionnaireSchema({})
     routing_validator = RoutingValidator({}, {}, questionnaire_schema)
-
+    routing_validator.validate_routing_rule_target(
+        [{"id": "mock-block"}], "block", rule
+    )
     expected_error = {
-        "message": "Routing rule routes to invalid block [invalid-location]"
+        "message": error_messages.ROUTE_TARGET_INVALID,
+        "goto_key": "block",
+        "referenced_id": "invalid-location",
     }
 
-    routing_validator.validate_routing_rule_target(
-        [{"id": "a-valid-location"}], "block", rule
-    )
-
-    assert routing_validator.errors[0] == expected_error
+    assert routing_validator.errors == [expected_error]

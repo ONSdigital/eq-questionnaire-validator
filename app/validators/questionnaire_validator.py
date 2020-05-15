@@ -194,21 +194,21 @@ class QuestionnaireValidator(Validator):
             self.add_error(
                 error_messages.VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES,
                 block_id=block["id"],
-                question_types=results["question_types"]
+                question_types=results["question_types"],
             )
 
         if len(results["default_answers"]) > 1:
             self.add_error(
                 error_messages.VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS,
                 block_id=block["id"],
-                question_ids=results["question_ids"]
+                question_ids=results["question_ids"],
             )
 
         if len(results["answer_ids"]) != next(iter(results["number_of_answers"])):
             self.add_error(
                 error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_IDS,
                 block_id=block["id"],
-                answer_ids=results["answer_ids"]
+                answer_ids=results["answer_ids"],
             )
 
         for answer_id, type_set in results["answer_types"].items():
@@ -217,7 +217,7 @@ class QuestionnaireValidator(Validator):
                     error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES,
                     block_id=block["id"],
                     answer_types=type_set,
-                    answer_id=answer_id
+                    answer_id=answer_id,
                 )
 
     @staticmethod
@@ -257,8 +257,7 @@ class QuestionnaireValidator(Validator):
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
             self.add_error(
-                error_messages.VARIANTS_HAS_ONE_VARIANT,
-                block_id=block["id"]
+                error_messages.VARIANTS_HAS_ONE_VARIANT, block_id=block["id"]
             )
 
         for variant in all_variants:
@@ -315,13 +314,13 @@ class QuestionnaireValidator(Validator):
             self.add_error(
                 error_messages.ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN,
                 reference_id=answer["minimum"]["value"]["identifier"],
-                answer_id=answer['id']
+                answer_id=answer["id"],
             )
         if answer_ranges[answer.get("id")]["max"] is None:
             self.add_error(
                 error_messages.ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX,
                 reference_id=answer["maximum"]["value"]["identifier"],
-                answer_id=answer['id']
+                answer_id=answer["id"],
             )
 
     def _validate_list_exists(self, list_name):

@@ -27,7 +27,7 @@ class AnswerValidator(Validator):
     def validate(self):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
-        self._validate_answer_actions()
+        self.validate_answer_actions()
 
         if not self.are_decimal_places_valid():
             self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
@@ -61,8 +61,6 @@ class AnswerValidator(Validator):
         return True
 
     def validate_labels_and_values_match(self):
-        errors = []
-
         for option in self.options:
             if "text_plural" in option["label"]:
                 continue
@@ -73,13 +71,13 @@ class AnswerValidator(Validator):
                 label = option["label"]["text"]
 
             if label != option["value"]:
-                errors.append(
-                    f"Found mismatching answer value for label: {label} "
-                    f'in answer id: {self.answer["id"]}'
+                self.add_error(
+                    error_messages.ANSWER_LABEL_VALUE_MISMATCH,
+                    label=label,
+                    value=option["value"],
                 )
-        return errors
 
-    def _validate_answer_actions(self):
+    def validate_answer_actions(self):
         for option in self.options:
 
             action_params = option.get("action", {}).get("params")
@@ -138,9 +136,10 @@ class AnswerValidator(Validator):
 
         if max_value - min_value < 0:
             self.add_error(
-                'Invalid range of min = {} and max = {} is possible for answer "{}".'.format(
-                    min_value, max_value, self.answer["id"]
-                )
+                error_messages.ANSWER_RANGE_INVALID,
+                min=min_value,
+                max=max_value,
+                answer_id=self.answer["id"],
             )
 
     def validate_referred_numeric_answer_decimals(self, answer_ranges):

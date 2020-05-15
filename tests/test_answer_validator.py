@@ -17,15 +17,25 @@ def test_invalid_mismatching_answer_label_and_value():
     }
 
     expected_errors = [
-        "Found mismatching answer value for label: Yes it is {name} in answer id: correct-answer",
-        "Found mismatching answer value for label: Nope in answer id: correct-answer",
+        {
+            "message": error_messages.ANSWER_LABEL_VALUE_MISMATCH,
+            "answer_id": "correct-answer",
+            "label": "Yes it is {name}",
+            "value": "Yes it is",
+        },
+        {
+            "message": error_messages.ANSWER_LABEL_VALUE_MISMATCH,
+            "answer_id": "correct-answer",
+            "label": "Nope",
+            "value": "No",
+        },
     ]
 
     answer_validator = AnswerValidator(answer)
 
-    errors = answer_validator.validate_labels_and_values_match()
+    answer_validator.validate_labels_and_values_match()
 
-    assert expected_errors == errors
+    assert expected_errors == answer_validator.errors
 
 
 def test_number_of_decimals():

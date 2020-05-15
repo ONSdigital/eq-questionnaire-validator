@@ -37,7 +37,7 @@ class ListCollectorValidator(BlockValidator, ValidateCollectorQuestionsMixin):
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
         except KeyError as e:
-            self.add_error(f"Missing key in ListCollector: {e}")
+            self.add_error(error_messages.LIST_COLLECTOR_KEY_MISSING, key=e)
 
     def _validate_list_answer_references(self, block):
         main_block_ids = self.questionnaire_schema.get_all_answer_ids(block["id"])

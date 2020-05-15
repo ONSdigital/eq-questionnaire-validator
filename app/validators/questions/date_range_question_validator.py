@@ -1,3 +1,4 @@
+from app import error_messages
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.questions.question_validator import QuestionValidator
 
@@ -21,7 +22,7 @@ class DateRangeQuestionValidator(QuestionValidator):
             )
 
             if minimum_date > maximum_date:
-                self.add_error("The minimum period is greater than the maximum period")
+                self.add_error(error_messages.PERIOD_MIN_GREATER_THAN_MAX)
 
         first_answer_type = self.question["answers"][0]["type"]
 
@@ -33,11 +34,7 @@ class DateRangeQuestionValidator(QuestionValidator):
         ) or "months" in period_limits.get("maximum", [])
 
         if first_answer_type == "MonthYearDate" and has_days_limit:
-            self.add_error(
-                "Days can not be used in period_limit for yyyy-mm date range"
-            )
+            self.add_error(error_messages.PERIOD_LIMIT_CANNOT_USE_DAYS)
 
         if first_answer_type == "YearDate" and (has_days_limit or has_months_limit):
-            self.add_error(
-                "Days/Months can not be used in period_limit for yyyy date range"
-            )
+            self.add_error(error_messages.PERIOD_LIMIT_CANNOT_USE_DAYS_MONTHS)
