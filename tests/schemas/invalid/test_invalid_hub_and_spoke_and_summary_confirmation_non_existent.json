@@ -28,7 +28,7 @@
     {
       "id": "employment-section",
       "title": "Employment",
-      "summary": {},
+      "summary": { "show_on_completion": true },
       "groups": [
         {
           "id": "radio",
