@@ -413,16 +413,15 @@ def test_invalid_repeating_section_list_name():
 
 
 def test_invalid_hub_section_non_existent():
-    filename = "schemas/invalid/test_invalid_hub_section_definition.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
+    validator = QuestionnaireValidator()
+    section_ids = ["employment-section", "accommodation-section"]
+    required_section_ids = ["invalid-section-id"]
     expected_error_message = {
         "message": error_messages.REQUIRED_HUB_SECTION_UNDEFINED,
         "required_section_id": "invalid-section-id",
     }
 
-    validator.validate()
+    validator.validate_required_section_ids(section_ids, required_section_ids)
 
     assert expected_error_message == validator.errors[0]
 

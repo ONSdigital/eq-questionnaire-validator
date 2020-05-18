@@ -56,7 +56,7 @@ class QuestionnaireValidator(Validator):
             "required_completed_sections", []
         )
 
-        self._validate_required_section_ids(
+        self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
 
@@ -79,7 +79,7 @@ class QuestionnaireValidator(Validator):
             for item in section_summary.get("items", []):
                 self._validate_list_exists(item.get("for_list"))
 
-    def _validate_required_section_ids(self, section_ids, required_section_ids):
+    def validate_required_section_ids(self, section_ids, required_section_ids):
 
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:

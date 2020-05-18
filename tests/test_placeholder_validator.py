@@ -7,24 +7,24 @@ def test_invalid_repeating_section_title_placeholders():
     questionnaire_schema = QuestionnaireSchema({})
 
     placeholder_container = {
-      "text": "{person}",
-      "placeholders": [
-        {
-          "placeholder": "person_name",
-          "transforms": [
+        "text": "{person}",
+        "placeholders": [
             {
-              "transform": "concatenate_list",
-              "arguments": {
-                "list_to_concatenate": {
-                  "source": "answers",
-                  "identifier": ["first-name", "last-name"]
-                },
-                "delimiter": " "
-              }
+                "placeholder": "person_name",
+                "transforms": [
+                    {
+                        "transform": "concatenate_list",
+                        "arguments": {
+                            "list_to_concatenate": {
+                                "source": "answers",
+                                "identifier": ["first-name", "last-name"],
+                            },
+                            "delimiter": " ",
+                        },
+                    }
+                ],
             }
-          ]
-        }
-      ]
+        ],
     }
 
     validator = PlaceholderValidator({}, questionnaire_schema)
