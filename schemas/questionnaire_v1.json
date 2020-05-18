@@ -164,6 +164,10 @@
           "summary": {
             "type": "object",
             "properties": {
+              "show_on_completion": {
+                "type": "boolean",
+                "description": "A boolean that is used to determine whether to show the section summary on completion of the section."
+              },
               "collapsible": {
                 "type": "boolean"
               },
@@ -194,11 +198,8 @@
                 }
               }
             },
-            "additionalProperties": false
-          },
-          "show_summary_on_completion": {
-            "type": "boolean",
-            "description": "On completion of the section a summary will be shown"
+            "additionalProperties": false,
+            "required": ["show_on_completion"]
           },
           "show_on_hub": {
             "type": "boolean",
