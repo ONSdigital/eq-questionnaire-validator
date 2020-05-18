@@ -41,7 +41,7 @@ class QuestionnaireValidator(Validator):
         numeric_answer_ranges = {}
 
         for section in self.questionnaire_schema.sections:
-            self._validate_section(section)
+            self.validate_section(section)
 
             for group in section["groups"]:
                 group_routing_validator = RoutingValidator(
@@ -50,7 +50,7 @@ class QuestionnaireValidator(Validator):
                 group_routing_validator.validate()
                 self.errors += group_routing_validator.errors
 
-                self._validate_blocks(section["id"], group["id"], numeric_answer_ranges)
+                self.validate_blocks(section["id"], group["id"], numeric_answer_ranges)
 
         required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
@@ -60,11 +60,11 @@ class QuestionnaireValidator(Validator):
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
 
-    def _validate_section(self, section):
+    def validate_section(self, section):
         section_repeat = section.get("repeat")
 
         if section_repeat:
-            self._validate_list_exists(section_repeat["for_list"])
+            self.validate_list_exists(section_repeat["for_list"])
             placeholder_validator = PlaceholderValidator(
                 section, self.questionnaire_schema
             )
@@ -77,7 +77,7 @@ class QuestionnaireValidator(Validator):
 
         if section_summary:
             for item in section_summary.get("items", []):
-                self._validate_list_exists(item.get("for_list"))
+                self.validate_list_exists(item.get("for_list"))
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
 
@@ -88,10 +88,7 @@ class QuestionnaireValidator(Validator):
                     required_section_id=required_section_id,
                 )
 
-    # pylint: disable=too-complex
-    def _validate_blocks(  # noqa: C901 pylint: disable=too-many-branches
-        self, section_id, group_id, numeric_answer_ranges
-    ):
+    def validate_blocks(self, section_id, group_id, numeric_answer_ranges):
         section = self.questionnaire_schema.get_section(section_id)
         group = self.questionnaire_schema.get_group(group_id)
 
@@ -113,10 +110,10 @@ class QuestionnaireValidator(Validator):
             block_validator.validate()
             self.errors += block_validator.errors
 
-            self._validate_questions(block, numeric_answer_ranges)
+            self.validate_questions(block, numeric_answer_ranges)
             self.validate_variants(block, numeric_answer_ranges)
 
-    def _validate_questions(self, block_or_variant, numeric_answer_ranges):
+    def validate_questions(self, block_or_variant, numeric_answer_ranges):
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
         routing_rules = block_or_variant.get("routing_rules", {})
@@ -163,7 +160,7 @@ class QuestionnaireValidator(Validator):
                     )
                 self.errors += answer_validator.errors
 
-    def _ensure_variant_fields_are_consistent(self, block, variants):
+    def validate_variant_fields(self, block, variants):
         """ Ensure consistency between relevant fields in variants
 
         - Ensure that question_ids are the same across all variants.
@@ -252,7 +249,7 @@ class QuestionnaireValidator(Validator):
         all_variants = question_variants + content_variants
 
         for variant in question_variants:
-            self._validate_questions(variant, numeric_answer_ranges)
+            self.validate_questions(variant, numeric_answer_ranges)
 
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
@@ -268,10 +265,9 @@ class QuestionnaireValidator(Validator):
             when_validator.validate()
             self.errors += when_validator.errors
 
-        self._ensure_variant_fields_are_consistent(block, question_variants)
+        self.validate_variant_fields(block, question_variants)
 
-    def _validate_primary_person_list_answer_references(self, block):
-
+    def validate_primary_person_list_answer_references(self, block):
         main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
             block
         )
@@ -305,7 +301,7 @@ class QuestionnaireValidator(Validator):
         if not is_last_block_valid and not self.questionnaire_schema.is_hub_enabled:
             self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)
 
-    def _validate_referred_numeric_answer(self, answer, answer_ranges):
+    def validate_referred_numeric_answer(self, answer, answer_ranges):
         """
         Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
@@ -323,7 +319,7 @@ class QuestionnaireValidator(Validator):
                 answer_id=answer["id"],
             )
 
-    def _validate_list_exists(self, list_name):
+    def validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 

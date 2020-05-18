@@ -43,6 +43,7 @@ def get_element_path(key, path):
     return path[: position + len(key + ".[0]")]
 
 
+# pylint: disable=too-many-public-methods
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
