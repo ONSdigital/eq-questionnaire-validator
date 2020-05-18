@@ -175,6 +175,10 @@ class QuestionnaireSchema:
                 yield answer
 
     @lru_cache
+    def get_answer(self, answer_id):
+        return self.answers_with_context[answer_id]["answer"]
+
+    @lru_cache
     def get_group(self, group_id):
         return self.groups_by_id[group_id]
 

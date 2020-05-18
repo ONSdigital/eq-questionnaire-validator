@@ -3,6 +3,8 @@ from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.answers.number_answer_validator import NumberAnswerValidator
 from app.validators.answers.text_field_answer_validator import TextFieldAnswerValidator
+from app.validators.questionnaire_schema import QuestionnaireSchema
+from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_invalid_mismatching_answer_label_and_value():
@@ -245,3 +247,33 @@ def test_invalid_numeric_answers():
     ]
 
     assert validator.errors == expected_errors
+
+
+def test_invalid_answer_action():
+    filename = (
+        "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_question.json"
+    )
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    answer = questionnaire_schema.get_answer("anyone-else-live-here-answer")
+    validator = AnswerValidator(
+        answer,
+        list_names=questionnaire_schema.list_names,
+        block_ids=questionnaire_schema.block_ids,
+    )
+
+    expected_error_messages = [
+        {
+            "message": error_messages.LIST_NAME_MISSING,
+            "answer_id": "anyone-else-live-here-answer",
+            "list_name": "non-existent-list-name",
+        },
+        {
+            "message": error_messages.BLOCK_ID_MISSING,
+            "block_id": "non-existent-block-id",
+            "answer_id": "anyone-else-live-here-answer",
+        },
+    ]
+
+    validator.validate()
+
+    assert expected_error_messages == validator.errors

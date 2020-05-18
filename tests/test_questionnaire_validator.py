@@ -6,7 +6,6 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app import error_messages
-from app.validators.blocks import BlockValidator, ListCollectorValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.schema_validator import SchemaValidator
 
@@ -444,30 +443,6 @@ def test_invalid_hub_section_non_existent():
     validator.validate()
 
     assert expected_error_message == validator.errors[0]
-
-
-def test_invalid_answer_action():
-    filename = (
-        "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_question.json"
-    )
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_error_messages = [
-        {
-            "message": "List name defined in action params does not exist",
-            "answer_id": "anyone-else-live-here-answer",
-            "list_name": "non-existent-list-name",
-        },
-        {
-            "message": "Block id defined in action params does not exist",
-            "block_id": "non-existent-block-id",
-            "answer_id": "anyone-else-live-here-answer",
-        },
-    ]
-
-    validator.validate()
-
-    assert expected_error_messages == validator.errors
 
 
 def test_invalid_quotes_in_schema():
