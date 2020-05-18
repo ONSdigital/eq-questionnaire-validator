@@ -4,8 +4,9 @@ An API for validating survey schemas.
 
 ## Setup
 
+It is recommended that you use [Pyenv](https://github.com/pyenv/pyenv) to manage your Python installations.
+
 ```
-brew install pyenv
 pip install --upgrade pip setuptools pipenv
 pipenv install --dev
 ```
@@ -15,7 +16,7 @@ pipenv install --dev
 To run the app:
 
 ```
-pipenv run ./scripts/run_app.sh
+make run
 ```
 
 ## Testing
@@ -26,17 +27,17 @@ Any errors in these schemas will cause a failure.
 To run the app's unit tests:
 
 ```
-pipenv run ./scripts/run_tests_unit.sh
+make test
 ```
 
 To test the apps functionality:
 ```
-pipenv run ./scripts/run_app.sh
+make run
 ```
 
 Then, in another terminal window/tab, navigate to a checked out copy of eq-survey-runner:
 ```
-pipenv run ./scripts/test_schemas.sh --local
+make test
 ```
 
 # Installing node dependencies
@@ -52,7 +53,7 @@ Install yarn and node dependencies:
 
 ```
 npm i -g yarn
-yarn 
+yarn
 ```
 
 ## Formatting json
@@ -60,7 +61,7 @@ yarn
 Run the following to format all json files in the schemas directory:
 
 ```
-yarn gulp format
+make format
 ````
 
 ## Validating with ajv

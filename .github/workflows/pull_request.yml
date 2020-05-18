@@ -27,7 +27,7 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: pipenv install --dev
       - name: Lint Python
-        run: pipenv run ./scripts/run_lint_python.sh
+        run: make lint
   lint-json:
     runs-on: ubuntu-latest
     steps:
@@ -70,7 +70,7 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: pipenv install --dev
       - name: Running unit tests
-        run: pipenv run ./scripts/run_tests_unit.sh
+        run: make test
   docker-push:
       runs-on: ubuntu-latest
       steps:

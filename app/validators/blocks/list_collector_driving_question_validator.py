@@ -6,14 +6,6 @@ class ListCollectorDrivingQuestionValidator(BlockValidator):
     def validate(self):
         super(ListCollectorDrivingQuestionValidator, self).validate()
 
-        if not self.questionnaire_schema.has_single_list_collector(
-            self.block["for_list"]
-        ):
-            self.add_error(
-                error_messages.MULTIPLE_LIST_COLLECTORS_FOR_DRIVING_QUESTION,
-                list_name=self.block["for_list"],
-            )
-
         if not self.questionnaire_schema.has_single_driving_question(
             self.block["for_list"]
         ):

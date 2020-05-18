@@ -22,7 +22,8 @@
     }
   ],
   "hub": {
-    "enabled": false
+    "enabled": true,
+    "required_completed_sections": ["invalid-section-id"]
   },
   "sections": [
     {
@@ -154,7 +155,7 @@
     },
     {
       "id": "accommodation-section",
-      "title": "accommodation",
+      "title": "Accommodation",
       "groups": [
         {
           "blocks": [

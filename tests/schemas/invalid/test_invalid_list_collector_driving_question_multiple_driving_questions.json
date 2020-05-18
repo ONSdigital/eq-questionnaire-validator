@@ -28,6 +28,7 @@
     {
       "id": "section",
       "title": "People",
+      "summary": {},
       "groups": [
         {
           "id": "group",
@@ -108,7 +109,7 @@
               "routing_rules": [
                 {
                   "goto": {
-                    "block": "summary",
+                    "section": "End",
                     "when": [
                       {
                         "id": "anyone-usually-live-at-answer",
@@ -254,10 +255,6 @@
                   ]
                 }
               }
-            },
-            {
-              "type": "SectionSummary",
-              "id": "summary"
             }
           ]
         }

@@ -240,6 +240,27 @@ class QuestionnaireValidator(Validator):
 
             results["number_of_answers"].add(len(results["answer_ids"]))
 
+        # Code to handle comparison of variants which contain a MutuallyExclusive answer type
+        if (
+            len(results["question_types"]) > 1
+            and "MutuallyExclusive" in results["question_types"]
+        ):
+            results["question_types"].remove("MutuallyExclusive")
+
+            results["answer_ids"].clear()
+
+            results["number_of_answers"].clear()
+
+            for variant in variants:
+                if variant["question"]["type"] == "MutuallyExclusive":
+                    non_exclusive_answer = variant["question"]["answers"][0]
+                    results["answer_ids"].add(non_exclusive_answer["id"])
+                else:
+                    for answer in variant["question"]["answers"]:
+                        results["answer_ids"].add(answer["id"])
+
+                results["number_of_answers"].add(len(results["answer_ids"]))
+
         return results
 
     def validate_variants(self, block, numeric_answer_ranges):

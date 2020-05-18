@@ -192,18 +192,6 @@ class QuestionnaireSchema:
         return self.blocks_by_id[block_id]
 
     @lru_cache
-    def has_single_list_collector(self, list_name):
-        return (
-            len(
-                jp.match(
-                    f'$..blocks[?(@.type=="ListCollector" & @.for_list=="{list_name}")]',
-                    self.schema,
-                )
-            )
-            == 1
-        )
-
-    @lru_cache
     def get_blocks(self, **filters):
         conditions = []
         for key, value in filters.items():
