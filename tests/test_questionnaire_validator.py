@@ -412,24 +412,6 @@ def test_invalid_repeating_section_list_name():
     assert validator.errors == expected_errors
 
 
-def test_invalid_repeating_section_title_placeholders():
-    filename = "schemas/invalid/test_invalid_repeating_section_title_placeholders.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
-            "text": "{person}",
-            "differences": {"person"},
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_invalid_hub_section_non_existent():
     filename = "schemas/invalid/test_invalid_hub_section_definition.json"
 
