@@ -166,7 +166,7 @@
             "properties": {
               "show_on_completion": {
                 "type": "boolean",
-                "description": "A flag to determine whether to show the section summary on completion of the section."
+                "description": "A boolean that is used to determine whether to show the section summary on completion of the section."
               },
               "collapsible": {
                 "type": "boolean"
