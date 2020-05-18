@@ -163,7 +163,7 @@ class QuestionnaireValidator(Validator):
                     )
                 self.errors += answer_validator.errors
 
-    def _ensure_relevant_variant_fields_are_consistent(self, block, variants):
+    def _ensure_variant_fields_are_consistent(self, block, variants):
         """ Ensure consistency between relevant fields in variants
 
         - Ensure that question_ids are the same across all variants.
@@ -268,7 +268,7 @@ class QuestionnaireValidator(Validator):
             when_validator.validate()
             self.errors += when_validator.errors
 
-        self._ensure_relevant_variant_fields_are_consistent(block, question_variants)
+        self._ensure_variant_fields_are_consistent(block, question_variants)
 
     def _validate_primary_person_list_answer_references(self, block):
 
@@ -289,7 +289,7 @@ class QuestionnaireValidator(Validator):
 
     def validate_duplicates(self):
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
-            self.add_error("Duplicate id found", id=duplicate)
+            self.add_error(error_messages.DUPLICATE_ID_FOUND, id=duplicate)
 
     def validate_block_is_submission(self, last_block):
         """

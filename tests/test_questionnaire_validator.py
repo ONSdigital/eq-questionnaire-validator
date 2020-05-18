@@ -41,48 +41,6 @@ def test_param_valid_schemas(valid_schema_filename):
         assert not schema_validator.errors
 
 
-def test_answer_comparisons_different_types():
-    """ Ensures that when answer comparison is used, the type of the variables must be the same """
-    filename = "schemas/invalid/test_invalid_answer_comparison_types.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
-            "comparison_id": "route-comparison-1-answer",
-            "answer_id": "route-comparison-2-answer",
-            "referenced_id": "route-comparison-2",
-        },
-        {
-            "message": error_messages.NON_CHECKBOX_COMPARISON_ID,
-            "comparison_id": "route-comparison-2-answer",
-            "condition": "equals any",
-        },
-        {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
-            "comparison_id": "comparison-2-answer",
-            "answer_id": "comparison-1-answer",
-            "referenced_id": "equals-answers",
-        },
-        {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
-            "comparison_id": "comparison-2-answer",
-            "answer_id": "comparison-1-answer",
-            "referenced_id": "less-than-answers",
-        },
-        {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
-            "comparison_id": "comparison-2-answer",
-            "answer_id": "comparison-1-answer",
-            "referenced_id": "less-than-answers",
-        },
-    ]
-
-    assert expected_errors == validator.errors
-
-
 def test_answer_comparisons_invalid_comparison_id():
     """ Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
     filename = "schemas/invalid/test_invalid_answer_comparison_id.json"
@@ -246,22 +204,6 @@ def test_duplicate_answer_ids():
     )
 
 
-def test_invalid_primary_person_list_collector_with_no_add_option():
-    filename = "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_value.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
-
-    expected_errors = [
-        {
-            "message": error_messages.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
-            "block_id": "primary-person-list-collector",
-        }
-    ]
-
-    assert expected_errors == validator.errors
-
-
 def test_invalid_list_reference_in_custom_summary():
     filename = "schemas/invalid/test_invalid_custom_list_summary.json"
 
@@ -325,7 +267,7 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     filename = "schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-    validator.validate()
+    validator.validate_duplicates()
 
     expected_errors = [
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "add-person"},
