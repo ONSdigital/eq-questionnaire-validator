@@ -117,7 +117,6 @@ class QuestionnaireValidator(Validator):
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
         routing_rules = block_or_variant.get("routing_rules", {})
-        default_route = has_default_route(routing_rules)
 
         if question:
             questions.append(question)
@@ -131,7 +130,7 @@ class QuestionnaireValidator(Validator):
             for answer in question.get("answers", []):
                 if routing_rules:
                     answer_routing_validator = AnswerRoutingValidator(
-                        answer, routing_rules, default_route
+                        answer, routing_rules
                     )
                     answer_routing_validator.validate()
                     self.errors += answer_routing_validator.errors

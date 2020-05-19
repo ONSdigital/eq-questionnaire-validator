@@ -1,14 +1,14 @@
 from app import error_messages
-from app.validators.questionnaire_schema import get_routing_when_list
+from app.validators.questionnaire_schema import get_routing_when_list, has_default_route
 from app.validators.validator import Validator
 
 
 class AnswerRoutingValidator(Validator):
-    def __init__(self, answer, routing_rules, default_route):
+    def __init__(self, answer, routing_rules):
         super(AnswerRoutingValidator, self).__init__(answer)
         self.answer = answer
         self.routing_rules = routing_rules
-        self.default_route = default_route
+        self.default_route = has_default_route(routing_rules)
 
     def validate(self):
         self.validate_default_route()
