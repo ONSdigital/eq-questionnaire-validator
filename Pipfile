@@ -7,7 +7,7 @@ name = "pypi"
 Flask = "*"
 attrs = "==19.1.0"
 jsonpointer = "*"
-eq-translations = {editable = true,git = "https://github.com/ONSDigital/eq-translations.git",ref = "v2.0.0"}
+eq-translations = {editable = true,git = "https://github.com/ONSDigital/eq-translations.git",ref = "master"}
 structlog = "*"
 python-dateutil = "*"
 jsonschema = "*"
