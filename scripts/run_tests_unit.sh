@@ -19,6 +19,6 @@ function display_result {
   fi
 }
 
-py.test --cov=app --cov-report html --cov-fail-under=90 "$@"
+py.test --cov-config=.coveragerc --cov --cov-report html
 
 display_result $? 3 "Unit tests"
