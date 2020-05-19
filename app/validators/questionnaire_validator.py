@@ -8,11 +8,7 @@ from app.validators.answers import get_answer_validator, NumberAnswerValidator
 from app.validators.blocks import get_block_validator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import (
-    QuestionnaireSchema,
-    has_default_route,
-    find_duplicates,
-)
+from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplicates
 from app.validators.questions import get_question_validator
 from app.validators.routing.answer_routing_validator import AnswerRoutingValidator
 from app.validators.routing.routing_validator import RoutingValidator
