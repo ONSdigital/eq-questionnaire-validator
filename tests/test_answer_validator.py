@@ -123,20 +123,6 @@ def test_invalid_answer_default():
     }
 
 
-def test_invalid_url_in_answer():
-    answer = {
-        "id": "country-answer",
-        "label": "What is your country of birth?",
-        "mandatory": False,
-        "suggestions_url": "this isn't a valid url",
-        "type": "TextField",
-    }
-
-    answer_validator = TextFieldAnswerValidator(answer)
-
-    assert not answer_validator.is_suggestion_url_valid()
-
-
 def test_are_decimal_places_valid():
     answer = {
         "calculated": True,

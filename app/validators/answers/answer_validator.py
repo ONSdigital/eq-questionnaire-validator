@@ -20,10 +20,6 @@ class AnswerValidator(Validator):
     def options(self):
         return self.answer.get("options", [])
 
-    @cached_property
-    def option_values(self):
-        return [option["value"] for option in self.options]
-
     def validate(self):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()

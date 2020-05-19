@@ -39,3 +39,42 @@ def test_invalid_repeating_section_title_placeholders():
     ]
 
     assert validator.errors == expected_errors
+
+
+def test_placeholder_plurals():
+    placeholder_container = {
+        "text_plural": {
+            "forms": {
+                "one": "You’ve said one person lives here. Is that correct?",
+                "other": "You’ve said {number_of_people} people live here. Is that correct?",
+            },
+            "count": {"source": "answers", "identifier": "answer1"},
+        },
+        "placeholders": [
+            {
+                "placeholder": "number_of_persons",
+                "transforms": [
+                    {
+                        "transform": "number_to_words",
+                        "arguments": {
+                            "number": {"source": "answers", "identifier": "answer1"}
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+    questionnaire_schema = QuestionnaireSchema({})
+
+    validator = PlaceholderValidator({}, questionnaire_schema)
+    validator.validate_placeholder_object(placeholder_container, None)
+
+    expected_errors = [
+        {
+            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "text": "You’ve said {number_of_people} people live here. Is that correct?",
+            "differences": {"number_of_people"},
+        }
+    ]
+
+    assert validator.errors == expected_errors
