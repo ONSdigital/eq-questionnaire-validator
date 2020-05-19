@@ -40,7 +40,7 @@
         },
         "eq-translations": {
             "git": "https://github.com/ONSDigital/eq-translations.git",
-            "ref": "54c48629bd0b14cdae07af63c16512c3a59e0197"
+            "ref": "8f94a0f9645f10493dbe97e939b2f50dad96a756"
         },
         "flask": {
             "hashes": [
