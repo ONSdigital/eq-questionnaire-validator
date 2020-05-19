@@ -16,7 +16,7 @@ NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE = (
 NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE = "The list collector block has a remove_answer_value that is not present in the answer values"
 
 NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
-    "The primary person list collector block does not contain a Radio " "answer type"
+    "The primary person list collector block does not contain a Radio answer type"
 )
 NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE = (
     "The primary person list collector block has an "
