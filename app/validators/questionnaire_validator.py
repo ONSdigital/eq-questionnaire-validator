@@ -4,7 +4,7 @@ from collections import defaultdict
 from eq_translations.survey_schema import SurveySchema
 
 from app import error_messages
-from app.validators.answers import get_answer_validator
+from app.validators.answers import get_answer_validator, NumberAnswerValidator
 from app.validators.blocks import get_block_validator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
@@ -144,7 +144,7 @@ class QuestionnaireValidator(Validator):
 
                 answer_validator.validate()
 
-                if answer["type"] in ["Number", "Currency", "Percentage"]:
+                if isinstance(answer_validator, NumberAnswerValidator):
                     numeric_answer_ranges[
                         answer["id"]
                     ] = answer_validator.get_numeric_range_values(numeric_answer_ranges)

@@ -106,7 +106,7 @@ class AnswerValidator(Validator):
             return
 
         # Validate numeric answer has a positive range of possible responses
-        self._validate_numeric_range(answer_ranges)
+        self.validate_numeric_range(answer_ranges)
 
         # Validate referred numeric answer decimals
         self.validate_referred_numeric_answer_decimals(answer_ranges)
@@ -131,7 +131,7 @@ class AnswerValidator(Validator):
             errors_found = True
         return errors_found
 
-    def _validate_numeric_range(self, answer_ranges):
+    def validate_numeric_range(self, answer_ranges):
         max_value = answer_ranges[self.answer.get("id")]["max"]
         min_value = answer_ranges[self.answer.get("id")]["min"]
 

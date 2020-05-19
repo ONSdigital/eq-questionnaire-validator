@@ -10,15 +10,14 @@ class NumberAnswerValidator(AnswerValidator):
     def validate(self):
         super(NumberAnswerValidator, self).validate()
 
-        if self.answer["type"] in ["Number", "Currency", "Percentage"]:
-            # Validate default is only used with non mandatory answers
-            self.validate_numeric_default()
+        # Validate default is only used with non mandatory answers
+        self.validate_numeric_default()
 
-            # Validate numeric answer value within system limits
-            self.validate_numeric_answer_value()
+        # Validate numeric answer value within system limits
+        self.validate_numeric_answer_value()
 
-            # Validate numeric answer decimal places within system limits
-            self.validate_numeric_answer_decimals()
+        # Validate numeric answer decimal places within system limits
+        self.validate_numeric_answer_decimals()
 
     def get_numeric_range_values(self, answer_ranges):
         min_value = self.answer.get("minimum", {}).get("value", {})
