@@ -160,12 +160,11 @@
           "source": {
             "description": "The source of the data.",
             "type": "string",
-            "enum": ["location"]
+            "enum": ["location", "list"]
           },
           "id": {
             "description": "The unique id of the object.",
-            "type": "string",
-            "enum": ["list_item_id", "to_list_item_id"]
+            "type": "string"
           }
         }
       }
