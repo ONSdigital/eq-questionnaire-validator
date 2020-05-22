@@ -8,7 +8,6 @@ NO_RADIO_FOR_LIST_COLLECTOR = (
 NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
     "The list collector remove block does not contain a Radio answer type"
 )
-
 NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE = (
     "The list collector block has an add_answer_value that is not "
     "present in the answer values"
