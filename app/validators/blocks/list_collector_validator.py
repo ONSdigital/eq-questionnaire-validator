@@ -58,7 +58,7 @@ class ListCollectorValidator(BlockValidator, ValidateCollectorQuestionsMixin):
 
     def validate_list_collector_answer_ids(self, block):
         """
-        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
+        - Ensure that answer_ids on add and edit blocks match between all blocks that populate a single list.
         - Enforce the same answer_ids on add and edit sub-blocks
         """
         add_answer_ids = self.questionnaire_schema.get_all_answer_ids(
