@@ -7,9 +7,9 @@ def _options_contain_value(options, value):
             return True
 
 
-class ValidateCollectorQuestionsMixin(Validator):
+class ValidateListCollectorQuestionsMixin(Validator):
     def __init__(self, *args, **kwargs):
-        super(ValidateCollectorQuestionsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def validate_collector_questions(
         self,

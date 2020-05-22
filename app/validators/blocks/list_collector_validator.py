@@ -1,11 +1,11 @@
 from app import error_messages
 from app.validators.blocks.block_validator import BlockValidator
-from app.validators.blocks.validate_collector_quesitons_mixin import (
-    ValidateCollectorQuestionsMixin,
+from app.validators.blocks.validate_list_collector_quesitons_mixin import (
+    ValidateListCollectorQuestionsMixin,
 )
 
 
-class ListCollectorValidator(BlockValidator, ValidateCollectorQuestionsMixin):
+class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     def validate(self):
         super().validate()
 
