@@ -4,7 +4,7 @@ from app.validators.validator import Validator
 
 class WhenValidator(Validator):
     def __init__(self, when_clause, referenced_id, questionnaire_schema):
-        super(WhenValidator, self).__init__(when_clause)
+        super().__init__(when_clause)
         self.when_clause = when_clause
         self.referenced_id = referenced_id
         self.questionnaire_schema = questionnaire_schema

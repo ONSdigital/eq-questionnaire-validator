@@ -5,7 +5,7 @@ from app.validators.questions.question_validator import QuestionValidator
 
 class DateRangeQuestionValidator(QuestionValidator):
     def __init__(self, question):
-        super(DateRangeQuestionValidator, self).__init__(question)
+        super().__init__(question)
 
         self.period_limits = self.question["period_limits"]
 

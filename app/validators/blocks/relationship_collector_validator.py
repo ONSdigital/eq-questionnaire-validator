@@ -4,7 +4,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 class RelationshipCollectorValidator(BlockValidator):
     def validate(self):
-        super(RelationshipCollectorValidator, self).validate()
+        super().validate()
 
         self.validate_list_exists()
         self.validate_multiple_answers()

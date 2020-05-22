@@ -8,7 +8,7 @@ class NumberAnswerValidator(AnswerValidator):
     MAX_DECIMAL_PLACES = 6
 
     def validate(self):
-        super(NumberAnswerValidator, self).validate()
+        super().validate()
 
         self.validate_mandatory_has_no_default()
         self.validate_value_in_limits()

@@ -5,7 +5,7 @@ from app.validators.validator import Validator
 
 class AnswerRoutingValidator(Validator):
     def __init__(self, answer, routing_rules):
-        super(AnswerRoutingValidator, self).__init__(answer)
+        super().__init__(answer)
         self.answer = answer
         self.routing_rules = routing_rules
         self.default_route = has_default_route(routing_rules)

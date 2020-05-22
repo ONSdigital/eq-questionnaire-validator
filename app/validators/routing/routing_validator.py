@@ -6,7 +6,7 @@ from app.validators.validator import Validator
 
 class RoutingValidator(Validator):
     def __init__(self, element, group, questionnaire_schema):
-        super(RoutingValidator, self).__init__(element)
+        super().__init__(element)
         self.group = group
         self.questionnaire_schema = questionnaire_schema
 

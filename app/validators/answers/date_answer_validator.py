@@ -9,7 +9,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 class DateAnswerValidator(AnswerValidator):
     def validate(self):
-        super(DateAnswerValidator, self).validate()
+        super().validate()
 
         if not self.is_offset_date_valid():
             self.add_error(error_messages.INVALID_OFFSET_DATE)

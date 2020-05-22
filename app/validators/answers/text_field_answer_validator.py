@@ -7,7 +7,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 class TextFieldAnswerValidator(AnswerValidator):
     def validate(self):
-        super(TextFieldAnswerValidator, self).validate()
+        super().validate()
 
         if (
             self.answer["type"] == "TextField"

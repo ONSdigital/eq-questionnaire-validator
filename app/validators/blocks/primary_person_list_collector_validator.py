@@ -9,7 +9,7 @@ class PrimaryPersonListCollectorValidator(
     BlockValidator, ValidateCollectorQuestionsMixin
 ):
     def validate(self):
-        super(PrimaryPersonListCollectorValidator, self).validate()
+        super().validate()
 
         self._validate_primary_person_list_answer_references(self.block)
 

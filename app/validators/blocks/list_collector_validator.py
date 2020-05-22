@@ -7,7 +7,7 @@ from app.validators.blocks.validate_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateCollectorQuestionsMixin):
     def validate(self):
-        super(ListCollectorValidator, self).validate()
+        super().validate()
 
         try:
             self._validate_list_answer_references(self.block)

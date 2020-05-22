@@ -9,7 +9,7 @@ from app.validators.validator import Validator
 class MetadataValidator(Validator):
     def __init__(self, metadata, theme_name):
         self.theme_name = theme_name
-        super(MetadataValidator, self).__init__(metadata)
+        super().__init__(metadata)
 
     def validate(self):
         self.validate_duplicates()
