@@ -1,5 +1,6 @@
 from app import error_messages
 from app.validators.blocks.block_validator import BlockValidator
+from app.validators.questionnaire_schema import find_duplicates
 
 
 class CalculatedSummaryBlockValidator(BlockValidator):
@@ -22,11 +23,8 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             )
             return
 
-        duplicates = {
-            answer_id
-            for answer_id in self.answers_to_calculate
-            if self.answers_to_calculate.count(answer_id) > 1
-        }
+        duplicates = find_duplicates(self.answers_to_calculate)
+
         if duplicates:
             self.add_error(
                 error_messages.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,

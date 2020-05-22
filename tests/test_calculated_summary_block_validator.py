@@ -32,7 +32,7 @@ def test_invalid_calculated_summary():
         {
             "message": error_messages.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
             "block_id": "total-playback-duplicate-error",
-            "duplicate_answers": {"sixth-number-answer", "fourth-number-answer"},
+            "duplicate_answers": ["fourth-number-answer", "sixth-number-answer"],
         },
     ]
 

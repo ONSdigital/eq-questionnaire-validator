@@ -3,6 +3,7 @@ import collections
 from functools import cached_property
 
 from app import error_messages
+from app.validators.questionnaire_schema import find_duplicates
 from app.validators.validator import Validator
 
 
@@ -20,11 +21,7 @@ class MetadataValidator(Validator):
         return [metadata_field["name"] for metadata_field in self.schema_element]
 
     def validate_duplicates(self):
-        duplicates = [
-            item
-            for item, count in collections.Counter(self.metadata_names).items()
-            if count > 1
-        ]
+        duplicates = find_duplicates(self.metadata_names)
 
         if len(duplicates) > 0:
             self.add_error(
