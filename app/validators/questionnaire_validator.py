@@ -12,7 +12,6 @@ from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplic
 from app.validators.questions import get_question_validator
 from app.validators.routing.answer_routing_validator import AnswerRoutingValidator
 from app.validators.routing.routing_validator import RoutingValidator
-
 from app.validators.routing.when_validator import WhenValidator
 from app.validators.validator import Validator
 

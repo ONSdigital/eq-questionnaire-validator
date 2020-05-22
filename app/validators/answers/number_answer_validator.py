@@ -10,14 +10,9 @@ class NumberAnswerValidator(AnswerValidator):
     def validate(self):
         super(NumberAnswerValidator, self).validate()
 
-        # Validate default is only used with non mandatory answers
-        self.validate_numeric_default()
-
-        # Validate numeric answer value within system limits
-        self.validate_numeric_answer_value()
-
-        # Validate numeric answer decimal places within system limits
-        self.validate_numeric_answer_decimals()
+        self.validate_mandatory_has_no_default()
+        self.validate_value_in_limits()
+        self.validate_decimals()
 
     def get_numeric_range_values(self, answer_ranges):
         min_value = self.answer.get("minimum", {}).get("value", {})
@@ -76,11 +71,11 @@ class NumberAnswerValidator(AnswerValidator):
                 return system_default
         return system_default
 
-    def validate_numeric_default(self):
+    def validate_mandatory_has_no_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(error_messages.DEFAULT_ON_MANDATORY)
 
-    def validate_numeric_answer_value(self):
+    def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
@@ -98,7 +93,7 @@ class NumberAnswerValidator(AnswerValidator):
                 limit=self.MAX_NUMBER,
             )
 
-    def validate_numeric_answer_decimals(self):
+    def validate_decimals(self):
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > self.MAX_DECIMAL_PLACES:
             self.add_error(

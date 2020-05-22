@@ -50,7 +50,7 @@ def test_number_of_decimals():
 
     answer_validator = NumberAnswerValidator(answer)
 
-    answer_validator.validate_numeric_answer_decimals()
+    answer_validator.validate_decimals()
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DECIMAL_PLACES_TOO_LONG,
@@ -72,7 +72,7 @@ def test_minimum_value():
 
     answer_validator = NumberAnswerValidator(answer)
 
-    answer_validator.validate_numeric_answer_value()
+    answer_validator.validate_value_in_limits()
 
     assert answer_validator.errors[0] == {
         "message": "Minimum value is less than system limit",
@@ -114,7 +114,7 @@ def test_invalid_answer_default():
     }
 
     answer_validator = NumberAnswerValidator(answer)
-    answer_validator.validate_numeric_default()
+    answer_validator.validate_mandatory_has_no_default()
 
     assert answer_validator.errors[0] == {
         "message": error_messages.DEFAULT_ON_MANDATORY,
