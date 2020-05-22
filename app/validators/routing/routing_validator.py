@@ -1,6 +1,6 @@
 from app import error_messages
 from app.validators.questionnaire_schema import is_contained_in_dict_list
-from app.validators.routing.when_validator import WhenValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.validator import Validator
 
 
@@ -28,7 +28,7 @@ class RoutingValidator(Validator):
     def validate_routing_rule(self, rule):
         rule = rule.get("goto")
         if "when" in rule:
-            when_validator = WhenValidator(
+            when_validator = WhenRuleValidator(
                 rule["when"], self.schema_element["id"], self.questionnaire_schema
             )
             when_validator.validate()
@@ -41,7 +41,7 @@ class RoutingValidator(Validator):
         """
         when = skip_condition.get("when")
 
-        when_validator = WhenValidator(
+        when_validator = WhenRuleValidator(
             when, self.schema_element["id"], self.questionnaire_schema
         )
         when_validator.validate()

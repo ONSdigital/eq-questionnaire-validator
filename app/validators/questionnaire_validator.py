@@ -12,7 +12,7 @@ from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplic
 from app.validators.questions import get_question_validator
 from app.validators.routing.answer_routing_validator import AnswerRoutingValidator
 from app.validators.routing.routing_validator import RoutingValidator
-from app.validators.routing.when_validator import WhenValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.validator import Validator
 
 
@@ -274,7 +274,7 @@ class QuestionnaireValidator(Validator):
 
         for variant in all_variants:
             when_clause = variant.get("when", [])
-            when_validator = WhenValidator(
+            when_validator = WhenRuleValidator(
                 when_clause, block["id"], self.questionnaire_schema
             )
             when_validator.validate()

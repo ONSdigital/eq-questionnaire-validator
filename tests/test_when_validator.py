@@ -1,6 +1,6 @@
 from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
-from app.validators.routing.when_validator import WhenValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
@@ -11,7 +11,7 @@ def test_validate_answer_value_in_when_rule_invalid():
         "answer-2": {"Yes", "No"},
     }
     questionnaire_schema = QuestionnaireSchema({})
-    validator = WhenValidator(when_rule, {}, questionnaire_schema)
+    validator = WhenRuleValidator(when_rule, {}, questionnaire_schema)
     validator.questionnaire_schema.answer_id_to_option_values_map = (
         option_value_to_answer_id_map
     )
@@ -33,7 +33,7 @@ def test_validate_answer_value_in_when_rule_valid():
     }
 
     questionnaire_schema = QuestionnaireSchema({})
-    validator = WhenValidator(when_rule, {}, questionnaire_schema)
+    validator = WhenRuleValidator(when_rule, {}, questionnaire_schema)
     validator.questionnaire_schema.answer_id_to_option_values_map = (
         option_value_to_answer_id_map
     )
@@ -46,7 +46,7 @@ def test_validate_answer_value_in_when_rule_valid():
 def test_invalid_answer_value_in_when_rule():
     filename = "schemas/invalid/test_invalid_answer_value_in_when_rule.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = WhenValidator({}, {}, questionnaire_schema)
+    validator = WhenRuleValidator({}, {}, questionnaire_schema)
 
     when = {
         "id": "country-checkbox-answer",

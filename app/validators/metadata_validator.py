@@ -1,5 +1,3 @@
-import collections
-
 from functools import cached_property
 
 from app import error_messages

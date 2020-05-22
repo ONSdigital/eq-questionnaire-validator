@@ -2,7 +2,7 @@ from app import error_messages
 from app.validators.validator import Validator
 
 
-class WhenValidator(Validator):
+class WhenRuleValidator(Validator):
     def __init__(self, when_clause, referenced_id, questionnaire_schema):
         super().__init__(when_clause)
         self.when_clause = when_clause
@@ -14,25 +14,25 @@ class WhenValidator(Validator):
         Validates any answer id in a when clause exists within the schema
         Will also check that comparison exists
         """
-        for when in self.when_clause:
-            if "list" in when:
-                self.validate_list_name_in_when_rule(when)
+        for when_rule in self.when_clause:
+            if "list" in when_rule:
+                self.validate_list_name_in_when_rule(when_rule)
                 break
 
             valid_answer_ids = self.validate_answer_ids_present_in_schema(
-                when, self.referenced_id
+                when_rule, self.referenced_id
             )
             if not valid_answer_ids:
                 break
 
             # We know the ids are correct, so can continue to perform validation
-            self.validate_checkbox_exclusive_conditions_in_when_rule(when)
+            self.validate_checkbox_exclusive_conditions_in_when_rule(when_rule)
 
-            if "comparison" in when:
-                self.validate_comparison_in_when_rule(when, self.referenced_id)
+            if "comparison" in when_rule:
+                self.validate_comparison_in_when_rule(when_rule, self.referenced_id)
 
-            if "id" in when:
-                self.validate_answer_value_in_when_rule(when)
+            if "id" in when_rule:
+                self.validate_answer_value_in_when_rule(when_rule)
 
     def validate_checkbox_exclusive_conditions_in_when_rule(self, when):
         """
