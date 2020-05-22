@@ -9,11 +9,7 @@ class TextFieldAnswerValidator(AnswerValidator):
     def validate(self):
         super().validate()
 
-        if (
-            self.answer["type"] == "TextField"
-            and "suggestions_url" in self.answer
-            and not self.is_suggestion_url_valid()
-        ):
+        if "suggestions_url" in self.answer and not self.is_suggestion_url_valid():
             self.add_error(error_messages.INVALID_SUGGESTION_URL)
 
     def is_suggestion_url_valid(self):
