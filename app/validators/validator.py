@@ -5,7 +5,7 @@ class Validator(ABC):
     def __init__(self, schema_element=None):
         self.errors = []
         self.context = {}
-        self.schema_element = {} if schema_element is None else schema_element
+        self.schema_element = schema_element or {}
 
     def add_error(self, message, **context):
         self.errors.append({"message": message, **context, **self.context})
