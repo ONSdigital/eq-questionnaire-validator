@@ -1,5 +1,5 @@
 from app import error_messages
-from app.validators.questionnaire_schema import is_contained_in_list
+from app.validators.questionnaire_schema import is_contained_in_dict_list
 from app.validators.routing.when_validator import WhenValidator
 from app.validators.validator import Validator
 
@@ -51,7 +51,7 @@ class RoutingValidator(Validator):
         if "goto" in rule and goto_key in rule["goto"].keys():
             referenced_id = rule["goto"][goto_key]
 
-            if not is_contained_in_list(dict_list, referenced_id):
+            if not is_contained_in_dict_list(dict_list, referenced_id):
                 self.add_error(
                     error_messages.ROUTE_TARGET_INVALID,
                     goto_key=goto_key,

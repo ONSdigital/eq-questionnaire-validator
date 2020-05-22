@@ -15,11 +15,7 @@ class DateAnswerValidator(AnswerValidator):
             self.add_error(error_messages.INVALID_OFFSET_DATE)
 
     def is_offset_date_valid(self):
-        if (
-            self.answer["type"] == "Date"
-            and "minimum" in self.answer
-            and "maximum" in self.answer
-        ):
+        if "minimum" in self.answer and "maximum" in self.answer:
             if (
                 "value" in self.answer["minimum"]
                 and "value" in self.answer["maximum"]
