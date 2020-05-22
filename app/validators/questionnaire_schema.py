@@ -20,7 +20,7 @@ def get_routing_when_list(routing_rules):
     return when_list
 
 
-def is_contained_in_list(dict_list, key_id):
+def is_contained_in_dict_list(dict_list, key_id):
     for dict_to_check in dict_list:
         if dict_to_check["id"] == key_id:
             return True
