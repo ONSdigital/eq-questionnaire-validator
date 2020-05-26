@@ -13,6 +13,7 @@ class AnswerRoutingValidator(Validator):
     def validate(self):
         self.validate_default_route()
         self.validate_routing_on_answer_options()
+        return self.errors
 
     def validate_default_route(self):
         if self.answer["mandatory"] and not self.default_route:

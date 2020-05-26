@@ -9,6 +9,7 @@ class RelationshipCollectorValidator(BlockValidator):
         self.validate_list_exists()
         self.validate_multiple_answers()
         self.validate_answer_type()
+        return self.errors
 
     def validate_answer_type(self):
         if (

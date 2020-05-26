@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import List
 
 
 class Validator(ABC):
@@ -10,5 +11,5 @@ class Validator(ABC):
     def add_error(self, message, **context):
         self.errors.append({"message": message, **context, **self.context})
 
-    def validate(self):
-        pass
+    def validate(self) -> List[dict]:
+        return self.errors

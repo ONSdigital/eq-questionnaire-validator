@@ -24,6 +24,7 @@ class AnswerValidator(Validator):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self.validate_answer_actions()
+        return self.errors
 
     def validate_duplicate_options(self):
         labels = set()

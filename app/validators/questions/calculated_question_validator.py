@@ -15,3 +15,4 @@ class CalculatedQuestionValidator(QuestionValidator):
                     self.add_error(
                         error_messages.ANSWER_NOT_IN_QUESTION, answer_id=answer_id
                     )
+        return self.errors

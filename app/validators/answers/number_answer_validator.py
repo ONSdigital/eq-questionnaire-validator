@@ -13,6 +13,7 @@ class NumberAnswerValidator(AnswerValidator):
         self.validate_mandatory_has_no_default()
         self.validate_value_in_limits()
         self.validate_decimals()
+        return self.errors
 
     def get_numeric_range_values(self, answer_ranges):
         min_value = self.answer.get("minimum", {}).get("value", {})

@@ -26,9 +26,7 @@ class QuestionnaireValidator(Validator):
         metadata_validator = MetadataValidator(
             self.schema_element["metadata"], self.schema_element["theme"]
         )
-        metadata_validator.validate()
-
-        self.errors += metadata_validator.errors
+        self.errors += metadata_validator.validate()
 
         self.validate_duplicates()
         self.validate_smart_quotes()
@@ -42,8 +40,7 @@ class QuestionnaireValidator(Validator):
                 group_routing_validator = RoutingValidator(
                     group, group, self.questionnaire_schema
                 )
-                group_routing_validator.validate()
-                self.errors += group_routing_validator.errors
+                self.errors += group_routing_validator.validate()
 
                 self.validate_blocks(section["id"], group["id"], numeric_answer_ranges)
 
@@ -54,6 +51,7 @@ class QuestionnaireValidator(Validator):
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
+        return self.errors
 
     def validate_section(self, section):
         section_repeat = section.get("repeat")
@@ -98,12 +96,10 @@ class QuestionnaireValidator(Validator):
             block_routing_validator = RoutingValidator(
                 block, group, self.questionnaire_schema
             )
-            block_routing_validator.validate()
-            self.errors += block_routing_validator.errors
+            self.errors += block_routing_validator.validate()
 
             block_validator = get_block_validator(block, self.questionnaire_schema)
-            block_validator.validate()
-            self.errors += block_validator.errors
+            self.errors += block_validator.validate()
 
             self.validate_questions(block, numeric_answer_ranges)
             self.validate_variants(block, numeric_answer_ranges)
@@ -118,17 +114,15 @@ class QuestionnaireValidator(Validator):
 
         for question in questions:
             question_validator = get_question_validator(question)
-            question_validator.validate()
 
-            self.errors += question_validator.errors
+            self.errors += question_validator.validate()
 
             for answer in question.get("answers", []):
                 if routing_rules:
                     answer_routing_validator = AnswerRoutingValidator(
                         answer, routing_rules
                     )
-                    answer_routing_validator.validate()
-                    self.errors += answer_routing_validator.errors
+                    self.errors += answer_routing_validator.validate()
 
                 answer_validator = get_answer_validator(
                     answer,
@@ -277,8 +271,7 @@ class QuestionnaireValidator(Validator):
             when_validator = WhenRuleValidator(
                 when_clause, block["id"], self.questionnaire_schema
             )
-            when_validator.validate()
-            self.errors += when_validator.errors
+            self.errors += when_validator.validate()
 
         self.validate_variant_fields(block, question_variants)
 

@@ -48,3 +48,4 @@ class CalculatedSummaryBlockValidator(BlockValidator):
                 self.add_error(
                     error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY
                 )
+        return self.errors

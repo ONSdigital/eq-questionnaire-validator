@@ -44,3 +44,4 @@ class SchemaValidator(Validator):
             self.add_error(match.message, verbose=e.message, path=e.path)
         except SchemaError as e:
             self.add_error(e)
+        return self.errors

@@ -11,6 +11,7 @@ class TextFieldAnswerValidator(AnswerValidator):
 
         if "suggestions_url" in self.answer and not self.is_suggestion_url_valid():
             self.add_error(error_messages.INVALID_SUGGESTION_URL)
+        return self.errors
 
     def is_suggestion_url_valid(self):
         parsed_result = urlparse(self.answer["suggestions_url"])

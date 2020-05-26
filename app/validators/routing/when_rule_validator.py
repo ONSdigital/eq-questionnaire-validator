@@ -33,6 +33,7 @@ class WhenRuleValidator(Validator):
 
             if "id" in when_rule:
                 self.validate_answer_value_in_when_rule(when_rule)
+        return self.errors
 
     def validate_checkbox_exclusive_conditions_in_when_rule(self, when):
         """

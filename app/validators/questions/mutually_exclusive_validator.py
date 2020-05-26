@@ -15,3 +15,4 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
             self.add_error(
                 error_messages.NON_CHECKBOX_ANSWER, answer_id=answers[-1]["id"]
             )
+        return self.errors

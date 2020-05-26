@@ -25,6 +25,7 @@ class PrimaryPersonListCollectorValidator(
         )
 
         self.validate_primary_person_list_collector_answer_ids(self.block)
+        return self.errors
 
     def _validate_primary_person_list_answer_references(self, block):
         main_answer_ids = self.questionnaire_schema.get_all_answer_ids(block["id"])

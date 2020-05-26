@@ -10,3 +10,5 @@ class BlockPlaceholderValidator(PlaceholderValidator):
             self.validate_placeholder_object(
                 placeholder_object, self.schema_element["id"]
             )
+
+        return self.errors

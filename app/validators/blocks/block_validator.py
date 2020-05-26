@@ -24,9 +24,9 @@ class BlockValidator(Validator):
         placeholder_validator = BlockPlaceholderValidator(
             self.block, self.questionnaire_schema
         )
-        placeholder_validator.validate()
+        self.errors += placeholder_validator.validate()
 
-        self.errors += placeholder_validator.errors
+        return self.errors
 
     def validate_source_references(self, source_references, block_id):
         for source_reference in source_references:

@@ -24,6 +24,7 @@ class RoutingValidator(Validator):
 
         for skip_condition in self.schema_element.get("skip_conditions", []):
             self.validate_skip_condition(skip_condition)
+        return self.errors
 
     def validate_routing_rule(self, rule):
         rule = rule.get("goto")
@@ -31,8 +32,7 @@ class RoutingValidator(Validator):
             when_validator = WhenRuleValidator(
                 rule["when"], self.schema_element["id"], self.questionnaire_schema
             )
-            when_validator.validate()
-            self.errors += when_validator.errors
+            self.errors += when_validator.validate()
 
     def validate_skip_condition(self, skip_condition):
         """
@@ -44,8 +44,7 @@ class RoutingValidator(Validator):
         when_validator = WhenRuleValidator(
             when, self.schema_element["id"], self.questionnaire_schema
         )
-        when_validator.validate()
-        self.errors += when_validator.errors
+        self.errors += when_validator.validate()
 
     def validate_routing_rule_target(self, dict_list, goto_key, rule):
         if "goto" in rule and goto_key in rule["goto"].keys():

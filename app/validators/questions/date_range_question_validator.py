@@ -16,6 +16,7 @@ class DateRangeQuestionValidator(QuestionValidator):
         """
         self.validate_range()
         self.validate_period_limits()
+        return self.errors
 
     def validate_range(self):
         if "minimum" in self.period_limits and "maximum" in self.period_limits:

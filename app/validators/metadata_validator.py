@@ -13,6 +13,7 @@ class MetadataValidator(Validator):
     def validate(self):
         self.validate_duplicates()
         self.validate_mandatory()
+        return self.errors
 
     @cached_property
     def metadata_names(self):

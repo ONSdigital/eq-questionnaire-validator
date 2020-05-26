@@ -14,3 +14,4 @@ class ListCollectorDrivingQuestionValidator(BlockValidator):
                 block_id=self.block["id"],
                 for_list=self.block["for_list"],
             )
+        return self.errors

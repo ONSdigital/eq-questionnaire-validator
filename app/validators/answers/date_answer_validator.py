@@ -13,6 +13,7 @@ class DateAnswerValidator(AnswerValidator):
 
         if not self.is_offset_date_valid():
             self.add_error(error_messages.INVALID_OFFSET_DATE)
+        return self.errors
 
     def is_offset_date_valid(self):
         if "minimum" in self.answer and "maximum" in self.answer:
