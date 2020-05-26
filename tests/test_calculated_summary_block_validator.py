@@ -12,24 +12,24 @@ def test_invalid_calculated_summary():
 
     expected_error_messages = [
         {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
             "block_id": "total-playback-type-error",
         },
         {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_CURRENCY,
             "block_id": "total-playback-currency-error",
         },
         {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_UNIT,
             "block_id": "total-playback-unit-error",
         },
         {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_HAS_INVALID_ID,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_INVALID_ID,
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
         {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_DUPLICATES,
             "block_id": "total-playback-duplicate-error",
             "duplicate_answers": ["fourth-number-answer", "sixth-number-answer"],
         },

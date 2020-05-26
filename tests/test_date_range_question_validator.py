@@ -19,7 +19,7 @@ def test_invalid_date_range():
 
     expected_error_messages = [
         {
-            "message": validator.PERIOD_MIN_GREATER_THAN_MAX,
+            "message": validator.MIN_GREATER_THAN_MAX,
             "question_id": "date-range-question",
         }
     ]
@@ -62,7 +62,7 @@ def test_invalid_yyyy_date_range_period():
 
     expected_error_messages = [
         {
-            "message": validator.PERIOD_LIMIT_CANNOT_USE_DAYS_MONTHS,
+            "message": validator.CANNOT_USE_DAYS_MONTHS,
             "question_id": "date-range-question",
         }
     ]
@@ -107,10 +107,7 @@ def test_invalid_mm_yyyy_date_range_period():
     validator.validate_period_limits()
 
     expected_error_messages = [
-        {
-            "message": validator.PERIOD_LIMIT_CANNOT_USE_DAYS,
-            "question_id": "date-range-question",
-        }
+        {"message": validator.CANNOT_USE_DAYS, "question_id": "date-range-question"}
     ]
 
     assert expected_error_messages == validator.errors
