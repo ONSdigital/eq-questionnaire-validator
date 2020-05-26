@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.answers.answer_validator import AnswerValidator
 
 
@@ -6,6 +5,11 @@ class NumberAnswerValidator(AnswerValidator):
     MAX_NUMBER = 9999999999
     MIN_NUMBER = -999999999
     MAX_DECIMAL_PLACES = 6
+
+    DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
+    MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
+    MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
+    DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
 
     def validate(self):
         super().validate()
@@ -74,7 +78,7 @@ class NumberAnswerValidator(AnswerValidator):
 
     def validate_mandatory_has_no_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
-            self.add_error(error_messages.DEFAULT_ON_MANDATORY)
+            self.add_error(self.DEFAULT_ON_MANDATORY)
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
@@ -82,23 +86,19 @@ class NumberAnswerValidator(AnswerValidator):
 
         if isinstance(min_value, int) and min_value < self.MIN_NUMBER:
             self.add_error(
-                error_messages.MINIMUM_LESS_THAN_LIMIT,
-                value=min_value,
-                limit=self.MIN_NUMBER,
+                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=self.MIN_NUMBER
             )
 
         if isinstance(max_value, int) and max_value > self.MAX_NUMBER:
             self.add_error(
-                error_messages.MAXIMUM_GREATER_THAN_LIMIT,
-                value=max_value,
-                limit=self.MAX_NUMBER,
+                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=self.MAX_NUMBER
             )
 
     def validate_decimals(self):
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > self.MAX_DECIMAL_PLACES:
             self.add_error(
-                error_messages.DECIMAL_PLACES_TOO_LONG,
+                self.DECIMAL_PLACES_TOO_LONG,
                 decimal_places=decimal_places,
                 limit=self.MAX_DECIMAL_PLACES,
             )

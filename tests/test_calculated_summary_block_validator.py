@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
@@ -13,24 +12,24 @@ def test_invalid_calculated_summary():
 
     expected_error_messages = [
         {
-            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_TYPE,
             "block_id": "total-playback-type-error",
         },
         {
-            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_CURRENCY,
             "block_id": "total-playback-currency-error",
         },
         {
-            "message": error_messages.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_MUST_HAVE_SAME_UNIT,
             "block_id": "total-playback-unit-error",
         },
         {
-            "message": error_messages.ANSWERS_TO_CALCULATE_HAS_INVALID_ID,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_HAS_INVALID_ID,
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
         {
-            "message": error_messages.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
+            "message": CalculatedSummaryBlockValidator.ANSWERS_TO_CALCULATE_HAS_DUPLICATES,
             "block_id": "total-playback-duplicate-error",
             "duplicate_answers": ["fourth-number-answer", "sixth-number-answer"],
         },

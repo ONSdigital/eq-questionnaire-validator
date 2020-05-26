@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.answers import TextFieldAnswerValidator
 
 
@@ -15,7 +14,7 @@ def test_textfield_validator():
     validator.validate()
 
     assert [
-        {"message": error_messages.INVALID_SUGGESTION_URL, "answer_id": "answer-1"}
+        {"message": validator.INVALID_SUGGESTION_URL, "answer_id": "answer-1"}
     ] == validator.errors
 
 

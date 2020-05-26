@@ -1,10 +1,16 @@
-from app import error_messages
 from app.validators.questionnaire_schema import is_contained_in_dict_list
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.validator import Validator
 
 
 class RoutingValidator(Validator):
+    ROUTE_TARGET_INVALID = "Routing rule routes to invalid"
+    ROUTE_MUST_CONTAIN_DEFAULT = (
+        "The routing rules for group or block must contain a default routing rule without a "
+        "when rule"
+    )
+    ROUTE_HAS_TOO_MANY_DEFAULTS = "The routing rules for group or block cannot contain multiple default routing rules."
+
     def __init__(self, element, group, questionnaire_schema):
         super().__init__(element)
         self.group = group
@@ -52,7 +58,7 @@ class RoutingValidator(Validator):
 
             if not is_contained_in_dict_list(dict_list, referenced_id):
                 self.add_error(
-                    error_messages.ROUTE_TARGET_INVALID,
+                    self.ROUTE_TARGET_INVALID,
                     goto_key=goto_key,
                     referenced_id=referenced_id,
                 )
@@ -72,11 +78,10 @@ class RoutingValidator(Validator):
 
             if not default_routing_rule_count:
                 self.add_error(
-                    error_messages.ROUTE_MUST_CONTAIN_DEFAULT,
-                    block_or_group_id=block_or_group_id,
+                    self.ROUTE_MUST_CONTAIN_DEFAULT, block_or_group_id=block_or_group_id
                 )
             elif default_routing_rule_count > 1:
                 self.add_error(
-                    error_messages.ROUTE_HAS_TOO_MANY_DEFAULTS,
+                    self.ROUTE_HAS_TOO_MANY_DEFAULTS,
                     block_or_group_id=block_or_group_id,
                 )

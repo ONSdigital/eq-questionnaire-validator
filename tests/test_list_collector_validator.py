@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.blocks import ListCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
@@ -14,12 +13,12 @@ def test_invalid_list_collector_bad_add_answer_reference():
 
     expected_errors = [
         {
-            "message": error_messages.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
+            "message": validator.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
             "referenced_id": "someone-else",
             "block_id": "list-collector",
         },
         {
-            "message": error_messages.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
+            "message": validator.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
             "referenced_id": "delete-confirmation",
             "block_id": "list-collector",
         },
@@ -39,7 +38,7 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
 
     expected_errors = [
         {
-            "message": error_messages.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
+            "message": validator.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
             "block_id": "list-collector",
         }
     ]
@@ -59,7 +58,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": error_messages.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
             "list_name": "people",
             "block_id": "list-collector",
         }
@@ -77,10 +76,7 @@ def test_invalid_list_collector_non_radio():
     validator.validate()
 
     expected_error_messages = [
-        {
-            "message": error_messages.NO_RADIO_FOR_LIST_COLLECTOR,
-            "block_id": "list-collector",
-        }
+        {"message": validator.NO_RADIO_FOR_LIST_COLLECTOR, "block_id": "list-collector"}
     ]
 
     assert expected_error_messages == validator.errors
@@ -97,7 +93,7 @@ def test_invalid_list_collector_with_no_add_option():
 
     expected_errors = [
         {
-            "message": error_messages.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            "message": validator.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
             "block_id": "list-collector",
         }
     ]

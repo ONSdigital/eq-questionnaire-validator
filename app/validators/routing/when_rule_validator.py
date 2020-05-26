@@ -1,8 +1,27 @@
-from app import error_messages
 from app.validators.validator import Validator
 
 
 class WhenRuleValidator(Validator):
+    LIST_REFERENCE_INVALID = "Invalid list reference"
+    CHECKBOX_MUST_USE_CORRECT_CONDITION = (
+        "The condition cannot be used with `Checkbox` answer type"
+    )
+    CHECKBOX_CONDITION_ONLY = (
+        "This condition can only be used with `Checkbox` answer types"
+    )
+    NON_CHECKBOX_COMPARISON_ID = (
+        "The comparison id is not of answer type `Checkbox`. The condition can only reference "
+        "`Checkbox` answers when using `comparison id`"
+    )
+    NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES = (
+        "The answers used as comparison id and answer id in the `when` clause have "
+        "different types"
+    )
+    INVALID_WHEN_RULE_ANSWER_VALUE = "Answer value in when rule has an invalid value"
+    NON_EXISTENT_WHEN_KEY = (
+        'The answer id in the key of the "when" clause does not exist'
+    )
+
     def __init__(self, when_clause, referenced_id, questionnaire_schema):
         super().__init__(when_clause)
         self.when_clause = when_clause
@@ -60,7 +79,7 @@ class WhenRuleValidator(Validator):
                     "answer"
                 ]["id"]
                 self.add_error(
-                    error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
+                    self.CHECKBOX_MUST_USE_CORRECT_CONDITION,
                     condition=condition,
                     answer_id=answer_id,
                 )
@@ -69,7 +88,7 @@ class WhenRuleValidator(Validator):
                 "answer"
             ]["id"]
             self.add_error(
-                error_messages.CHECKBOX_CONDITION_ONLY,
+                self.CHECKBOX_CONDITION_ONLY,
                 condition=condition,
                 answer_type=answer_type,
                 answer_id=answer_id,
@@ -103,14 +122,14 @@ class WhenRuleValidator(Validator):
             if condition in conditions_requiring_list_match_values:
                 if comparison_answer_type != "Checkbox":
                     self.add_error(
-                        error_messages.NON_CHECKBOX_COMPARISON_ID,
+                        self.NON_CHECKBOX_COMPARISON_ID,
                         comparison_id=comparison_id,
                         condition=condition,
                     )
 
             elif comparison_answer_type != id_answer_type:
                 self.add_error(
-                    error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+                    self.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
                     comparison_id=comparison_id,
                     answer_id=answer_id,
                     referenced_id=referenced_id,
@@ -131,7 +150,7 @@ class WhenRuleValidator(Validator):
         for value in when_values:
             if value not in option_values:
                 self.add_error(
-                    error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
+                    self.INVALID_WHEN_RULE_ANSWER_VALUE,
                     answer_id=when_rule["id"],
                     value=value,
                 )
@@ -152,7 +171,7 @@ class WhenRuleValidator(Validator):
         for key, present_id in ids_to_check:
             if present_id not in self.questionnaire_schema.answers_with_context:
                 self.add_error(
-                    error_messages.NON_EXISTENT_WHEN_KEY,
+                    self.NON_EXISTENT_WHEN_KEY,
                     answer_id=present_id,
                     key=key,
                     referenced_id=referenced_id,
@@ -166,4 +185,4 @@ class WhenRuleValidator(Validator):
         """
         list_name = when["list"]
         if list_name not in self.questionnaire_schema.list_names:
-            self.add_error(error_messages.LIST_REFERENCE_INVALID, list_name=list_name)
+            self.add_error(self.LIST_REFERENCE_INVALID, list_name=list_name)

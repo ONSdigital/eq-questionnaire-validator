@@ -1,6 +1,5 @@
 from functools import cached_property
 
-from app import error_messages
 from app.validators.validator import Validator
 
 
@@ -8,6 +7,23 @@ class AnswerValidator(Validator):
     MAX_NUMBER = 9999999999
     MIN_NUMBER = -999999999
     MAX_DECIMAL_PLACES = 6
+
+    ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
+    DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
+    DUPLICATE_LABEL_FOUND = "Duplicate label found"
+    DUPLICATE_VALUE_FOUND = "Duplicate value found"
+    ANSWER_LABEL_VALUE_MISMATCH = "Found mismatching answer value for label"
+    LIST_NAME_MISSING = "List name defined in action params does not exist"
+    BLOCK_ID_MISSING = "Block id defined in action params does not exist"
+    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the minimum of answer"
+    )
+    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the maximum of answer"
+    )
+    GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
+        "The referenced answer has a greater number of decimal places than answer"
+    )
 
     def __init__(self, schema_element, list_names=None, block_ids=None):
         super().__init__(schema_element)
@@ -37,14 +53,10 @@ class AnswerValidator(Validator):
                 continue
 
             if option["label"] in labels:
-                self.add_error(
-                    error_messages.DUPLICATE_LABEL_FOUND, label=option["label"]
-                )
+                self.add_error(self.DUPLICATE_LABEL_FOUND, label=option["label"])
 
             if option["value"] in values:
-                self.add_error(
-                    error_messages.DUPLICATE_VALUE_FOUND, value=option["value"]
-                )
+                self.add_error(self.DUPLICATE_VALUE_FOUND, value=option["value"])
 
             labels.add(option["label"])
             values.add(option["value"])
@@ -56,7 +68,7 @@ class AnswerValidator(Validator):
 
     def validate_decimal_places(self):
         if not self.are_decimal_places_valid():
-            self.add_error(error_messages.DECIMAL_PLACES_UNDEFINED)
+            self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_labels_and_values_match(self):
         for option in self.options:
@@ -70,9 +82,7 @@ class AnswerValidator(Validator):
 
             if label != option["value"]:
                 self.add_error(
-                    error_messages.ANSWER_LABEL_VALUE_MISMATCH,
-                    label=label,
-                    value=option["value"],
+                    self.ANSWER_LABEL_VALUE_MISMATCH, label=label, value=option["value"]
                 )
 
     def validate_answer_actions(self):
@@ -85,12 +95,12 @@ class AnswerValidator(Validator):
             list_name = action_params.get("list_name")
 
             if list_name and list_name not in self.list_names:
-                self.add_error(error_messages.LIST_NAME_MISSING, list_name=list_name)
+                self.add_error(self.LIST_NAME_MISSING, list_name=list_name)
 
             block_id = action_params.get("block_id")
 
             if block_id and block_id not in self.block_ids:
-                self.add_error(error_messages.BLOCK_ID_MISSING, block_id=block_id)
+                self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
 
     def validate_numeric_answer_types(self, answer_ranges):
         """
@@ -116,13 +126,13 @@ class AnswerValidator(Validator):
         errors_found = False
         if answer_ranges[self.answer.get("id")]["min"] is None:
             self.add_error(
-                error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                self.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["minimum"]["value"]["identifier"],
             )
             errors_found = True
         if answer_ranges[self.answer.get("id")]["max"] is None:
             self.add_error(
-                error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                self.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
                 referenced_id=self.answer["maximum"]["value"]["identifier"],
             )
             errors_found = True
@@ -134,7 +144,7 @@ class AnswerValidator(Validator):
 
         if max_value - min_value < 0:
             self.add_error(
-                error_messages.ANSWER_RANGE_INVALID,
+                self.ANSWER_RANGE_INVALID,
                 min=min_value,
                 max=max_value,
                 answer_id=self.answer["id"],
@@ -147,7 +157,7 @@ class AnswerValidator(Validator):
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
                     referenced_id=answer_values["min_referred"],
                 )
 
@@ -155,6 +165,6 @@ class AnswerValidator(Validator):
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
-                    error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
                     referenced_id=answer_values["max_referred"],
                 )

@@ -1,6 +1,6 @@
-from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.routing_validator import RoutingValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
@@ -32,18 +32,16 @@ def test_invalid_routing_default_block():
         },
     ]
     questionnaire_schema = QuestionnaireSchema({})
-    questionnaire_validator = RoutingValidator({}, {}, questionnaire_schema)
+    validator = RoutingValidator({}, {}, questionnaire_schema)
 
-    questionnaire_validator.validate_routing_rules_have_default(
-        rules, "conditional-routing-block"
-    )
+    validator.validate_routing_rules_have_default(rules, "conditional-routing-block")
 
     expected_error = {
-        "message": error_messages.ROUTE_MUST_CONTAIN_DEFAULT,
+        "message": validator.ROUTE_MUST_CONTAIN_DEFAULT,
         "block_or_group_id": "conditional-routing-block",
     }
 
-    assert questionnaire_validator.errors[0] == expected_error
+    assert validator.errors[0] == expected_error
 
 
 def test_invalid_routing_block_id():
@@ -61,17 +59,15 @@ def test_invalid_routing_block_id():
         }
     }
     questionnaire_schema = QuestionnaireSchema({})
-    routing_validator = RoutingValidator({}, {}, questionnaire_schema)
-    routing_validator.validate_routing_rule_target(
-        [{"id": "mock-block"}], "block", rule
-    )
+    validator = RoutingValidator({}, {}, questionnaire_schema)
+    validator.validate_routing_rule_target([{"id": "mock-block"}], "block", rule)
     expected_error = {
-        "message": error_messages.ROUTE_TARGET_INVALID,
+        "message": validator.ROUTE_TARGET_INVALID,
         "goto_key": "block",
         "referenced_id": "invalid-location",
     }
 
-    assert routing_validator.errors == [expected_error]
+    assert validator.errors == [expected_error]
 
 
 def test_answer_comparisons_different_types():
@@ -85,13 +81,13 @@ def test_answer_comparisons_different_types():
 
     expected_errors = [
         {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "message": WhenRuleValidator.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
             "comparison_id": "route-comparison-1-answer",
             "answer_id": "route-comparison-2-answer",
             "referenced_id": "route-comparison-2",
         },
         {
-            "message": error_messages.NON_CHECKBOX_COMPARISON_ID,
+            "message": WhenRuleValidator.NON_CHECKBOX_COMPARISON_ID,
             "comparison_id": "route-comparison-2-answer",
             "condition": "equals any",
         },
@@ -111,13 +107,13 @@ def test_answer_comparisons_different_types_skip_group():
 
     expected_errors = [
         {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "message": WhenRuleValidator.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
             "comparison_id": "comparison-2-answer",
             "answer_id": "comparison-1-answer",
             "referenced_id": "less-than-answers",
         },
         {
-            "message": error_messages.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "message": WhenRuleValidator.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
             "comparison_id": "comparison-2-answer",
             "answer_id": "comparison-1-answer",
             "referenced_id": "less-than-answers",

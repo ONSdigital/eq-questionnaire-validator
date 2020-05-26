@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.answers.number_answer_validator import NumberAnswerValidator
@@ -17,26 +16,26 @@ def test_invalid_mismatching_answer_label_and_value():
         ],
     }
 
+    validator = AnswerValidator(answer)
+
     expected_errors = [
         {
-            "message": error_messages.ANSWER_LABEL_VALUE_MISMATCH,
+            "message": validator.ANSWER_LABEL_VALUE_MISMATCH,
             "answer_id": "correct-answer",
             "label": "Yes it is {name}",
             "value": "Yes it is",
         },
         {
-            "message": error_messages.ANSWER_LABEL_VALUE_MISMATCH,
+            "message": validator.ANSWER_LABEL_VALUE_MISMATCH,
             "answer_id": "correct-answer",
             "label": "Nope",
             "value": "No",
         },
     ]
 
-    answer_validator = AnswerValidator(answer)
+    validator.validate_labels_and_values_match()
 
-    answer_validator.validate_labels_and_values_match()
-
-    assert expected_errors == answer_validator.errors
+    assert expected_errors == validator.errors
 
 
 def test_number_of_decimals():
@@ -48,12 +47,12 @@ def test_number_of_decimals():
         "type": "Number",
     }
 
-    answer_validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(answer)
 
-    answer_validator.validate_decimals()
+    validator.validate_decimals()
 
-    assert answer_validator.errors[0] == {
-        "message": error_messages.DECIMAL_PLACES_TOO_LONG,
+    assert validator.errors[0] == {
+        "message": validator.DECIMAL_PLACES_TOO_LONG,
         "decimal_places": 10,
         "limit": 6,
         "answer_id": "answer-5",
@@ -70,19 +69,19 @@ def test_minimum_value():
         "type": "Number",
     }
 
-    answer_validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(answer)
 
-    answer_validator.validate_value_in_limits()
+    validator.validate_value_in_limits()
 
-    assert answer_validator.errors[0] == {
-        "message": "Minimum value is less than system limit",
+    assert validator.errors[0] == {
+        "message": validator.MINIMUM_LESS_THAN_LIMIT,
         "value": -99999999999,
         "limit": -999999999,
         "answer_id": "answer-4",
     }
 
-    assert answer_validator.errors[1] == {
-        "message": "Maximum value is greater than system limit",
+    assert validator.errors[1] == {
+        "message": validator.MAXIMUM_GREATER_THAN_LIMIT,
         "value": 99999999999,
         "limit": 9999999999,
         "answer_id": "answer-4",
@@ -113,11 +112,11 @@ def test_invalid_answer_default():
         "type": "Number",
     }
 
-    answer_validator = NumberAnswerValidator(answer)
-    answer_validator.validate_mandatory_has_no_default()
+    validator = NumberAnswerValidator(answer)
+    validator.validate_mandatory_has_no_default()
 
-    assert answer_validator.errors[0] == {
-        "message": error_messages.DEFAULT_ON_MANDATORY,
+    assert validator.errors[0] == {
+        "message": validator.DEFAULT_ON_MANDATORY,
         "answer_id": "answer-7",
     }
 
@@ -134,11 +133,11 @@ def test_are_decimal_places_valid():
         "maximum": {"value": 100},
     }
 
-    answer_validator = NumberAnswerValidator(answer)
-    answer_validator.validate_decimal_places()
+    validator = NumberAnswerValidator(answer)
+    validator.validate_decimal_places()
 
-    assert answer_validator.errors[0] == {
-        "message": error_messages.DECIMAL_PLACES_UNDEFINED,
+    assert validator.errors[0] == {
+        "message": validator.DECIMAL_PLACES_UNDEFINED,
         "answer_id": "total-percentage",
     }
 
@@ -156,17 +155,17 @@ def test_unique_answer_options():
         ],
     }
 
-    answer_validator = AnswerValidator(answer)
-    answer_validator.validate_duplicate_options()
+    validator = AnswerValidator(answer)
+    validator.validate_duplicate_options()
 
-    assert answer_validator.errors == [
+    assert validator.errors == [
         {
-            "message": error_messages.DUPLICATE_LABEL_FOUND,
+            "message": validator.DUPLICATE_LABEL_FOUND,
             "answer_id": "duplicate-country-answer",
             "label": "India",
         },
         {
-            "message": error_messages.DUPLICATE_VALUE_FOUND,
+            "message": validator.DUPLICATE_VALUE_FOUND,
             "answer_id": "duplicate-country-answer",
             "value": "India",
         },
@@ -188,12 +187,12 @@ def test_invalid_range():
 
     expected_errors = [
         {
-            "message": error_messages.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "message": validator.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-4",
             "answer_id": "answer-3",
         },
         {
-            "message": error_messages.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "message": validator.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-5",
             "answer_id": "answer-3",
         },
@@ -225,7 +224,7 @@ def test_invalid_numeric_answers():
 
     expected_errors = [
         {
-            "message": error_messages.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+            "message": validator.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
             "referenced_id": "answer-2",
             "answer_id": "answer-1",
         }
@@ -248,12 +247,12 @@ def test_invalid_answer_action():
 
     expected_error_messages = [
         {
-            "message": error_messages.LIST_NAME_MISSING,
+            "message": validator.LIST_NAME_MISSING,
             "answer_id": "anyone-else-live-here-answer",
             "list_name": "non-existent-list-name",
         },
         {
-            "message": error_messages.BLOCK_ID_MISSING,
+            "message": validator.BLOCK_ID_MISSING,
             "block_id": "non-existent-block-id",
             "answer_id": "anyone-else-live-here-answer",
         },

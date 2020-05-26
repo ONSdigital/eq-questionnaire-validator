@@ -1,9 +1,13 @@
-from app import error_messages
 from app.validators.questionnaire_schema import get_routing_when_list, has_default_route
 from app.validators.validator import Validator
 
 
 class AnswerRoutingValidator(Validator):
+    UNDEFINED_QUESTION_DEFAULT_ROUTE = "Default route not defined for optional question"
+    UNDEFINED_ANSWER_ROUTING_RULE = (
+        "Routing rule not defined for answer missing options"
+    )
+
     def __init__(self, answer, routing_rules):
         super().__init__(answer)
         self.answer = answer
@@ -18,8 +22,7 @@ class AnswerRoutingValidator(Validator):
     def validate_default_route(self):
         if self.answer["mandatory"] and not self.default_route:
             self.errors.append(
-                error_messages.UNDEFINED_QUESTION_DEFAULT_ROUTE,
-                answer_id=self.answer["id"],
+                self.UNDEFINED_QUESTION_DEFAULT_ROUTE, answer_id=self.answer["id"]
             )
 
     def validate_routing_on_answer_options(self):
@@ -45,7 +48,7 @@ class AnswerRoutingValidator(Validator):
 
             if has_unrouted_options and not self.default_route:
                 self.errors.append(
-                    error_messages.UNDEFINED_ANSWER_ROUTING_RULE,
+                    self.UNDEFINED_ANSWER_ROUTING_RULE,
                     answer_id=self.answer["id"],
                     option_values=option_values,
                 )

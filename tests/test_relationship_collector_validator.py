@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.blocks import RelationshipCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
@@ -13,7 +12,7 @@ def test_invalid_relationship_multiple_answers():
 
     expected_errors = [
         {
-            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
+            "message": validator.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
             "block_id": "relationships",
         }
     ]
@@ -32,7 +31,7 @@ def test_invalid_relationship_wrong_answer_type():
 
     expected_errors = [
         {
-            "message": error_messages.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
+            "message": validator.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
             "block_id": "relationships",
         }
     ]

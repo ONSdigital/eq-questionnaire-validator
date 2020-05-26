@@ -1,16 +1,17 @@
 import re
 from urllib.parse import urlparse
 
-from app import error_messages
 from app.validators.answers.answer_validator import AnswerValidator
 
 
 class TextFieldAnswerValidator(AnswerValidator):
+    INVALID_SUGGESTION_URL = "Suggestions url is invalid"
+
     def validate(self):
         super().validate()
 
         if "suggestions_url" in self.answer and not self.is_suggestion_url_valid():
-            self.add_error(error_messages.INVALID_SUGGESTION_URL)
+            self.add_error(self.INVALID_SUGGESTION_URL)
         return self.errors
 
     def is_suggestion_url_valid(self):

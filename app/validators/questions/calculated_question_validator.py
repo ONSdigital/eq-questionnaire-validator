@@ -1,8 +1,9 @@
-from app import error_messages
 from app.validators.questions.question_validator import QuestionValidator
 
 
 class CalculatedQuestionValidator(QuestionValidator):
+    ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
+
     def validate(self):
         """
         Validates that any answer ids within the 'answer_to_group'
@@ -12,7 +13,5 @@ class CalculatedQuestionValidator(QuestionValidator):
         for calculation in self.question.get("calculations"):
             for answer_id in calculation["answers_to_calculate"]:
                 if answer_id not in answer_ids:
-                    self.add_error(
-                        error_messages.ANSWER_NOT_IN_QUESTION, answer_id=answer_id
-                    )
+                    self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
         return self.errors

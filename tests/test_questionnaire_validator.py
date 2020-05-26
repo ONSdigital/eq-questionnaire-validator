@@ -6,7 +6,10 @@ from structlog import getLogger
 from structlog.stdlib import LoggerFactory
 
 from app import error_messages
+from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
+from app.validators.questions import MutuallyExclusiveQuestionValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
 
 logger = getLogger()
@@ -46,37 +49,37 @@ def test_answer_comparisons_invalid_comparison_id():
 
     expected_error_messages = [
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-2",
             "key": "comparison.id",
             "referenced_id": "route-comparison-2",
         },
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-3",
             "key": "comparison.id",
             "referenced_id": "equals-answers",
         },
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-4",
             "key": "comparison.id",
             "referenced_id": "less-than-answers",
         },
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-5",
             "key": "comparison.id",
             "referenced_id": "less-than-answers",
         },
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-6",
             "key": "comparison.id",
             "referenced_id": "greater-than-answers",
         },
         {
-            "message": error_messages.NON_EXISTENT_WHEN_KEY,
+            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
             "answer_id": "bad-answer-id-7",
             "key": "id",
             "referenced_id": "greater-than-answers",
@@ -98,11 +101,11 @@ def test_invalid_mutually_exclusive_conditions():
 
     expected_errors = [
         {
-            "message": error_messages.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY,
+            "message": MutuallyExclusiveQuestionValidator.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY,
             "question_id": "mutually-exclusive-date-question",
         },
         {
-            "message": error_messages.NON_CHECKBOX_ANSWER,
+            "message": MutuallyExclusiveQuestionValidator.NON_CHECKBOX_ANSWER,
             "answer_id": "mutually-exclusive-date-answer-2",
             "question_id": "mutually-exclusive-date-question",
         },
@@ -149,22 +152,22 @@ def test_invalid_placeholder_answer_ids():
 
     expected_errors = [
         {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
+            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
             "block_id": "block1",
             "referenced_id": "invalid-answer0",
         },
         {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
+            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
             "block_id": "block2",
             "referenced_id": "invalid-answer1",
         },
         {
-            "message": error_messages.ANSWER_SELF_REFERENCE,
+            "message": BlockValidator.ANSWER_SELF_REFERENCE,
             "block_id": "block3",
             "referenced_id": "answer4",
         },
         {
-            "message": error_messages.METADATA_REFERENCE_INVALID,
+            "message": BlockValidator.METADATA_REFERENCE_INVALID,
             "block_id": "block4",
             "referenced_id": "invalid-metadata-ref",
         },
@@ -310,12 +313,12 @@ def test_invalid_when_condition_property():
 
     expected_errors = [
         {
-            "message": error_messages.NON_CHECKBOX_COMPARISON_ID,
+            "message": WhenRuleValidator.NON_CHECKBOX_COMPARISON_ID,
             "comparison_id": "country-checkbox-answer2",
             "condition": "contains any",
         },
         {
-            "message": error_messages.CHECKBOX_MUST_USE_CORRECT_CONDITION,
+            "message": WhenRuleValidator.CHECKBOX_MUST_USE_CORRECT_CONDITION,
             "condition": "equals any",
             "answer_id": "country-checkbox-answer",
         },
@@ -332,7 +335,7 @@ def test_invalid_list_name_in_when_rule():
 
     expected_errors = [
         {
-            "message": error_messages.LIST_REFERENCE_INVALID,
+            "message": BlockValidator.LIST_REFERENCE_INVALID,
             "list_name": "non-existent-list-name",
         }
     ]
@@ -358,12 +361,12 @@ def test_invalid_relationship_no_list_specified():
 
     expected_answer_errors = [
         {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
+            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
             "referenced_id": "first-name",
             "block_id": "relationships",
         },
         {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
+            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
             "referenced_id": "last-name",
             "block_id": "relationships",
         },

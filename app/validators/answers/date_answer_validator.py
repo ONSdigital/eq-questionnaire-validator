@@ -3,16 +3,19 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-from app import error_messages
 from app.validators.answers.answer_validator import AnswerValidator
 
 
 class DateAnswerValidator(AnswerValidator):
+    INVALID_OFFSET_DATE = (
+        "The minimum offset date is greater than the maximum offset date"
+    )
+
     def validate(self):
         super().validate()
 
         if not self.is_offset_date_valid():
-            self.add_error(error_messages.INVALID_OFFSET_DATE)
+            self.add_error(self.INVALID_OFFSET_DATE)
         return self.errors
 
     def is_offset_date_valid(self):

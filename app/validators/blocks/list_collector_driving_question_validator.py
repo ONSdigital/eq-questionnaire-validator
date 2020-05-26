@@ -1,8 +1,11 @@
-from app import error_messages
 from app.validators.blocks.block_validator import BlockValidator
 
 
 class ListCollectorDrivingQuestionValidator(BlockValidator):
+    MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
+        "The block_id should be the only ListCollectorDrivingQuestion for list"
+    )
+
     def validate(self):
         super().validate()
 
@@ -10,7 +13,7 @@ class ListCollectorDrivingQuestionValidator(BlockValidator):
             self.block["for_list"]
         ):
             self.add_error(
-                error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
+                self.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
                 block_id=self.block["id"],
                 for_list=self.block["for_list"],
             )

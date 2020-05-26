@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
@@ -28,12 +27,12 @@ def test_invalid_reference():
 
     expected_errors = [
         {
-            "message": error_messages.ANSWER_SELF_REFERENCE,
+            "message": BlockValidator.ANSWER_SELF_REFERENCE,
             "referenced_id": "answer-1",
             "block_id": "block-1",
         },
         {
-            "message": error_messages.ANSWER_REFERENCE_INVALID,
+            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
             "referenced_id": "answer-2",
             "block_id": "block-1",
         },
@@ -52,7 +51,7 @@ def test_invalid_placeholder_list_reference():
 
     expected_errors = [
         {
-            "message": error_messages.LIST_REFERENCE_INVALID,
+            "message": BlockValidator.LIST_REFERENCE_INVALID,
             "block_id": "block1",
             "id": "people",
         }

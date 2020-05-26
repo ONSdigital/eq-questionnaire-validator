@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.metadata_validator import MetadataValidator
 
 
@@ -11,7 +10,7 @@ def test_mandatory_metadata():
     validator.validate_mandatory()
 
     expected_errors = [
-        {"message": error_messages.FOUND_MISSING_METADATA, "metadata": "ru_name"}
+        {"message": validator.FOUND_MISSING_METADATA, "metadata": "ru_name"}
     ]
 
     assert validator.errors == expected_errors
@@ -38,10 +37,7 @@ def test_duplicate_metadata():
     validator.validate_duplicates()
 
     expected_errors = [
-        {
-            "message": error_messages.FOUND_DUPLICATE_METADATA,
-            "duplicates": ["period_id"],
-        }
+        {"message": validator.FOUND_DUPLICATE_METADATA, "duplicates": ["period_id"]}
     ]
 
     assert validator.errors == expected_errors

@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.blocks.list_collector_driving_question_validator import (
     ListCollectorDrivingQuestionValidator,
 )
@@ -15,12 +14,10 @@ def test_invalid_driving_question_multiple_driving_questions():
 
     expected_error_messages = [
         {
-            "message": error_messages.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
+            "message": validator.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
             "block_id": "anyone-usually-live-at",
             "for_list": "people",
         }
     ]
 
-    validator.validate()
-
-    assert expected_error_messages == validator.errors
+    assert expected_error_messages == validator.validate()

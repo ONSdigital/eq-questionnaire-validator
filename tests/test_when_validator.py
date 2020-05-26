@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from tests.test_questionnaire_validator import _open_and_load_schema_file
@@ -19,7 +18,7 @@ def test_validate_answer_value_in_when_rule_invalid():
     validator.validate_answer_value_in_when_rule(when_rule)
 
     assert validator.errors[0] == {
-        "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
+        "message": WhenRuleValidator.INVALID_WHEN_RULE_ANSWER_VALUE,
         "answer_id": "answer-1",
         "value": "Yes",
     }
@@ -55,7 +54,7 @@ def test_invalid_answer_value_in_when_rule():
     }
     expected_error_messages = [
         {
-            "message": error_messages.INVALID_WHEN_RULE_ANSWER_VALUE,
+            "message": WhenRuleValidator.INVALID_WHEN_RULE_ANSWER_VALUE,
             "answer_id": "country-checkbox-answer",
             "value": value,
         }
