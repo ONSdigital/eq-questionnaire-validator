@@ -181,7 +181,7 @@ def test_invalid_range():
         "minimum": {"value": {"identifier": "answer-4", "source": "answers"}},
         "type": "Percentage",
     }
-    validator = AnswerValidator(answer)
+    validator = NumberAnswerValidator(answer)
 
     validator.validate_referred_numeric_answer({"answer-3": {"min": None, "max": None}})
 
@@ -202,7 +202,7 @@ def test_invalid_range():
 
 
 def test_invalid_numeric_answers():
-    validator = AnswerValidator(
+    validator = NumberAnswerValidator(
         {
             "decimal_places": 2,
             "id": "answer-1",

@@ -102,3 +102,70 @@ class NumberAnswerValidator(AnswerValidator):
                 decimal_places=decimal_places,
                 limit=self.MAX_DECIMAL_PLACES,
             )
+
+    def validate_numeric_answer_types(self, answer_ranges):
+        """
+        Validate numeric answer types are valid.
+        """
+        # Validate referred numeric answer exists (skip further tests for answer if error is returned)
+        referred_errors = self.validate_referred_numeric_answer(answer_ranges)
+
+        if referred_errors:
+            return
+
+        # Validate numeric answer has a positive range of possible responses
+        self.validate_numeric_range(answer_ranges)
+
+        # Validate referred numeric answer decimals
+        self.validate_referred_numeric_answer_decimals(answer_ranges)
+
+    def validate_referred_numeric_answer(self, answer_ranges):
+        """
+        Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
+        If either of the above is true then it will not have been given a value by _get_numeric_range_values
+        """
+        errors_found = False
+        if answer_ranges[self.answer.get("id")]["min"] is None:
+            self.add_error(
+                self.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                referenced_id=self.answer["minimum"]["value"]["identifier"],
+            )
+            errors_found = True
+        if answer_ranges[self.answer.get("id")]["max"] is None:
+            self.add_error(
+                self.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+                referenced_id=self.answer["maximum"]["value"]["identifier"],
+            )
+            errors_found = True
+        return errors_found
+
+    def validate_numeric_range(self, answer_ranges):
+        max_value = answer_ranges[self.answer.get("id")]["max"]
+        min_value = answer_ranges[self.answer.get("id")]["min"]
+
+        if max_value - min_value < 0:
+            self.add_error(
+                self.ANSWER_RANGE_INVALID,
+                min=min_value,
+                max=max_value,
+                answer_id=self.answer["id"],
+            )
+
+    def validate_referred_numeric_answer_decimals(self, answer_ranges):
+        answer_values = answer_ranges[self.answer["id"]]
+
+        if answer_values["min_referred"] is not None:
+            referred_values = answer_ranges[answer_values["min_referred"]]
+            if answer_values["decimal_places"] < referred_values["decimal_places"]:
+                self.add_error(
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    referenced_id=answer_values["min_referred"],
+                )
+
+        if answer_values["max_referred"] is not None:
+            referred_values = answer_ranges[answer_values["max_referred"]]
+            if answer_values["decimal_places"] < referred_values["decimal_places"]:
+                self.add_error(
+                    self.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
+                    referenced_id=answer_values["max_referred"],
+                )
