@@ -29,24 +29,21 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             ]
         except KeyError as e:
             self.add_error(self.ANSWERS_HAS_INVALID_ID, answer_id=str(e).strip("'"))
-            return
+            return self.errors
 
         duplicates = find_duplicates(self.answers_to_calculate)
 
         if duplicates:
             self.add_error(self.ANSWERS_HAS_DUPLICATES, duplicate_answers=duplicates)
-            return
 
         if not all(answer["type"] == answers[0]["type"] for answer in answers):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_TYPE)
-            return
+            return self.errors
 
         if answers[0]["type"] == "Unit":
             if not all(answer["unit"] == answers[0]["unit"] for answer in answers):
                 self.add_error(self.ANSWERS_MUST_HAVE_SAME_UNIT)
-                return
-
-        if answers[0]["type"] == "Currency":
+        elif answers[0]["type"] == "Currency":
             if not all(
                 answer["currency"] == answers[0]["currency"] for answer in answers
             ):
