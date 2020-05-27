@@ -35,8 +35,8 @@ def test_invalid_calculated_summary():
         },
         {
             "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
-            "block_id": "total-playback-duplicate-error"
-        }
+            "block_id": "total-playback-duplicate-error",
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
