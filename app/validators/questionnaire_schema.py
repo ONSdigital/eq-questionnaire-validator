@@ -31,6 +31,19 @@ def find_duplicates(values):
     return [item for item, count in collections.Counter(values).items() if count > 1]
 
 
+def get_object_containing_key(data, key_name):
+    """
+    Get all dicts that contain `key_name` within a piece of data
+    :param data: the data to search
+    :param key_name: the key to find
+    :return: list of dicts containing the key name, otherwise returns None
+    """
+    matches = []
+    for match in parse(f"$..{key_name}").find(data):
+        matches.append(match.context.value)
+    return matches
+
+
 @lru_cache
 def get_key_index_from_path(key, path):
     position = path.find(key) + len(key + ".[")
@@ -201,19 +214,6 @@ class QuestionnaireSchema:
             final_condition = " & ".join(conditions)
             return jp.match(f"$..blocks[?({final_condition})]", self.schema)
         return self.blocks
-
-    @lru_cache
-    def get_block_key_context(self, block_id, key_name):
-        """
-        Get all dicts that contain `key_name` within a block
-        :param block_id: the id of the block to search
-        :param key_name: the key to find
-        :return: list of dicts containing the key name, otherwise returns None
-        """
-        matches = []
-        for match in parse(f"$..{key_name}").find(self.blocks_by_id[block_id]):
-            matches.append(match.context.value)
-        return matches
 
     @lru_cache
     def get_other_blocks(self, block_id_to_filter, **filters):

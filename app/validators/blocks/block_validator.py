@@ -1,6 +1,7 @@
 from app.validators.placeholders.block_placeholder_validator import (
     BlockPlaceholderValidator,
 )
+from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
 
 
@@ -20,9 +21,7 @@ class BlockValidator(Validator):
         """
         Validation called for every block type
         """
-        source_references = self.questionnaire_schema.get_block_key_context(
-            self.block["id"], "identifier"
-        )
+        source_references = get_object_containing_key(self.block, "identifier")
 
         self.validate_source_references(source_references, self.block["id"])
         placeholder_validator = BlockPlaceholderValidator(
