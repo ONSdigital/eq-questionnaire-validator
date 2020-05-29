@@ -5,6 +5,14 @@ from app.validators.validator import Validator
 
 
 class PlaceholderValidator(Validator):
+    PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
+    FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = (
+        "Can't reference `previous_transform` in a first transform"
+    )
+    NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
+        "`previous_transform` not referenced in chained transform"
+    )
+
     def __init__(self, element, questionnaire_schema):
         super().__init__(element)
         self.questionnaire_schema = questionnaire_schema
@@ -41,7 +49,7 @@ class PlaceholderValidator(Validator):
                 text = placeholder_object["text_plural"]["forms"]["other"]
 
             self.add_error(
-                error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+                self.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
                 text=text,
                 differences=placeholder_differences,
             )
@@ -56,7 +64,7 @@ class PlaceholderValidator(Validator):
                 and argument.get("source") == "previous_transform"
             ):
                 self.add_error(
-                    error_messages.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+                    self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
                     block_id=block_id,
                 )
 

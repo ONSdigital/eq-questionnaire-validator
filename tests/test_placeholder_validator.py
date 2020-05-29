@@ -1,4 +1,3 @@
-from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 
@@ -32,7 +31,7 @@ def test_invalid_repeating_section_title_placeholders():
 
     expected_errors = [
         {
-            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": validator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "{person}",
             "differences": {"person"},
         }
@@ -71,7 +70,7 @@ def test_placeholder_plurals():
 
     expected_errors = [
         {
-            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": validator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "You’ve said {number_of_people} people live here. Is that correct?",
             "differences": {"number_of_people"},
         }

@@ -7,6 +7,7 @@ from structlog.stdlib import LoggerFactory
 
 from app import error_messages
 from app.validators.blocks import BlockValidator
+from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
@@ -122,21 +123,21 @@ def test_invalid_string_transforms():
 
     expected_errors = [
         {
-            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": PlaceholderValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "test {answer1}",
             "differences": {"answer1"},
         },
         {
-            "message": error_messages.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
+            "message": PlaceholderValidator.PLACEHOLDERS_DONT_MATCH_DEFINITIONS,
             "text": "test {answer1} and {answer2}",
             "differences": {"answer2"},
         },
         {
-            "message": error_messages.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
+            "message": PlaceholderValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
             "block_id": "block4",
         },
         {
-            "message": error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
+            "message": PlaceholderValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
             "block_id": "block5",
         },
     ]
