@@ -1,3 +1,5 @@
+from jsonpath_rw import parse
+
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
@@ -28,15 +30,14 @@ def test_get_other_blocks():
     assert other_list_collectors[0]["id"] == "another-list-collector"
 
 
-def test_get_context_from_path():
+def test_get_context_from_match():
     filename = "schemas/valid/test_question_variants.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    context = questionnaire_schema.get_context_from_path(
-        "sections.[0].groups.[0].blocks.[1]"
-    )
+    matches = parse("$..blocks[*]").find(questionnaire_schema.schema)
+    context = questionnaire_schema.get_context_from_match(matches[0])
 
-    assert context == {"section": "section", "group_id": "group", "block": "block-2"}
+    assert context == {"section": "section", "group_id": "group", "block": "block-1"}
 
 
 def test_questions_with_context():

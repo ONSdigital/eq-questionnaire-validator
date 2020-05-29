@@ -44,16 +44,13 @@ def get_object_containing_key(data, key_name):
     return matches
 
 
-@lru_cache
-def get_key_index_from_path(key, path):
-    position = path.find(key) + len(key + ".[")
-    return int(path[position : position + 1])
-
-
-@lru_cache
-def get_element_path(key, path):
-    position = path.find(key)
-    return path[: position + len(key + ".[0]")]
+def get_element_value(key, match):
+    if (
+        str(match.full_path.left).endswith(f".{key}")
+        or str(match.full_path.left) == key
+    ):
+        return match.value
+    return get_element_value(key, match.context)
 
 
 # pylint: disable=too-many-public-methods
@@ -90,7 +87,7 @@ class QuestionnaireSchema:
     @cached_property
     def questions_with_context(self):
         for match in parse("$..question").find(self.schema):
-            yield match.value, self.get_context_from_path(str(match.full_path))
+            yield match.value, self.get_context_from_match(match)
 
     @cached_property
     def answers_with_context(self):
@@ -268,31 +265,20 @@ class QuestionnaireSchema:
     def _get_path_id(self, path):
         return jp.match1(path + ".id", self.schema)
 
-    @lru_cache
-    def get_context_from_path(self, full_path):
-        section_index = get_key_index_from_path("sections", full_path)
+    def get_context_from_match(self, match):
+        full_path = str(match.full_path)
+        section = get_element_value("sections", match)
+        block = get_element_value("blocks", match)
+        block_id = block["id"]
+        group = get_element_value("groups", match)
 
-        block_path = get_element_path("blocks", full_path)
-        group_path = get_element_path("groups", full_path)
+        for sub_block in [
+            "add_block",
+            "edit_block",
+            "add_or_edit_block",
+            "remove_block",
+        ]:
+            if sub_block in full_path and sub_block in block:
+                block_id = block[sub_block]["id"]
 
-        group_id = self._get_path_id(group_path)
-        block_id = self._get_path_id(block_path)
-
-        if any(
-            sub_block in full_path
-            for sub_block in [
-                "add_block",
-                "edit_block",
-                "add_or_edit_block",
-                "remove_block",
-            ]
-        ):
-            key_path = full_path[len(block_path) + 1 :]
-            key = key_path[: key_path.find(".question")]
-            block_id = self.blocks_by_id[block_id][key]["id"]
-
-        return {
-            "section": self.section_ids[section_index],
-            "block": block_id,
-            "group_id": group_id,
-        }
+        return {"section": section["id"], "block": block_id, "group_id": group["id"]}
