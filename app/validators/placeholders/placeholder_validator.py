@@ -81,5 +81,5 @@ class PlaceholderValidator(Validator):
 
             if not previous_transform_used:
                 self.add_error(
-                    error_messages.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
+                    self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
                 )

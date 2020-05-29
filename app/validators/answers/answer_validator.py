@@ -4,10 +4,6 @@ from app.validators.validator import Validator
 
 
 class AnswerValidator(Validator):
-    MAX_NUMBER = 9999999999
-    MIN_NUMBER = -999999999
-    MAX_DECIMAL_PLACES = 6
-
     ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
     DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
     DUPLICATE_LABEL_FOUND = "Duplicate label found"
