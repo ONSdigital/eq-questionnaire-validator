@@ -236,7 +236,7 @@ class QuestionnaireSchema:
         for match in parse("$..id").find(self.schema):
             full_path = str(match.full_path)
             if not any(ignored_path in full_path for ignored_path in ignored_paths):
-                yield str(match.full_path)[:-3], match.value
+                yield str(match.full_path.left), match.value
 
     @cached_property
     def answer_id_to_option_values_map(self):
