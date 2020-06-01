@@ -21,9 +21,7 @@ def test_invalid_reference():
         }
     }
 
-    validator.validate_answer_source_reference(
-        identifiers=known_identifiers, current_block_id="block-1"
-    )
+    validator.validate_answer_source_reference(identifiers=known_identifiers)
 
     expected_errors = [
         {
@@ -47,7 +45,7 @@ def test_invalid_placeholder_list_reference():
     validator = BlockValidator(
         questionnaire_schema.get_block("block1"), questionnaire_schema
     )
-    validator.validate_list_source_reference(["people"], "block1")
+    validator.validate_list_source_reference(["people"])
 
     expected_errors = [
         {
