@@ -11,12 +11,22 @@ class NumberAnswerValidator(AnswerValidator):
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
     DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
 
+    def __init__(self, schema_element, questionnaire_schema=None):
+        super().__init__(schema_element, questionnaire_schema)
+        self.questionnaire_schema = questionnaire_schema
+
     def validate(self):
         super().validate()
 
         self.validate_mandatory_has_no_default()
         self.validate_value_in_limits()
         self.validate_decimals()
+
+        if self.questionnaire_schema:
+            self.validate_numeric_answer_types(
+                self.questionnaire_schema.numeric_answer_ranges
+            )
+
         return self.errors
 
     def validate_mandatory_has_no_default(self):

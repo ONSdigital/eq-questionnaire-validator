@@ -21,11 +21,12 @@ class AnswerValidator(Validator):
         "The referenced answer has a greater number of decimal places than answer"
     )
 
-    def __init__(self, schema_element, list_names=None, block_ids=None):
+    def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
         self.answer = schema_element
-        self.list_names = list_names
-        self.block_ids = block_ids
+        if questionnaire_schema:
+            self.list_names = questionnaire_schema.list_names
+            self.block_ids = questionnaire_schema.block_ids
         self.context["answer_id"] = self.answer["id"]
 
     @cached_property

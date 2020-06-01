@@ -4,7 +4,7 @@ from collections import defaultdict
 from eq_translations.survey_schema import SurveySchema
 
 from app import error_messages
-from app.validators.answers import get_answer_validator, NumberAnswerValidator
+from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
@@ -123,17 +123,10 @@ class QuestionnaireValidator(Validator):
                     self.errors += answer_routing_validator.validate()
 
                 answer_validator = get_answer_validator(
-                    answer,
-                    self.questionnaire_schema.list_names,
-                    self.questionnaire_schema.block_ids,
+                    answer, self.questionnaire_schema
                 )
 
                 answer_validator.validate()
-
-                if isinstance(answer_validator, NumberAnswerValidator):
-                    answer_validator.validate_numeric_answer_types(
-                        self.questionnaire_schema.numeric_answer_ranges
-                    )
 
                 if question.get("summary") and answer["type"] != "TextField":
                     self.add_error(

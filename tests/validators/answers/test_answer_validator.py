@@ -239,11 +239,7 @@ def test_invalid_answer_action():
     )
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     answer = questionnaire_schema.get_answer("anyone-else-live-here-answer")
-    validator = AnswerValidator(
-        answer,
-        list_names=questionnaire_schema.list_names,
-        block_ids=questionnaire_schema.block_ids,
-    )
+    validator = AnswerValidator(answer, questionnaire_schema)
 
     expected_error_messages = [
         {

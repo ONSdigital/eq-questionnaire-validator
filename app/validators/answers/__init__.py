@@ -4,7 +4,7 @@ from app.validators.answers.number_answer_validator import NumberAnswerValidator
 from app.validators.answers.text_field_answer_validator import TextFieldAnswerValidator
 
 
-def get_answer_validator(answer, list_names, block_ids):
+def get_answer_validator(answer, questionnaire_schema):
     validators = {
         "TextField": TextFieldAnswerValidator,
         "Date": DateAnswerValidator,
@@ -12,6 +12,4 @@ def get_answer_validator(answer, list_names, block_ids):
         "Currency": NumberAnswerValidator,
         "Percentage": NumberAnswerValidator,
     }
-    return validators.get(answer["type"], AnswerValidator)(
-        answer, list_names, block_ids
-    )
+    return validators.get(answer["type"], AnswerValidator)(answer, questionnaire_schema)
