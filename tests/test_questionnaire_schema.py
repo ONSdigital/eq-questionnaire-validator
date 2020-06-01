@@ -1,6 +1,9 @@
 from jsonpath_rw import parse
 
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    get_context_from_match,
+)
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
@@ -35,7 +38,7 @@ def test_get_context_from_match():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     matches = parse("$..blocks[*]").find(questionnaire_schema.schema)
-    context = questionnaire_schema.get_context_from_match(matches[0])
+    context = get_context_from_match(matches[0])
 
     assert context == {"section": "section", "group_id": "group", "block": "block-1"}
 

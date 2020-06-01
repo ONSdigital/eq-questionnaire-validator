@@ -53,7 +53,20 @@ def get_element_value(key, match):
     return get_element_value(key, match.context)
 
 
-# pylint: disable=too-many-public-methods
+def get_context_from_match(match):
+    full_path = str(match.full_path)
+    section = get_element_value("sections", match)
+    block = get_element_value("blocks", match)
+    block_id = block["id"]
+    group = get_element_value("groups", match)
+
+    for sub_block in ["add_block", "edit_block", "add_or_edit_block", "remove_block"]:
+        if sub_block in full_path and sub_block in block:
+            block_id = block[sub_block]["id"]
+
+    return {"section": section["id"], "block": block_id, "group_id": group["id"]}
+
+
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
@@ -87,7 +100,7 @@ class QuestionnaireSchema:
     @cached_property
     def questions_with_context(self):
         for match in parse("$..question").find(self.schema):
-            yield match.value, self.get_context_from_match(match)
+            yield match.value, get_context_from_match(match)
 
     @cached_property
     def answers_with_context(self):
@@ -264,21 +277,3 @@ class QuestionnaireSchema:
     @lru_cache
     def _get_path_id(self, path):
         return jp.match1(path + ".id", self.schema)
-
-    def get_context_from_match(self, match):
-        full_path = str(match.full_path)
-        section = get_element_value("sections", match)
-        block = get_element_value("blocks", match)
-        block_id = block["id"]
-        group = get_element_value("groups", match)
-
-        for sub_block in [
-            "add_block",
-            "edit_block",
-            "add_or_edit_block",
-            "remove_block",
-        ]:
-            if sub_block in full_path and sub_block in block:
-                block_id = block[sub_block]["id"]
-
-        return {"section": section["id"], "block": block_id, "group_id": group["id"]}
