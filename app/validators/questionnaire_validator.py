@@ -31,8 +31,6 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
 
-        numeric_answer_ranges = {}
-
         for section in self.questionnaire_schema.sections:
             self.validate_section(section)
 
@@ -42,7 +40,7 @@ class QuestionnaireValidator(Validator):
                 )
                 self.errors += group_routing_validator.validate()
 
-                self.validate_blocks(section["id"], group["id"], numeric_answer_ranges)
+                self.validate_blocks(section["id"], group["id"])
 
         required_hub_section_ids = self.schema_element.get("hub", {}).get(
             "required_completed_sections", []
@@ -81,7 +79,7 @@ class QuestionnaireValidator(Validator):
                     required_section_id=required_section_id,
                 )
 
-    def validate_blocks(self, section_id, group_id, numeric_answer_ranges):
+    def validate_blocks(self, section_id, group_id):
         section = self.questionnaire_schema.get_section(section_id)
         group = self.questionnaire_schema.get_group(group_id)
 
@@ -101,10 +99,10 @@ class QuestionnaireValidator(Validator):
             block_validator = get_block_validator(block, self.questionnaire_schema)
             self.errors += block_validator.validate()
 
-            self.validate_questions(block, numeric_answer_ranges)
-            self.validate_variants(block, numeric_answer_ranges)
+            self.validate_questions(block)
+            self.validate_variants(block)
 
-    def validate_questions(self, block_or_variant, numeric_answer_ranges):
+    def validate_questions(self, block_or_variant):
         questions = block_or_variant.get("questions", [])
         question = block_or_variant.get("question")
         routing_rules = block_or_variant.get("routing_rules", {})
@@ -133,12 +131,8 @@ class QuestionnaireValidator(Validator):
                 answer_validator.validate()
 
                 if isinstance(answer_validator, NumberAnswerValidator):
-                    numeric_answer_ranges[
-                        answer["id"]
-                    ] = answer_validator.get_numeric_range_values(numeric_answer_ranges)
-
                     answer_validator.validate_numeric_answer_types(
-                        numeric_answer_ranges
+                        self.questionnaire_schema.numeric_answer_ranges
                     )
 
                 if question.get("summary") and answer["type"] != "TextField":
@@ -251,14 +245,14 @@ class QuestionnaireValidator(Validator):
 
         return results
 
-    def validate_variants(self, block, numeric_answer_ranges):
+    def validate_variants(self, block):
         question_variants = block.get("question_variants", [])
         content_variants = block.get("content_variants", [])
 
         all_variants = question_variants + content_variants
 
         for variant in question_variants:
-            self.validate_questions(variant, numeric_answer_ranges)
+            self.validate_questions(variant)
 
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:

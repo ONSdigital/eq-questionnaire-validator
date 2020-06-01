@@ -4,6 +4,56 @@ from functools import cached_property, lru_cache
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 
+from app.validators.answers import NumberAnswerValidator
+
+
+def get_numeric_range_values(answer, answer_ranges):
+    min_value = answer.get("minimum", {}).get("value", {})
+    max_value = answer.get("maximum", {}).get("value", {})
+    min_referred = min_value.get("identifier") if isinstance(min_value, dict) else None
+    max_referred = max_value.get("identifier") if isinstance(max_value, dict) else None
+
+    exclusive = answer.get("exclusive", False)
+    decimal_places = answer.get("decimal_places", 0)
+
+    return {
+        "min": get_answer_minimum(min_value, decimal_places, exclusive, answer_ranges),
+        "max": get_answer_maximum(max_value, decimal_places, exclusive, answer_ranges),
+        "decimal_places": decimal_places,
+        "min_referred": min_referred,
+        "max_referred": max_referred,
+        "default": answer.get("default"),
+    }
+
+
+def get_answer_minimum(defined_minimum, decimal_places, exclusive, answer_ranges):
+    minimum_value = get_numeric_value(defined_minimum, 0, answer_ranges)
+    if exclusive:
+        return minimum_value + (1 / 10 ** decimal_places)
+    return minimum_value
+
+
+def get_answer_maximum(defined_maximum, decimal_places, exclusive, answer_ranges):
+    maximum_value = get_numeric_value(
+        defined_maximum, NumberAnswerValidator.MAX_NUMBER, answer_ranges
+    )
+    if exclusive:
+        return maximum_value - (1 / 10 ** decimal_places)
+    return maximum_value
+
+
+def get_numeric_value(defined_value, system_default, answer_ranges):
+    if not isinstance(defined_value, dict):
+        return defined_value
+    if "source" in defined_value and defined_value["source"] == "answers":
+        referred_answer = answer_ranges.get(defined_value["identifier"])
+        if referred_answer is None:
+            # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
+            return None
+        if referred_answer.get("default") is not None:
+            return system_default
+    return system_default
+
 
 def has_default_route(routing_rules):
     for rule in routing_rules:
@@ -90,6 +140,17 @@ class QuestionnaireSchema:
         self.list_names = jp.match(
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
+
+    @cached_property
+    def numeric_answer_ranges(self):
+        numeric_answer_ranges = {}
+
+        for answer in jp.match("$..answers[*]", self.schema):
+            numeric_answer_ranges[answer["id"]] = get_numeric_range_values(
+                answer, numeric_answer_ranges
+            )
+
+        return numeric_answer_ranges
 
     @cached_property
     def metadata_ids(self):
