@@ -1,6 +1,5 @@
 import re
 
-from app import error_messages
 from app.validators.validator import Validator
 
 
