@@ -160,9 +160,9 @@
           {
             "properties": {
               "source": {
-              "description": "The source of the data.",
-              "type": "string",
-              "enum": ["location"]
+                "description": "The source of the data.",
+                "type": "string",
+                "enum": ["location"]
               },
               "id": {
                 "description": "The unique id of the object.",
@@ -174,9 +174,9 @@
           {
             "properties": {
               "source": {
-              "description": "The source of the data.",
-              "type": "string",
-              "enum": ["list"]
+                "description": "The source of the data.",
+                "type": "string",
+                "enum": ["list"]
               },
               "id": {
                 "description": "The unique id of the object.",
