@@ -27,7 +27,7 @@ def test_invalid_repeating_section_title_placeholders():
     }
 
     validator = PlaceholderValidator({}, questionnaire_schema)
-    validator.validate_placeholder_object(placeholder_container, None)
+    validator.validate_placeholder_object(placeholder_container)
 
     expected_errors = [
         {
@@ -66,7 +66,7 @@ def test_placeholder_plurals():
     questionnaire_schema = QuestionnaireSchema({})
 
     validator = PlaceholderValidator({}, questionnaire_schema)
-    validator.validate_placeholder_object(placeholder_container, None)
+    validator.validate_placeholder_object(placeholder_container)
 
     expected_errors = [
         {

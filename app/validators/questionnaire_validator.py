@@ -28,6 +28,11 @@ class QuestionnaireValidator(Validator):
         )
         self.errors += metadata_validator.validate()
 
+        placeholder_validator = PlaceholderValidator(
+            self.schema_element, self.questionnaire_schema
+        )
+        self.errors += placeholder_validator.validate()
+
         self.validate_duplicates()
         self.validate_smart_quotes()
 
@@ -56,13 +61,6 @@ class QuestionnaireValidator(Validator):
 
         if section_repeat:
             self.validate_list_exists(section_repeat["for_list"])
-            placeholder_validator = PlaceholderValidator(
-                section, self.questionnaire_schema
-            )
-            placeholder_validator.validate_placeholder_object(
-                section_repeat["title"], None
-            )
-            self.errors += placeholder_validator.errors
 
         section_summary = section.get("summary")
 

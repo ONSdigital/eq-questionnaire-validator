@@ -133,16 +133,12 @@ def test_invalid_string_transforms():
             "differences": {"answer2"},
         },
         {
-            "message": PlaceholderValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
-            "block_id": "block4",
+            "message": PlaceholderValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF
         },
-        {
-            "message": PlaceholderValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN,
-            "block_id": "block5",
-        },
+        {"message": PlaceholderValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN},
     ]
 
-    assert expected_errors == validator.errors
+    assert validator.errors == expected_errors
 
 
 def test_invalid_placeholder_answer_ids():

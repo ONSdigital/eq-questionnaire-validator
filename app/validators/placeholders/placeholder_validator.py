@@ -1,5 +1,6 @@
 import re
 
+from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
 
 
@@ -16,7 +17,16 @@ class PlaceholderValidator(Validator):
         super().__init__(element)
         self.questionnaire_schema = questionnaire_schema
 
-    def validate_placeholder_object(self, placeholder_object, current_block_id):
+    def validate(self):
+        strings_with_placeholders = get_object_containing_key(
+            self.schema_element, "placeholders"
+        )
+        for placeholder_object in strings_with_placeholders:
+            self.validate_placeholder_object(placeholder_object)
+
+        return self.errors
+
+    def validate_placeholder_object(self, placeholder_object):
         """ Current block id may be None if called outside of a block
         """
         placeholders_in_string = set()
@@ -37,7 +47,7 @@ class PlaceholderValidator(Validator):
 
             transforms = placeholder_definition.get("transforms")
             if transforms:
-                self.validate_placeholder_transforms(transforms, current_block_id)
+                self.validate_placeholder_transforms(transforms)
 
         placeholder_differences = placeholders_in_string - placeholder_definition_names
 
@@ -53,7 +63,7 @@ class PlaceholderValidator(Validator):
                 differences=placeholder_differences,
             )
 
-    def validate_placeholder_transforms(self, transforms, block_id):
+    def validate_placeholder_transforms(self, transforms):
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
@@ -62,10 +72,7 @@ class PlaceholderValidator(Validator):
                 isinstance(argument, dict)
                 and argument.get("source") == "previous_transform"
             ):
-                self.add_error(
-                    self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
-                    block_id=block_id,
-                )
+                self.add_error(self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF)
 
         # Previous transform must be referenced in all subsequent transforms
         for transform in transforms[1:]:
@@ -79,6 +86,4 @@ class PlaceholderValidator(Validator):
                     previous_transform_used = True
 
             if not previous_transform_used:
-                self.add_error(
-                    self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN, block_id=block_id
-                )
+                self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
