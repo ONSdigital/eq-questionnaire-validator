@@ -19,6 +19,9 @@
       "instruction": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "warning": {
+        "type": "string"
+      },
       "definitions": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/question_definitions"
       },
