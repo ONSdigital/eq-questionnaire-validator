@@ -179,6 +179,10 @@
                 "enum": ["list"]
               },
               "id": {
+                "description": "The name of the list",
+                "type": "string"
+              },
+              "id_selector": {
                 "description": "The unique id of the object.",
                 "type": "string",
                 "enum": ["first", "primary_person"]
