@@ -10,6 +10,17 @@ class NumberAnswerValidator(AnswerValidator):
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
     DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
+    DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
+    ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
+    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the minimum of answer"
+    )
+    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = (
+        "The referenced answer cannot be used to set the maximum of answer"
+    )
+    GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
+        "The referenced answer has a greater number of decimal places than answer"
+    )
 
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element, questionnaire_schema)
@@ -18,6 +29,7 @@ class NumberAnswerValidator(AnswerValidator):
     def validate(self):
         super().validate()
 
+        self.validate_decimal_places()
         self.validate_mandatory_has_no_default()
         self.validate_value_in_limits()
         self.validate_decimals()
@@ -46,6 +58,15 @@ class NumberAnswerValidator(AnswerValidator):
             self.add_error(
                 self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=self.MAX_NUMBER
             )
+
+    def are_decimal_places_valid(self):
+        if "calculated" in self.answer:
+            return self.answer.get("decimal_places") == 2
+        return True
+
+    def validate_decimal_places(self):
+        if not self.are_decimal_places_valid():
+            self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_decimals(self):
         decimal_places = self.answer.get("decimal_places", 0)
