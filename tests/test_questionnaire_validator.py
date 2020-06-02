@@ -181,6 +181,7 @@ def test_single_variant_invalid():
 
     assert {
         "message": error_messages.VARIANTS_HAS_ONE_VARIANT,
+        "section_id": "section",
         "block_id": "block-2",
     } in validator.errors
 
@@ -203,20 +204,6 @@ def test_duplicate_answer_ids():
     )
 
 
-def test_invalid_list_reference_in_custom_summary():
-    filename = "schemas/invalid/test_invalid_custom_list_summary.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {"message": error_messages.FOR_LIST_NEVER_POPULATED, "list_name": "household"}
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_inconsistent_ids_in_variants():
     file_name = "schemas/invalid/test_invalid_inconsistent_ids_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
@@ -228,15 +215,18 @@ def test_inconsistent_ids_in_variants():
         {
             "message": error_messages.VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS,
             "block_id": "block-2",
+            "section_id": "section",
         },
         {
             "message": error_messages.VARIANTS_HAVE_DIFFERENT_QUESTION_IDS,
             "block_id": "block-2",
+            "section_id": "section",
             "question_ids": {"question-2", "question-2-variant"},
         },
         {
             "message": error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_IDS,
             "block_id": "block-2",
+            "section_id": "section",
             "answer_ids": {"answer-2", "answer-2-variant", "answer-3"},
         },
     ] == validator.errors
@@ -257,6 +247,7 @@ def test_inconsistent_default_answers_in_variants():
         {
             "message": error_messages.VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS,
             "block_id": "block-2",
+            "section_id": "section",
             "question_ids": {"question-2"},
         }
     ] == validator.errors
@@ -290,12 +281,14 @@ def test_inconsistent_types_in_variants():
         {
             "message": error_messages.VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES,
             "block_id": "block-2",
+            "section_id": "section",
             "question_types": {"NotGeneral", "General"},
         },
         {
             "message": error_messages.VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES,
             "block_id": "block-2",
             "answer_id": "answer-2",
+            "section_id": "section",
             "answer_types": {"NotANumber", "Number"},
         },
     ]
@@ -378,7 +371,12 @@ def test_invalid_hub_and_spoke_with_summary_confirmation():
     )
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    expected_errors = [{"message": error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE}]
+    expected_errors = [
+        {
+            "message": error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE,
+            "section_id": "accommodation-section",
+        }
+    ]
 
     validator.validate()
 
@@ -389,7 +387,12 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     filename = "schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
-    expected_errors = [{"message": error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE}]
+    expected_errors = [
+        {
+            "section_id": "accommodation-section",
+            "message": error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE,
+        }
+    ]
 
     validator.validate()
 
@@ -404,6 +407,7 @@ def test_invalid_repeating_section_list_name():
         {
             "message": error_messages.FOR_LIST_NEVER_POPULATED,
             "list_name": "non-existent-list",
+            "section_id": "personal-details-section",
         }
     ]
 
@@ -454,6 +458,7 @@ def test_invalid_non_textfield_question_concatenation():
         {
             "message": error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
             "answer_id": "checkbox-answer",
+            "section_id": "default-section",
         }
     ]
 
