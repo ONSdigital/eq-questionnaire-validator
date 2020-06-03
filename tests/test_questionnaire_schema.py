@@ -186,3 +186,7 @@ def test_id_paths():
         ),
         ("sections.[0].groups.[0].blocks.[2]", "summary"),
     ]
+
+
+def test_id_paths_variants():
+    pass

@@ -51,22 +51,6 @@ class QuestionnaireValidator(Validator):
                     required_section_id=required_section_id,
                 )
 
-    def validate_primary_person_list_answer_references(self, block):
-        main_block_questions = self.questionnaire_schema.get_all_questions_for_block(
-            block
-        )
-        main_block_ids = {
-            answer["id"]
-            for question in main_block_questions
-            for answer in question["answers"]
-        }
-
-        if block["add_or_edit_answer"]["id"] not in main_block_ids:
-            self.add_error(
-                error_messages.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-                referenced_id=block["add_or_edit_answer"]["id"],
-            )
-
     def validate_duplicates(self):
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error(error_messages.DUPLICATE_ID_FOUND, id=duplicate)

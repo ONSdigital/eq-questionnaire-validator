@@ -7,15 +7,6 @@ ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )
-QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
-    "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
-)
-QUESTIONNAIRE_ONLY_ONE_PAGE = (
-    "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
-)
-ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK = (
-    "add_or_edit_answer reference uses id not found in main block question"
-)
 SUMMARY_HAS_NON_TEXTFIELD_ANSWER = (
     "Summary concatenation can only be used for TextField answer types"
 )

@@ -11,6 +11,13 @@ from app.validators.blocks import get_block_validator
 
 
 class SectionValidator(Validator):
+    QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
+        "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
+    )
+    QUESTIONNAIRE_ONLY_ONE_PAGE = (
+        "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
+    )
+
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
         self.section = schema_element
