@@ -170,7 +170,31 @@ def test_id_paths():
             "anyone-else",
         ),
         ("sections.[0].groups.[0].blocks.[1].add_block", "add-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].add_block.question_variants.[0].question",
+            "add-question",
+        ),
+        (
+            "sections.[0].groups.[0].blocks.[1].add_block.question_variants.[1].question",
+            "add-question",
+        ),
         ("sections.[0].groups.[0].blocks.[1].edit_block", "edit-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].edit_block.question_variants.[0].question",
+            "edit-question",
+        ),
+        (
+            "sections.[0].groups.[0].blocks.[1].edit_block.question_variants.[1].question",
+            "edit-question",
+        ),
         ("sections.[0].groups.[0].blocks.[1].remove_block", "remove-person"),
+        (
+            "sections.[0].groups.[0].blocks.[1].remove_block.question_variants.[0].question",
+            "remove-question",
+        ),
+        (
+            "sections.[0].groups.[0].blocks.[1].remove_block.question_variants.[1].question",
+            "remove-question",
+        ),
         ("sections.[0].groups.[0].blocks.[2]", "confirmation"),
     ]

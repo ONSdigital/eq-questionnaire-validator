@@ -221,21 +221,29 @@ class QuestionnaireSchema:
 
         Returns: generator yielding (path, value) tuples
         """
-        ignored = [
-            "routing_rules",
-            "skip_conditions",
-            "when",
-            "edit_block.question",
-            "add_block.question",
-            "remove_block.question",
-            "edit_block.question_variants",
-            "add_block.question_variants",
-            "remove_block.question_variants",
+        ignored = ["routing_rules", "skip_conditions", "when"]
+        ignored_sub_paths = [
+            "edit_block",
+            "add_or_edit_block",
+            "add_block",
+            "remove_block",
         ]
 
         for match in parse("$..id").find(self.schema):
             full_path = str(match.full_path)
-            if not any(ignored_path in full_path for ignored_path in ignored):
+            is_list_collector_answer_id = False
+            if hasattr(match.context.context.full_path, "left"):
+                is_list_collector_answer_id = (
+                    any(
+                        ignored_sub_path in full_path
+                        for ignored_sub_path in ignored_sub_paths
+                    )
+                    and str(match.context.context.full_path.right) == "answers"
+                )
+            if (
+                not any(ignored_path in full_path for ignored_path in ignored)
+                and not is_list_collector_answer_id
+            ):
                 yield str(match.full_path.left), match.value
 
     @cached_property
