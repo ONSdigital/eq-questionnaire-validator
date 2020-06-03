@@ -12,7 +12,7 @@ class DateRangeQuestionValidator(QuestionValidator):
     def __init__(self, question):
         super().__init__(question)
 
-        self.period_limits = self.question["period_limits"]
+        self.period_limits = self.question.get("period_limits", {})
 
     def validate(self):
         """
