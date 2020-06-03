@@ -12,6 +12,7 @@ from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
+from app.validators.sections.section_validator import SectionValidator
 
 logger = getLogger()
 
@@ -363,40 +364,6 @@ def test_invalid_relationship_no_list_specified():
     ] * 12
 
     assert validator.errors == expected_answer_errors + expected_for_list_error
-
-
-def test_invalid_hub_and_spoke_with_summary_confirmation():
-    filename = (
-        "schemas/invalid/test_invalid_hub_and_spoke_with_summary_confirmation.json"
-    )
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE,
-            "section_id": "accommodation-section",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
-def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
-    filename = "schemas/invalid/test_invalid_hub_and_spoke_and_summary_confirmation_non_existent.json"
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "section_id": "accommodation-section",
-            "message": error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE,
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
 
 
 def test_invalid_repeating_section_list_name():

@@ -14,9 +14,7 @@ class SectionValidator(Validator):
     QUESTIONNAIRE_MUST_CONTAIN_PAGE = (
         "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
     )
-    QUESTIONNAIRE_ONLY_ONE_PAGE = (
-        "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
-    )
+    QUESTIONNAIRE_ONLY_ONE_PAGE = "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
@@ -91,10 +89,10 @@ class SectionValidator(Validator):
         is_last_block_valid = last_block["type"] in {"Summary", "Confirmation"}
 
         if is_last_block_valid and self.questionnaire_schema.is_hub_enabled:
-            self.add_error(error_messages.QUESTIONNAIRE_ONLY_ONE_PAGE)
+            self.add_error(self.QUESTIONNAIRE_ONLY_ONE_PAGE)
 
         if not is_last_block_valid and not self.questionnaire_schema.is_hub_enabled:
-            self.add_error(error_messages.QUESTIONNAIRE_MUST_CONTAIN_PAGE)
+            self.add_error(self.QUESTIONNAIRE_MUST_CONTAIN_PAGE)
 
     def validate_questions(self, block_or_variant):
         questions = block_or_variant.get("questions", [])
