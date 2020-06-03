@@ -156,18 +156,40 @@
       "list_item_selector": {
         "description": "The identifier and source of the list item.",
         "type": "object",
-        "properties": {
-          "source": {
-            "description": "The source of the data.",
-            "type": "string",
-            "enum": ["location"]
+        "oneOf": [
+          {
+            "properties": {
+              "source": {
+                "description": "The source of the data.",
+                "type": "string",
+                "enum": ["location"]
+              },
+              "id": {
+                "description": "The unique id of the object.",
+                "type": "string",
+                "enum": ["list_item_id", "to_list_item_id"]
+              }
+            }
           },
-          "id": {
-            "description": "The unique id of the object.",
-            "type": "string",
-            "enum": ["list_item_id", "to_list_item_id"]
+          {
+            "properties": {
+              "source": {
+                "description": "The source of the data.",
+                "type": "string",
+                "enum": ["list"]
+              },
+              "id": {
+                "description": "The name of the list",
+                "type": "string"
+              },
+              "id_selector": {
+                "description": "The unique id of the object.",
+                "type": "string",
+                "enum": ["first", "primary_person"]
+              }
+            }
           }
-        }
+        ]
       }
     },
     "additionalProperties": false,
