@@ -12,7 +12,6 @@ from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
-from app.validators.sections.section_validator import SectionValidator
 
 logger = getLogger()
 
