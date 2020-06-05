@@ -21,9 +21,7 @@ class QuestionnaireValidator(Validator):
         )
         self.errors += metadata_validator.validate()
 
-        placeholder_validator = PlaceholderValidator(
-            self.schema_element, self.questionnaire_schema
-        )
+        placeholder_validator = PlaceholderValidator(self.schema_element)
         self.errors += placeholder_validator.validate()
 
         self.validate_duplicates()

@@ -13,9 +13,8 @@ class PlaceholderValidator(Validator):
         "`previous_transform` not referenced in chained transform"
     )
 
-    def __init__(self, element, questionnaire_schema):
+    def __init__(self, element):
         super().__init__(element)
-        self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
         strings_with_placeholders = get_object_containing_key(

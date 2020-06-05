@@ -1,10 +1,7 @@
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
 
 
 def test_invalid_repeating_section_title_placeholders():
-    questionnaire_schema = QuestionnaireSchema({})
-
     placeholder_container = {
         "text": "{person}",
         "placeholders": [
@@ -26,7 +23,7 @@ def test_invalid_repeating_section_title_placeholders():
         ],
     }
 
-    validator = PlaceholderValidator({}, questionnaire_schema)
+    validator = PlaceholderValidator({})
     validator.validate_placeholder_object(placeholder_container)
 
     expected_errors = [
@@ -63,9 +60,8 @@ def test_placeholder_plurals():
             }
         ],
     }
-    questionnaire_schema = QuestionnaireSchema({})
 
-    validator = PlaceholderValidator({}, questionnaire_schema)
+    validator = PlaceholderValidator({})
     validator.validate_placeholder_object(placeholder_container)
 
     expected_errors = [
