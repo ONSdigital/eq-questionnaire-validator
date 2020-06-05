@@ -220,6 +220,8 @@ class QuestionnaireSchema:
         Returns: generator yielding (path, value) tuples
         """
         ignored = ["routing_rules", "skip_conditions", "when"]
+
+        # Ignore duplicate answer_ids within multiple list collector blocks
         ignored_sub_paths = [
             "edit_block",
             "add_or_edit_block",
