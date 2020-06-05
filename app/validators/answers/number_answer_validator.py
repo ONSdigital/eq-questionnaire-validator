@@ -1,11 +1,12 @@
 from app.validators.answers.answer_validator import AnswerValidator
 
 
-class NumberAnswerValidator(AnswerValidator):
-    MAX_NUMBER = 9999999999
-    MIN_NUMBER = -999999999
-    MAX_DECIMAL_PLACES = 6
+MAX_NUMBER = 9999999999
+MIN_NUMBER = -999999999
+MAX_DECIMAL_PLACES = 6
 
+
+class NumberAnswerValidator(AnswerValidator):
     DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
@@ -57,14 +58,14 @@ class NumberAnswerValidator(AnswerValidator):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
-        if isinstance(min_value, int) and min_value < self.MIN_NUMBER:
+        if isinstance(min_value, int) and min_value < MIN_NUMBER:
             self.add_error(
-                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=self.MIN_NUMBER
+                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=MIN_NUMBER
             )
 
-        if isinstance(max_value, int) and max_value > self.MAX_NUMBER:
+        if isinstance(max_value, int) and max_value > MAX_NUMBER:
             self.add_error(
-                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=self.MAX_NUMBER
+                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER
             )
 
     def are_decimal_places_valid(self):
@@ -78,11 +79,11 @@ class NumberAnswerValidator(AnswerValidator):
 
     def validate_decimals(self):
         decimal_places = self.answer.get("decimal_places", 0)
-        if decimal_places > self.MAX_DECIMAL_PLACES:
+        if decimal_places > MAX_DECIMAL_PLACES:
             self.add_error(
                 self.DECIMAL_PLACES_TOO_LONG,
                 decimal_places=decimal_places,
-                limit=self.MAX_DECIMAL_PLACES,
+                limit=MAX_DECIMAL_PLACES,
             )
 
     def validate_referred_numeric_answer(self, answer_ranges):

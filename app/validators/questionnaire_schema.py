@@ -4,7 +4,7 @@ from functools import cached_property, lru_cache
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 
-from app.validators.answers import NumberAnswerValidator
+from app.validators.answers.number_answer_validator import MAX_NUMBER
 
 
 def get_numeric_range_values(answer, answer_ranges):
@@ -34,9 +34,7 @@ def get_answer_minimum(defined_minimum, decimal_places, exclusive, answer_ranges
 
 
 def get_answer_maximum(defined_maximum, decimal_places, exclusive, answer_ranges):
-    maximum_value = get_numeric_value(
-        defined_maximum, NumberAnswerValidator.MAX_NUMBER, answer_ranges
-    )
+    maximum_value = get_numeric_value(defined_maximum, MAX_NUMBER, answer_ranges)
     if exclusive:
         return maximum_value - (1 / 10 ** decimal_places)
     return maximum_value
