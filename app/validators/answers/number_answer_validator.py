@@ -22,10 +22,6 @@ class NumberAnswerValidator(AnswerValidator):
         "The referenced answer has a greater number of decimal places than answer"
     )
 
-    def __init__(self, schema_element, questionnaire_schema=None):
-        super().__init__(schema_element, questionnaire_schema)
-        self.questionnaire_schema = questionnaire_schema
-
     def validate(self):
         super().validate()
 
@@ -35,7 +31,19 @@ class NumberAnswerValidator(AnswerValidator):
         self.validate_decimals()
 
         if self.questionnaire_schema:
-            self.validate_numeric_answer_types(
+            # Validate referred numeric answer exists (skip further tests for answer if error is returned)
+            referred_errors = self.validate_referred_numeric_answer(
+                self.questionnaire_schema.numeric_answer_ranges
+            )
+
+            if referred_errors:
+                return
+
+            # Validate numeric answer has a positive range of possible responses
+            self.validate_numeric_range(self.questionnaire_schema.numeric_answer_ranges)
+
+            # Validate referred numeric answer decimals
+            self.validate_referred_numeric_answer_decimals(
                 self.questionnaire_schema.numeric_answer_ranges
             )
 
@@ -76,22 +84,6 @@ class NumberAnswerValidator(AnswerValidator):
                 decimal_places=decimal_places,
                 limit=self.MAX_DECIMAL_PLACES,
             )
-
-    def validate_numeric_answer_types(self, answer_ranges):
-        """
-        Validate numeric answer types are valid.
-        """
-        # Validate referred numeric answer exists (skip further tests for answer if error is returned)
-        referred_errors = self.validate_referred_numeric_answer(answer_ranges)
-
-        if referred_errors:
-            return
-
-        # Validate numeric answer has a positive range of possible responses
-        self.validate_numeric_range(answer_ranges)
-
-        # Validate referred numeric answer decimals
-        self.validate_referred_numeric_answer_decimals(answer_ranges)
 
     def validate_referred_numeric_answer(self, answer_ranges):
         """
