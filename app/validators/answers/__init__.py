@@ -14,5 +14,6 @@ def get_answer_validator(answer, questionnaire_schema):
         "Percentage": NumberAnswerValidator,
         "Dropdown": OptionAnswerValidator,
         "Radio": OptionAnswerValidator,
+        "Checkbox": OptionAnswerValidator,
     }
     return validators.get(answer["type"], AnswerValidator)(answer, questionnaire_schema)
