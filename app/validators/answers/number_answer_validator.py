@@ -7,7 +7,7 @@ MAX_DECIMAL_PLACES = 6
 
 
 class NumberAnswerValidator(AnswerValidator):
-    DEFAULT_ON_MANDATORY = "Default is being used with a mandatory answer"
+    DEFAULT_ON_MANDATORY = "Default answer is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
     DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
