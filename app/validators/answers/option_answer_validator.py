@@ -4,8 +4,8 @@ from app.validators.answers import AnswerValidator
 
 
 class OptionAnswerValidator(AnswerValidator):
-    DUPLICATE_LABEL_FOUND = "Duplicate label found"
-    DUPLICATE_VALUE_FOUND = "Duplicate value found"
+    FOUND_DUPLICATE_LABEL = "Duplicate label found"
+    FOUND_DUPLICATE_VALUE = "Duplicate value found"
     ANSWER_LABEL_VALUE_MISMATCH = "Found mismatching answer value for label"
     LIST_NAME_MISSING = "List name defined in action params does not exist"
     BLOCK_ID_MISSING = "Block id defined in action params does not exist"
@@ -38,10 +38,10 @@ class OptionAnswerValidator(AnswerValidator):
                 continue
 
             if option["label"] in labels:
-                self.add_error(self.DUPLICATE_LABEL_FOUND, label=option["label"])
+                self.add_error(self.FOUND_DUPLICATE_LABEL, label=option["label"])
 
             if option["value"] in values:
-                self.add_error(self.DUPLICATE_VALUE_FOUND, value=option["value"])
+                self.add_error(self.FOUND_DUPLICATE_VALUE, value=option["value"])
 
             labels.add(option["label"])
             values.add(option["value"])

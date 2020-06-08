@@ -54,12 +54,12 @@ def test_unique_answer_options():
 
     assert validator.errors == [
         {
-            "message": validator.DUPLICATE_LABEL_FOUND,
+            "message": validator.FOUND_DUPLICATE_LABEL,
             "answer_id": "duplicate-country-answer",
             "label": "India",
         },
         {
-            "message": validator.DUPLICATE_VALUE_FOUND,
+            "message": validator.FOUND_DUPLICATE_VALUE,
             "answer_id": "duplicate-country-answer",
             "value": "India",
         },

@@ -11,7 +11,7 @@ SUMMARY_HAS_NON_TEXTFIELD_ANSWER = (
     "Summary concatenation can only be used for TextField answer types"
 )
 REQUIRED_HUB_SECTION_UNDEFINED = (
-    "Required defined section hub does not appear in schema"
+    "Required section for hub is undefined"
 )
 VARIANTS_HAS_ONE_VARIANT = "Variants list only contains one variant"
 VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
