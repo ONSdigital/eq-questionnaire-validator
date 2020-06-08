@@ -5,8 +5,8 @@ from app.validators.validator import Validator
 
 
 class MetadataValidator(Validator):
-    FOUND_MISSING_METADATA = "Metadata not specified in metadata field"
-    FOUND_DUPLICATE_METADATA = "Metadata contains duplicates"
+    MISSING_METADATA = "Metadata not specified in metadata field"
+    DUPLICATE_METADATA = "Metadata contains duplicates"
 
     def __init__(self, metadata, theme_name):
         self.theme_name = theme_name
@@ -25,7 +25,7 @@ class MetadataValidator(Validator):
         duplicates = find_duplicates(self.metadata_names)
 
         if len(duplicates) > 0:
-            self.add_error(self.FOUND_DUPLICATE_METADATA, duplicates=duplicates)
+            self.add_error(self.DUPLICATE_METADATA, duplicates=duplicates)
 
     def validate_mandatory(self):
         # user_id and period_id required downstream for receipting
@@ -37,4 +37,4 @@ class MetadataValidator(Validator):
 
         for metadata_name in required_metadata_names:
             if metadata_name not in self.metadata_names:
-                self.add_error(self.FOUND_MISSING_METADATA, metadata=metadata_name)
+                self.add_error(self.MISSING_METADATA, metadata=metadata_name)
