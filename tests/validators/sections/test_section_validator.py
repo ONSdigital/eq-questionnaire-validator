@@ -33,7 +33,7 @@ def test_invalid_hub_and_spoke_with_summary_confirmation():
 
     expected_errors = [
         {
-            "message": SectionValidator.QUESTIONNAIRE_ONLY_ONE_PAGE,
+            "message": SectionValidator.MULTIPLE_SUBMISSION_PAGES,
             "section_id": "accommodation-section",
         }
     ]
@@ -52,7 +52,7 @@ def test_invalid_hub_and_spoke_and_summary_confirmation_non_existent():
     expected_errors = [
         {
             "section_id": "accommodation-section",
-            "message": SectionValidator.QUESTIONNAIRE_MUST_CONTAIN_PAGE,
+            "message": SectionValidator.UNDEFINED_SUBMISSION_PAGE,
         }
     ]
 
