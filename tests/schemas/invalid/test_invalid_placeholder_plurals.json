@@ -46,8 +46,8 @@
                 "title": {
                   "text_plural": {
                     "forms": {
-                      "one": "You've said one person lives here. Is that correct?",
-                      "other": "You've said {number_of_people} people live here. Is that correct?"
+                      "one": "You’ve said one person lives here. Is that correct?",
+                      "other": "You’ve said {number_of_people} people live here. Is that correct?"
                     },
                     "count": {
                       "source": "list",

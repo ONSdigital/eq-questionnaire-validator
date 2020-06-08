@@ -14,3 +14,4 @@ test:
 
 format:
 	yarn gulp format
+	pipenv run black .

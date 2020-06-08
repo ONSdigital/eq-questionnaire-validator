@@ -7,10 +7,12 @@ name = "pypi"
 Flask = "*"
 attrs = "==19.1.0"
 jsonpointer = "*"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git",ref = "master"}
+eq-translations = {editable = true,git = "https://github.com/ONSDigital/eq-translations.git",ref = "v2.0.0"}
 structlog = "*"
 python-dateutil = "*"
 jsonschema = "*"
+jsonpath-rw = "*"
+jsonpath-rw-ext = "*"
 
 [dev-packages]
 pytest = "*"
@@ -18,6 +20,9 @@ pytest = "*"
 pylint = "*"
 pylint-quotes = "*"
 black = "==19.3b0"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-sugar = "*"
 
 [requires]
 python_version = "3.8"

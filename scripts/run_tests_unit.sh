@@ -19,5 +19,6 @@ function display_result {
   fi
 }
 
-pipenv run py.test "$@"
+py.test -n auto --cov-config=.coveragerc --cov --cov-report html
+
 display_result $? 3 "Unit tests"
