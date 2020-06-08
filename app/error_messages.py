@@ -10,9 +10,7 @@ ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
 SUMMARY_HAS_NON_TEXTFIELD_ANSWER = (
     "Summary concatenation can only be used for TextField answer types"
 )
-REQUIRED_HUB_SECTION_UNDEFINED = (
-    "Required section for hub is undefined"
-)
+REQUIRED_HUB_SECTION_UNDEFINED = "Required section for hub is undefined"
 VARIANTS_HAS_ONE_VARIANT = "Variants list only contains one variant"
 VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
     "Variants in block contain different numbers of answers"
