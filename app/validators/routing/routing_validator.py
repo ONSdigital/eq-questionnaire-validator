@@ -4,7 +4,7 @@ from app.validators.validator import Validator
 
 
 class RoutingValidator(Validator):
-    ROUTE_TARGET_INVALID = "Routing rule routes to invalid"
+    ROUTE_TARGET_INVALID = "Routing rule routes to invalid target"
     ROUTE_MUST_CONTAIN_DEFAULT = (
         "The routing rules for group or block must contain a default routing rule without a "
         "when rule"
