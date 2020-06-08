@@ -9,9 +9,7 @@ def test_mandatory_metadata():
     validator = MetadataValidator(metadata, "default")
     validator.validate_mandatory()
 
-    expected_errors = [
-        {"message": validator.MISSING_METADATA, "metadata": "ru_name"}
-    ]
+    expected_errors = [{"message": validator.MISSING_METADATA, "metadata": "ru_name"}]
 
     assert validator.errors == expected_errors
 
