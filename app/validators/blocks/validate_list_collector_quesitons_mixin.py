@@ -2,9 +2,7 @@ from app.validators.validator import Validator
 
 
 def _options_contain_value(options, value):
-    for option in options:
-        if option["value"] == value:
-            return True
+    return any(option["value"] == value for option in options)
 
 
 class ValidateListCollectorQuestionsMixin(Validator):
