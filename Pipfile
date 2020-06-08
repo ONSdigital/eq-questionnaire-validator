@@ -21,6 +21,8 @@ pylint = "*"
 pylint-quotes = "*"
 black = "==19.3b0"
 pytest-cov = "*"
+pytest-xdist = "*"
+pytest-sugar = "*"
 
 [requires]
 python_version = "3.8"
