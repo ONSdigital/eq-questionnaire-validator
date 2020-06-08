@@ -10,8 +10,8 @@ class WhenRuleValidator(Validator):
         "This condition can only be used with `Checkbox` answer types"
     )
     NON_CHECKBOX_COMPARISON_ID = (
-        "The comparison id is not of answer type `Checkbox`. The condition can only reference "
-        "`Checkbox` answers when using `comparison id`"
+        "The comparison_id is not for a Checkbox. The condition can only reference "
+        "Checkbox answers when using comparison_id"
     )
     NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES = (
         "The answers used as comparison id and answer id in the `when` clause have "
