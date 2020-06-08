@@ -26,8 +26,6 @@ class PlaceholderValidator(Validator):
         return self.errors
 
     def validate_placeholder_object(self, placeholder_object):
-        """ Current block id may be None if called outside of a block
-        """
         placeholders_in_string = set()
         placeholder_regex = re.compile("{(.*?)}")
 
