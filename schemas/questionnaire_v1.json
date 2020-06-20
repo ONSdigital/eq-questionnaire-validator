@@ -181,6 +181,9 @@
                   },
                   "additionalProperties": false
                 }
+              },
+              "title": {
+                "type": "string"
               }
             },
             "additionalProperties": false,
