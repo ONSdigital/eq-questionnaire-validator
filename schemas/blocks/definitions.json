@@ -9,6 +9,9 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
         "description": "The top-level heading on the page"
       },
+      "instruction": {
+        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+      },
       "contents": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
       }
