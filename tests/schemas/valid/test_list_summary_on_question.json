@@ -27,6 +27,7 @@
       "title": "Who Lives Here",
       "summary": {
         "show_on_completion": true,
+        "title": "Household Summary",
         "items": [
           {
             "type": "List",
