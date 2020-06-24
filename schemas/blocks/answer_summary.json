@@ -11,11 +11,11 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "type": {
-         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["AnswerSummary"]
       },
       "label": {
-         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "routing_rules": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
@@ -26,16 +26,16 @@
       "answer_ids": {
         "type": "array",
         "items": {
-           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         },
         "minItems": 1,
         "uniqueItems": true
       },
       "answer_label": {
-         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "icon": {
-         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       }
     },
     "additionalProperties": false,
