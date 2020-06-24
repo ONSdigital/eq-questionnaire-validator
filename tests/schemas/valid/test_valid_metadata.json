@@ -33,19 +33,19 @@
   "sections": [
     {
       "id": "section3",
-      "title": "",
+      "title": "Title",
       "groups": [
         {
           "id": "group3",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "id": "block4",
               "type": "Question",
               "question": {
                 "id": "question4",
-                "title": "",
-                "description": "",
+                "title": "Title",
+                "description": "Description",
                 "type": "General",
                 "answers": [
                   {
@@ -53,7 +53,7 @@
                     "mandatory": false,
                     "type": "TextField",
                     "label": "Text",
-                    "description": ""
+                    "description": "Description"
                   }
                 ]
               }

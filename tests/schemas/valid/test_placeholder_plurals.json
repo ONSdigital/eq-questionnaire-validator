@@ -36,7 +36,7 @@
       "groups": [
         {
           "id": "group1",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "id": "block1",

@@ -36,15 +36,15 @@
       "groups": [
         {
           "id": "group1",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "id": "block0",
               "type": "Question",
               "question": {
                 "id": "question0",
-                "title": "",
-                "description": "",
+                "title": "Title",
+                "description": "Title",
                 "type": "General",
                 "summary": {
                   "concatenation_type": "Newline"
@@ -62,14 +62,14 @@
                     "mandatory": true,
                     "type": "TextField",
                     "label": "A second answer which transforms may reference",
-                    "description": ""
+                    "description": "Description"
                   },
                   {
                     "id": "ref-answer2",
                     "mandatory": true,
                     "type": "TextField",
                     "label": "A third answer which transforms may reference",
-                    "description": ""
+                    "description": "Description"
                   }
                 ]
               }
@@ -79,8 +79,8 @@
               "type": "Question",
               "question": {
                 "id": "question1",
-                "title": "",
-                "description": "",
+                "title": "Title",
+                "description": "Description",
                 "type": "General",
                 "summary": {
                   "concatenation_type": "Space"
@@ -257,7 +257,7 @@
               "type": "Question",
               "question": {
                 "id": "question2",
-                "title": "",
+                "title": "Title",
                 "description": "Calculate years difference tests",
                 "type": "General",
                 "answers": [
@@ -381,7 +381,7 @@
               "type": "Question",
               "question": {
                 "id": "question3",
-                "title": "",
+                "title": "Title",
                 "description": "Concatenate list tests",
                 "type": "General",
                 "answers": [
@@ -445,7 +445,7 @@
               "type": "Question",
               "question": {
                 "id": "question4",
-                "title": "",
+                "title": "Title",
                 "description": "Format possessive tests",
                 "type": "General",
                 "answers": [
@@ -516,7 +516,7 @@
               "type": "Question",
               "question": {
                 "id": "question5",
-                "title": "",
+                "title": "Title",
                 "description": "Format list tests",
                 "type": "General",
                 "answers": [
@@ -553,7 +553,7 @@
               "type": "Question",
               "question": {
                 "id": "question6",
-                "title": "",
+                "title": "Title",
                 "description": "Radio option label tests",
                 "type": "General",
                 "answers": [
@@ -562,7 +562,7 @@
                     "mandatory": false,
                     "type": "Radio",
                     "label": "Placeholders in radio option label",
-                    "description": "",
+                    "description": "Description",
                     "options": [
                       {
                         "label": {
@@ -593,7 +593,7 @@
               "type": "Question",
               "question": {
                 "id": "question7",
-                "title": "",
+                "title": "Title",
                 "description": "Checkbox option label tests",
                 "type": "General",
                 "answers": [
@@ -602,7 +602,7 @@
                     "mandatory": false,
                     "type": "Checkbox",
                     "label": "Placeholders in checkbox option label",
-                    "description": "",
+                    "description": "Description",
                     "options": [
                       {
                         "label": {

@@ -28,7 +28,7 @@
       "groups": [
         {
           "id": "group1",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "content": {
