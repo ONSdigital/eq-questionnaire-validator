@@ -23,11 +23,11 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "type": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["PrimaryPersonListCollector"]
       },
       "for_list": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "add_or_edit_answer": {
         "$ref": "list_collector.json#/answer_reference"
@@ -48,7 +48,7 @@
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
           },
           "type": {
-            "type": "string",
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "enum": ["PrimaryPersonListAddOrEditQuestion"]
           },
           "question": {

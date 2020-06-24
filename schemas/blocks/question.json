@@ -8,10 +8,10 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "number": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "type": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["Question"]
       },
       "question": {

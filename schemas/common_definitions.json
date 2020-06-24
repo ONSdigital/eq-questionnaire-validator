@@ -2,17 +2,17 @@
   "$id": "https://eq.ons.gov.uk/common_definitions.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "q_code": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "A question code used by downstream systems to identify answers.",
     "pattern": "^[0-9a-z]+$"
   },
   "identifier": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "Used to identify groups, blocks, questions and answers.",
     "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
   },
   "metadata_identifier": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "The id of a metadata provided by the calling service from which to obtain the value",
     "pattern": "^[a-z0-9][a-z0-9\\-_]*[a-z0-9]$"
   },
@@ -25,7 +25,7 @@
       "required": ["title", "contents"],
       "properties": {
         "title": {
-          "type": "string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         },
         "contents": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
@@ -89,61 +89,61 @@
     "description": "These messages override the standard error messages.",
     "properties": {
       "MANDATORY_DROPDOWN": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_TEXTFIELD": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_NUMBER": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_TEXTAREA": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_RADIO": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_CHECKBOX": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_DATE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MANDATORY_DURATION": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "NUMBER_TOO_SMALL": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "NUMBER_TOO_LARGE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "NUMBER_TOO_SMALL_EXCLUSIVE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "NUMBER_TOO_LARGE_EXCLUSIVE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_NUMBER": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_INTEGER": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_DECIMAL": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "MAX_LENGTH_EXCEEDED": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_DATE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_DATE_RANGE": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "INVALID_DURATION": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       }
     },
     "additionalProperties": false
@@ -178,7 +178,7 @@
     "type:": "object",
     "properties": {
       "value": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now)$"
       }
     },
@@ -229,7 +229,7 @@
             "description": "The id of an answer to reference"
           },
           "source": {
-            "type": "string",
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "enum": ["answers"]
           }
         },
@@ -245,7 +245,7 @@
             "description": "The id of the metadata to reference"
           },
           "source": {
-            "type": "string",
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "enum": ["metadata"]
           }
         },
@@ -264,15 +264,15 @@
           "type": "object",
           "properties": {
             "block": {
-              "type": "string",
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
               "description": "The id of another block in the same group."
             },
             "group": {
-              "type": "string",
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
               "description": "The id of another group. The first block in that group will be routed to."
             },
             "section": {
-              "type": "string",
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
               "description": "Routes to the end of the current section",
               "enum": ["End"]
             },
@@ -297,5 +297,9 @@
       "additionalProperties": false,
       "required": ["goto"]
     }
+  },
+  "non_empty_string": {
+    "type": "string",
+    "minLength": 1
   }
 }

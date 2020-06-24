@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "transform": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["format_number"]
       },
       "arguments": {

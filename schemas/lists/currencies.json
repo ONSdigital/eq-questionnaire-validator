@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "description": "Currency codes as defined by ISO 4217",
   "currency": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "enum": [
       "AED",
       "AFN",

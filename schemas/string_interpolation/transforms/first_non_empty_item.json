@@ -6,7 +6,7 @@
     "type": "object",
     "properties": {
       "transform": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["first_non_empty_item"]
       },
       "arguments": {

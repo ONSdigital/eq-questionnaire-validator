@@ -11,16 +11,16 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "description": {
-        "type": "string"
+         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "definitions": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "warning": {
-        "type": "string"
+         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question_guidance"
@@ -29,7 +29,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
       "type": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["DateRange"]
       },
       "period_limits": {

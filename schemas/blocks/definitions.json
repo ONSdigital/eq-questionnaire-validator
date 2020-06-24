@@ -64,7 +64,7 @@
     "type": "object",
     "properties": {
       "for_list": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "summary": {
         "type": "object",

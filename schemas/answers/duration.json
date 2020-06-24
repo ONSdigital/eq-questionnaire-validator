@@ -11,7 +11,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
       },
       "label": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
@@ -20,7 +20,7 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "type": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["Duration"]
       },
       "mandatory": {
@@ -30,7 +30,7 @@
         "type": "array",
         "minItems": 1,
         "items": {
-          "type": "string",
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
           "enum": ["years", "months"]
         }
       },
@@ -39,10 +39,10 @@
         "properties": {
           "messages": {
             "MANDATORY_DURATION": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             },
             "INVALID_DURATION": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
           }
         }

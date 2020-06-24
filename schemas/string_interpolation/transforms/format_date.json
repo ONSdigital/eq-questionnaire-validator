@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "transform": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "enum": ["format_date"]
       },
       "arguments": {
@@ -22,7 +22,7 @@
             ]
           },
           "date_format": {
-            "type": "string",
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "description": "See https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
             "enum": ["EEEE d MMMM", "EEEE d MMMM yyyy", "d MMMM yyyy"]
           }
