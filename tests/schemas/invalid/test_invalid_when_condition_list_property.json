@@ -37,7 +37,7 @@
                 "answers": [
                   {
                     "id": "answer",
-                    "label": "",
+                    "label": "Label",
                     "mandatory": false,
                     "type": "TextField"
                   }
