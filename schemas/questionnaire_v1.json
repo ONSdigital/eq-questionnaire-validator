@@ -38,7 +38,7 @@
       "enum": ["0.0.1", "0.0.3"]
     },
     "survey_id": {
-      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+      "type":  "string",
       "description": "The ONS id of the survey derived from the inquiry code already in use for that survey.",
       "pattern": "^[0-9a-z]+$"
     },
