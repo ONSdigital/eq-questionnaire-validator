@@ -7,7 +7,7 @@
     "pattern": "^[0-9a-z]+$"
   },
   "identifier": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+    "type": "string",
     "description": "Used to identify groups, blocks, questions and answers.",
     "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
   },
@@ -229,7 +229,7 @@
             "description": "The id of an answer to reference"
           },
           "source": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "type": "string",
             "enum": ["answers"]
           }
         },
@@ -245,7 +245,7 @@
             "description": "The id of the metadata to reference"
           },
           "source": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "type": "string",
             "enum": ["metadata"]
           }
         },
@@ -272,7 +272,7 @@
               "description": "The id of another group. The first block in that group will be routed to."
             },
             "section": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+              "type": "string",
               "description": "Routes to the end of the current section",
               "enum": ["End"]
             },

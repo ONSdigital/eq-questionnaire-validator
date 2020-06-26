@@ -23,7 +23,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "type": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["PrimaryPersonListCollector"]
       },
       "for_list": {
@@ -48,7 +48,7 @@
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
           },
           "type": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "type": "string",
             "enum": ["PrimaryPersonListAddOrEditQuestion"]
           },
           "question": {

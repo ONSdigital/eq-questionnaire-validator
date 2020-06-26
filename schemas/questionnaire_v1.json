@@ -68,7 +68,7 @@
             "pattern": "^[a-zA-Z0-9-_]+$"
           },
           "type": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "type": "string",
             "enum": ["boolean", "date", "string", "uuid", "url"]
           },
           "min_length": {
@@ -163,7 +163,7 @@
                   "type": "object",
                   "properties": {
                     "type": {
-                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                      "type": "string",
                       "enum": ["List"]
                     },
                     "for_list": {

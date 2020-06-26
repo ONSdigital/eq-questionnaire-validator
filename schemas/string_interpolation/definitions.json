@@ -133,7 +133,7 @@
     "type": "object",
     "properties": {
       "source": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["previous_transform"]
       }
     },
@@ -146,7 +146,7 @@
     "properties": {
       "source": {
         "description": "The data source.",
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["answers", "metadata", "collection_metadata", "list"]
       },
       "identifier": {
@@ -161,12 +161,12 @@
             "properties": {
               "source": {
                 "description": "The source of the data.",
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                "type": "string",
                 "enum": ["location"]
               },
               "id": {
                 "description": "The unique id of the object.",
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                "type": "string",
                 "enum": ["list_item_id", "to_list_item_id"]
               }
             }
@@ -175,7 +175,7 @@
             "properties": {
               "source": {
                 "description": "The source of the data.",
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                "type": "string",
                 "enum": ["list"]
               },
               "id": {
@@ -184,7 +184,7 @@
               },
               "id_selector": {
                 "description": "The unique id of the object.",
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                "type": "string",
                 "enum": ["first", "primary_person"]
               }
             }

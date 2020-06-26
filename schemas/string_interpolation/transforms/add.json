@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "transform": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["add"]
       },
       "arguments": {

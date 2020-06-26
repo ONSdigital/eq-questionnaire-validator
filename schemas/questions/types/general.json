@@ -35,7 +35,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
       "type": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["General"]
       },
       "answers": {

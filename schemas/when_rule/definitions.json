@@ -50,7 +50,7 @@
         "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_identifier"
       },
       "source": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["answers"]
       }
     },
@@ -65,7 +65,7 @@
         "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/location_identifier"
       },
       "source": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["location"]
       }
     },

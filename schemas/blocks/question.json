@@ -11,7 +11,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "type": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["Question"]
       },
       "question": {

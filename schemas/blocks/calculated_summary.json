@@ -8,7 +8,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "type": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["CalculatedSummary"]
       },
       "title": {
@@ -24,7 +24,7 @@
         "type": "object",
         "properties": {
           "calculation_type": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "type": "string",
             "enum": ["sum"]
           },
           "answers_to_calculate": {

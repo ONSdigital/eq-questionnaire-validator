@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "transform": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "type": "string",
         "enum": ["format_ordinal"]
       },
       "arguments": {
@@ -18,7 +18,7 @@
             "type": "object",
             "properties": {
               "value": {
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                "type": "string",
                 "enum": ["a_or_an"]
               }
             }
