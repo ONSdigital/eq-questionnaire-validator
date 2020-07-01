@@ -35,14 +35,12 @@
                     "mandatory": true,
                     "type": "TextField",
                     "label": "A second answer which transforms may reference",
-                    "description": "Description"
                   },
                   {
                     "id": "ref-answer2",
                     "mandatory": true,
                     "type": "TextField",
                     "label": "A third answer which transforms may reference",
-                    "description": "Description"
                   }
                 ]
               }
