@@ -45,15 +45,13 @@
               "question": {
                 "id": "question4",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {
                     "id": "answer6",
                     "mandatory": false,
                     "type": "TextField",
-                    "label": "Text",
-                    "description": "Description"
+                    "label": "Text"
                   }
                 ]
               }

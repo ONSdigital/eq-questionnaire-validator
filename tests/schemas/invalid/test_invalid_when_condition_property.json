@@ -150,7 +150,6 @@
               "question": {
                 "id": "conditional-routing-question",
                 "title": "Do you drink coffee?",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {

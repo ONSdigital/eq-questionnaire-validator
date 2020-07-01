@@ -44,7 +44,6 @@
               "question": {
                 "id": "question0",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {
@@ -85,7 +84,6 @@
               "question": {
                 "id": "question1",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {
@@ -115,7 +113,6 @@
               "question": {
                 "id": "question2",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {
@@ -145,7 +142,6 @@
               "question": {
                 "id": "question3",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "answers": [
                   {

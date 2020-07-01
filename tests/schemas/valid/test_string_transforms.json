@@ -44,7 +44,6 @@
               "question": {
                 "id": "question0",
                 "title": "Title",
-                "description": "Title",
                 "type": "General",
                 "summary": {
                   "concatenation_type": "Newline"
@@ -61,15 +60,13 @@
                     "id": "ref-answer1",
                     "mandatory": true,
                     "type": "TextField",
-                    "label": "A second answer which transforms may reference",
-                    "description": "Description"
+                    "label": "A second answer which transforms may reference"
                   },
                   {
                     "id": "ref-answer2",
                     "mandatory": true,
                     "type": "TextField",
-                    "label": "A third answer which transforms may reference",
-                    "description": "Description"
+                    "label": "A third answer which transforms may reference"
                   }
                 ]
               }
@@ -80,7 +77,6 @@
               "question": {
                 "id": "question1",
                 "title": "Title",
-                "description": "Description",
                 "type": "General",
                 "summary": {
                   "concatenation_type": "Space"
@@ -562,7 +558,6 @@
                     "mandatory": false,
                     "type": "Radio",
                     "label": "Placeholders in radio option label",
-                    "description": "Description",
                     "options": [
                       {
                         "label": {
@@ -602,7 +597,6 @@
                     "mandatory": false,
                     "type": "Checkbox",
                     "label": "Placeholders in checkbox option label",
-                    "description": "Description",
                     "options": [
                       {
                         "label": {

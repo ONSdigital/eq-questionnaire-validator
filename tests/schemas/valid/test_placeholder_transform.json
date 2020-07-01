@@ -37,14 +37,12 @@
               "type": "Question",
               "id": "total-items-block",
               "question": {
-                "description": "Description",
                 "id": "total-items-question",
                 "title": "Please enter the number of items",
                 "type": "General",
                 "answers": [
                   {
                     "id": "total-items-answer",
-                    "description": "Description",
                     "label": "Number of Items",
                     "mandatory": false,
                     "type": "Number",

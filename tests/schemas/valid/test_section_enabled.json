@@ -63,7 +63,6 @@
                     }
                   }
                 ],
-                "description": "Description",
                 "id": "mandatory-checkbox-question",
                 "title": "Should the second section be enabled?",
                 "type": "General"
@@ -119,7 +118,6 @@
                     }
                   }
                 ],
-                "description": "Description",
                 "id": "non-mandatory-checkbox-question",
                 "title": "Was this section shown?",
                 "type": "General"

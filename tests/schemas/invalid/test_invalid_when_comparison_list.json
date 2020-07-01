@@ -42,7 +42,6 @@
                     "type": "Number"
                   }
                 ],
-                "description": "Description",
                 "id": "route-comparison-1-question",
                 "title": "Enter a number",
                 "type": "General"

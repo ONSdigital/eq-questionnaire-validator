@@ -60,7 +60,6 @@
                     "type": "Number"
                   }
                 ],
-                "description": "Description",
                 "id": "route-comparison-2-question",
                 "title": "Enter a higher number to skip the next interstitial",
                 "type": "General"
@@ -118,7 +117,6 @@
                     "type": "Number"
                   }
                 ],
-                "description": "Description",
                 "id": "comparison-1-question",
                 "title": "Enter your first number",
                 "type": "General"
@@ -136,7 +134,6 @@
                     "type": "Number"
                   }
                 ],
-                "description": "Description",
                 "id": "comparison-2-question",
                 "title": "Enter your second number",
                 "type": "General"
