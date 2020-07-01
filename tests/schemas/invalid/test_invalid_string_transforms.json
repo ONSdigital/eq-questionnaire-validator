@@ -34,13 +34,13 @@
                     "id": "ref-answer1",
                     "mandatory": true,
                     "type": "TextField",
-                    "label": "A second answer which transforms may reference",
+                    "label": "A second answer which transforms may reference"
                   },
                   {
                     "id": "ref-answer2",
                     "mandatory": true,
                     "type": "TextField",
-                    "label": "A third answer which transforms may reference",
+                    "label": "A third answer which transforms may reference"
                   }
                 ]
               }
