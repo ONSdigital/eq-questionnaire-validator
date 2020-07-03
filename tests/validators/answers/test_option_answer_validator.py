@@ -39,7 +39,7 @@ def test_invalid_mismatching_answer_label_and_value():
 def test_unique_answer_options():
     answer = {
         "id": "duplicate-country-answer",
-        "label": "",
+        "label": "Label",
         "type": "Checkbox",
         "options": [
             {"label": "India", "value": "India"},

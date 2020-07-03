@@ -8,7 +8,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "label": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
@@ -27,10 +27,10 @@
           "type": "object",
           "properties": {
             "label": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             },
             "value": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             },
             "title": {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"

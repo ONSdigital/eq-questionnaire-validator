@@ -20,7 +20,7 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "suggestions_url": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "type": {
         "type": "string",
@@ -40,7 +40,7 @@
         "properties": {
           "messages": {
             "MANDATORY_TEXTFIELD": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
           }
         }

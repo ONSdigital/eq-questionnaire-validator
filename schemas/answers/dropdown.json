@@ -21,7 +21,7 @@
         "type": "boolean"
       },
       "label": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
@@ -41,7 +41,7 @@
         "properties": {
           "messages": {
             "MANDATORY_DROPDOWN": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
           }
         }

@@ -5,17 +5,17 @@
   "description": "Overrides default behaviour and redirect to the list add question block",
   "properties": {
     "type": {
-      "type": "string",
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
       "const": "RedirectToListAddQuestion"
     },
     "params": {
       "type": "object",
       "properties": {
         "block_id": {
-          "type": "string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         },
         "list_name": {
-          "type": "string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         }
       },
       "additionalProperties": false,

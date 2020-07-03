@@ -34,7 +34,6 @@
                 "answers": [
                   {
                     "id": "checkbox-answer",
-                    "label": "",
                     "mandatory": true,
                     "options": [
                       {
@@ -49,9 +48,8 @@
                     "type": "Checkbox"
                   }
                 ],
-                "description": "",
                 "id": "checkbox-question",
-                "title": "",
+                "title": "Title",
                 "type": "General",
                 "summary": {
                   "concatenation_type": "Newline"
@@ -64,7 +62,7 @@
             }
           ],
           "id": "checkboxes",
-          "title": ""
+          "title": "Title"
         }
       ]
     }

@@ -12,10 +12,10 @@
         "enum": ["RelationshipCollector"]
       },
       "title": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "for_list": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "question": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"

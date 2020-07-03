@@ -36,15 +36,14 @@
       "groups": [
         {
           "id": "group1",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "id": "block0",
               "type": "Question",
               "question": {
                 "id": "question0",
-                "title": "",
-                "description": "",
+                "title": "Title",
                 "type": "General",
                 "answers": [
                   {
@@ -84,8 +83,7 @@
               "type": "Question",
               "question": {
                 "id": "question1",
-                "title": "",
-                "description": "",
+                "title": "Title",
                 "type": "General",
                 "answers": [
                   {
@@ -114,8 +112,7 @@
               "type": "Question",
               "question": {
                 "id": "question2",
-                "title": "",
-                "description": "",
+                "title": "Title",
                 "type": "General",
                 "answers": [
                   {
@@ -144,8 +141,7 @@
               "type": "Question",
               "question": {
                 "id": "question3",
-                "title": "",
-                "description": "",
+                "title": "Title",
                 "type": "General",
                 "answers": [
                   {

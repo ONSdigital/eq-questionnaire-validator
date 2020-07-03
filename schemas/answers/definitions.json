@@ -15,7 +15,7 @@
           "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
         },
         "value": {
-          "type": "string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         },
         "q_code": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
@@ -78,11 +78,11 @@
     "type": "object",
     "properties": {
       "show_guidance": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "description": "The text that is used for the 'Show guidance' link."
       },
       "hide_guidance": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "description": "The text that is used for the 'Hide guidance' link."
       },
       "contents": {

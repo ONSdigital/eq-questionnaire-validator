@@ -31,20 +31,18 @@
       "groups": [
         {
           "id": "total-items-group",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "type": "Question",
               "id": "total-items-block",
               "question": {
-                "description": "",
                 "id": "total-items-question",
                 "title": "Please enter the number of items",
                 "type": "General",
                 "answers": [
                   {
                     "id": "total-items-answer",
-                    "description": "",
                     "label": "Number of Items",
                     "mandatory": false,
                     "type": "Number",

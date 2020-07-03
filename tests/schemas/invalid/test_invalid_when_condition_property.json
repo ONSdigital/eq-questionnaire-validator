@@ -37,7 +37,7 @@
                 "answers": [
                   {
                     "id": "country-checkbox-answer",
-                    "label": "",
+                    "label": "Label",
                     "mandatory": false,
                     "type": "Checkbox",
                     "options": [
@@ -61,7 +61,7 @@
                   },
                   {
                     "id": "country-checkbox-answer2",
-                    "label": "",
+                    "label": "Label",
                     "mandatory": false,
                     "type": "Radio",
                     "options": [
@@ -150,7 +150,6 @@
               "question": {
                 "id": "conditional-routing-question",
                 "title": "Do you drink coffee?",
-                "description": "",
                 "type": "General",
                 "answers": [
                   {
@@ -246,7 +245,7 @@
             }
           ],
           "id": "checkboxes",
-          "title": ""
+          "title": "Title"
         }
       ]
     }

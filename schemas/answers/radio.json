@@ -15,7 +15,7 @@
         "type": "boolean"
       },
       "label": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
@@ -41,7 +41,7 @@
         "type": "boolean"
       },
       "default": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "description": "Default value if no answer given"
       },
       "validation": {
@@ -49,7 +49,7 @@
         "properties": {
           "messages": {
             "MANDATORY_RADIO": {
-              "type": "string"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
           }
         }

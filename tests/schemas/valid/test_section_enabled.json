@@ -43,7 +43,7 @@
                 "answers": [
                   {
                     "id": "mandatory-checkbox-answer",
-                    "label": "",
+                    "label": "Label",
                     "mandatory": true,
                     "options": [
                       {
@@ -63,7 +63,6 @@
                     }
                   }
                 ],
-                "description": "",
                 "id": "mandatory-checkbox-question",
                 "title": "Should the second section be enabled?",
                 "type": "General"
@@ -72,7 +71,7 @@
             }
           ],
           "id": "checkboxes",
-          "title": ""
+          "title": "Title"
         }
       ]
     },
@@ -99,7 +98,7 @@
                 "answers": [
                   {
                     "id": "non-mandatory-checkbox-answer",
-                    "label": "",
+                    "label": "Label",
                     "mandatory": true,
                     "options": [
                       {
@@ -119,7 +118,6 @@
                     }
                   }
                 ],
-                "description": "",
                 "id": "non-mandatory-checkbox-question",
                 "title": "Was this section shown?",
                 "type": "General"
@@ -128,7 +126,7 @@
             }
           ],
           "id": "second-section-checkboxes",
-          "title": ""
+          "title": "Title"
         }
       ]
     }

@@ -28,7 +28,7 @@
       "groups": [
         {
           "id": "route-group",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "type": "Question",
@@ -42,7 +42,6 @@
                     "type": "Number"
                   }
                 ],
-                "description": "",
                 "id": "route-comparison-1-question",
                 "title": "Enter a number",
                 "type": "General"
@@ -99,7 +98,7 @@
         },
         {
           "id": "summary-group",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "type": "Summary",

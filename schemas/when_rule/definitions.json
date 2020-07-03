@@ -25,11 +25,11 @@
     "minItems": 1
   },
   "answer_identifier": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "The id of an answer from which to obtain the value"
   },
   "location_identifier": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "The id of a location attribute from which to obtain the value"
   },
   "comparison_value": {
@@ -81,7 +81,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier"
       },
       "value": {
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
       },
       "offset_by": {
@@ -102,11 +102,11 @@
     ]
   },
   "list": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "The name of a list"
   },
   "id_selector": {
-    "type": "string",
+    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
     "description": "The attribute to use from the list as the identifier"
   }
 }

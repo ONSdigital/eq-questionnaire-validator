@@ -5,7 +5,7 @@
     "oneOf": [
       {
         "description": "String with no placeholders.",
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "not": {
           "pattern": "({[_a-zA-Z0-9]*})+"
         }
@@ -15,7 +15,7 @@
         "type": "object",
         "properties": {
           "text": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "text_plural": {
             "$ref": "#/text_plural"
@@ -51,7 +51,7 @@
     "properties": {
       "placeholder": {
         "description": "The placeholder in the string that will be replaced e.g. 'test' is the placeholder in 'My {test} string'.",
-        "type": "string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "pattern": "^[0-9a-z_]+$"
       },
       "value": {
@@ -180,7 +180,7 @@
               },
               "id": {
                 "description": "The name of the list",
-                "type": "string"
+                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
               },
               "id_selector": {
                 "description": "The unique id of the object.",
@@ -204,22 +204,22 @@
         "type": "object",
         "properties": {
           "zero": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "one": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "two": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "few": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "many": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "other": {
-            "type": "string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           }
         },
         "additionalProperties": false,

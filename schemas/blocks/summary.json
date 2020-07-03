@@ -12,7 +12,7 @@
         "enum": ["Summary"]
       },
       "title": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "collapsible": {
         "description": "When True, the summary page will contain a list of collapsible section summaries",

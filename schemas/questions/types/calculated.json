@@ -11,13 +11,13 @@
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
       "warning": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "definitions": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/question_definitions"
@@ -42,7 +42,7 @@
               "enum": ["sum"]
             },
             "answer_id": {
-              "type": "string",
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
               "description": "The id of an answer from which to obtain the total to validate against"
             },
             "value": {

@@ -33,27 +33,25 @@
   "sections": [
     {
       "id": "section3",
-      "title": "",
+      "title": "Title",
       "groups": [
         {
           "id": "group3",
-          "title": "",
+          "title": "Title",
           "blocks": [
             {
               "id": "block4",
               "type": "Question",
               "question": {
                 "id": "question4",
-                "title": "",
-                "description": "",
+                "title": "Title",
                 "type": "General",
                 "answers": [
                   {
                     "id": "answer6",
                     "mandatory": false,
                     "type": "TextField",
-                    "label": "Text",
-                    "description": ""
+                    "label": "Text"
                   }
                 ]
               }

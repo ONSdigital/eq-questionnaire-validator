@@ -40,7 +40,7 @@
         "enum": ["ListCollector"]
       },
       "for_list": {
-        "type": "string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "add_answer": {
         "$ref": "list_collector.json#/answer_reference"
