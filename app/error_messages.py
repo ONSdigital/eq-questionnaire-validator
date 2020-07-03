@@ -7,7 +7,7 @@ ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )
-SUMMARY_HAS_NON_TEXTFIELD_ANSWER = (
+UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE = (
     "Summary concatenation can only be used for TextField answer types"
 )
 REQUIRED_HUB_SECTION_UNDEFINED = "Required section for hub is undefined"
