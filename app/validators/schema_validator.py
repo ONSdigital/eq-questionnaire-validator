@@ -41,7 +41,7 @@ class SchemaValidator(Validator):
             return {}
         except ValidationError as e:
             match = best_match([e])
-            self.add_error(match.message, verbose=e.message, path=e.path)
+            self.add_error(match.message, verbose=e.message, path=str(e.path))
         except SchemaError as e:
             self.add_error(e)
         return self.errors
