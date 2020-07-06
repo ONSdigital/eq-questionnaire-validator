@@ -90,3 +90,29 @@ def test_invalid_answer_action():
     validator.validate()
 
     assert expected_error_messages == validator.errors
+
+
+def test_validate_default_exists_in_options():
+    answer = {
+        "type": "Radio",
+        "id": "correct-answer",
+        "mandatory": False,
+        "default": "Yes",
+        "options": [
+            {"label": "Yes it is", "value": "Yes it is"},
+            {"label": "No", "value": "No"},
+        ],
+    }
+
+    validator = OptionAnswerValidator(answer)
+
+    expected_errors = [
+        {
+            "message": validator.DEFAULT_MISMATCH,
+            "answer_id": "correct-answer",
+        },
+    ]
+
+    validator.validate_default_exists_in_options()
+
+    assert expected_errors == validator.errors
