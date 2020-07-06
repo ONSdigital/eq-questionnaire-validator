@@ -86,3 +86,14 @@ def test_invalid_survey_id_whitespace():
     validator.validate()
 
     assert validator.errors[0]["message"] == "'lms ' does not match '^[0-9a-z]+$'"
+
+
+def test_returns_pointer():
+    file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
+    json_to_validate = _open_and_load_schema_file(file)
+
+    validator = SchemaValidator(json_to_validate)
+
+    validator.validate()
+
+    assert validator.errors[0]["pointer"] == "/survey_id"
