@@ -415,15 +415,15 @@ def test_invalid_quotes_in_schema():
     assert validator.errors == expected_error_messages
 
 
-def test_invalid_non_textfield_question_concatenation():
-    filename = "schemas/invalid/test_invalid_question_concatenation_non_textfield.json"
+def test_invalid_answer_type_for_question_summary_concatenation():
+    filename = "schemas/invalid/test_invalid_answer_type_for_question_summary.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_error_messages = [
         {
             "message": error_messages.UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
-            "answer_id": "checkbox-answer",
+            "answer_id": "radio-answer",
             "section_id": "default-section",
         }
     ]
