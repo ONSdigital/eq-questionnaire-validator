@@ -22,7 +22,7 @@ class OptionAnswerValidator(AnswerValidator):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self.validate_answer_actions()
-        self.validate_default_mismatch()
+        self.validate_default_exists_in_options()
         return self.errors
 
     @cached_property
@@ -80,7 +80,7 @@ class OptionAnswerValidator(AnswerValidator):
             if block_id and block_id not in self.block_ids:
                 self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
 
-    def validate_default_mismatch(self):
+    def validate_default_exists_in_options(self):
         default_value = self.answer.get("default")
         if default_value and default_value not in [
             option["value"] for option in self.options
