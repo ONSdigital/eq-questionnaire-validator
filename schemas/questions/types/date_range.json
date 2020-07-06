@@ -118,6 +118,22 @@
             }
           ]
         }
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "INVALID_DATE_RANGE": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "DATE_PERIOD_TOO_SMALL": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "DATE_PERIOD_TOO_LARGE": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            }
+          }
+        }
       }
     },
     "additionalProperties": false,
