@@ -96,4 +96,4 @@ def test_returns_pointer():
 
     validator.validate()
 
-    assert validator.errors[0]["pointer"] == '/survey_id'
+    assert validator.errors[0]["pointer"] == "/survey_id"
