@@ -29,11 +29,11 @@
           "blocks": [
             {
               "type": "Question",
-              "id": "checkbox",
+              "id": "radio",
               "question": {
                 "answers": [
                   {
-                    "id": "checkbox-answer",
+                    "id": "radio-answer",
                     "mandatory": true,
                     "options": [
                       {
@@ -45,10 +45,10 @@
                         "value": "No"
                       }
                     ],
-                    "type": "Checkbox"
+                    "type": "Radio"
                   }
                 ],
-                "id": "checkbox-question",
+                "id": "radio-question",
                 "title": "Title",
                 "type": "General",
                 "summary": {
@@ -61,7 +61,7 @@
               "id": "summary"
             }
           ],
-          "id": "checkboxes",
+          "id": "radios",
           "title": "Title"
         }
       ]
