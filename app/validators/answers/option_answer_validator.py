@@ -9,6 +9,7 @@ class OptionAnswerValidator(AnswerValidator):
     ANSWER_LABEL_VALUE_MISMATCH = "Found mismatching answer value for label"
     LIST_NAME_MISSING = "List name defined in action params does not exist"
     BLOCK_ID_MISSING = "Block id defined in action params does not exist"
+    DEFAULT_MISMATCH = "Default mismatch"
 
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
@@ -21,6 +22,7 @@ class OptionAnswerValidator(AnswerValidator):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self.validate_answer_actions()
+        self.validate_default_mismatch()
         return self.errors
 
     @cached_property
@@ -77,3 +79,11 @@ class OptionAnswerValidator(AnswerValidator):
 
             if block_id and block_id not in self.block_ids:
                 self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
+
+    def validate_default_mismatch(self):
+        if self.answer.get("default") is not None:
+            values = []
+            for option in self.options:
+                values.append(option.get("value"))
+            if self.answer.get("default") not in values:
+                self.add_error(self.DEFAULT_MISMATCH)
