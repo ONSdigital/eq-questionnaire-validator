@@ -81,9 +81,8 @@ class OptionAnswerValidator(AnswerValidator):
                 self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
 
     def validate_default_mismatch(self):
-        if self.answer.get("default") is not None:
-            values = []
-            for option in self.options:
-                values.append(option.get("value"))
-            if self.answer.get("default") not in values:
-                self.add_error(self.DEFAULT_MISMATCH)
+        default_value = self.answer.get("default")
+        if default_value and default_value not in [
+            option["value"] for option in self.options
+        ]:
+            self.add_error(self.DEFAULT_MISMATCH)
