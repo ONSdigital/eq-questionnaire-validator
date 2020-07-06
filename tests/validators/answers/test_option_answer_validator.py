@@ -107,10 +107,7 @@ def test_validate_default_exists_in_options():
     validator = OptionAnswerValidator(answer)
 
     expected_errors = [
-        {
-            "message": validator.DEFAULT_MISMATCH,
-            "answer_id": "correct-answer",
-        },
+        {"message": validator.DEFAULT_MISMATCH, "answer_id": "correct-answer"}
     ]
 
     validator.validate_default_exists_in_options()
