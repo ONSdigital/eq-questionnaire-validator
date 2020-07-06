@@ -1,167 +1,167 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "language": "en",
-    "schema_version": "0.0.1",
-    "data_version": "0.0.3",
-    "survey_id": "0",
-    "title": "Question Validation Test",
-    "theme": "default",
-    "description": "A questionnaire to test use of the question title in validation",
-    "metadata": [
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Question Validation Test",
+  "theme": "default",
+  "description": "A questionnaire to test use of the question title in validation",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "mutually-exclusive-checkbox-section",
+      "groups": [
         {
-            "name": "user_id",
-            "type": "string"
-        },
-        {
-            "name": "period_id",
-            "type": "string"
-        },
-        {
-            "name": "ru_name",
-            "type": "string"
-        }
-    ],
-    "sections": [
-        {
-            "id": "mutually-exclusive-checkbox-section",
-            "groups": [
-                {
-                    "blocks": [
-                        {
-                            "type": "Question",
-                            "id": "date-block",
-                            "question": {
-                                "answers": [
-                                    {
-                                        "id": "date-range-from-answer",
-                                        "label": "Period from",
-                                        "mandatory": true,
-                                        "q_code": "11",
-                                        "type": "Date"
-                                    },
-                                    {
-                                        "id": "date-range-to-answer",
-                                        "label": "Period to",
-                                        "mandatory": true,
-                                        "q_code": "12",
-                                        "type": "Date"
-                                    }
-                                ],
-                                "id": "date-range-question",
-                                "title": "Date range",
-                                "warning": "The period to date must be after the period from date",
-                                "type": "DateRange",
-                                "validation": {
-                                    "INVALID_DATE_RANGE": "The date range specified is invalid"
-                                }
-                            }
-                        }
-                    ],
-                    "id": "dates",
-                    "title": "Title"
-                },
-                {
-                    "id": "calculated-question-group",
-                    "title": "Calculated Question Group",
-                    "blocks": [
-                        {
-                            "type": "Question",
-                            "id": "breakdown-block",
-                            "question": {
-                                "id": "breakdown-question",
-                                "title": "Breakdown",
-                                "type": "Calculated",
-                                "calculations": [
-                                    {
-                                        "calculation_type": "sum",
-                                        "answer_id": "total-answer",
-                                        "answers_to_calculate": ["breakdown-1", "breakdown-2"],
-                                        "conditions": ["less than"]
-                                    }
-                                ],
-                                "answers": [
-                                    {
-                                        "id": "breakdown-1",
-                                        "label": "Breakdown 1",
-                                        "mandatory": false,
-                                        "decimal_places": 2,
-                                        "type": "Currency",
-                                        "currency": "GBP"
-                                    },
-                                    {
-                                        "id": "breakdown-2",
-                                        "label": "Breakdown 2",
-                                        "mandatory": false,
-                                        "decimal_places": 2,
-                                        "type": "Currency",
-                                        "currency": "GBP"
-                                    }
-                                ],
-                                "validation": {
-                                    "messages": {
-                                        "TOTAL_SUM_NOT_LESS_THAN": "Enter answers that add up to or are less than total answer"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": "mutually-exclusive-mandatory-group",
-                    "title": "Mutually Exclusive Group",
-                    "blocks": [
-                        {
-                            "type": "Question",
-                            "id": "mutually-exclusive-checkbox",
-                            "question": {
-                                "id": "mutually-exclusive-checkbox-question",
-                                "type": "MutuallyExclusive",
-                                "title": "Were you a resident at any of the following addresses?",
-                                "mandatory": true,
-                                "answers": [
-                                    {
-                                        "id": "checkbox-answer",
-                                        "label": "Select answer",
-                                        "type": "Checkbox",
-                                        "mandatory": false,
-                                        "options": [
-                                            {
-                                                "label": "7 Evelyn Street, Barry",
-                                                "value": "7 Evelyn Street, Barry"
-                                            },
-                                            {
-                                                "label": "251 Argae Lane, Barry",
-                                                "value": "251 Argae Lane, Barry"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "id": "checkbox-exclusive-answer",
-                                        "mandatory": false,
-                                        "type": "Checkbox",
-                                        "options": [
-                                            {
-                                                "label": "I prefer not to say",
-                                                "description": "Some description",
-                                                "value": "I prefer not to say"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "validation": {
-                                    "messages": {
-                                        "MANDATORY_QUESTION": "Select an answer to continue"
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "type": "Summary",
-                            "id": "summary"
-                        }
-                    ]
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "date-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "date-range-from-answer",
+                    "label": "Period from",
+                    "mandatory": true,
+                    "q_code": "11",
+                    "type": "Date"
+                  },
+                  {
+                    "id": "date-range-to-answer",
+                    "label": "Period to",
+                    "mandatory": true,
+                    "q_code": "12",
+                    "type": "Date"
+                  }
+                ],
+                "id": "date-range-question",
+                "title": "Date range",
+                "warning": "The period to date must be after the period from date",
+                "type": "DateRange",
+                "validation": {
+                  "INVALID_DATE_RANGE": "The date range specified is invalid"
                 }
-            ]
+              }
+            }
+          ],
+          "id": "dates",
+          "title": "Title"
+        },
+        {
+          "id": "calculated-question-group",
+          "title": "Calculated Question Group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "breakdown-block",
+              "question": {
+                "id": "breakdown-question",
+                "title": "Breakdown",
+                "type": "Calculated",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "answer_id": "total-answer",
+                    "answers_to_calculate": ["breakdown-1", "breakdown-2"],
+                    "conditions": ["less than"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "breakdown-1",
+                    "label": "Breakdown 1",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  },
+                  {
+                    "id": "breakdown-2",
+                    "label": "Breakdown 2",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  }
+                ],
+                "validation": {
+                  "messages": {
+                    "TOTAL_SUM_NOT_LESS_THAN": "Enter answers that add up to or are less than total answer"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "mutually-exclusive-mandatory-group",
+          "title": "Mutually Exclusive Group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-checkbox",
+              "question": {
+                "id": "mutually-exclusive-checkbox-question",
+                "type": "MutuallyExclusive",
+                "title": "Were you a resident at any of the following addresses?",
+                "mandatory": true,
+                "answers": [
+                  {
+                    "id": "checkbox-answer",
+                    "label": "Select answer",
+                    "type": "Checkbox",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "7 Evelyn Street, Barry",
+                        "value": "7 Evelyn Street, Barry"
+                      },
+                      {
+                        "label": "251 Argae Lane, Barry",
+                        "value": "251 Argae Lane, Barry"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "checkbox-exclusive-answer",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "options": [
+                      {
+                        "label": "I prefer not to say",
+                        "description": "Some description",
+                        "value": "I prefer not to say"
+                      }
+                    ]
+                  }
+                ],
+                "validation": {
+                  "messages": {
+                    "MANDATORY_QUESTION": "Select an answer to continue"
+                  }
+                }
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }
