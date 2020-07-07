@@ -109,6 +109,29 @@
           ]
         }
       },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "TOTAL_SUM_NOT_EQUALS": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "TOTAL_SUM_NOT_LESS_THAN": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "TOTAL_SUM_NOT_GREATER_THAN": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "TOTAL_SUM_NOT_GREATER_THAN_OR_EQUALS": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "TOTAL_SUM_NOT_LESS_THAN_OR_EQUALS": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "additionalProperties": false,
       "required": ["id", "type", "calculations", "answers", "title"]
     }

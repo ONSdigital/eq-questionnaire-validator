@@ -82,6 +82,20 @@
             }
           ]
         }
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MUTUALLY_EXCLUSIVE": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
+            "MANDATORY_QUESTION": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            }
+          }
+        },
+        "additionalProperties": false
       }
     },
     "additionalProperties": false,
