@@ -120,9 +120,13 @@ class SectionValidator(Validator):
 
                 answer_validator.validate()
 
-                if question.get("summary") and answer["type"] != "TextField":
+                if question.get("summary") and answer["type"] not in [
+                    "TextField",
+                    "Checkbox",
+                    "Number",
+                ]:
                     self.add_error(
-                        error_messages.SUMMARY_HAS_NON_TEXTFIELD_ANSWER,
+                        error_messages.UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
                         answer_id=answer["id"],
                     )
                 self.errors += answer_validator.errors
