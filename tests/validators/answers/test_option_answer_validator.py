@@ -109,8 +109,8 @@ def test_validate_default_exists_in_options():
     expected_errors = [
         {
             "message": validator.ANSWER_DEFAULT_MISSING,
+            "default_value": "Yes",
             "answer_id": "correct-answer",
-            "default": "Yes",
         }
     ]
 
