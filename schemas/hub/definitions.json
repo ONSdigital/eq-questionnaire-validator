@@ -51,6 +51,10 @@
           "button": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "description": "The text that appears on the submit button, when the questionnaire is ready to be submitted"
+          },
+          "guidance": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "The text guidance that appears, when the questionnaire is ready to be submitted"
           }
         },
         "additionalProperties": false,
