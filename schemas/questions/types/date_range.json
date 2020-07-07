@@ -133,7 +133,8 @@
               "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
           }
-        }
+        },
+        "additionalProperties": false
       }
     },
     "additionalProperties": false,

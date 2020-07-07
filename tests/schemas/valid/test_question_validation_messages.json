@@ -36,14 +36,12 @@
                     "id": "date-range-from-answer",
                     "label": "Period from",
                     "mandatory": true,
-                    "q_code": "11",
                     "type": "Date"
                   },
                   {
                     "id": "date-range-to-answer",
                     "label": "Period to",
                     "mandatory": true,
-                    "q_code": "12",
                     "type": "Date"
                   }
                 ],
@@ -52,7 +50,9 @@
                 "warning": "The period to date must be after the period from date",
                 "type": "DateRange",
                 "validation": {
-                  "INVALID_DATE_RANGE": "The date range specified is invalid"
+                  "messages": {
+                    "INVALID_DATE_RANGE": "The date range specified is invalid"
+                  }
                 }
               }
             }
