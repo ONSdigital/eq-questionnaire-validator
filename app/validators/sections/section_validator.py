@@ -77,7 +77,7 @@ class SectionValidator(Validator):
             block_validator = get_block_validator(block, self.questionnaire_schema)
             self.errors += block_validator.validate()
 
-            self.validate_questions(block)
+            self.validate_question(block)
             self.validate_variants(block)
 
     def validate_block_is_submission(self, last_block):
@@ -94,15 +94,11 @@ class SectionValidator(Validator):
         if not is_last_block_valid and not self.questionnaire_schema.is_hub_enabled:
             self.add_error(self.UNDEFINED_SUBMISSION_PAGE)
 
-    def validate_questions(self, block_or_variant):
-        questions = block_or_variant.get("questions", [])
+    def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
         routing_rules = block_or_variant.get("routing_rules", {})
 
         if question:
-            questions.append(question)
-
-        for question in questions:
             question_validator = get_question_validator(question)
 
             self.errors += question_validator.validate()
@@ -138,7 +134,7 @@ class SectionValidator(Validator):
         all_variants = question_variants + content_variants
 
         for variant in question_variants:
-            self.validate_questions(variant)
+            self.validate_question(variant)
 
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
