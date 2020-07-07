@@ -85,6 +85,4 @@ class OptionAnswerValidator(AnswerValidator):
         if default_value and default_value not in [
             option["value"] for option in self.options
         ]:
-            self.add_error(
-                self.ANSWER_DEFAULT_MISSING, default=default_value, options=self.options
-            )
+            self.add_error(self.ANSWER_DEFAULT_MISSING, default_value=default_value)

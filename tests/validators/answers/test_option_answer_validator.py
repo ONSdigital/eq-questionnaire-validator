@@ -111,10 +111,6 @@ def test_validate_default_exists_in_options():
             "message": validator.ANSWER_DEFAULT_MISSING,
             "answer_id": "correct-answer",
             "default": "Yes",
-            "options": [
-                {"label": "Yes it is", "value": "Yes it is"},
-                {"label": "No", "value": "No"},
-            ],
         }
     ]
 
