@@ -41,6 +41,23 @@
           "title": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
           },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+                },
+                "question": {
+                  "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+                },
+                "contents": {
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
+                }
+              }
+            }
+          },
           "contents": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
           }
