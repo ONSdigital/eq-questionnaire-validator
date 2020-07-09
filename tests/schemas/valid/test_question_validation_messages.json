@@ -57,8 +57,7 @@
               }
             }
           ],
-          "id": "dates",
-          "title": "Title"
+          "id": "dates"
         },
         {
           "id": "calculated-question-group",
