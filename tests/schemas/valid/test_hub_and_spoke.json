@@ -32,7 +32,8 @@
       "guidance": "Guidance displayed on hub, when the questionnaire is incomplete"
     },
     "submission": {
-      "button": "Submit button text"
+      "button": "Submit button text",
+      "guidance": "Submission guidance"
     }
   },
   "sections": [
