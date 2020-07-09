@@ -35,6 +35,9 @@
         "type": "string",
         "enum": ["MutuallyExclusive"]
       },
+      "interviewer_note": {
+        "type": "boolean"
+      },
       "mandatory": {
         "type": "boolean"
       },

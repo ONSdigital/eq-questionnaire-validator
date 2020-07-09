@@ -34,6 +34,9 @@
       "skip_conditions": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
+      "interviewer_note": {
+        "type": "boolean"
+      },
       "type": {
         "type": "string",
         "enum": ["General"]

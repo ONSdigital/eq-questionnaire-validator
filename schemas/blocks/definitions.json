@@ -14,6 +14,9 @@
       },
       "contents": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
+      },
+      "interviewer_note": {
+        "type": "boolean"
       }
     },
     "additionalProperties": false,
