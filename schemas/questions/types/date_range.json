@@ -14,7 +14,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_list"
       },
       "definitions": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"

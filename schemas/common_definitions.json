@@ -301,5 +301,11 @@
   "non_empty_string": {
     "type": "string",
     "minLength": 1
+  },
+  "string_list": {
+    "type": "array",
+    "items": {
+      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+    }
   }
 }
