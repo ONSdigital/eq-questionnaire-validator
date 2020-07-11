@@ -28,7 +28,6 @@
       "groups": [
         {
           "id": "group1",
-          "title": "Title",
           "blocks": [
             {
               "content": {

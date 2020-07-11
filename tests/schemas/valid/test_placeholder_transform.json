@@ -31,7 +31,6 @@
       "groups": [
         {
           "id": "total-items-group",
-          "title": "Title",
           "blocks": [
             {
               "type": "Question",
