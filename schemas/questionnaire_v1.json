@@ -260,7 +260,7 @@
                 }
               },
               "additionalProperties": false,
-              "required": ["id", "title", "blocks"]
+              "required": ["id", "blocks"]
             }
           },
           "enabled": {
