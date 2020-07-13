@@ -16,7 +16,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
       },
       "interviewer_note": {
-        "type": "boolean"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/interviewer_note"
       }
     },
     "additionalProperties": false,
