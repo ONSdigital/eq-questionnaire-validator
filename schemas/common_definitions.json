@@ -301,5 +301,9 @@
   "non_empty_string": {
     "type": "string",
     "minLength": 1
+  },
+  "interviewer_note": {
+    "description": "Allows customisation of question and interstitial page title.",
+    "type": "boolean"
   }
 }

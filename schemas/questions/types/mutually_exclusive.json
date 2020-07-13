@@ -36,7 +36,7 @@
         "enum": ["MutuallyExclusive"]
       },
       "interviewer_note": {
-        "type": "boolean"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/interviewer_note"
       },
       "mandatory": {
         "type": "boolean"
