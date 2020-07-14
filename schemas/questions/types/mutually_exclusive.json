@@ -35,9 +35,6 @@
         "type": "string",
         "enum": ["MutuallyExclusive"]
       },
-      "interviewer_only": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/interviewer_only"
-      },
       "mandatory": {
         "type": "boolean"
       },
