@@ -25,6 +25,9 @@
       },
       "skip_conditions": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
+      },
+      "interviewer_only": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/interviewer_only"
       }
     },
     "additionalProperties": false,

@@ -301,5 +301,9 @@
   "non_empty_string": {
     "type": "string",
     "minLength": 1
+  },
+  "interviewer_only": {
+    "description": "Marks the page as for the interviewer only. Only applies for questionnaires that will be completed by an interviewer.",
+    "type": "boolean"
   }
 }
