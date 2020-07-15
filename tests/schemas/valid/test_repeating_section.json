@@ -24,6 +24,10 @@
   "hub": {
     "enabled": true
   },
+  "individual_response": {
+    "for_list": "household",
+    "individual_section_id": "individual-section"
+  },
   "sections": [
     {
       "id": "section",
@@ -411,6 +415,18 @@
           "id": "personal-details-group",
           "title": "Personal Details",
           "blocks": [
+            {
+              "id": "personal-details-interstitial",
+              "content": {
+                "title": "Individual Intro",
+                "contents": [
+                  {
+                    "description": "In this section we are going to ask you questions"
+                  }
+                ]
+              },
+              "type": "Interstitial"
+            },
             {
               "id": "proxy",
               "question": {
