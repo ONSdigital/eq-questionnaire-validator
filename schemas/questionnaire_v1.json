@@ -115,6 +115,9 @@
     "hub": {
       "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/hub"
     },
+    "individual_response": {
+      "$ref": "https://eq.ons.gov.uk/individual_response/definitions.json#/individual_response"
+    },
     "sections": {
       "type": "array",
       "minItems": 1,
