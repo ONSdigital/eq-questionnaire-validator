@@ -307,5 +307,9 @@
     "items": {
       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
     }
+  },
+  "interviewer_only": {
+    "description": "Marks the page as for the interviewer only. Only applies for questionnaires that will be completed by an interviewer.",
+    "type": "boolean"
   }
 }
