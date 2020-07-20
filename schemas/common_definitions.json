@@ -302,7 +302,7 @@
     "type": "string",
     "minLength": 1
   },
-  "string_list_with_placeholders": {
+  "string_array_with_placeholders": {
     "type": "array",
     "items": {
       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
