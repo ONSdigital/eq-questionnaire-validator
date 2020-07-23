@@ -14,37 +14,6 @@
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         }
       },
-      "complete": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "The title that will appear on the hub, when the questionnaire is complete."
-          },
-          "guidance": {
-            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
-          }
-        },
-        "anyOf": [
-          {
-            "required": ["guidance"]
-          },
-          {
-            "required": ["title"]
-          }
-        ],
-        "additionalProperties": false
-      },
-      "incomplete": {
-        "type": "object",
-        "properties": {
-          "guidance": {
-            "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/guidance"
-          }
-        },
-        "additionalProperties": false,
-        "required": ["guidance"]
-      },
       "submission": {
         "type": "object",
         "properties": {
@@ -55,17 +24,20 @@
           "guidance": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "description": "The text guidance that appears, when the questionnaire is ready to be submitted"
+          },
+          "title": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "The title that will appear on the hub, when the questionnaire is complete."
+          },
+          "warning": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "The warning that will appear on the hub, when the questionnaire is complete."
           }
         },
-        "additionalProperties": false,
-        "required": ["button"]
+        "additionalProperties": false
       }
     },
     "required": ["enabled"],
     "additionalProperties": false
-  },
-  "guidance": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-    "description": "The guidance that will appear on the hub"
   }
 }
