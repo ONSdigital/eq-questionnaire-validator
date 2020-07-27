@@ -25,10 +25,10 @@
     "enabled": true,
     "required_completed_sections": ["employment-section"],
     "submission": {
-      "button": "Submit button text",
+      "button": "Submission button text",
       "guidance": "Submission guidance",
-      "title": "Title displayed on hub, when the questionnaire is complete",
-      "warning": "warning"
+      "title": "Submission title",
+      "warning": "Submission warning"
     }
   },
   "individual_response": {

@@ -34,7 +34,21 @@
             "description": "The warning that will appear on the hub, when the questionnaire is complete."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": ["button"]
+          },
+          {
+            "required": ["guidance"]
+          },
+          {
+            "required": ["title"]
+          },
+          {
+            "required": ["warning"]
+          }
+        ]
       }
     },
     "required": ["enabled"],
