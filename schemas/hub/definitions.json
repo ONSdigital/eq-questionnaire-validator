@@ -13,29 +13,6 @@
         "items": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
         }
-      },
-      "submission": {
-        "type": "object",
-        "properties": {
-          "button": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "The text that appears on the submit button, when the questionnaire is complete."
-          },
-          "guidance": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "The text guidance that appears, when the questionnaire is complete."
-          },
-          "title": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "The title that will appear on the hub, when the questionnaire is complete."
-          },
-          "warning": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "The warning that will appear on the hub, when the questionnaire is complete."
-          }
-        },
-        "additionalProperties": false,
-        "minProperties": 1
       }
     },
     "required": ["enabled"],
