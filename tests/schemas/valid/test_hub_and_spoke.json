@@ -26,10 +26,10 @@
     "required_completed_sections": ["employment-section"]
   },
   "submission": {
-      "button": "Submission button text",
-      "guidance": "Submission guidance",
-      "title": "Submission title",
-      "warning": "Submission warning"
+    "button": "Submission button text",
+    "guidance": "Submission guidance",
+    "title": "Submission title",
+    "warning": "Submission warning"
   },
   "individual_response": {
     "for_list": "household",
