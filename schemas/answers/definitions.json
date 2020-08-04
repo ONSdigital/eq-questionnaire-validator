@@ -39,6 +39,9 @@
           "oneOf": [
             {
               "$ref": "https://eq.ons.gov.uk/answer_actions/redirect_to_list_add_question.json"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/remove_answers_for_list_item.json"
             }
           ]
         }

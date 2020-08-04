@@ -36,30 +36,6 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         super().validate()
 
         try:
-            self._validate_list_answer_references(self.block)
-
-            collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-                self.block
-            )
-
-            self.validate_collector_questions(
-                collector_questions,
-                self.block["add_answer"]["value"],
-                self.NO_RADIO_FOR_LIST_COLLECTOR,
-                self.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
-            )
-
-            collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
-                self.block["remove_answer"]
-            )
-
-            self.validate_collector_questions(
-                collector_remove_questions,
-                self.block["remove_answer"]["value"],
-                self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-                self.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
-            )
-
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
         except KeyError as e:
