@@ -115,6 +115,23 @@
               }
             },
             {
+              "type": "Question",
+              "id": "block-and-question",
+              "question": {
+                "id": "block-and-question",
+                "type": "General",
+                "title": "What is your age?",
+                "answers": [
+                  {
+                    "id": "answer-2",
+                    "label": "Your age?",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
               "type": "Summary",
               "id": "summary"
             }
