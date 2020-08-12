@@ -8,13 +8,13 @@ Page titles are currently defined in question or content blocks. There is a requ
 1. String with a list item index: `"Person {index}"`
 1. String with multiple list item indices: `"Person {index} and person {index}"`
 
-This could be achieved with the introduction of a new transform object, one that takes a list item id and returns it's index position in a list; this approach would require significant changes to almost all Census schema block definitions. Instead, we can rely on Python's positional string formatting to render the correct index position for the list item id.
+This could be achieved with the introduction of a new transform object, one that takes a list item id and returns it's index position in a list; this approach would require significant changes to almost all Census schema block definitions. Instead, we can rely on Python's string formatting to render the index value for the list item id.
 
 ## Proposal
 
 We will add an optional `title` property to block definitions. This property, when provided, will override any question or content page title definitions for that block. If it is ommitted, the page title will still be determined from a question or content definition depending on the block type.
 
-Python's [positional string formatting](https://docs.python.org/3/library/string.html#string.Formatter.format) will be used to resolve any formatting required. Positional arguments will be resolved in the order `list_item_id` followed by `to_list_item_id`. Note that the `to_list_item_id` will only be available for Relationship block types. If `list_item_id` cannot be resolved, the question or content title will be used.
+Python's [string formatting](https://docs.python.org/3/library/string.html#string.Formatter.format) will be used to resolve any formatting parameters. The only formatting parameters that will be resolved are `list_item_id` and `to_list_item_id`. Note that the `to_list_item_id` will only be available for Relationship block types. If either `list_item_id` (or `to_list_item_id` where applicable) cannot be resolved, the question or content title will be used.
 
 ### Example:
 
@@ -24,7 +24,7 @@ Python's [positional string formatting](https://docs.python.org/3/library/string
     {
       "type": "Question",
       "id": "",
-      "title": "Question or Content block: Person {0}"
+      "title": "Question or Content block: Person {list_item_id}"
     }
   ]
 }
@@ -36,7 +36,7 @@ Python's [positional string formatting](https://docs.python.org/3/library/string
     {
       "type": "Question",
       "id": "",
-      "title": "Relationship block: Person {0} and Person {1}"
+      "title": "Relationship block: Person {list_item_id} and Person {to_list_item_id}"
     }
   ]
 }
