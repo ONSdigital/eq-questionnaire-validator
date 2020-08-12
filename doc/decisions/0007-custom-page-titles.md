@@ -14,7 +14,7 @@ This could be achieved with the introduction of a new transform object, one that
 
 We will add an optional `title` property to block definitions. This property, when provided, will override any question or content page title definitions for that block. If it is ommitted, the page title will still be determined from a question or content definition depending on the block type.
 
-Python's [string formatting](https://docs.python.org/3/library/string.html#string.Formatter.format) will be used to resolve any formatting parameters. The only formatting parameters that will be resolved are `list_item_id` and `to_list_item_id`. Note that the `to_list_item_id` will only be available for Relationship block types. If either `list_item_id` (or `to_list_item_id` where applicable) cannot be resolved, the question or content title will be used.
+Python's [string formatting](https://docs.python.org/3/library/string.html#string.Formatter.format) will be used to resolve any formatting parameters. The only formatting parameters that will be resolved are `list_item_index` and `to_list_item_index`. Note that the `to_list_item_index` will only be available for Relationship block types. If either `list_item_index` (or `to_list_item_index` where applicable) cannot be resolved, the question or content title will be used.
 
 ### Example:
 
@@ -24,7 +24,7 @@ Python's [string formatting](https://docs.python.org/3/library/string.html#strin
     {
       "type": "Question",
       "id": "",
-      "title": "Question or Content block: Person {list_item_id}"
+      "title": "Question or Content block: Person {list_item_index}"
     }
   ]
 }
@@ -36,7 +36,7 @@ Python's [string formatting](https://docs.python.org/3/library/string.html#strin
     {
       "type": "Question",
       "id": "",
-      "title": "Relationship block: Person {list_item_id} and Person {to_list_item_id}"
+      "title": "Relationship block: Person {list_item_index} and Person {to_list_item_index}"
     }
   ]
 }
