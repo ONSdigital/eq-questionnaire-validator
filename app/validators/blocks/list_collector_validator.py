@@ -6,27 +6,30 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
-    ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK = (
-        "add_answer reference uses id not found in main block question"
-    )
+    ADD_ANSWER_FOR_LIST_ITEM = "AddAnswersForListItem"
+    REMOVE_ANSWER_FOR_LIST_ITEM = "RemoveAnswersForListItem"
+
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
     )
+
     NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
         "The list collector remove block does not contain a Radio answer type"
     )
-    NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE = (
-        "The list collector block has an add_answer_value that is not "
-        "present in the answer values"
+
+    ADD_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
+        "AddAnswerForListItem action not found in main block"
     )
-    NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE = "The list collector block has a remove_answer_value that is not present in the answer values"
-    REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK = (
-        "remove_answer reference uses id not found in remove_block"
+
+    REMOVE_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK = (
+        "RemoveAnswerForListItem action not found in remove block"
     )
+
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
         "The list collector block contains an add block and edit block"
         " with different answer ids"
     )
+
     NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = (
         "Multiple list collectors populate a list using different "
         "answer_ids in the add block"
@@ -35,53 +38,29 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     def validate(self):
         super().validate()
 
-        try:
-            self._validate_list_answer_references(self.block)
-
-            collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-                self.block
-            )
-
-            self.validate_collector_questions(
-                collector_questions,
-                self.block["add_answer"]["value"],
-                self.NO_RADIO_FOR_LIST_COLLECTOR,
-                self.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
-            )
-
-            collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
-                self.block["remove_answer"]
-            )
-
-            self.validate_collector_questions(
-                collector_remove_questions,
-                self.block["remove_answer"]["value"],
-                self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-                self.NON_EXISTENT_LIST_COLLECTOR_REMOVE_ANSWER_VALUE,
-            )
-
-            self.validate_list_collector_answer_ids(self.block)
-            self.validate_other_list_collectors()
-        except KeyError as e:
-            self.add_error(self.LIST_COLLECTOR_KEY_MISSING, key=e)
-        return self.errors
-
-    def _validate_list_answer_references(self, block):
-        main_block_ids = self.questionnaire_schema.get_all_answer_ids(block["id"])
-        remove_block_ids = self.questionnaire_schema.get_all_answer_ids(
-            block["remove_block"]["id"]
+        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
+            self.block
+        )
+        self.validate_collector_questions(
+            self.ADD_ANSWER_FOR_LIST_ITEM,
+            collector_questions,
+            self.NO_RADIO_FOR_LIST_COLLECTOR,
+            self.ADD_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
         )
 
-        if block["add_answer"]["id"] not in main_block_ids:
-            self.add_error(
-                self.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-                referenced_id=block["add_answer"]["id"],
-            )
-        if block["remove_answer"]["id"] not in remove_block_ids:
-            self.add_error(
-                self.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
-                referenced_id=block["remove_answer"]["id"],
-            )
+        collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
+            self.block["remove_block"]
+        )
+        self.validate_collector_questions(
+            self.REMOVE_ANSWER_FOR_LIST_ITEM,
+            collector_remove_questions,
+            self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
+            self.REMOVE_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
+        )
+
+        self.validate_list_collector_answer_ids(self.block)
+        self.validate_other_list_collectors()
+        return self.errors
 
     def validate_list_collector_answer_ids(self, block):
         """

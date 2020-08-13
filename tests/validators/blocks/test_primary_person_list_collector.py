@@ -3,26 +3,6 @@ from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
-def test_invalid_primary_person_list_collector_bad_answer_reference_ids():
-    filename = (
-        "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_id.json"
-    )
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("primary-person-list-collector")
-
-    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)
-
-    expected_errors = [
-        {
-            "message": validator.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-            "referenced_id": "fake-answer-id",
-            "block_id": "primary-person-list-collector",
-        }
-    ]
-
-    assert validator.validate() == expected_errors
-
-
 def test_invalid_primary_person_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
 
@@ -62,20 +42,18 @@ def test_primary_person_invalid_list_collector_non_radio():
     assert expected_errors == validator.validate()
 
 
-def test_invalid_primary_person_list_collector_with_no_add_option():
-    filename = "schemas/invalid/test_invalid_primary_person_list_collector_bad_answer_value.json"
-
+def test_invalid_primary_person_list_collector_missing_action():
+    filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_add_edit_action.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = PrimaryPersonListCollectorValidator(
-        questionnaire_schema.get_block("primary-person-list-collector"),
-        questionnaire_schema,
-    )
+    block = questionnaire_schema.get_block("primary-person-list-collector")
+
+    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)
 
     expected_errors = [
         {
-            "message": validator.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+            "message": "AddOrEditAnswerForListItem action not found in main block",
             "block_id": "primary-person-list-collector",
         }
     ]
 
-    assert expected_errors == validator.validate()
+    assert validator.validate() == expected_errors

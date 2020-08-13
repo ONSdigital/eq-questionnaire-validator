@@ -73,7 +73,7 @@ class SectionValidator(Validator):
                 block, group, self.questionnaire_schema
             )
             self.errors += block_routing_validator.validate()
-
+            print(self.errors)
             block_validator = get_block_validator(block, self.questionnaire_schema)
             self.errors += block_validator.validate()
 

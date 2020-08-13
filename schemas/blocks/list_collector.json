@@ -42,12 +42,6 @@
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
-      "add_answer": {
-        "$ref": "list_collector.json#/answer_reference"
-      },
-      "remove_answer": {
-        "$ref": "list_collector.json#/answer_reference"
-      },
       "question": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
@@ -75,8 +69,6 @@
       "id",
       "type",
       "for_list",
-      "add_answer",
-      "remove_answer",
       "add_block",
       "edit_block",
       "remove_block"
