@@ -7,12 +7,12 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 class PrimaryPersonListCollectorValidator(
     BlockValidator, ValidateListCollectorQuestionsMixin
 ):
-    ADD_OR_EDIT_ANSWERS_FOR_LIST_ITEM = "AddOrEditAnswersForListItem"
+    ADD_OR_EDIT_ANSWER_FOR_LIST_ITEM = "AddOrEditAnswerForListItem"
 
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
         "The primary person list collector block does not contain a Radio answer type"
     )
-    ADD_OR_EDIT_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
+    ADD_OR_EDIT_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
         "AddOrEditAnswerForListItem action not found in main block"
     )
     NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT = (
@@ -27,10 +27,10 @@ class PrimaryPersonListCollectorValidator(
             self.block
         )
         self.validate_collector_questions(
-            self.ADD_OR_EDIT_ANSWERS_FOR_LIST_ITEM,
+            self.ADD_OR_EDIT_ANSWER_FOR_LIST_ITEM,
             collector_questions,
             self.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
-            self.ADD_OR_EDIT_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
+            self.ADD_OR_EDIT_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
         )
 
         self.validate_primary_person_list_collector_answer_ids(self.block)

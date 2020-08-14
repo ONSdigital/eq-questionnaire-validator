@@ -42,7 +42,7 @@ def test_primary_person_invalid_list_collector_non_radio():
     assert expected_errors == validator.validate()
 
 
-def test_invalid_primary_person_list_collector_missing_action():
+def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_add_edit_action.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     block = questionnaire_schema.get_block("primary-person-list-collector")

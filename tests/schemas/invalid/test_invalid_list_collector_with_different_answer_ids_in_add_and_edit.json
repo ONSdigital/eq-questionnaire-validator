@@ -47,7 +47,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "AddAnswersForListItem"
+                          "type": "AddAnswerForListItem"
                         }
                       },
                       {
@@ -127,7 +127,7 @@
                           "label": "Yes",
                           "value": "Yes",
                           "action": {
-                            "type": "RemoveAnswersForListItem"
+                            "type": "RemoveAnswerForListItem"
                           }
                         },
                         {

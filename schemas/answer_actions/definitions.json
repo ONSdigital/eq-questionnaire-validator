@@ -7,9 +7,9 @@
     "properties": {
       "type": {
         "enum": [
-          "AddAnswersForListItem",
-          "RemoveAnswersForListItem",
-          "AddOrEditAnswersForListItem"
+          "AddAnswerForListItem",
+          "RemoveAnswerForListItem",
+          "AddOrEditAnswerForListItem"
         ]
       }
     },

@@ -47,7 +47,7 @@
                         "label": "Do you?",
                         "value": "Do you?",
                         "action": {
-                          "type": "AddOrEditAnswersForListItem"
+                          "type": "AddOrEditAnswerForListItem"
                         }
                       }
                     ]

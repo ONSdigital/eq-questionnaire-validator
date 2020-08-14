@@ -173,7 +173,7 @@
                         "label": "Yes, I need to add someone",
                         "value": "Yes, I need to add someone",
                         "action": {
-                          "type": "AddAnswersForListItem"
+                          "type": "AddAnswerForListItem"
                         }
                       },
                       {
@@ -200,7 +200,7 @@
                           "label": "Yes, I want to remove this person",
                           "value": "Yes, I want to remove this person",
                           "action": {
-                            "type": "RemoveAnswersForListItem"
+                            "type": "RemoveAnswerForListItem"
                           }
                         },
                         {

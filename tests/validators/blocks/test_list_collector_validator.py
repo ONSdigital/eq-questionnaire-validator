@@ -56,7 +56,7 @@ def test_invalid_list_collector_non_radio():
     assert expected_error_messages == validator.errors
 
 
-def test_invalid_list_collector_with_no_add_action():
+def test_invalid_list_collector_with_no_add_answer_action():
     filename = (
         "schemas/invalid/test_invalid_list_collector_with_no_add_answer_action.json"
     )
@@ -69,7 +69,7 @@ def test_invalid_list_collector_with_no_add_action():
 
     expected_errors = [
         {
-            "message": validator.ADD_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
+            "message": validator.ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
             "block_id": "list-collector",
         }
     ]
@@ -77,7 +77,7 @@ def test_invalid_list_collector_with_no_add_action():
     assert expected_errors == validator.errors
 
 
-def test_invalid_list_collector_with_no_remove_action():
+def test_invalid_list_collector_with_no_remove_answer_action():
     filename = (
         "schemas/invalid/test_invalid_list_collector_with_no_remove_answer_action.json"
     )
@@ -90,7 +90,7 @@ def test_invalid_list_collector_with_no_remove_action():
 
     expected_errors = [
         {
-            "message": validator.REMOVE_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
+            "message": validator.REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
             "block_id": "list-collector",
         }
     ]

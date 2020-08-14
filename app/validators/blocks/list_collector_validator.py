@@ -6,8 +6,8 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
-    ADD_ANSWER_FOR_LIST_ITEM = "AddAnswersForListItem"
-    REMOVE_ANSWER_FOR_LIST_ITEM = "RemoveAnswersForListItem"
+    ADD_ANSWER_FOR_LIST_ITEM = "AddAnswerForListItem"
+    REMOVE_ANSWER_FOR_LIST_ITEM = "RemoveAnswerForListItem"
 
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
@@ -17,11 +17,11 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         "The list collector remove block does not contain a Radio answer type"
     )
 
-    ADD_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
+    ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
         "AddAnswerForListItem action not found in main block"
     )
 
-    REMOVE_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK = (
+    REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK = (
         "RemoveAnswerForListItem action not found in remove block"
     )
 
@@ -45,7 +45,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.ADD_ANSWER_FOR_LIST_ITEM,
             collector_questions,
             self.NO_RADIO_FOR_LIST_COLLECTOR,
-            self.ADD_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
+            self.ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
         )
 
         collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -55,7 +55,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.REMOVE_ANSWER_FOR_LIST_ITEM,
             collector_remove_questions,
             self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-            self.REMOVE_ANSWERS_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
+            self.REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
         )
 
         self.validate_list_collector_answer_ids(self.block)
