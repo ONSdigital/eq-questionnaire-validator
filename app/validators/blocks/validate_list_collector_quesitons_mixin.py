@@ -1,8 +1,12 @@
 from app.validators.validator import Validator
 
 
-def _options_contain_value(options, value):
-    return any(option["value"] == value for option in options)
+def _options_contain_value(options, action_type):
+    return any(
+        option["action"]["type"] == action_type
+        for option in options
+        if "action" in option
+    )
 
 
 class ValidateListCollectorQuestionsMixin(Validator):
@@ -11,17 +15,15 @@ class ValidateListCollectorQuestionsMixin(Validator):
 
     def validate_collector_questions(
         self,
+        action_type,
         collector_questions,
-        answer_value,
         missing_radio_error,
-        missing_value_error,
+        missing_action_error,
     ):
         for collector_question in collector_questions:
             for collector_answer in collector_question["answers"]:
                 if collector_answer["type"] != "Radio":
                     self.add_error(missing_radio_error)
 
-                if not _options_contain_value(
-                    collector_answer["options"], answer_value
-                ):
-                    self.add_error(missing_value_error)
+                if not _options_contain_value(collector_answer["options"], action_type):
+                    self.add_error(missing_action_error)

@@ -1,0 +1,43 @@
+{
+  "$id": "https://eq.ons.gov.uk/answer_actions/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "listAnswerActions": {
+    "type": "object",
+    "description": "List answer actions",
+    "properties": {
+      "type": {
+        "enum": [
+          "AddAnswersForListItem",
+          "RemoveAnswersForListItem",
+          "AddOrEditAnswersForListItem"
+        ]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+  },
+  "redirectListAnswerActions": {
+    "type": "object",
+    "description": "redirected list answer actions",
+    "properties": {
+      "type": {
+        "enum": ["RedirectToListAddQuestion"]
+      },
+      "params": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          },
+          "list_name": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["block_id", "list_name"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type", "params"]
+  }
+}

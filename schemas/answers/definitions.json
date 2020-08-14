@@ -38,7 +38,10 @@
           "type": "object",
           "oneOf": [
             {
-              "$ref": "https://eq.ons.gov.uk/answer_actions/redirect_to_list_add_question.json"
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/listAnswerActions"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirectListAnswerActions"
             }
           ]
         }
