@@ -68,10 +68,7 @@ def test_invalid_list_collector_with_no_add_answer_action():
     validator.validate()
 
     expected_errors = [
-        {
-            "message": validator.ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
-            "block_id": "list-collector",
-        }
+        {"message": validator.NO_REDIRECT_TO_ADD_BLOCK, "block_id": "list-collector"}
     ]
 
     assert expected_errors == validator.errors
@@ -89,10 +86,7 @@ def test_invalid_list_collector_with_no_remove_answer_action():
     validator.validate()
 
     expected_errors = [
-        {
-            "message": validator.REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
-            "block_id": "list-collector",
-        }
+        {"message": validator.NO_REDIRECT_TO_REMOVE_BLOCK, "block_id": "list-collector"}
     ]
 
     assert expected_errors == validator.errors

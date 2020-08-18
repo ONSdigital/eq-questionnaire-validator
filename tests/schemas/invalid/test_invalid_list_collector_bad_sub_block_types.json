@@ -47,7 +47,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "AddAnswerForListItem"
+                          "type": "RedirectToAddBlock"
                         }
                       },
                       {
@@ -121,7 +121,7 @@
                           "label": "Yeah",
                           "value": "Yeah",
                           "action": {
-                            "type": "RemoveAnswerForListItem"
+                            "type": "RedirectToRemoveBlock"
                           }
                         },
                         {
@@ -152,7 +152,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "AddAnswerForListItem"
+                          "type": "RedirectToAddBlock"
                         }
                       },
                       {
@@ -226,7 +226,7 @@
                           "label": "Yes",
                           "value": "Yes",
                           "action": {
-                            "type": "RemoveAnswerForListItem"
+                            "type": "RedirectToRemoveBlock"
                           }
                         },
                         {

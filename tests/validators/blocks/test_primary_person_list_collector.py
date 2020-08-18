@@ -51,7 +51,7 @@ def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action
 
     expected_errors = [
         {
-            "message": "AddOrEditAnswerForListItem action not found in main block",
+            "message": validator.NO_REDIRECT_TO_ADD_OR_EDIT_BLOCK,
             "block_id": "primary-person-list-collector",
         }
     ]

@@ -47,7 +47,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "AddOrEditAnswerForListItem"
+                          "type": "RedirectToAddOrEditBlock"
                         }
                       },
                       {

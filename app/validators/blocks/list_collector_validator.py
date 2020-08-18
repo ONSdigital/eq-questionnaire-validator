@@ -6,8 +6,8 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
-    ADD_ANSWER_FOR_LIST_ITEM = "AddAnswerForListItem"
-    REMOVE_ANSWER_FOR_LIST_ITEM = "RemoveAnswerForListItem"
+    REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock"
+    REDIRECT_TO_REMOVE_BLOCK = "RedirectToRemoveBlock"
 
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
@@ -17,13 +17,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         "The list collector remove block does not contain a Radio answer type"
     )
 
-    ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK = (
-        "AddAnswerForListItem action not found in main block"
-    )
+    NO_REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock action not found"
 
-    REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK = (
-        "RemoveAnswerForListItem action not found in remove block"
-    )
+    NO_REDIRECT_TO_REMOVE_BLOCK = "RedirectToRemoveBlock action not found"
 
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
         "The list collector block contains an add block and edit block"
@@ -37,29 +33,31 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
 
     def validate(self):
         super().validate()
+        try:
+            collector_questions = self.questionnaire_schema.get_all_questions_for_block(
+                self.block
+            )
+            self.validate_collector_questions(
+                collector_questions,
+                self.NO_RADIO_FOR_LIST_COLLECTOR,
+                self.REDIRECT_TO_ADD_BLOCK,
+                self.NO_REDIRECT_TO_ADD_BLOCK,
+            )
 
-        collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-            self.block
-        )
-        self.validate_collector_questions(
-            self.ADD_ANSWER_FOR_LIST_ITEM,
-            collector_questions,
-            self.NO_RADIO_FOR_LIST_COLLECTOR,
-            self.ADD_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_MAIN_BLOCK,
-        )
+            collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
+                self.block["remove_block"]
+            )
+            self.validate_collector_questions(
+                collector_remove_questions,
+                self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
+                self.REDIRECT_TO_REMOVE_BLOCK,
+                self.NO_REDIRECT_TO_REMOVE_BLOCK,
+            )
+            self.validate_list_collector_answer_ids(self.block)
+            self.validate_other_list_collectors()
+        except KeyError as e:
+            self.add_error(self.LIST_COLLECTOR_KEY_MISSING, key=e)
 
-        collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
-            self.block["remove_block"]
-        )
-        self.validate_collector_questions(
-            self.REMOVE_ANSWER_FOR_LIST_ITEM,
-            collector_remove_questions,
-            self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-            self.REMOVE_ANSWER_FOR_LIST_ITEM_ACTION_NOT_IN_REMOVE_BLOCK,
-        )
-
-        self.validate_list_collector_answer_ids(self.block)
-        self.validate_other_list_collectors()
         return self.errors
 
     def validate_list_collector_answer_ids(self, block):

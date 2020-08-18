@@ -38,10 +38,16 @@
           "type": "object",
           "oneOf": [
             {
-              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/listAnswerActions"
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirect_to_add_block"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirectListAnswerActions"
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirect_to_remove_block"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirect_to_add_or_edit_block"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirect_to_list_add_question"
             }
           ]
         }

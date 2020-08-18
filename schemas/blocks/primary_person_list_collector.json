@@ -1,21 +1,6 @@
 {
   "$id": "https://eq.ons.gov.uk/blocks/primary_person_list_collector.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "answer_reference": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
-        "description": "The id of an answer to reference"
-      },
-      "value": {
-        "type": ["string", "integer"],
-        "description": "The value of the answer which should be matched"
-      }
-    },
-    "required": ["id", "value"],
-    "additionalProperties": false
-  },
   "block": {
     "type": "object",
     "properties": {

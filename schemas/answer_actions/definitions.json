@@ -1,24 +1,42 @@
 {
   "$id": "https://eq.ons.gov.uk/answer_actions/definitions.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "listAnswerActions": {
+  "redirect_to_add_block": {
     "type": "object",
-    "description": "List answer actions",
+    "description": "An action that redirects to the add block",
     "properties": {
       "type": {
-        "enum": [
-          "AddAnswerForListItem",
-          "RemoveAnswerForListItem",
-          "AddOrEditAnswerForListItem"
-        ]
+        "enum": ["RedirectToAddBlock"]
       }
     },
     "additionalProperties": false,
     "required": ["type"]
   },
-  "redirectListAnswerActions": {
+  "redirect_to_remove_block": {
     "type": "object",
-    "description": "redirected list answer actions",
+    "description": "An action that redirects to the remove block",
+    "properties": {
+      "type": {
+        "enum": ["RedirectToRemoveBlock"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+  },
+  "redirect_to_add_or_edit_block": {
+    "type": "object",
+    "description": "An action that redirects to the add or edit block",
+    "properties": {
+      "type": {
+        "enum": ["RedirectToAddOrEditBlock"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+  },
+  "redirect_to_list_add_question": {
+    "type": "object",
+    "description": "An action that redirects to a list add question",
     "properties": {
       "type": {
         "enum": ["RedirectToListAddQuestion"]
