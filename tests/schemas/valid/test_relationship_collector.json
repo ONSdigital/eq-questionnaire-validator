@@ -133,7 +133,7 @@
                           "label": "Yeah",
                           "value": "Yeah",
                           "action": {
-                            "type": "RedirectToRemoveBlock"
+                            "type": "RemoveAnswersForListItem"
                           }
                         },
                         {

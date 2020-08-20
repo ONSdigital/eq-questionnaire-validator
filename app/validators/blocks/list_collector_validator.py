@@ -7,7 +7,7 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
     REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock"
-    REDIRECT_TO_REMOVE_BLOCK = "RedirectToRemoveBlock"
+    REDIRECT_TO_REMOVE_BLOCK = "RemoveAnswersForListItem"
 
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
@@ -19,7 +19,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
 
     NO_REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock action not found"
 
-    NO_REDIRECT_TO_REMOVE_BLOCK = "RedirectToRemoveBlock action not found"
+    NO_REDIRECT_TO_REMOVE_BLOCK = "RemoveAnswersForListItem action not found"
 
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
         "The list collector block contains an add block and edit block"
