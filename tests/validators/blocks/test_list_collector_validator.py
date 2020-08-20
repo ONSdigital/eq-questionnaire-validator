@@ -86,7 +86,10 @@ def test_invalid_list_collector_with_no_remove_answer_action():
     validator.validate()
 
     expected_errors = [
-        {"message": validator.NO_REDIRECT_TO_REMOVE_BLOCK, "block_id": "list-collector"}
+        {
+            "message": validator.NO_REMOVE_ANSWERS_FOR_LIST_ITEM,
+            "block_id": "list-collector",
+        }
     ]
 
     assert expected_errors == validator.errors
