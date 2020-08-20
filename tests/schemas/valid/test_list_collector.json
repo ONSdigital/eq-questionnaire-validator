@@ -133,7 +133,7 @@
                           "label": "Yeah",
                           "value": "Yeah",
                           "action": {
-                            "type": "RemoveAnswersForListItem"
+                            "type": "RemoveListItemAndAnswers"
                           }
                         },
                         {
@@ -261,7 +261,7 @@
                           "label": "Yes",
                           "value": "Yes",
                           "action": {
-                            "type": "RemoveAnswersForListItem"
+                            "type": "RemoveListItemAndAnswers"
                           }
                         },
                         {

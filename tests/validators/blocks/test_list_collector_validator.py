@@ -87,7 +87,7 @@ def test_invalid_list_collector_with_no_remove_answer_action():
 
     expected_errors = [
         {
-            "message": validator.NO_REMOVE_ANSWERS_FOR_LIST_ITEM,
+            "message": validator.NO_REMOVE_LIST_ITEM_AND_ANSWERS,
             "block_id": "list-collector",
         }
     ]

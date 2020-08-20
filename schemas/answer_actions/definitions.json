@@ -12,12 +12,12 @@
     "additionalProperties": false,
     "required": ["type"]
   },
-  "remove_answers_for_list_item": {
+  "remove_list_item_and_answers": {
     "type": "object",
     "description": "An action that redirects to the remove block",
     "properties": {
       "type": {
-        "enum": ["RemoveAnswersForListItem"]
+        "enum": ["RemoveListItemAndAnswers"]
       }
     },
     "additionalProperties": false,

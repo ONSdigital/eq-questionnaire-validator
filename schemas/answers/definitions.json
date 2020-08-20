@@ -47,7 +47,7 @@
               "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/redirect_to_list_add_question"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/remove_answers_for_list_item"
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/remove_list_item_and_answers"
             }
           ]
         }
