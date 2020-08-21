@@ -1,15 +1,15 @@
 {
   "$id": "https://eq.ons.gov.uk/answer_actions/definitions.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "redirect_to_add_block": {
+  "redirect_to_list_add_block": {
     "type": "object",
-    "description": "An action that redirects to the add block",
+    "description": "An action that redirects to the list add block",
     "properties": {
       "type": {
-        "enum": ["RedirectToAddBlock"]
+        "enum": ["RedirectToListAddBlock"]
       }
     },
-    "additionalProperties": false,
+    "additionalProperties": true,
     "required": ["type"]
   },
   "remove_list_item_and_answers": {
@@ -18,28 +18,6 @@
     "properties": {
       "type": {
         "enum": ["RemoveListItemAndAnswers"]
-      }
-    },
-    "additionalProperties": false,
-    "required": ["type"]
-  },
-  "redirect_to_add_or_edit_block": {
-    "type": "object",
-    "description": "An action that redirects to the add or edit block",
-    "properties": {
-      "type": {
-        "enum": ["RedirectToAddOrEditBlock"]
-      }
-    },
-    "additionalProperties": false,
-    "required": ["type"]
-  },
-  "redirect_to_list_add_question": {
-    "type": "object",
-    "description": "An action that redirects to a list add question",
-    "properties": {
-      "type": {
-        "enum": ["RedirectToListAddQuestion"]
       },
       "params": {
         "type": "object",
@@ -56,6 +34,6 @@
       }
     },
     "additionalProperties": false,
-    "required": ["type", "params"]
+    "required": ["type"]
   }
 }

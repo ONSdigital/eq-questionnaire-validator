@@ -6,26 +6,21 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
-    REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock"
+    REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS = "RemoveListItemAndAnswers"
 
+    NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
+    NO_REMOVE_LIST_ITEM_AND_ANSWERS = f"{REMOVE_LIST_ITEM_AND_ANSWERS} action not found"
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
     )
-
     NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
         "The list collector remove block does not contain a Radio answer type"
     )
-
-    NO_REDIRECT_TO_ADD_BLOCK = "RedirectToAddBlock action not found"
-
-    NO_REMOVE_LIST_ITEM_AND_ANSWERS = "RemoveListItemAndAnswers action not found"
-
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
         "The list collector block contains an add block and edit block"
         " with different answer ids"
     )
-
     NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = (
         "Multiple list collectors populate a list using different "
         "answer_ids in the add block"
@@ -40,8 +35,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.validate_collector_questions(
                 collector_questions,
                 self.NO_RADIO_FOR_LIST_COLLECTOR,
-                self.REDIRECT_TO_ADD_BLOCK,
-                self.NO_REDIRECT_TO_ADD_BLOCK,
+                self.REDIRECT_TO_LIST_ADD_BLOCK,
+                self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
             )
 
             collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(

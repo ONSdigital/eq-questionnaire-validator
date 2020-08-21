@@ -46,7 +46,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "RedirectToListAddQuestion",
+                          "type": "RedirectToListAddBlock",
                           "params": {
                             "block_id": "non-existent-block-id",
                             "list_name": "non-existent-list-name"
@@ -80,7 +80,7 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "RedirectToAddBlock"
+                          "type": "RedirectToListAddBlock"
                         }
                       },
                       {

@@ -21,7 +21,6 @@ class OptionAnswerValidator(AnswerValidator):
         super().validate()
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
-        self.validate_answer_actions()
         self.validate_default_exists_in_options()
         return self.errors
 
