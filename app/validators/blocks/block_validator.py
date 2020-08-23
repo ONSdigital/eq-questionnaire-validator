@@ -26,7 +26,7 @@ class BlockValidator(Validator):
         self.validate_source_references(source_references)
 
         if self.block["type"] not in ["ListCollector", "PrimaryPersonListCollector"]:
-            self.validate_answer_actions_redirect_to_list_add_block_params()
+            self.validate_redirect_to_list_add_block_params()
 
         return self.errors
 
@@ -69,7 +69,7 @@ class BlockValidator(Validator):
             ):
                 self.add_error(self.ANSWER_SELF_REFERENCE, referenced_id=identifier)
 
-    def validate_answer_actions_redirect_to_list_add_block_params(self):
+    def validate_redirect_to_list_add_block_params(self):
         collector_questions = self.questionnaire_schema.get_all_questions_for_block(
             self.block
         )
