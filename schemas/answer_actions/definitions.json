@@ -7,17 +7,6 @@
     "properties": {
       "type": {
         "enum": ["RedirectToListAddBlock"]
-      }
-    },
-    "additionalProperties": true,
-    "required": ["type"]
-  },
-  "remove_list_item_and_answers": {
-    "type": "object",
-    "description": "An action that redirects to the remove block",
-    "properties": {
-      "type": {
-        "enum": ["RemoveListItemAndAnswers"]
       },
       "params": {
         "type": "object",
@@ -31,6 +20,17 @@
         },
         "additionalProperties": false,
         "required": ["block_id", "list_name"]
+      }
+    },
+    "additionalProperties": true,
+    "required": ["type"]
+  },
+  "remove_list_item_and_answers": {
+    "type": "object",
+    "description": "An action that removes a list item and all answers associated with it",
+    "properties": {
+      "type": {
+        "enum": ["RemoveListItemAndAnswers"]
       }
     },
     "additionalProperties": false,

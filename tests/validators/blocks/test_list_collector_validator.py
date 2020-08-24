@@ -69,7 +69,7 @@ def test_invalid_list_collector_with_no_add_answer_action():
 
     expected_errors = [
         {
-            "message": validator.NO_REDIRECT_TO_LIST_ADD_BLOCK,
+            "message": validator.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
             "block_id": "list-collector",
         }
     ]
@@ -90,7 +90,7 @@ def test_invalid_list_collector_with_no_remove_answer_action():
 
     expected_errors = [
         {
-            "message": validator.NO_REMOVE_LIST_ITEM_AND_ANSWERS,
+            "message": validator.NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION,
             "block_id": "list-collector",
         }
     ]

@@ -6,11 +6,15 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
-    REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
-    REMOVE_LIST_ITEM_AND_ANSWERS = "RemoveListItemAndAnswers"
+    REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
+    REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
 
-    NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
-    NO_REMOVE_LIST_ITEM_AND_ANSWERS = f"{REMOVE_LIST_ITEM_AND_ANSWERS} action not found"
+    NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION = (
+        f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    )
+    NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = (
+        f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    )
     NO_RADIO_FOR_LIST_COLLECTOR = (
         "The list collector block does not contain a Radio answer type"
     )
@@ -35,8 +39,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.validate_collector_questions(
                 collector_questions,
                 self.NO_RADIO_FOR_LIST_COLLECTOR,
-                self.REDIRECT_TO_LIST_ADD_BLOCK,
-                self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
+                self.REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
+                self.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
             )
 
             collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -45,8 +49,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.validate_collector_questions(
                 collector_remove_questions,
                 self.NO_RADIO_FOR_LIST_COLLECTOR_REMOVE,
-                self.REMOVE_LIST_ITEM_AND_ANSWERS,
-                self.NO_REMOVE_LIST_ITEM_AND_ANSWERS,
+                self.REMOVE_LIST_ITEM_AND_ANSWERS_ACTION,
+                self.NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION,
             )
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
