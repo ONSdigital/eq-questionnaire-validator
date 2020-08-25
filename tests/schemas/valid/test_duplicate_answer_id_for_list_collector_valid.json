@@ -31,10 +31,6 @@
           "title": "Variants",
           "blocks": [
             {
-              "add_answer": {
-                "id": "anyone-else-answer",
-                "value": "Yes, I need to add someone"
-              },
               "add_block": {
                 "id": "add-person",
                 "question": {
@@ -175,7 +171,10 @@
                     "options": [
                       {
                         "label": "Yes, I need to add someone",
-                        "value": "Yes, I need to add someone"
+                        "value": "Yes, I need to add someone",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
                       },
                       {
                         "label": "No, I do not need to add anyone",
@@ -189,10 +188,6 @@
                 "title": "A title",
                 "type": "General"
               },
-              "remove_answer": {
-                "id": "remove-confirmation",
-                "value": "Yes, I want to remove this person"
-              },
               "remove_block": {
                 "id": "remove-person",
                 "question": {
@@ -203,7 +198,10 @@
                       "options": [
                         {
                           "label": "Yes, I want to remove this person",
-                          "value": "Yes, I want to remove this person"
+                          "value": "Yes, I want to remove this person",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
                         },
                         {
                           "label": "No, I do not want to remove this person",

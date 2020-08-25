@@ -7,6 +7,8 @@ class BlockValidator(Validator):
     ANSWER_REFERENCE_INVALID = "Invalid answer reference"
     LIST_REFERENCE_INVALID = "Invalid list reference"
     ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
+    ACTION_PARAMS_MISSING = "Action params key missing"
+    ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
 
     def __init__(self, block_element, questionnaire_schema):
         super().__init__(block_element)
@@ -21,6 +23,7 @@ class BlockValidator(Validator):
         source_references = get_object_containing_key(self.block, "identifier")
 
         self.validate_source_references(source_references)
+        self.validate_redirect_to_list_add_block_params()
 
         return self.errors
 
@@ -62,3 +65,28 @@ class BlockValidator(Validator):
                 == self.block["id"]
             ):
                 self.add_error(self.ANSWER_SELF_REFERENCE, referenced_id=identifier)
+
+    def validate_redirect_to_list_add_block_params(self):
+        questions = self.questionnaire_schema.get_all_questions_for_block(self.block)
+
+        for question in questions:
+            for answer in question["answers"]:
+                for option in answer.get("options", []):
+                    action = option.get("action")
+
+                    if action and action["type"] == "RedirectToListAddBlock":
+                        params = action.get("params")
+                        is_list_collector = self.block["type"] in [
+                            "ListCollector",
+                            "PrimaryPersonListCollector",
+                        ]
+
+                        if is_list_collector and params:
+                            self.add_error(
+                                self.ACTION_PARAMS_SHOULDNT_EXIST, block_id=self.block
+                            )
+
+                        elif not is_list_collector and not params:
+                            self.add_error(
+                                self.ACTION_PARAMS_MISSING, block_id=self.block
+                            )

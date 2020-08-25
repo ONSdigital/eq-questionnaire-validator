@@ -21,7 +21,6 @@ class OptionAnswerValidator(AnswerValidator):
         super().validate()
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
-        self.validate_answer_actions()
         self.validate_default_exists_in_options()
         return self.errors
 
@@ -62,23 +61,6 @@ class OptionAnswerValidator(AnswerValidator):
                 self.add_error(
                     self.ANSWER_LABEL_VALUE_MISMATCH, label=label, value=option["value"]
                 )
-
-    def validate_answer_actions(self):
-        for option in self.options:
-
-            action_params = option.get("action", {}).get("params")
-            if not action_params:
-                continue
-
-            list_name = action_params.get("list_name")
-
-            if list_name and list_name not in self.list_names:
-                self.add_error(self.LIST_NAME_MISSING, list_name=list_name)
-
-            block_id = action_params.get("block_id")
-
-            if block_id and block_id not in self.block_ids:
-                self.add_error(self.BLOCK_ID_MISSING, block_id=block_id)
 
     def validate_default_exists_in_options(self):
         default_value = self.answer.get("default")

@@ -151,8 +151,6 @@ def test_id_paths():
             "you-live-here-answer",
         ),
         ("sections.[0].groups.[0].blocks.[1]", "list-collector"),
-        ("sections.[0].groups.[0].blocks.[1].add_answer", "anyone-else"),
-        ("sections.[0].groups.[0].blocks.[1].remove_answer", "remove-confirmation"),
         (
             "sections.[0].groups.[0].blocks.[1].question_variants.[0].question",
             "confirmation-question",

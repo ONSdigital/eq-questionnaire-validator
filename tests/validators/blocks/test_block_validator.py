@@ -56,3 +56,42 @@ def test_invalid_placeholder_list_reference():
     ]
 
     assert expected_errors == validator.errors
+
+
+def test_invalid_answer_action_redirect_to_list_add_block_no_params():
+    filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_no_params.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = BlockValidator(
+        questionnaire_schema.get_block("anyone-else-live-here-block"),
+        questionnaire_schema,
+    )
+
+    expected_error_messages = [
+        {
+            "message": validator.ACTION_PARAMS_MISSING,
+            "block_id": "anyone-else-live-here-block",
+        }
+    ]
+
+    validator.validate()
+
+    assert expected_error_messages == validator.errors
+
+
+def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
+    filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_unexpected_params.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = BlockValidator(
+        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+    )
+
+    expected_error_messages = [
+        {
+            "message": validator.ACTION_PARAMS_SHOULDNT_EXIST,
+            "block_id": "list-collector",
+        }
+    ]
+
+    validator.validate()
+
+    assert expected_error_messages == validator.errors

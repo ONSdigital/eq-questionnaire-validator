@@ -1,0 +1,39 @@
+{
+  "$id": "https://eq.ons.gov.uk/answer_actions/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "redirect_to_list_add_block": {
+    "type": "object",
+    "description": "An action that redirects to the list add block",
+    "properties": {
+      "type": {
+        "enum": ["RedirectToListAddBlock"]
+      },
+      "params": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          },
+          "list_name": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["block_id", "list_name"]
+      }
+    },
+    "additionalProperties": true,
+    "required": ["type"]
+  },
+  "remove_list_item_and_answers": {
+    "type": "object",
+    "description": "An action that removes a list item and all answers associated with it",
+    "properties": {
+      "type": {
+        "enum": ["RemoveListItemAndAnswers"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+  }
+}

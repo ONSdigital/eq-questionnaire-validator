@@ -3,11 +3,10 @@
   "language": "en",
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
-  "survey_id": "001",
-  "title": "Test Routing Location Comparisons",
+  "survey_id": "0",
+  "title": "Test RedirectToListAddQuestion action",
   "theme": "default",
-  "legal_basis": "StatisticsOfTradeAct",
-  "description": "A test survey for routing based comparison with a location",
+  "description": "A questionnaire to test RedirectToListAddQuestion answer action",
   "metadata": [
     {
       "name": "user_id",
@@ -25,17 +24,6 @@
   "sections": [
     {
       "id": "section",
-      "summary": {
-        "show_on_completion": true,
-        "items": [
-          {
-            "type": "List",
-            "for_list": "people",
-            "add_link_text": "Add another person to this household",
-            "empty_list_text": "There are no people"
-          }
-        ]
-      },
       "groups": [
         {
           "id": "group",
@@ -59,7 +47,11 @@
                         "label": "Yes",
                         "value": "Yes",
                         "action": {
-                          "type": "RedirectToListAddBlock"
+                          "type": "RedirectToListAddBlock",
+                          "params": {
+                            "block_id": "extra param",
+                            "list_name": "extra param"
+                          }
                         }
                       },
                       {
@@ -130,8 +122,8 @@
                       "type": "Radio",
                       "options": [
                         {
-                          "label": "Yeah",
-                          "value": "Yeah",
+                          "label": "Yes",
+                          "value": "Yes",
                           "action": {
                             "type": "RemoveListItemAndAnswers"
                           }
@@ -174,85 +166,18 @@
       ]
     },
     {
-      "id": "default-section",
+      "id": "summary-section",
+      "title": "Summary",
       "groups": [
         {
-          "id": "route-group",
-          "blocks": [
-            {
-              "type": "Question",
-              "id": "route-comparison-1",
-              "question": {
-                "answers": [
-                  {
-                    "id": "route-comparison-1-answer",
-                    "label": "Number",
-                    "mandatory": true,
-                    "type": "Number"
-                  }
-                ],
-                "id": "route-comparison-1-question",
-                "title": "Enter a number",
-                "type": "General"
-              },
-              "routing_rules": [
-                {
-                  "goto": {
-                    "block": "route-comparison-3",
-                    "when": [
-                      {
-                        "list": "people",
-                        "id_selector": "primary_person",
-                        "condition": "equals",
-                        "comparison": {
-                          "id": "from_list_item_id",
-                          "source": "location"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "goto": {
-                    "block": "route-comparison-3"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "Interstitial",
-              "id": "route-comparison-2",
-              "content": {
-                "title": "You are not the primary person",
-                "contents": [
-                  {
-                    "description": "This page should be skipped if you are identified as the primary person in the household"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Interstitial",
-              "id": "route-comparison-3",
-              "content": {
-                "title": "This will be shown to all household members",
-                "contents": [
-                  {
-                    "description": "This page should never be skipped"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "id": "summary-group",
           "blocks": [
             {
               "type": "Summary",
               "id": "summary"
             }
-          ]
+          ],
+          "id": "summary-group",
+          "title": "Summary"
         }
       ]
     }

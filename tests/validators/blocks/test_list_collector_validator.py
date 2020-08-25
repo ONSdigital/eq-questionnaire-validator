@@ -3,32 +3,6 @@ from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
-def test_invalid_list_collector_bad_add_answer_reference():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_bad_answer_reference_ids.json"
-    )
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("list-collector")
-    validator = ListCollectorValidator(block, questionnaire_schema)
-
-    expected_errors = [
-        {
-            "message": validator.ADD_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-            "referenced_id": "someone-else",
-            "block_id": "list-collector",
-        },
-        {
-            "message": validator.REMOVE_ANSWER_REFERENCE_NOT_IN_REMOVE_BLOCK,
-            "referenced_id": "delete-confirmation",
-            "block_id": "list-collector",
-        },
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_answer_ids_in_add_and_edit.json"
 
@@ -82,8 +56,10 @@ def test_invalid_list_collector_non_radio():
     assert expected_error_messages == validator.errors
 
 
-def test_invalid_list_collector_with_no_add_option():
-    filename = "schemas/invalid/test_invalid_list_collector_with_no_add_option.json"
+def test_invalid_list_collector_with_no_add_answer_action():
+    filename = (
+        "schemas/invalid/test_invalid_list_collector_with_no_add_answer_action.json"
+    )
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
@@ -93,7 +69,28 @@ def test_invalid_list_collector_with_no_add_option():
 
     expected_errors = [
         {
-            "message": validator.NON_EXISTENT_LIST_COLLECTOR_ADD_ANSWER_VALUE,
+            "message": validator.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
+            "block_id": "list-collector",
+        }
+    ]
+
+    assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_with_no_remove_answer_action():
+    filename = (
+        "schemas/invalid/test_invalid_list_collector_with_no_remove_answer_action.json"
+    )
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = ListCollectorValidator(
+        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION,
             "block_id": "list-collector",
         }
     ]
