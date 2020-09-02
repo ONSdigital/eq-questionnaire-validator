@@ -18,7 +18,14 @@ class TextFieldAnswerValidator(AnswerValidator):
 
     def is_suggestion_url_valid(self):
         if isinstance(self.answer["suggestions_url"], str):
-            return re.match(r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"]) is not None
+            return (
+                re.match(r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"])
+                is not None
+            )
         if isinstance(self.answer["suggestions_url"], dict):
-            return re.match(r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"]["text"]) is not None
-
+            return (
+                re.match(
+                    r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"]["text"]
+                )
+                is not None
+            )

@@ -11,25 +11,23 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "url":
-            {
-              "type": "object",
-              "properties": {
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-          "list_json":
-            {
-              "type": "object",
-              "properties": {
-                "value": {
-                  "type": "string"
-                }
+          "url": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
               }
             }
           },
+          "list_json": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "additionalProperties": false,
         "required": ["url", "list_json"]
       }
