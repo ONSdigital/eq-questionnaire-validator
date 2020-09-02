@@ -1,5 +1,4 @@
 import re
-from urllib.parse import urlparse
 
 from app.validators.answers.answer_validator import AnswerValidator
 
