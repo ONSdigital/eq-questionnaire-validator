@@ -26,7 +26,7 @@
     "guidance": "Submission guidance",
     "title": "Submission title",
     "warning": "Submission warning",
-    "email_confirmation": true
+    "confirmation_email": true
   },
   "sections": [
     {
