@@ -1,0 +1,40 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_suggestions_url.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "format_suggestions_url": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_suggestions_url"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "url":
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+          "list_json":
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+        "additionalProperties": false,
+        "required": ["url", "list_json"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

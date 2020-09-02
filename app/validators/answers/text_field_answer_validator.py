@@ -17,8 +17,8 @@ class TextFieldAnswerValidator(AnswerValidator):
             self.add_error(self.INVALID_SUGGESTION_URL)
 
     def is_suggestion_url_valid(self):
-        parsed_result = urlparse(self.answer["suggestions_url"])
+        if isinstance(self.answer["suggestions_url"], str):
+            return re.match(r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"]) is not None
+        if isinstance(self.answer["suggestions_url"], dict):
+            return re.match(r"[A-Za-z0-9_'{}.:\/-]", self.answer["suggestions_url"]["text"]) is not None
 
-        if parsed_result.scheme and parsed_result.netloc:
-            return True
-        return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None

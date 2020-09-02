@@ -102,6 +102,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json#/format_ordinal"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_suggestions_url.json#/format_suggestions_url"
             }
           ]
         }
