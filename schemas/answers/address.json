@@ -1,0 +1,37 @@
+{
+  "$id": "https://eq.ons.gov.uk/answers/address.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "answer": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
+      },
+      "guidance": {
+        "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["Address"]
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "MANDATORY_ADDRESS": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            }
+          }
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": ["id", "type", "mandatory"]
+  }
+}
