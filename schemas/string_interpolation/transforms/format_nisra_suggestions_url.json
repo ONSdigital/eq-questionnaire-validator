@@ -1,12 +1,12 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_suggestions_url.json",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_nisra_suggestions_url.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "format_suggestions_url": {
+  "format_nisra_suggestions_url": {
     "type": "object",
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_suggestions_url"]
+        "enum": ["format_nisra_suggestions_url"]
       },
       "arguments": {
         "type": "object",
