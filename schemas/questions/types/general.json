@@ -44,6 +44,9 @@
         "items": {
           "oneOf": [
             {
+              "$ref": "https://eq.ons.gov.uk/answers/address.json#/answer"
+            },
+            {
               "$ref": "https://eq.ons.gov.uk/answers/checkbox.json#/answer"
             },
             {
