@@ -10,6 +10,10 @@
       "number": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "page_title": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "description": "Custom page title used the interstitial page."
+      },
       "type": {
         "type": "string",
         "enum": ["Interstitial"]

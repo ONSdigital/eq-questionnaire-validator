@@ -155,6 +155,10 @@
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "description": "Title used for the navigation container."
           },
+          "page_title": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "Custom Page Title used for the section summary."
+          },
           "title_from_answers": {
             "type": "array",
             "description": "Takes a list of answer ids. Title will be generated from answer values concatenated together with spaces."

@@ -14,6 +14,10 @@
       "title": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "page_title": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "description": "Custom page title used for the relationship collector pages."
+      },
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
