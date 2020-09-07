@@ -54,7 +54,14 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "for_list", "add_block", "edit_block", "remove_block"],
+    "required": [
+      "id",
+      "type",
+      "for_list",
+      "add_block",
+      "edit_block",
+      "remove_block"
+    ],
     "oneOf": [
       {
         "required": ["question"]
