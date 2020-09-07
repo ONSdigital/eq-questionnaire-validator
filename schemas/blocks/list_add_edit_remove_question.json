@@ -9,7 +9,7 @@
       },
       "page_title": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-        "description": "Custom page title used for list collector action page."
+        "description": "Custom page title used for list collector action pages."
       },
       "cancel_text": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"

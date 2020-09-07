@@ -26,7 +26,7 @@
       },
       "page_title": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-        "description": "Custom page title used for the list collector page."
+        "description": "Custom page title used for list collector pages."
       },
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
@@ -54,14 +54,7 @@
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "for_list",
-      "add_block",
-      "edit_block",
-      "remove_block"
-    ],
+    "required": ["id", "type", "for_list", "add_block", "edit_block", "remove_block"],
     "oneOf": [
       {
         "required": ["question"]

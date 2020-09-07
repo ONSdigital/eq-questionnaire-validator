@@ -157,7 +157,7 @@
           },
           "page_title": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "Custom Page Title used for the section summary."
+            "description": "Custom Page Title used for section summary pages."
           },
           "title_from_answers": {
             "type": "array",
