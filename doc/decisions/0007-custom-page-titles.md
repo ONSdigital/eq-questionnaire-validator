@@ -56,7 +56,9 @@ Python's string formatting will be used to resolve the `list_item_index` and `to
     {
       "id": "section",
       "title": "Household",
-      "page_title": "Custom section summary page title"
+      "summary": {
+        "page_title": "Custom section summary page title"
+      }
     }
   ]
 }
