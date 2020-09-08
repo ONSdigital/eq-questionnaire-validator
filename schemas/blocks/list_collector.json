@@ -27,6 +27,9 @@
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "same_name_answer_ids": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_array"
+      },
       "question": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
