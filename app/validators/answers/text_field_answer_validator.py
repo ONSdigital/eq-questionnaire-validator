@@ -21,4 +21,4 @@ class TextFieldAnswerValidator(AnswerValidator):
 
         if parsed_result.scheme and parsed_result.netloc:
             return True
-        return re.match(r"^[A-Za-z0-9_.\-/~]+$", parsed_result.path) is not None
+        return re.match(r"^[A-Za-z0-9_.\-/~{}]+$", parsed_result.path) is not None
