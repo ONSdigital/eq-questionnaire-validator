@@ -12,7 +12,6 @@
       },
       "page_title": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-        "description": "Custom page title used for the Question page."
       },
       "type": {
         "type": "string",
