@@ -8,7 +8,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "cancel_text": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
