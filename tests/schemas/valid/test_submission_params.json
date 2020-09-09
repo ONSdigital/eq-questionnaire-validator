@@ -1,0 +1,73 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "001",
+  "title": "Submission Params",
+  "theme": "default",
+  "description": "A questionnaire to test submission params",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "submission": {
+    "button": "Submission button text",
+    "guidance": "Submission guidance",
+    "title": "Submission title",
+    "warning": "Submission warning",
+    "confirmation_email": true
+  },
+  "sections": [
+    {
+      "id": "submission-params-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "submission-params",
+              "question": {
+                "answers": [
+                  {
+                    "id": "submission-params-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "submission-params-question",
+                "title": "Did you know this schema was test submission params?",
+                "type": "General"
+              },
+              "type": "Question"
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "group"
+        }
+      ]
+    }
+  ]
+}
