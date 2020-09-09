@@ -133,6 +133,10 @@
         "warning": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
           "description": "The warning when the questionnaire is complete."
+        },
+        "confirmation_email": {
+          "type": "boolean",
+          "description": "A flag that is used to determine if an email confirmation is available on questionnaire completion"
         }
       },
       "additionalProperties": false,
