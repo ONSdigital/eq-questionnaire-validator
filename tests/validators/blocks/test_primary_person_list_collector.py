@@ -59,7 +59,7 @@ def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action
     assert validator.validate() == expected_errors
 
 
-def test_invalid_list_collector_same_name_answer_id_reference():
+def test_invalid_primary_person_list_collector_same_name_answer_id_reference():
     filename = "schemas/invalid/test_invalid_list_collector_same_name_answer_ids.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
