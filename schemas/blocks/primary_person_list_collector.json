@@ -11,6 +11,9 @@
         "type": "string",
         "enum": ["PrimaryPersonListCollector"]
       },
+      "page_title": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      },
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },

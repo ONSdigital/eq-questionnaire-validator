@@ -10,6 +10,9 @@
       "title": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "page_title": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      },
       "type": {
         "type": "string",
         "enum": ["AnswerSummary"]
