@@ -304,8 +304,11 @@
   },
   "string_array": {
     "type": "array",
-    "items": { "type": "string" },
-    "uniqueItems": true
+    "items": {
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+    },
+    "uniqueItems": true,
+    "minLength": 1
   },
   "string_array_with_placeholders": {
     "type": "array",
