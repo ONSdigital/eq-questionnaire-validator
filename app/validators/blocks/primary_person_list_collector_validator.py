@@ -29,6 +29,10 @@ class PrimaryPersonListCollectorValidator(
             self.REDIRECT_TO_LIST_ADD_BLOCK,
             self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
         )
+        answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
+            self.block["id"]
+        )
+        self.validate_same_name_answer_ids(answer_ids)
 
         self.validate_primary_person_list_collector_answer_ids(self.block)
         return self.errors

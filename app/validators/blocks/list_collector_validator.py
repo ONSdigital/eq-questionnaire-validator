@@ -42,7 +42,10 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 self.REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
                 self.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
             )
-
+            answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
+                self.block["id"]
+            )
+            self.validate_same_name_answer_ids(answer_ids)
             collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
                 self.block["remove_block"]
             )

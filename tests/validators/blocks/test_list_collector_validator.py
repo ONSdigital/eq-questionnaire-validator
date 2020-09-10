@@ -96,3 +96,23 @@ def test_invalid_list_collector_with_no_remove_answer_action():
     ]
 
     assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_same_name_answer_id_reference():
+    filename = "schemas/invalid/test_invalid_list_collector_same_name_answer_ids.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = ListCollectorValidator(
+        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.MISSING_SAME_NAME_ANSWER_ID,
+            "block_id": "list-collector",
+            "answer_id": "surname",
+        }
+    ]
+
+    assert expected_errors == validator.errors
