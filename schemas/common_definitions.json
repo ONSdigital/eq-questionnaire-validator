@@ -302,6 +302,14 @@
     "type": "string",
     "minLength": 1
   },
+  "string_array": {
+    "type": "array",
+    "items": {
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+    },
+    "uniqueItems": true,
+    "minItems": 1
+  },
   "string_array_with_placeholders": {
     "type": "array",
     "items": {

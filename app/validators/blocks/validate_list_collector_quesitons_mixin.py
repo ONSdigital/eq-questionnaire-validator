@@ -10,6 +10,8 @@ def _options_contain_action_type(options, expected_action):
 
 
 class ValidateListCollectorQuestionsMixin(Validator):
+    MISSING_SAME_NAME_ANSWER_ID = "Invalid id in same_name_answer_ids"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -29,3 +31,12 @@ class ValidateListCollectorQuestionsMixin(Validator):
                     collector_answer["options"], expected_action
                 ):
                     self.add_error(missing_action_error)
+
+    def validate_same_name_answer_ids(self, answer_ids):
+        same_name_item_answer_ids = self.schema_element.get("same_name_answer_ids", [])
+
+        for same_name_answer_id in same_name_item_answer_ids:
+            if same_name_answer_id not in answer_ids:
+                self.add_error(
+                    self.MISSING_SAME_NAME_ANSWER_ID, answer_id=same_name_answer_id
+                )
