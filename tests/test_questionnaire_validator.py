@@ -197,6 +197,7 @@ def test_duplicate_answer_ids():
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "answer-2"},
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "question-1"},
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-2"},
+        {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-and-question"},
     ]
 
     assert all(

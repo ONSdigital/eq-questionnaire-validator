@@ -33,14 +33,6 @@
               "id": "list-collector",
               "type": "ListCollector",
               "for_list": "people",
-              "add_answer": {
-                "id": "anyone-else",
-                "value": "Yes"
-              },
-              "remove_answer": {
-                "id": "remove-confirmation",
-                "value": "Yes"
-              },
               "question": {
                 "id": "confirmation-question",
                 "type": "AddListQuestion",
@@ -53,7 +45,10 @@
                     "options": [
                       {
                         "label": "Yes",
-                        "value": "Yes"
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
                       },
                       {
                         "label": "No",
@@ -124,7 +119,10 @@
                       "options": [
                         {
                           "label": "Yeah",
-                          "value": "Yeah"
+                          "value": "Yeah",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
                         },
                         {
                           "label": "No",
@@ -140,14 +138,6 @@
               "id": "another-list-collector",
               "type": "ListCollector",
               "for_list": "people",
-              "add_answer": {
-                "id": "another-anyone-else",
-                "value": "Yes"
-              },
-              "remove_answer": {
-                "id": "another-remove-confirmation",
-                "value": "Yes"
-              },
               "question": {
                 "id": "another-confirmation-question",
                 "type": "General",
@@ -160,7 +150,10 @@
                     "options": [
                       {
                         "label": "Yes",
-                        "value": "Yes"
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
                       },
                       {
                         "label": "No",
@@ -231,7 +224,10 @@
                       "options": [
                         {
                           "label": "Yes",
-                          "value": "Yes"
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
                         },
                         {
                           "label": "No",

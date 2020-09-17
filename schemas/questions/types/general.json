@@ -14,10 +14,10 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_array_with_placeholders"
       },
       "instruction": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_array_with_placeholders"
       },
       "warning": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
@@ -43,6 +43,9 @@
         "minItems": 1,
         "items": {
           "oneOf": [
+            {
+              "$ref": "https://eq.ons.gov.uk/answers/address.json#/answer"
+            },
             {
               "$ref": "https://eq.ons.gov.uk/answers/checkbox.json#/answer"
             },

@@ -7,15 +7,10 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 class PrimaryPersonListCollectorValidator(
     BlockValidator, ValidateListCollectorQuestionsMixin
 ):
+    REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
+    NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
         "The primary person list collector block does not contain a Radio answer type"
-    )
-    NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE = (
-        "The primary person list collector block has an "
-        "add_or_edit_answer value that is not present in the answer values"
-    )
-    ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK = (
-        "add_or_edit_answer reference uses id not found in main block question"
     )
     NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT = (
         "Multiple primary person list collectors "
@@ -25,30 +20,22 @@ class PrimaryPersonListCollectorValidator(
     def validate(self):
         super().validate()
 
-        self._validate_primary_person_list_answer_references(self.block)
-
         collector_questions = self.questionnaire_schema.get_all_questions_for_block(
             self.block
         )
-
         self.validate_collector_questions(
             collector_questions,
-            self.block["add_or_edit_answer"]["value"],
             self.NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR,
-            self.NON_EXISTENT_PRIMARY_PERSON_LIST_COLLECTOR_ANSWER_VALUE,
+            self.REDIRECT_TO_LIST_ADD_BLOCK,
+            self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
         )
+        answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
+            self.block["id"]
+        )
+        self.validate_same_name_answer_ids(answer_ids)
 
         self.validate_primary_person_list_collector_answer_ids(self.block)
         return self.errors
-
-    def _validate_primary_person_list_answer_references(self, block):
-        main_answer_ids = self.questionnaire_schema.get_all_answer_ids(block["id"])
-
-        if block["add_or_edit_answer"]["id"] not in main_answer_ids:
-            self.add_error(
-                self.ADD_OR_EDIT_ANSWER_REFERENCE_NOT_IN_MAIN_BLOCK,
-                referenced_id=block["add_or_edit_answer"]["id"],
-            )
 
     def validate_primary_person_list_collector_answer_ids(self, block):
         """

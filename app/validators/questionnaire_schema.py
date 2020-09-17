@@ -189,6 +189,7 @@ class QuestionnaireSchema:
             - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
         """
         unique_ids_per_block = defaultdict(set)
+        all_block_ids = []
         non_block_ids = []
         all_ids = []
 
@@ -196,18 +197,23 @@ class QuestionnaireSchema:
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split(".")
+                is_block_id = len(path_list) == 6
+                if is_block_id:
+                    all_block_ids.append(value)
+                else:
+                    block_path = path_list[: path_list.index("blocks") + 2]
 
-                block_path = path_list[: path_list.index("blocks") + 2]
-
-                string_path = ".".join(block_path)
-                # Since unique_ids_per_block is a set, duplicate ids will only be recorded once within the block.
-                unique_ids_per_block[string_path].add(value)
+                    string_path = ".".join(block_path)
+                    # Since unique_ids_per_block is a set, duplicate ids will only be recorded once within the block.
+                    unique_ids_per_block[string_path].add(value)
             else:
                 non_block_ids.append(value)
 
         for block_ids in unique_ids_per_block.values():
             all_ids.extend(block_ids)
+
         all_ids.extend(non_block_ids)
+        all_ids.extend(all_block_ids)
 
         return all_ids
 
@@ -330,6 +336,17 @@ class QuestionnaireSchema:
             questions.append(single_question)
 
         return questions
+
+    @lru_cache
+    def get_list_collector_answer_ids(self, block_id):
+        block = self.blocks_by_id[block_id]
+        if "add_or_edit_block" in block:
+            return self.get_all_answer_ids(block["add_or_edit_block"]["id"])
+
+        add_answer_ids = self.get_all_answer_ids(block["add_block"]["id"])
+
+        edit_answer_ids = self.get_all_answer_ids(block["edit_block"]["id"])
+        return add_answer_ids | edit_answer_ids
 
     @lru_cache
     def get_all_answer_ids(self, block_id):
