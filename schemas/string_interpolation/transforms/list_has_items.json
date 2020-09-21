@@ -1,25 +1,22 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/name_is_duplicate.json",
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/list_has_items.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "name_is_duplicate": {
+  "list_has_items": {
     "type": "object",
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["name_is_duplicate"]
+        "enum": ["contains"]
       },
       "arguments": {
         "type": "object",
         "properties": {
-          "same_name_item_ids": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
-          },
-          "list_item_id": {
+          "list_to_check": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           }
         },
         "additionalProperties": false,
-        "required": ["same_name_item_ids", "list_item_id"]
+        "required": ["list_to_check"]
       }
     },
     "additionalProperties": false,
