@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["contains"]
+        "enum": ["list_has_items"]
       },
       "arguments": {
         "type": "object",
