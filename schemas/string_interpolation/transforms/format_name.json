@@ -11,7 +11,7 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "include_middle_name": {
+          "include_middle_names": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
           },
           "first_name": {
@@ -29,7 +29,7 @@
           "first_name",
           "middle_names",
           "last_name",
-          "include_middle_name"
+          "include_middle_names"
         ]
       }
     },
