@@ -65,6 +65,15 @@
           "type": "object",
           "anyOf": [
             {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/contains.json#/contains"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/list_has_items.json#/list_has_items"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_name.json#/format_name"
+            },
+            {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_number.json#/format_number"
             },
             {
@@ -147,11 +156,22 @@
       "source": {
         "description": "The data source.",
         "type": "string",
-        "enum": ["answers", "metadata", "collection_metadata", "list"]
+        "enum": [
+          "answers",
+          "metadata",
+          "collection_metadata",
+          "list",
+          "location"
+        ]
       },
       "identifier": {
         "description": "The identifier of the item in the data source. This would be an answer id for answers, a metadata property name for metadata, or a list name for lists. The array option allows multiple values to be passed as a list to a transform.",
         "type": ["string", "array"]
+      },
+      "id_selector": {
+        "description": "The property to return from the source.",
+        "type": "string",
+        "enum": ["same_name_items"]
       },
       "list_item_selector": {
         "description": "The identifier and source of the list item.",

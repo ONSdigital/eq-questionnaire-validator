@@ -1,0 +1,28 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/contains.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "contains": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["contains"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "list_to_check": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+          },
+          "value": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["list_to_check", "value"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}
