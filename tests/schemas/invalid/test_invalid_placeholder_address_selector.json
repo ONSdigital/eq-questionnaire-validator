@@ -1,0 +1,85 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "001",
+  "title": "Other input fields",
+  "theme": "default",
+  "description": "A questionnaire to test textfields",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "name",
+              "question": {
+                "answers": [
+                  {
+                    "id": "name-answer",
+                    "label": "What is your name?",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ],
+                "id": "name-question",
+                "title": "Title",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "age",
+              "question": {
+                "type": "General",
+                "id": "age-question",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "name-answer",
+                      "value": {
+                        "identifier": "name-answer",
+                        "source": "answers",
+                        "selector": "line1"
+                      }
+                    }
+                  ],
+                  "text": "What is {name-answer} age?"
+                },
+                "answers": [
+                  {
+                    "id": "age-answer",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ],
+          "id": "group"
+        }
+      ]
+    }
+  ]
+}

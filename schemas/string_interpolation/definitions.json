@@ -153,6 +153,11 @@
         "description": "The identifier of the item in the data source. This would be an answer id for answers, a metadata property name for metadata, or a list name for lists. The array option allows multiple values to be passed as a list to a transform.",
         "type": ["string", "array"]
       },
+      "selector": {
+        "type": "string",
+        "description": "Address answer type field selector",
+        "enum": ["line1", "line2", "town", "postcode"]
+      },
       "list_item_selector": {
         "description": "The identifier and source of the list item.",
         "type": "object",

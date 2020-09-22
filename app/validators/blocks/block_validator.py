@@ -3,10 +3,12 @@ from app.validators.validator import Validator
 
 
 class BlockValidator(Validator):
-    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
     ANSWER_REFERENCE_INVALID = "Invalid answer reference"
-    LIST_REFERENCE_INVALID = "Invalid list reference"
     ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
+    LIST_REFERENCE_INVALID = "Invalid list reference"
+    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+    SELECTOR_USED_FOR_NON_ADDRESS_TYPE = "Invalid use of selector"
+
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
 
@@ -36,7 +38,8 @@ class BlockValidator(Validator):
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                self.validate_answer_source_reference(identifiers)
+                has_selector = "selector" in source_reference
+                self.validate_answer_source_reference(identifiers, has_selector)
 
             elif source == "metadata":
                 self.validate_metadata_source_reference(identifiers)
@@ -56,15 +59,22 @@ class BlockValidator(Validator):
             if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(self.LIST_REFERENCE_INVALID, id=identifier)
 
-    def validate_answer_source_reference(self, identifiers):
+    def validate_answer_source_reference(self, identifiers, has_selector=False):
+        answers_with_context = self.questionnaire_schema.answers_with_context
+
         for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.answers_with_context:
+            if identifier not in answers_with_context:
                 self.add_error(self.ANSWER_REFERENCE_INVALID, referenced_id=identifier)
-            elif (
-                self.questionnaire_schema.answers_with_context[identifier]["block"]
-                == self.block["id"]
-            ):
+            elif answers_with_context[identifier]["block"] == self.block["id"]:
                 self.add_error(self.ANSWER_SELF_REFERENCE, referenced_id=identifier)
+
+            if (
+                has_selector
+                and answers_with_context[identifier]["answer"]["type"] != "Address"
+            ):
+                self.add_error(
+                    self.SELECTOR_USED_FOR_NON_ADDRESS_TYPE, referenced_id=identifier
+                )
 
     def validate_redirect_to_list_add_block_params(self):
         questions = self.questionnaire_schema.get_all_questions_for_block(self.block)

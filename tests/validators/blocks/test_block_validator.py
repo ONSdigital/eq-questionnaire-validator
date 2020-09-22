@@ -38,6 +38,27 @@ def test_invalid_reference():
     assert validator.errors == expected_errors
 
 
+def test_invalid_placeholder_address_field_selector():
+    filename = "schemas/invalid/test_invalid_placeholder_address_selector.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = BlockValidator(
+        questionnaire_schema.get_block("age"), questionnaire_schema
+    )
+
+    validator.validate_source_references(
+        [{"identifier": "name-answer", "source": "answers", "selector": "line1"}]
+    )
+
+    expected_errors = [
+        {
+            "message": BlockValidator.SELECTOR_USED_FOR_NON_ADDRESS_TYPE,
+            "referenced_id": "name-answer",
+            "block_id": "age",
+        }
+    ]
+    assert validator.errors == expected_errors
+
+
 def test_invalid_placeholder_list_reference():
     filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
 
