@@ -403,7 +403,8 @@
               ]
             }
           ]
-        }
+        },
+        "page_title": "repeating page title"
       },
       "groups": [
         {
