@@ -4,9 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "001",
-  "title": "Other input fields",
+  "title": "Invalid address selector placeholder",
   "theme": "default",
-  "description": "A questionnaire to test textfields",
+  "description": "A questionnaire to test address selector placeholder",
   "metadata": [
     {
       "name": "user_id",
