@@ -112,6 +112,9 @@
       "MANDATORY_DURATION": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "MANDATORY_MOBILE_NUMBER": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      },
       "NUMBER_TOO_SMALL": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },

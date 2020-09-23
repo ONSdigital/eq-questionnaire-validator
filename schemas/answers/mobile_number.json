@@ -30,6 +30,9 @@
         "type": "object",
         "properties": {
           "messages": {
+            "MANDATORY_MOBILE_NUMBER": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            },
             "INVALID_MOBILE_NUMBER": {
               "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
             }
