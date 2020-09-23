@@ -176,7 +176,8 @@
       "selector": {
         "type": "string",
         "description": "Address answer type field selector",
-        "enum": ["line1", "line2", "town", "postcode"],
+        "enum": ["line1", "line2", "town", "postcode"]
+      },
       "list_item_selector": {
         "description": "The identifier and source of the list item.",
         "type": "object",
