@@ -29,6 +29,26 @@
             }
           }
         }
+      },
+      "lookup_options": {
+        "type": "object",
+        "properties": {
+          "address_type": {
+            "type": "string",
+            "enum": ["Educational", "Residential", "Workplace"]
+          },
+          "one_year_ago": {
+            "type": "boolean",
+            "description": "Setting this to true will search the address index as of one year ago. If omitted, the latest index will be searched."
+          },
+          "region_code": {
+            "type": "string",
+            "enum": ["GB-ENG", "GB-WLS", "GB-NIR"],
+            "description": "Which region to search for addresses in."
+          }
+        },
+        "additionalProperties": false,
+        "required": ["address_type", "region_code"]
       }
     },
     "additionalProperties": false,
