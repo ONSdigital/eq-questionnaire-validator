@@ -87,6 +87,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/answers/relationship.json#/answer"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answers/mobile_number.json#/answer"
             }
           ]
         }
