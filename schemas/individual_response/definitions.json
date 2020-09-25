@@ -3,6 +3,10 @@
   "individual_response": {
     "type": "object",
     "properties": {
+      "show_on_hub": {
+        "description": "Determines whether the individual response link is shown on the hub. Default is true",
+        "type": "boolean"
+      },
       "for_list": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "description": "The list from which an individual response can be requested"
