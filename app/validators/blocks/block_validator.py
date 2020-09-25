@@ -12,7 +12,9 @@ class BlockValidator(Validator):
     LIST_REFERENCE_INVALID = "Invalid list reference"
     METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 
-    COMPOSITE_ANSWERS = {"Address": ["line1", "line2", "town", "postcode"]}
+    COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
+        "Address": ["line1", "line2", "town", "postcode"]
+    }
 
     def __init__(self, block_element, questionnaire_schema):
         super().__init__(block_element)
@@ -74,11 +76,13 @@ class BlockValidator(Validator):
             if selector:
                 answer_type = answers_with_context[identifier]["answer"]["type"]
 
-                if answer_type not in self.COMPOSITE_ANSWERS:
+                if answer_type not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP:
                     self.add_error(
                         self.COMPOSITE_ANSWER_INVALID, referenced_id=identifier
                     )
-                elif selector not in self.COMPOSITE_ANSWERS[answer_type]:
+                elif (
+                    selector not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP[answer_type]
+                ):
                     self.add_error(
                         self.COMPOSITE_ANSWER_FIELD_INVALID, referenced_id=identifier
                     )
