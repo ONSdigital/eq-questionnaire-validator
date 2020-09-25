@@ -3,12 +3,18 @@ from app.validators.validator import Validator
 
 
 class BlockValidator(Validator):
-    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
-    ANSWER_REFERENCE_INVALID = "Invalid answer reference"
-    LIST_REFERENCE_INVALID = "Invalid list reference"
-    ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
+    ANSWER_REFERENCE_INVALID = "Invalid answer reference"
+    ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
+    COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
+    COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
+    LIST_REFERENCE_INVALID = "Invalid list reference"
+    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+
+    COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
+        "Address": ["line1", "line2", "town", "postcode"]
+    }
 
     def __init__(self, block_element, questionnaire_schema):
         super().__init__(block_element)
@@ -36,7 +42,8 @@ class BlockValidator(Validator):
                 identifiers = source_reference["identifier"]
 
             if source == "answers":
-                self.validate_answer_source_reference(identifiers)
+                selector = source_reference.get("selector")
+                self.validate_answer_source_reference(identifiers, selector)
 
             elif source == "metadata":
                 self.validate_metadata_source_reference(identifiers)
@@ -56,15 +63,29 @@ class BlockValidator(Validator):
             if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(self.LIST_REFERENCE_INVALID, id=identifier)
 
-    def validate_answer_source_reference(self, identifiers):
+    def validate_answer_source_reference(self, identifiers, selector=None):
+        answers_with_context = self.questionnaire_schema.answers_with_context
+
         for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.answers_with_context:
+            if identifier not in answers_with_context:
                 self.add_error(self.ANSWER_REFERENCE_INVALID, referenced_id=identifier)
-            elif (
-                self.questionnaire_schema.answers_with_context[identifier]["block"]
-                == self.block["id"]
-            ):
+
+            elif answers_with_context[identifier]["block"] == self.block["id"]:
                 self.add_error(self.ANSWER_SELF_REFERENCE, referenced_id=identifier)
+
+            if selector:
+                answer_type = answers_with_context[identifier]["answer"]["type"]
+
+                if answer_type not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP:
+                    self.add_error(
+                        self.COMPOSITE_ANSWER_INVALID, referenced_id=identifier
+                    )
+                elif (
+                    selector not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP[answer_type]
+                ):
+                    self.add_error(
+                        self.COMPOSITE_ANSWER_FIELD_INVALID, referenced_id=identifier
+                    )
 
     def validate_redirect_to_list_add_block_params(self):
         questions = self.questionnaire_schema.get_all_questions_for_block(self.block)

@@ -38,6 +38,67 @@ def test_invalid_reference():
     assert validator.errors == expected_errors
 
 
+def test_invalid_composite_answer_in_selector():
+    questionnaire_schema = QuestionnaireSchema({})
+    validator = BlockValidator({"id": "confirm-name"}, questionnaire_schema)
+    validator.questionnaire_schema.answers_with_context = {
+        "name-answer": {
+            "answer": {"id": "name-answer", "type": "TextField"},
+            "block": "name",
+        },
+        "confirm-name-answer": {
+            "answer": {"id": "confirm-name-answer"},
+            "block": "confirm-name",
+        },
+    }
+    validator.validate_source_references(
+        [{"identifier": "name-answer", "source": "answers", "selector": "line1"}]
+    )
+
+    expected_errors = [
+        {
+            "message": BlockValidator.COMPOSITE_ANSWER_INVALID,
+            "referenced_id": "name-answer",
+            "block_id": "confirm-name",
+        }
+    ]
+    assert validator.errors == expected_errors
+
+
+def test_invalid_composite_answer_field_in_selector():
+    questionnaire_schema = QuestionnaireSchema({})
+
+    validator = BlockValidator({"id": "confirm-address"}, questionnaire_schema)
+    validator.questionnaire_schema.answers_with_context = {
+        "address-answer": {
+            "answer": {"id": "address-answer", "type": "Address"},
+            "block": "name",
+        },
+        "confirm-address-answer": {
+            "answer": {"id": "confirm-address-answer"},
+            "block": "confirm-address",
+        },
+    }
+    validator.validate_source_references(
+        [
+            {
+                "identifier": "address-answer",
+                "source": "answers",
+                "selector": "invalid-field",
+            }
+        ]
+    )
+
+    expected_errors = [
+        {
+            "message": BlockValidator.COMPOSITE_ANSWER_FIELD_INVALID,
+            "referenced_id": "address-answer",
+            "block_id": "confirm-address",
+        }
+    ]
+    assert validator.errors == expected_errors
+
+
 def test_invalid_placeholder_list_reference():
     filename = "schemas/invalid/test_invalid_placeholder_plurals.json"
 

@@ -173,6 +173,10 @@
         "type": "string",
         "enum": ["same_name_items"]
       },
+      "selector": {
+        "type": "string",
+        "description": "Field selector for composite Answer"
+      },
       "list_item_selector": {
         "description": "The identifier and source of the list item.",
         "type": "object",
