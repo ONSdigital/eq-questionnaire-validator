@@ -5,7 +5,8 @@
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "type": "string",
+        "enum": ["relationships"]
       },
       "type": {
         "type": "string",
@@ -25,6 +26,9 @@
       },
       "question_variants": {
         "$ref": "definitions.json#/question_variants"
+      },
+      "unrelated_relationship_block": {
+        "$ref": "https://eq.ons.gov.uk/blocks/unrelated_relationship_block.json#/block"
       },
       "routing_rules": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
