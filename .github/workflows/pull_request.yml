@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - run: |
           echo "::set-env name=PYTHON_VERSION::$(python -c 'import platform; print(platform.python_version())')"
       - name: Install Pipenv
@@ -53,9 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - run: |
           echo "::set-env name=PYTHON_VERSION::$(python -c 'import platform; print(platform.python_version())')"
       - name: Install pipenv
