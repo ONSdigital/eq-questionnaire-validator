@@ -27,7 +27,7 @@
       "question_variants": {
         "$ref": "definitions.json#/question_variants"
       },
-      "unrelated_relationship_block": {
+      "unrelated_block": {
         "$ref": "https://eq.ons.gov.uk/blocks/unrelated_relationship_block.json#/block"
       },
       "routing_rules": {
