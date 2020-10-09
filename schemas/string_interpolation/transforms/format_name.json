@@ -12,7 +12,14 @@
         "type": "object",
         "properties": {
           "include_middle_names": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "oneOf": [
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
           },
           "first_name": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
