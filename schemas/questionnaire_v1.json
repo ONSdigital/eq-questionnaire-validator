@@ -137,6 +137,10 @@
         "confirmation_email": {
           "type": "boolean",
           "description": "A flag that is used to determine if an email confirmation is available on questionnaire completion"
+        },
+        "feedback": {
+          "type": "boolean",
+          "description": "A flag that is used to determine if a feedback is available on questionnaire completion"
         }
       },
       "additionalProperties": false,
