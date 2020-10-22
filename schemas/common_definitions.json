@@ -49,6 +49,9 @@
         },
         {
           "required": ["list"]
+        },
+        {
+          "required": ["definition"]
         }
       ],
       "properties": {
@@ -62,6 +65,24 @@
           "type": "array",
           "items": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+          }
+        },
+        "definition": {
+          "description": "Definition title and description.",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "contents"
+            ],
+            "properties": {
+              "title": {
+                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              },
+              "contents": {
+                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
+              }
+            }
           }
         }
       },
