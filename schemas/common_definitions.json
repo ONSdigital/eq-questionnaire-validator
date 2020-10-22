@@ -71,10 +71,7 @@
           "description": "Definition title and description.",
           "items": {
             "type": "object",
-            "required": [
-              "title",
-              "contents"
-            ],
+            "required": ["title", "contents"],
             "properties": {
               "title": {
                 "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
