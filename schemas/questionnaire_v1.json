@@ -20,14 +20,6 @@
     "messages": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/messages"
     },
-    "eq_id": {
-      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-      "description": "Used in combination with the form_type to uniquely identify a questionnaire."
-    },
-    "form_type": {
-      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-      "description": "Used in combination with the eq_id to uniquely identify a questionnaire."
-    },
     "mime_type": {
       "type": "string"
     },
@@ -57,6 +49,16 @@
     },
     "legal_basis": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+    },
+    "survey": {
+      "enum": ["CENSUS", "CCS"]
+    },
+    "form_type": {
+      "enum": ["H", "I", "C"]
+    },
+    "region_code": {
+      "type": "string",
+      "pattern": "^GB-[A-Z]{3}$"
     },
     "metadata": {
       "type": "array",
