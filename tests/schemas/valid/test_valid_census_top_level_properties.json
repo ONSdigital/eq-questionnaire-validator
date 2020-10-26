@@ -4,6 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "3",
+  "survey": "CENSUS",
+  "form_type": "H",
+  "region_code": "GB-WLS",
   "title": "Metadata",
   "theme": "default",
   "legal_basis": "StatisticsOfTradeAct",
@@ -21,10 +24,6 @@
     },
     {
       "name": "ru_name",
-      "type": "string"
-    },
-    {
-      "name": "test_metadata",
       "type": "string"
     }
   ],
