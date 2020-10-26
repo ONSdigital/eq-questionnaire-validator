@@ -51,10 +51,12 @@
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
     },
     "survey": {
-      "enum": ["CENSUS", "CCS"]
+      "enum": ["CENSUS", "CCS"],
+      "description": "The survey (Census/Census Coverage Survey) that this address has been sampled into for participation"
     },
     "form_type": {
-      "enum": ["H", "I", "C"]
+      "enum": ["H", "I", "C"],
+      "description": "The form types are Household (H), CE1 (C) and Individual (I)"
     },
     "region_code": {
       "type": "string",
