@@ -56,7 +56,7 @@
     },
     "form_type": {
       "enum": ["H", "I", "C"],
-      "description": "The form types are Household (H), CE1 (C) and Individual (I)"
+      "description": "The form types are Household (H), Individual (I) or Communal Establishment (C)"
     },
     "region_code": {
       "type": "string",
