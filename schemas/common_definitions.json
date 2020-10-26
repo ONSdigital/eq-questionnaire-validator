@@ -76,9 +76,9 @@
         "contents": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
         }
-      }
-    },
-    "additionalProperties": false
+      },
+      "additionalProperties": false
+    }
   },
   "skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
