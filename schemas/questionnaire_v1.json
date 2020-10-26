@@ -52,7 +52,7 @@
     },
     "survey": {
       "enum": ["CENSUS", "CCS"],
-      "description": "The survey (Census/Census Coverage Survey) that this address has been sampled into for participation"
+      "description": "The survey (Census/Census Coverage Survey) that this schema has been sampled into for participation"
     },
     "form_type": {
       "enum": ["H", "I", "C"],
