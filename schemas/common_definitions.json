@@ -75,7 +75,7 @@
     }
   },
   "definition": {
-    "description": "Definition title and description.",
+    "description": "Definition title and contents.",
     "items": {
       "type": "object",
       "required": ["title", "contents"],
