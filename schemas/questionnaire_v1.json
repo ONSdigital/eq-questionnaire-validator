@@ -52,7 +52,7 @@
     },
     "survey": {
       "enum": ["CENSUS", "CCS"],
-      "description": "The survey (Census/Census Coverage Survey) that this schema has been sampled into for participation"
+      "description": "The survey (Census or Census Coverage Survey) that an address has been sampled into for participation"
     },
     "form_type": {
       "enum": ["H", "I", "C"],
@@ -60,7 +60,8 @@
     },
     "region_code": {
       "type": "string",
-      "pattern": "^GB-[A-Z]{3}$"
+      "pattern": "^GB-[A-Z]{3}$",
+      "description": "An ISO 3166-2:GB region code"
     },
     "metadata": {
       "type": "array",
