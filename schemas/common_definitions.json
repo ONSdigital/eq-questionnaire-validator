@@ -21,17 +21,7 @@
     "type": "array",
     "minItems": 1,
     "items": {
-      "type": "object",
-      "required": ["title", "contents"],
-      "properties": {
-        "title": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-        },
-        "contents": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/definition"
     }
   },
   "contents": {
@@ -87,7 +77,8 @@
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
         }
       }
-    }
+    },
+    "additionalProperties": false
   },
   "skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
