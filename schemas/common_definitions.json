@@ -21,17 +21,7 @@
     "type": "array",
     "minItems": 1,
     "items": {
-      "type": "object",
-      "required": ["title", "contents"],
-      "properties": {
-        "title": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-        },
-        "contents": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/definition"
     }
   },
   "contents": {
@@ -49,6 +39,9 @@
         },
         {
           "required": ["list"]
+        },
+        {
+          "required": ["definition"]
         }
       ],
       "properties": {
@@ -63,6 +56,25 @@
           "items": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
           }
+        },
+        "definition": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/definition"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definition": {
+    "description": "Definition title and contents.",
+    "items": {
+      "type": "object",
+      "required": ["title", "contents"],
+      "properties": {
+        "title": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        },
+        "contents": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
         }
       },
       "additionalProperties": false
