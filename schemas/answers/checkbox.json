@@ -36,6 +36,9 @@
       "mandatory": {
         "type": "boolean"
       },
+      "no_label": {
+        "type": "boolean"
+      },
       "validation": {
         "type": "object",
         "properties": {
