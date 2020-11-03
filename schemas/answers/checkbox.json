@@ -13,6 +13,9 @@
       "label": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "no_label": {
+        "type": "boolean"
+      },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
       },
@@ -36,9 +39,6 @@
       "mandatory": {
         "type": "boolean"
       },
-      "no_label": {
-        "type": "boolean"
-      },
       "validation": {
         "type": "object",
         "properties": {
@@ -51,6 +51,22 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "mandatory", "options"]
+    "required": ["id", "type", "mandatory", "options"],
+    "dependencies": {
+      "label": {
+        "not": {
+          "required": [
+            "no_label"
+          ]
+        }
+      },
+      "no_label": {
+        "not": {
+          "required": [
+            "label"
+          ]
+        }
+      }
+    }
   }
 }
