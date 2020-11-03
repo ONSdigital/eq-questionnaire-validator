@@ -1,0 +1,101 @@
+{
+    "mime_type": "application/json/ons/eq",
+    "language": "en",
+    "schema_version": "0.0.1",
+    "data_version": "0.0.3",
+    "survey_id": "0",
+    "title": "Other input fields",
+    "theme": "default",
+    "description": "A questionnaire to demo checkbox label and show_label properties.",
+    "messages": {
+        "NUMBER_TOO_LARGE": "Number is too large",
+        "NUMBER_TOO_SMALL": "Number cannot be less than zero",
+        "INVALID_NUMBER": "Please enter an integer"
+    },
+    "metadata": [
+        {
+            "name": "user_id",
+            "type": "string"
+        },
+        {
+            "name": "period_id",
+            "type": "string"
+        },
+        {
+            "name": "ru_name",
+            "type": "string"
+        }
+    ],
+    "sections": [
+        {
+            "id": "default-section",
+            "groups": [
+                {
+                    "blocks": [
+                        {
+                            "type": "Question",
+                            "id": "non-mandatory-checkbox",
+                            "question": {
+                                "answers": [
+                                    {
+                                        "id": "non-mandatory-checkbox-answer",
+                                        "label": "Select any answers that apply",
+                                        "show_label": false,
+                                        "mandatory": false,
+                                        "options": [
+                                            {
+                                                "label": "None",
+                                                "value": "None"
+                                            },
+                                            {
+                                                "label": "Cheese",
+                                                "value": "Cheese"
+                                            },
+                                            {
+                                                "label": "Ham",
+                                                "value": "Ham"
+                                            },
+                                            {
+                                                "label": "Pineapple",
+                                                "value": "Pineapple"
+                                            },
+                                            {
+                                                "label": "Tuna",
+                                                "value": "Tuna"
+                                            },
+                                            {
+                                                "label": "Pepperoni",
+                                                "value": "Pepperoni"
+                                            },
+                                            {
+                                                "label": "Other",
+                                                "value": "Other",
+                                                "description": "Choose any other topping",
+                                                "detail_answer": {
+                                                    "mandatory": false,
+                                                    "id": "other-answer-non-mandatory",
+                                                    "label": "Please specify other",
+                                                    "type": "TextField"
+                                                }
+                                            }
+                                        ],
+                                        "q_code": "20",
+                                        "type": "Checkbox"
+                                    }
+                                ],
+                                "id": "non-mandatory-checkbox-question",
+                                "title": "What extra toppings would you like?",
+                                "type": "General"
+                            }
+                        },
+                        {
+                            "type": "Summary",
+                            "id": "summary"
+                        }
+                    ],
+                    "id": "checkboxes"
+                }
+            ]
+        }
+    ]
+}
