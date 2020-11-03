@@ -13,7 +13,7 @@
       "label": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
-      "no_label": {
+      "show_label": {
         "type": "boolean"
       },
       "guidance": {
@@ -55,10 +55,10 @@
     "dependencies": {
       "label": {
         "not": {
-          "required": ["no_label"]
+          "required": ["show_label"]
         }
       },
-      "no_label": {
+      "show_label": {
         "not": {
           "required": ["label"]
         }
