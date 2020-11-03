@@ -55,16 +55,12 @@
     "dependencies": {
       "label": {
         "not": {
-          "required": [
-            "no_label"
-          ]
+          "required": ["no_label"]
         }
       },
       "no_label": {
         "not": {
-          "required": [
-            "label"
-          ]
+          "required": ["label"]
         }
       }
     }
