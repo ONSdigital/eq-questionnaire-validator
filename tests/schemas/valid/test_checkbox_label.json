@@ -39,8 +39,7 @@
                 "answers": [
                   {
                     "id": "non-mandatory-checkbox-answer",
-                    "label": "Select any answers that apply",
-                    "show_label": false,
+                    "label": null,
                     "mandatory": false,
                     "options": [
                       {
