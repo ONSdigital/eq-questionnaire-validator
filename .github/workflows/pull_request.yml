@@ -11,12 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          echo "::set-env name=PYTHON_VERSION::$(cat .python-version)"
+          echo "PYTHON_VERSION=cat .python-version)" >> $GITHUB_ENV
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: |
-          echo "::set-env name=PYTHON_VERSION::$(python -c 'import platform; print(platform.python_version())')"
+          echo "PYTHON_VERSION=python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
       - name: Install Pipenv
         run: pip install pipenv==2018.11.26
       - name: Cache virtualenv
@@ -56,12 +56,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          echo "::set-env name=PYTHON_VERSION::$(cat .python-version)"
+          echo "PYTHON_VERSION=cat .python-version)" >> $GITHUB_ENV
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: |
-          echo "::set-env name=PYTHON_VERSION::$(python -c 'import platform; print(platform.python_version())')"
+          echo "PYTHON_VERSION=python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
       - name: Install pipenv
         run: pip install pipenv==2018.11.26
       - name: Cache virtualenv
@@ -80,7 +80,7 @@ jobs:
       steps:
         - uses: actions/checkout@v2
         - name: Tag
-          run: echo "::set-env name=TAG::${{ github.event.pull_request.head.ref }}"
+          run: echo "TAG=${{ github.event.pull_request.head.ref }}" > $GITHUB_ENV
         - name: Build
           run: docker build -t onsdigital/eq-questionnaire-validator:$TAG .
         - name: Push
