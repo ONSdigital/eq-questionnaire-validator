@@ -11,7 +11,14 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
       },
       "label": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "oneOf": [
+          {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          },
+          {
+            "type": "null"
+          }
+        ]
       },
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
