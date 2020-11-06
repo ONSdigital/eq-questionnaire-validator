@@ -87,10 +87,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for schema_text in values_to_check:
-                if schema_text is not None:
-                    found = quote_regex.search(schema_text)
-
-                    if found:
+                if schema_text and quote_regex.search(schema_text):
                         self.add_error(
                             error_messages.DUMB_QUOTES_FOUND,
                             pointer=translatable_item.pointer,
