@@ -13,11 +13,12 @@ class UnrelatedBlockValidator(BlockValidator):
         expected_actions = ["AddUnrelatedRelationships", "RemoveUnrelatedRelationships"]
         questions = self.questionnaire_schema.get_all_questions_for_block(self.block)
         for question in questions:
-            actions = []
-            for answer in question["answers"]:
-                for option in answer["options"]:
-                    if "action" in option:
-                        actions.append(option["action"]["type"])
+            actions = [
+                option["action"]["type"]
+                for answer in question["answers"]
+                for option in answer["options"]
+                if "action" in option
+            ]
 
             if sorted(actions) != expected_actions:
                 self.add_error(self.ACTION_PARAMS_MISSING)
