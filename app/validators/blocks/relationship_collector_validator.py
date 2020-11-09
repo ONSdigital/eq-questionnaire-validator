@@ -1,5 +1,6 @@
 from app import error_messages
 from app.validators.blocks.block_validator import BlockValidator
+from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValidator
 
 
 class RelationshipCollectorValidator(BlockValidator):
@@ -16,6 +17,8 @@ class RelationshipCollectorValidator(BlockValidator):
         self.validate_list_exists()
         self.validate_multiple_answers()
         self.validate_answer_type()
+        self.validate_unrelated_block()
+
         return self.errors
 
     def validate_answer_type(self):
@@ -38,3 +41,10 @@ class RelationshipCollectorValidator(BlockValidator):
 
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
+
+    def validate_unrelated_block(self):
+        if "unrelated_block" in self.block:
+            block_validator = UnrelatedBlockValidator(
+                self.block["unrelated_block"], self.questionnaire_schema
+            )
+            self.errors += block_validator.validate()

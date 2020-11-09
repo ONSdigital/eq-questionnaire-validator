@@ -42,6 +42,12 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/remove_list_item_and_answers"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/remove_unrelated_relationships"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answer_actions/definitions.json#/add_unrelated_relationships"
             }
           ]
         }

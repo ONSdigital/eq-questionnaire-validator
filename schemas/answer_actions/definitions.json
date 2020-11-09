@@ -35,5 +35,27 @@
     },
     "additionalProperties": false,
     "required": ["type"]
+  },
+  "remove_unrelated_relationships": {
+    "type": "object",
+    "description": "An action that removes the remaining unrelated relationships after an `unrelated_block`",
+    "properties": {
+      "type": {
+        "enum": ["RemoveUnrelatedRelationships"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+  },
+  "add_unrelated_relationships": {
+    "type": "object",
+    "description": "An action that adds 'Unrelated' relationships for the remaining relationships after an `unrelated_block`",
+    "properties": {
+      "type": {
+        "enum": ["AddUnrelatedRelationships"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
   }
 }
