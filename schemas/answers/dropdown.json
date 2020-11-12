@@ -23,6 +23,10 @@
       "label": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "placeholder": {
+        "description": "The placeholder text to be used for the select field.",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      },
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
