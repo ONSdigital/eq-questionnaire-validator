@@ -4,9 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "Test invalid use of relationships id",
+  "title": "Test invalid use of id relationships",
   "theme": "default",
-  "description": "A questionnaire to test invalid use of block id with type",
+  "description": "A questionnaire to test invalid use id relationships with type",
   "metadata": [
     {
       "name": "user_id",
