@@ -9,7 +9,7 @@ class BlockValidator(Validator):
     ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
-    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of relationships id, can only be used with type RelationshipCollector"
+    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of id relationships, can only be used with type RelationshipCollector"
     LIST_REFERENCE_INVALID = "Invalid list reference"
     METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 
