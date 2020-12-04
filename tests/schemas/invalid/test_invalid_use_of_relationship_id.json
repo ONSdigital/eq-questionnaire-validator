@@ -4,10 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "session_timeout_in_seconds": 3,
-  "title": "Test Question Variants",
+  "title": "Test invalid use of relationships id",
   "theme": "default",
-  "description": "A questionnaire to test question variants and variant choices",
+  "description": "A questionnaire to test invalid use of block id with type",
   "metadata": [
     {
       "name": "user_id",
@@ -24,25 +23,33 @@
   ],
   "sections": [
     {
-      "id": "section",
+      "id": "relationships-section",
       "groups": [
         {
-          "id": "group",
-          "title": "Variants",
+          "id": "relationships-group",
           "blocks": [
             {
               "type": "Question",
               "id": "relationships",
               "question": {
-                "id": "question-2",
+                "id": "question",
                 "type": "General",
-                "title": "What is your age?",
+                "title": "Is anyone related in the household?",
                 "answers": [
                   {
-                    "id": "answer-2",
-                    "label": "Your age?",
-                    "mandatory": false,
-                    "type": "Number"
+                    "id": "radio-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Radio"
                   }
                 ]
               }
