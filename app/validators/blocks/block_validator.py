@@ -11,6 +11,7 @@ class BlockValidator(Validator):
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     LIST_REFERENCE_INVALID = "Invalid list reference"
     METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+    RELATIONSHIPS_ID_USE_INVALID = "Invalid use of relationship id, can only be used with type RelationshipCollector"
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"]
@@ -28,10 +29,18 @@ class BlockValidator(Validator):
         """
         source_references = get_object_containing_key(self.block, "identifier")
 
+        self.validate_relationships_id_use()
         self.validate_source_references(source_references)
         self.validate_redirect_to_list_add_block_params()
 
         return self.errors
+
+    def validate_relationships_id_use(self):
+        if (
+            self.block["id"] == "relationships"
+            and self.block["type"] != "RelationshipCollector"
+        ):
+            self.add_error(self.RELATIONSHIPS_ID_USE_INVALID, block_id=self.block["id"])
 
     def validate_source_references(self, source_references):
         for source_reference in source_references:
