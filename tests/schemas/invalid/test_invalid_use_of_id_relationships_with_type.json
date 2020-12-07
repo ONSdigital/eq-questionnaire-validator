@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "Test invalid use of id relationships",
   "theme": "default",
-  "description": "A questionnaire to test invalid use of id relationships with type",
+  "description": "A questionnaire to test invalid use of block id relationships",
   "metadata": [
     {
       "name": "user_id",
