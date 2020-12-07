@@ -9,6 +9,7 @@ class BlockValidator(Validator):
     ANSWER_SELF_REFERENCE = "Invalid answer reference (self-reference)"
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
+    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of id relationships, can only be used with RelationshipCollector block type"
     LIST_REFERENCE_INVALID = "Invalid list reference"
     METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 
@@ -28,10 +29,21 @@ class BlockValidator(Validator):
         """
         source_references = get_object_containing_key(self.block, "identifier")
 
+        self.validate_id_relationships_used_with_relationship_collector()
         self.validate_source_references(source_references)
         self.validate_redirect_to_list_add_block_params()
 
         return self.errors
+
+    def validate_id_relationships_used_with_relationship_collector(self):
+        if (
+            self.block["id"] == "relationships"
+            and self.block["type"] != "RelationshipCollector"
+        ):
+            self.add_error(
+                self.ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR,
+                block_id=self.block["id"],
+            )
 
     def validate_source_references(self, source_references):
         for source_reference in source_references:

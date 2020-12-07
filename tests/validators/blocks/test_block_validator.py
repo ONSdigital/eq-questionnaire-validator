@@ -156,3 +156,22 @@ def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
     validator.validate()
 
     assert expected_error_messages == validator.errors
+
+
+def test_invalid_use_of_id_relationships_with_type():
+    filename = "schemas/invalid/test_invalid_use_of_block_id_relationships.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    validator = BlockValidator(
+        questionnaire_schema.get_block("relationships"), questionnaire_schema
+    )
+
+    expected_error_messages = [
+        {
+            "message": validator.ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR,
+            "block_id": "relationships",
+        }
+    ]
+
+    validator.validate()
+
+    assert expected_error_messages == validator.errors

@@ -1,0 +1,66 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test invalid use of id relationships",
+  "theme": "default",
+  "description": "A questionnaire to test invalid use of block id relationships",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "sections": [
+    {
+      "id": "relationships-section",
+      "groups": [
+        {
+          "id": "relationships-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "relationships",
+              "question": {
+                "id": "question",
+                "type": "General",
+                "title": "Is anyone related in the household?",
+                "answers": [
+                  {
+                    "id": "radio-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Summary",
+              "id": "summary"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
