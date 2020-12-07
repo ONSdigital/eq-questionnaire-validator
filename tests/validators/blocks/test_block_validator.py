@@ -159,7 +159,7 @@ def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
 
 
 def test_invalid_use_of_id_relationships_with_type():
-    filename = "schemas/invalid/test_invalid_use_of_id_relationships_with_type.json"
+    filename = "schemas/invalid/test_invalid_use_of_block_id_relationships.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
         questionnaire_schema.get_block("relationships"), questionnaire_schema
