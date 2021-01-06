@@ -22,6 +22,9 @@
       "suggestions_url": {
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
       },
+      "allow_multiple": {
+        "type": "boolean"
+      },
       "type": {
         "type": "string",
         "enum": ["TextField"]
