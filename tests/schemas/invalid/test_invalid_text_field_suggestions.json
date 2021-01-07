@@ -36,8 +36,7 @@
                     "id": "country-answer",
                     "label": "What is your country of birth?",
                     "mandatory": false,
-                    "suggestions": {
-                    },
+                    "suggestions": {},
                     "type": "TextField"
                   }
                 ],
