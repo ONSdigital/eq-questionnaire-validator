@@ -29,11 +29,7 @@
             "type": "boolean"
           }
         },
-        "dependencies": {
-          "suggestions": {
-            "required": ["url"]
-          }
-        }
+        "required": ["url"]
       },
       "type": {
         "type": "string",
