@@ -19,8 +19,17 @@
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "suggestions_url": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      "suggestions": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          },
+          "allow_multiple": {
+            "type": "boolean"
+          }
+        },
+        "required": ["url"]
       },
       "type": {
         "type": "string",
