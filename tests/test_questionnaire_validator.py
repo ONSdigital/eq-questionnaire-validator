@@ -201,7 +201,7 @@ def test_duplicate_answer_ids():
     ]
 
     assert all(
-        [expected_error in validator.errors for expected_error in expected_errors]
+        {expected_error in validator.errors for expected_error in expected_errors}
     )
 
 
@@ -267,7 +267,7 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
     ]
 
     assert all(
-        [expected_error in validator.errors for expected_error in expected_errors]
+        {expected_error in validator.errors for expected_error in expected_errors}
     )
 
 
