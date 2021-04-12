@@ -405,10 +405,10 @@ def test_invalid_quotes_in_schema():
     expected_error_messages = [
         {"message": error_messages.DUMB_QUOTES_FOUND, "pointer": pointer}
         for pointer in [
-            "/sections/0/groups/0/blocks/0/question/description",
-            "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
             "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+            "/sections/0/groups/0/blocks/0/question/description/0",
             "/sections/0/groups/0/blocks/0/question/answers/0/label",
+            "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
         ]
     ]
     validator.validate_smart_quotes()
