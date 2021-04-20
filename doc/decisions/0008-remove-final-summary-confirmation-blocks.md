@@ -19,7 +19,7 @@ The `SectionSummary` block type was [removed](https://github.com/ONSdigital/eq-q
 - Introduce a new `questionnaire_flow` top-level schema object with:
   - a `type` property to differentiate between `Linear` and `Hub` questionnaires
   - an `options` object to hold options related to the given questionnaire flow:
-    - For `Linear` questionnaires, an `include_summary_on_submission` boolean option
+    - For `Linear` questionnaires, an `include_summary` boolean option
     - For `Hub` questionnaires, the existing `required_completed_sections` option
 
 ### Examples:
@@ -42,7 +42,7 @@ Proposed:
   "questionnaire_flow": {
     "type": "Linear",
     "options": {
-      "include_summary_on_submission": true
+      "include_summary": true
     }
   }
 }
