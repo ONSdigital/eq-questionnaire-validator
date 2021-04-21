@@ -21,6 +21,7 @@ The `SectionSummary` block type was [removed](https://github.com/ONSdigital/eq-q
   - an `options` object to hold options related to the given questionnaire flow:
     - For `Linear` questionnaires, an `include_summary` boolean option
     - For `Hub` questionnaires, the existing `required_completed_sections` option
+- Remove the top-level `hub` property
 
 ### Examples:
 
