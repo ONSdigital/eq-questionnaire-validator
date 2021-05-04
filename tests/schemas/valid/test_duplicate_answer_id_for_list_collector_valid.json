@@ -22,6 +22,12 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": true
+    }
+  },
   "sections": [
     {
       "id": "block-2",
@@ -260,10 +266,6 @@
                 "title": "Household members"
               },
               "type": "ListCollector"
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ]
         }

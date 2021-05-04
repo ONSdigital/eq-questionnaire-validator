@@ -24,6 +24,12 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": true
+    }
+  },
   "sections": [
     {
       "id": "total-items",
@@ -109,22 +115,6 @@
               "type": "Question"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "summary-section",
-      "title": "Summary",
-      "groups": [
-        {
-          "blocks": [
-            {
-              "type": "Summary",
-              "id": "summary"
-            }
-          ],
-          "id": "summary-group",
-          "title": "Summary"
         }
       ]
     }

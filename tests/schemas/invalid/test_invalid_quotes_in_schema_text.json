@@ -22,6 +22,12 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": true
+    }
+  },
   "sections": [
     {
       "id": "section",
@@ -107,10 +113,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ]
         }

@@ -30,6 +30,12 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": false
+    }
+  },
   "sections": [
     {
       "id": "section1",
@@ -192,13 +198,6 @@
                     }
                   }
                 ]
-              }
-            },
-            {
-              "id": "confirmation",
-              "type": "Confirmation",
-              "content": {
-                "title": "Confirm"
               }
             }
           ]

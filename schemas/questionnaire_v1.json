@@ -11,7 +11,8 @@
     "sections",
     "theme",
     "metadata",
-    "language"
+    "language",
+    "questionnaire_flow"
   ],
   "properties": {
     "language": {
@@ -117,8 +118,8 @@
         }
       }
     },
-    "hub": {
-      "$ref": "https://eq.ons.gov.uk/hub/definitions.json#/hub"
+    "questionnaire_flow": {
+      "$ref": "https://eq.ons.gov.uk/questionnaire_flow/definitions.json#/flow"
     },
     "submission": {
       "type": "object",
@@ -271,9 +272,6 @@
                         "$ref": "https://eq.ons.gov.uk/blocks/calculated_summary.json#/block"
                       },
                       {
-                        "$ref": "https://eq.ons.gov.uk/blocks/confirmation.json#/block"
-                      },
-                      {
                         "$ref": "https://eq.ons.gov.uk/blocks/confirmation_question.json#/block"
                       },
                       {
@@ -296,9 +294,6 @@
                       },
                       {
                         "$ref": "https://eq.ons.gov.uk/blocks/relationship_collector.json#/block"
-                      },
-                      {
-                        "$ref": "https://eq.ons.gov.uk/blocks/summary.json#/block"
                       }
                     ]
                   }

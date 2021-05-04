@@ -7,6 +7,12 @@
   "data_version": "0.0.3",
   "survey_id": "3",
   "title": "Invalid String Transforms",
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": false
+    }
+  },
   "sections": [
     {
       "id": "section1",
@@ -216,13 +222,6 @@
                     }
                   }
                 ]
-              }
-            },
-            {
-              "id": "confirmation",
-              "type": "Confirmation",
-              "content": {
-                "title": "Confirm"
               }
             }
           ]

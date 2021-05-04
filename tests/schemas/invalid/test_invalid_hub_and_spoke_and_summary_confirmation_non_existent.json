@@ -21,8 +21,9 @@
       "type": "string"
     }
   ],
-  "hub": {
-    "enabled": false
+  "questionnaire_flow": {
+    "type": "Hub",
+    "options": {}
   },
   "sections": [
     {

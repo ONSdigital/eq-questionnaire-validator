@@ -19,6 +19,12 @@
   "mime_type": "application/json/ons/eq",
   "language": "en",
   "schema_version": "0.0.1",
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": true
+    }
+  },
   "sections": [
     {
       "groups": [
@@ -102,10 +108,6 @@
                 "type": "General"
               },
               "type": "Question"
-            },
-            {
-              "id": "summary",
-              "type": "Summary"
             }
           ],
           "id": "group",

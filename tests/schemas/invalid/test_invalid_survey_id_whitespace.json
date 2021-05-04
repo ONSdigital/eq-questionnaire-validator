@@ -31,6 +31,12 @@
   "survey_id": "lms ",
   "theme": "default",
   "title": "Labour Market Survey (Alpha)",
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": false
+    }
+  },
   "sections": [
     {
       "id": "section3",
@@ -41,18 +47,8 @@
           "title": "confirmation",
           "blocks": [
             {
-              "type": "Confirmation",
-              "id": "confirmation",
-              "content": {
-                "contents": [
-                  {
-                    "list": [
-                      "You will not be able to access or change your answers on submitting the questionnaire",
-                      "If you wish to review your answers please select the relevant completed sections"
-                    ]
-                  }
-                ]
-              }
+              "type": "Introduction",
+              "id": "introduction"
             }
           ]
         }

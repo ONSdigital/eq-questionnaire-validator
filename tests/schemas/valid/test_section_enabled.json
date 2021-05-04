@@ -26,9 +26,11 @@
       "type": "string"
     }
   ],
-  "hub": {
-    "enabled": true,
-    "required_completed_sections": ["default-section"]
+  "questionnaire_flow": {
+    "type": "Hub",
+    "options": {
+      "required_completed_sections": ["default-section"]
+    }
   },
   "sections": [
     {

@@ -194,5 +194,4 @@ def test_id_paths():
             "sections.[0].groups.[0].blocks.[1].remove_block.question_variants.[1].question",
             "remove-question",
         ),
-        ("sections.[0].groups.[0].blocks.[2]", "confirmation"),
     ]

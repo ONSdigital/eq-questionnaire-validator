@@ -1,0 +1,44 @@
+{
+  "$id": "https://eq.ons.gov.uk/questionnaire_flow/linear.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "linear": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "const": "Linear"
+      },
+      "options": {
+        "$ref": "https://eq.ons.gov.uk/questionnaire_flow/linear.json#/options"
+      }
+    },
+    "required": ["type", "options"],
+    "additionalProperties": false,
+    "minProperties": 1
+  },
+  "options": {
+    "type": "object",
+    "properties": {
+      "include_summary": {
+        "description": "Whether to include the summary of answers",
+        "type": "boolean"
+      },
+      "collapsible": {
+        "description": "When True, the summary page will contain a list of collapsible section summaries",
+        "type": "boolean"
+      }
+    },
+    "required": ["include_summary"],
+    "dependencies": {
+      "collapsible": { "required": ["include_summary"] }
+    },
+    "if": {
+      "properties": { "collapsible": { "const": true } },
+      "required": ["collapsible"]
+    },
+    "then": {
+      "properties": { "include_summary": { "not": { "const": false } } }
+    },
+    "additionalProperties": false
+  }
+}

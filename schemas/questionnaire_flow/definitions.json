@@ -1,0 +1,11 @@
+{
+  "$id": "https://eq.ons.gov.uk/questionnaire_flow/definitions.json",
+  "flow": {
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/questionnaire_flow/hub.json#/hub" },
+      { "$ref": "https://eq.ons.gov.uk/questionnaire_flow/linear.json#/linear" }
+    ],
+    "required": ["type", "options"],
+    "minProperties": 1
+  }
+}

@@ -29,6 +29,12 @@
     "confirmation_email": true,
     "feedback": true
   },
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "include_summary": true
+    }
+  },
   "sections": [
     {
       "id": "submission-params-section",
@@ -60,10 +66,6 @@
                 "type": "General"
               },
               "type": "Question"
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ],
           "id": "group"
