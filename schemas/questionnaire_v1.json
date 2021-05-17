@@ -55,8 +55,12 @@
       "description": "The survey (Census or Census Coverage Survey) that an address has been sampled into for participation"
     },
     "form_type": {
-      "enum": ["H", "I", "C"],
+      "enum": ["H", "I", "C", "business"],
       "description": "The form types are Household (H), Individual (I) or Communal Establishment (C)"
+    },
+    "eq_id": {
+      "enum": ["test"],
+      "description": "The eq id, currently only test"
     },
     "region_code": {
       "type": "string",
