@@ -55,10 +55,6 @@
       "pattern": "^[0-9A-Za-z_]+$",
       "description": "The form types are alphanumeric strings with optional underscores"
     },
-    "eq_id": {
-      "type": "string",
-      "description": "The eq_ids are any alphanumeric strings"
-    },
     "region_code": {
       "type": "string",
       "pattern": "^GB-[A-Z]{3}$",
