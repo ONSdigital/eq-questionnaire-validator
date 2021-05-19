@@ -33,9 +33,7 @@
   "title": "Labour Market Survey (Alpha)",
   "questionnaire_flow": {
     "type": "Linear",
-    "options": {
-      "include_summary": false
-    }
+    "options": {}
   },
   "sections": [
     {

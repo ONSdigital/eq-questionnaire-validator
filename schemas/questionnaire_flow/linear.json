@@ -4,25 +4,18 @@
   "options": {
     "type": "object",
     "properties": {
-      "include_summary": {
-        "description": "Whether to include the summary of answers",
-        "type": "boolean"
-      },
-      "collapsible": {
-        "description": "When True, the summary page will contain a list of collapsible section summaries",
-        "type": "boolean"
+      "summary": {
+        "type": "object",
+        "description": "Options for the summary",
+        "properties": {
+          "collapsible": {
+            "description": "When True, the summary page will contain a list of collapsible section summaries",
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["collapsible"]
       }
-    },
-    "required": ["include_summary"],
-    "dependencies": {
-      "collapsible": { "required": ["include_summary"] }
-    },
-    "if": {
-      "properties": { "collapsible": { "const": true } },
-      "required": ["collapsible"]
-    },
-    "then": {
-      "properties": { "include_summary": { "not": { "const": false } } }
     },
     "additionalProperties": false
   }
