@@ -56,7 +56,8 @@
     },
     "form_type": {
       "type": "string",
-      "description": "The form types are any alphanumeric strings"
+      "pattern": "^[0-9A-Za-z_]+$",
+      "description": "The form types are alphanumeric strings with optional underscores"
     },
     "eq_id": {
       "type": "string",
