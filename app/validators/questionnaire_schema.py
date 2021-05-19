@@ -178,10 +178,6 @@ class QuestionnaireSchema:
         return answers
 
     @cached_property
-    def is_hub_enabled(self):
-        return self.schema.get("hub", {}).get("enabled")
-
-    @cached_property
     def ids(self):
         """
         question_id & answer_id should be globally unique with some exceptions:
