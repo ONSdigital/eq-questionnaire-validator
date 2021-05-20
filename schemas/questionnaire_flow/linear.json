@@ -6,10 +6,10 @@
     "properties": {
       "summary": {
         "type": "object",
-        "description": "Options for the summary",
+        "description": "Using this property will include a summary on the submit page",
         "properties": {
           "collapsible": {
-            "description": "When True, the summary page will contain a list of collapsible section summaries",
+            "description": "Determines if the summary sections are collapsible",
             "type": "boolean"
           }
         },
