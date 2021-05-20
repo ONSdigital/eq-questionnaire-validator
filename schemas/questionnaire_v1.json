@@ -52,8 +52,7 @@
     },
     "form_type": {
       "type": "string",
-      "pattern": "^[0-9A-Za-z_]+$",
-      "description": "The form types are alphanumeric strings with optional underscores"
+      "pattern": "^[0-9A-Za-z_]+$"
     },
     "region_code": {
       "type": "string",
