@@ -50,13 +50,9 @@
     "legal_basis": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
     },
-    "survey": {
-      "enum": ["CENSUS", "CCS"],
-      "description": "The survey (Census or Census Coverage Survey) that an address has been sampled into for participation"
-    },
     "form_type": {
-      "enum": ["H", "I", "C"],
-      "description": "The form types are Household (H), Individual (I) or Communal Establishment (C)"
+      "type": "string",
+      "pattern": "^[0-9A-Za-z_]+$"
     },
     "region_code": {
       "type": "string",
