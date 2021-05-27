@@ -22,6 +22,14 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
   "sections": [
     {
       "id": "section",
@@ -107,10 +115,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ]
         }

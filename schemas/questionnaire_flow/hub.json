@@ -1,21 +1,18 @@
 {
-  "$id": "https://eq.ons.gov.uk/hub/definitions.json",
-  "hub": {
+  "$id": "https://eq.ons.gov.uk/questionnaire_flow/hub.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "options": {
     "type": "object",
     "properties": {
-      "enabled": {
-        "description": "Whether or not the hub and spoke pattern is enabled for this questionnaire.",
-        "type": "boolean"
-      },
       "required_completed_sections": {
         "description": "The sections that need to be complete prior to the hub displaying",
         "type": "array",
         "items": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-        }
+        },
+        "minItems": 1
       }
     },
-    "required": ["enabled"],
     "additionalProperties": false
   }
 }

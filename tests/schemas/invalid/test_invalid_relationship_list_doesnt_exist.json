@@ -22,6 +22,10 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
   "sections": [
     {
       "id": "section",
@@ -313,13 +317,6 @@
                     ]
                   }
                 ]
-              }
-            },
-            {
-              "type": "Confirmation",
-              "id": "confirmation",
-              "content": {
-                "title": "Thank you for your answers, do you wish to submit"
               }
             }
           ]

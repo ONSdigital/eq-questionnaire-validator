@@ -21,6 +21,14 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
   "sections": [
     {
       "id": "section",
@@ -72,7 +80,7 @@
               "routing_rules": [
                 {
                   "goto": {
-                    "block": "summary",
+                    "section": "End",
                     "when": [
                       {
                         "id": "anyone-else",
@@ -84,7 +92,7 @@
                 },
                 {
                   "goto": {
-                    "block": "summary"
+                    "section": "End"
                   }
                 }
               ],
@@ -186,10 +194,6 @@
                   ]
                 }
               }
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ]
         }

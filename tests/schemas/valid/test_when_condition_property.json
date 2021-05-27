@@ -21,6 +21,14 @@
       "type": "string"
     }
   ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
   "sections": [
     {
       "id": "default-section",
@@ -88,7 +96,7 @@
                 },
                 {
                   "goto": {
-                    "block": "summary"
+                    "section": "End"
                   }
                 }
               ]
@@ -164,7 +172,7 @@
                 },
                 {
                   "goto": {
-                    "block": "summary"
+                    "section": "End"
                   }
                 }
               ]
@@ -192,10 +200,6 @@
                   }
                 ]
               }
-            },
-            {
-              "type": "Summary",
-              "id": "summary"
             }
           ],
           "id": "checkboxes"

@@ -1,0 +1,22 @@
+{
+  "$id": "https://eq.ons.gov.uk/questionnaire_flow/linear.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "options": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "Using this property will include a summary on the submit page",
+        "properties": {
+          "collapsible": {
+            "description": "Determines if the summary sections are collapsible",
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["collapsible"]
+      }
+    },
+    "additionalProperties": false
+  }
+}

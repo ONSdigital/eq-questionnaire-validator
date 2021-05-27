@@ -21,8 +21,9 @@
       "type": "string"
     }
   ],
-  "hub": {
-    "enabled": true
+  "questionnaire_flow": {
+    "type": "Hub",
+    "options": {}
   },
   "sections": [
     {
@@ -183,10 +184,6 @@
                 "type": "General"
               },
               "type": "Question"
-            },
-            {
-              "id": "summary",
-              "type": "Summary"
             }
           ],
           "id": "checkboxes"

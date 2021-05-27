@@ -59,6 +59,10 @@
   "mime_type": "application/json/ons/eq",
   "language": "en",
   "schema_version": "0.0.1",
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
   "sections": [
     {
       "groups": [
@@ -110,13 +114,6 @@
                 }
               ],
               "type": "Introduction"
-            },
-            {
-              "id": "confirmation",
-              "type": "Confirmation",
-              "content": {
-                "title": "Confirm"
-              }
             }
           ],
           "id": "general-business-information",

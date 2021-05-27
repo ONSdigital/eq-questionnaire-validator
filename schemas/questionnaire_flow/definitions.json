@@ -1,0 +1,35 @@
+{
+  "$id": "https://eq.ons.gov.uk/questionnaire_flow/definitions.json",
+  "flow": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": ["Linear", "Hub"]
+      },
+      "options": {
+        "type": "object"
+      }
+    },
+    "oneOf": [
+      {
+        "properties": {
+          "type": { "const": "Hub" },
+          "options": {
+            "$ref": "https://eq.ons.gov.uk/questionnaire_flow/hub.json#/options"
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": { "const": "Linear" },
+          "options": {
+            "$ref": "https://eq.ons.gov.uk/questionnaire_flow/linear.json#/options"
+          }
+        }
+      }
+    ],
+    "additionalProperties": false,
+    "required": ["type", "options"]
+  }
+}

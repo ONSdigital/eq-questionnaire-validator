@@ -31,9 +31,9 @@ class QuestionnaireValidator(Validator):
             section_validator = SectionValidator(section, self.questionnaire_schema)
             self.errors += section_validator.validate()
 
-        required_hub_section_ids = self.schema_element.get("hub", {}).get(
-            "required_completed_sections", []
-        )
+        required_hub_section_ids = self.schema_element["questionnaire_flow"][
+            "options"
+        ].get("required_completed_sections", [])
 
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids

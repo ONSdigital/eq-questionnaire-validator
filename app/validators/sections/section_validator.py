@@ -11,11 +11,6 @@ from app.validators.blocks import get_block_validator
 
 
 class SectionValidator(Validator):
-    UNDEFINED_SUBMISSION_PAGE = (
-        "Questionnaire must contain one of [Confirmation page, Summary page, Hub page]"
-    )
-    MULTIPLE_SUBMISSION_PAGES = "Questionnaire can only contain one of [Confirmation page, Summary page, Hub page]"
-
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
         self.section = schema_element
@@ -57,18 +52,7 @@ class SectionValidator(Validator):
     def validate_blocks(self, section_id, group_id):
         group = self.questionnaire_schema.get_group(group_id)
 
-        last_section = self.questionnaire_schema.sections[-1]
-        last_group = last_section["groups"][-1]
-        last_block = last_group["blocks"][-1]
-
         for block in group.get("blocks"):
-            if (
-                section_id == last_section["id"]
-                and group_id == last_group["id"]
-                and block["id"] == last_block["id"]
-            ):
-                self.validate_block_is_submission(block)
-
             block_routing_validator = RoutingValidator(
                 block, group, self.questionnaire_schema
             )
@@ -79,20 +63,6 @@ class SectionValidator(Validator):
 
             self.validate_question(block)
             self.validate_variants(block)
-
-    def validate_block_is_submission(self, last_block):
-        """
-        Validate that the final block is of type Summary or Confirmation.
-        :param last_block: The final block in the schema
-        :return: List of dictionaries containing error messages, otherwise it returns an empty list
-        """
-        is_last_block_valid = last_block["type"] in {"Summary", "Confirmation"}
-
-        if is_last_block_valid and self.questionnaire_schema.is_hub_enabled:
-            self.add_error(self.MULTIPLE_SUBMISSION_PAGES)
-
-        if not is_last_block_valid and not self.questionnaire_schema.is_hub_enabled:
-            self.add_error(self.UNDEFINED_SUBMISSION_PAGE)
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
