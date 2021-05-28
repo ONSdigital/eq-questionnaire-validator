@@ -68,8 +68,7 @@
                 "id": "mandatory-checkbox-question",
                 "title": "Should the second section be enabled?",
                 "type": "General"
-              },
-              "routing_rules": []
+              }
             }
           ],
           "id": "checkboxes"
@@ -122,8 +121,7 @@
                 "id": "non-mandatory-checkbox-question",
                 "title": "Was this section shown?",
                 "type": "General"
-              },
-              "routing_rules": []
+              }
             }
           ],
           "id": "second-section-checkboxes"

@@ -84,11 +84,11 @@ def get_object_containing_key(data, key_name):
     Get all dicts that contain `key_name` within a piece of data
     :param data: the data to search
     :param key_name: the key to find
-    :return: list of dicts containing the key name, otherwise returns None
+    :return: list of tuples containing the json path and matched object
     """
     matches = []
     for match in parse(f"$..{key_name}").find(data):
-        matches.append(match.context.value)
+        matches.append((str(match.full_path), match.context.value))
     return matches
 
 

@@ -30,7 +30,8 @@ class BlockValidator(Validator):
         source_references = get_object_containing_key(self.block, "identifier")
 
         self.validate_id_relationships_used_with_relationship_collector()
-        self.validate_source_references(source_references)
+        for json_path, source_reference in source_references:
+            self.validate_source_reference(json_path, source_reference)
         self.validate_redirect_to_list_add_block_params()
 
         return self.errors
@@ -45,23 +46,24 @@ class BlockValidator(Validator):
                 block_id=self.block["id"],
             )
 
-    def validate_source_references(self, source_references):
-        for source_reference in source_references:
-            source = source_reference["source"]
-            if isinstance(source_reference["identifier"], str):
-                identifiers = [source_reference["identifier"]]
-            else:
-                identifiers = source_reference["identifier"]
+    def validate_source_reference(self, source_reference_path, source_reference):
+        source = source_reference["source"]
+        if isinstance(source_reference["identifier"], str):
+            identifiers = [source_reference["identifier"]]
+        else:
+            identifiers = source_reference["identifier"]
 
-            if source == "answers":
-                selector = source_reference.get("selector")
-                self.validate_answer_source_reference(identifiers, selector)
+        if source == "answers":
+            selector = source_reference.get("selector")
+            self.validate_answer_source_reference(
+                source_reference_path, identifiers, selector
+            )
 
-            elif source == "metadata":
-                self.validate_metadata_source_reference(identifiers)
+        elif source == "metadata":
+            self.validate_metadata_source_reference(identifiers)
 
-            elif source == "list":
-                self.validate_list_source_reference(identifiers)
+        elif source == "list":
+            self.validate_list_source_reference(identifiers)
 
     def validate_metadata_source_reference(self, identifiers):
         for identifier in identifiers:
@@ -75,14 +77,19 @@ class BlockValidator(Validator):
             if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(self.LIST_REFERENCE_INVALID, id=identifier)
 
-    def validate_answer_source_reference(self, identifiers, selector=None):
+    def validate_answer_source_reference(
+        self, source_reference_path, identifiers, selector=None
+    ):
         answers_with_context = self.questionnaire_schema.answers_with_context
 
         for identifier in identifiers:
             if identifier not in answers_with_context:
                 self.add_error(self.ANSWER_REFERENCE_INVALID, referenced_id=identifier)
 
-            elif answers_with_context[identifier]["block"] == self.block["id"]:
+            elif (
+                "placeholders" in source_reference_path
+                and answers_with_context[identifier]["block"] == self.block["id"]
+            ):
                 self.add_error(self.ANSWER_SELF_REFERENCE, referenced_id=identifier)
 
             if selector:

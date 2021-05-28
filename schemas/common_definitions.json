@@ -232,6 +232,92 @@
     "additionalProperties": false,
     "required": ["years"]
   },
+  "answer_value_source": {
+    "description": "A reference to an answer. When resolved this can be a number, string, array, object or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+        "description": "The answer id"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["answers"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
+  "metadata_value_source": {
+    "description": "A reference to a metadata property. When resolved this can be a string or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
+        "description": "The metadata property name"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["metadata"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
+  "list_value_source": {
+    "description": "A reference to a list property. When resolved this can be a number, string, array or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
+        "description": "The list name"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["list"]
+      },
+      "selector": {
+        "description": "The list property name to select",
+        "type": "string",
+        "enum": ["count", "first", "primary_person", "same_name_items"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
+  "location_value_source": {
+    "type": "object",
+    "description": "A reference to a location object property. When resolved this can be a string or null.",
+    "properties": {
+      "identifier": {
+        "description": "The location property name",
+        "type": "string",
+        "enum": ["list_item_id", "to_list_item_id"]
+      },
+      "source": {
+        "type": "string",
+        "enum": ["location"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
+  "date_value_source": {
+    "description": "A reference to a date value in the format YYYY-MM-DD or `now`",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "value": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now)$"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["date"]
+      }
+    },
+    "required": ["value", "source"]
+  },
   "value_reference": {
     "oneOf": [
       {
@@ -239,40 +325,14 @@
         "type": ["integer", "string"]
       },
       {
-        "description": "A reference to an answer",
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
-            "description": "The id of an answer to reference"
-          },
-          "source": {
-            "type": "string",
-            "enum": ["answers"]
-          }
-        },
-        "required": ["identifier", "source"],
-        "additionalProperties": false
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
       },
       {
-        "description": "A reference to a piece of metadata",
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
-            "description": "The id of the metadata to reference"
-          },
-          "source": {
-            "type": "string",
-            "enum": ["metadata"]
-          }
-        },
-        "required": ["identifier", "source"],
-        "additionalProperties": false
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_value_source"
       }
     ]
   },
-  "routing_rules": {
+  "original_routing_rules": {
     "type": "array",
     "description": "Used to direct the journey through a survey (in conjunction with navigation).",
     "items": {
@@ -315,6 +375,53 @@
       "additionalProperties": false,
       "required": ["goto"]
     }
+  },
+  "new_routing_rules": {
+    "type": "array",
+    "description": "Used to direct the journey through a survey (in conjunction with navigation).",
+    "items": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "description": "The id of another block in the same group."
+        },
+        "group": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "description": "The id of another group. The first block in that group will be routed to."
+        },
+        "section": {
+          "type": "string",
+          "description": "Routes to the end of the current section",
+          "enum": ["End"]
+        },
+        "when": {
+          "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["block"]
+        },
+        {
+          "required": ["group"]
+        },
+        {
+          "required": ["section"]
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "routing_rules": {
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_routing_rules"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_routing_rules"
+      }
+    ]
   },
   "non_empty_string": {
     "type": "string",

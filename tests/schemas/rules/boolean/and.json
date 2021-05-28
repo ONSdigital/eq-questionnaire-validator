@@ -1,0 +1,27 @@
+[
+  {
+    "description": "And combined with equals",
+    "rule": {
+      "and": [
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            },
+            "Yes"
+          ]
+        },
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-2"
+            },
+            "Yes"
+          ]
+        }
+      ]
+    }
+  }
+]

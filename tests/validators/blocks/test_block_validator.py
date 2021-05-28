@@ -21,7 +21,9 @@ def test_invalid_reference():
         }
     }
 
-    validator.validate_answer_source_reference(identifiers=known_identifiers)
+    validator.validate_answer_source_reference(
+        "placeholders", identifiers=known_identifiers
+    )
 
     expected_errors = [
         {
@@ -51,8 +53,9 @@ def test_invalid_composite_answer_in_selector():
             "block": "confirm-name",
         },
     }
-    validator.validate_source_references(
-        [{"identifier": "name-answer", "source": "answers", "selector": "line1"}]
+    validator.validate_source_reference(
+        "name-answer",
+        {"identifier": "name-answer", "source": "answers", "selector": "line1"},
     )
 
     expected_errors = [
@@ -79,14 +82,13 @@ def test_invalid_composite_answer_field_in_selector():
             "block": "confirm-address",
         },
     }
-    validator.validate_source_references(
-        [
-            {
-                "identifier": "address-answer",
-                "source": "answers",
-                "selector": "invalid-field",
-            }
-        ]
+    validator.validate_source_reference(
+        "address-answer",
+        {
+            "identifier": "address-answer",
+            "source": "answers",
+            "selector": "invalid-field",
+        },
     )
 
     expected_errors = [

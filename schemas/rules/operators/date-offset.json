@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/date-offset.json",
+  "description": "Offsets a date, takes two arguments",
+  "type": "object",
+  "properties": {
+    "date-offset": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/date_value"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer"
+            },
+            "months": {
+              "type": "integer"
+            },
+            "years": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "anyOf": [
+            {
+              "required": ["days"]
+            },
+            {
+              "required": ["months"]
+            },
+            {
+              "required": ["years"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "required": ["date-offset"],
+  "additionalProperties": false
+}

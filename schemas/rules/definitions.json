@@ -1,0 +1,82 @@
+{
+  "$id": "https://eq.ons.gov.uk/rules/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "operators": {
+    "description": "All operators",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/equal.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/not-equal.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than-or-equal.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/more-than.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/more-than-or-equal.json"
+      },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/in.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/date-offset.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/and.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/or.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/not.json" }
+    ]
+  },
+  "any_value": {
+    "description": "Any value",
+    "oneOf": [
+      { "type": ["number", "string", "array", "null"] },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/list_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/location_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value_source"
+      }
+    ]
+  },
+  "any_value_or_operator": {
+    "description": "Any value or operator",
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/operators"
+      }
+    ]
+  },
+  "array_or_string_value": {
+    "description": "Any array or value",
+    "oneOf": [
+      { "type": ["string", "array"] },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+      }
+    ]
+  },
+  "date_value": {
+    "description": "Any date value",
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+      }
+    ]
+  }
+}
