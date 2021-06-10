@@ -13,7 +13,7 @@ configure(logger_factory=LoggerFactory())
 
 def test_param_valid_schemas(rule_schema_filename):
     """
-    Uses py.test generated tests to validate all schemas contained in the 'valid' folder.
+    Uses py.test generated tests to validate all schemas contained in the 'rules' folder.
     """
     with open(rule_schema_filename, encoding="utf8") as json_file:
         for json_fixture in load(json_file):
