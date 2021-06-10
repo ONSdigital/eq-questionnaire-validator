@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/any.json",
+  "description": "Evaluates if any values are in an array, takes two arguments",
+  "type": "object",
+  "properties": {
+    "any": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_value"
+      }
+    }
+  },
+  "required": ["any"],
+  "additionalProperties": false
+}
