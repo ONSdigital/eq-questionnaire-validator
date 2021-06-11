@@ -37,7 +37,7 @@
       ]
     }
   },
-    {
+  {
     "description": "answer-1 == 'Yes' and (answer-2 not in ['No', 'Maybe'] or answer-3 == 'Yes')",
     "rule": {
       "and": [
@@ -60,10 +60,7 @@
                       "source": "answers",
                       "identifier": "answer-2"
                     },
-                    [
-                      "No",
-                      "Maybe"
-                    ]
+                    ["No", "Maybe"]
                   ]
                 }
               ]
