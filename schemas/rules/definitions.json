@@ -15,10 +15,10 @@
         "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than-or-equal.json"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/more-than.json"
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than.json"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/more-than-or-equal.json"
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json"
       },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/in.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/any.json" },

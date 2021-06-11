@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/more-than-or-equal.json",
-  "description": "Evaluates more than or equal, takes two arguments",
+  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json",
+  "description": "Evaluates greater than or equal, takes two arguments",
   "type": "object",
   "properties": {
     ">=": {
