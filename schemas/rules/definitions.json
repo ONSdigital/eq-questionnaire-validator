@@ -34,19 +34,19 @@
     "oneOf": [
       { "type": ["number", "string", "array", "null"] },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/list_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/location_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/location_value_source"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/date_value_source"
       }
     ]
   },
@@ -66,7 +66,7 @@
     "oneOf": [
       { "type": ["string", "array"] },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }
     ]
   },
@@ -75,7 +75,7 @@
     "oneOf": [
       { "type": ["array"] },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }
     ]
   },
@@ -83,10 +83,10 @@
     "description": "Any date value",
     "oneOf": [
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/date_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/date_value_source"
       },
       {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/answer_value_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }
     ]
   }
