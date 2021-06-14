@@ -21,8 +21,12 @@
         "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json"
       },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/in.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/any.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/all.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/any-in.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/all-in.json"
+      },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/date-offset.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/and.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/or.json" },
