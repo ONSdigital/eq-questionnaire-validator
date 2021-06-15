@@ -10,7 +10,7 @@
       "maxItems": 2,
       "items": [
         {
-          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/string_value"
+          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value_except_array"
         },
         {
           "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_value"

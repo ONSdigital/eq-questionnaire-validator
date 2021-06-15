@@ -1,16 +1,25 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/value/date-offset.json",
-  "description": "Offsets a date, takes two arguments",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/date.json",
+  "description": "Casts a value to a date, first argument is a date, second is an offset",
   "type": "object",
   "properties": {
-    "date-offset": {
+    "date": {
       "type": "array",
-      "minItems": 2,
+      "minItems": 1,
       "maxItems": 2,
       "items": [
         {
-          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/date_value"
+          "oneOf": [
+            {
+              "description": "A date value in the format YYYY-MM-DD or `now`",
+              "type": "string",
+              "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now)$"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
+            }
+          ]
         },
         {
           "type": "object",
@@ -41,6 +50,6 @@
       ]
     }
   },
-  "required": ["date-offset"],
+  "required": ["date"],
   "additionalProperties": false
 }

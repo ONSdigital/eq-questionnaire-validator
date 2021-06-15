@@ -14,10 +14,7 @@
             "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/number_value"
           },
           {
-            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/date_value"
-          },
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/value_operators"
+            "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
           }
         ]
       }
