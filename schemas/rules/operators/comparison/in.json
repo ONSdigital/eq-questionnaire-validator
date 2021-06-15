@@ -8,9 +8,14 @@
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
-      "items": {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_or_string_value"
-      }
+      "items": [
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/string_value"
+        },
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_value"
+        }
+      ]
     }
   },
   "required": ["in"],

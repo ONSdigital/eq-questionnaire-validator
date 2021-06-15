@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/date-offset.json",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/date-offset.json",
   "description": "Offsets a date, takes two arguments",
   "type": "object",
   "properties": {

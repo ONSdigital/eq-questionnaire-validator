@@ -8,7 +8,7 @@
       "type": "array",
       "minItems": 2,
       "items": {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/operators"
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
       }
     }
   },

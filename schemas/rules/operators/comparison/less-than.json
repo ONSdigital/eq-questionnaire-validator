@@ -9,7 +9,17 @@
       "minItems": 2,
       "maxItems": 2,
       "items": {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value_or_operator"
+        "anyOf": [
+          {
+            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/number_value"
+          },
+          {
+            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/date_value"
+          },
+          {
+            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/value_operators"
+          }
+        ]
       }
     }
   },

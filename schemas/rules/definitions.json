@@ -1,8 +1,8 @@
 {
   "$id": "https://eq.ons.gov.uk/rules/definitions.json",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "operators": {
-    "description": "All operators",
+  "boolean_operators": {
+    "description": "All operators that resolve to a boolean",
     "oneOf": [
       { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/equal.json" },
       {
@@ -27,10 +27,15 @@
       {
         "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/all-in.json"
       },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/date-offset.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/and.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/or.json" },
       { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/not.json" }
+    ]
+  },
+  "value_operators": {
+    "description": "All operators that resolve to a value",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-offset.json" }
     ]
   },
   "any_value": {
@@ -54,21 +59,19 @@
       }
     ]
   },
-  "any_value_or_operator": {
-    "description": "Any value or operator",
+  "string_value": {
+    "description": "Any string value",
     "oneOf": [
+      { "type": "string" },
       {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/operators"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }
     ]
   },
-  "array_or_string_value": {
-    "description": "Any array or string value",
+  "number_value": {
+    "description": "Any number value",
     "oneOf": [
-      { "type": ["string", "array"] },
+      { "type": "number" },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }
@@ -77,7 +80,7 @@
   "array_value": {
     "description": "Any array value",
     "oneOf": [
-      { "type": ["array"] },
+      { "type": "array" },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       }

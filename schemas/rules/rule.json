@@ -3,5 +3,5 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "description": "Top level rule",
-  "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/operators"
+  "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
 }
