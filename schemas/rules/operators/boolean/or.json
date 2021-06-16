@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://eq.ons.gov.uk/rules/operators/boolean/or.json",
-  "description": "Evaluates boolean `or`, takes two or more arguments",
+  "description": "Evaluates boolean `or`",
   "type": "object",
   "properties": {
     "or": {
