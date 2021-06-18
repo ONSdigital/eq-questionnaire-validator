@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://eq.ons.gov.uk/rules/operators/value/date.json",
-  "description": "Casts a value to a date. First argument is a date, second is an offset",
+  "description": "Casts a value to a date. First argument is a date, second is an optional offset",
   "type": "object",
   "properties": {
     "date": {
