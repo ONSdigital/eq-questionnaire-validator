@@ -1,0 +1,71 @@
+{
+  "$id": "https://eq.ons.gov.uk/rules/definitions.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "boolean_operators": {
+    "description": "All operators that resolve to a boolean",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/equal.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/not-equal.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than-or-equal.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json"
+      },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/in.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/any-in.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/all-in.json"
+      },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/and.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/or.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/not.json" }
+    ]
+  },
+  "any_value": {
+    "description": "Any value",
+    "oneOf": [
+      { "type": ["number", "string", "array", "null"] },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
+      }
+    ]
+  },
+  "any_value_except_array": {
+    "description": "Any value",
+    "oneOf": [
+      { "type": ["number", "string", "null"] },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
+      }
+    ]
+  },
+  "number_value": {
+    "description": "Any number value",
+    "oneOf": [
+      { "type": "number" },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
+      }
+    ]
+  },
+  "array_value": {
+    "description": "Any array value",
+    "oneOf": [
+      { "type": "array" },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
+      }
+    ]
+  }
+}

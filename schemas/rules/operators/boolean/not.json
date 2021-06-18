@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/boolean/not.json",
+  "description": "Evaluates boolean `not`",
+  "type": "object",
+  "properties": {
+    "not": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
+      }
+    }
+  },
+  "required": ["not"],
+  "additionalProperties": false
+}

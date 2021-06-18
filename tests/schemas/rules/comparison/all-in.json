@@ -1,0 +1,35 @@
+[
+  {
+    "description": "Are all items in the first list in the second list",
+    "rule": {
+      "all-in": [
+        ["Option one", "Option two"],
+        ["Option one", "Option two", "Option three"]
+      ]
+    }
+  },
+  {
+    "description": "Are all selected answer options in a list of values, the answer can be a subset of these values",
+    "rule": {
+      "all-in": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        ["Option one", "Option two", "Option three"]
+      ]
+    }
+  },
+  {
+    "description": "Are all of these answer options selected, the answer must contain all the values",
+    "rule": {
+      "all-in": [
+        ["Option one", "Option two", "Option three"],
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        }
+      ]
+    }
+  }
+]

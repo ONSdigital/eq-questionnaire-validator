@@ -1,0 +1,27 @@
+[
+  {
+    "description": "Or combined with equals",
+    "rule": {
+      "or": [
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            },
+            "Yes"
+          ]
+        },
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-2"
+            },
+            "Yes"
+          ]
+        }
+      ]
+    }
+  }
+]

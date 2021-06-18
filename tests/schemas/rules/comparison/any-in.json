@@ -1,0 +1,35 @@
+[
+  {
+    "description": "Are any items in the first list in the second list",
+    "rule": {
+      "any-in": [
+        ["Option one", "Option four"],
+        ["Option one", "Option two", "Option three"]
+      ]
+    }
+  },
+  {
+    "description": "Are any of these answer options selected, the answer must contain at least one of these values",
+    "rule": {
+      "any-in": [
+        ["Option one", "Option two", "Option three"],
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        }
+      ]
+    }
+  },
+  {
+    "description": "Are any of the selected answer options in a list of values, equivalent to the previous rule",
+    "rule": {
+      "any-in": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        ["Option one", "Option two", "Option three"]
+      ]
+    }
+  }
+]

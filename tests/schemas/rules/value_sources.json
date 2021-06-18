@@ -1,0 +1,43 @@
+[
+  {
+    "description": "A metadata source",
+    "rule": {
+      "==": [
+        {
+          "source": "metadata",
+          "identifier": "ref_p_start_date"
+        },
+        "2021-01-01"
+      ]
+    }
+  },
+  {
+    "description": "A list source",
+    "rule": {
+      "==": [
+        {
+          "source": "list",
+          "identifier": "household",
+          "selector": "count"
+        },
+        1
+      ]
+    }
+  },
+  {
+    "description": "A list source and a location source",
+    "rule": {
+      "==": [
+        {
+          "source": "list",
+          "identifier": "household",
+          "selector": "first"
+        },
+        {
+          "source": "location",
+          "identifier": "list_item_id"
+        }
+      ]
+    }
+  }
+]

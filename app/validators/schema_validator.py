@@ -8,10 +8,10 @@ from app.validators.validator import Validator
 
 
 class SchemaValidator(Validator):
-    def __init__(self, schema_element=None):
+    def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
         super().__init__(schema_element)
 
-        with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
+        with open(schema, encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
         resolver = RefResolver(
@@ -25,6 +25,7 @@ class SchemaValidator(Validator):
     def lookup_ref_store():
         store = {}
         for glob_path in [
+            "schemas/**/**/**/*.json",
             "schemas/**/**/*.json",
             "schemas/**/*.json",
             "schemas/*.json",

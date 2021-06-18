@@ -239,40 +239,14 @@
         "type": ["integer", "string"]
       },
       {
-        "description": "A reference to an answer",
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
-            "description": "The id of an answer to reference"
-          },
-          "source": {
-            "type": "string",
-            "enum": ["answers"]
-          }
-        },
-        "required": ["identifier", "source"],
-        "additionalProperties": false
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
       },
       {
-        "description": "A reference to a piece of metadata",
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
-            "description": "The id of the metadata to reference"
-          },
-          "source": {
-            "type": "string",
-            "enum": ["metadata"]
-          }
-        },
-        "required": ["identifier", "source"],
-        "additionalProperties": false
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
       }
     ]
   },
-  "routing_rules": {
+  "original_routing_rules": {
     "type": "array",
     "description": "Used to direct the journey through a survey (in conjunction with navigation).",
     "items": {
@@ -315,6 +289,53 @@
       "additionalProperties": false,
       "required": ["goto"]
     }
+  },
+  "new_routing_rules": {
+    "type": "array",
+    "description": "Used to direct the journey through a survey (in conjunction with navigation).",
+    "items": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "description": "The id of another block in the same group."
+        },
+        "group": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "description": "The id of another group. The first block in that group will be routed to."
+        },
+        "section": {
+          "type": "string",
+          "description": "Routes to the end of the current section",
+          "enum": ["End"]
+        },
+        "when": {
+          "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["block"]
+        },
+        {
+          "required": ["group"]
+        },
+        {
+          "required": ["section"]
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "routing_rules": {
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_routing_rules"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_routing_rules"
+      }
+    ]
   },
   "non_empty_string": {
     "type": "string",

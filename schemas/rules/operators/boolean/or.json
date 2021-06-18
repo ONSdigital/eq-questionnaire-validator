@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/boolean/or.json",
+  "description": "Evaluates boolean `or`",
+  "type": "object",
+  "properties": {
+    "or": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
+      }
+    }
+  },
+  "required": ["or"],
+  "additionalProperties": false
+}

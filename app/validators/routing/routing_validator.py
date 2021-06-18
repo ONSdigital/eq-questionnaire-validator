@@ -34,7 +34,7 @@ class RoutingValidator(Validator):
 
     def validate_routing_rule(self, rule):
         rule = rule.get("goto")
-        if "when" in rule:
+        if rule and "when" in rule:
             when_validator = WhenRuleValidator(
                 rule["when"], self.schema_element["id"], self.questionnaire_schema
             )

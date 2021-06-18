@@ -1,0 +1,32 @@
+[
+  {
+    "description": "Two values",
+    "rule": {
+      "==": [1, 1]
+    }
+  },
+  {
+    "description": "An answer and a value",
+    "rule": {
+      "==": [
+        {
+          "source": "answers",
+          "identifier": "test"
+        },
+        "Yes"
+      ]
+    }
+  },
+  {
+    "description": "An un-answered answer",
+    "rule": {
+      "==": [
+        {
+          "source": "answers",
+          "identifier": "test"
+        },
+        null
+      ]
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Answer not in a list of values",
+    "rule": {
+      "not": [
+        {
+          "in": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            },
+            ["Yes, I have one", "Yes, they have one"]
+          ]
+        }
+      ]
+    }
+  }
+]

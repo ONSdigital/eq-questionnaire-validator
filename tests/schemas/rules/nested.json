@@ -1,0 +1,82 @@
+[
+  {
+    "description": "answer-1 == 'Yes' and (answer-2 == 'Yes' or answer-3 == 'Yes')",
+    "rule": {
+      "and": [
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            },
+            "Yes"
+          ]
+        },
+        {
+          "or": [
+            {
+              "==": [
+                {
+                  "source": "answers",
+                  "identifier": "answer-2"
+                },
+                "Yes"
+              ]
+            },
+            {
+              "==": [
+                {
+                  "source": "answers",
+                  "identifier": "answer-3"
+                },
+                "Yes"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "description": "answer-1 == 'Yes' and (answer-2 not in ['No', 'Maybe'] or answer-3 == 'Yes')",
+    "rule": {
+      "and": [
+        {
+          "==": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            },
+            "Yes"
+          ]
+        },
+        {
+          "or": [
+            {
+              "not": [
+                {
+                  "in": [
+                    {
+                      "source": "answers",
+                      "identifier": "answer-2"
+                    },
+                    ["No", "Maybe"]
+                  ]
+                }
+              ]
+            },
+            {
+              "==": [
+                {
+                  "source": "answers",
+                  "identifier": "answer-3"
+                },
+                "Yes"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

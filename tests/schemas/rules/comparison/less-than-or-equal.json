@@ -1,0 +1,35 @@
+[
+  {
+    "description": "Two values",
+    "rule": {
+      "<=": [1, 1]
+    }
+  },
+  {
+    "description": "An answer and a value",
+    "rule": {
+      "<=": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        1
+      ]
+    }
+  },
+  {
+    "description": "Two answers",
+    "rule": {
+      "<=": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        {
+          "source": "answers",
+          "identifier": "answer-2"
+        }
+      ]
+    }
+  }
+]
