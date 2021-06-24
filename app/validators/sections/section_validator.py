@@ -1,13 +1,15 @@
 from collections import defaultdict
 
 from app import error_messages
+from app.validators.questionnaire_schema import get_object_containing_key
+from app.validators.routing.new_routing_validator import NewRoutingValidator
 from app.validators.validator import Validator
 from app.validators.questions import get_question_validator
-from app.validators.routing.answer_routing_validator import AnswerRoutingValidator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 class SectionValidator(Validator):
@@ -21,6 +23,7 @@ class SectionValidator(Validator):
         self.validate_repeat()
         self.validate_summary()
         self.validate_groups()
+        self.validate_value_sources()
         return self.errors
 
     def validate_repeat(self):
@@ -40,23 +43,65 @@ class SectionValidator(Validator):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
+    def validate_skip_conditions(self, skip_conditions, origin_id):
+        for skip_condition in skip_conditions:
+            when_validator = WhenRuleValidator(
+                skip_condition["when"], origin_id, self.questionnaire_schema
+            )
+            self.errors += when_validator.validate()
+
+    def validate_value_sources(self):
+        source_references = get_object_containing_key(self.section, "identifier")
+        for json_path, source_reference in source_references:
+            if "source" in source_reference:
+                value_source_validator = ValueSourceValidator(
+                    value_source=source_reference,
+                    json_path=json_path,
+                    questionnaire_schema=self.questionnaire_schema,
+                )
+                self.errors += value_source_validator.validate()
+
     def validate_groups(self):
         for group in self.section["groups"]:
-            group_routing_validator = RoutingValidator(
-                group, group, self.questionnaire_schema
-            )
-            self.errors += group_routing_validator.validate()
+            if "routing_rules" in group:
+                if any("goto" in rule for rule in group["routing_rules"]):
+                    group_routing_validator = RoutingValidator(
+                        group, group, self.questionnaire_schema
+                    )
+                else:
+                    group_routing_validator = NewRoutingValidator(
+                        routing_rules=group["routing_rules"],
+                        group=group,
+                        origin_id=group["id"],
+                        questionnaire_schema=self.questionnaire_schema,
+                    )
+                self.errors += group_routing_validator.validate()
 
-            self.validate_blocks(self.section["id"], group["id"])
+            if "skip_conditions" in group:
+                self.validate_skip_conditions(group["skip_conditions"], group["id"])
 
-    def validate_blocks(self, section_id, group_id):
+            self.validate_blocks(group["id"])
+
+    def validate_blocks(self, group_id):
         group = self.questionnaire_schema.get_group(group_id)
 
         for block in group.get("blocks"):
-            block_routing_validator = RoutingValidator(
-                block, group, self.questionnaire_schema
-            )
-            self.errors += block_routing_validator.validate()
+            if "routing_rules" in block:
+                if any("goto" in rule for rule in block["routing_rules"]):
+                    block_routing_validator = RoutingValidator(
+                        block, group, self.questionnaire_schema
+                    )
+                else:
+                    block_routing_validator = NewRoutingValidator(
+                        routing_rules=block["routing_rules"],
+                        group=group,
+                        origin_id=block["id"],
+                        questionnaire_schema=self.questionnaire_schema,
+                    )
+                self.errors += block_routing_validator.validate()
+
+            if "skip_conditions" in block:
+                self.validate_skip_conditions(block["skip_conditions"], block["id"])
 
             block_validator = get_block_validator(block, self.questionnaire_schema)
             self.errors += block_validator.validate()
@@ -66,7 +111,6 @@ class SectionValidator(Validator):
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
-        routing_rules = block_or_variant.get("routing_rules", {})
 
         if question:
             question_validator = get_question_validator(question)
@@ -74,12 +118,6 @@ class SectionValidator(Validator):
             self.errors += question_validator.validate()
 
             for answer in question.get("answers", []):
-                if routing_rules:
-                    answer_routing_validator = AnswerRoutingValidator(
-                        answer, routing_rules
-                    )
-                    self.errors += answer_routing_validator.validate()
-
                 answer_validator = get_answer_validator(
                     answer, self.questionnaire_schema
                 )
