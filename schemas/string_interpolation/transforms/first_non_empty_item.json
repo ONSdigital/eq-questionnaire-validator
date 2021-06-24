@@ -13,8 +13,11 @@
         "type": "object",
         "properties": {
           "items": {
-            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "description": "A list of value_sources to evaluate the first non empty item.",
+            "type": "array",
+            "items": {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            }
           }
         },
         "additionalProperties": false,

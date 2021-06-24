@@ -165,8 +165,8 @@
         ]
       },
       "identifier": {
-        "description": "The identifier of the item in the data source. This would be an answer id for answers, a metadata property name for metadata, or a list name for lists. The array option allows multiple values to be passed as a list to a transform.",
-        "type": ["string", "array"]
+        "description": "The identifier of the item in the data source. This would be an answer id for answers or a metadata property name for metadata.",
+        "type": ["string"]
       },
       "id_selector": {
         "description": "The property to return from the source.",

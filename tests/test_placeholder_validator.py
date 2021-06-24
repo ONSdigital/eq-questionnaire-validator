@@ -11,10 +11,10 @@ def test_invalid_repeating_section_title_placeholders():
                     {
                         "transform": "concatenate_list",
                         "arguments": {
-                            "list_to_concatenate": {
-                                "source": "answers",
-                                "identifier": ["first-name", "last-name"],
-                            },
+                            "list_to_concatenate": [
+                                {"source": "answers", "identifier": "first-name"},
+                                {"source": "answers", "identifier": "last-name"},
+                            ],
                             "delimiter": " ",
                         },
                     }
