@@ -37,7 +37,7 @@ class NewRoutingValidator(Validator):
         """
         Ensure that a set of routing rules contains a default, without a when clause.
         """
-        default_routing_rule_count = 0
+        default_routing_rule_count = sum("when" not in rule for rule in rules)
         for rule in rules:
             if "when" not in rule:
                 default_routing_rule_count += 1
