@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/boolean/and.json",
-  "description": "Evaluates boolean `and`",
+  "$id": "https://eq.ons.gov.uk/rules/operators/logic/or.json",
+  "description": "Evaluates boolean `or`",
   "type": "object",
   "properties": {
-    "and": {
+    "or": {
       "type": "array",
       "minItems": 2,
       "items": {
@@ -12,6 +12,6 @@
       }
     }
   },
-  "required": ["and"],
+  "required": ["or"],
   "additionalProperties": false
 }

@@ -27,9 +27,9 @@
       {
         "$ref": "https://eq.ons.gov.uk/rules/operators/array/all-in.json"
       },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/and.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/or.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/boolean/not.json" }
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/and.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/or.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/not.json" }
     ]
   },
   "any_value": {
