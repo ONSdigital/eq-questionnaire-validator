@@ -63,51 +63,39 @@ class SectionValidator(Validator):
 
     def validate_groups(self):
         for group in self.section["groups"]:
-            if "routing_rules" in group:
-                if any("goto" in rule for rule in group["routing_rules"]):
-                    group_routing_validator = RoutingValidator(
-                        group, group, self.questionnaire_schema
-                    )
-                else:
-                    group_routing_validator = NewRoutingValidator(
-                        routing_rules=group["routing_rules"],
-                        group=group,
-                        origin_id=group["id"],
-                        questionnaire_schema=self.questionnaire_schema,
-                    )
-                self.errors += group_routing_validator.validate()
-
-            if "skip_conditions" in group:
-                self.validate_skip_conditions(group["skip_conditions"], group["id"])
-
+            self.validate_routing(group, group)
             self.validate_blocks(group["id"])
 
     def validate_blocks(self, group_id):
         group = self.questionnaire_schema.get_group(group_id)
 
         for block in group.get("blocks"):
-            if "routing_rules" in block:
-                if any("goto" in rule for rule in block["routing_rules"]):
-                    block_routing_validator = RoutingValidator(
-                        block, group, self.questionnaire_schema
-                    )
-                else:
-                    block_routing_validator = NewRoutingValidator(
-                        routing_rules=block["routing_rules"],
-                        group=group,
-                        origin_id=block["id"],
-                        questionnaire_schema=self.questionnaire_schema,
-                    )
-                self.errors += block_routing_validator.validate()
-
-            if "skip_conditions" in block:
-                self.validate_skip_conditions(block["skip_conditions"], block["id"])
+            self.validate_routing(block, group)
 
             block_validator = get_block_validator(block, self.questionnaire_schema)
             self.errors += block_validator.validate()
 
             self.validate_question(block)
             self.validate_variants(block)
+
+    def validate_routing(self, schema_element, group):
+        if "routing_rules" in schema_element:
+            if any("goto" in rule for rule in schema_element["routing_rules"]):
+                routing_validator = RoutingValidator(
+                    schema_element, group, self.questionnaire_schema
+                )
+            else:
+                routing_validator = NewRoutingValidator(
+                    routing_rules=schema_element["routing_rules"],
+                    group=group,
+                    origin_id=schema_element["id"],
+                    questionnaire_schema=self.questionnaire_schema,
+                )
+            self.errors += routing_validator.validate()
+        if "skip_conditions" in schema_element:
+            self.validate_skip_conditions(
+                schema_element["skip_conditions"], schema_element["id"]
+            )
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
