@@ -20,7 +20,7 @@ class NewRoutingValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        self.validate_routing_rules_have_default(self.routing_rules)
+        self.validate_routing_rules_has_single_default_rule(self.routing_rules)
 
         block_ids = [block["id"] for block in self.group["blocks"]]
 
@@ -35,9 +35,9 @@ class NewRoutingValidator(Validator):
 
         return self.errors
 
-    def validate_routing_rules_have_default(self, rules):
+    def validate_routing_rules_has_single_default_rule(self, rules):
         """
-        Ensure that a set of routing rules contains a default, without a when clause.
+        Ensure that a set of routing rules contains one default rule, without a when clause.
         """
         default_routing_rule_count = sum("when" not in rule for rule in rules)
 

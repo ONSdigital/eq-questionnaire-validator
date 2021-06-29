@@ -20,7 +20,7 @@ def test_route_must_contain_default():
     ]
 
     validator = get_validator(routing_rules=routing_rules, origin_id="block-id")
-    validator.validate_routing_rules_have_default(routing_rules)
+    validator.validate_routing_rules_has_single_default_rule(routing_rules)
 
     expected_error = {
         "message": validator.ROUTING_RULES_DO_NOT_HAVE_A_DEFAULT_RULE,
@@ -34,7 +34,7 @@ def test_route_has_too_many_defaults():
     routing_rules = [{"block": "response-yes"}, {"block": "response-no"}]
 
     validator = get_validator(routing_rules=routing_rules, origin_id="block-id")
-    validator.validate_routing_rules_have_default(routing_rules)
+    validator.validate_routing_rules_has_single_default_rule(routing_rules)
 
     expected_error = {
         "message": validator.ROUTING_RULES_HAS_TOO_MANY_DEFAULTS,
