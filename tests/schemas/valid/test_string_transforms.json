@@ -396,10 +396,12 @@
                             {
                               "transform": "concatenate_list",
                               "arguments": {
-                                "list_to_concatenate": {
-                                  "source": "answers",
-                                  "identifier": "ref-answer1"
-                                },
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer1"
+                                  }
+                                ],
                                 "delimiter": " "
                               }
                             }
@@ -422,10 +424,16 @@
                             {
                               "transform": "concatenate_list",
                               "arguments": {
-                                "list_to_concatenate": {
-                                  "source": "answers",
-                                  "identifier": ["ref-answer1", "ref-answer2"]
-                                },
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer1"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer2"
+                                  }
+                                ],
                                 "delimiter": ", "
                               }
                             }
@@ -485,10 +493,16 @@
                             {
                               "transform": "concatenate_list",
                               "arguments": {
-                                "list_to_concatenate": {
-                                  "source": "answers",
-                                  "identifier": ["ref-answer1", "ref-answer2"]
-                                },
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer1"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer2"
+                                  }
+                                ],
                                 "delimiter": " "
                               }
                             },
@@ -514,33 +528,35 @@
               "question": {
                 "id": "question5",
                 "title": "Title",
-                "description": ["Format list tests"],
+                "description": ["Checkbox option label tests"],
                 "type": "General",
                 "answers": [
                   {
                     "id": "q5-answer-1",
                     "mandatory": false,
-                    "type": "TextField",
-                    "label": "Simple format list",
-                    "description": {
-                      "text": "{list}",
-                      "placeholders": [
-                        {
-                          "placeholder": "list",
-                          "transforms": [
+                    "type": "Checkbox",
+                    "label": "Placeholders in checkbox option label",
+                    "options": [
+                      {
+                        "label": {
+                          "text": "test {simple_answer}",
+                          "placeholders": [
                             {
-                              "transform": "format_list",
-                              "arguments": {
-                                "list_to_format": {
-                                  "source": "answers",
-                                  "identifier": ["ref-answer1", "ref-answer2"]
-                                }
+                              "placeholder": "simple_answer",
+                              "value": {
+                                "source": "answers",
+                                "identifier": "ref-answer1"
                               }
                             }
                           ]
-                        }
-                      ]
-                    }
+                        },
+                        "value": "test {simple_answer}"
+                      },
+                      {
+                        "label": "Another value",
+                        "value": "Another value"
+                      }
+                    ]
                   }
                 ]
               }
@@ -590,35 +606,33 @@
               "question": {
                 "id": "question7",
                 "title": "Title",
-                "description": ["Checkbox option label tests"],
+                "description": ["Format list tests"],
                 "type": "General",
                 "answers": [
                   {
                     "id": "q7-answer-1",
                     "mandatory": false,
-                    "type": "Checkbox",
-                    "label": "Placeholders in checkbox option label",
-                    "options": [
-                      {
-                        "label": {
-                          "text": "test {simple_answer}",
-                          "placeholders": [
+                    "type": "TextField",
+                    "label": "Simple format list",
+                    "description": {
+                      "text": "{list}",
+                      "placeholders": [
+                        {
+                          "placeholder": "list",
+                          "transforms": [
                             {
-                              "placeholder": "simple_answer",
-                              "value": {
-                                "source": "answers",
-                                "identifier": "ref-answer1"
+                              "transform": "format_list",
+                              "arguments": {
+                                "list_to_format": {
+                                  "source": "answers",
+                                  "identifier": "q5-answer-1"
+                                }
                               }
                             }
                           ]
-                        },
-                        "value": "test {simple_answer}"
-                      },
-                      {
-                        "label": "Another value",
-                        "value": "Another value"
-                      }
-                    ]
+                        }
+                      ]
+                    }
                   }
                 ]
               }

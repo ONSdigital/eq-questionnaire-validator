@@ -13,8 +13,11 @@
         "type": "object",
         "properties": {
           "list_to_concatenate": {
-            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "description": "A list of value_sources to concatenate.",
+            "type": "array",
+            "items": {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            }
           },
           "delimiter": {
             "description": "The delimiter to use, common ones are ' ' for names and ', ' for addresses.",
