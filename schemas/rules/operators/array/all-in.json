@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/all-in.json",
+  "$id": "https://eq.ons.gov.uk/rules/operators/array/all-in.json",
   "description": "Evaluates if all values from the first array are in the second array",
   "type": "object",
   "properties": {

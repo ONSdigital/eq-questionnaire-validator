@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/any-in.json",
+  "$id": "https://eq.ons.gov.uk/rules/operators/array/any-in.json",
   "description": "Evaluates if any value from the first array is in the second array",
   "type": "object",
   "properties": {

@@ -64,3 +64,68 @@ def test_invalid_answer_value_in_when_rule():
     validator.validate_answer_value_in_when_rule(when)
 
     assert validator.errors == expected_error_messages
+
+
+def test_answer_comparisons_different_types():
+    """ Ensures that when answer comparison is used, the type of the variables must be the same """
+    when_rule = {
+        "id": "comparison-1-answer",
+        "condition": "equals any",
+        "comparison": {"id": "comparison-2-answer", "source": "answers"},
+    }
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "comparison-1-answer": {
+            "answer": {"id": "comparison-1-answer", "type": "Number"},
+            "block": "route-comparison-1",
+        },
+        "comparison-2-answer": {
+            "answer": {"id": "comparison-2-answer", "type": "TextField"},
+            "block": "comparison-2",
+        },
+    }
+    validator = WhenRuleValidator(when_rule, {}, questionnaire_schema)
+    validator.validate_comparison_in_when_rule(when_rule, "block-id")
+
+    expected_errors = [
+        {
+            "message": WhenRuleValidator.NON_CHECKBOX_COMPARISON_ID,
+            "comparison_id": "comparison-2-answer",
+            "condition": "equals any",
+        }
+    ]
+
+    assert expected_errors == validator.errors
+
+
+def test_answer_comparisons_different_types_skip_group():
+    """ Ensures that when answer comparison is used, the type of the variables must be the same """
+    when_rule = {
+        "id": "comparison-1-answer",
+        "condition": "less than",
+        "comparison": {"id": "comparison-2-answer", "source": "answers"},
+    }
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "comparison-1-answer": {
+            "answer": {"id": "comparison-1-answer", "type": "Number"},
+            "block": "route-comparison-1",
+        },
+        "comparison-2-answer": {
+            "answer": {"id": "comparison-2-answer", "type": "TextField"},
+            "block": "comparison-2",
+        },
+    }
+    validator = WhenRuleValidator(when_rule, {}, questionnaire_schema)
+    validator.validate_comparison_in_when_rule(when_rule, "block-id")
+
+    expected_errors = [
+        {
+            "message": WhenRuleValidator.NON_MATCHING_WHEN_ANSWER_AND_COMPARISON_TYPES,
+            "comparison_id": "comparison-2-answer",
+            "answer_id": "comparison-1-answer",
+            "referenced_id": "block-id",
+        }
+    ]
+
+    assert expected_errors == validator.errors

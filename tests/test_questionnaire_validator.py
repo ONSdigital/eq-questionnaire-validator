@@ -12,6 +12,7 @@ from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
+from app.validators.value_source_validator import ValueSourceValidator
 
 logger = getLogger()
 
@@ -149,27 +150,26 @@ def test_invalid_placeholder_answer_ids():
 
     expected_errors = [
         {
-            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
-            "block_id": "block1",
-            "referenced_id": "invalid-answer0",
-        },
-        {
-            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
-            "block_id": "block2",
-            "referenced_id": "invalid-answer1",
-        },
-        {
-            "message": BlockValidator.ANSWER_SELF_REFERENCE,
+            "message": BlockValidator.PLACEHOLDER_ANSWER_SELF_REFERENCE,
             "block_id": "block3",
-            "referenced_id": "answer4",
+            "identifier": "answer4",
         },
         {
-            "message": BlockValidator.METADATA_REFERENCE_INVALID,
-            "block_id": "block4",
-            "referenced_id": "invalid-metadata-ref",
+            "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+            "identifier": "invalid-answer0",
+            "json_path": "groups.[0].blocks.[0].question.answers.[1].description.placeholders.[0].value.identifier",
+        },
+        {
+            "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+            "identifier": "invalid-answer1",
+            "json_path": "groups.[0].blocks.[1].question.answers.[1].description.placeholders.[0].transforms.[0].arguments.number.identifier",
+        },
+        {
+            "message": ValueSourceValidator.METADATA_REFERENCE_INVALID,
+            "identifier": "invalid-metadata-ref",
+            "json_path": "groups.[0].blocks.[3].question.answers.[0].description.placeholders.[0].value.identifier",
         },
     ]
-
     assert validator.errors == expected_errors
 
 
@@ -326,7 +326,7 @@ def test_invalid_list_name_in_when_rule():
 
     expected_errors = [
         {
-            "message": BlockValidator.LIST_REFERENCE_INVALID,
+            "message": ValueSourceValidator.LIST_REFERENCE_INVALID,
             "list_name": "non-existent-list-name",
         }
     ]
@@ -342,28 +342,13 @@ def test_invalid_relationship_no_list_specified():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
     validator.validate()
 
-    expected_for_list_error = [
-        {
-            "message": error_messages.FOR_LIST_NEVER_POPULATED,
-            "list_name": "not-a-list",
-            "block_id": "relationships",
-        }
-    ]
+    expected_for_list_error = {
+        "message": error_messages.FOR_LIST_NEVER_POPULATED,
+        "list_name": "not-a-list",
+        "block_id": "relationships",
+    }
 
-    expected_answer_errors = [
-        {
-            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
-            "referenced_id": "first-name",
-            "block_id": "relationships",
-        },
-        {
-            "message": BlockValidator.ANSWER_REFERENCE_INVALID,
-            "referenced_id": "last-name",
-            "block_id": "relationships",
-        },
-    ] * 12
-
-    assert validator.errors == expected_answer_errors + expected_for_list_error
+    assert validator.errors[0] == expected_for_list_error
 
 
 def test_invalid_repeating_section_list_name():

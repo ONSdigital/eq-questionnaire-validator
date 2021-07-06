@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/in.json",
+  "$id": "https://eq.ons.gov.uk/rules/operators/array/in.json",
   "description": "Evaluates if a value is in an array",
   "type": "object",
   "properties": {
