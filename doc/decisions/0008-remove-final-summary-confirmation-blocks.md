@@ -1,4 +1,4 @@
-# 7. Remove final summary and confirmation blocks
+# 8. Remove final summary and confirmation blocks
 
 ## Context
 
