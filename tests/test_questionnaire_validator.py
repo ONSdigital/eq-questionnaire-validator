@@ -142,6 +142,17 @@ def test_invalid_string_transforms():
     assert validator.errors == expected_errors
 
 
+def test_invalid_email_link_transforms():
+    filename = "schemas/invalid/test_invalid_placeholder_email_link.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+    validator.validate()
+
+    expected_errors = [{"message": PlaceholderValidator.INVALID_EMAIL_FORMAT}]
+
+    assert validator.errors == expected_errors
+
+
 def test_invalid_placeholder_answer_ids():
     filename = "schemas/invalid/test_invalid_placeholder_source_ids.json"
 

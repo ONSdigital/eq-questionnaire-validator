@@ -111,6 +111,12 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_ordinal.json#/format_ordinal"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/email_link.json#/email_link"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json#/telephone_number_link"
             }
           ]
         }

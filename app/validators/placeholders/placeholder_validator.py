@@ -12,6 +12,7 @@ class PlaceholderValidator(Validator):
     NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
         "`previous_transform` not referenced in chained transform"
     )
+    INVALID_EMAIL_FORMAT = "Email address is not correctly formatted"
 
     def __init__(self, element):
         super().__init__(element)
@@ -44,7 +45,8 @@ class PlaceholderValidator(Validator):
 
             transforms = placeholder_definition.get("transforms")
             if transforms:
-                self.validate_placeholder_transforms(transforms)
+                self._validate_placeholder_previous_transform(transforms)
+                self._validate_placeholder_email_link_transform(transforms)
 
         placeholder_differences = placeholders_in_string - placeholder_definition_names
 
@@ -60,7 +62,7 @@ class PlaceholderValidator(Validator):
                 differences=placeholder_differences,
             )
 
-    def validate_placeholder_transforms(self, transforms):
+    def _validate_placeholder_previous_transform(self, transforms):
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
@@ -84,3 +86,12 @@ class PlaceholderValidator(Validator):
 
             if not previous_transform_used:
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
+
+    def _validate_placeholder_email_link_transform(self, transforms):
+        for transform in transforms:
+            if transform["transform"] == "email_link":
+                regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+                email_address = transform["arguments"]["email_address"]
+
+                if not re.match(regex, email_address):
+                    self.add_error(self.INVALID_EMAIL_FORMAT)
