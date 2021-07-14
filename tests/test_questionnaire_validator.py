@@ -20,12 +20,12 @@ configure(logger_factory=LoggerFactory())
 
 
 def _open_and_load_schema_file(file):
-    json_file = open(
+    with open(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding="utf8"
-    )
-    json_to_validate = load(json_file)
+    ) as json_file:
+        json_to_validate = load(json_file)
 
-    return json_to_validate
+        return json_to_validate
 
 
 def test_param_valid_schemas(valid_schema_filename):
