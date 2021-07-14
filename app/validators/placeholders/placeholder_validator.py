@@ -1,4 +1,5 @@
 import re
+from email_validator import validate_email, EmailNotValidError
 
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
@@ -90,8 +91,7 @@ class PlaceholderValidator(Validator):
     def _validate_placeholder_email_link_transform(self, transforms):
         for transform in transforms:
             if transform["transform"] == "email_link":
-                regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
-                email_address = transform["arguments"]["email_address"]
-
-                if not re.match(regex, email_address):
+                try:
+                    validate_email(transform["arguments"]["email_address"])
+                except EmailNotValidError:
                     self.add_error(self.INVALID_EMAIL_FORMAT)
