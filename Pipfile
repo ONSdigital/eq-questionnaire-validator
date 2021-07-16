@@ -12,7 +12,6 @@ python-dateutil = "*"
 jsonschema = "*"
 jsonpath-rw = "*"
 jsonpath-rw-ext = "*"
-email-validator = "*"
 
 [dev-packages]
 pytest = "*"

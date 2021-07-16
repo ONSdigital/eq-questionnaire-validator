@@ -12,7 +12,8 @@
         "type": "object",
         "properties": {
           "email_address": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "format": "email"
           },
           "email_subject": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
