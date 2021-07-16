@@ -1,5 +1,4 @@
 import re
-from email_validator import validate_email, EmailNotValidError
 
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
@@ -13,7 +12,6 @@ class PlaceholderValidator(Validator):
     NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = (
         "`previous_transform` not referenced in chained transform"
     )
-    INVALID_EMAIL_FORMAT = "Email address is not correctly formatted"
 
     def __init__(self, element):
         super().__init__(element)
@@ -46,8 +44,7 @@ class PlaceholderValidator(Validator):
 
             transforms = placeholder_definition.get("transforms")
             if transforms:
-                self._validate_placeholder_previous_transform(transforms)
-                self._validate_placeholder_email_link_transform(transforms)
+                self.validate_placeholder_transforms(transforms)
 
         placeholder_differences = placeholders_in_string - placeholder_definition_names
 
@@ -63,7 +60,7 @@ class PlaceholderValidator(Validator):
                 differences=placeholder_differences,
             )
 
-    def _validate_placeholder_previous_transform(self, transforms):
+    def validate_placeholder_transforms(self, transforms):
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
@@ -87,11 +84,3 @@ class PlaceholderValidator(Validator):
 
             if not previous_transform_used:
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
-
-    def _validate_placeholder_email_link_transform(self, transforms):
-        for transform in transforms:
-            if transform["transform"] == "email_link":
-                try:
-                    validate_email(transform["arguments"]["email_address"])
-                except EmailNotValidError:
-                    self.add_error(self.INVALID_EMAIL_FORMAT)
