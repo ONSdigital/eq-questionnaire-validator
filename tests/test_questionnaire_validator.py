@@ -23,9 +23,7 @@ def _open_and_load_schema_file(file):
     with open(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding="utf8"
     ) as json_file:
-        json_to_validate = load(json_file)
-
-        return json_to_validate
+        return load(json_file)
 
 
 def test_param_valid_schemas(valid_schema_filename):
