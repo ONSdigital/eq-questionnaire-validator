@@ -1,0 +1,26 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "telephone_number_link": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["telephone_number_link"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "telephone_number": {
+            "type": "string",
+            "pattern": "^[0-9 ]+$"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["telephone_number"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}
