@@ -12,6 +12,7 @@
         "type": "object",
         "properties": {
           "telephone_number": {
+            "type": "string",
             "pattern": "^[0-9 ]+$"
           }
         },
