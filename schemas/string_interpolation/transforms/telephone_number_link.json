@@ -12,7 +12,6 @@
         "type": "object",
         "properties": {
           "telephone_number": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "pattern": "^[0-9 ]+$"
           }
         },
