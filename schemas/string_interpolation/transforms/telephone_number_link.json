@@ -2,7 +2,7 @@
   "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "telephone_number_link": {
-    "type": "string",
+    "type": "object",
     "properties": {
       "transform": {
         "type": "string",
