@@ -143,6 +143,10 @@
         "feedback": {
           "type": "boolean",
           "description": "A flag that is used to determine if a feedback is available on questionnaire completion"
+        },
+        "view_submitted_response": {
+          "type": "boolean",
+          "description": "A flag that is used to determine if the users response is viewable after submission"
         }
       },
       "additionalProperties": false,
