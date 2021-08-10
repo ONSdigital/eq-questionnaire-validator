@@ -1,8 +1,5 @@
-from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.answers.number_answer_validator import NumberAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_number_of_decimals():

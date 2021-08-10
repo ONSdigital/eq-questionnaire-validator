@@ -120,7 +120,7 @@ class NewWhenRuleValidator(Validator):
         """
         Validates that all arguments are of the correct type for the operator
         """
-        for argument_position, argument in enumerate(rule[operator_name]):
+        for argument_position, _ in enumerate(rule[operator_name]):
             valid_types = self._get_valid_types_for_operator(
                 operator_name, argument_position=argument_position
             )
