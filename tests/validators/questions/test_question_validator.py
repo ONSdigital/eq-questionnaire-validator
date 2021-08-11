@@ -78,3 +78,32 @@ def test_missing_answer_label_mutually_exclusive_ignored():
     validator.validate()
 
     assert not validator.errors
+
+
+def test_missing_answer_label_last_answer_checkbox_ignored():
+    question = {
+        "id": "some-question",
+        "title": "Some title",
+        "type": "General",
+        "answers": [
+            {
+                "id": "age",
+                "label": "Enter your age",
+                "mandatory": False,
+                "type": "Number",
+            },
+            {
+                "id": "age-estimate",
+                "mandatory": False,
+                "options": [
+                    {"label": "This is an estimate", "value": "This is an estimate"}
+                ],
+                "type": "Checkbox",
+            },
+        ],
+    }
+
+    validator = get_question_validator(question)
+    validator.validate()
+
+    assert not validator.errors
