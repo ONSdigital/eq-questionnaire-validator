@@ -23,7 +23,7 @@ class QuestionValidator(Validator):
         if len(self.answers) < 2:
             return None
 
-        final_answer_single_checkbox = self.answers[1]["type"] == "Checkbox"
+        final_answer_single_checkbox = self.answers[-1]["type"] == "Checkbox"
         for answer in self.answers:
             if not (
                 len(self.answers) == 2 and final_answer_single_checkbox
