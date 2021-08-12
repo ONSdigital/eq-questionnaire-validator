@@ -80,7 +80,7 @@ def test_no_answer_label_mutually_exclusive_ignored():
     assert not validator.errors
 
 
-def test_no_answer_label_max_2_answers_last_answer_checkbox_ignored():
+def test_no_answer_label_two_answers_last_answer_single_checkbox_ignored():
     question = {
         "id": "some-question",
         "title": "Some title",
