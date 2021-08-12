@@ -23,15 +23,11 @@ class QuestionValidator(Validator):
         if len(self.answers) < 2:
             return None
 
+        final_answer_single_checkbox = self.answers[1]["type"] == "Checkbox"
         for answer in self.answers:
-            if not answer.get("label"):
-                if (
-                    answer["type"] == "Checkbox"
-                    and (answer == self.answers[-1])
-                    and len(answer["options"]) < 2
-                ):
-                    return None
-
+            if not (
+                len(self.answers) == 2 and final_answer_single_checkbox
+            ) and not answer.get("label"):
                 self.add_error(
                     self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"]
                 )

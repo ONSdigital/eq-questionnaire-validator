@@ -1,7 +1,7 @@
 from app.validators.questions import get_question_validator
 
 
-def test_missing_answer_label_single_answer_ignored():
+def test_no_answer_label_single_answer_ignored():
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -15,7 +15,7 @@ def test_missing_answer_label_single_answer_ignored():
     assert not validator.errors
 
 
-def test_missing_answer_label_multiple_answer():
+def test_no_answer_label_multiple_answers():
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -45,7 +45,7 @@ def test_missing_answer_label_multiple_answer():
     assert expected_error_messages == validator.errors
 
 
-def test_missing_answer_label_mutually_exclusive_ignored():
+def test_no_answer_label_mutually_exclusive_ignored():
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -80,17 +80,20 @@ def test_missing_answer_label_mutually_exclusive_ignored():
     assert not validator.errors
 
 
-def test_missing_answer_label_last_answer_checkbox_ignored():
+def test_no_answer_label_max_2_answers_last_answer_checkbox_ignored():
     question = {
         "id": "some-question",
         "title": "Some title",
         "type": "General",
         "answers": [
             {
-                "id": "age",
-                "label": "Enter your age",
+                "id": "cost",
                 "mandatory": False,
-                "type": "Number",
+                "type": "Radio",
+                "options": [
+                    {"label": "100", "value": "100"},
+                    {"label": "1000", "value": "M1000"},
+                ],
             },
             {
                 "id": "age-estimate",
