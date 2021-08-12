@@ -28,7 +28,7 @@
     "warning": "Submission warning",
     "confirmation_email": true,
     "feedback": true,
-    "view_submitted_response": true
+    "view_response": true
   },
   "questionnaire_flow": {
     "type": "Linear",
