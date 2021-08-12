@@ -20,14 +20,15 @@ class QuestionValidator(Validator):
         return self.errors
 
     def _validate_answer_labels(self):
-        if len(self.answers) < 2:
+        if len(self.answers) < 2 or (
+            len(self.answers) == 2
+            and self.answers[-1]["type"] == "Checkbox"
+            and len(self.answers[-1]["options"]) == 1
+        ):
             return None
 
-        final_answer_single_checkbox = self.answers[-1]["type"] == "Checkbox"
         for answer in self.answers:
-            if not (
-                len(self.answers) == 2 and final_answer_single_checkbox
-            ) and not answer.get("label"):
+            if not answer.get("label"):
                 self.add_error(
                     self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"]
                 )
