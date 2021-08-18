@@ -92,7 +92,7 @@ def test_no_answer_label_two_answers_last_answer_single_checkbox_ignored():
                 "type": "Radio",
                 "options": [
                     {"label": "100", "value": "100"},
-                    {"label": "1000", "value": "M1000"},
+                    {"label": "1000", "value": "1000"},
                 ],
             },
             {
