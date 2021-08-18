@@ -1,6 +1,4 @@
 from app.validators.answers import OptionAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_invalid_mismatching_answer_label_and_value():

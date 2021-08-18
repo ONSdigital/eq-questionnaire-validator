@@ -19,6 +19,7 @@ class DateRangeQuestionValidator(QuestionValidator):
         If period_limits object is present in the DateRange question validates that a date range
         does not have a negative period and days can not be used to define limits for yyyy-mm date ranges
         """
+        super().validate()
         self.validate_range()
         self.validate_period_limits()
         return self.errors
@@ -39,7 +40,7 @@ class DateRangeQuestionValidator(QuestionValidator):
                 self.add_error(self.MIN_GREATER_THAN_MAX)
 
     def validate_period_limits(self):
-        first_answer_type = self.question["answers"][0]["type"]
+        first_answer_type = self.answers[0]["type"]
 
         has_days_limit = "days" in self.period_limits.get(
             "minimum", []
