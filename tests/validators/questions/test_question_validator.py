@@ -1,7 +1,7 @@
 from app.validators.questions import get_question_validator
 
 
-def test_no_answer_label_single_answer_ignored():
+def test_no_answer_label_single_answer():
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -45,7 +45,7 @@ def test_no_answer_label_multiple_answers():
     assert expected_error_messages == validator.errors
 
 
-def test_no_answer_label_mutually_exclusive_ignored():
+def test_no_answer_label_mutually_exclusive():
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -80,7 +80,7 @@ def test_no_answer_label_mutually_exclusive_ignored():
     assert not validator.errors
 
 
-def test_no_answer_label_two_answers_last_answer_single_checkbox_ignored():
+def test_no_answer_label_two_answers_last_answer_single_checkbox():
     question = {
         "id": "some-question",
         "title": "Some title",
