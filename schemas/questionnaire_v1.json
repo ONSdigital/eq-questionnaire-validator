@@ -152,6 +152,23 @@
       "additionalProperties": false,
       "minProperties": 1
     },
+    "post_submission": {
+      "type": "object",
+      "properties": {
+        "guidance": {
+          "description": "Guidance displayed after the questionnaire is submitted.",
+          "type": "object",
+          "properties": {
+            "contents": {
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
+            }
+          },
+          "required": ["contents"]
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1
+    },
     "individual_response": {
       "$ref": "https://eq.ons.gov.uk/individual_response/definitions.json#/individual_response"
     },
