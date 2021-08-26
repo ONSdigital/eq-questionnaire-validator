@@ -31,7 +31,10 @@
           "description": "<a href=''>Important link</a>"
         }
       ]
-    }
+    },
+    "confirmation_email": true,
+    "feedback": true,
+    "view_response": true
   },
   "questionnaire_flow": {
     "type": "Linear",

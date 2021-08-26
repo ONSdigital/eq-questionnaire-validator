@@ -25,10 +25,7 @@
     "button": "Submission button text",
     "guidance": "Submission guidance",
     "title": "Submission title",
-    "warning": "Submission warning",
-    "confirmation_email": true,
-    "feedback": true,
-    "view_response": true
+    "warning": "Submission warning"
   },
   "questionnaire_flow": {
     "type": "Linear",
