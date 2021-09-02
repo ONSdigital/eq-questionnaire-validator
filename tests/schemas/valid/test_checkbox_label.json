@@ -47,7 +47,7 @@
                 "answers": [
                   {
                     "id": "non-mandatory-checkbox-answer",
-                    "label": null,
+                    "instruction": null,
                     "mandatory": false,
                     "options": [
                       {

@@ -11,6 +11,9 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
       },
       "label": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      },
+      "instruction": {
         "oneOf": [
           {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
