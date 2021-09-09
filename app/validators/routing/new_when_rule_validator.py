@@ -49,7 +49,7 @@ class NewWhenRuleValidator(Validator):
     INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
-        "Date operator references non Date answer"
+        "Date operator references non Date, MonthYearDate, or YearDate answer"
     )
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
@@ -144,7 +144,7 @@ class NewWhenRuleValidator(Validator):
             and self.questionnaire_schema.get_answer(first_argument["identifier"])[
                 "type"
             ]
-            != "Date"
+            not in ["Date", "MonthYearDate", "YearDate"]
         ):
             self.add_error(
                 self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
