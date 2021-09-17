@@ -23,6 +23,7 @@ OPERATOR_IN = "in"
 OPERATOR_ALL_IN = "all-in"
 OPERATOR_ANY_IN = "any-in"
 OPERATOR_DATE = "date"
+OPERATOR_COUNT = "count"
 
 LOGIC_OPERATORS = [OPERATOR_NOT, OPERATOR_AND, OPERATOR_OR]
 
@@ -37,7 +38,7 @@ COMPARISON_OPERATORS = [
 
 ARRAY_OPERATORS = [OPERATOR_IN, OPERATOR_ALL_IN, OPERATOR_ANY_IN]
 
-VALUE_OPERATORS = [OPERATOR_DATE]
+VALUE_OPERATORS = [OPERATOR_DATE, OPERATOR_COUNT]
 
 ALL_OPERATORS = (
     LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
@@ -101,6 +102,9 @@ class NewWhenRuleValidator(Validator):
 
         if operator_name == OPERATOR_DATE:
             return TYPE_DATE
+
+        if operator_name == OPERATOR_COUNT:
+            return TYPE_NUMBER
         return TYPE_BOOLEAN
 
     def _validate_argument_types_match(self, rule, argument_types):
