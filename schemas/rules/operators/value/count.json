@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://eq.ons.gov.uk/rules/operators/value/count.json",
-  "description": "Returns the number of objects in an array. Accepts a single arguement which is the array to get the number of objects from",
+  "description": "Returns the count of items in an array. Accepts a single argument which is the array",
   "type": "object",
   "properties": {
     "count": {
