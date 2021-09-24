@@ -161,12 +161,12 @@ class NewWhenRuleValidator(Validator):
         """
         first_argument = operator["count"][0]
         if (
-                isinstance(first_argument, dict)
-                and first_argument.get("source") == "answers"
-                and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-            "type"
-        ]
-                not in ["Date", "MonthYearDate", "YearDate"]
+            isinstance(first_argument, dict)
+            and first_argument.get("source") == "answers"
+            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
+                "type"
+            ]
+            not in ["Date", "MonthYearDate", "YearDate"]
         ):
             self.add_error(
                 self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
