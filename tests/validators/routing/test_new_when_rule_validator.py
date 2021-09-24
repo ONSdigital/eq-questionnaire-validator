@@ -380,6 +380,24 @@ def test_validate_date_operator_non_date_answer():
     assert validator.errors == [expected_error]
 
 
+def test_validate_count_operator_non_checkbox_answer():
+    count_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
+    }
+    validator = get_validator(count_operator, questionnaire_schema)
+    validator.validate()
+
+    expected_error = {
+        "message": validator.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
+        "origin_id": ORIGIN_ID,
+        "value_source": {"source": "answers", "identifier": "string-answer"},
+    }
+
+    assert validator.errors == [expected_error]
+
+
 def test_validate_date_operator_with_offset():
     date_operator = {
         "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}]

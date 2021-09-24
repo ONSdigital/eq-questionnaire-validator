@@ -52,6 +52,9 @@ class NewWhenRuleValidator(Validator):
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
         "Date operator references non Date, MonthYearDate, or YearDate answer"
     )
+    COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = (
+        "Count operator references non Checkbox answer"
+    )
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
         super().__init__(when_clause)
