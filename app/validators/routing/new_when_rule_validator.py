@@ -157,7 +157,7 @@ class NewWhenRuleValidator(Validator):
 
     def _validate_count_operator(self, operator):
         """
-        Validates that when an answer value source is used it is a date
+        Validates that when an answer value source is used it is a checkbox
         """
         first_argument = operator["count"][0]
         if (
@@ -166,10 +166,10 @@ class NewWhenRuleValidator(Validator):
             and self.questionnaire_schema.get_answer(first_argument["identifier"])[
                 "type"
             ]
-            not in ["Date", "MonthYearDate", "YearDate"]
+            not in ["Checkbox"]
         ):
             self.add_error(
-                self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
+                self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
                 value_source=first_argument,
             )
 
