@@ -427,7 +427,7 @@ def test_validate_count_operator_non_checkbox_answer():
     count_operator = {"count": [{"source": "answers", "identifier": "array-answer"}]}
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
+        "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
     }
     validator = get_validator(count_operator, questionnaire_schema)
     validator.validate()
