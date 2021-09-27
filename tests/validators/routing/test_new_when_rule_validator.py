@@ -427,7 +427,7 @@ def test_validate_count_operator_non_checkbox_answer():
     count_operator = {"count": [{"source": "answers", "identifier": "array-answer"}]}
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
+        "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
     }
     validator = get_validator(count_operator, questionnaire_schema)
     validator.validate()
@@ -435,7 +435,7 @@ def test_validate_count_operator_non_checkbox_answer():
     expected_error = {
         "message": validator.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
         "origin_id": ORIGIN_ID,
-        "value_source": {"identifier": "array-answer", "type": "Checkbox"},
+        "value_source": {"source": "answers", "identifier": "array-answer"},
     }
 
     assert validator.errors == [expected_error]

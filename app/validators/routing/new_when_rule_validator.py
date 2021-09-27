@@ -107,7 +107,7 @@ class NewWhenRuleValidator(Validator):
             return TYPE_DATE
 
         if operator_name == OPERATOR_COUNT:
-            return TYPE_NUMBER
+            self._validate_count_operator(rule)
         return TYPE_BOOLEAN
 
     def _validate_argument_types_match(self, rule, argument_types):
@@ -169,7 +169,7 @@ class NewWhenRuleValidator(Validator):
             and self.questionnaire_schema.get_answer(first_argument["identifier"])[
                 "type"
             ]
-            not in ["Checkbox"]
+            != "Checkbox"
         ):
             self.add_error(
                 self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
