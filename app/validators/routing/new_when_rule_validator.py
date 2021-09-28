@@ -89,6 +89,9 @@ class NewWhenRuleValidator(Validator):
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
 
+        if operator_name == OPERATOR_COUNT:
+            self._validate_count_operator(rule)
+
         if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS:
             self._validate_comparison_operator_argument_types(
                 rule, operator_name, argument_types
@@ -107,7 +110,8 @@ class NewWhenRuleValidator(Validator):
             return TYPE_DATE
 
         if operator_name == OPERATOR_COUNT:
-            self._validate_count_operator(rule)
+            return TYPE_NUMBER
+
         return TYPE_BOOLEAN
 
     def _validate_argument_types_match(self, rule, argument_types):
