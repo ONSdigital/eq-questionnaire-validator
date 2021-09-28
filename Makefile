@@ -13,4 +13,5 @@ test:
 	pipenv run ./scripts/run_tests_unit.sh
 
 format:
+    npm install gulp
 	pipenv run black .
