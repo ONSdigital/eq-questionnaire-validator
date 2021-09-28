@@ -13,5 +13,4 @@ test:
 	pipenv run ./scripts/run_tests_unit.sh
 
 format:
-	yarn gulp format
 	pipenv run black .
