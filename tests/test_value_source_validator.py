@@ -1,5 +1,5 @@
-from app.validators.value_source_validator import ValueSourceValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 def test_invalid_reference():
