@@ -1,6 +1,7 @@
 import collections
 from collections import defaultdict
 from functools import cached_property, lru_cache
+
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 

@@ -1,14 +1,14 @@
 from collections import defaultdict
 
 from app import error_messages
-from app.validators.questionnaire_schema import get_object_containing_key
-from app.validators.routing.new_routing_validator import NewRoutingValidator
-from app.validators.validator import Validator
-from app.validators.questions import get_question_validator
-from app.validators.routing.routing_validator import RoutingValidator
-from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
+from app.validators.questionnaire_schema import get_object_containing_key
+from app.validators.questions import get_question_validator
+from app.validators.routing.new_routing_validator import NewRoutingValidator
+from app.validators.routing.routing_validator import RoutingValidator
+from app.validators.routing.when_rule_validator import WhenRuleValidator
+from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
 
