@@ -11,7 +11,7 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value_except_array"
+            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value"
           },
           {
             "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
