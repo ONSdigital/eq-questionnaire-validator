@@ -1,8 +1,8 @@
 import glob
 from json import load
 
-from jsonschema import Draft7Validator, ValidationError, RefResolver
-from jsonschema.exceptions import best_match, SchemaError
+from jsonschema import Draft7Validator, RefResolver, ValidationError
+from jsonschema.exceptions import SchemaError, best_match
 
 from app.validators.validator import Validator
 
