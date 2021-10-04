@@ -28,6 +28,9 @@ find . -type f -name "*.py" | xargs pylint --reports=n --output-format=colorized
 # http://stackoverflow.com/questions/6626351/how-to-extract-bits-from-return-code-number-in-bash
 display_result $? 2 "Pylint linting check"
 
+isort --check .
+display_result $? 1 "isort linting check"
+
 black --check . --exclude node_modules
 
 display_result $? 1 "Python code formatting check"
