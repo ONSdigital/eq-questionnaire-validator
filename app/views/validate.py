@@ -1,9 +1,8 @@
-import urllib
-
 import json
+import urllib
 from json import JSONDecodeError
 
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, Response, jsonify, request
 from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator

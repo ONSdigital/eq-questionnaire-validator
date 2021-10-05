@@ -3,11 +3,11 @@ import pytest
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
 from app.validators.routing.types import (
+    TYPE_ARRAY,
+    TYPE_DATE,
+    TYPE_NULL,
     TYPE_NUMBER,
     TYPE_STRING,
-    TYPE_DATE,
-    TYPE_ARRAY,
-    TYPE_NULL,
 )
 
 ORIGIN_ID = "block-id"
