@@ -636,6 +636,43 @@
                   }
                 ]
               }
+            },
+            {
+              "id": "block8",
+              "type": "Question",
+              "question": {
+                "id": "question8",
+                "title": "Title",
+                "description": ["Count list tests"],
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q8-answer-1",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "label": "Count list items",
+                    "description": {
+                      "text": "{list}",
+                      "placeholders": [
+                        {
+                          "placeholder": "list",
+                          "transforms": [
+                            {
+                              "transform": "list_item_count",
+                              "arguments": {
+                                "list_to_count": {
+                                  "source": "answers",
+                                  "identifier": "q5-answer-1"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
             }
           ]
         }
