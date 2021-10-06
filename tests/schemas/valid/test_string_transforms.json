@@ -649,7 +649,7 @@
                   {
                     "id": "q8-answer-1",
                     "mandatory": false,
-                    "type": "Checkbox",
+                    "type": "TextField",
                     "label": "Count list items",
                     "description": {
                       "text": "{list}",
