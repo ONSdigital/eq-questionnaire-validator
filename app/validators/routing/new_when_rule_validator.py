@@ -74,7 +74,6 @@ class NewWhenRuleValidator(Validator):
         operator_name = next(iter(rule))
         argument_types = self._get_argument_types_for_operator(rule, operator_name)
 
-
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
 
