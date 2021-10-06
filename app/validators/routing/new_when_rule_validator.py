@@ -73,7 +73,7 @@ class NewWhenRuleValidator(Validator):
     def validate_rule(self, rule):
         operator_name = next(iter(rule))
         argument_types = []
-        self.validate_argument_type(rule, operator_name, argument_types)
+        self._get_argument_types_for_operator(rule, operator_name, argument_types)
 
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
@@ -103,7 +103,7 @@ class NewWhenRuleValidator(Validator):
 
         return TYPE_BOOLEAN
 
-    def validate_argument_type(self, rule, operator_name, argument_types):
+    def _get_argument_types_for_operator(self, rule, operator_name, argument_types):
         for argument in rule[operator_name]:
             if isinstance(argument, dict) and any(
                 operator in argument for operator in ALL_OPERATORS
