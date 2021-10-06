@@ -1,0 +1,110 @@
+[
+  {
+    "description": "A checkbox selected answer equal to number of checkboxes count number",
+    "rule": {
+      "==": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  },
+  {
+    "description": "A checkbox selected answer not equal to number of checkboxes count number",
+    "rule": {
+      "!=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  },
+  {
+    "description": "A checkbox selected answer less than number of checkboxes count number",
+    "rule": {
+      "<": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  },
+  {
+    "description": "A checkbox selected answer less than or equal to number of checkboxes count number",
+    "rule": {
+      "<=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  },
+  {
+    "description": "A checkbox selected answer more than number of checkboxes count number",
+    "rule": {
+      ">": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  },
+  {
+    "description": "A checkbox selected answer more than or equal to number of checkboxes count number",
+    "rule": {
+      ">=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "checkboxNumber": 2
+        }
+      ]
+    }
+  }
+]
