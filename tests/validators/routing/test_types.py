@@ -1,14 +1,14 @@
 import pytest
 
 from app.validators.routing.types import (
-    resolve_value_source_json_type,
-    python_type_to_json_type,
-    TYPE_OBJECT,
     TYPE_ARRAY,
-    TYPE_STRING,
-    TYPE_NUMBER,
     TYPE_BOOLEAN,
     TYPE_NULL,
+    TYPE_NUMBER,
+    TYPE_OBJECT,
+    TYPE_STRING,
+    python_type_to_json_type,
+    resolve_value_source_json_type,
 )
 
 

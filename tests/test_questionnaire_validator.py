@@ -1,8 +1,7 @@
 import os
 from json import load
 
-from structlog import configure
-from structlog import getLogger
+from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
 from app import error_messages

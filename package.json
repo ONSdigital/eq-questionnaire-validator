@@ -9,7 +9,14 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "gulp lint"
+    "lint": "yarn lint:schemas && yarn lint:test-schemas && yarn lint:ajv",
+    "lint:schemas": "prettier --check \"schemas/**/*.json\" && eslint \"schemas/**/*.json\"",
+    "lint:test-schemas": "prettier --check \"tests/schemas/**/*.json\" && eslint \"tests/schemas/**/*.json\"",
+    "lint:ajv": "prettier \"ajv/**/*.js\" && eslint \"ajv/**/*.js\"",
+    "format": "yarn format:schemas && yarn format:test-schemas && yarn format:ajv",
+    "format:schemas": "prettier \"schemas/**/*.json\" --write && eslint --fix \"schemas/**/*.json\"",
+    "format:test-schemas": "prettier \"tests/schemas/**/*.json\" --write && eslint --fix \"tests/schemas/**/*.json\"",
+    "format:ajv": "prettier \"ajv/**/*.js\" --write && eslint --fix \"ajv/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -23,20 +30,20 @@
   "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
   "devDependencies": {
     "ajv": "^6.10.2",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "debug": "^4.1.1",
-    "eslint": "^6.6.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-standard": "^4.0.1",
     "express": "^4.17.1",
     "fancy-log": "^1.3.3",
     "glob": "^7.1.6",
-    "gulp": "^4.0.2",
-    "gulp-diff-4": "^4.0.1",
-    "gulp-prettier": "^3.0.0"
-  }
+    "prettier": "2.4.1"
+  },
+  "prettier": {}
 }
