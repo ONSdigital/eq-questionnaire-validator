@@ -72,8 +72,8 @@ class NewWhenRuleValidator(Validator):
 
     def validate_rule(self, rule):
         operator_name = next(iter(rule))
-        argument_types = []
-        self._get_argument_types_for_operator(rule, operator_name, argument_types)
+        argument_types = self._get_argument_types_for_operator(rule, operator_name)
+
 
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
@@ -103,7 +103,8 @@ class NewWhenRuleValidator(Validator):
 
         return TYPE_BOOLEAN
 
-    def _get_argument_types_for_operator(self, rule, operator_name, argument_types):
+    def _get_argument_types_for_operator(self, rule, operator_name):
+        argument_types = []
         for argument in rule[operator_name]:
             if isinstance(argument, dict) and any(
                 operator in argument for operator in ALL_OPERATORS
@@ -116,6 +117,8 @@ class NewWhenRuleValidator(Validator):
             else:
                 argument_type = python_type_to_json_type(type(argument).__name__)
             argument_types.append(argument_type)
+
+        return argument_types
 
     def _validate_argument_types_match(self, rule, argument_types):
         """
