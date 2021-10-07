@@ -1,0 +1,113 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "001",
+  "title": "Test Response Metadata Value Source",
+  "theme": "default",
+  "description": "A test survey for response metadata value source",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "return_by",
+      "type": "date"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "initial-checkbox",
+              "question": {
+                "answers": [
+                  {
+                    "id": "initial-checkbox-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "Check",
+                        "value": "Check"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "id": "initial-checkbox-question",
+                "title": "Initial Checkobox",
+                "type": "General",
+                "guidance": {
+                  "contents": [
+                    {
+                      "description": "Submit the answer to create submitted_at identifier for response metadata value source"
+                    }
+                  ]
+                }
+              },
+              "routing_rules": [
+                {
+                  "block": "interstitial"
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "interstitial",
+              "content": {
+                "title": "Date of Submission",
+                "contents": [
+                  {
+                    "description": {
+                      "text": "You submitted your first answer on {date}",
+                      "placeholders": [
+                        {
+                          "placeholder": "date",
+                          "transforms": [
+                            {
+                              "transform": "format_date",
+                              "arguments": {
+                                "date_to_format": {
+                                  "source": "response_metadata",
+                                  "identifier": "started_at"
+                                },
+                                "date_format": "d MMMM yyyy"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "group"
+        }
+      ]
+    }
+  ]
+}

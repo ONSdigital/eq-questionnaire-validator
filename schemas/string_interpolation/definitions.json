@@ -165,6 +165,7 @@
         "enum": [
           "answers",
           "metadata",
+          "response_metadata",
           "collection_metadata",
           "list",
           "location"

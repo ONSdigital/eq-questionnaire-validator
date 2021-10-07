@@ -7,6 +7,7 @@ class ValueSourceValidator(Validator):
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     LIST_REFERENCE_INVALID = "Invalid list reference"
     METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+    RESPONSE_METADATA_REFERENCE_INVALID = "Invalid response metadata reference"
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"]
@@ -39,6 +40,9 @@ class ValueSourceValidator(Validator):
         elif source == "list":
             self._validate_list_source_reference(identifiers)
 
+        elif source == "response_metadata":
+            self._validate_response_metadata_source_reference(identifiers)
+
     def _validate_metadata_source_reference(self, identifiers):
         for identifier in identifiers:
             if identifier not in self.questionnaire_schema.metadata_ids:
@@ -48,6 +52,13 @@ class ValueSourceValidator(Validator):
         for identifier in identifiers:
             if identifier not in self.questionnaire_schema.list_names:
                 self.add_error(self.LIST_REFERENCE_INVALID, identifier=identifier)
+
+    def _validate_response_metadata_source_reference(self, identifiers):
+        for identifier in identifiers:
+            if identifier not in ["started_at"]:
+                self.add_error(
+                    self.RESPONSE_METADATA_REFERENCE_INVALID, identifier=identifier
+                )
 
     def _validate_answer_source_reference(self, identifiers, selector=None):
         answers_with_context = self.questionnaire_schema.answers_with_context
