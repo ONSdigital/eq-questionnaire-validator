@@ -242,6 +242,8 @@ Properties and uses:
 
 - The `concat` operator is responsible for concatenating a sequence of values using a delimiter.
   This example demonstrates formatting the answer values for each list item.
+- When dynamic options are used with a `list` source, the `list_item_id` is not passed explicitly as `self` as the call is responsible for using the rule evaluator in the context of the current list item id. 
+  Alternatively, we could introduce a new property such as `list_item_id` to answer value source to support passing in explicit values.
 
 ## Consequences
 
