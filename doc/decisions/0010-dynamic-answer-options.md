@@ -56,7 +56,7 @@ Properties and uses:
                 },
                 {
                   "days": -7,
-                  "weekday": "MON"
+                  "day_of_week": "MONDAY"
                 }
               ]
             },
@@ -89,9 +89,9 @@ Properties and uses:
 ```
 
 - The `date` operator takes an offset object; this currently only supports `days`, `months`, and `years`.
-  This has been extended to support a `weekday` property, which allows a date to be set to a specific day for the given date's week. This can be combined with the numerical offsets to achieve behaviours such as "last Monday", "next Monday" etc. To achieve this, **the weekday offset needs to be applied after any numerical offsets.**.
-- The `date-range` operation returns a list of datetime objects for a specified range from a given date. It takes a `datetime` object, the range in days (+/-), to return.
-- The `format_date` is used to return a formatted string date. It takes three arguments, the datetime object or a string date, the format to return and an input format (Used with string inputs).
+  This has been extended to support a `day_of_week` property, allowing a date to be set to a specific day for the given week. This can be combined with the numerical offsets to achieve behaviours such as "last Monday", "next Monday" etc. To achieve this, **the day_of_week offset needs to be applied after any numerical offsets.**.
+- The `date-range` operation returns a list of `datetime` objects for a specified range from a given date. It takes a `datetime` object, the range in days (+/-), to return.
+- The `format_date` is used to return a formatted string date. It takes three arguments, the datetime object, or a string date, the format to return and an input format (Used with string inputs).
     - This could be broken down into two explicit operations, `format_string_date` and `formate_datetime`, so each has a single responsibility.
 - The `map` operator has been introduced to apply operations on each value of a sequence. It takes two-argument, first, a sequence, and second the operation to apply to each item in the sequence.
   The reference to `self` within the `map` operator refers to the current iteration's value.
@@ -247,6 +247,7 @@ Properties and uses:
 
 - Dynamic answer options can be driven by any value source or value operators that return a sequence of values.
 - Consistent with new rules structure.
-- Supports translated schemas since values are resolved to the schema label.
+- Although we resolve an answer value to its label when using Checkbox answers to drive the dynamic options, support for translations are out of scope, and no guarantees are provided.
 - `answer.*.options` can be optional when `dynamic_options` are defined. The necessary guards will need to be in place to ensure the answer always have a minimum of 2 options.
 - Answer option action (`options.*.action`) will not be supported for dynamic options.
+- Support for the nested use of dynamic options, i.e. dynamically generated options, populating other dynamic options, is out of scope.
