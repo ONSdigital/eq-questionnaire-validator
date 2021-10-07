@@ -102,9 +102,9 @@ class NewWhenRuleValidator(Validator):
 
         return TYPE_BOOLEAN
 
-    def _get_argument_types_for_operator(self, operator_name):
+    def _get_argument_types_for_operator(self, arguments):
         argument_types = []
-        for argument in operator_name:
+        for argument in arguments:
             if isinstance(argument, dict) and any(
                 operator in argument for operator in ALL_OPERATORS
             ):
