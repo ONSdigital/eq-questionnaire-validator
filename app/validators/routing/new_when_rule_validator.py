@@ -1,12 +1,12 @@
 from app.validators.routing.types import (
-    python_type_to_json_type,
-    resolve_value_source_json_type,
-    TYPE_DATE,
     TYPE_ARRAY,
+    TYPE_BOOLEAN,
+    TYPE_DATE,
+    TYPE_NULL,
     TYPE_NUMBER,
     TYPE_STRING,
-    TYPE_NULL,
-    TYPE_BOOLEAN,
+    python_type_to_json_type,
+    resolve_value_source_json_type,
 )
 from app.validators.validator import Validator
 
