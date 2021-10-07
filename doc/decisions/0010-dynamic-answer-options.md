@@ -143,7 +143,7 @@ Properties and uses:
       }
     },
     "transform": {
-      "answer_label_from_value": [
+      "option_label_from_value": [
         "self",
         "checkbox-answer-id",
         {
@@ -182,7 +182,7 @@ Properties and uses:
       }
     },
     "transform": {
-      "answer_label_from_value": [
+      "option_label_from_value": [
         "self",
         "checkbox-answer-id",
         {
