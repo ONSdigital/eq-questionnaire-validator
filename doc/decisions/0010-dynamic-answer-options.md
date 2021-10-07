@@ -125,6 +125,7 @@ Properties and uses:
 ```
 
 - Given an answer id, list item id and, an option's value, `option_label_from_value` is responsible for resolving the label for that option's value.
+  This is required as the label and value does not necessarily always match. We store the option's value, but the user sees the label; hence when rerendering an answer option, we need to use the label for the given value.
 
 ### Dynamic answer options with repeating answer source within a repeat (Checkbox)
 
@@ -242,7 +243,7 @@ Properties and uses:
 
 - The `concat` operator is responsible for concatenating a sequence of values using a delimiter.
   This example demonstrates formatting the answer values for each list item.
-- When dynamic options are used with a `list` source, the `list_item_id` is not passed explicitly as `self` as the call is responsible for using the rule evaluator in the context of the current list item id. 
+- When dynamic options are used with a `list` source, the `list_item_id` is not passed explicitly as `self` as the call is responsible for using the rule evaluator in the context of the current list item id.
   Alternatively, we could introduce a new property such as `list_item_id` to answer value source to support passing in explicit values.
 
 ## Consequences
