@@ -119,6 +119,12 @@
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json#/telephone_number_link"
             },
             {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/date_range_bounds.json#/date_range_bounds"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json#/format_date_range"
+            },
+            {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/list_item_count.json#/list_item_count"
             }
           ]

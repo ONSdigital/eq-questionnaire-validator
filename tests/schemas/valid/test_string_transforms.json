@@ -73,6 +73,29 @@
               }
             },
             {
+              "id": "block00",
+              "type": "Question",
+              "question": {
+                "id": "question08",
+                "title": "Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "ref-answer3",
+                    "mandatory": true,
+                    "type": "Date",
+                    "label": "A fourth answer which transforms may reference"
+                  },
+                  {
+                    "id": "ref-answer4",
+                    "mandatory": true,
+                    "type": "Date",
+                    "label": "A fifth answer which transforms may reference"
+                  }
+                ]
+              }
+            },
+            {
               "id": "block1",
               "type": "Question",
               "question": {
@@ -147,14 +170,16 @@
                             {
                               "transform": "format_date_range",
                               "arguments": {
-                                "start_date": {
-                                  "source": "answers",
-                                  "identifier": "ref-answer2"
-                                },
-                                "end_date": {
-                                  "source": "answers",
-                                  "identifier": "ref-answer2"
-                                }
+                                "date_range": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer3"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "ref-answer4"
+                                  }
+                                ]
                               }
                             }
                           ]
