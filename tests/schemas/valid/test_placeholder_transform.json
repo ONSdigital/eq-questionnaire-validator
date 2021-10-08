@@ -194,6 +194,81 @@
           ]
         }
       ]
+    },
+    {
+      "id": "days-worked-section",
+      "title": "Days Input",
+      "groups": [
+        {
+          "id": "days-input-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "date-question",
+              "question": {
+                "id": "primary-date-question",
+                "title": "Please enter a reference date to generate a date range",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "reference-date",
+                    "label": "Reference Date",
+                    "description": "This scenario uses 2 prior full week offset, 15 day range, first day of the week monday",
+                    "mandatory": true,
+                    "type": "Date"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "days-question-block",
+              "question": {
+                "id": "days-question",
+                "title": {
+                  "text": "How many days did you work between {formatted_date_range}?",
+                  "placeholders": [
+                    {
+                      "placeholder": "formatted_date_range",
+                      "transforms": [
+                        {
+                          "transform": "date_range_bounds",
+                          "arguments": {
+                            "reference_date": {
+                              "source": "answers",
+                              "identifier": "reference-date"
+                            },
+                            "offset_full_weeks": -1,
+                            "days_in_range": 15,
+                            "first_day_of_week": "MONDAY"
+                          }
+                        },
+                        {
+                          "transform": "format_date_range",
+                          "arguments": {
+                            "date_range": {
+                              "source": "previous_transform"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "date-range-year-answer",
+                    "label": "How many days did you work during this period?",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
