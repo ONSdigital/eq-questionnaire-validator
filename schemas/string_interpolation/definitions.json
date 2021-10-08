@@ -117,6 +117,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json#/telephone_number_link"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/list_item_count.json#/list_item_count"
             }
           ]
         }
