@@ -99,17 +99,12 @@
   "new_skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
     "type": "object",
-    "minItems": 1,
-    "uniqueItems": true,
-    "items": {
-      "type": "object",
-      "properties": {
-        "when": {
-          "$ref": "https://eq.ons.gov.uk/rules/rule.json"
-        }
-      },
-      "additionalProperties": false
+    "properties": {
+      "when": {
+        "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+      }
     },
+    "additionalProperties": false,
     "required": ["when"]
   },
   "skip_conditions": {
