@@ -12,6 +12,7 @@ class ValueSourceValidator(Validator):
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"]
     }
+    RESPONSE_METADATA_IDENTIFIERS = ["started_at"]
 
     def __init__(self, value_source, json_path, questionnaire_schema):
         super().__init__(value_source)
@@ -55,7 +56,7 @@ class ValueSourceValidator(Validator):
 
     def _validate_response_metadata_source_reference(self, identifiers):
         for identifier in identifiers:
-            if identifier not in ["started_at"]:
+            if identifier not in self.RESPONSE_METADATA_IDENTIFIERS:
                 self.add_error(
                     self.RESPONSE_METADATA_REFERENCE_INVALID, identifier=identifier
                 )
