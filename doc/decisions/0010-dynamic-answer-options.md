@@ -47,6 +47,12 @@ Properties and uses:
     "values": {
       "map": [
         {
+          "format_date": [
+            "self",
+            "%Y-%m-%d"
+          ]
+        },
+        {
           "date-range": [
             {
               "date": [
@@ -61,12 +67,6 @@ Properties and uses:
               ]
             },
             7
-          ]
-        },
-        {
-          "format_date": [
-            "self",
-            "%Y-%m-%d"
           ]
         }
       ]
@@ -93,7 +93,7 @@ Properties and uses:
 - The `date-range` operation returns a list of `datetime` objects for a specified range from a given date. It takes a `datetime` object, the range in days (+/-), to return.
 - The `format_date` is used to return a formatted string date. It takes three arguments, the datetime object, or a string date, the format to return and an input format (Used with string inputs).
     - This could be broken down into two explicit operations, `format_string_date` and `formate_datetime`, so each has a single responsibility.
-- The `map` operator has been introduced to apply operations on each value of a sequence. It takes two-argument, first, a sequence, and second the operation to apply to each item in the sequence.
+- The `map` operator has been introduced to apply operations on each value of a sequence. It takes two-argument, first, the operation to apply to each item, second, the sequence of values on which the operation is applied.
   The reference to `self` within the `map` operator refers to the current iteration's value.
 
 ### Dynamic answer options with non-repeating answer source (Checkbox)
