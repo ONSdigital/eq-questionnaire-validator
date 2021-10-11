@@ -211,7 +211,7 @@ class NewWhenRuleValidator(Validator):
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
         if operator_name in [OPERATOR_EQUAL, OPERATOR_NOT_EQUAL]:
-            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL]
+            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
 
         if operator_name in [
             OPERATOR_LESS_THAN,

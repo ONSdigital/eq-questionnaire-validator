@@ -1,8 +1,14 @@
 [
   {
-    "description": "Two values",
+    "description": "Two non-array values",
     "rule": {
       "==": [1, 1]
+    }
+  },
+  {
+    "description": "Two array values",
+    "rule": {
+      "==": [[], []]
     }
   },
   {
