@@ -51,12 +51,11 @@ class SectionValidator(Validator):
             )
             self.errors += when_validator.validate()
 
-    def validate_new_skip_conditions(self, skip_conditions, origin_id):
-        for skip_condition in skip_conditions:
-            when_validator = NewWhenRuleValidator(
-                skip_condition["when"], origin_id, self.questionnaire_schema
-            )
-            self.errors += when_validator.validate()
+    def validate_new_skip_conditions(self, skip_condition, origin_id):
+        when_validator = NewWhenRuleValidator(
+            skip_condition["when"], origin_id, self.questionnaire_schema
+        )
+        self.errors += when_validator.validate()
 
     def validate_value_sources(self):
         source_references = get_object_containing_key(self.section, "identifier")
@@ -107,7 +106,7 @@ class SectionValidator(Validator):
                 )
             elif isinstance(schema_element["skip_conditions"], dict):
                 self.validate_new_skip_conditions(
-                    [schema_element["skip_conditions"]], schema_element["id"]
+                    schema_element["skip_conditions"], schema_element["id"]
                 )
 
     def validate_question(self, block_or_variant):
