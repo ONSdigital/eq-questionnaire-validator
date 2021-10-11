@@ -7,6 +7,7 @@ from app.validators.routing.types import (
     TYPE_DATE,
     TYPE_NULL,
     TYPE_NUMBER,
+    TYPE_OBJECT,
     TYPE_STRING,
 )
 
@@ -130,18 +131,21 @@ def test_operator_argument_type_mismatch_nested(rule):
 @pytest.mark.parametrize("operator_name", ["==", "!=", "<", "<=", ">", ">="])
 def test_comparison_operator_invalid_argument_types(operator_name):
     rule = {
-        operator_name: [{"source": "answers", "identifier": "array-answer"}, ["test"]]
+        operator_name: [
+            {"source": "answers", "identifier": "object-answer"},
+            {"line1": "7 Evelyn Street"},
+        ]
     }
 
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}}
+        "object-answer": {"answer": {"id": "object-answer", "type": "Address"}}
     }
     validator = get_validator(rule, questionnaire_schema)
     validator.validate()
 
     if operator_name in ["==", "!="]:
-        valid_types = [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL]
+        valid_types = [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
     else:
         valid_types = [TYPE_DATE, TYPE_NUMBER]
 
@@ -149,16 +153,16 @@ def test_comparison_operator_invalid_argument_types(operator_name):
         {
             "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
             "origin_id": ORIGIN_ID,
-            "argument_type": TYPE_ARRAY,
-            "argument_value": {"identifier": "array-answer", "source": "answers"},
+            "argument_type": TYPE_OBJECT,
+            "argument_value": {"identifier": "object-answer", "source": "answers"},
             "operator": operator_name,
             "valid_types": valid_types,
         },
         {
             "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
             "origin_id": ORIGIN_ID,
-            "argument_type": TYPE_ARRAY,
-            "argument_value": ["test"],
+            "argument_type": TYPE_OBJECT,
+            "argument_value": {"line1": "7 Evelyn Street"},
             "operator": operator_name,
             "valid_types": valid_types,
         },
@@ -418,6 +422,24 @@ def test_validate_nested_date_operator_non_date_answer():
         "message": validator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
         "origin_id": ORIGIN_ID,
         "value_source": {"source": "answers", "identifier": "string-answer"},
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_validate_count_operator_non_checkbox_answer():
+    count_operator = {"count": [{"source": "answers", "identifier": "array-answer"}]}
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+    }
+    validator = get_validator(count_operator, questionnaire_schema)
+    validator.validate()
+
+    expected_error = {
+        "message": validator.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
+        "origin_id": ORIGIN_ID,
+        "value_source": {"source": "answers", "identifier": "array-answer"},
     }
 
     assert validator.errors == [expected_error]

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/count.json",
+  "description": "Returns the count of items in an array. Accepts a single argument which is the array",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": [
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_value"
+        }
+      ]
+    }
+  },
+  "required": ["count"],
+  "additionalProperties": false
+}

@@ -43,7 +43,7 @@ def test_param_valid_schemas(valid_schema_filename):
 
 
 def test_answer_comparisons_invalid_comparison_id():
-    """ Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
+    """Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
     filename = "schemas/invalid/test_invalid_answer_comparison_id.json"
 
     expected_error_messages = [

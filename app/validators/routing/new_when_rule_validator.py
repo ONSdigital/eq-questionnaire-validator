@@ -23,6 +23,7 @@ OPERATOR_IN = "in"
 OPERATOR_ALL_IN = "all-in"
 OPERATOR_ANY_IN = "any-in"
 OPERATOR_DATE = "date"
+OPERATOR_COUNT = "count"
 
 LOGIC_OPERATORS = [OPERATOR_NOT, OPERATOR_AND, OPERATOR_OR]
 
@@ -37,7 +38,7 @@ COMPARISON_OPERATORS = [
 
 ARRAY_OPERATORS = [OPERATOR_IN, OPERATOR_ALL_IN, OPERATOR_ANY_IN]
 
-VALUE_OPERATORS = [OPERATOR_DATE]
+VALUE_OPERATORS = [OPERATOR_DATE, OPERATOR_COUNT]
 
 ALL_OPERATORS = (
     LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
@@ -50,6 +51,9 @@ class NewWhenRuleValidator(Validator):
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
         "Date operator references non Date, MonthYearDate, or YearDate answer"
+    )
+    COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = (
+        "Count operator references non Checkbox answer"
     )
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
@@ -68,22 +72,13 @@ class NewWhenRuleValidator(Validator):
 
     def validate_rule(self, rule):
         operator_name = next(iter(rule))
-        argument_types = []
-        for argument in rule[operator_name]:
-            if isinstance(argument, dict) and any(
-                operator in argument for operator in ALL_OPERATORS
-            ):
-                argument_type = self.validate_rule(argument)
-            elif isinstance(argument, dict) and "source" in argument:
-                argument_type = resolve_value_source_json_type(
-                    argument, self.questionnaire_schema.answers_with_context
-                )
-            else:
-                argument_type = python_type_to_json_type(type(argument).__name__)
-            argument_types.append(argument_type)
+        argument_types = self._get_argument_types_for_operator(rule[operator_name])
 
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
+
+        if operator_name == OPERATOR_COUNT:
+            self._validate_count_operator(rule)
 
         if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS:
             self._validate_comparison_operator_argument_types(
@@ -101,7 +96,28 @@ class NewWhenRuleValidator(Validator):
 
         if operator_name == OPERATOR_DATE:
             return TYPE_DATE
+
+        if operator_name == OPERATOR_COUNT:
+            return TYPE_NUMBER
+
         return TYPE_BOOLEAN
+
+    def _get_argument_types_for_operator(self, arguments):
+        argument_types = []
+        for argument in arguments:
+            if isinstance(argument, dict) and any(
+                operator in argument for operator in ALL_OPERATORS
+            ):
+                argument_type = self.validate_rule(argument)
+            elif isinstance(argument, dict) and "source" in argument:
+                argument_type = resolve_value_source_json_type(
+                    argument, self.questionnaire_schema.answers_with_context
+                )
+            else:
+                argument_type = python_type_to_json_type(type(argument).__name__)
+            argument_types.append(argument_type)
+
+        return argument_types
 
     def _validate_argument_types_match(self, rule, argument_types):
         """
@@ -151,6 +167,24 @@ class NewWhenRuleValidator(Validator):
                 value_source=first_argument,
             )
 
+    def _validate_count_operator(self, operator):
+        """
+        Validates that when an answer value source is used it is a checkbox
+        """
+        first_argument = operator["count"][0]
+        if (
+            isinstance(first_argument, dict)
+            and first_argument.get("source") == "answers"
+            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
+                "type"
+            ]
+            != "Checkbox"
+        ):
+            self.add_error(
+                self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
+                value_source=first_argument,
+            )
+
     def _validate_options(self, rule, operator_name):
         """
         Validates that answer options referenced in a rule exist
@@ -177,7 +211,7 @@ class NewWhenRuleValidator(Validator):
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
         if operator_name in [OPERATOR_EQUAL, OPERATOR_NOT_EQUAL]:
-            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL]
+            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
 
         if operator_name in [
             OPERATOR_LESS_THAN,
