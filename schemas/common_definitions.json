@@ -80,7 +80,7 @@
       "additionalProperties": false
     }
   },
-  "skip_conditions": {
+  "original_skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
     "type": "array",
     "minItems": 1,
@@ -95,6 +95,27 @@
       "additionalProperties": false
     },
     "required": ["when"]
+  },
+  "new_skip_conditions": {
+    "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "object",
+    "properties": {
+      "when": {
+        "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["when"]
+  },
+  "skip_conditions": {
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_skip_conditions"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_skip_conditions"
+      }
+    ]
   },
   "messages": {
     "type": "object",
