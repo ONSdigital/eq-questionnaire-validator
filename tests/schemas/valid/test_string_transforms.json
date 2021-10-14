@@ -698,6 +698,37 @@
                   }
                 ]
               }
+            },
+            {
+              "id": "block9",
+              "type": "Interstitial",
+              "content": {
+                "title": "Date of Submission",
+                "contents": [
+                  {
+                    "description": {
+                      "text": "You submitted your first answer on {date}",
+                      "placeholders": [
+                        {
+                          "placeholder": "date",
+                          "transforms": [
+                            {
+                              "transform": "format_date",
+                              "arguments": {
+                                "date_to_format": {
+                                  "source": "response_metadata",
+                                  "identifier": "started_at"
+                                },
+                                "date_format": "d MMMM yyyy"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
             }
           ]
         }

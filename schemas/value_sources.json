@@ -33,6 +33,22 @@
     "required": ["identifier", "source"],
     "additionalProperties": false
   },
+  "response_metadata_value_source": {
+    "description": "A reference to a response metadata property. When resolved this can be a string or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+        "description": "The response metadata property name"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["response_metadata"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
   "list_value_source": {
     "description": "A reference to a list property. When resolved this can be a number, string, array or null.",
     "type": "object",
@@ -79,6 +95,9 @@
       },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/response_metadata_value_source"
       },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"

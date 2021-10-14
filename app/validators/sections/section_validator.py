@@ -6,6 +6,7 @@ from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.questions import get_question_validator
 from app.validators.routing.new_routing_validator import NewRoutingValidator
+from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.validator import Validator
@@ -50,6 +51,12 @@ class SectionValidator(Validator):
             )
             self.errors += when_validator.validate()
 
+    def validate_new_skip_conditions(self, skip_condition, origin_id):
+        when_validator = NewWhenRuleValidator(
+            skip_condition["when"], origin_id, self.questionnaire_schema
+        )
+        self.errors += when_validator.validate()
+
     def validate_value_sources(self):
         source_references = get_object_containing_key(self.section, "identifier")
         for json_path, source_reference in source_references:
@@ -93,9 +100,14 @@ class SectionValidator(Validator):
                 )
             self.errors += routing_validator.validate()
         if "skip_conditions" in schema_element:
-            self.validate_skip_conditions(
-                schema_element["skip_conditions"], schema_element["id"]
-            )
+            if isinstance(schema_element["skip_conditions"], list):
+                self.validate_skip_conditions(
+                    schema_element["skip_conditions"], schema_element["id"]
+                )
+            elif isinstance(schema_element["skip_conditions"], dict):
+                self.validate_new_skip_conditions(
+                    schema_element["skip_conditions"], schema_element["id"]
+                )
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
