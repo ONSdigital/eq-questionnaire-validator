@@ -28,9 +28,6 @@
       "guidance": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question_guidance"
       },
-      "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
-      },
       "type": {
         "type": "string",
         "enum": ["MutuallyExclusive"]
