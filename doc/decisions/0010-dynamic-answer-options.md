@@ -28,7 +28,7 @@ Properties and uses:
 
 - `dynamic_options.values`
     - Used to define the literal values used for [`options.*.value`](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/schemas/answers/definitions.json#L17-L19).
-    - Structure to allow either a Value Source that returns a sequence or the new Rules structure.
+    - Structure to allow either a Value Source that returns a sequence or the any of the [new value operators](https://github.com/ONSdigital/eq-questionnaire-validator/tree/master/schemas/rules/operators/value) that returns a sequence.
 - `dynamic_options.transform`
     - An optional property used to apply some transform on each value provided to `dynamic_options.values` which will be used for [`options.*.label`](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/schemas/answers/definitions.json#L14-L16). If omitted, labels will use `dynamic_options.values` as the source.
     - Structure to follow the new Rules structure allowing for the chaining of operators. All transforms are new [value operators](https://github.com/ONSdigital/eq-questionnaire-validator/tree/master/schemas/rules/operators/value).
@@ -92,7 +92,7 @@ Properties and uses:
   This has been extended to support a `day_of_week` property, allowing a date to be set to a specific day for the given week. This can be combined with the numerical offsets to achieve behaviours such as "last Monday", "next Monday" etc. To achieve this, **the day_of_week offset needs to be applied after any numerical offsets.**.
 - The `date-range` operation returns a list of `datetime` objects for a specified range from a given date. It takes a `datetime` object, the range in days (+/-), to return.
 - The `format_date` is used to return a formatted string date. It takes three arguments, the datetime object, or a string date, the format to return and an input format (Used with string inputs).
-    - This could be broken down into two explicit operations, `format_string_date` and `formate_datetime`, so each has a single responsibility.
+    - This could be broken down into two explicit operations, `format_string_date` and `format_datetime`, so each has a single responsibility.
 - The `map` operator has been introduced to apply operations on each value of a sequence. It takes two-argument, first, the operation to apply to each item, second, the sequence of values on which the operation is applied.
   The reference to `self` within the `map` operator refers to the current iteration's value.
 
@@ -245,6 +245,71 @@ Properties and uses:
   This example demonstrates formatting the answer values for each list item.
 - When dynamic options are used with a `list` source, the `list_item_id` is not passed explicitly as `self` as the call is responsible for using the rule evaluator in the context of the current list item id.
   Alternatively, we could introduce a new property such as `list_item_id` to answer value source to support passing in explicit values.
+
+### Resolving the value for `self`
+
+As already outlined, the use of `self` denotes the value of the current iteration. To make things more straightforward, the outputs below shows the rough representation when using `self` with `map`; the concept is the same when used within `dynamic_options.transform`.
+
+Given the following schema for a `map` operation:
+```json
+{
+    "map": [
+        {
+            "format_date": [
+                "self",
+                "%Y-%m-%d"
+            ]
+        },
+        {
+            "date-range": [
+                {
+                    "date": [
+                        {
+                            "source": "response_metadata",
+                            "identifier": "started_at"
+                        },
+                        {
+                            "days": -7,
+                            "day_of_week": "MONDAY"
+                        }
+                    ]
+                },
+                2
+            ]
+        }
+    ]
+}
+```
+
+Steps involved:
+1. Resolve the `iterables`, which is the second argument to the `map` operator. In this example, the `date` operator would be resolved first, then the `date-range` operator. Once resolved, the definition under the hood would look like this:
+    ```json    
+    {
+        "map": [
+            {
+                "format_datetime": [
+                    "self",
+                    "%Y-%m-%d"
+                ]
+            },
+            [datetime(2021, 1, 1), datetime(2021, 1, 2)]
+        ]
+    }
+    ```
+1. Resolve the string `self` on each iteration. So the first iteration would look like this:
+    ```json    
+    {
+        "format_datetime": [
+            datetime(2021, 1, 1),
+            "%Y-%m-%d"
+        ]
+    }
+    ```
+1. Once the operation is applied to each item in the list; the output should look like this:
+   ```json
+   ["2021-01-01", "2021-01-02"]
+   ``` 
+
 
 ## Consequences
 
