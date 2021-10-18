@@ -31,9 +31,6 @@
       "summary": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/summary"
       },
-      "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
-      },
       "type": {
         "type": "string",
         "enum": ["General"]
