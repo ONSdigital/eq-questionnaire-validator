@@ -47,7 +47,7 @@ Properties and uses:
     "values": {
       "map": [
         {
-          "format_date": [
+          "format-date": [
             "self",
             "%Y-%m-%d"
           ]
@@ -72,7 +72,7 @@ Properties and uses:
       ]
     },
     "transform": {
-      "format_date": [
+      "format-date": [
         "self",
         "%A %d %B %Y",
         "%Y-%m-%d"
@@ -91,8 +91,8 @@ Properties and uses:
 - The `date` operator takes an offset object; this currently only supports `days`, `months`, and `years`.
   This has been extended to support a `day_of_week` property, allowing a date to be set to a specific day for the given week. This can be combined with the numerical offsets to achieve behaviours such as "last Monday", "next Monday" etc. To achieve this, **the day_of_week offset needs to be applied after any numerical offsets.**.
 - The `date-range` operation returns a list of `datetime` objects for a specified range from a given date. It takes a `datetime` object, the range in days (+/-), to return.
-- The `format_date` is used to return a formatted string date. It takes three arguments, the datetime object, or a string date, the format to return and an input format (Used with string inputs).
-    - This could be broken down into two explicit operations, `format_string_date` and `format_datetime`, so each has a single responsibility.
+- The `format-date` is used to return a formatted string date. It takes three arguments, the datetime object, or a string date, the format to return and an input format (Used with string inputs).
+    - This could be broken down into two explicit operations, `format_string_date` and `format-datetime`, so each has a single responsibility.
 - The `map` operator has been introduced to apply operations on each value of a sequence. It takes two-argument, first, the operation to apply to each item, second, the sequence of values on which the operation is applied.
   The reference to `self` within the `map` operator refers to the current iteration's value.
 
@@ -255,7 +255,7 @@ Given the following schema for a `map` operation:
 {
     "map": [
         {
-            "format_date": [
+            "format-date": [
                 "self",
                 "%Y-%m-%d"
             ]
@@ -287,7 +287,7 @@ Steps involved:
     {
         "map": [
             {
-                "format_datetime": [
+                "format-datetime": [
                     "self",
                     "%Y-%m-%d"
                 ]
@@ -299,7 +299,7 @@ Steps involved:
 1. Resolve the string `self` on each iteration. So the first iteration would look like this:
     ```json    
     {
-        "format_datetime": [
+        "format-datetime": [
             datetime(2021, 1, 1),
             "%Y-%m-%d"
         ]
