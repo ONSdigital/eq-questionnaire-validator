@@ -44,13 +44,6 @@ ALL_OPERATORS = (
     LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
 )
 
-source_validation = {
-    "answers": "test",
-    "list": "list",
-    "location": "location",
-    "metadata": "metadata",
-}
-
 
 class NewWhenRuleValidator(Validator):
     OPERATOR_ARGUMENT_TYPE_MISMATCH = "Argument types don't match"
@@ -243,26 +236,6 @@ class NewWhenRuleValidator(Validator):
             if argument_position == 0:
                 return [TYPE_NUMBER, TYPE_STRING]
             return [TYPE_ARRAY]
-
-    def validate_list_name_in_when_rule(self, list_name):
-        """
-        Validate that the list referenced in the when rule is defined in the schema
-        """
-
-        if list_name not in self.questionnaire_schema.list_names:
-            self.add_error(self.LIST_REFERENCE_INVALID, list_name=list_name)
-
-    def validate_answer_ids_present_in_schema(self, answer_identifier):
-        """
-        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
-        writing when conditions against id's that don't exist.
-        :return: list of dictionaries containing error messages, otherwise it returns an empty list
-        """
-
-        if answer_identifier not in self.questionnaire_schema.answers_with_context:
-            self.add_error(self.NON_EXISTENT_WHEN_KEY, answer_id=answer_identifier)
-            return False
-        return True
 
     def is_source_id_valid(self, rule):
         """
