@@ -44,6 +44,13 @@ ALL_OPERATORS = (
     LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
 )
 
+source_validation = {
+    "answers": "test",
+    "list": "list",
+    "location": "location",
+    "metadata": "metadata",
+}
+
 
 class NewWhenRuleValidator(Validator):
     OPERATOR_ARGUMENT_TYPE_MISMATCH = "Argument types don't match"
@@ -55,6 +62,8 @@ class NewWhenRuleValidator(Validator):
     COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = (
         "Count operator references non Checkbox answer"
     )
+    LIST_REFERENCE_INVALID = "Invalid list reference"
+    NON_EXISTENT_WHEN_KEY = 'The answer identifier in the "when" clause does not exist'
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
         super().__init__(when_clause)
@@ -66,13 +75,17 @@ class NewWhenRuleValidator(Validator):
         """
         Validates all operators and arguments in when clause
         """
-        self.validate_rule(self.when_clause)
+
+        if self.is_source_id_valid(self.when_clause):
+            self.validate_rule(self.when_clause)
 
         return self.errors
 
     def validate_rule(self, rule):
         operator_name = next(iter(rule))
-        argument_types = self._get_argument_types_for_operator(rule[operator_name])
+        comparison_block = rule[operator_name]
+
+        argument_types = self._get_argument_types_for_operator(comparison_block)
 
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
@@ -110,6 +123,7 @@ class NewWhenRuleValidator(Validator):
             ):
                 argument_type = self.validate_rule(argument)
             elif isinstance(argument, dict) and "source" in argument:
+
                 argument_type = resolve_value_source_json_type(
                     argument, self.questionnaire_schema.answers_with_context
                 )
@@ -228,3 +242,59 @@ class NewWhenRuleValidator(Validator):
             if argument_position == 0:
                 return [TYPE_NUMBER, TYPE_STRING]
             return [TYPE_ARRAY]
+
+    def validate_list_name_in_when_rule(self, list_name):
+        """
+        Validate that the list referenced in the when rule is defined in the schema
+        """
+
+        if list_name not in self.questionnaire_schema.list_names:
+            self.add_error(self.LIST_REFERENCE_INVALID, list_name=list_name)
+
+    def validate_answer_ids_present_in_schema(self, answer_identifier):
+        """
+        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
+        writing when conditions against id's that don't exist.
+        :return: list of dictionaries containing error messages, otherwise it returns an empty list
+        """
+
+        if answer_identifier not in self.questionnaire_schema.answers_with_context:
+            self.add_error(self.NON_EXISTENT_WHEN_KEY, answer_id=answer_identifier)
+            return False
+        return True
+
+    def is_source_id_valid(self, rule):
+        """
+        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
+        writing when conditions against id's that don't exist.
+        :param rule: dict, when clause dictionary
+        :return bool: True Validation passed
+                      False validation failed
+        """
+
+        operator_name = next(iter(rule))
+        for argument in rule[operator_name]:
+            if isinstance(argument, dict) and "source" in argument:
+                self.check_list_and_answer_exists(argument)
+
+            else:
+                if isinstance(argument, dict) and any(
+                    operator in argument for operator in ALL_OPERATORS
+                ):
+                    self.is_source_id_valid(argument)
+        # if self.errors is empty, validation has passed
+        return not self.errors
+
+    def check_list_and_answer_exists(self, argument):
+        if (
+            argument.get("source") == "list"
+            and argument["identifier"] not in self.questionnaire_schema.list_names
+        ):
+            self.add_error(
+                self.LIST_REFERENCE_INVALID, list_name=argument["identifier"]
+            )
+
+        elif (
+            argument["identifier"] not in self.questionnaire_schema.answers_with_context
+        ):
+            self.add_error(self.NON_EXISTENT_WHEN_KEY, answer_id=argument["identifier"])

@@ -354,15 +354,17 @@ def test_validate_options_multiple_errors():
         ("==", {"source": "location", "identifier": "list_item_id"}, "list-item-id"),
     ],
 )
-def test_validate_value_sources(operator_name, first_argument, second_argument):
+def test_validate_value_sources(
+    operator_name, first_argument, second_argument, mock_is_source_id_valid
+):  # pylint: disable=unused-argument
     rule = {operator_name: [first_argument, second_argument]}
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
         "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
     }
     validator = get_validator(rule, questionnaire_schema)
-    validator.validate()
 
+    validator.validate()
     assert not validator.errors
 
 
@@ -443,3 +445,33 @@ def test_validate_count_operator_non_checkbox_answer():
     }
 
     assert validator.errors == [expected_error]
+
+
+def test_list_name_not_present_in_schema_returns_error():
+    rule = {"!=": [{"identifier": "non_existent_list", "source": "list"}, 2]}
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.list_names = ["people"]
+    validator = get_validator(rule, questionnaire_schema)
+    validator.validate()
+    expected_error = {
+        "message": validator.LIST_REFERENCE_INVALID,
+        "origin_id": ORIGIN_ID,
+        "list_name": "non_existent_list",
+    }
+    assert validator.errors[0] == expected_error
+
+
+def test_answer_name_not_present_in_schema_returns_error():
+    rule = {"==": [{"source": "answers", "identifier": "non-existent-answer"}, "Maybe"]}
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
+    }
+    validator = get_validator(rule, questionnaire_schema)
+    validator.validate()
+    expected_error = {
+        "message": validator.NON_EXISTENT_WHEN_KEY,
+        "origin_id": ORIGIN_ID,
+        "answer_id": "non-existent-answer",
+    }
+    assert validator.errors[0] == expected_error
