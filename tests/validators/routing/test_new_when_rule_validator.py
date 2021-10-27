@@ -456,7 +456,7 @@ def test_list_name_not_present_in_schema_returns_error():
     expected_error = {
         "message": validator.LIST_REFERENCE_INVALID,
         "origin_id": ORIGIN_ID,
-        "list_name": "non_existent_list",
+        "list_id": "non_existent_list",
     }
     assert validator.errors[0] == expected_error
 
@@ -472,6 +472,25 @@ def test_answer_name_not_present_in_schema_returns_error():
     expected_error = {
         "message": validator.NON_EXISTENT_WHEN_KEY,
         "origin_id": ORIGIN_ID,
-        "answer_id": "non-existent-answer",
+        "answers_id": "non-existent-answer",
+    }
+    assert validator.errors[0] == expected_error
+
+
+def test_metadata_name_not_present_in_schema_returns_error():
+    rule = {
+        ">": [
+            {"date": [{"source": "metadata", "identifier": "non-existent-metadata"}]},
+            "test",
+        ]
+    }
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.metadata_ids = ["existing-metdata", "some-other-metadata"]
+    validator = get_validator(rule, questionnaire_schema)
+    validator.validate()
+    expected_error = {
+        "message": validator.METADATA_REFERENCE_INVALID,
+        "origin_id": ORIGIN_ID,
+        "metadata_id": "non-existent-metadata",
     }
     assert validator.errors[0] == expected_error

@@ -64,6 +64,7 @@ class NewWhenRuleValidator(Validator):
     )
     LIST_REFERENCE_INVALID = "Invalid list reference"
     NON_EXISTENT_WHEN_KEY = 'The answer identifier in the "when" clause does not exist'
+    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
         super().__init__(when_clause)
@@ -275,26 +276,43 @@ class NewWhenRuleValidator(Validator):
         operator_name = next(iter(rule))
         for argument in rule[operator_name]:
             if isinstance(argument, dict) and "source" in argument:
-                self.check_list_and_answer_exists(argument)
+                self.check_argument_source_exists(argument)
 
             else:
                 if isinstance(argument, dict) and any(
                     operator in argument for operator in ALL_OPERATORS
                 ):
                     self.is_source_id_valid(argument)
-        # if self.errors is empty, validation has passed
+        # if self.errors is empty, it means all ids are present in schema
         return not self.errors
 
-    def check_list_and_answer_exists(self, argument):
-        if (
-            argument.get("source") == "list"
-            and argument["identifier"] not in self.questionnaire_schema.list_names
-        ):
-            self.add_error(
-                self.LIST_REFERENCE_INVALID, list_name=argument["identifier"]
-            )
+    def check_argument_source_exists(self, argument):
+        """
+        Checks argument id is present in Questionnair schema
+        :param argument: dict : argument identifier and source
+        if identifier is not present in schema, error is added to the self.error dict
+        """
 
-        elif (
-            argument["identifier"] not in self.questionnaire_schema.answers_with_context
-        ):
-            self.add_error(self.NON_EXISTENT_WHEN_KEY, answer_id=argument["identifier"])
+        source_dict_map = {
+            "list": {
+                "schema": self.questionnaire_schema.list_names,
+                "message": self.LIST_REFERENCE_INVALID,
+            },
+            "answers": {
+                "schema": self.questionnaire_schema.answers_with_context,
+                "message": self.NON_EXISTENT_WHEN_KEY,
+            },
+            "metadata": {
+                "schema": self.questionnaire_schema.metadata_ids,
+                "message": self.METADATA_REFERENCE_INVALID,
+            },
+        }
+
+        source = argument["source"]
+        arg_id = argument["identifier"]
+        if arg_id not in source_dict_map[source]["schema"]:
+            error = {
+                "message": source_dict_map[source]["message"],
+                f"{source}_id": arg_id,
+            }
+            self.add_error(**error)
