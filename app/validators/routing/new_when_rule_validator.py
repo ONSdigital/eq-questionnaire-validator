@@ -261,7 +261,7 @@ class NewWhenRuleValidator(Validator):
 
     def check_argument_source_exists(self, argument):
         """
-        Checks argument id is present in Questionnair schema
+        Checks argument id is present in Questionnaire schema
         :param argument: dict : argument identifier and source
         if identifier is not present in schema, error is added to the self.error dict
         """

@@ -330,6 +330,7 @@ def test_validate_options_multiple_errors():
     assert validator.errors == expected_errors
 
 
+@pytest.mark.usefixtures("mock_is_source_id_valid")
 @pytest.mark.parametrize(
     "operator_name, first_argument, second_argument",
     [
@@ -354,9 +355,7 @@ def test_validate_options_multiple_errors():
         ("==", {"source": "location", "identifier": "list_item_id"}, "list-item-id"),
     ],
 )
-def test_validate_value_sources(
-    operator_name, first_argument, second_argument, mock_is_source_id_valid
-):  # pylint: disable=unused-argument
+def test_validate_value_sources(operator_name, first_argument, second_argument):
     rule = {operator_name: [first_argument, second_argument]}
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
