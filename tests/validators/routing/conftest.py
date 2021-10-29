@@ -9,4 +9,4 @@ def mock_is_source_id_valid(monkeypatch):
         # return true to skip id name validations within schema
         return True
 
-    monkeypatch.setattr(NewWhenRuleValidator, "is_source_id_valid", mock_return)
+    monkeypatch.setattr(NewWhenRuleValidator, "is_source_identifier_valid", mock_return)

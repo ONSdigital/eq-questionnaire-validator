@@ -41,7 +41,7 @@ ARRAY_OPERATORS = [OPERATOR_IN, OPERATOR_ALL_IN, OPERATOR_ANY_IN]
 VALUE_OPERATORS = [OPERATOR_DATE, OPERATOR_COUNT]
 
 ALL_OPERATORS = (
-    LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
+        LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
 )
 
 
@@ -55,9 +55,13 @@ class NewWhenRuleValidator(Validator):
     COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = (
         "Count operator references non Checkbox answer"
     )
-    LIST_REFERENCE_INVALID = "Invalid list reference"
-    NON_EXISTENT_WHEN_KEY = 'The answer identifier in the "when" clause does not exist'
-    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
+    INVALID_LIST_REFERENCE = "Invalid list reference"
+    INVALID_ANSWERS_REFERENCE = (
+        'The answer identifier in the "when" clause does not exist'
+    )
+    INVALID_METADATA_REFERENCE = "Invalid metadata reference"
+    INVALID_RESPONSE_METADATA_REFERENCE = "Invalid response metadata reference"
+    INVALID_LOCATION_REFERENCE = "Invalid location reference"
 
     def __init__(self, when_clause, origin_id, questionnaire_schema):
         super().__init__(when_clause)
@@ -70,16 +74,17 @@ class NewWhenRuleValidator(Validator):
         Validates all operators and arguments in when clause
         """
 
-        if self.is_source_id_valid(self.when_clause):
-            self.validate_rule(self.when_clause)
+        self.validate_rule(self.when_clause)
 
         return self.errors
 
     def validate_rule(self, rule):
         operator_name = next(iter(rule))
-        comparison_block = rule[operator_name]
 
-        argument_types = self._get_argument_types_for_operator(comparison_block)
+        if not self.is_source_identifier_valid(rule[operator_name]):
+            return
+
+        argument_types = self._get_argument_types_for_operator(rule[operator_name])
 
         if operator_name == OPERATOR_DATE:
             self._validate_date_operator(rule)
@@ -93,8 +98,8 @@ class NewWhenRuleValidator(Validator):
             )
 
         if (
-            operator_name in COMPARISON_OPERATORS + [OPERATOR_ALL_IN, OPERATOR_ANY_IN]
-            and TYPE_NULL not in argument_types
+                operator_name in COMPARISON_OPERATORS + [OPERATOR_ALL_IN, OPERATOR_ANY_IN]
+                and TYPE_NULL not in argument_types
         ):
             self._validate_argument_types_match(rule, argument_types)
 
@@ -113,7 +118,7 @@ class NewWhenRuleValidator(Validator):
         argument_types = []
         for argument in arguments:
             if isinstance(argument, dict) and any(
-                operator in argument for operator in ALL_OPERATORS
+                    operator in argument for operator in ALL_OPERATORS
             ):
                 argument_type = self.validate_rule(argument)
             elif isinstance(argument, dict) and "source" in argument:
@@ -139,7 +144,7 @@ class NewWhenRuleValidator(Validator):
             )
 
     def _validate_comparison_operator_argument_types(
-        self, rule, operator_name, argument_types
+            self, rule, operator_name, argument_types
     ):
         """
         Validates that all arguments are of the correct type for the operator
@@ -163,12 +168,12 @@ class NewWhenRuleValidator(Validator):
         """
         first_argument = operator["date"][0]
         if (
-            isinstance(first_argument, dict)
-            and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            not in ["Date", "MonthYearDate", "YearDate"]
+                isinstance(first_argument, dict)
+                and first_argument.get("source") == "answers"
+                and self.questionnaire_schema.get_answer(first_argument["identifier"])[
+            "type"
+        ]
+                not in ["Date", "MonthYearDate", "YearDate"]
         ):
             self.add_error(
                 self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
@@ -181,12 +186,12 @@ class NewWhenRuleValidator(Validator):
         """
         first_argument = operator["count"][0]
         if (
-            isinstance(first_argument, dict)
-            and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            != "Checkbox"
+                isinstance(first_argument, dict)
+                and first_argument.get("source") == "answers"
+                and self.questionnaire_schema.get_answer(first_argument["identifier"])[
+            "type"
+        ]
+                != "Checkbox"
         ):
             self.add_error(
                 self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
@@ -237,29 +242,26 @@ class NewWhenRuleValidator(Validator):
                 return [TYPE_NUMBER, TYPE_STRING]
             return [TYPE_ARRAY]
 
-    def is_source_id_valid(self, rule):
+    def is_source_identifier_valid(self, rule):
         """
-        Validates that any ids that are referenced within the when rule are present within the schema.  This prevents
-        writing when conditions against id's that don't exist.
+        Validates that any ids that are referenced within the when rule are present within the schema.
         :param rule: dict, when clause dictionary
-        :return bool: True Validation passed
-                      False validation failed
+        :return bool:
         """
 
-        operator_name = next(iter(rule))
-        for argument in rule[operator_name]:
+        for argument in rule:
             if isinstance(argument, dict) and "source" in argument:
-                self.check_argument_source_exists(argument)
+                self.check_argument_source_identifier_exists(argument)
 
             else:
                 if isinstance(argument, dict) and any(
-                    operator in argument for operator in ALL_OPERATORS
+                        operator in argument for operator in ALL_OPERATORS
                 ):
-                    self.is_source_id_valid(argument)
-        # if self.errors is empty, it means all ids are present in schema
+                    self.validate_rule(argument)
+
         return not self.errors
 
-    def check_argument_source_exists(self, argument):
+    def check_argument_source_identifier_exists(self, argument):
         """
         Checks argument id is present in Questionnaire schema
         :param argument: dict : argument identifier and source
@@ -269,23 +271,27 @@ class NewWhenRuleValidator(Validator):
         source_dict_map = {
             "list": {
                 "schema": self.questionnaire_schema.list_names,
-                "message": self.LIST_REFERENCE_INVALID,
+                "message": self.INVALID_LIST_REFERENCE,
             },
             "answers": {
                 "schema": self.questionnaire_schema.answers_with_context,
-                "message": self.NON_EXISTENT_WHEN_KEY,
+                "message": self.INVALID_ANSWERS_REFERENCE,
             },
             "metadata": {
                 "schema": self.questionnaire_schema.metadata_ids,
-                "message": self.METADATA_REFERENCE_INVALID,
+                "message": self.INVALID_METADATA_REFERENCE,
             },
         }
 
         source = argument["source"]
         arg_id = argument["identifier"]
-        if arg_id not in source_dict_map[source]["schema"]:
-            error = {
-                "message": source_dict_map[source]["message"],
-                f"{source}_id": arg_id,
-            }
-            self.add_error(**error)
+
+        try:
+            if arg_id not in source_dict_map[source]["schema"]:
+                error = {
+                    "message": source_dict_map[source]["message"],
+                    f"{source}_id": arg_id,
+                }
+                self.add_error(**error)
+        except KeyError:
+            self.add_error(f"Invalid source type '{source}' ")

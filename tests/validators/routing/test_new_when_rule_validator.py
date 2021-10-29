@@ -453,7 +453,7 @@ def test_list_name_not_present_in_schema_returns_error():
     validator = get_validator(rule, questionnaire_schema)
     validator.validate()
     expected_error = {
-        "message": validator.LIST_REFERENCE_INVALID,
+        "message": validator.INVALID_LIST_REFERENCE,
         "origin_id": ORIGIN_ID,
         "list_id": "non_existent_list",
     }
@@ -469,7 +469,7 @@ def test_answer_name_not_present_in_schema_returns_error():
     validator = get_validator(rule, questionnaire_schema)
     validator.validate()
     expected_error = {
-        "message": validator.NON_EXISTENT_WHEN_KEY,
+        "message": validator.INVALID_ANSWERS_REFERENCE,
         "origin_id": ORIGIN_ID,
         "answers_id": "non-existent-answer",
     }
@@ -488,7 +488,7 @@ def test_metadata_name_not_present_in_schema_returns_error():
     validator = get_validator(rule, questionnaire_schema)
     validator.validate()
     expected_error = {
-        "message": validator.METADATA_REFERENCE_INVALID,
+        "message": validator.INVALID_METADATA_REFERENCE,
         "origin_id": ORIGIN_ID,
         "metadata_id": "non-existent-metadata",
     }
