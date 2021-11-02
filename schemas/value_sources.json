@@ -11,7 +11,9 @@
       },
       "source": {
         "type": "string",
-        "enum": ["answers"]
+        "enum": [
+          "answers"
+        ]
       },
       "list_item_selector": {
         "description": "The identifier and source of list item",
@@ -24,9 +26,17 @@
           }
         ]
       },
-      "required": ["identifier", "source"],
-      "additionalProperties": false
-    }
+       "selector": {
+        "type": "string",
+        "description": "Field selector for composite Answer"
+      }
+    },
+
+    "required": [
+      "identifier",
+      "source"
+    ],
+    "additionalProperties": false
   },
   "metadata_value_source": {
     "description": "A reference to a metadata property. When resolved this can be a string or null.",
@@ -38,10 +48,15 @@
       },
       "source": {
         "type": "string",
-        "enum": ["metadata"]
+        "enum": [
+          "metadata"
+        ]
       }
     },
-    "required": ["identifier", "source"],
+    "required": [
+      "identifier",
+      "source"
+    ],
     "additionalProperties": false
   },
   "response_metadata_value_source": {
@@ -54,10 +69,15 @@
       },
       "source": {
         "type": "string",
-        "enum": ["response_metadata"]
+        "enum": [
+          "response_metadata"
+        ]
       }
     },
-    "required": ["identifier", "source"],
+    "required": [
+      "identifier",
+      "source"
+    ],
     "additionalProperties": false
   },
   "list_value_source": {
@@ -70,15 +90,25 @@
       },
       "source": {
         "type": "string",
-        "enum": ["list"]
+        "enum": [
+          "list"
+        ]
       },
       "selector": {
         "description": "The list property name to select",
         "type": "string",
-        "enum": ["count", "first", "primary_person", "same_name_items"]
+        "enum": [
+          "count",
+          "first",
+          "primary_person",
+          "same_name_items"
+        ]
       }
     },
-    "required": ["identifier", "source"],
+    "required": [
+      "identifier",
+      "source"
+    ],
     "additionalProperties": false
   },
   "location_value_source": {
@@ -88,14 +118,22 @@
       "identifier": {
         "description": "The location property name",
         "type": "string",
-        "enum": ["list_item_id", "to_list_item_id"]
+        "enum": [
+          "list_item_id",
+          "to_list_item_id"
+        ]
       },
       "source": {
         "type": "string",
-        "enum": ["location"]
+        "enum": [
+          "location"
+        ]
       }
     },
-    "required": ["identifier", "source"],
+    "required": [
+      "identifier",
+      "source"
+    ],
     "additionalProperties": false
   },
   "any_value_source": {

@@ -56,7 +56,7 @@
       },
       "value": {
         "description": "A direct lookup with no transforms.",
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       },
       "transforms": {
         "description": "A list of transforms to resolve the placeholder value.",
@@ -148,7 +148,7 @@
         "$ref": "#/chained_source"
       },
       {
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       }
     ]
   },
@@ -267,7 +267,7 @@
       },
       "count": {
         "description": "The source to use for the count. Must resolve to a number.",
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       }
     },
     "additionalProperties": false,
