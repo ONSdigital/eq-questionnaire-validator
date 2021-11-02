@@ -32,6 +32,17 @@
             },
             "years": {
               "type": "integer"
+            },
+            "day_of_week": {
+              "enum": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ]
             }
           },
           "additionalProperties": false,
@@ -44,6 +55,9 @@
             },
             {
               "required": ["years"]
+            },
+            {
+              "required": ["day_of_week"]
             }
           ]
         }
