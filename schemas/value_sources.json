@@ -12,10 +12,21 @@
       "source": {
         "type": "string",
         "enum": ["answers"]
-      }
-    },
-    "required": ["identifier", "source"],
-    "additionalProperties": false
+      },
+      "list_item_selector": {
+        "description": "The identifier and source of list item",
+        "oneOf": [
+          {
+            "$ref": "#/list_value_source"
+          },
+          {
+            "$ref": "#/location_value_source"
+          }
+        ]
+      },
+      "required": ["identifier", "source"],
+      "additionalProperties": false
+    }
   },
   "metadata_value_source": {
     "description": "A reference to a metadata property. When resolved this can be a string or null.",
