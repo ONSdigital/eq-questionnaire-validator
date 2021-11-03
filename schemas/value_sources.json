@@ -38,7 +38,7 @@
     "type": "object",
     "properties": {
       "identifier": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
         "description": "The response metadata property name"
       },
       "source": {

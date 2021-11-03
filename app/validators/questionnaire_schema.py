@@ -140,6 +140,8 @@ class QuestionnaireSchema:
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
 
+        self._answers_with_context = {}
+
     @cached_property
     def numeric_answer_ranges(self):
         numeric_answer_ranges = {}
@@ -162,8 +164,11 @@ class QuestionnaireSchema:
         for match in parse("$..question").find(self.schema):
             yield match.value, get_context_from_match(match)
 
-    @cached_property
+    @property
     def answers_with_context(self):
+        if self._answers_with_context:
+            return self._answers_with_context
+
         answers = {}
         for question, context in self.questions_with_context:
             for answer in question.get("answers", []):
@@ -176,7 +181,12 @@ class QuestionnaireSchema:
                             **context,
                         }
 
-        return answers
+        self._answers_with_context = answers
+        return self._answers_with_context
+
+    @answers_with_context.setter
+    def answers_with_context(self, value):
+        self._answers_with_context = value
 
     @cached_property
     def ids(self):

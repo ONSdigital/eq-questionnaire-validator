@@ -1,6 +1,7 @@
 import os
 from json import load
 
+import pytest
 from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
@@ -12,6 +13,7 @@ from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
 from app.validators.value_source_validator import ValueSourceValidator
+from tests.conftest import find_all_json_files
 
 logger = getLogger()
 
@@ -25,6 +27,9 @@ def _open_and_load_schema_file(file):
         return load(json_file)
 
 
+@pytest.mark.parametrize(
+    "valid_schema_filename", find_all_json_files("tests/schemas/valid")
+)
 def test_param_valid_schemas(valid_schema_filename):
     """
     Uses py.test generated tests to validate all schemas contained in the 'valid' folder.

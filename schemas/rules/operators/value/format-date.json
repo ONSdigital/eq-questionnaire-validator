@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/format-date.json",
+  "description": "Formats a datetime object into the specified format. Takes two arguments, the datetime object and the date format.",
+  "type": "object",
+  "properties": {
+    "format-date": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Used to reference the current value of an iteration. Must resolve to a datetime object",
+              "const": "self"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "description": "The format to return the date in. https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
+          "enum": [
+            "EEEE d MMMM",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "yyyy-MM-dd",
+            "yyyy-MM",
+            "yyyy"
+          ]
+        }
+      ]
+    }
+  },
+  "required": ["format-date"],
+  "additionalProperties": false
+}

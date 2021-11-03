@@ -1,13 +1,6 @@
 import os
 
-
-def pytest_generate_tests(metafunc):
-    if "valid_schema_filename" in metafunc.fixturenames:
-        valid_schema_filenames = find_all_json_files("tests/schemas/valid")
-        metafunc.parametrize("valid_schema_filename", valid_schema_filenames)
-    if "rule_schema_filename" in metafunc.fixturenames:
-        rule_schema_filenames = find_all_json_files("tests/schemas/rules")
-        metafunc.parametrize("rule_schema_filename", rule_schema_filenames)
+from app.validators.questionnaire_schema import QuestionnaireSchema
 
 
 def find_all_json_files(folder_name):
@@ -17,3 +10,13 @@ def find_all_json_files(folder_name):
         for filename in files
         if filename.endswith(".json")
     ]
+
+
+def get_mock_schema(questionnaire_schema, answers_with_context):
+    if not questionnaire_schema:
+        questionnaire_schema = QuestionnaireSchema({})
+
+    if answers_with_context:
+        questionnaire_schema.answers_with_context = answers_with_context
+
+    return questionnaire_schema

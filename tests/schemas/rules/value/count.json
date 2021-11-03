@@ -1,98 +1,20 @@
 [
   {
-    "description": "A checkbox selected answer equal to number of checkboxes count number",
+    "description": "Count with answer value source",
     "rule": {
-      "==": [
+      "count": [
         {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
+          "source": "answers",
+          "identifier": "answer-1"
+        }
       ]
     }
   },
+
   {
-    "description": "A checkbox selected answer not equal to number of checkboxes count number",
+    "description": "Count with raw values",
     "rule": {
-      "!=": [
-        {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
-      ]
-    }
-  },
-  {
-    "description": "A checkbox selected answer less than number of checkboxes count number",
-    "rule": {
-      "<": [
-        {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
-      ]
-    }
-  },
-  {
-    "description": "A checkbox selected answer less than or equal to number of checkboxes count number",
-    "rule": {
-      "<=": [
-        {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
-      ]
-    }
-  },
-  {
-    "description": "A checkbox selected answer more than number of checkboxes count number",
-    "rule": {
-      ">": [
-        {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
-      ]
-    }
-  },
-  {
-    "description": "A checkbox selected answer more than or equal to number of checkboxes count number",
-    "rule": {
-      ">=": [
-        {
-          "count": [
-            {
-              "source": "answers",
-              "identifier": "answer-1"
-            }
-          ]
-        },
-        2
-      ]
+      "count": [[1, 2, 3]]
     }
   }
 ]
