@@ -25,6 +25,7 @@ class SectionValidator(Validator):
         self.validate_summary()
         self.validate_groups()
         self.validate_value_sources()
+        self.validate_section_enabled()
         return self.errors
 
     def validate_repeat(self):
@@ -39,6 +40,24 @@ class SectionValidator(Validator):
         if section_summary:
             for item in section_summary.get("items", []):
                 self.validate_list_exists(item.get("for_list"))
+
+    def validate_section_enabled(self):
+        section_enabled = self.section.get("enabled", None)
+
+        if section_enabled and isinstance(section_enabled, list):
+            for enabled in self.section.get("enabled"):
+                when = enabled["when"]
+                when_validator = WhenRuleValidator(
+                    when, self.section["id"], self.questionnaire_schema
+                )
+                self.errors += when_validator.validate()
+
+        if section_enabled and isinstance(section_enabled, dict):
+            when = self.section.get("enabled")["when"]
+            when_validator = NewWhenRuleValidator(
+                when, self.section["id"], self.questionnaire_schema
+            )
+            self.errors += when_validator.validate()
 
     def validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
