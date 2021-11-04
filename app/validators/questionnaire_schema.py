@@ -161,8 +161,10 @@ class QuestionnaireSchema:
 
     @cached_property
     def questions_with_context(self):
-        for match in parse("$..question").find(self.schema):
-            yield match.value, get_context_from_match(match)
+        return [
+            (match.value, get_context_from_match(match))
+            for match in parse("$..question").find(self.schema)
+        ]
 
     @property
     def answers_with_context(self):
