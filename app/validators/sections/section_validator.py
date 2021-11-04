@@ -44,16 +44,16 @@ class SectionValidator(Validator):
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
 
-        if section_enabled and isinstance(section_enabled, list):
-            for enabled in self.section.get("enabled"):
+        if isinstance(section_enabled, list):
+            for enabled in section_enabled:
                 when = enabled["when"]
                 when_validator = WhenRuleValidator(
                     when, self.section["id"], self.questionnaire_schema
                 )
                 self.errors += when_validator.validate()
 
-        if section_enabled and isinstance(section_enabled, dict):
-            when = self.section.get("enabled")["when"]
+        if isinstance(section_enabled, dict):
+            when = section_enabled["when"]
             when_validator = NewWhenRuleValidator(
                 when, self.section["id"], self.questionnaire_schema
             )
