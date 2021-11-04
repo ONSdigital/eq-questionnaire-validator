@@ -174,7 +174,7 @@ def test_validate_count_operator_non_checkbox_answer():
     assert validator.errors == [expected_error]
 
 
-def test_map_operator_with_self_reference():
+def test_map_operator_without_self_reference():
     operator = {
         "map": [
             {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
