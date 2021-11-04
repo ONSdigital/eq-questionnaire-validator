@@ -52,7 +52,7 @@ class SectionValidator(Validator):
                 )
                 self.errors += when_validator.validate()
 
-        if isinstance(section_enabled, dict):
+        elif isinstance(section_enabled, dict):
             when = section_enabled["when"]
             when_validator = NewWhenRuleValidator(
                 when, self.section["id"], self.questionnaire_schema
