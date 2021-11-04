@@ -172,3 +172,65 @@ def test_validate_count_operator_non_checkbox_answer():
     }
 
     assert validator.errors == [expected_error]
+
+
+def test_map_operator_with_self_reference():
+    operator = {
+        "map": [
+            {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
+            {
+                "date-range": [
+                    {
+                        "date": [
+                            {"source": "response_metadata", "identifier": "started_at"}
+                        ]
+                    },
+                    7,
+                ]
+            },
+        ]
+    }
+
+    validator = get_validator(
+        operator,
+        answers_with_context={
+            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
+        },
+    )
+    validator.validate()
+
+    expected_error = {
+        "message": validator.MAP_OPERATOR_WITHOUT_SELF_REFERENCE,
+        "origin_id": ORIGIN_ID,
+        "rule": {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
+    }
+
+    assert validator.errors == [expected_error]
+
+
+@pytest.mark.parametrize(
+    "operator_name, operands",
+    [
+        ("date", ["self"]),
+        ("format-date", ["self"]),
+        ("format-date", [{"date": ["self"]}]),
+    ],
+)
+def test_self_reference_outside_map_operator(operator_name, operands):
+    rule = {operator_name: operands}
+
+    validator = get_validator(
+        rule,
+        answers_with_context={
+            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
+        },
+    )
+    validator.validate()
+
+    expected_error = {
+        "message": validator.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR,
+        "origin_id": ORIGIN_ID,
+        "rule": rule,
+    }
+
+    assert expected_error in validator.errors

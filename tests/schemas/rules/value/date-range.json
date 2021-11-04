@@ -1,6 +1,6 @@
 [
   {
-    "description": "Date range with date operating using answer source",
+    "description": "Date range with date operator using answer source",
     "rule": {
       "date-range": [
         {
