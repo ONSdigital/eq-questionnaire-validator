@@ -51,7 +51,9 @@ def resolve_value_source_json_type(value_source, answers_with_context):
         return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
     if source == "list":
-        return LIST_SELECTOR_TO_JSON_TYPE[value_source["selector"]]
+        if selector := value_source.get("selector"):
+            return LIST_SELECTOR_TO_JSON_TYPE[selector]
+        return TYPE_ARRAY
 
     return TYPE_STRING
 

@@ -193,8 +193,10 @@ class NewWhenRuleValidator(Validator):
         option_values = []
         for argument in rule[operator_name]:
             if isinstance(argument, dict) and argument.get("source") == "answers":
-                option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
-                    argument["identifier"]
+                option_values = (
+                    self.questionnaire_schema.answer_id_to_option_values_map.get(
+                        argument["identifier"]
+                    )
                 )
             else:
                 values = argument if isinstance(argument, list) else [argument]

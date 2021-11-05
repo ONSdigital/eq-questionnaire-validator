@@ -322,7 +322,7 @@ class QuestionnaireSchema:
 
     @staticmethod
     def get_all_questions_for_block(block):
-        """ Get all questions on a block including variants"""
+        """Get all questions on a block including variants"""
         questions = []
 
         for variant in block.get("question_variants", []):
