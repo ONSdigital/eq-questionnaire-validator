@@ -138,7 +138,7 @@
     "type": "object",
     "properties": {
       "when": {
-        "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+        "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
       }
     },
     "additionalProperties": false,
