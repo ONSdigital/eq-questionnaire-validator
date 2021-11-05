@@ -117,6 +117,33 @@
       }
     ]
   },
+  "original_section_enabled": {
+    "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": true,
+    "items": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
+        }
+      },
+      "additionalProperties": false
+    },
+    "required": ["when"]
+  },
+  "new_section_enabled": {
+    "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "object",
+    "properties": {
+      "when": {
+        "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["when"]
+  },
   "messages": {
     "type": "object",
     "description": "These messages override the standard error messages.",
