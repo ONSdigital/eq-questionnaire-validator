@@ -10,10 +10,12 @@
       "maxItems": 2,
       "items": [
         {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "description": "The value of the option"
         },
         {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+          "description": "The answer id to which the option belongs to"
         }
       ]
     }

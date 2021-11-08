@@ -1,6 +1,7 @@
 from functools import cached_property
 
 from app.validators.answers import AnswerValidator
+from app.validators.rules.rule_validator import RulesValidator
 
 
 class OptionAnswerValidator(AnswerValidator):
@@ -21,8 +22,9 @@ class OptionAnswerValidator(AnswerValidator):
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
         if questionnaire_schema:
-            self.list_names = questionnaire_schema.list_names
-            self.block_ids = questionnaire_schema.block_ids
+            self.questionnaire_schema = questionnaire_schema
+            self.list_names = self.questionnaire_schema.list_names
+            self.block_ids = self.questionnaire_schema.block_ids
 
     def validate(self):
         super().validate()
@@ -30,6 +32,7 @@ class OptionAnswerValidator(AnswerValidator):
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self.validate_default_exists_in_options()
+        self.validate_dynamic_options()
         return self.errors
 
     @cached_property
@@ -42,7 +45,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def validate_min_options(self):
         options_len = len(self.options)
-        min_options = self.MIN_OPTIONS_BY_ANSWER_TYPE[self.answer["type"]]
+        min_options = self.MIN_OPTIONS_BY_ANSWER_TYPE[self.answer_type]
 
         if self.dynamic_options:
             if "options" in self.answer and options_len == 0:
@@ -50,7 +53,7 @@ class OptionAnswerValidator(AnswerValidator):
         elif options_len < min_options:
             self.add_error(
                 self.INVALID_NUMBER_OF_ANSWER_OPTIONS.format(
-                    answer_type=self.answer["type"],
+                    answer_type=self.answer_type,
                     required_num_options=min_options,
                     actual_num_options=len(self.options),
                 )
@@ -96,3 +99,19 @@ class OptionAnswerValidator(AnswerValidator):
             option["value"] for option in self.options
         ]:
             self.add_error(self.ANSWER_DEFAULT_MISSING, default_value=default_value)
+
+    def validate_dynamic_options(self):
+        if not self.dynamic_options:
+            return None
+
+        for key_to_validate, allow_self_reference in [
+            ("values", False),
+            ("transform", True),
+        ]:
+            validator = RulesValidator(
+                self.dynamic_options[key_to_validate],
+                self.answer_id,
+                self.questionnaire_schema,
+                allow_self_reference=allow_self_reference,
+            )
+            self.errors += validator.validate()

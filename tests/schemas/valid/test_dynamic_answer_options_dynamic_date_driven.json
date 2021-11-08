@@ -4,9 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "Dynamic answer options driven by a Checkbox",
+  "title": "Dynamic answer options driven by a dynamic date",
   "theme": "default",
-  "description": "A questionnaire to demo dynamic answer options driven by a Checkbox",
+  "description": "A questionnaire to demo dynamic answer options driven by a dynamic date",
   "metadata": [
     {
       "name": "user_id",
@@ -37,59 +37,6 @@
           "blocks": [
             {
               "type": "Question",
-              "id": "mandatory-checkbox",
-              "question": {
-                "id": "mandatory-checkbox-question",
-                "title": "What extra toppings would you like?",
-                "type": "General",
-                "answers": [
-                  {
-                    "id": "mandatory-checkbox-answer",
-                    "mandatory": true,
-                    "options": [
-                      {
-                        "label": "None",
-                        "value": "None"
-                      },
-                      {
-                        "label": "Cheese",
-                        "value": "Cheese"
-                      },
-                      {
-                        "label": "Ham",
-                        "value": "Ham"
-                      },
-                      {
-                        "label": "Pineapple",
-                        "value": "Pineapple"
-                      },
-                      {
-                        "label": "Tuna",
-                        "value": "Tuna"
-                      },
-                      {
-                        "label": "Pepperoni",
-                        "value": "Pepperoni"
-                      },
-                      {
-                        "label": "Other",
-                        "value": "Other",
-                        "description": "Choose any other topping",
-                        "detail_answer": {
-                          "mandatory": false,
-                          "id": "other-answer-mandatory",
-                          "label": "Please specify other",
-                          "type": "TextField"
-                        }
-                      }
-                    ],
-                    "type": "Checkbox"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Question",
               "id": "checkbox-with-dynamic-options",
               "question": {
                 "id": "checkbox-with-dynamic-options-question",
@@ -102,13 +49,35 @@
                     "type": "Checkbox",
                     "dynamic_options": {
                       "values": {
-                        "source": "answers",
-                        "identifier": "mandatory-checkbox-answer"
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
                         ]
                       }
                     },
@@ -136,13 +105,35 @@
                     "type": "Radio",
                     "dynamic_options": {
                       "values": {
-                        "source": "answers",
-                        "identifier": "mandatory-checkbox-answer"
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
                         ]
                       }
                     },
@@ -171,13 +162,35 @@
                     "label": "Select an option",
                     "dynamic_options": {
                       "values": {
-                        "source": "answers",
-                        "identifier": "mandatory-checkbox-answer"
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
                         ]
                       }
                     },

@@ -4,9 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "Dynamic answer options",
+  "title": "Dynamic answer options driven by a Checkbox (No static options)",
   "theme": "default",
-  "description": "A questionnaire to demo dynamic answer options",
+  "description": "A questionnaire to demo dynamic answer options driven by a Checkbox with no extra static options",
   "metadata": [
     {
       "name": "user_id",

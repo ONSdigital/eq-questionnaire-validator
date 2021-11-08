@@ -1,0 +1,8 @@
+[
+  {
+    "description": "Get the label of an option using its value and answer id",
+    "rule": {
+      "option-label-from-value": ["Yes", "checkbox-answer"]
+    }
+  }
+]

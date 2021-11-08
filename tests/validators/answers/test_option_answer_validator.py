@@ -1,4 +1,5 @@
 from app.validators.answers import OptionAnswerValidator
+from tests.conftest import get_mock_schema
 
 
 def test_invalid_mismatching_answer_label_and_value():
@@ -124,3 +125,29 @@ def test_min_answer_options_with_dynamic_options():
     assert validator.errors == [
         {"message": validator.OPTIONS_DEFINED_BUT_EMPTY, "answer_id": "answer"}
     ]
+
+
+def test_dynamic_options_transform_allows_non_map_self_reference():
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": "Checkbox",
+        "dynamic_options": {
+            "values": {"source": "answers", "identifier": "checkbox-answer"},
+            "transform": {"option-label-from-value": ["self", "checkbox-answer"]},
+        },
+    }
+
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "checkbox-answer": {
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                }
+            }
+        ),
+    )
+    validator.validate_dynamic_options()
+
+    assert not validator.errors
