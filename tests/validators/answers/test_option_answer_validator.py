@@ -89,3 +89,38 @@ def test_validate_default_exists_in_options():
     validator.validate_default_exists_in_options()
 
     assert expected_errors == validator.errors
+
+
+def test_min_answer_options_without_dynamic_options():
+    answer_type = "Checkbox"
+    answer = {"id": "answer", "label": "Label", "type": answer_type, "options": []}
+
+    validator = OptionAnswerValidator(answer)
+    validator.validate_min_options()
+
+    assert validator.errors == [
+        {
+            "message": validator.INVALID_NUMBER_OF_ANSWER_OPTIONS.format(
+                answer_type=answer_type, required_num_options=1, actual_num_options=0
+            ),
+            "answer_id": "answer",
+        }
+    ]
+
+
+def test_min_answer_options_with_dynamic_options():
+    answer_type = "Checkbox"
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": answer_type,
+        "options": [],
+        "dynamic_options": {"values": {}, "transform": {}},
+    }
+
+    validator = OptionAnswerValidator(answer)
+    validator.validate_min_options()
+
+    assert validator.errors == [
+        {"message": validator.OPTIONS_DEFINED_BUT_EMPTY, "answer_id": "answer"}
+    ]

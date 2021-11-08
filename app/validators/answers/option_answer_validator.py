@@ -10,6 +10,13 @@ class OptionAnswerValidator(AnswerValidator):
     LIST_NAME_MISSING = "List name defined in action params does not exist"
     BLOCK_ID_MISSING = "Block id defined in action params does not exist"
     ANSWER_DEFAULT_MISSING = "Couldn't find matching value for answer default"
+    INVALID_NUMBER_OF_ANSWER_OPTIONS = (
+        "Not enough options. "
+        "{answer_type} requires at least {required_num_options} answer option(s) but got {actual_num_options}"
+    )
+    OPTIONS_DEFINED_BUT_EMPTY = "Answer options defined, but empty"
+
+    MIN_OPTIONS_BY_ANSWER_TYPE = {"Checkbox": 1, "Radio": 2, "Dropdown": 2}
 
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
@@ -19,6 +26,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def validate(self):
         super().validate()
+        self.validate_min_options()
         self.validate_duplicate_options()
         self.validate_labels_and_values_match()
         self.validate_default_exists_in_options()
@@ -27,6 +35,26 @@ class OptionAnswerValidator(AnswerValidator):
     @cached_property
     def options(self):
         return self.answer.get("options", [])
+
+    @cached_property
+    def dynamic_options(self):
+        return self.answer.get("dynamic_options", {})
+
+    def validate_min_options(self):
+        options_len = len(self.options)
+        min_options = self.MIN_OPTIONS_BY_ANSWER_TYPE[self.answer["type"]]
+
+        if self.dynamic_options:
+            if "options" in self.answer and options_len == 0:
+                self.add_error(self.OPTIONS_DEFINED_BUT_EMPTY)
+        elif options_len < min_options:
+            self.add_error(
+                self.INVALID_NUMBER_OF_ANSWER_OPTIONS.format(
+                    answer_type=self.answer["type"],
+                    required_num_options=min_options,
+                    actual_num_options=len(self.options),
+                )
+            )
 
     def validate_duplicate_options(self):
         labels = set()

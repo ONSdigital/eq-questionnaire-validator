@@ -106,5 +106,22 @@
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/location_value_source"
       }
     ]
+  },
+  "any_value_source_except_location": {
+    "description": "Any value source",
+    "anyOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/response_metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"
+      }
+    ]
   }
 }
