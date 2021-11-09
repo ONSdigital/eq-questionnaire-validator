@@ -67,7 +67,7 @@ def test_invalid_answer_value_in_when_rule():
 
 
 def test_answer_comparisons_different_types():
-    """ Ensures that when answer comparison is used, the type of the variables must be the same """
+    """Ensures that when answer comparison is used, the type of the variables must be the same"""
     when_rule = {
         "id": "comparison-1-answer",
         "condition": "equals any",
@@ -99,7 +99,7 @@ def test_answer_comparisons_different_types():
 
 
 def test_answer_comparisons_different_types_skip_group():
-    """ Ensures that when answer comparison is used, the type of the variables must be the same """
+    """Ensures that when answer comparison is used, the type of the variables must be the same"""
     when_rule = {
         "id": "comparison-1-answer",
         "condition": "less than",
