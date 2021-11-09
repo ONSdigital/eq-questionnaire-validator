@@ -14,7 +14,7 @@
           "lhs": {
             "anyOf": [
               {
-                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
               },
               {
                 "type": "object",
@@ -29,7 +29,7 @@
           "rhs": {
             "anyOf": [
               {
-                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
               },
               {
                 "type": "object",

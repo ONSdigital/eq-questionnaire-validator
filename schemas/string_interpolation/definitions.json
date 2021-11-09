@@ -142,7 +142,7 @@
       }
     ]
   },
-  "value_sources": {
+  "placeholder_value_sources": {
     "oneOf": [
       {
         "$ref": "#/chained_source"
