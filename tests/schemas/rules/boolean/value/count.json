@@ -1,6 +1,6 @@
 [
   {
-    "description": "A checkbox selected answer equal to number of checkboxes count number",
+    "description": "Number of checkbox options selected is equal 2",
     "rule": {
       "==": [
         {
@@ -16,7 +16,7 @@
     }
   },
   {
-    "description": "A checkbox selected answer not equal to number of checkboxes count number",
+    "description": "Number of checkbox options selected is not equal 2",
     "rule": {
       "!=": [
         {
@@ -32,7 +32,7 @@
     }
   },
   {
-    "description": "A checkbox selected answer less than number of checkboxes count number",
+    "description": "Number of checkbox options selected is less than 2",
     "rule": {
       "<": [
         {
@@ -48,7 +48,7 @@
     }
   },
   {
-    "description": "A checkbox selected answer less than or equal to number of checkboxes count number",
+    "description": "Number of checkbox options selected is less than or equal 2",
     "rule": {
       "<=": [
         {
@@ -64,7 +64,7 @@
     }
   },
   {
-    "description": "A checkbox selected answer more than number of checkboxes count number",
+    "description": "Number of checkbox options selected is greater than 2",
     "rule": {
       ">": [
         {
@@ -80,7 +80,7 @@
     }
   },
   {
-    "description": "A checkbox selected answer more than or equal to number of checkboxes count number",
+    "description": "Number of checkbox options selected is greater than or equal 2",
     "rule": {
       ">=": [
         {

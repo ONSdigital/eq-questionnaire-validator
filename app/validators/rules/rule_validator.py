@@ -131,6 +131,11 @@ class RulesValidator(Validator):
             )
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
+        """
+        Recursively fetch all the arguments for all non `map` operators.
+
+        The `map` operator is checkbox explicitly.
+        """
         non_operator_arguments = []
         for argument in arguments:
             if isinstance(argument, dict) and any(
@@ -167,7 +172,7 @@ class RulesValidator(Validator):
 
     def _validate_count_operator(self, operator):
         """
-        Validates that when an answer value source is used it is a checkbox
+        Validates that an answer value source within a count operator is of type Checkbox
         """
         first_argument = operator["count"][0]
         if (
