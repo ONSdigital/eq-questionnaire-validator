@@ -1,4 +1,6 @@
 from app.validators.answers import OptionAnswerValidator
+from app.validators.rules.rule_validator import RulesValidator
+from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import get_mock_schema
 
 
@@ -151,3 +153,116 @@ def test_dynamic_options_transform_allows_non_map_self_reference():
     validator.validate_dynamic_options()
 
     assert not validator.errors
+
+
+def test_dynamic_options_values_with_invalid_value_rule():
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": "Checkbox",
+        "dynamic_options": {
+            "values": {
+                "map": [
+                    {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
+                    {
+                        "date-range": [
+                            {
+                                "date": [
+                                    {
+                                        "source": "response_metadata",
+                                        "identifier": "started_at",
+                                    }
+                                ]
+                            },
+                            7,
+                        ]
+                    },
+                ]
+            },
+            "transform": {"format-date": [{"date": ["self"]}, "EEEE d MMMM yyyy"]},
+        },
+    }
+
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "checkbox-answer": {
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                }
+            }
+        ),
+    )
+    validator.validate_dynamic_options()
+
+    expected_error = {
+        "message": RulesValidator.MAP_OPERATOR_WITHOUT_SELF_REFERENCE,
+        "origin_id": "answer",
+        "rule": {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_dynamic_options_transform_with_invalid_value_rule():
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": "Checkbox",
+        "dynamic_options": {
+            "values": {"source": "answers", "identifier": "checkbox-answer"},
+            "transform": {"option-label-from-value": ["self", "non-existing-answer"]},
+        },
+    }
+
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "checkbox-answer": {
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                }
+            }
+        ),
+    )
+    validator.validate_dynamic_options()
+
+    expected_error = {
+        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+        "identifier": "non-existing-answer",
+        "origin_id": "answer",
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_dynamic_options_values_with_non_checkbox_answer_source():
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": "Checkbox",
+        "dynamic_options": {
+            "values": {"source": "answers", "identifier": "non-checkbox-answer"},
+            "transform": {"option-label-from-value": ["self", "non-checkbox-answer"]},
+        },
+    }
+
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "non-checkbox-answer": {
+                    "answer": {"id": "non-checkbox-answer", "type": "Radio"}
+                }
+            }
+        ),
+    )
+    validator.validate_dynamic_options()
+
+    expected_error = {
+        "message": validator.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
+        "value_source": {"source": "answers", "identifier": "non-checkbox-answer"},
+        "answer_id": "answer",
+    }
+
+    assert validator.errors == [expected_error]

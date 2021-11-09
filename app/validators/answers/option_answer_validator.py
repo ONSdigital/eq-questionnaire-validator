@@ -16,6 +16,9 @@ class OptionAnswerValidator(AnswerValidator):
         "{answer_type} requires at least {required_num_options} answer option(s) but got {actual_num_options}"
     )
     OPTIONS_DEFINED_BUT_EMPTY = "Answer options defined, but empty"
+    DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER = (
+        "Dynamic options references non Checkbox answer"
+    )
 
     MIN_OPTIONS_BY_ANSWER_TYPE = {"Checkbox": 1, "Radio": 2, "Dropdown": 2}
 
@@ -104,6 +107,10 @@ class OptionAnswerValidator(AnswerValidator):
         if not self.dynamic_options:
             return None
 
+        self._validate_dynamic_options_answer_source()
+        self._validate_dynamic_options_value_rules()
+
+    def _validate_dynamic_options_value_rules(self):
         for key_to_validate, allow_self_reference in [
             ("values", False),
             ("transform", True),
@@ -115,3 +122,18 @@ class OptionAnswerValidator(AnswerValidator):
                 allow_self_reference=allow_self_reference,
             )
             self.errors += validator.validate()
+
+    def _validate_dynamic_options_answer_source(self):
+        if "source" not in self.dynamic_options["values"]:
+            return None
+
+        value_source = self.dynamic_options["values"]
+        if (
+            value_source["source"] == "answers"
+            and self.questionnaire_schema.get_answer(value_source["identifier"])["type"]
+            != "Checkbox"
+        ):
+            self.add_error(
+                self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
+                value_source=value_source,
+            )
