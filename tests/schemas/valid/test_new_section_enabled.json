@@ -1,0 +1,108 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Section Enabled",
+  "theme": "default",
+  "description": "A questionnaire to demo new section enabled key usage",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Section 1",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "section-1-block",
+              "type": "Question",
+              "question": {
+                "answers": [
+                  {
+                    "id": "section-1-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "description": ["Choose ‘Yes’ to enable section 2."],
+                "id": "section-1-question",
+                "title": "Do you want to enable section 2?",
+                "type": "General"
+              }
+            }
+          ],
+          "id": "section-1-group",
+          "title": "Section 1"
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Section 2",
+      "enabled": {
+        "when": {
+          "in": [
+            "Yes",
+            {
+              "source": "answers",
+              "identifier": "section-1-answer"
+            }
+          ]
+        }
+      },
+      "groups": [
+        {
+          "blocks": [
+            {
+              "id": "section-2-interstitial",
+              "content": {
+                "title": "Section 2 interstitial",
+                "contents": [
+                  {
+                    "description": "You should be only able to see this interstitial page if you chose ‘Yes’ in the previous question."
+                  }
+                ]
+              },
+              "type": "Interstitial"
+            }
+          ],
+          "id": "section-2-group",
+          "title": "Section 2"
+        }
+      ]
+    }
+  ]
+}
