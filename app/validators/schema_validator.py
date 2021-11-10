@@ -31,7 +31,7 @@ class SchemaValidator(Validator):
             "schemas/*.json",
         ]:
             for filename in glob.glob(glob_path):
-                with open(filename) as schema_file:
+                with open(filename, encoding="utf8") as schema_file:
                     json_data = load(schema_file)
                     store[json_data["$id"]] = json_data
         return store

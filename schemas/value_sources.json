@@ -12,8 +12,24 @@
       "source": {
         "type": "string",
         "enum": ["answers"]
+      },
+      "list_item_selector": {
+        "description": "The identifier and source of list item",
+        "oneOf": [
+          {
+            "$ref": "#/list_value_source"
+          },
+          {
+            "$ref": "#/location_value_source"
+          }
+        ]
+      },
+      "selector": {
+        "type": "string",
+        "description": "Field selector for composite Answer"
       }
     },
+
     "required": ["identifier", "source"],
     "additionalProperties": false
   },
@@ -38,7 +54,7 @@
     "type": "object",
     "properties": {
       "identifier": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
         "description": "The response metadata property name"
       },
       "source": {

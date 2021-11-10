@@ -28,9 +28,11 @@ def validate_schema_from_url():
             with urllib.request.urlopen(values["url"]) as url:
                 return validate_schema(url.read().decode())
         except urllib.error.URLError:
-            return Response(
-                status=404,
-                response="Could not load schema at URL [{}]".format(values["url"]),
+            return (
+                Response(
+                    status=404,
+                    response=f'Could not load schema at URL [{values["url"]}]',
+                ),
             )
 
 

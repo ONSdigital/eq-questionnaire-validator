@@ -349,6 +349,11 @@ def test_validate_options_multiple_errors():
         (
             "in",
             "list-item-id",
+            {"source": "list", "identifier": "no-selector"},
+        ),
+        (
+            "in",
+            "list-item-id",
             {"source": "list", "identifier": "a-list", "selector": "same_name_items"},
         ),
         ("==", {"source": "location", "identifier": "list_item_id"}, "list-item-id"),

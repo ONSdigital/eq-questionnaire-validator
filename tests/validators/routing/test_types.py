@@ -68,6 +68,7 @@ def test_resolve_answer_value_source_json_type(answer_type, json_type):
         ("list", "first", TYPE_STRING),
         ("list", "primary_person", TYPE_STRING),
         ("list", "same_name_items", TYPE_ARRAY),
+        ("list", None, TYPE_ARRAY),
     ],
 )
 def test_resolve_non_answer_value_source_json_type(source, selector, json_type):
