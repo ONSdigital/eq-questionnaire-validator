@@ -137,7 +137,7 @@ class RulesValidator(Validator):
         """
         Recursively fetch all the arguments for all non `map` operators.
 
-        The `map` operator is checkbox explicitly.
+        The `map` operator is checked explicitly.
         """
         non_operator_arguments = []
         for argument in arguments:
