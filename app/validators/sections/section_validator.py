@@ -179,7 +179,7 @@ class SectionValidator(Validator):
         self.validate_variant_fields(block, question_variants)
 
     def validate_variant_fields(self, block, variants):
-        """ Ensure consistency between relevant fields in variants
+        """Ensure consistency between relevant fields in variants
 
         - Ensure that question_ids are the same across all variants.
         - Ensure answer_ids are the same across all variants.

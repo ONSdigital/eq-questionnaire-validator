@@ -50,7 +50,7 @@ ALL_OPERATORS = (
 )
 
 
-SELF = "self"
+SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
@@ -62,10 +62,10 @@ class RulesValidator(Validator):
         "Count operator references non Checkbox answer"
     )
     MAP_OPERATOR_WITHOUT_SELF_REFERENCE = (
-        f"Argument one of the `map` operator does not reference `{SELF}`"
+        f"Argument one of the `map` operator does not reference `{SELF_REFERENCE_KEY}`"
     )
     SELF_REFERENCE_OUTSIDE_MAP_OPERATOR = (
-        f"Reference to {SELF} was made outside of the `map` operator"
+        f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
     )
 
     def __init__(
@@ -118,7 +118,10 @@ class RulesValidator(Validator):
         arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
             rules[operator_name]
         )
-        if SELF in arguments_for_non_map_operators and not allow_self_reference:
+        if (
+            SELF_REFERENCE_KEY in arguments_for_non_map_operators
+            and not allow_self_reference
+        ):
             self.add_error(self.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR, rule=rules)
 
     def _validate_map_operator(self, operator):
@@ -127,19 +130,24 @@ class RulesValidator(Validator):
         The second argument is currently not validated here as it can currently only be `date-range`
         """
         function_to_map_over_arguments = list(operator["map"][0].values())[0]
-        if SELF in function_to_map_over_arguments:
+        if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return None
 
         arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
             function_to_map_over_arguments
         )
 
-        if SELF not in arguments_for_non_map_operators:
+        if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
             self.add_error(
                 self.MAP_OPERATOR_WITHOUT_SELF_REFERENCE, rule=operator["map"][0]
             )
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
+        """
+        Recursively fetch all the arguments for all non `map` operators.
+
+        The `map` operator is checked explicitly.
+        """
         non_operator_arguments = []
         for argument in arguments:
             if isinstance(argument, dict) and any(
@@ -186,7 +194,7 @@ class RulesValidator(Validator):
 
     def _validate_count_operator(self, operator):
         """
-        Validates that when an answer value source is used it is a checkbox
+        Validates that an answer value source within a count operator is of type Checkbox
         """
         first_argument = operator["count"][0]
         if (
