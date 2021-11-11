@@ -3,6 +3,8 @@ from functools import cached_property
 from app.validators.answers import AnswerValidator
 from app.validators.rules.rule_validator import RulesValidator
 
+MIN_OPTIONS_BY_ANSWER_TYPE = {"Checkbox": 1, "Radio": 2, "Dropdown": 2}
+
 
 class OptionAnswerValidator(AnswerValidator):
     DUPLICATE_LABEL = "Duplicate label found"
@@ -11,7 +13,7 @@ class OptionAnswerValidator(AnswerValidator):
     LIST_NAME_MISSING = "List name defined in action params does not exist"
     BLOCK_ID_MISSING = "Block id defined in action params does not exist"
     ANSWER_DEFAULT_MISSING = "Couldn't find matching value for answer default"
-    INVALID_NUMBER_OF_ANSWER_OPTIONS = (
+    NOT_ENOUGH_ANSWER_OPTIONS = (
         "Not enough options. "
         "{answer_type} requires at least {required_num_options} answer option(s) but got {actual_num_options}"
     )
@@ -19,8 +21,6 @@ class OptionAnswerValidator(AnswerValidator):
     DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER = (
         "Dynamic options references non Checkbox answer"
     )
-
-    MIN_OPTIONS_BY_ANSWER_TYPE = {"Checkbox": 1, "Radio": 2, "Dropdown": 2}
 
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
@@ -55,10 +55,10 @@ class OptionAnswerValidator(AnswerValidator):
                 self.add_error(self.OPTIONS_DEFINED_BUT_EMPTY)
         elif options_len < min_options:
             self.add_error(
-                self.INVALID_NUMBER_OF_ANSWER_OPTIONS.format(
+                self.NOT_ENOUGH_ANSWER_OPTIONS.format(
                     answer_type=self.answer_type,
                     required_num_options=min_options,
-                    actual_num_options=len(self.options),
+                    actual_num_options=options_len,
                 )
             )
 

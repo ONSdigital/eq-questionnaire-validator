@@ -103,7 +103,7 @@ def test_min_answer_options_without_dynamic_options():
 
     assert validator.errors == [
         {
-            "message": validator.INVALID_NUMBER_OF_ANSWER_OPTIONS.format(
+            "message": validator.NOT_ENOUGH_ANSWER_OPTIONS.format(
                 answer_type=answer_type, required_num_options=1, actual_num_options=0
             ),
             "answer_id": "answer",
