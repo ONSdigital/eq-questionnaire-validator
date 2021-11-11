@@ -48,7 +48,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def validate_min_options(self):
         options_len = len(self.options)
-        min_options = self.MIN_OPTIONS_BY_ANSWER_TYPE[self.answer_type]
+        min_options = MIN_OPTIONS_BY_ANSWER_TYPE[self.answer_type]
 
         if self.dynamic_options:
             if "options" in self.answer and options_len == 0:

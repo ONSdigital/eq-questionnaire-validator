@@ -21,7 +21,7 @@ class Operator:
     DATE_RANGE = "date-range"
     MAP = "map"
     OPTION_LABEL_FROM_VALUE = "option-label-from-value"
-    CONCAT = "concat"
+    CONCATENATE = "concatenate"
 
 
 LOGIC_OPERATORS = [Operator.NOT, Operator.AND, Operator.OR]
