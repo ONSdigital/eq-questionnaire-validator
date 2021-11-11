@@ -166,7 +166,7 @@ class RulesValidator(Validator):
 
     def _validate_option_label_from_value_operator(self, operator):
         """
-        Validate the referenced answer id exists
+        Validate the referenced answer id in `option-label-from-value` exists
         """
         answer_id = operator[next(iter(operator))][1]
         if answer_id not in self.questionnaire_schema.answers_with_context:
