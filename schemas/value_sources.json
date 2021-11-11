@@ -108,7 +108,7 @@
     ]
   },
   "any_value_source_except_location": {
-    "description": "Any value source",
+    "description": "Any value source except location",
     "anyOf": [
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
