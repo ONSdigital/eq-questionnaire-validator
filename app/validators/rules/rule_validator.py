@@ -72,6 +72,9 @@ class RulesValidator(Validator):
         self.context["origin_id"] = origin_id
 
     def validate(self):
+        """
+        Validate that the top level rules are valid
+        """
         self._validate_rule(self.rules)
         return self.errors
 
@@ -157,7 +160,7 @@ class RulesValidator(Validator):
 
     def _validate_date_operator(self, operator):
         """
-        Validates that when an answer value source is used it is a date
+        Validates that when an answer value source is used, it is a date
         """
         first_argument = operator["date"][0]
         if (
