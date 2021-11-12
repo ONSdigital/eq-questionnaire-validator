@@ -138,23 +138,37 @@ class RulesValidator(Validator):
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
         """
-        Recursively fetch all the arguments for all non `map` operators.
+        Recursively fetch all the arguments for all non `map` operators as a flattened list.
 
         The `map` operator is checked explicitly.
         """
+        return [
+            non_operator_argument
+            for argument in arguments
+            for non_operator_argument in self._get_non_map_arguments_from_argument(
+                argument
+            )
+        ]
+
+    def _get_non_map_arguments_from_argument(self, argument):
+        """
+        For the given argument, recursively fetch all the arguments for all non `map` operators as a flattened list.
+
+        The `map` operator is checked explicitly.
+        """
+
         non_operator_arguments = []
-        for argument in arguments:
-            if isinstance(argument, dict) and any(
-                operator in argument
-                for operator in ALL_OPERATORS
-                if operator != Operator.MAP
-            ):
-                for operands in argument.values():
-                    non_operator_arguments += self._get_flattened_arguments_for_non_map_operators(
-                        operands
-                    )
-            else:
-                non_operator_arguments.append(argument)
+        if isinstance(argument, dict) and any(
+            operator in argument
+            for operator in ALL_OPERATORS
+            if operator != Operator.MAP
+        ):
+            for operands in argument.values():
+                non_operator_arguments += self._get_flattened_arguments_for_non_map_operators(
+                    operands
+                )
+        else:
+            non_operator_arguments.append(argument)
 
         return non_operator_arguments
 

@@ -191,9 +191,7 @@ def test_map_operator_with_self_reference():
         ]
     }
 
-    validator = get_validator(
-        operator
-    )
+    validator = get_validator(operator)
     validator.validate()
 
     assert not validator.errors
@@ -216,9 +214,7 @@ def test_map_operator_without_self_reference():
         ]
     }
 
-    validator = get_validator(
-        operator
-    )
+    validator = get_validator(operator)
     validator.validate()
 
     expected_error = {
