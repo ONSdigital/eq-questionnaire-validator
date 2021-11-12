@@ -282,6 +282,11 @@ def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
         (
             "in",
             "list-item-id",
+            {"source": "list", "identifier": "no-selector"},
+        ),
+        (
+            "in",
+            "list-item-id",
             {"source": "list", "identifier": "a-list", "selector": "same_name_items"},
         ),
         ("==", {"source": "location", "identifier": "list_item_id"}, "list-item-id"),

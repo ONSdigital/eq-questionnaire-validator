@@ -109,8 +109,8 @@ class RulesValidator(Validator):
         """
         Validate references to `self` are within the context of the `map` operator
         """
-        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
-            rules[operator_name]
+        arguments_for_non_map_operators = (
+            self._get_flattened_arguments_for_non_map_operators(rules[operator_name])
         )
         if (
             SELF_REFERENCE_KEY in arguments_for_non_map_operators
@@ -127,8 +127,10 @@ class RulesValidator(Validator):
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return None
 
-        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
-            function_to_map_over_arguments
+        arguments_for_non_map_operators = (
+            self._get_flattened_arguments_for_non_map_operators(
+                function_to_map_over_arguments
+            )
         )
 
         if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
@@ -164,8 +166,8 @@ class RulesValidator(Validator):
             if operator != Operator.MAP
         ):
             for operands in argument.values():
-                non_operator_arguments += self._get_flattened_arguments_for_non_map_operators(
-                    operands
+                non_operator_arguments += (
+                    self._get_flattened_arguments_for_non_map_operators(operands)
                 )
         else:
             non_operator_arguments.append(argument)
@@ -216,8 +218,10 @@ class RulesValidator(Validator):
         option_values = []
         for argument in rules[operator_name]:
             if isinstance(argument, dict) and argument.get("source") == "answers":
-                option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
-                    argument["identifier"]
+                option_values = (
+                    self.questionnaire_schema.answer_id_to_option_values_map.get(
+                        argument["identifier"]
+                    )
                 )
             else:
                 values = argument if isinstance(argument, list) else [argument]

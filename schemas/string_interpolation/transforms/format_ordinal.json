@@ -12,7 +12,7 @@
         "type": "object",
         "properties": {
           "number_to_format": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
           },
           "determiner": {
             "type": "object",
