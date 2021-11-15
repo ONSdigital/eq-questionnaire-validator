@@ -184,6 +184,29 @@ def test_validate_count_operator_non_checkbox_answer():
     assert validator.errors == [expected_error]
 
 
+def test_map_operator_with_self_reference():
+    operator = {
+        "map": [
+            {"format-date": [{"date": ["self"]}, "yyyy-MM-dd"]},
+            {
+                "date-range": [
+                    {
+                        "date": [
+                            {"source": "response_metadata", "identifier": "started_at"}
+                        ]
+                    },
+                    7,
+                ]
+            },
+        ]
+    }
+
+    validator = get_validator(operator)
+    validator.validate()
+
+    assert not validator.errors
+
+
 def test_map_operator_without_self_reference():
     operator = {
         "map": [
@@ -201,12 +224,7 @@ def test_map_operator_without_self_reference():
         ]
     }
 
-    validator = get_validator(
-        operator,
-        answers_with_context={
-            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
-        },
-    )
+    validator = get_validator(operator)
     validator.validate()
 
     expected_error = {

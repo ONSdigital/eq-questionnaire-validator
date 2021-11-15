@@ -79,6 +79,9 @@ class RulesValidator(Validator):
         self.allow_self_reference = allow_self_reference
 
     def validate(self):
+        """
+        Validate that the top level rules are valid
+        """
         self._validate_rule(self.rules, allow_self_reference=self.allow_self_reference)
         return self.errors
 
@@ -116,8 +119,8 @@ class RulesValidator(Validator):
         """
         Validate references to `self` are within the context of the `map` operator
         """
-        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
-            rules[operator_name]
+        arguments_for_non_map_operators = (
+            self._get_flattened_arguments_for_non_map_operators(rules[operator_name])
         )
         if (
             SELF_REFERENCE_KEY in arguments_for_non_map_operators
@@ -134,8 +137,10 @@ class RulesValidator(Validator):
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return None
 
-        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
-            function_to_map_over_arguments
+        arguments_for_non_map_operators = (
+            self._get_flattened_arguments_for_non_map_operators(
+                function_to_map_over_arguments
+            )
         )
 
         if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
@@ -145,23 +150,37 @@ class RulesValidator(Validator):
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
         """
-        Recursively fetch all the arguments for all non `map` operators.
+        Recursively fetch all the arguments for all non `map` operators as a flattened list.
 
         The `map` operator is checked explicitly.
         """
+        return [
+            non_operator_argument
+            for argument in arguments
+            for non_operator_argument in self._get_non_map_arguments_from_argument(
+                argument
+            )
+        ]
+
+    def _get_non_map_arguments_from_argument(self, argument):
+        """
+        For the given argument, recursively fetch all the arguments for all non `map` operators as a flattened list.
+
+        The `map` operator is checked explicitly.
+        """
+
         non_operator_arguments = []
-        for argument in arguments:
-            if isinstance(argument, dict) and any(
-                operator in argument
-                for operator in ALL_OPERATORS
-                if operator != Operator.MAP
-            ):
-                for operands in argument.values():
-                    non_operator_arguments += self._get_flattened_arguments_for_non_map_operators(
-                        operands
-                    )
-            else:
-                non_operator_arguments.append(argument)
+        if isinstance(argument, dict) and any(
+            operator in argument
+            for operator in ALL_OPERATORS
+            if operator != Operator.MAP
+        ):
+            for operands in argument.values():
+                non_operator_arguments += (
+                    self._get_flattened_arguments_for_non_map_operators(operands)
+                )
+        else:
+            non_operator_arguments.append(argument)
 
         return non_operator_arguments
 
@@ -177,7 +196,7 @@ class RulesValidator(Validator):
 
     def _validate_date_operator(self, operator):
         """
-        Validates that when an answer value source is used it is a date
+        Validates that when an answer value source is used, it is a date
         """
         first_argument = operator["date"][0]
         if (
@@ -215,8 +234,10 @@ class RulesValidator(Validator):
         option_values = []
         for argument in rules[operator_name]:
             if isinstance(argument, dict) and argument.get("source") == "answers":
-                option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
-                    argument["identifier"]
+                option_values = (
+                    self.questionnaire_schema.answer_id_to_option_values_map.get(
+                        argument["identifier"]
+                    )
                 )
             else:
                 values = argument if isinstance(argument, list) else [argument]

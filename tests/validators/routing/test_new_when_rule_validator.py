@@ -279,6 +279,7 @@ def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
             {"source": "list", "identifier": "a-list", "selector": "primary_person"},
             "list-item-id",
         ),
+        ("in", "list-item-id", {"source": "list", "identifier": "no-selector"}),
         (
             "in",
             "list-item-id",
