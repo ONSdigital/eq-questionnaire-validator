@@ -1,3 +1,4 @@
+from app.answer_type import AnswerType
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -182,10 +183,8 @@ class RulesValidator(Validator):
         if (
             isinstance(first_argument, dict)
             and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            not in ["Date", "MonthYearDate", "YearDate"]
+            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
+            not in [AnswerType.DATE, AnswerType.MONTH_YEAR_DATE, AnswerType.YEAR_DATE]
         ):
             self.add_error(
                 self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
@@ -200,10 +199,8 @@ class RulesValidator(Validator):
         if (
             isinstance(first_argument, dict)
             and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            != "Checkbox"
+            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
+            != AnswerType.CHECKBOX
         ):
             self.add_error(
                 self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,

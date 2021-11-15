@@ -1,3 +1,4 @@
+from app.answer_type import AnswerType
 from app.validators.validator import Validator
 
 
@@ -6,5 +7,5 @@ class AnswerValidator(Validator):
         super().__init__(schema_element)
         self.answer = schema_element
         self.answer_id = self.answer["id"]
-        self.answer_type = self.answer["type"]
+        self.answer_type = AnswerType(self.answer["type"])
         self.context["answer_id"] = self.answer_id

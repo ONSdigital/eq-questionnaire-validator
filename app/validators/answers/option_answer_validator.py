@@ -1,9 +1,14 @@
 from functools import cached_property
 
+from app.answer_type import AnswerType
 from app.validators.answers import AnswerValidator
 from app.validators.rules.rule_validator import RulesValidator
 
-MIN_OPTIONS_BY_ANSWER_TYPE = {"Checkbox": 1, "Radio": 2, "Dropdown": 2}
+MIN_OPTIONS_BY_ANSWER_TYPE = {
+    AnswerType.CHECKBOX: 1,
+    AnswerType.RADIO: 2,
+    AnswerType.DROPDOWN: 2,
+}
 
 
 class OptionAnswerValidator(AnswerValidator):
@@ -56,7 +61,7 @@ class OptionAnswerValidator(AnswerValidator):
         elif options_len < min_options:
             self.add_error(
                 self.NOT_ENOUGH_ANSWER_OPTIONS.format(
-                    answer_type=self.answer_type,
+                    answer_type=self.answer_type.value,
                     required_num_options=min_options,
                     actual_num_options=options_len,
                 )
@@ -130,8 +135,8 @@ class OptionAnswerValidator(AnswerValidator):
         value_source = self.dynamic_options["values"]
         if (
             value_source["source"] == "answers"
-            and self.questionnaire_schema.get_answer(value_source["identifier"])["type"]
-            != "Checkbox"
+            and self.questionnaire_schema.get_answer_type(value_source["identifier"])
+            != AnswerType.CHECKBOX
         ):
             self.add_error(
                 self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,

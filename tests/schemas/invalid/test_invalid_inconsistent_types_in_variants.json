@@ -69,7 +69,7 @@
                         "id": "answer-2",
                         "label": "Your age?",
                         "mandatory": false,
-                        "type": "NotANumber"
+                        "type": "TextField"
                       },
                       {
                         "id": "answer-3",

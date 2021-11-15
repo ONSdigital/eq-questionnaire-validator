@@ -292,7 +292,7 @@ def test_inconsistent_types_in_variants():
             "block_id": "block-2",
             "answer_id": "answer-2",
             "section_id": "section",
-            "answer_types": {"NotANumber", "Number"},
+            "answer_types": {"TextField", "Number"},
         },
     ]
 
