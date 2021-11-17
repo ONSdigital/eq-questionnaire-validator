@@ -1,7 +1,7 @@
 {
-  "$id": "https://eq.ons.gov.uk/rules/rule.json",
+  "$id": "https://eq.ons.gov.uk/rules/boolean_rule.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
-  "description": "Top level rule",
+  "description": "Top level boolean operator rule",
   "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
 }

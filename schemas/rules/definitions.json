@@ -32,6 +32,25 @@
       { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/not.json" }
     ]
   },
+  "value_operators": {
+    "description": "All operators that resolve to a value",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-range.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
+      },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" }
+    ]
+  },
+  "list_value_operators": {
+    "description": "All operators that resolve to a list of values",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-range.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" }
+    ]
+  },
   "any_value": {
     "description": "Any value",
     "oneOf": [

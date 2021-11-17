@@ -1,0 +1,46 @@
+[
+  {
+    "description": "Format date with date operator using answer source",
+    "rule": {
+      "format-date": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        "EEEE d MMMM yyyy"
+      ]
+    }
+  },
+  {
+    "description": "Format date with date operator using dynamic source `now`",
+    "rule": {
+      "format-date": [
+        {
+          "date": ["now"]
+        },
+        "d MMMM yyyy"
+      ]
+    }
+  },
+  {
+    "description": "Format date with reference to the current iteration using `self` where the value is a date time object",
+    "rule": {
+      "format-date": ["self", "d MMMM yyyy"]
+    }
+  },
+  {
+    "description": "Format date with reference to the current iteration using `self` where the value is a string date",
+    "rule": {
+      "format-date": [
+        {
+          "date": ["self"]
+        },
+        "EEEE d MMMM yyyy"
+      ]
+    }
+  }
+]
