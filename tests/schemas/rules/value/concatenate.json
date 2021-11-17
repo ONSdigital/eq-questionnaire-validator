@@ -18,25 +18,7 @@
     }
   },
   {
-    "description": "Concatenate two answers comma seperated",
-    "rule": {
-      "concatenate": [
-        [
-          {
-            "source": "answers",
-            "identifier": "first-name"
-          },
-          {
-            "source": "answers",
-            "identifier": "last-name"
-          }
-        ],
-        ","
-      ]
-    }
-  },
-  {
-    "description": "Concatenate two metadata",
+    "description": "Concatenate two metadata comma separated",
     "rule": {
       "concatenate": [
         [
