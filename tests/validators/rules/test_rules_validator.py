@@ -57,6 +57,36 @@ def test_validate_options(operator_name, first_argument, second_argument):
     assert validator.errors == [expected_error]
 
 
+@pytest.mark.parametrize(
+    "operator_name, first_argument, second_argument",
+    [
+        ("==", {"source": "answers", "identifier": "string-answer"}, None),
+        ("!=", {"source": "answers", "identifier": "string-answer"}, None),
+        ("in", {"source": "answers", "identifier": "string-answer"}, [None]),
+        ("any-in", {"source": "answers", "identifier": "array-answer"}, [None]),
+        ("all-in", [None], {"source": "answers", "identifier": "array-answer"}),
+    ],
+)
+def test_validate_options_null_value_is_valid(
+    operator_name, first_argument, second_argument
+):
+    rule = {operator_name: [first_argument, second_argument]}
+
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
+        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
+    }
+    questionnaire_schema.answer_id_to_option_values_map = {
+        "string-answer": ["Yes", "No"],
+        "array-answer": ["Yes", "No"],
+    }
+    validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
+    validator.validate()
+
+    assert not validator.errors
+
+
 def test_validate_options_multiple_errors():
     rule = {
         "in": [
