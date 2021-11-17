@@ -1,0 +1,213 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Dynamic answer options driven by a dynamic date",
+  "theme": "default",
+  "description": "A questionnaire to demo dynamic answer options driven by a dynamic date",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "checkbox-with-dynamic-options",
+              "question": {
+                "id": "checkbox-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-checkbox-answer",
+                    "mandatory": true,
+                    "type": "Checkbox",
+                    "dynamic_options": {
+                      "values": {
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
+                      },
+                      "transform": {
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "I don’t have a favourite",
+                        "value": "I don’t have a favourite"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "radio-with-dynamic-options",
+              "question": {
+                "id": "radio-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-radio-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "dynamic_options": {
+                      "values": {
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
+                      },
+                      "transform": {
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "I don’t have a favourite",
+                        "value": "I don’t have a favourite"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "dropdown-with-dynamic-options",
+              "question": {
+                "id": "dropdown-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-dropdown-answer",
+                    "mandatory": true,
+                    "type": "Dropdown",
+                    "label": "Select an option",
+                    "dynamic_options": {
+                      "values": {
+                        "map": [
+                          {
+                            "format-date": ["self", "yyyy-MM-dd"]
+                          },
+                          {
+                            "date-range": [
+                              {
+                                "date": [
+                                  {
+                                    "source": "response_metadata",
+                                    "identifier": "started_at"
+                                  },
+                                  {
+                                    "days": -7,
+                                    "day_of_week": "MONDAY"
+                                  }
+                                ]
+                              },
+                              7
+                            ]
+                          }
+                        ]
+                      },
+                      "transform": {
+                        "format-date": [
+                          {
+                            "date": ["self"]
+                          },
+                          "EEEE d MMMM yyyy"
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "I don’t have a favourite",
+                        "value": "I don’t have a favourite"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "dynamic-answer-options-group"
+        }
+      ]
+    }
+  ]
+}

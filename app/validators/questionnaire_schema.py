@@ -5,6 +5,7 @@ from functools import cached_property, lru_cache
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 
+from app.answer_type import AnswerType
 from app.validators.answers.number_answer_validator import MAX_NUMBER
 
 
@@ -285,6 +286,11 @@ class QuestionnaireSchema:
     @lru_cache
     def get_answer(self, answer_id):
         return self.answers_with_context[answer_id]["answer"]
+
+    @lru_cache
+    def get_answer_type(self, answer_id):
+        answer = self.get_answer(answer_id)
+        return AnswerType(answer["type"])
 
     @lru_cache
     def get_group(self, group_id):

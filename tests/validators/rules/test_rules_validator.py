@@ -2,6 +2,7 @@ import pytest
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.rules.rule_validator import RulesValidator
+from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import get_mock_schema
 
 ORIGIN_ID = "block-id"
@@ -11,9 +12,18 @@ default_answer_with_context = {
 }
 
 
-def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None):
+def get_validator(
+    rule,
+    *,
+    questionnaire_schema=None,
+    answers_with_context=None,
+    allow_self_reference=False,
+):
     return RulesValidator(
-        rule, ORIGIN_ID, get_mock_schema(questionnaire_schema, answers_with_context)
+        rule,
+        ORIGIN_ID,
+        get_mock_schema(questionnaire_schema, answers_with_context),
+        allow_self_reference=allow_self_reference,
     )
 
 
@@ -264,7 +274,9 @@ def test_map_operator_without_self_reference():
         ("format-date", [{"date": ["self"]}]),
     ],
 )
-def test_self_reference_outside_map_operator(operator_name, operands):
+def test_self_reference_outside_map_operator_without_allow_self_reference(
+    operator_name, operands
+):
     rule = {operator_name: operands}
 
     validator = get_validator(
@@ -272,6 +284,7 @@ def test_self_reference_outside_map_operator(operator_name, operands):
         answers_with_context={
             "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
         },
+        allow_self_reference=False,
     )
     validator.validate()
 
@@ -282,3 +295,37 @@ def test_self_reference_outside_map_operator(operator_name, operands):
     }
 
     assert expected_error in validator.errors
+
+
+@pytest.mark.parametrize(
+    "operator_name, operands",
+    [
+        ("date", ["self"]),
+        ("format-date", ["self"]),
+        ("format-date", [{"date": ["self"]}]),
+    ],
+)
+def test_self_reference_outside_map_operator_with_allow_self_reference(
+    operator_name, operands
+):
+    rule = {operator_name: operands}
+
+    validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
+    validator.validate()
+
+    assert not validator.errors
+
+
+def test_non_existing_answer_id_in_option_label_for_value_operator():
+    rule = {"option-label-from-value": ["self", "non-existing-answer"]}
+
+    validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
+    validator.validate()
+
+    expected_error = {
+        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+        "origin_id": ORIGIN_ID,
+        "identifier": "non-existing-answer",
+    }
+
+    assert validator.errors == [expected_error]

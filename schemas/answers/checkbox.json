@@ -33,15 +33,11 @@
         "type": "string",
         "enum": ["Checkbox"]
       },
+      "dynamic_options": {
+        "$ref": "definitions.json#/dynamic_options"
+      },
       "options": {
-        "allOf": [
-          {
-            "$ref": "definitions.json#/options"
-          },
-          {
-            "minItems": 1
-          }
-        ]
+        "$ref": "definitions.json#/options"
       },
       "mandatory": {
         "type": "boolean"
@@ -58,6 +54,14 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "mandatory", "options"]
+    "required": ["id", "type", "mandatory"],
+    "anyOf": [
+      {
+        "required": ["options"]
+      },
+      {
+        "required": ["dynamic_options"]
+      }
+    ]
   }
 }

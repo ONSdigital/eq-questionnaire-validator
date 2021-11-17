@@ -41,7 +41,29 @@
       {
         "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
       },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" }
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/option-label-from-value.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/concatenate.json"
+      }
+    ]
+  },
+  "non_array_value_operators": {
+    "description": "All operators that resolve to a non-array value",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json" },
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json" },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/option-label-from-value.json"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/rules/operators/value/concatenate.json"
+      }
     ]
   },
   "list_value_operators": {

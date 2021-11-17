@@ -1,0 +1,315 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Dynamic answer options driven by a list collector",
+  "theme": "default",
+  "description": "A questionnaire to demo dynamic answer options driven by a list collector",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "List",
+          "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "warning": "All of the information about this person will be deleted",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yeah",
+                          "value": "Yeah",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "checkbox-with-dynamic-options",
+              "question": {
+                "id": "checkbox-with-dynamic-options-question",
+                "title": "Who is the home owner?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-checkbox-answer",
+                    "mandatory": true,
+                    "type": "Checkbox",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "list",
+                        "identifier": "people"
+                      },
+                      "transform": {
+                        "concatenate": [
+                          [
+                            {
+                              "source": "answers",
+                              "identifier": "first-name"
+                            },
+                            {
+                              "source": "answers",
+                              "identifier": "last-name"
+                            }
+                          ],
+                          " "
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "None of the above",
+                        "value": "None of the above"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "radio-with-dynamic-options",
+              "question": {
+                "id": "radio-with-dynamic-options-question",
+                "title": "Who is the home owner?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-radio-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "list",
+                        "identifier": "people"
+                      },
+                      "transform": {
+                        "concatenate": [
+                          [
+                            {
+                              "source": "answers",
+                              "identifier": "first-name"
+                            },
+                            {
+                              "source": "answers",
+                              "identifier": "last-name"
+                            }
+                          ],
+                          " "
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "None of the above",
+                        "value": "None of the above"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "dropdown-with-dynamic-options",
+              "question": {
+                "id": "dropdown-with-dynamic-options-question",
+                "title": "Who is the home owner?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-dropdown-answer",
+                    "mandatory": true,
+                    "type": "Dropdown",
+                    "label": "Select an option",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "list",
+                        "identifier": "people"
+                      },
+                      "transform": {
+                        "concatenate": [
+                          [
+                            {
+                              "source": "answers",
+                              "identifier": "first-name"
+                            },
+                            {
+                              "source": "answers",
+                              "identifier": "last-name"
+                            }
+                          ],
+                          " "
+                        ]
+                      }
+                    },
+                    "options": [
+                      {
+                        "label": "None of the above",
+                        "value": "None of the above"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "dynamic-answer-options-group"
+        }
+      ]
+    }
+  ]
+}

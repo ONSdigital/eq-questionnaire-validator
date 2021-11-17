@@ -30,15 +30,11 @@
       "description": {
         "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "dynamic_options": {
+        "$ref": "definitions.json#/dynamic_options"
+      },
       "options": {
-        "allOf": [
-          {
-            "$ref": "definitions.json#/options"
-          },
-          {
-            "minItems": 2
-          }
-        ]
+        "$ref": "definitions.json#/options"
       },
       "validation": {
         "type": "object",
@@ -52,6 +48,14 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "mandatory", "label", "options"]
+    "required": ["id", "type", "mandatory", "label"],
+    "anyOf": [
+      {
+        "required": ["options"]
+      },
+      {
+        "required": ["dynamic_options"]
+      }
+    ]
   }
 }

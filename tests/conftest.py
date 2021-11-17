@@ -12,7 +12,7 @@ def find_all_json_files(folder_name):
     ]
 
 
-def get_mock_schema(questionnaire_schema, answers_with_context):
+def get_mock_schema(questionnaire_schema=None, answers_with_context=None):
     if not questionnaire_schema:
         questionnaire_schema = QuestionnaireSchema({})
 

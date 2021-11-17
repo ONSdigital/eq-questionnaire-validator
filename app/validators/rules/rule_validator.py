@@ -1,4 +1,6 @@
+from app.answer_type import AnswerType
 from app.validators.validator import Validator
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 class Operator:
@@ -19,6 +21,8 @@ class Operator:
     FORMAT_DATE = "format-date"
     DATE_RANGE = "date-range"
     MAP = "map"
+    OPTION_LABEL_FROM_VALUE = "option-label-from-value"
+    CONCATENATE = "concatenate"
 
 
 LOGIC_OPERATORS = [Operator.NOT, Operator.AND, Operator.OR]
@@ -65,20 +69,23 @@ class RulesValidator(Validator):
         f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
     )
 
-    def __init__(self, rules, origin_id, questionnaire_schema):
+    def __init__(
+        self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False
+    ):
         super().__init__(rules)
         self.rules = rules
         self.questionnaire_schema = questionnaire_schema
         self.context["origin_id"] = origin_id
+        self.allow_self_reference = allow_self_reference
 
     def validate(self):
         """
         Validate that the top level rules are valid
         """
-        self._validate_rule(self.rules)
+        self._validate_rule(self.rules, allow_self_reference=self.allow_self_reference)
         return self.errors
 
-    def _validate_rule(self, rules, *, allow_self_reference=False):
+    def _validate_rule(self, rules, *, allow_self_reference):
         operator_name = next(iter(rules))
         allow_self_reference = allow_self_reference or operator_name == Operator.MAP
 
@@ -97,6 +104,9 @@ class RulesValidator(Validator):
 
         elif operator_name == Operator.MAP:
             self._validate_map_operator(rules)
+
+        elif operator_name == Operator.OPTION_LABEL_FROM_VALUE:
+            self._validate_option_label_from_value_operator(rules)
 
         if operator_name in [Operator.FORMAT_DATE, Operator.DATE]:
             self._validate_self_references(
@@ -174,6 +184,16 @@ class RulesValidator(Validator):
 
         return non_operator_arguments
 
+    def _validate_option_label_from_value_operator(self, operator):
+        """
+        Validate the referenced answer id in `option-label-from-value` exists
+        """
+        answer_id = operator[next(iter(operator))][1]
+        if answer_id not in self.questionnaire_schema.answers_with_context:
+            self.add_error(
+                ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=answer_id
+            )
+
     def _validate_date_operator(self, operator):
         """
         Validates that when an answer value source is used, it is a date
@@ -182,10 +202,8 @@ class RulesValidator(Validator):
         if (
             isinstance(first_argument, dict)
             and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            not in ["Date", "MonthYearDate", "YearDate"]
+            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
+            not in [AnswerType.DATE, AnswerType.MONTH_YEAR_DATE, AnswerType.YEAR_DATE]
         ):
             self.add_error(
                 self.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
@@ -200,10 +218,8 @@ class RulesValidator(Validator):
         if (
             isinstance(first_argument, dict)
             and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer(first_argument["identifier"])[
-                "type"
-            ]
-            != "Checkbox"
+            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
+            != AnswerType.CHECKBOX
         ):
             self.add_error(
                 self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,

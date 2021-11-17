@@ -43,7 +43,11 @@ class SchemaValidator(Validator):
         except ValidationError as e:
             match = best_match([e])
             path = "/".join(str(path_element) for path_element in e.path)
-            self.add_error(match.message, verbose=e.message, pointer=f"/{path}")
+            error = {
+                "reason": e.message.replace(str(e.instance), "").strip(),
+                "json": e.instance,
+            }
+            self.add_error(match.message, verbose=error, pointer=f"/{path}")
         except SchemaError as e:
             self.add_error(e)
         return self.errors
