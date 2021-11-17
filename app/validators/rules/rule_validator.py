@@ -228,7 +228,7 @@ class RulesValidator(Validator):
 
         if values and option_values:
             for value in values:
-                # Null values are allowed and will not existing in answer options
+                # Null values are allowed and will not exist in answer options
                 if value and value not in option_values:
                     self.add_error(
                         self.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
