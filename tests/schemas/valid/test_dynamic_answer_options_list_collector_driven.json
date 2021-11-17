@@ -194,7 +194,7 @@
                         "identifier": "people"
                       },
                       "transform": {
-                        "concat": [
+                        "concatenate": [
                           [
                             {
                               "source": "answers",
@@ -237,7 +237,7 @@
                         "identifier": "people"
                       },
                       "transform": {
-                        "concat": [
+                        "concatenate": [
                           [
                             {
                               "source": "answers",
@@ -281,7 +281,7 @@
                         "identifier": "people"
                       },
                       "transform": {
-                        "concat": [
+                        "concatenate": [
                           [
                             {
                               "source": "answers",

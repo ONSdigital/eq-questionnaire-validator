@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/value/concat.json",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/concatenate.json",
   "description": "Joins a list of strings together with a delimiter. Takes two arguments, the list of strings and the delimiter.",
   "type": "object",
   "properties": {
-    "concat": {
+    "concatenate": {
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
@@ -28,6 +28,6 @@
       ]
     }
   },
-  "required": ["concat"],
+  "required": ["concatenate"],
   "additionalProperties": false
 }
