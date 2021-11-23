@@ -2,15 +2,17 @@ import json
 import urllib
 from json import JSONDecodeError
 
+import requests
 from flask import Blueprint, Response, jsonify, request
 from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
-from app.validators.schema_validator import SchemaValidator
 
 logger = get_logger()
 
 validate_blueprint = Blueprint("validate", __name__)
+
+AJV_VALIDATOR_URI = "http://localhost:5002/validate"
 
 
 @validate_blueprint.route("/validate", methods=["POST"])
@@ -44,14 +46,17 @@ def validate_schema(data):
         return Response(status=400, response="Could not parse JSON")
 
     response = {}
+    try:
+        ajv_response = requests.post(AJV_VALIDATOR_URI, json=json_to_validate)
+        ajv_response_dict = ajv_response.json()
 
-    schema_validator = SchemaValidator(json_to_validate)
-    schema_validator.validate()
+        if len(ajv_response_dict) > 0:
+            response["errors"] = ajv_response_dict
+            logger.info("Schema validator returned errors", status=400)
+            return jsonify(response), 400
 
-    if len(schema_validator.errors) > 0:
-        response["errors"] = schema_validator.errors
-        logger.info("Schema validator returned errors", status=400)
-        return jsonify(response), 400
+    except requests.exceptions.ConnectionError:
+        return jsonify(error="AJV Schema validator service unavailable")
 
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate()
