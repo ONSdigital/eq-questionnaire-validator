@@ -21,7 +21,7 @@ app.use(
 );
 
 app.listen(5002, () => {
-  debug("Server running on port 5001");
+  debug("Server running on port 5002");
 });
 
 app.get("/status", (req, res, next) => {

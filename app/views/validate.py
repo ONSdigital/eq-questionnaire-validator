@@ -59,6 +59,7 @@ def validate_schema(data):
             return jsonify(response), 400
 
     except requests.exceptions.ConnectionError:
+        logger.info("AJV validator Schema service unavailable")
         return jsonify(error="AJV Schema validator service unavailable")
 
     validator = QuestionnaireValidator(json_to_validate)
