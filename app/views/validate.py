@@ -1,4 +1,5 @@
 import json
+import os
 import urllib
 from json import JSONDecodeError
 
@@ -12,7 +13,9 @@ logger = get_logger()
 
 validate_blueprint = Blueprint("validate", __name__)
 
-AJV_VALIDATOR_URI = "http://localhost:5002/validate"
+AJV_HOST = os.getenv("AJV_HOST", "localhost")
+
+AJV_VALIDATOR_URI = f"http://{AJV_HOST}:5002/validate"
 
 
 @validate_blueprint.route("/validate", methods=["POST"])
@@ -50,8 +53,8 @@ def validate_schema(data):
         ajv_response = requests.post(AJV_VALIDATOR_URI, json=json_to_validate)
         ajv_response_dict = ajv_response.json()
 
-        if len(ajv_response_dict) > 0:
-            response["errors"] = ajv_response_dict
+        if ajv_response_dict:
+            response["errors"] = ajv_response_dict["errors"]
             logger.info("Schema validator returned errors", status=400)
             return jsonify(response), 400
 
