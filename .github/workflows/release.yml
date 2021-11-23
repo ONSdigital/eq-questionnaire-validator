@@ -14,7 +14,7 @@ jobs:
       - name: Build
         run: |
           docker build -t onsdigital/eq-questionnaire-validator:$TAG .
-          docker build -f Dockefile-ajv -t onsdigital/eq-questionnaire-validator:$TAG-ajv .
+          docker build -f Dockerfile-ajv -t onsdigital/eq-questionnaire-validator:$TAG-ajv .
 
       - name: Push
         run: |
