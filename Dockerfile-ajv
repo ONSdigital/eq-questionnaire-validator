@@ -3,13 +3,14 @@ FROM node:16
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY ../package.json ./
-COPY ../yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 
 RUN yarn install
 
 
-COPY app.js .
+COPY ajv/app.js .
+COPY schemas ../schemas
 
 EXPOSE 5001
 
