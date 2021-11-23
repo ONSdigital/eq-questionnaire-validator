@@ -8,10 +8,9 @@ COPY yarn.lock ./
 
 RUN yarn install
 
-
 COPY ajv/app.js .
 COPY schemas ../schemas
 
-EXPOSE 5001
+EXPOSE 5002
 
 CMD [ "node", "app.js" ]
