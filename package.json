@@ -10,6 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn lint:schemas && yarn lint:test-schemas && yarn lint:ajv",
+    "start": "cd ajv && DEBUG=ajv-schema-validator node app.js &",
     "lint:schemas": "prettier --check \"schemas/**/*.json\" && eslint \"schemas/**/*.json\"",
     "lint:test-schemas": "prettier --check \"tests/schemas/**/*.json\" && eslint \"tests/schemas/**/*.json\"",
     "lint:ajv": "prettier \"ajv/**/*.js\" && eslint \"ajv/**/*.js\"",

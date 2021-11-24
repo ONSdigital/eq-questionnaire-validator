@@ -70,10 +70,10 @@ Also included is a node based version of the json schema validation which may be
 debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our
 blocks.
 
-Run the ajv based version of validator from within the ajv/ directory.
+Run the ajv based version of validator.
 
 ```
-DEBUG=validator node app.js
+yarn start
 ```
 
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
