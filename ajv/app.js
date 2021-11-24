@@ -3,7 +3,7 @@ const fs = require("fs");
 const glob = require("glob");
 const express = require("express");
 const app = express();
-const debug = require("debug")("validator");
+const debug = require("debug")("ajv-schema-validator");
 
 const ajv = new Ajv({
   meta: false,
