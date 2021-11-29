@@ -73,7 +73,7 @@ blocks.
 Run the ajv based version of validator.
 
 ```
-yarn start
+make run-ajv
 ```
 
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
