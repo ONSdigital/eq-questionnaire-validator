@@ -28,7 +28,7 @@ app.get("/status", (req, res, next) => {
   return res.sendStatus(200);
 });
 
-glob("../schemas/**/*.json", (er, schemas) => {
+glob("schemas/**/*.json", (er, schemas) => {
   schemas.forEach((currentSchema) => {
     const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
     ajv.addSchema(JSON.parse(data));
