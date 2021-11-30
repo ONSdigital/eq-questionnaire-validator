@@ -5,6 +5,7 @@ from json import JSONDecodeError
 
 import requests
 from flask import Blueprint, Response, jsonify, request
+from requests import RequestException
 from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
@@ -15,7 +16,7 @@ validate_blueprint = Blueprint("validate", __name__)
 
 AJV_HOST = os.getenv("AJV_HOST", "localhost")
 
-AJV_VALIDATOR_URI = f"http://{AJV_HOST}:5002/validate"
+AJV_VALIDATOR_URL = f"http://{AJV_HOST}:5002/validate"
 
 
 @validate_blueprint.route("/validate", methods=["POST"])
@@ -50,7 +51,7 @@ def validate_schema(data):
 
     response = {}
     try:
-        ajv_response = requests.post(AJV_VALIDATOR_URI, json=json_to_validate)
+        ajv_response = requests.post(AJV_VALIDATOR_URL, json=json_to_validate)
         ajv_response_dict = ajv_response.json()
 
         if ajv_response_dict:
@@ -58,7 +59,7 @@ def validate_schema(data):
             logger.info("Schema validator returned errors", status=400)
             return jsonify(response), 400
 
-    except requests.exceptions.ConnectionError:
+    except RequestException:
         logger.info("AJV Schema validator service unavailable")
         return jsonify(error="AJV Schema validator service unavailable")
 
