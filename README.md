@@ -70,10 +70,15 @@ Also included is a node based version of the json schema validation which may be
 debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our
 blocks.
 
-Run the ajv based version of validator.
+Run the ajv (server) based version of validator.
 
 ```
-make run-ajv
+make start-ajv
+```
+To stop the ajv (server) based version of validator.
+
+```
+make stop-ajv
 ```
 
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
