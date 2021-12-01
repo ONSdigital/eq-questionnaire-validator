@@ -6,11 +6,14 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn install
-
 COPY ajv/app.js .
 COPY schemas ../schemas
 
-EXPOSE 5002
+RUN yarn install --production=true
 
-CMD [ "node", "app.js" ]
+EXPOSE 5002
+ENV DEBUG=ajv-schema-validator
+
+WORKDIR /usr/src
+
+CMD [ "node", "app/app.js" ]
