@@ -23,8 +23,10 @@ class SectionValidator(Validator):
     def validate(self):
         self.validate_repeat()
         self.validate_summary()
-        self.validate_groups()
         self.validate_value_sources()
+        if self.errors:  # return when value sources are not valid
+            return self.errors
+        self.validate_groups()
         self.validate_section_enabled()
         return self.errors
 
@@ -260,8 +262,8 @@ class SectionValidator(Validator):
 
         # Code to handle comparison of variants which contain a MutuallyExclusive answer type
         if (
-            len(results["question_types"]) > 1
-            and "MutuallyExclusive" in results["question_types"]
+                len(results["question_types"]) > 1
+                and "MutuallyExclusive" in results["question_types"]
         ):
             results["question_types"].remove("MutuallyExclusive")
 
