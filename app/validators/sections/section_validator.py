@@ -262,8 +262,8 @@ class SectionValidator(Validator):
 
         # Code to handle comparison of variants which contain a MutuallyExclusive answer type
         if (
-                len(results["question_types"]) > 1
-                and "MutuallyExclusive" in results["question_types"]
+            len(results["question_types"]) > 1
+            and "MutuallyExclusive" in results["question_types"]
         ):
             results["question_types"].remove("MutuallyExclusive")
 
