@@ -3,7 +3,13 @@
 build:
 	pipenv run ./scripts/build.sh
 
-run:
+stop-ajv:
+	yarn stop
+
+start-ajv:
+	yarn start
+
+run: start-ajv
 	pipenv run ./scripts/run_app.sh
 
 lint: lint-python

@@ -3,7 +3,7 @@ const fs = require("fs");
 const glob = require("glob");
 const express = require("express");
 const app = express();
-const debug = require("debug")("validator");
+const debug = require("debug")("ajv-schema-validator");
 
 const ajv = new Ajv({
   meta: false,
@@ -20,15 +20,15 @@ app.use(
   })
 );
 
-app.listen(5001, () => {
-  debug("Server running on port 5001");
+app.listen(5002, () => {
+  debug("Server running on port 5002");
 });
 
 app.get("/status", (req, res, next) => {
   return res.sendStatus(200);
 });
 
-glob("../schemas/**/*.json", (er, schemas) => {
+glob("schemas/**/*.json", (er, schemas) => {
   schemas.forEach((currentSchema) => {
     const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
     ajv.addSchema(JSON.parse(data));
