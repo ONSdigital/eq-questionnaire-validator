@@ -6,7 +6,6 @@ from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
 from app import error_messages
-from app.validators.blocks import BlockValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
@@ -151,11 +150,6 @@ def test_invalid_placeholder_answer_ids():
     validator.validate()
 
     expected_errors = [
-        {
-            "message": BlockValidator.PLACEHOLDER_ANSWER_SELF_REFERENCE,
-            "block_id": "block3",
-            "identifier": "answer4",
-        },
         {
             "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
             "identifier": "invalid-answer0",
@@ -345,9 +339,10 @@ def test_invalid_relationship_no_list_specified():
     validator.validate()
 
     expected_for_list_error = {
-        "message": error_messages.FOR_LIST_NEVER_POPULATED,
-        "list_name": "not-a-list",
-        "block_id": "relationships",
+        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+        "identifier": "first-name",
+        "json_path": "groups.[0].blocks.[0].question.title.placeholders.[0].transforms.["
+        "0].arguments.list_to_concatenate.[0].identifier",
     }
 
     assert validator.errors[0] == expected_for_list_error
