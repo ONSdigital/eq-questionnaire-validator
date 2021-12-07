@@ -12,8 +12,24 @@
       "source": {
         "type": "string",
         "enum": ["answers"]
+      },
+      "list_item_selector": {
+        "description": "The identifier and source of list item",
+        "oneOf": [
+          {
+            "$ref": "#/list_value_source"
+          },
+          {
+            "$ref": "#/location_value_source"
+          }
+        ]
+      },
+      "selector": {
+        "type": "string",
+        "description": "Field selector for composite Answer"
       }
     },
+
     "required": ["identifier", "source"],
     "additionalProperties": false
   },
@@ -28,6 +44,22 @@
       "source": {
         "type": "string",
         "enum": ["metadata"]
+      }
+    },
+    "required": ["identifier", "source"],
+    "additionalProperties": false
+  },
+  "response_metadata_value_source": {
+    "description": "A reference to a response metadata property. When resolved this can be a string or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier",
+        "description": "The response metadata property name"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["response_metadata"]
       }
     },
     "required": ["identifier", "source"],
@@ -81,10 +113,30 @@
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
       },
       {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/response_metadata_value_source"
+      },
+      {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"
       },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/location_value_source"
+      }
+    ]
+  },
+  "any_value_source_except_location": {
+    "description": "Any value source except location",
+    "anyOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/response_metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"
       }
     ]
   }

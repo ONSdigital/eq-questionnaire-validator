@@ -1,0 +1,19 @@
+FROM node:16
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package.json ./
+COPY yarn.lock ./
+
+COPY ajv/app.js .
+COPY schemas ../schemas
+
+RUN yarn install --production=true
+
+EXPOSE 5002
+ENV DEBUG=ajv-schema-validator
+
+WORKDIR /usr/src
+
+CMD [ "node", "app/app.js" ]

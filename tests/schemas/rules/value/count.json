@@ -1,0 +1,20 @@
+[
+  {
+    "description": "Count with answer value source",
+    "rule": {
+      "count": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        }
+      ]
+    }
+  },
+
+  {
+    "description": "Count with raw values",
+    "rule": {
+      "count": [[1, 2, 3]]
+    }
+  }
+]

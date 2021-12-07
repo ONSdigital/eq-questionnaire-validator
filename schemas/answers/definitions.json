@@ -59,6 +59,24 @@
       "required": ["label", "value"]
     }
   },
+  "dynamic_options": {
+    "type": "object",
+    "properties": {
+      "values": {
+        "oneOf": [
+          { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" },
+          {
+            "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source_except_location"
+          }
+        ]
+      },
+      "transform": {
+        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/non_array_value_operators"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["values", "transform"]
+  },
   "min_value": {
     "type": "object",
     "properties": {

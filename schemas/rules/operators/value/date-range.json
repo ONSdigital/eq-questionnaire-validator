@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/date-range.json",
+  "description": "Generates a sequence of datetime objects for a specified range from a given date. The first argument takes a datetime object generated using the `date` operator, and the second argument is the range in days",
+  "type": "object",
+  "properties": {
+    "date-range": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
+        },
+        {
+          "type": "integer",
+          "description": "The number of days to generate the range for",
+          "minimum": 1
+        }
+      ]
+    }
+  },
+  "required": ["date-range"],
+  "additionalProperties": false
+}

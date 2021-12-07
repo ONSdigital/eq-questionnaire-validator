@@ -56,7 +56,7 @@
       },
       "value": {
         "description": "A direct lookup with no transforms.",
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       },
       "transforms": {
         "description": "A list of transforms to resolve the placeholder value.",
@@ -117,6 +117,15 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/telephone_number_link.json#/telephone_number_link"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/date_range_bounds.json#/date_range_bounds"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json#/format_date_range"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/list_item_count.json#/list_item_count"
             }
           ]
         }
@@ -133,13 +142,13 @@
       }
     ]
   },
-  "value_sources": {
+  "placeholder_value_sources": {
     "oneOf": [
       {
         "$ref": "#/chained_source"
       },
       {
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       }
     ]
   },
@@ -154,76 +163,6 @@
     },
     "additionalProperties": false,
     "required": ["source"]
-  },
-  "lookup_source": {
-    "description": "Look up the value from a data source.",
-    "type": "object",
-    "properties": {
-      "source": {
-        "description": "The data source.",
-        "type": "string",
-        "enum": [
-          "answers",
-          "metadata",
-          "collection_metadata",
-          "list",
-          "location"
-        ]
-      },
-      "identifier": {
-        "description": "The identifier of the item in the data source. This would be an answer id for answers or a metadata property name for metadata.",
-        "type": ["string"]
-      },
-      "id_selector": {
-        "description": "The property to return from the source.",
-        "type": "string",
-        "enum": ["same_name_items", "first"]
-      },
-      "selector": {
-        "type": "string",
-        "description": "Field selector for composite Answer"
-      },
-      "list_item_selector": {
-        "description": "The identifier and source of the list item.",
-        "type": "object",
-        "oneOf": [
-          {
-            "properties": {
-              "source": {
-                "description": "The source of the data.",
-                "type": "string",
-                "enum": ["location"]
-              },
-              "id": {
-                "description": "The unique id of the object.",
-                "type": "string",
-                "enum": ["list_item_id", "to_list_item_id"]
-              }
-            }
-          },
-          {
-            "properties": {
-              "source": {
-                "description": "The source of the data.",
-                "type": "string",
-                "enum": ["list"]
-              },
-              "id": {
-                "description": "The name of the list",
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-              },
-              "id_selector": {
-                "description": "The unique id of the object.",
-                "type": "string",
-                "enum": ["first", "primary_person"]
-              }
-            }
-          }
-        ]
-      }
-    },
-    "additionalProperties": false,
-    "required": ["source", "identifier"]
   },
   "text_plural": {
     "description": "A mapping of a count to plural strings",
@@ -257,7 +196,7 @@
       },
       "count": {
         "description": "The source to use for the count. Must resolve to a number.",
-        "$ref": "#/lookup_source"
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
       }
     },
     "additionalProperties": false,

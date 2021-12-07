@@ -1,0 +1,98 @@
+[
+  {
+    "description": "Number of checkbox options selected is equal 2",
+    "rule": {
+      "==": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  },
+  {
+    "description": "Number of checkbox options selected is not equal 2",
+    "rule": {
+      "!=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  },
+  {
+    "description": "Number of checkbox options selected is less than 2",
+    "rule": {
+      "<": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  },
+  {
+    "description": "Number of checkbox options selected is less than or equal 2",
+    "rule": {
+      "<=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  },
+  {
+    "description": "Number of checkbox options selected is greater than 2",
+    "rule": {
+      ">": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  },
+  {
+    "description": "Number of checkbox options selected is greater than or equal 2",
+    "rule": {
+      ">=": [
+        {
+          "count": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        2
+      ]
+    }
+  }
+]

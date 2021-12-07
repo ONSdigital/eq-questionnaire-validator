@@ -16,7 +16,7 @@
             "description": "A list of value_sources to concatenate.",
             "type": "array",
             "items": {
-              "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
             }
           },
           "delimiter": {

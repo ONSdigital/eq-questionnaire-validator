@@ -19,7 +19,7 @@
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
           },
           "email_subject_append": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
           }
         },
         "additionalProperties": false,

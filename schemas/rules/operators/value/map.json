@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://eq.ons.gov.uk/rules/operators/value/map.json",
+  "description": "Applies an operation on each value of a sequence. Takes two-argument, first, the operation to apply to each item, second, the sequence of values on which the operation is applied. The reference to self within the map operator refers to the current iteration's value.",
+  "type": "object",
+  "properties": {
+    "map": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
+        },
+        {
+          "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-range.json"
+        }
+      ]
+    }
+  },
+  "required": ["map"],
+  "additionalProperties": false
+}

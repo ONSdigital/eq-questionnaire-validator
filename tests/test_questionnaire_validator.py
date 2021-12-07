@@ -1,6 +1,7 @@
 import os
 from json import load
 
+import pytest
 from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
@@ -12,6 +13,7 @@ from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
 from app.validators.value_source_validator import ValueSourceValidator
+from tests.conftest import find_all_json_files
 
 logger = getLogger()
 
@@ -25,6 +27,9 @@ def _open_and_load_schema_file(file):
         return load(json_file)
 
 
+@pytest.mark.parametrize(
+    "valid_schema_filename", find_all_json_files("tests/schemas/valid")
+)
 def test_param_valid_schemas(valid_schema_filename):
     """
     Uses py.test generated tests to validate all schemas contained in the 'valid' folder.
@@ -43,7 +48,7 @@ def test_param_valid_schemas(valid_schema_filename):
 
 
 def test_answer_comparisons_invalid_comparison_id():
-    """ Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
+    """Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
     filename = "schemas/invalid/test_invalid_answer_comparison_id.json"
 
     expected_error_messages = [
@@ -287,7 +292,7 @@ def test_inconsistent_types_in_variants():
             "block_id": "block-2",
             "answer_id": "answer-2",
             "section_id": "section",
-            "answer_types": {"NotANumber", "Number"},
+            "answer_types": {"TextField", "Number"},
         },
     ]
 

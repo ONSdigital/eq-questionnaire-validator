@@ -2,6 +2,7 @@
   "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_date_range.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "format_date_range": {
+    "description": "A transform for formatting a pair of dates representing the start and end of a date range.",
     "type": "object",
     "properties": {
       "transform": {
@@ -11,15 +12,24 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "start_date": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
-          },
-          "end_date": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/value_sources"
+          "date_range": {
+            "oneOf": [
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+                }
+              },
+              {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/chained_source"
+              }
+            ]
           }
         },
         "additionalProperties": false,
-        "required": ["start_date"]
+        "required": ["date_range"]
       }
     },
     "additionalProperties": false,

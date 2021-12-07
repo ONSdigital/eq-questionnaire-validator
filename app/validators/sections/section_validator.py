@@ -6,6 +6,7 @@ from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.questions import get_question_validator
 from app.validators.routing.new_routing_validator import NewRoutingValidator
+from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.validator import Validator
@@ -24,6 +25,7 @@ class SectionValidator(Validator):
         self.validate_summary()
         self.validate_groups()
         self.validate_value_sources()
+        self.validate_section_enabled()
         return self.errors
 
     def validate_repeat(self):
@@ -39,6 +41,24 @@ class SectionValidator(Validator):
             for item in section_summary.get("items", []):
                 self.validate_list_exists(item.get("for_list"))
 
+    def validate_section_enabled(self):
+        section_enabled = self.section.get("enabled", None)
+
+        if isinstance(section_enabled, list):
+            for enabled in section_enabled:
+                when = enabled["when"]
+                when_validator = WhenRuleValidator(
+                    when, self.section["id"], self.questionnaire_schema
+                )
+                self.errors += when_validator.validate()
+
+        elif isinstance(section_enabled, dict):
+            when = section_enabled["when"]
+            when_validator = NewWhenRuleValidator(
+                when, self.section["id"], self.questionnaire_schema
+            )
+            self.errors += when_validator.validate()
+
     def validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
@@ -49,6 +69,12 @@ class SectionValidator(Validator):
                 skip_condition["when"], origin_id, self.questionnaire_schema
             )
             self.errors += when_validator.validate()
+
+    def validate_new_skip_conditions(self, skip_condition, origin_id):
+        when_validator = NewWhenRuleValidator(
+            skip_condition["when"], origin_id, self.questionnaire_schema
+        )
+        self.errors += when_validator.validate()
 
     def validate_value_sources(self):
         source_references = get_object_containing_key(self.section, "identifier")
@@ -93,9 +119,14 @@ class SectionValidator(Validator):
                 )
             self.errors += routing_validator.validate()
         if "skip_conditions" in schema_element:
-            self.validate_skip_conditions(
-                schema_element["skip_conditions"], schema_element["id"]
-            )
+            if isinstance(schema_element["skip_conditions"], list):
+                self.validate_skip_conditions(
+                    schema_element["skip_conditions"], schema_element["id"]
+                )
+            elif isinstance(schema_element["skip_conditions"], dict):
+                self.validate_new_skip_conditions(
+                    schema_element["skip_conditions"], schema_element["id"]
+                )
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
@@ -148,7 +179,7 @@ class SectionValidator(Validator):
         self.validate_variant_fields(block, question_variants)
 
     def validate_variant_fields(self, block, variants):
-        """ Ensure consistency between relevant fields in variants
+        """Ensure consistency between relevant fields in variants
 
         - Ensure that question_ids are the same across all variants.
         - Ensure answer_ids are the same across all variants.

@@ -1,0 +1,27 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/list_item_count.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "list_item_count": {
+    "description": "A transform for outputting the number of items in a list",
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["list_item_count"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "list_to_count": {
+            "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["list_to_count"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

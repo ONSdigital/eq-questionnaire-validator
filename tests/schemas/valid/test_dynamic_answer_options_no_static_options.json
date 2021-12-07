@@ -1,0 +1,182 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Dynamic answer options driven by a Checkbox (No static options)",
+  "theme": "default",
+  "description": "A questionnaire to demo dynamic answer options driven by a Checkbox with no extra static options",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "mandatory-checkbox",
+              "question": {
+                "id": "mandatory-checkbox-question",
+                "title": "What extra toppings would you like?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "mandatory-checkbox-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "None",
+                        "value": "None"
+                      },
+                      {
+                        "label": "Cheese",
+                        "value": "Cheese"
+                      },
+                      {
+                        "label": "Ham",
+                        "value": "Ham"
+                      },
+                      {
+                        "label": "Pineapple",
+                        "value": "Pineapple"
+                      },
+                      {
+                        "label": "Tuna",
+                        "value": "Tuna"
+                      },
+                      {
+                        "label": "Pepperoni",
+                        "value": "Pepperoni"
+                      },
+                      {
+                        "label": "Other",
+                        "value": "Other",
+                        "description": "Choose any other topping",
+                        "detail_answer": {
+                          "mandatory": false,
+                          "id": "other-answer-mandatory",
+                          "label": "Please specify other",
+                          "type": "TextField"
+                        }
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "checkbox-with-dynamic-options",
+              "question": {
+                "id": "checkbox-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-checkbox-answer",
+                    "mandatory": true,
+                    "type": "Checkbox",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "answers",
+                        "identifier": "mandatory-checkbox-answer"
+                      },
+                      "transform": {
+                        "option-label-from-value": [
+                          "self",
+                          "mandatory-checkbox-answer"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "radio-with-dynamic-options",
+              "question": {
+                "id": "radio-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-radio-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "answers",
+                        "identifier": "mandatory-checkbox-answer"
+                      },
+                      "transform": {
+                        "option-label-from-value": [
+                          "self",
+                          "mandatory-checkbox-answer"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "dropdown-with-dynamic-options",
+              "question": {
+                "id": "dropdown-with-dynamic-options-question",
+                "title": "Which one is your favourite?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "dynamic-dropdown-answer",
+                    "mandatory": true,
+                    "type": "Dropdown",
+                    "label": "Select an option",
+                    "dynamic_options": {
+                      "values": {
+                        "source": "answers",
+                        "identifier": "mandatory-checkbox-answer"
+                      },
+                      "transform": {
+                        "option-label-from-value": [
+                          "self",
+                          "mandatory-checkbox-answer"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "dynamic-answer-options-group"
+        }
+      ]
+    }
+  ]
+}

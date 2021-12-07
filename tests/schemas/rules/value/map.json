@@ -1,0 +1,77 @@
+[
+  {
+    "description": "Map over a list of dates using `date-range` operator using a value source",
+    "rule": {
+      "map": [
+        {
+          "format-date": ["self", "yyyy-MM-dd"]
+        },
+        {
+          "date-range": [
+            {
+              "date": [
+                {
+                  "source": "response_metadata",
+                  "identifier": "started_at"
+                },
+                {
+                  "days": -7,
+                  "day_of_week": "MONDAY"
+                }
+              ]
+            },
+            7
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Map over a list of dates using `date-range` operator using a dynamic date source `now`",
+    "rule": {
+      "map": [
+        {
+          "format-date": ["self", "yyyy-MM-dd"]
+        },
+        {
+          "date-range": [
+            {
+              "date": [
+                "now",
+                {
+                  "days": 7,
+                  "day_of_week": "MONDAY"
+                }
+              ]
+            },
+            7
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Map over a list of dates using `date-range` operator using a dynamic date source `now`",
+    "rule": {
+      "map": [
+        {
+          "format-date": ["self", "yyyy-MM-dd"]
+        },
+        {
+          "date-range": [
+            {
+              "date": [
+                "now",
+                {
+                  "days": 7,
+                  "day_of_week": "MONDAY"
+                }
+              ]
+            },
+            7
+          ]
+        }
+      ]
+    }
+  }
+]

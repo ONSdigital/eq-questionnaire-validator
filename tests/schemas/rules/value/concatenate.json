@@ -1,0 +1,38 @@
+[
+  {
+    "description": "Concatenate two answers space seperated",
+    "rule": {
+      "concatenate": [
+        [
+          {
+            "source": "answers",
+            "identifier": "first-name"
+          },
+          {
+            "source": "answers",
+            "identifier": "last-name"
+          }
+        ],
+        " "
+      ]
+    }
+  },
+  {
+    "description": "Concatenate two metadata comma separated",
+    "rule": {
+      "concatenate": [
+        [
+          {
+            "source": "metadata",
+            "identifier": "trad_as"
+          },
+          {
+            "source": "metadata",
+            "identifier": "ru_name"
+          }
+        ],
+        ","
+      ]
+    }
+  }
+]

@@ -5,6 +5,7 @@ from functools import cached_property, lru_cache
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 
+from app.answer_type import AnswerType
 from app.validators.answers.number_answer_validator import MAX_NUMBER
 
 
@@ -140,6 +141,8 @@ class QuestionnaireSchema:
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
 
+        self._answers_with_context = {}
+
     @cached_property
     def numeric_answer_ranges(self):
         numeric_answer_ranges = {}
@@ -159,11 +162,16 @@ class QuestionnaireSchema:
 
     @cached_property
     def questions_with_context(self):
-        for match in parse("$..question").find(self.schema):
-            yield match.value, get_context_from_match(match)
+        return [
+            (match.value, get_context_from_match(match))
+            for match in parse("$..question").find(self.schema)
+        ]
 
-    @cached_property
+    @property
     def answers_with_context(self):
+        if self._answers_with_context:
+            return self._answers_with_context
+
         answers = {}
         for question, context in self.questions_with_context:
             for answer in question.get("answers", []):
@@ -176,7 +184,12 @@ class QuestionnaireSchema:
                             **context,
                         }
 
-        return answers
+        self._answers_with_context = answers
+        return self._answers_with_context
+
+    @answers_with_context.setter
+    def answers_with_context(self, value):
+        self._answers_with_context = value
 
     @cached_property
     def ids(self):
@@ -275,6 +288,11 @@ class QuestionnaireSchema:
         return self.answers_with_context[answer_id]["answer"]
 
     @lru_cache
+    def get_answer_type(self, answer_id):
+        answer = self.get_answer(answer_id)
+        return AnswerType(answer["type"])
+
+    @lru_cache
     def get_group(self, group_id):
         return self.groups_by_id[group_id]
 
@@ -322,7 +340,7 @@ class QuestionnaireSchema:
 
     @staticmethod
     def get_all_questions_for_block(block):
-        """ Get all questions on a block including variants"""
+        """Get all questions on a block including variants"""
         questions = []
 
         for variant in block.get("question_variants", []):

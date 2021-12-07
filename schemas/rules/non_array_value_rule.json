@@ -1,0 +1,7 @@
+{
+  "$id": "https://eq.ons.gov.uk/rules/non_array_value_rule.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "description": "Top level non array value operator rule",
+  "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/non_array_value_operators"
+}

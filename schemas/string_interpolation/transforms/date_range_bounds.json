@@ -1,0 +1,46 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/date_range_bounds.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "date_range_bounds": {
+    "description": "A transform for generating the start and end date of a date range from a reference date, offset number of weeks, number of days in range and an optional first day of the week.",
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["date_range_bounds"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "reference_date": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+          },
+          "offset_full_weeks": {
+            "type": "integer"
+          },
+          "days_in_range": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "first_day_of_week": {
+            "type": "string",
+            "default": "MONDAY",
+            "enum": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["reference_date", "offset_full_weeks", "days_in_range"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

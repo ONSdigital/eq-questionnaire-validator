@@ -1,0 +1,177 @@
+[
+  {
+    "description": "A date answer equal to a fixed date",
+    "rule": {
+      "==": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "A date answer equal to a dynamic date",
+    "rule": {
+      "==": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["now"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "A date answer equal to a dynamic date with an offset",
+    "rule": {
+      "==": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": [
+            "now",
+            {
+              "years": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "description": "A date answer equal to another date answer with an offset",
+    "rule": {
+      "==": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-2"
+            },
+            {
+              "years": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Date not equal",
+    "rule": {
+      "!=": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Date less than",
+    "rule": {
+      "<": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Date less than or equal",
+    "rule": {
+      "<=": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Date more than",
+    "rule": {
+      ">": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  },
+  {
+    "description": "Date more than or equal",
+    "rule": {
+      ">=": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": ["2021-01-01"]
+        }
+      ]
+    }
+  }
+]

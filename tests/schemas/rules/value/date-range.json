@@ -1,0 +1,29 @@
+[
+  {
+    "description": "Date range with date operator using answer source",
+    "rule": {
+      "date-range": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        7
+      ]
+    }
+  },
+  {
+    "description": "Date range with date operator using dynamic source `now`",
+    "rule": {
+      "date-range": [
+        {
+          "date": ["now"]
+        },
+        14
+      ]
+    }
+  }
+]

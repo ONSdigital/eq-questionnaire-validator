@@ -80,7 +80,7 @@
       "additionalProperties": false
     }
   },
-  "skip_conditions": {
+  "original_skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
     "type": "array",
     "minItems": 1,
@@ -94,6 +94,54 @@
       },
       "additionalProperties": false
     },
+    "required": ["when"]
+  },
+  "new_skip_conditions": {
+    "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "object",
+    "properties": {
+      "when": {
+        "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["when"]
+  },
+  "skip_conditions": {
+    "oneOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_skip_conditions"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_skip_conditions"
+      }
+    ]
+  },
+  "original_section_enabled": {
+    "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": true,
+    "items": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
+        }
+      },
+      "additionalProperties": false
+    },
+    "required": ["when"]
+  },
+  "new_section_enabled": {
+    "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
+    "type": "object",
+    "properties": {
+      "when": {
+        "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
+      }
+    },
+    "additionalProperties": false,
     "required": ["when"]
   },
   "messages": {
@@ -310,7 +358,7 @@
           "enum": ["End"]
         },
         "when": {
-          "$ref": "https://eq.ons.gov.uk/rules/rule.json"
+          "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
         }
       },
       "oneOf": [

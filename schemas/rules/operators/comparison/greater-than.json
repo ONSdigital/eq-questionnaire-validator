@@ -15,6 +15,9 @@
           },
           {
             "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
+          },
+          {
+            "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json"
           }
         ]
       }
