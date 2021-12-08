@@ -339,10 +339,9 @@ def test_non_existent_list_name_in_relationship():
     validator.validate()
 
     expected_for_list_error = {
-        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
-        "identifier": "first-name",
-        "json_path": "groups.[0].blocks.[0].question.title.placeholders.[0].transforms.["
-        "0].arguments.list_to_concatenate.[0].identifier",
+        "message": error_messages.FOR_LIST_NEVER_POPULATED,
+        "list_name": "not-a-list",
+        "block_id": "relationships",
     }
 
     assert validator.errors[0] == expected_for_list_error
