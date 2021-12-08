@@ -332,7 +332,7 @@ def test_invalid_list_name_in_when_rule():
     assert validator.errors == expected_errors
 
 
-def test_invalid_relationship_no_list_specified():
+def test_non_existent_list_name_in_relationship():
     filename = "schemas/invalid/test_invalid_relationship_list_doesnt_exist.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))

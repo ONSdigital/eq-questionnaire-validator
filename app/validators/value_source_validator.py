@@ -68,7 +68,7 @@ class ValueSourceValidator(Validator):
             if identifier not in answers_with_context:
                 self.add_error(self.ANSWER_REFERENCE_INVALID, identifier=identifier)
 
-            if selector and identifier in answers_with_context:
+            elif selector:
                 answer_type = answers_with_context[identifier]["answer"]["type"]
 
                 if answer_type not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP:

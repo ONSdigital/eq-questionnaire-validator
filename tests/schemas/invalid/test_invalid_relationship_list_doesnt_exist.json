@@ -24,16 +24,166 @@
   ],
   "questionnaire_flow": {
     "type": "Linear",
-    "options": {}
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
   },
   "sections": [
     {
       "id": "section",
+      "summary": {
+        "show_on_completion": true,
+        "items": [
+          {
+            "add_link_text": "Add someone to this household",
+            "empty_list_text": "There are no householders",
+            "for_list": "people",
+            "title": "Household members",
+            "type": "List"
+          }
+        ]
+      },
       "groups": [
         {
           "id": "group",
           "title": "Relationships",
           "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live at 1 Pleasant Lane?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person who isn’t you?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "People who live here",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
             {
               "type": "RelationshipCollector",
               "id": "relationships",
@@ -43,7 +193,7 @@
                 "id": "relationship-question",
                 "type": "General",
                 "title": {
-                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>…</em>",
                   "placeholders": [
                     {
                       "placeholder": "first_person_name",
@@ -57,7 +207,7 @@
                                 "identifier": "first-name",
                                 "list_item_selector": {
                                   "source": "location",
-                                  "id": "list_item_id"
+                                  "identifier": "list_item_id"
                                 }
                               },
                               {
@@ -65,7 +215,7 @@
                                 "identifier": "last-name",
                                 "list_item_selector": {
                                   "source": "location",
-                                  "id": "list_item_id"
+                                  "identifier": "list_item_id"
                                 }
                               }
                             ],
@@ -86,7 +236,7 @@
                                 "identifier": "first-name",
                                 "list_item_selector": {
                                   "source": "location",
-                                  "id": "to_list_item_id"
+                                  "identifier": "to_list_item_id"
                                 }
                               },
                               {
@@ -94,7 +244,7 @@
                                 "identifier": "last-name",
                                 "list_item_selector": {
                                   "source": "location",
-                                  "id": "to_list_item_id"
+                                  "identifier": "to_list_item_id"
                                 }
                               }
                             ],
@@ -111,10 +261,10 @@
                     "mandatory": true,
                     "type": "Relationship",
                     "playback": {
-                      "text": "{second_person_name} is {first_person_name} <em>…</em>",
+                      "text": "{second_person_name} is {first_person_name_possessive} <em>…</em>",
                       "placeholders": [
                         {
-                          "placeholder": "first_person_name",
+                          "placeholder": "first_person_name_possessive",
                           "transforms": [
                             {
                               "transform": "concatenate_list",
@@ -125,7 +275,7 @@
                                     "identifier": "first-name",
                                     "list_item_selector": {
                                       "source": "location",
-                                      "id": "list_item_id"
+                                      "identifier": "list_item_id"
                                     }
                                   },
                                   {
@@ -133,11 +283,19 @@
                                     "identifier": "last-name",
                                     "list_item_selector": {
                                       "source": "location",
-                                      "id": "list_item_id"
+                                      "identifier": "list_item_id"
                                     }
                                   }
                                 ],
                                 "delimiter": " "
+                              }
+                            },
+                            {
+                              "transform": "format_possessive",
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "previous_transform"
+                                }
                               }
                             }
                           ]
@@ -154,7 +312,7 @@
                                     "identifier": "first-name",
                                     "list_item_selector": {
                                       "source": "location",
-                                      "id": "to_list_item_id"
+                                      "identifier": "to_list_item_id"
                                     }
                                   },
                                   {
@@ -162,7 +320,7 @@
                                     "identifier": "last-name",
                                     "list_item_selector": {
                                       "source": "location",
-                                      "id": "to_list_item_id"
+                                      "identifier": "to_list_item_id"
                                     }
                                   }
                                 ],
@@ -175,8 +333,8 @@
                     },
                     "options": [
                       {
-                        "value": "Husband or Wife",
                         "label": "Husband or Wife",
+                        "value": "Husband or Wife",
                         "title": {
                           "text": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
                           "placeholders": [
@@ -192,7 +350,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       },
                                       {
@@ -200,7 +358,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       }
                                     ],
@@ -221,7 +379,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       },
                                       {
@@ -229,7 +387,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       }
                                     ],
@@ -241,10 +399,10 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "text": "{second_person_name} is {first_person_name_possessive} <em>husband or wife</em>",
                           "placeholders": [
                             {
-                              "placeholder": "first_person_name",
+                              "placeholder": "first_person_name_possessive",
                               "transforms": [
                                 {
                                   "transform": "concatenate_list",
@@ -255,7 +413,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       },
                                       {
@@ -263,11 +421,19 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       }
                                     ],
                                     "delimiter": " "
+                                  }
+                                },
+                                {
+                                  "transform": "format_possessive",
+                                  "arguments": {
+                                    "string_to_format": {
+                                      "source": "previous_transform"
+                                    }
                                   }
                                 }
                               ]
@@ -284,7 +450,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       },
                                       {
@@ -292,7 +458,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       }
                                     ],
@@ -305,8 +471,8 @@
                         }
                       },
                       {
-                        "value": "Legally Registered Civil Partner",
-                        "label": "Legally Registered Civil Partner",
+                        "label": "Legally registered civil partner",
+                        "value": "Legally registered civil partner",
                         "title": {
                           "text": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
                           "placeholders": [
@@ -322,7 +488,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       },
                                       {
@@ -330,7 +496,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       }
                                     ],
@@ -351,7 +517,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       },
                                       {
@@ -359,7 +525,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       }
                                     ],
@@ -371,7 +537,82 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "text": "{second_person_name} is {first_person_name_possessive} <em>legally registered civil partner</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name_possessive",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                },
+                                {
+                                  "transform": "format_possessive",
+                                  "arguments": {
+                                    "string_to_format": {
+                                      "source": "previous_transform"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": "Son or daughter",
+                        "value": "Son or daughter",
+                        "title": {
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>son or daughter</em>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -385,7 +626,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       },
                                       {
@@ -393,7 +634,7 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "list_item_id"
+                                          "identifier": "list_item_id"
                                         }
                                       }
                                     ],
@@ -414,7 +655,7 @@
                                         "identifier": "first-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
                                         }
                                       },
                                       {
@@ -422,7 +663,78 @@
                                         "identifier": "last-name",
                                         "list_item_selector": {
                                           "source": "location",
-                                          "id": "to_list_item_id"
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "playback": {
+                          "text": "{second_person_name} is {first_person_name_possessive} <em>son or daughter</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name_possessive",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                },
+                                {
+                                  "transform": "format_possessive",
+                                  "arguments": {
+                                    "string_to_format": {
+                                      "source": "previous_transform"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
                                         }
                                       }
                                     ],
@@ -433,11 +745,184 @@
                             }
                           ]
                         }
+                      },
+                      {
+                        "label": "Brother or sister",
+                        "value": "Brother or sister",
+                        "title": {
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>brother or sister</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "playback": {
+                          "text": "{second_person_name} is {first_person_name_possessive} <em>brother or sister</em>",
+                          "placeholders": [
+                            {
+                              "placeholder": "first_person_name_possessive",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                },
+                                {
+                                  "transform": "format_possessive",
+                                  "arguments": {
+                                    "string_to_format": {
+                                      "source": "previous_transform"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "placeholder": "second_person_name",
+                              "transforms": [
+                                {
+                                  "transform": "concatenate_list",
+                                  "arguments": {
+                                    "list_to_concatenate": [
+                                      {
+                                        "source": "answers",
+                                        "identifier": "first-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      },
+                                      {
+                                        "source": "answers",
+                                        "identifier": "last-name",
+                                        "list_item_selector": {
+                                          "source": "location",
+                                          "identifier": "to_list_item_id"
+                                        }
+                                      }
+                                    ],
+                                    "delimiter": " "
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "description": "Including half brother or half sister"
                       }
                     ]
                   }
                 ]
-              }
+              },
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "list": "people",
+                      "condition": "less than",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "relationship-interstitial",
+              "content": {
+                "title": "Relationship section",
+                "contents": [
+                  {
+                    "description": "You have successfully completed the relationship section."
+                  }
+                ]
+              },
+              "type": "Interstitial",
+              "skip_conditions": [
+                {
+                  "when": [
+                    {
+                      "list": "people",
+                      "condition": "less than",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
