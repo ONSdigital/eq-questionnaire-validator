@@ -173,10 +173,18 @@ class SectionValidator(Validator):
 
         for variant in all_variants:
             when_clause = variant.get("when", [])
-            when_validator = WhenRuleValidator(
-                when_clause, block["id"], self.questionnaire_schema
-            )
-            self.errors += when_validator.validate()
+
+            if isinstance(when_clause, list):
+                when_validator = WhenRuleValidator(
+                    when_clause, block["id"], self.questionnaire_schema
+                )
+                self.errors += when_validator.validate()
+
+            elif isinstance(when_clause, dict):
+                when_validator = NewWhenRuleValidator(
+                    when_clause, self.section["id"], self.questionnaire_schema
+                )
+                self.errors += when_validator.validate()
 
         self.validate_variant_fields(block, question_variants)
 
