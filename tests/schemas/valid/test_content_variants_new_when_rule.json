@@ -71,25 +71,29 @@
                   "content": {
                     "title": "The following question are about you"
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "equals",
-                      "value": "Yes"
-                    }
-                  ]
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "Yes"
+                    ]
+                  }
                 },
                 {
                   "content": {
                     "title": "The following question are about the person you are answering for"
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "equals",
-                      "value": "No"
-                    }
-                  ]
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "No"
+                    ]
+                  }
                 }
               ]
             }

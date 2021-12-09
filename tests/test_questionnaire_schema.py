@@ -47,55 +47,63 @@ def test_questions_with_context():
     filename = "schemas/valid/test_question_variants.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-
     assert list(questionnaire_schema.questions_with_context) == [
         (
             {
                 "id": "question-1",
                 "type": "General",
-                "title": "What is your age?",
+                "title": "Are you answering for yourself",
                 "answers": [
                     {
+                        "type": "Radio",
                         "id": "answer-1",
-                        "label": "Your age?",
-                        "mandatory": False,
-                        "type": "Number",
+                        "mandatory": True,
+                        "options": [
+                            {"label": "Yes", "value": "Yes"},
+                            {"label": "No", "value": "No"},
+                        ],
                     }
                 ],
             },
-            {"group_id": "group", "section": "section", "block": "block-1"},
+            {"section": "section", "block": "block-1", "group_id": "group"},
         ),
         (
             {
                 "id": "question-2",
                 "type": "General",
-                "title": "What is your age?",
+                "title": "Are you in full time education?",
                 "answers": [
                     {
+                        "type": "Radio",
                         "id": "answer-2",
-                        "label": "Your age?",
                         "mandatory": False,
-                        "type": "Number",
+                        "options": [
+                            {"label": "Yes", "value": "Yes"},
+                            {"label": "No", "value": "No"},
+                        ],
                     }
                 ],
             },
-            {"group_id": "group", "section": "section", "block": "block-2"},
+            {"section": "section", "block": "block-2", "group_id": "group"},
         ),
         (
             {
                 "id": "question-2",
                 "type": "General",
-                "title": "What is your age?",
+                "title": "Is the person your are answering for in full time education?",
                 "answers": [
                     {
+                        "type": "Radio",
                         "id": "answer-2",
-                        "label": "Your age?",
                         "mandatory": False,
-                        "type": "Number",
+                        "options": [
+                            {"label": "Yes", "value": "Yes"},
+                            {"label": "No", "value": "No"},
+                        ],
                     }
                 ],
             },
-            {"group_id": "group", "section": "section", "block": "block-2"},
+            {"section": "section", "block": "block-2", "group_id": "group"},
         ),
     ]
 
