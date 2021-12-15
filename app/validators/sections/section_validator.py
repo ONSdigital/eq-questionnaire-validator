@@ -23,8 +23,10 @@ class SectionValidator(Validator):
     def validate(self):
         self.validate_repeat()
         self.validate_summary()
-        self.validate_groups()
         self.validate_value_sources()
+        if self.errors:  # return when value sources are not valid
+            return self.errors
+        self.validate_groups()
         self.validate_section_enabled()
         return self.errors
 
