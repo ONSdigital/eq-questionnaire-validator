@@ -18,3 +18,9 @@ class AnswerType(Enum):
     TEXT_FIELD = "TextField"
     UNIT = "Unit"
     YEAR_DATE = "YearDate"
+
+
+class AnswerOptionType(Enum):
+    DROPDOWN = "Dropdown"
+    CHECKBOX = "Checkbox"
+    RADIO = "Radio"

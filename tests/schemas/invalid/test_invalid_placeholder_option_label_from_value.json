@@ -1,0 +1,97 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test option label from value",
+  "theme": "default",
+  "description": "A questionnaire to demo invalid type of answer id for option_label_from_value transform",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "checkbox-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "name-question",
+              "question": {
+                "id": "primary-name-question",
+                "title": "Please enter body part where you had most serious injury",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "body-part-name",
+                    "label": "Body Part",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "recovery-question-checkbox-block",
+              "question": {
+                "id": "recovery-question-checkbox",
+                "title": {
+                  "text": "How long did it take to recover from the injury to your {body_part}?",
+                  "placeholders": [
+                    {
+                      "placeholder": "body_part",
+                      "transforms": [
+                        {
+                          "transform": "option_label_from_value",
+                          "arguments": {
+                            "value": {
+                              "source": "answers",
+                              "identifier": "body-part-name"
+                            },
+                            "answer_id": "body-part-name"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "recovery-checkbox-answer",
+                    "label": "Recovery time",
+                    "mandatory": false,
+                    "type": "Number"
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "checkboxes"
+        }
+      ]
+    }
+  ]
+}
