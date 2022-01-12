@@ -68,8 +68,13 @@ class PlaceholderValidator(Validator):
             )
 
     def validate_placeholder_answer_id(self, argument):
-        """validate placeholder 'answer_id' existence and type is radio/checkbox/dropdown if
-        the answer has 'options' .
+        """
+        Validate answer_id exists in Answer Context
+        Args:
+         argument: answer id
+        Returns:
+            True  : if exists
+            False : if not exists
         """
 
         if isinstance(argument, str):
@@ -82,6 +87,12 @@ class PlaceholderValidator(Validator):
             return True
 
     def validate_option_label_value_placeholder(self, argument):
+        """
+        validate answer_id  for transform 'option_label_from_value' is of type of ['Checkbox','Radio','Dropdown']
+        Args:
+         argument: answer id argument passed to transform
+
+        """
         answers = self.questionnaire_schema.answers_with_context
         answer_id_exists = self.validate_placeholder_answer_id(argument)
 
