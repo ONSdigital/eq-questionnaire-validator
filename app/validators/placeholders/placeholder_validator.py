@@ -95,7 +95,7 @@ class PlaceholderValidator(Validator):
         answers = self.questionnaire_schema.answers_with_context
         answer_id_exists = self.validate_placeholder_answer_id(argument)
 
-        # if answer id doesn't exist , no further validation is done
+        # if answer id doesn't exist, no further validation is done
         if not answer_id_exists:
             return
 
