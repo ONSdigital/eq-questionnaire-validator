@@ -1,12 +1,9 @@
-import json
-import os
-
 import pytest
 
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.value_source_validator import ValueSourceValidator
+from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_invalid_repeating_section_title_placeholders():
@@ -83,13 +80,6 @@ def test_placeholder_plurals():
     assert validator.errors == expected_errors
 
 
-def _open_and_load_schema_file(file):
-    with open(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding="utf8"
-    ) as json_file:
-        return json.load(json_file)
-
-
 @pytest.mark.parametrize(
     "answer_id,expected_error",
     [
@@ -116,8 +106,6 @@ def _open_and_load_schema_file(file):
 def test_validation_option_label_from_value(answer_id, expected_error):
     filename = "schemas/invalid/test_invalid_placeholder_option_label_from_value.json"
     schema_file = _open_and_load_schema_file(filename)
-    schema = QuestionnaireSchema(schema_file)
-    validator = PlaceholderValidator({})
-    validator.questionnaire_schema = schema
+    validator = PlaceholderValidator(schema_file)
     validator.validate_option_label_value_placeholder(answer_id)
     assert validator.errors == expected_error
