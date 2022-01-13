@@ -77,18 +77,17 @@ class PlaceholderValidator(Validator):
             False : if not exists
         """
 
-        if isinstance(argument, str):
-            answers = self.questionnaire_schema.answers_with_context
-            if argument not in answers:
-                self.add_error(
-                    ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=argument
-                )
-                return False
-            return True
+        answers = self.questionnaire_schema.answers_with_context
+        if argument not in answers:
+            self.add_error(
+                ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=argument
+            )
+            return False
+        return True
 
     def validate_option_label_value_placeholder(self, argument):
         """
-        validate answer_id  for transform 'option_label_from_value' is of type of ['Checkbox','Radio','Dropdown']
+        validate answer_id exists and answer_id for transform 'option_label_from_value' is of type of ['Checkbox','Radio','Dropdown']
         Args:
          argument: answer id argument passed to transform
 
@@ -100,16 +99,9 @@ class PlaceholderValidator(Validator):
         if not answer_id_exists:
             return
 
-        # if no "options" present , then it is not Answer Option type
-        if "options" in answers[argument]["answer"]:
-            if not any(
-                x.value == answers[argument]["answer"]["type"] for x in AnswerOptionType
-            ):
-                self.add_error(
-                    error_messages.ANSWER_OPTION_LABEL_VALUE_TYPE_INVALID,
-                    identifier=argument,
-                )
-        else:
+        if not any(
+            x.value == answers[argument]["answer"]["type"] for x in AnswerOptionType
+        ):
             self.add_error(
                 error_messages.ANSWER_OPTION_LABEL_VALUE_TYPE_INVALID,
                 identifier=argument,

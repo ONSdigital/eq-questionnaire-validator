@@ -3,8 +3,10 @@ import os
 
 import pytest
 
+from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 def test_invalid_repeating_section_title_placeholders():
@@ -91,13 +93,21 @@ def _open_and_load_schema_file(file):
 @pytest.mark.parametrize(
     "answer_id,expected_error",
     [
-        ("test", [{"message": "Invalid answer reference", "identifier": "test"}]),
+        (
+            "test",
+            [
+                {
+                    "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+                    "identifier": "test",
+                }
+            ],
+        ),
         (
             "body-part-name",
             [
                 {
                     "identifier": "body-part-name",
-                    "message": "The referenced answer_id type is not of type ['Radio','Checkbox','Dropdown']",
+                    "message": error_messages.ANSWER_OPTION_LABEL_VALUE_TYPE_INVALID,
                 }
             ],
         ),
