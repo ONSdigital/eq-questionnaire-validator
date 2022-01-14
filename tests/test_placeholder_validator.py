@@ -97,7 +97,7 @@ def test_placeholder_plurals():
             [
                 {
                     "identifier": "body-part-name",
-                    "message": error_messages.ANSWER_OPTION_LABEL_VALUE_TYPE_INVALID,
+                    "message": error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
                 }
             ],
         ),
@@ -107,5 +107,5 @@ def test_validation_option_label_from_value(answer_id, expected_error):
     filename = "schemas/invalid/test_invalid_placeholder_option_label_from_value.json"
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
-    validator.validate_option_label_value_placeholder(answer_id)
+    validator.validate_option_label_from_value_placeholder(answer_id)
     assert validator.errors == expected_error

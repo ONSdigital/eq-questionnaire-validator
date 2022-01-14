@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "Test option label from value",
   "theme": "default",
-  "description": "A questionnaire to demo invalid type of answer id for option_label_from_value transform",
+  "description": "A questionnaire to demo an invalid answer type for option_label_from_value transform",
   "metadata": [
     {
       "name": "user_id",
@@ -53,7 +53,7 @@
               }
             },
             {
-              "type": "Question",
+              "type": "Interstitial",
               "id": "recovery-question-checkbox-block",
               "question": {
                 "id": "recovery-question-checkbox",

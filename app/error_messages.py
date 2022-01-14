@@ -4,7 +4,7 @@ FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector block
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
     "The referenced answer cannot be used to set the minimum of answer"
 )
-ANSWER_OPTION_LABEL_VALUE_TYPE_INVALID = "The referenced answer for option label from value placeholder/operator is not of type ['Radio','Checkbox','Dropdown']"
+ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID = "The answer type for option label from value is not of type ['Radio','Checkbox','Dropdown']"
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )
