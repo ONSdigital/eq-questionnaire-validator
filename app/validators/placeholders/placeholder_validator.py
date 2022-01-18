@@ -1,7 +1,13 @@
 import re
 
-from app.validators.questionnaire_schema import get_object_containing_key
+from app import error_messages
+from app.answer_type import AnswerOptionType
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    get_object_containing_key,
+)
 from app.validators.validator import Validator
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 class PlaceholderValidator(Validator):
@@ -15,6 +21,7 @@ class PlaceholderValidator(Validator):
 
     def __init__(self, element):
         super().__init__(element)
+        self.questionnaire_schema = QuestionnaireSchema(element)
 
     def validate(self):
         strings_with_placeholders = get_object_containing_key(
@@ -60,6 +67,46 @@ class PlaceholderValidator(Validator):
                 differences=placeholder_differences,
             )
 
+    def validate_placeholder_answer_id(self, answer_id):
+        """
+        Validate answer_id exists in Answer Context
+        Args:
+          answer_id: Answer id of placeholder
+        Returns:
+            True  : if exists
+            False : if not exists
+        """
+
+        answers = self.questionnaire_schema.answers_with_context
+        if answer_id not in answers:
+            self.add_error(
+                ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=answer_id
+            )
+            return False
+        return True
+
+    def validate_option_label_from_value_placeholder(self, answer_id):
+        """
+        validate answer_id exists and answer_id for option label from value is of type ['Radio','Checkbox','Dropdown']
+        Args:
+         answer_id: answer_id passed to transform
+
+        """
+        answers = self.questionnaire_schema.answers_with_context
+        answer_id_exists = self.validate_placeholder_answer_id(answer_id)
+
+        # if answer id doesn't exist, no further validation is done
+        if not answer_id_exists:
+            return
+
+        if not any(
+            x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
+        ):
+            self.add_error(
+                error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
+                identifier=answer_id,
+            )
+
     def validate_placeholder_transforms(self, transforms):
         # First transform can't reference a previous transform
         first_transform = transforms[0]
@@ -70,6 +117,11 @@ class PlaceholderValidator(Validator):
                 and argument.get("source") == "previous_transform"
             ):
                 self.add_error(self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF)
+            if (
+                first_transform["transform"] == "option_label_from_value"
+                and argument_name == "answer_id"
+            ):
+                self.validate_option_label_from_value_placeholder(argument)
 
         # Previous transform must be referenced in all subsequent transforms
         for transform in transforms[1:]:
@@ -81,6 +133,12 @@ class PlaceholderValidator(Validator):
                     and argument.get("source") == "previous_transform"
                 ):
                     previous_transform_used = True
+
+                if (
+                    transform["transform"] == "option_label_from_value"
+                    and argument_name == "answer_id"
+                ):
+                    self.validate_option_label_from_value_placeholder(argument)
 
             if not previous_transform_used:
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)

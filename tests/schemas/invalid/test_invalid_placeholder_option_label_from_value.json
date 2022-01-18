@@ -1,0 +1,92 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test option label from value",
+  "theme": "default",
+  "description": "A questionnaire to demo an invalid answer type for option_label_from_value transform",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "textfield-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "injury-question",
+              "question": {
+                "id": "injury-body-part-question",
+                "title": "Please enter body part where you had most serious injury",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "body-part-name",
+                    "label": "Body Part",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "injury-interstitial-block",
+              "content": {
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "body_part",
+                      "transforms": [
+                        {
+                          "transform": "option_label_from_value",
+                          "arguments": {
+                            "value": {
+                              "source": "answers",
+                              "identifier": "body-part-name"
+                            },
+                            "answer_id": "body-part-name"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "text": "Injury interstitial {body_part}"
+                },
+                "contents": [
+                  {
+                    "description": "Thank you for answering, next question is related to your recovery"
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "textfield"
+        }
+      ]
+    }
+  ]
+}
