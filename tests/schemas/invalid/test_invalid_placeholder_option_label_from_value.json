@@ -31,15 +31,15 @@
   },
   "sections": [
     {
-      "id": "checkbox-section",
+      "id": "textfield-section",
       "groups": [
         {
           "blocks": [
             {
               "type": "Question",
-              "id": "name-question",
+              "id": "injury-question",
               "question": {
-                "id": "primary-name-question",
+                "id": "injury-body-part-question",
                 "title": "Please enter body part where you had most serious injury",
                 "type": "General",
                 "answers": [
@@ -54,11 +54,9 @@
             },
             {
               "type": "Interstitial",
-              "id": "recovery-question-checkbox-block",
-              "question": {
-                "id": "recovery-question-checkbox",
+              "id": "injury-interstitial-block",
+              "content": {
                 "title": {
-                  "text": "How long did it take to recover from the injury to your {body_part}?",
                   "placeholders": [
                     {
                       "placeholder": "body_part",
@@ -75,21 +73,18 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "text": "Injury interstitial {body_part}"
                 },
-                "type": "General",
-                "answers": [
+                "contents": [
                   {
-                    "id": "recovery-checkbox-answer",
-                    "label": "Recovery time",
-                    "mandatory": false,
-                    "type": "Number"
+                    "description": "Thank you for answering, next question is related to your recovery"
                   }
                 ]
               }
             }
           ],
-          "id": "checkboxes"
+          "id": "textfield"
         }
       ]
     }
