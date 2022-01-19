@@ -165,6 +165,7 @@ class QuestionnaireSchema:
         return [
             (match.value, get_context_from_match(match))
             for match in parse("$..question").find(self.schema)
+            if isinstance(match.value, dict)
         ]
 
     @property

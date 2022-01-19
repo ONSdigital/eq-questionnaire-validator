@@ -1,0 +1,66 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "theme": "default",
+  "title": "Test introduction with questions in preview content",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "introduction-section",
+      "title": "Introduction",
+      "groups": [
+        {
+          "id": "introduction-group",
+          "title": "Introduction",
+          "blocks": [
+            {
+              "id": "introduction",
+              "type": "Introduction",
+              "primary_content": [
+                {
+                  "id": "primary-content",
+                  "title": "Primary Content"
+                }
+              ],
+              "preview_content": {
+                "id": "preview-content",
+                "title": "Preview Content",
+                "questions": [
+                  {
+                    "id": "preview",
+                    "question": "Question",
+                    "contents": [
+                      {
+                        "description": "Question description"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
