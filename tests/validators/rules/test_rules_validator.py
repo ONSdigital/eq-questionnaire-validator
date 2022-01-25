@@ -1,5 +1,6 @@
 import pytest
 
+from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.rules.rule_validator import RulesValidator
 from app.validators.value_source_validator import ValueSourceValidator
@@ -326,6 +327,24 @@ def test_non_existing_answer_id_in_option_label_for_value_operator():
         "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
         "origin_id": ORIGIN_ID,
         "identifier": "non-existing-answer",
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_field_type_in_option_label_for_value_operator():
+    rule = {"option-label-from-value": ["self", "string-answer"]}
+    validator = get_validator(
+        rule,
+        answers_with_context=default_answer_with_context,
+        allow_self_reference=True,
+    )
+    validator.validate()
+
+    expected_error = {
+        "message": error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
+        "origin_id": ORIGIN_ID,
+        "identifier": "string-answer",
     }
 
     assert validator.errors == [expected_error]
