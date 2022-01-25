@@ -187,6 +187,7 @@ class RulesValidator(Validator):
     def _validate_option_label_from_value_operator(self, operator):
         """
         Validate the referenced answer id in `option-label-from-value` exists
+        and is of type ['Radio','Checkbox','Dropdown']
         """
         answer_id = operator[next(iter(operator))][1]
         answers = self.questionnaire_schema.answers_with_context
@@ -194,8 +195,8 @@ class RulesValidator(Validator):
             self.add_error(
                 ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=answer_id
             )
-            return
-        if not any(
+
+        elif not any(
             x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
         ):
             self.add_error(
