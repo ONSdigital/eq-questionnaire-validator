@@ -190,6 +190,32 @@
                 "type": "General"
               },
               "type": "Question"
+            },
+            {
+              "id": "interstitial",
+              "content": {
+                "title": {
+                  "text": "Your answer to the add item question: <em>{answer}</em>",
+                  "placeholders": [
+                    {
+                      "placeholder": "answer",
+                      "transforms": [
+                        {
+                          "transform": "option_label_from_value",
+                          "arguments": {
+                            "value": {
+                              "source": "answers",
+                              "identifier": "add-item-answer"
+                            },
+                            "answer_id": "add-item-answer"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "type": "Interstitial"
             }
           ]
         }
