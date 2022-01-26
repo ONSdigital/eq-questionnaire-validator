@@ -332,7 +332,7 @@ def test_non_existing_answer_id_in_option_label_for_value_operator():
     assert validator.errors == [expected_error]
 
 
-def test_field_type_in_option_label_for_value_operator():
+def test_answer_type_invalid_for_option_label_from_value():
     rule = {"option-label-from-value": ["self", "string-answer"]}
     validator = get_validator(
         rule,
