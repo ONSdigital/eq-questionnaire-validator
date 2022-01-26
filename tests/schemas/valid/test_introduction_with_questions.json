@@ -1,0 +1,144 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "theme": "default",
+  "title": "Test introduction with question in preview content",
+  "description": "This questionnaire needs to exercise questions with context, so an answer placeholder has been added",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "introduction-section",
+      "title": "Introduction",
+      "groups": [
+        {
+          "id": "introduction-group",
+          "title": "Introduction",
+          "blocks": [
+            {
+              "id": "introduction",
+              "type": "Introduction",
+              "primary_content": [
+                {
+                  "id": "primary-content",
+                  "title": "Primary Content"
+                }
+              ],
+              "preview_content": {
+                "id": "preview-content",
+                "title": "Preview Content",
+                "questions": [
+                  {
+                    "id": "name-question-preview",
+                    "question": "Name",
+                    "contents": [
+                      {
+                        "description": "Your name"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "age-question-preview",
+                    "question": "Age",
+                    "contents": [
+                      {
+                        "description": "Your age"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "name-section",
+      "title": "Name Input",
+      "groups": [
+        {
+          "id": "name-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "name",
+              "question": {
+                "id": "primary-name-question",
+                "title": "Please enter a name",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "name-answer",
+                    "label": "Name",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "age-input-section",
+      "title": "Age Input",
+      "groups": [
+        {
+          "id": "dob-input-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "dob-question-block",
+              "question": {
+                "id": "dob-question",
+                "title": {
+                  "text": "What is {person_name} date of birth?",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "value": {
+                        "identifier": "name-answer",
+                        "source": "answers"
+                      }
+                    }
+                  ]
+                },
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "date-of-birth-answer",
+                    "description": "Enter your date of birth",
+                    "label": "Date of Birth",
+                    "mandatory": true,
+                    "type": "Date"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

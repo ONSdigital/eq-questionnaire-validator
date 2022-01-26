@@ -126,6 +126,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/list_item_count.json#/list_item_count"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/option_label_from_value.json#/option_label_from_value"
             }
           ]
         }

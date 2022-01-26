@@ -1,4 +1,5 @@
-from app.answer_type import AnswerType
+from app import error_messages
+from app.answer_type import AnswerOptionType, AnswerType
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -49,7 +50,6 @@ VALUE_OPERATORS = [
 ALL_OPERATORS = (
     LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
 )
-
 
 SELF_REFERENCE_KEY = "self"
 
@@ -187,11 +187,21 @@ class RulesValidator(Validator):
     def _validate_option_label_from_value_operator(self, operator):
         """
         Validate the referenced answer id in `option-label-from-value` exists
+        and is of type ['Radio','Checkbox','Dropdown']
         """
         answer_id = operator[next(iter(operator))][1]
-        if answer_id not in self.questionnaire_schema.answers_with_context:
+        answers = self.questionnaire_schema.answers_with_context
+        if answer_id not in answers:
             self.add_error(
                 ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=answer_id
+            )
+
+        elif not any(
+            x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
+        ):
+            self.add_error(
+                error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
+                identifier=answer_id,
             )
 
     def _validate_date_operator(self, operator):
