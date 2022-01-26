@@ -76,7 +76,7 @@ jobs:
       - name: Tag
         run: |
           CLEAN_TAG=$(echo "${{ github.event.pull_request.head.ref  }}"  | tr / -)
-          echo "::set-env name=TAG::$CLEAN_TAG" > $GITHUB_ENV
+          echo "TAG=$CLEAN_TAG" >> $GITHUB_ENV
       - name: Build
         run: |
           docker build -t onsdigital/eq-questionnaire-validator:$TAG .
