@@ -20,9 +20,11 @@ jobs:
           node-version: "12.14.1"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
+
       - name: Get yarn cache
         id: get-yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Cache yarn modules
         id: cache-yarn
         uses: actions/cache@v1
@@ -31,23 +33,28 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
       - name: Install yarn deps
         run: yarn install
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
-      - name: Cache Poetry virtualenv
+
+      - name: cached-poetry-dependencies
         id: cache
         uses: actions/cache@v2
         with:
-          path: ~/.virtualenvs
-          key: ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run:
           poetry install
-        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: Lint Python
         run: make lint
+
       - name: Run unit tests
         run: make test
   #  test-unit:
