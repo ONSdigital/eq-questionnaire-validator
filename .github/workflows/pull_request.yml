@@ -43,6 +43,8 @@ jobs:
         with:
           path: ~/.virtualenvs
           key: ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
