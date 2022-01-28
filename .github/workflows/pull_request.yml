@@ -31,17 +31,21 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
       - name: Install yarn deps
         run: yarn install
-      - name: Install Pipenv
-        run: pip install pipenv==2018.11.26
-      - name: Cache virtualenv
-        id: cache-virtualenv
-        uses: actions/cache@v1
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          path: ~/.local/share/virtualenvs/
-          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('Pipfile.lock') }}
-      - name: Install virtual environment
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: pipenv install --dev
+          virtualenvs-create: true
+          virtualenvs-inp-project: true
+      - name: Cache Poetry virtualenv
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run:
+          poetry install --dev
+        if: steps.cache.outputs.cache-hit != 'true'
       - name: Lint Python
         run: make lint
   test-unit:

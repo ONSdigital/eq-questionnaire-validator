@@ -22,7 +22,7 @@ def test_mandatory_metadata_non_default_theme():
     validator = MetadataValidator(metadata, "another_theme")
     validator.validate_mandatory()
 
-    assert validator.errors == []
+    assert not validator.errors
 
 
 def test_duplicate_metadata():
