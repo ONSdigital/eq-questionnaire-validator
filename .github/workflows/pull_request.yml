@@ -44,7 +44,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       - name: Install dependencies
         run:
-          poetry install --dev
+          poetry install --no-interaction
         if: steps.cache.outputs.cache-hit != 'true'
       - name: Lint Python
         run: make lint
