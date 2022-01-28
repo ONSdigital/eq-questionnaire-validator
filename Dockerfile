@@ -4,10 +4,16 @@ RUN apt-get update && apt-get install --no-install-recommends -y git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pipenv==2018.11.26
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/
+WORKDIR /usr/src/
+
+COPY app /usr/src/app
+COPY api.py poetry.lock pyproject.toml /usr/src/
+
+RUN poetry install --no-dev
 
 EXPOSE 5000
 
@@ -15,9 +21,3 @@ ENV FLASK_APP=api.py
 
 ENTRYPOINT flask run --host 0.0.0.0
 
-COPY Pipfile Pipfile
-COPY Pipfile.lock Pipfile.lock
-
-RUN pipenv install --deploy --system
-
-COPY . /usr/src/app
