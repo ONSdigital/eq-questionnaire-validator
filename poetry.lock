@@ -151,7 +151,7 @@ tqdm = "*"
 [package.source]
 type = "git"
 url = "https://github.com/ONSDigital/eq-translations.git"
-reference = "test-version-for-poetry"
+reference = "update-setup-to-support-poetry"
 resolved_reference = "9717c03f1caf4e0f2ebca233ab546db497462d0a"
 
 [[package]]
@@ -687,7 +687,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4d2a4140ac1ce1dba165d5a09120606a40ea71a4dada92169e59100bc8559177"
+content-hash = "f3e9e7814ccb0c3dc0734607d6ccdd7f81820c480ccbf31206a8ea1bf24830de"
 
 [metadata.files]
 astroid = [
