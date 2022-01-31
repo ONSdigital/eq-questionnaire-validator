@@ -7,8 +7,9 @@ An API for validating survey schemas.
 It is recommended that you use [Pyenv](https://github.com/pyenv/pyenv) to manage your Python installations.
 
 ```
-pip install --upgrade pip setuptools pipenv
-pipenv install --dev
+# Install Poetry 
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+poetry install 
 ```
 
 ## Running

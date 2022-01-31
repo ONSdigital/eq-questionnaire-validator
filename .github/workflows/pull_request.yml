@@ -37,51 +37,18 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
-      - name: cached-poetry-dependencies
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.virtualenvs
-          key: ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run:
-          poetry config virtualenvs.path ~/.virtualenvs
-          poetry install --no-interaction
+        run: |
+          poetry install
 
-      - name: Lint Python
-        run: make lint
+      - name: Lint
+        run: |
+          make lint
 
-      - name: Run unit tests
-        run: make test
-  #  test-unit:
-  #    needs: lint
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - uses: actions/checkout@v2
-  #      - run: |
-  #          echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
-  #      - uses: actions/setup-python@v2
-  #        with:
-  #          python-version: ${{ env.PYTHON_VERSION }}
-  #      - run: |
-  #          echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
-  #      - name: Install pipenv
-  #        run: pip install pipenv==2018.11.26
-  #      - name: Cache virtualenv
-  #        id: cache-virtualenv
-  #        uses: actions/cache@v1
-  #        with:
-  #          path: ~/.local/share/virtualenvs/
-  #          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('Pipfile.lock') }}
-  #      - name: Install virtual environment
-  #        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-  #        run: pipenv install --dev
-  #      - name: Running unit tests
-  #        run: make test
+      - name: Unit tests
+        run: |
+         make test
+
   docker-push:
     runs-on: ubuntu-latest
     steps:
