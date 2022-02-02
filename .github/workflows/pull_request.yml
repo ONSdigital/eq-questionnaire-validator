@@ -46,8 +46,8 @@ jobs:
         uses: actions/cache@v2
         id: cache-virtualenv
         with:
-         path: ~/.virtualenvs
-         key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
       - name: Install virtual environment
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: poetry install
@@ -55,12 +55,12 @@ jobs:
         run: make lint
 
   test-unit:
-   needs: lint
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
-     - run:
-         echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run:
+          echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
