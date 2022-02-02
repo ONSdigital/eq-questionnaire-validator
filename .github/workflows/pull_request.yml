@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,18 +36,55 @@ jobs:
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
+        with:
+          version: 1.1.12
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
 
-      - name: Install dependencies
-        run: |
-          poetry install
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v2
+        id: cache-virtualenv
+        with:
+         path: ~/.virtualenvs
+         key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
+      - name: Install virtual environment
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        run: poetry install
+      - name: Lint Python
+        run: make lint
 
-      - name: Lint
-        run: |
-          make lint
+  test-unit:
+   needs: lint
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     - run:
+         echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: |
+          echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.1.12
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
 
-      - name: Unit tests
-        run: |
-         make test
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v2
+        id: cache-virtualenv
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
+      - name: Install virtual environment
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        run: poetry install
+      - name: Running unit tests
+        run: make test
 
   docker-push:
     runs-on: ubuntu-latest
