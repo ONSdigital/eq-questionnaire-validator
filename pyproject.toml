@@ -4,7 +4,7 @@ target_version = ['py38']
 [tool.poetry]
 name = "eq-questionnaire-validator"
 version = "0.1.0"
-description = "API for surveys schema validation"
+description = "API for questionnaire schema validation"
 authors = ["ONSDigital"]
 
 [tool.poetry.dependencies]
@@ -17,7 +17,8 @@ jsonschema = "^4.4.0"
 jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
 requests = "^2.27.1"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "update-setup-to-support-poetry"}
+eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git"}
+tqdm = "^4.62.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
