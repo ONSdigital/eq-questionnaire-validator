@@ -18,7 +18,6 @@ jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git"}
 
-
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 flake8 = "^4.0.1"
