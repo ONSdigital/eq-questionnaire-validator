@@ -20,9 +20,11 @@ jobs:
           node-version: "12.14.1"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
+
       - name: Get yarn cache
         id: get-yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Cache yarn modules
         id: cache-yarn
         uses: actions/cache@v1
@@ -31,44 +33,59 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
       - name: Install yarn deps
         run: yarn install
-      - name: Install Pipenv
-        run: pip install pipenv==2018.11.26
-      - name: Cache virtualenv
-        id: cache-virtualenv
-        uses: actions/cache@v1
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          path: ~/.local/share/virtualenvs/
-          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('Pipfile.lock') }}
+          version: 1.1.12
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v2
+        id: cache-virtualenv
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
       - name: Install virtual environment
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: pipenv install --dev
+        run: poetry install
       - name: Lint Python
         run: make lint
+
   test-unit:
     needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
+      - run:
           echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
-      - name: Install pipenv
-        run: pip install pipenv==2018.11.26
-      - name: Cache virtualenv
-        id: cache-virtualenv
-        uses: actions/cache@v1
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          path: ~/.local/share/virtualenvs/
-          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('Pipfile.lock') }}
+          version: 1.1.12
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v2
+        id: cache-virtualenv
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
       - name: Install virtual environment
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: pipenv install --dev
+        run: poetry install
       - name: Running unit tests
         run: make test
+
   docker-push:
     runs-on: ubuntu-latest
     steps:

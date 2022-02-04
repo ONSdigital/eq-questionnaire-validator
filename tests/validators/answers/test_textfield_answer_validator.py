@@ -30,4 +30,4 @@ def test_textfield_validator_success():
 
     validator.validate()
 
-    assert [] == validator.errors
+    assert not validator.errors
