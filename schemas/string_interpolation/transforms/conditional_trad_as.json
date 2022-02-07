@@ -1,0 +1,36 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/conditional_trad_as.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "conditional_trad_as": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["conditional_trad_as"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "trad_as": {
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "enum": ["trad_as"]
+              },
+              "source": {
+                "type": "string",
+                "enum": ["metadata"]
+              }
+            },
+            "additionalProperties": false,
+            "required": ["identifier", "source"]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["trad_as"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

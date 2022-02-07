@@ -129,6 +129,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/option_label_from_value.json#/option_label_from_value"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/conditional_trad_as.json#/conditional_trad_as"
             }
           ]
         }

@@ -120,7 +120,32 @@
               "id": "total-items-block",
               "question": {
                 "id": "total-items-question",
-                "title": "Please enter the number of items",
+                "title": {
+                  "text": "You are completing this for {ru_name}{conditional_trad_as}. Please enter the number of items",
+                  "placeholders": [
+                    {
+                      "placeholder": "conditional_trad_as",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "trad_as": {
+                              "source": "metadata",
+                              "identifier": "trad_as"
+                            }
+                          },
+                          "transform": "conditional_trad_as"
+                        }
+                      ]
+                    },
+                    {
+                      "placeholder": "ru_name",
+                      "value": {
+                        "source": "metadata",
+                        "identifier": "ru_name"
+                      }
+                    }
+                  ]
+                },
                 "type": "General",
                 "answers": [
                   {
