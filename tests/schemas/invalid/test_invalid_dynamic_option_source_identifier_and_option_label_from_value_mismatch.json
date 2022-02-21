@@ -1,0 +1,96 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test dynamic options label from value",
+  "theme": "default",
+  "description": "A questionnaire to test dynamic options label from value",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "injury-sustained-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "injury-sustained",
+              "question": {
+                "answers": [
+                  {
+                    "id": "injury-sustained-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Head",
+                        "value": "Head"
+                      },
+                      {
+                        "label": "Body",
+                        "value": "Body"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "id": "injury-sustained-question",
+                "title": "When you had the injury, where did you sustain injuries?",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "not-injured",
+              "question": {
+                "answers": [
+                  {
+                    "id": "not-injured-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Arms",
+                        "value": "Arms"
+                      },
+                      {
+                        "label": "Legs",
+                        "value": "Legs"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "id": "not-injured-question",
+                "title": "When you had the injury, where did you not sustain injuries?",
+                "type": "General"
+              }
+            }
+          ],
+          "id": "injury-group"
+        }
+      ]
+    }
+  ]
+}
