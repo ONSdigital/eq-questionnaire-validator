@@ -138,21 +138,23 @@ class OptionAnswerValidator(AnswerValidator):
         value_source = self.dynamic_options["values"]
         transform = self.dynamic_options["transform"]
 
-        if (
-            value_source["source"] == "answers"
-            and self.questionnaire_schema.get_answer_type(value_source["identifier"])
-            != AnswerType.CHECKBOX
-        ):
+        if value_source["source"] == "answers":
 
-            self.add_error(
-                self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
-                value_source=value_source,
-            )
+            if (
+                self.questionnaire_schema.get_answer_type(value_source["identifier"])
+                != AnswerType.CHECKBOX
+            ):
 
-        if (
-            "option-label-from-value" in transform
-            and transform["option-label-from-value"][1] != value_source["identifier"]
-        ):
-            self.add_error(
-                self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH
-            )
+                self.add_error(
+                    self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
+                    value_source=value_source,
+                )
+
+            if (
+                "option-label-from-value" in transform
+                and transform["option-label-from-value"][1]
+                != value_source["identifier"]
+            ):
+                self.add_error(
+                    self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH
+                )

@@ -1,9 +1,7 @@
 from app.validators.answers import OptionAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.rules.rule_validator import RulesValidator
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import get_mock_schema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_invalid_mismatching_answer_label_and_value():
@@ -207,22 +205,31 @@ def test_dynamic_options_values_with_invalid_value_rule():
 
 
 def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch():
-
-    filename = "schemas/invalid/test_invalid_dynamic_option_source_identifier_and_option_label_from_value_mismatch.json"
-
     answer = {
         "id": "answer",
         "label": "Label",
-        "type": "Checkbox",
+        "type": "Radio",
         "dynamic_options": {
-            "values": {"source": "answers", "identifier": "injury-sustained-answer"},
-            "transform": {"option-label-from-value": ["self", "not-injured-answer"]},
+            "values": {"source": "answers", "identifier": "checkbox-answer"},
+            "transform": {
+                "option-label-from-value": ["self", "mismatch-checkbox-answer"]
+            },
         },
     }
 
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-
-    validator = OptionAnswerValidator(answer, questionnaire_schema=questionnaire_schema)
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "checkbox-answer": {
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                },
+                "mismatch-checkbox-answer": {
+                    "answer": {"id": "mismatch-checkbox-answer", "type": "Checkbox"}
+                },
+            }
+        ),
+    )
     validator.validate_dynamic_options()
 
     expected_error = {
