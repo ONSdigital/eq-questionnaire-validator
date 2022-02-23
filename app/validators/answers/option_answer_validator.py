@@ -156,5 +156,7 @@ class OptionAnswerValidator(AnswerValidator):
                 != value_source["identifier"]
             ):
                 self.add_error(
-                    self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH
+                    self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+                    source_identifier=value_source["identifier"],
+                    transform_identifier=transform["option-label-from-value"][1]
                 )
