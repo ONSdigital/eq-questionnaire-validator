@@ -234,6 +234,8 @@ def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch(
 
     expected_error = {
         "message": validator.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+        "source_identifier": "checkbox-answer",
+        "transform_identifier": "mismatch-checkbox-answer",
         "answer_id": "answer",
     }
 
@@ -265,6 +267,8 @@ def test_dynamic_options_transform_with_invalid_answer_id_reference():
 
     option_label_from_value_do_not_match_error = {
         "message": validator.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+        "source_identifier": "checkbox-answer",
+        "transform_identifier": "non-existing-answer",
         "answer_id": "answer",
     }
 
