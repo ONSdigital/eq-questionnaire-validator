@@ -26,6 +26,10 @@ class OptionAnswerValidator(AnswerValidator):
     DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER = (
         "Dynamic options references non Checkbox answer"
     )
+    DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH = (
+        "Dynamic options source identifier and "
+        "option label from value answer_id do not match"
+    )
 
     def __init__(self, schema_element, questionnaire_schema=None):
         super().__init__(schema_element)
@@ -133,12 +137,27 @@ class OptionAnswerValidator(AnswerValidator):
             return None
 
         value_source = self.dynamic_options["values"]
-        if (
-            value_source["source"] == "answers"
-            and self.questionnaire_schema.get_answer_type(value_source["identifier"])
-            != AnswerType.CHECKBOX
-        ):
-            self.add_error(
-                self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
-                value_source=value_source,
-            )
+        transform = self.dynamic_options["transform"]
+
+        if value_source["source"] == "answers":
+
+            if (
+                self.questionnaire_schema.get_answer_type(value_source["identifier"])
+                != AnswerType.CHECKBOX
+            ):
+
+                self.add_error(
+                    self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
+                    value_source=value_source,
+                )
+
+            if (
+                "option-label-from-value" in transform
+                and transform["option-label-from-value"][1]
+                != value_source["identifier"]
+            ):
+                self.add_error(
+                    self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+                    source_identifier=value_source["identifier"],
+                    transform_identifier=transform["option-label-from-value"][1],
+                )

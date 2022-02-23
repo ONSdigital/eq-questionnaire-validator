@@ -204,7 +204,45 @@ def test_dynamic_options_values_with_invalid_value_rule():
     assert validator.errors == [expected_error]
 
 
-def test_dynamic_options_transform_with_invalid_value_rule():
+def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch():
+    answer = {
+        "id": "answer",
+        "label": "Label",
+        "type": "Radio",
+        "dynamic_options": {
+            "values": {"source": "answers", "identifier": "checkbox-answer"},
+            "transform": {
+                "option-label-from-value": ["self", "mismatch-checkbox-answer"]
+            },
+        },
+    }
+
+    validator = OptionAnswerValidator(
+        answer,
+        questionnaire_schema=get_mock_schema(
+            answers_with_context={
+                "checkbox-answer": {
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                },
+                "mismatch-checkbox-answer": {
+                    "answer": {"id": "mismatch-checkbox-answer", "type": "Checkbox"}
+                },
+            }
+        ),
+    )
+    validator.validate_dynamic_options()
+
+    expected_error = {
+        "message": validator.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+        "source_identifier": "checkbox-answer",
+        "transform_identifier": "mismatch-checkbox-answer",
+        "answer_id": "answer",
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_dynamic_options_transform_with_invalid_answer_id_reference():
     answer = {
         "id": "answer",
         "label": "Label",
@@ -227,13 +265,23 @@ def test_dynamic_options_transform_with_invalid_value_rule():
     )
     validator.validate_dynamic_options()
 
-    expected_error = {
+    option_label_from_value_do_not_match_error = {
+        "message": validator.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,
+        "source_identifier": "checkbox-answer",
+        "transform_identifier": "non-existing-answer",
+        "answer_id": "answer",
+    }
+
+    answer_reference_invalid_error = {
         "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
         "identifier": "non-existing-answer",
         "origin_id": "answer",
     }
 
-    assert validator.errors == [expected_error]
+    assert validator.errors == [
+        option_label_from_value_do_not_match_error,
+        answer_reference_invalid_error,
+    ]
 
 
 def test_dynamic_options_values_with_non_checkbox_answer_source():
