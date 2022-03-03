@@ -42,6 +42,9 @@
         },
         {
           "required": ["definition"]
+        },
+        {
+          "required": ["guidance"]
         }
       ],
       "properties": {

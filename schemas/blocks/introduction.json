@@ -30,9 +30,6 @@
             },
             "contents": {
               "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
-            },
-            "guidance": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/guidance"
             }
           },
           "additionalProperties": true,
@@ -43,9 +40,6 @@
             },
             {
               "required": ["contents"]
-            },
-            {
-              "required": ["guidance"]
             }
           ]
         }
