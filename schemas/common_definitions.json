@@ -42,9 +42,6 @@
         },
         {
           "required": ["definition"]
-        },
-        {
-          "required": ["guidance"]
         }
       ],
       "properties": {
@@ -53,15 +50,6 @@
         },
         "description": {
           "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
-        },
-        "guidance": {
-          "description": "Introduction guidance",
-          "type": "object",
-          "properties": {
-            "contents": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
-            }
-          }
         },
         "list": {
           "type": "array",
