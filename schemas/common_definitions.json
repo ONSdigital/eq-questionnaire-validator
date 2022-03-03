@@ -62,6 +62,9 @@
         },
         "definition": {
           "$ref": "https://eq.ons.gov.uk/common_definitions.json#/definition"
+        },
+        "guidance": {
+          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/guidance"
         }
       },
       "additionalProperties": false
