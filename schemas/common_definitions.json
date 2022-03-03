@@ -407,7 +407,7 @@
     "description": "Marks the page as for the interviewer only. Only applies for questionnaires that will be completed by an interviewer.",
     "type": "boolean"
   },
-  "introduction_guidance": {
+  "guidance": {
     "description": "Introduction guidance",
     "type": "object",
     "properties": {
