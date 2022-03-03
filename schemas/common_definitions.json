@@ -411,7 +411,7 @@
     "type": "boolean"
   },
   "guidance": {
-    "description": "Introduction guidance",
+    "description": "Question or contents guidance",
     "type": "object",
     "properties": {
       "contents": {
