@@ -36,7 +36,18 @@
             }
           },
           "additionalProperties": true,
-          "required": ["id", "title"]
+          "required": ["id"],
+          "anyOf": [
+            {
+              "required": ["title"]
+            },
+            {
+              "required": ["contents"]
+            },
+            {
+              "required": ["guidance"]
+            }
+          ]
         }
       },
       "preview_content": {
