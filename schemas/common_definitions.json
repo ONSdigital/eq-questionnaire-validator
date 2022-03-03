@@ -42,6 +42,9 @@
         },
         {
           "required": ["definition"]
+        },
+        {
+          "$ref": ["guidance"]
         }
       ],
       "properties": {
