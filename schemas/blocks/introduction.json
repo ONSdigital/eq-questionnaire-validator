@@ -32,7 +32,7 @@
               "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
             },
             "guidance": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
+              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/introduction_guidance"
             }
           },
           "additionalProperties": true,
