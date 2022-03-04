@@ -17,15 +17,6 @@
       }
     ]
   },
-  "question_guidance": {
-    "description": "Question guidance",
-    "type": "object",
-    "properties": {
-      "contents": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
-      }
-    }
-  },
   "summary": {
     "description": "TextField string concatenations for the summary page",
     "properties": {

@@ -26,7 +26,7 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/question_definitions"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question_guidance"
+        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/guidance"
       },
       "summary": {
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/summary"

@@ -32,7 +32,16 @@
               "$ref": "https://eq.ons.gov.uk/common_definitions.json#/contents"
             }
           },
-          "additionalProperties": false
+          "additionalProperties": true,
+          "required": ["id"],
+          "anyOf": [
+            {
+              "required": ["title"]
+            },
+            {
+              "required": ["contents"]
+            }
+          ]
         }
       },
       "preview_content": {

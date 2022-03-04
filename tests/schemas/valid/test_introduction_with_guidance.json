@@ -1,0 +1,85 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "144",
+  "theme": "default",
+  "title": "Test introduction",
+  "legal_basis": "Notice is given under section 999 of the Test Act 2000",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "ru_ref",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string",
+      "optional": true
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "introduction-section",
+      "title": "Introduction",
+      "groups": [
+        {
+          "id": "introduction-group",
+          "title": "General Business Information",
+          "blocks": [
+            {
+              "id": "introduction",
+              "type": "Introduction",
+              "primary_content": [
+                {
+                  "id": "business-details",
+                  "title": "You are completing this for ESSENTIAL ENTERPRISE LTD.",
+                  "contents": [
+                    {
+                      "guidance": {
+                        "contents": [
+                          {
+                            "title": "Coronavirus (COVID-19) guidance",
+                            "description": "<strong>Explain your figures</strong> in the comment section to minimise us contacting you and to help us tell an industry story"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Interstitial",
+              "id": "general-business-information-completed",
+              "content": {
+                "title": "Section complete",
+                "contents": [
+                  {
+                    "description": "<p>You have successfully completed this section</p>"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
