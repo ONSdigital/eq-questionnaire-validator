@@ -161,7 +161,7 @@ def test_invalid_placeholder_answer_ids():
             "json_path": "groups.[0].blocks.[1].question.answers.[1].description.placeholders.[0].transforms.[0].arguments.number.identifier",
         },
         {
-            "message": ValueSourceValidator.METADATA_REFERENCE_INVALID,
+            "message": ValueSourceValidator.SOURCE_REFERENCE_INVALID.format("metadata"),
             "identifier": "invalid-metadata-ref",
             "json_path": "groups.[0].blocks.[3].question.answers.[0].description.placeholders.[0].value.identifier",
         },
@@ -322,7 +322,7 @@ def test_invalid_list_name_in_when_rule():
 
     expected_errors = [
         {
-            "message": ValueSourceValidator.LIST_REFERENCE_INVALID,
+            "message": WhenRuleValidator.LIST_REFERENCE_INVALID,
             "list_name": "non-existent-list-name",
         }
     ]

@@ -1,5 +1,40 @@
+import pytest
+
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.value_source_validator import ValueSourceValidator
+
+
+@pytest.mark.parametrize(
+    "value_source",
+    [
+        {"source": "list", "identifier": "people"},
+        {"source": "answers", "identifier": "answer-2"},
+        {"source": "metadata", "identifier": "submitted_at"},
+        {"source": "response_metadata", "identifier": "submitted_at"},
+        {"source": "calculated_summary", "identifier": "total-turnover"},
+    ],
+)
+def test_invalid_source_reference(value_source):
+    questionnaire_schema = QuestionnaireSchema(
+        {"metadata": [{"name": "metatata-1", "type": "string"}]}
+    )
+    questionnaire_schema.list_names = ["list-1"]
+    questionnaire_schema.block_ids = ["block-1"]
+    questionnaire_schema.answers_with_context = {
+        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
+    }
+
+    validator = ValueSourceValidator(
+        value_source, "some.json.path", questionnaire_schema
+    )
+    validator.validate()
+
+    error = validator.errors[0]
+    assert error["message"] == ValueSourceValidator.SOURCE_REFERENCE_INVALID.format(
+        value_source["source"]
+    )
+    assert error["identifier"] == value_source["identifier"]
+    assert error["json_path"] == "some.json.path"
 
 
 def test_invalid_reference():
@@ -59,15 +94,3 @@ def test_invalid_composite_answer_field_in_selector():
     error = validator.errors[0]
     assert error["message"] == ValueSourceValidator.COMPOSITE_ANSWER_FIELD_INVALID
     assert error["identifier"] == "address-answer"
-
-
-def test_invalid_placeholder_list_reference():
-    value_source = {"identifier": "people", "source": "list", "selector": "count"}
-
-    questionnaire_schema = QuestionnaireSchema({})
-    validator = ValueSourceValidator(value_source, "", questionnaire_schema)
-    validator.validate()
-
-    error = validator.errors[0]
-    assert error["message"] == ValueSourceValidator.LIST_REFERENCE_INVALID
-    assert error["identifier"] == "people"

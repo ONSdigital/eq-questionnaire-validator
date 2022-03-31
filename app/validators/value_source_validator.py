@@ -2,12 +2,10 @@ from app.validators.validator import Validator
 
 
 class ValueSourceValidator(Validator):
-    ANSWER_REFERENCE_INVALID = "Invalid answer reference"
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
-    LIST_REFERENCE_INVALID = "Invalid list reference"
-    METADATA_REFERENCE_INVALID = "Invalid metadata reference"
-    RESPONSE_METADATA_REFERENCE_INVALID = "Invalid response metadata reference"
+    SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
+    ANSWER_REFERENCE_INVALID = SOURCE_REFERENCE_INVALID.format("answers")
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"]
@@ -20,6 +18,14 @@ class ValueSourceValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
         self.context["json_path"] = json_path
 
+        self._valid_source_identifiers_map = {
+            "answers": self.questionnaire_schema.answers_with_context,
+            "metadata": self.questionnaire_schema.metadata_ids,
+            "response_metadata": self.RESPONSE_METADATA_IDENTIFIERS,
+            "list": self.questionnaire_schema.list_names,
+            "calculated_summary": self.questionnaire_schema.block_ids,
+        }
+
     def validate(self):
         self.validate_source_reference()
         return self.errors
@@ -31,51 +37,34 @@ class ValueSourceValidator(Validator):
         else:
             identifiers = self.value_source["identifier"]
 
-        if source == "answers":
-            selector = self.value_source.get("selector")
-            self._validate_answer_source_reference(identifiers, selector)
+        self._validate_source_reference(identifiers, source)
 
-        elif source == "metadata":
-            self._validate_metadata_source_reference(identifiers)
+    def _validate_source_reference(self, identifiers, source):
+        valid_identifiers = self._valid_source_identifiers_map.get(source)
+        if not valid_identifiers:
+            return None
 
-        elif source == "list":
-            self._validate_list_source_reference(identifiers)
-
-        elif source == "response_metadata":
-            self._validate_response_metadata_source_reference(identifiers)
-
-    def _validate_metadata_source_reference(self, identifiers):
         for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.metadata_ids:
-                self.add_error(self.METADATA_REFERENCE_INVALID, identifier=identifier)
+            self._validate_source_identifier(
+                source, identifier=identifier, valid_identifiers=valid_identifiers
+            )
 
-    def _validate_list_source_reference(self, identifiers):
-        for identifier in identifiers:
-            if identifier not in self.questionnaire_schema.list_names:
-                self.add_error(self.LIST_REFERENCE_INVALID, identifier=identifier)
+    def _validate_source_identifier(self, source, *, identifier, valid_identifiers):
+        if identifier not in valid_identifiers:
+            self.add_error(
+                self.SOURCE_REFERENCE_INVALID.format(source),
+                identifier=identifier,
+            )
 
-    def _validate_response_metadata_source_reference(self, identifiers):
-        for identifier in identifiers:
-            if identifier not in self.RESPONSE_METADATA_IDENTIFIERS:
-                self.add_error(
-                    self.RESPONSE_METADATA_REFERENCE_INVALID, identifier=identifier
-                )
+        elif source == "answers" and (selector := self.value_source.get("selector")):
+            self._validate_answer_source_selector_reference(identifier, selector)
 
-    def _validate_answer_source_reference(self, identifiers, selector=None):
+    def _validate_answer_source_selector_reference(self, identifier, selector):
         answers_with_context = self.questionnaire_schema.answers_with_context
+        answer_type = answers_with_context[identifier]["answer"]["type"]
 
-        for identifier in identifiers:
-            if identifier not in answers_with_context:
-                self.add_error(self.ANSWER_REFERENCE_INVALID, identifier=identifier)
+        if answer_type not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP:
+            self.add_error(self.COMPOSITE_ANSWER_INVALID, identifier=identifier)
 
-            elif selector:
-                answer_type = answers_with_context[identifier]["answer"]["type"]
-
-                if answer_type not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP:
-                    self.add_error(self.COMPOSITE_ANSWER_INVALID, identifier=identifier)
-                elif (
-                    selector not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP[answer_type]
-                ):
-                    self.add_error(
-                        self.COMPOSITE_ANSWER_FIELD_INVALID, identifier=identifier
-                    )
+        elif selector not in self.COMPOSITE_ANSWERS_TO_SELECTORS_MAP[answer_type]:
+            self.add_error(self.COMPOSITE_ANSWER_FIELD_INVALID, identifier=identifier)
