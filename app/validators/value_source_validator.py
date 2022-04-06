@@ -32,10 +32,9 @@ class ValueSourceValidator(Validator):
 
     def validate_source_reference(self):
         source = self.value_source["source"]
-        if isinstance(self.value_source["identifier"], str):
-            identifiers = [self.value_source["identifier"]]
-        else:
-            identifiers = self.value_source["identifier"]
+        identifiers = self.value_source["identifier"]
+        if isinstance(identifiers, str):
+            identifiers = [identifiers]
 
         self._validate_source_reference(identifiers, source)
 
