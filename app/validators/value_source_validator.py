@@ -23,7 +23,7 @@ class ValueSourceValidator(Validator):
             "metadata": self.questionnaire_schema.metadata_ids,
             "response_metadata": self.RESPONSE_METADATA_IDENTIFIERS,
             "list": self.questionnaire_schema.list_names,
-            "calculated_summary": self.questionnaire_schema.block_ids,
+            "calculated_summary": self.questionnaire_schema.calculated_summary_block_ids,
         }
 
     def validate(self):

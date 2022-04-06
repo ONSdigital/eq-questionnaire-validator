@@ -129,6 +129,11 @@ class QuestionnaireSchema:
             block["id"]: block for block in self.blocks + self.sub_blocks
         }
         self.block_ids = list(self.blocks_by_id.keys())
+        self.calculated_summary_block_ids = {
+            block["id"]
+            for block in self.blocks_by_id.values()
+            if block["type"] == "CalculatedSummary"
+        }
         self.sections = jp.match("$.sections[*]", self.schema)
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())

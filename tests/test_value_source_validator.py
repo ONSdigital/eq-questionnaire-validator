@@ -19,7 +19,7 @@ def test_invalid_source_reference(value_source):
         {"metadata": [{"name": "metatata-1", "type": "string"}]}
     )
     questionnaire_schema.list_names = ["list-1"]
-    questionnaire_schema.block_ids = ["block-1"]
+    questionnaire_schema.calculated_summary_block_ids = ["block-1"]
     questionnaire_schema.answers_with_context = {
         "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
     }
