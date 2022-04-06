@@ -324,7 +324,7 @@ def test_non_existing_answer_id_in_option_label_for_value_operator():
     validator.validate()
 
     expected_error = {
-        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+        "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
         "origin_id": ORIGIN_ID,
         "identifier": "non-existing-answer",
     }

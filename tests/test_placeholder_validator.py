@@ -87,7 +87,7 @@ def test_placeholder_plurals():
             "test",
             [
                 {
-                    "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+                    "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
                     "identifier": "test",
                 }
             ],

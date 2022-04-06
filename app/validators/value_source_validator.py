@@ -5,7 +5,7 @@ class ValueSourceValidator(Validator):
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
-    ANSWER_REFERENCE_INVALID = SOURCE_REFERENCE_INVALID.format("answers")
+    ANSWER_SOURCE_REFERENCE_INVALID = SOURCE_REFERENCE_INVALID.format("answers")
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"]

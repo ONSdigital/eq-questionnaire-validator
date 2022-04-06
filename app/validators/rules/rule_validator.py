@@ -193,7 +193,8 @@ class RulesValidator(Validator):
         answers = self.questionnaire_schema.answers_with_context
         if answer_id not in answers:
             self.add_error(
-                ValueSourceValidator.ANSWER_REFERENCE_INVALID, identifier=answer_id
+                ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+                identifier=answer_id,
             )
 
         elif not any(

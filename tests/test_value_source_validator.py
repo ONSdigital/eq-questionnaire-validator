@@ -48,7 +48,7 @@ def test_invalid_reference():
     validator.validate()
 
     error = validator.errors[0]
-    assert error["message"] == ValueSourceValidator.ANSWER_REFERENCE_INVALID
+    assert error["message"] == ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID
     assert error["identifier"] == "answer-2"
 
 
