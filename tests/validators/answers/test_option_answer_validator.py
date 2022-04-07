@@ -273,7 +273,7 @@ def test_dynamic_options_transform_with_invalid_answer_id_reference():
     }
 
     answer_reference_invalid_error = {
-        "message": ValueSourceValidator.ANSWER_REFERENCE_INVALID,
+        "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
         "identifier": "non-existing-answer",
         "origin_id": "answer",
     }

@@ -1,0 +1,129 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "A test schema to demo Calculated Summary",
+  "theme": "default",
+  "description": "A schema to showcase Calculated Summary page and usage in value source.",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Total a range of values",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "first-number-block",
+              "question": {
+                "id": "first-number-question",
+                "title": "First Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "first-number-answer",
+                    "label": "First answer label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "second-number-block",
+              "question": {
+                "id": "second-number-question",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "second-number-answer",
+                    "label": "Second answer in currency label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
+              }
+            },
+
+            {
+              "type": "CalculatedSummary",
+              "id": "currency-total-playback",
+              "title": "We calculate the total of currency values entered to be %(total)s. Is this correct? (Skipped Fourth)",
+              "calculation": {
+                "calculation_type": "sum",
+                "answers_to_calculate": [
+                  "first-number-answer",
+                  "second-number-answer"
+                ],
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "calculated-summary-reconfirm",
+              "content": {
+                "title": "You have provided the following grand total.",
+                "contents": [
+                  {
+                    "list": [
+                      {
+                        "text": "Total currency values: <em>{total}</em>",
+                        "placeholders": [
+                          {
+                            "placeholder": "total",
+                            "transforms": [
+                              {
+                                "transform": "format_currency",
+                                "arguments": {
+                                  "number": {
+                                    "source": "calculated_summary",
+                                    "identifier": "first-number-block"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
