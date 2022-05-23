@@ -1,0 +1,25 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_percentage.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "format_percentage": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_percentage"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}

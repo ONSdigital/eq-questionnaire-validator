@@ -1,0 +1,31 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_unit.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "format_unit": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_unit"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+          },
+          "length": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          },
+          "unit": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value", "unit"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}
