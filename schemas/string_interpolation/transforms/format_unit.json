@@ -14,8 +14,9 @@
           "value": {
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
           },
-          "length": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          "unit_length": {
+            "type": "string",
+            "enum": ["short", "narrow", "long"]
           },
           "unit": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
