@@ -19,7 +19,7 @@
             "enum": ["short", "narrow", "long"]
           },
           "unit": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            "$ref": "https://eq.ons.gov.uk/lists/units.json#/unit"
           }
         },
         "additionalProperties": false,
