@@ -108,10 +108,11 @@ class PlaceholderValidator(Validator):
                 identifier=answer_id,
             )
 
-    def validate_answer_type_correct(self, argument, type):
+    def validate_answer_type_correct(self, argument, transform_type):
+        type = transform_type.split("_")[1]
         answer_id = argument.get("identifier")
         answer_type = self.questionnaire_schema.answers_with_context[answer_id]["answer"]["type"]
-        if answer_type != type:
+        if answer_type.lower() != type:
             self.add_error(
                 error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID,
                 identifier=answer_id,
@@ -132,10 +133,8 @@ class PlaceholderValidator(Validator):
                 and argument_name == "answer_id"
             ):
                 self.validate_option_label_from_value_placeholder(argument)
-            if first_transform["transform"] == "format_unit" and argument_name == "value":
-                self.validate_answer_type_correct(argument, "Unit")
-            if first_transform["transform"] == "format_percentage" and argument_name == "value":
-                self.validate_answer_type_correct(argument, "Percentage")
+            if first_transform["transform"] in ["format_unit", "format_percentage"] and argument_name == "value":
+                self.validate_answer_type_correct(argument, first_transform["transform"])
 
         # Previous transform must be referenced in all subsequent transforms
         for transform in transforms[1:]:
