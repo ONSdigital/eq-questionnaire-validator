@@ -5,6 +5,7 @@ ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
     "The referenced answer cannot be used to set the minimum of answer"
 )
 ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID = "The answer type for option label from value is not of type ['Radio','Checkbox','Dropdown']"
+ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID = "The answer type for 'format_percentage' or 'format_unit' transform is not of type 'Percentage','Unit'"
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )
