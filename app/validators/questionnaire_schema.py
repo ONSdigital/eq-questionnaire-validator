@@ -71,6 +71,7 @@ def get_context_from_match(match):
     return {"section": section["id"], "block": block_id, "group_id": group["id"]}
 
 
+# pylint: disable=too-many-public-methods
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
