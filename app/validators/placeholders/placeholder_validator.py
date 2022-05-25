@@ -109,16 +109,17 @@ class PlaceholderValidator(Validator):
             )
 
     def validate_answer_type_correct(self, argument, transform_type):
-        transform_type = transform_type.split("_")[1]
-        answer_id = argument.get("identifier")
-        answer_type = self.questionnaire_schema.answers_with_context[answer_id][
-            "answer"
-        ]["type"]
-        if answer_type.lower() != transform_type:
-            self.add_error(
-                error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID,
-                identifier=answer_id,
-            )
+        if argument.get("source") == "answers":
+            transform_type = transform_type.split("_")[1]
+            answer_id = argument.get("identifier")
+            answer_type = self.questionnaire_schema.answers_with_context[answer_id][
+                "answer"
+            ]["type"]
+            if answer_type.lower() != transform_type:
+                self.add_error(
+                    error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID,
+                    identifier=answer_id,
+                )
 
     def validate_placeholder_transforms(self, transforms):
         # First transform can't reference a previous transform
