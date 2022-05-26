@@ -15,7 +15,7 @@
             "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
           },
           "unit_length": {
-            "description": "A babel units parameter, possible values are “short”, “long” or “narrow”",
+            "description": "The formatting length. e.g. 1h (narrow) / 1 hr (short) / 1 hour (long)",
             "default": "short",
             "type": "string",
             "enum": ["short", "narrow", "long"]
