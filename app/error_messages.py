@@ -8,6 +8,7 @@ ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID = "The answer type for option la
 ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID = (
     "The answer type for '{transform}' transform is not of type '{answer_type}'"
 )
+ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH = "The answer unit and transform unit mismatch, '{answer_unit}' not '{transform_unit}'"
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )

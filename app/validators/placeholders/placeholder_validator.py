@@ -116,15 +116,34 @@ class PlaceholderValidator(Validator):
             and argument_name == "value"
             and argument.get("source") == "answers"
         ):
-            transform_type = transform_type.split("_")[1]
             answer_id = argument.get("identifier")
             answer_type = self.questionnaire_schema.answers_with_context[answer_id][
                 "answer"
             ]["type"]
-            if answer_type.lower() != transform_type:
+            if answer_type.lower() not in transform_type:
                 self.add_error(
                     error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
                         transform=transform_type, answer_type=answer_type
+                    ),
+                    identifier=answer_id,
+                )
+
+    def validate_answer_and_transform_unit_match(self, arguments, transform_type):
+        if transform_type == "format_unit":
+            answer_id = arguments["value"].get("identifier")
+            unit = arguments["unit"]
+            if (
+                unit
+                != self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+                    "unit"
+                ]
+            ):
+                self.add_error(
+                    error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                        answer_unit=self.questionnaire_schema.answers_with_context[
+                            answer_id
+                        ]["answer"]["unit"],
+                        transform_unit=unit,
                     ),
                     identifier=answer_id,
                 )
@@ -147,6 +166,9 @@ class PlaceholderValidator(Validator):
             self.validate_answer_type_for_transform(
                 argument, argument_name, first_transform["transform"]
             )
+        self.validate_answer_and_transform_unit_match(
+            first_transform.get("arguments"), first_transform["transform"]
+        )
 
         # Previous transform must be referenced in all subsequent transforms
         for transform in transforms[1:]:
@@ -167,6 +189,9 @@ class PlaceholderValidator(Validator):
                 self.validate_answer_type_for_transform(
                     argument, argument_name, transform["transform"]
                 )
+            self.validate_answer_and_transform_unit_match(
+                transform.get("arguments"), transform["transform"]
+            )
 
             if not previous_transform_used:
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
