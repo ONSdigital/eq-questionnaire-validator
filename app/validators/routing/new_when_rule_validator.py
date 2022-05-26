@@ -69,11 +69,14 @@ class NewWhenRuleValidator(RulesValidator):
                 argument_type = self.validate_rule(argument)
             elif isinstance(argument, dict) and "source" in argument:
                 argument_type = resolve_value_source_json_type(
-                    argument, self.questionnaire_schema.answers_with_context
+                    argument, self.questionnaire_schema
                 )
             else:
                 argument_type = python_type_to_json_type(type(argument).__name__)
-            argument_types.append(argument_type)
+            if isinstance(argument_type, list):
+                argument_types.extend(iter(argument_type))
+            else:
+                argument_types.append(argument_type)
 
         return argument_types
 

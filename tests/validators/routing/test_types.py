@@ -1,5 +1,8 @@
+from unittest.mock import Mock
+
 import pytest
 
+from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.types import (
     TYPE_ARRAY,
     TYPE_BOOLEAN,
@@ -10,6 +13,7 @@ from app.validators.routing.types import (
     python_type_to_json_type,
     resolve_value_source_json_type,
 )
+from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 @pytest.mark.parametrize(
@@ -51,12 +55,33 @@ def test_get_answer_value_json_type(python_type, json_type):
 )
 def test_resolve_answer_value_source_json_type(answer_type, json_type):
     value_source = {"source": "answers", "identifier": "answer-1"}
-    answers_with_context = {
+
+    questionnaire_schema = Mock()
+    questionnaire_schema.answers_with_context = {
         "answer-1": {"answer": {"id": "answer-1", "type": answer_type}, "block": "name"}
     }
+
     assert (
-        resolve_value_source_json_type(value_source, answers_with_context) == json_type
+        resolve_value_source_json_type(value_source, questionnaire_schema) == json_type
     )
+
+
+def test_resolve_calculated_summary_value_source_json_type():
+    filename = "schemas/valid/test_routing_calculated_summary_dependencies.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    value_source = {
+        "source": "calculated_summary",
+        "identifier": "currency-total-playback",
+    }
+
+    assert resolve_value_source_json_type(value_source, questionnaire_schema) == [
+        TYPE_NUMBER,
+        TYPE_NUMBER,
+        TYPE_NUMBER,
+        TYPE_NUMBER,
+    ]
 
 
 @pytest.mark.parametrize(

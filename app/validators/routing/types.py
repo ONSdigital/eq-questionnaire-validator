@@ -43,12 +43,21 @@ PYTHON_TYPE_TO_JSON_TYPE = {
 }
 
 
-def resolve_value_source_json_type(value_source, answers_with_context):
+def resolve_value_source_json_type(value_source, schema):
     source = value_source["source"]
     if source == "answers":
         answer_id = value_source["identifier"]
-        answer_type = answers_with_context[answer_id]["answer"]["type"]
+        answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
         return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
+
+    if source == "calculated_summary":
+        answer_type_list = []
+        block_id = schema.get_block(value_source["identifier"])
+        answer_ids = block_id["calculation"]["answers_to_calculate"]
+        for answer_id in answer_ids:
+            answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
+            answer_type_list.append(ANSWER_TYPE_TO_JSON_TYPE[answer_type])
+        return answer_type_list
 
     if source == "list":
         if selector := value_source.get("selector"):
