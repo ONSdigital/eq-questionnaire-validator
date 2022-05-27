@@ -111,42 +111,46 @@ class PlaceholderValidator(Validator):
     def validate_answer_type_for_transform(
         self, argument, argument_name, transform_type
     ):
-        if (
+        if not (
             transform_type in ["format_unit", "format_percentage"]
             and argument_name == "value"
             and argument.get("source") == "answers"
         ):
-            answer_id = argument.get("identifier")
-            answer_type = self.questionnaire_schema.answers_with_context[answer_id][
-                "answer"
-            ]["type"]
-            if answer_type.lower() not in transform_type:
-                self.add_error(
-                    error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
-                        transform=transform_type, answer_type=answer_type
-                    ),
-                    identifier=answer_id,
-                )
+            return
+        answer_id = argument["identifier"]
+        answer_type = self.questionnaire_schema.answers_with_context[answer_id][
+            "answer"
+        ]["type"]
+        if answer_type.lower() in transform_type:
+            return
+        self.add_error(
+            error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
+                transform=transform_type, answer_type=answer_type
+            ),
+            identifier=answer_id,
+        )
 
     def validate_answer_and_transform_unit_match(self, arguments, transform_type):
-        if transform_type == "format_unit":
-            answer_id = arguments["value"].get("identifier")
-            unit = arguments["unit"]
-            if (
-                unit
-                != self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                    "unit"
-                ]
-            ):
-                self.add_error(
-                    error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                        answer_unit=self.questionnaire_schema.answers_with_context[
-                            answer_id
-                        ]["answer"]["unit"],
-                        transform_unit=unit,
-                    ),
-                    identifier=answer_id,
-                )
+        if transform_type != "format_unit":
+            return
+        answer_id = arguments["value"].get("identifier")
+        unit = arguments["unit"]
+        if not (
+            unit
+            != self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+                "unit"
+            ]
+        ):
+            return
+        self.add_error(
+            error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                answer_unit=self.questionnaire_schema.answers_with_context[answer_id][
+                    "answer"
+                ]["unit"],
+                transform_unit=unit,
+            ),
+            identifier=answer_id,
+        )
 
     def validate_placeholder_transforms(self, transforms):
         # First transform can't reference a previous transform
