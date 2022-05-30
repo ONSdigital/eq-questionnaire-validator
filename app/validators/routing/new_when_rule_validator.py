@@ -73,10 +73,8 @@ class NewWhenRuleValidator(RulesValidator):
                 )
             else:
                 argument_type = python_type_to_json_type(type(argument).__name__)
-            if isinstance(argument_type, list):
-                argument_types.extend(iter(argument_type))
-            else:
-                argument_types.append(argument_type)
+
+            argument_types.append(argument_type)
 
         return argument_types
 

@@ -76,12 +76,10 @@ def test_resolve_calculated_summary_value_source_json_type():
         "identifier": "currency-total-playback",
     }
 
-    assert resolve_value_source_json_type(value_source, questionnaire_schema) == [
-        TYPE_NUMBER,
-        TYPE_NUMBER,
-        TYPE_NUMBER,
-        TYPE_NUMBER,
-    ]
+    assert (
+        resolve_value_source_json_type(value_source, questionnaire_schema)
+        == TYPE_NUMBER
+    )
 
 
 @pytest.mark.parametrize(
