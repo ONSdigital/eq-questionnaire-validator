@@ -297,6 +297,9 @@
       },
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/metadata_value_source"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/calculated_summary_value_source"
       }
     ]
   },
