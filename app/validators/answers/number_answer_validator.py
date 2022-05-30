@@ -124,7 +124,10 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_referred_numeric_answer_decimals(self, answer_ranges):
         answer_values = answer_ranges[self.answer["id"]]
 
-        if answer_values["min_referred"] is not None:
+        if (
+            answer_values["min_referred"] is not None
+            and answer_values["min_referred"] in answer_ranges
+        ):
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
@@ -132,7 +135,10 @@ class NumberAnswerValidator(AnswerValidator):
                     referenced_id=answer_values["min_referred"],
                 )
 
-        if answer_values["max_referred"] is not None:
+        if (
+            answer_values["max_referred"] is not None
+            and answer_values["max_referred"] in answer_ranges
+        ):
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(

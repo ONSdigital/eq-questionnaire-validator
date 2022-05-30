@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "A test schema to demo Calculated Summary",
   "theme": "default",
-  "description": "A schema to showcase Calculated Summary page and usage in value source.",
+  "description": "An invalid schema demonstrating setting a calculated summary value source before the answers that make up the calculated summary total.",
   "metadata": [
     {
       "name": "user_id",
@@ -56,26 +56,6 @@
                 ]
               }
             },
-            {
-              "type": "Question",
-              "id": "second-number-block",
-              "question": {
-                "id": "second-number-question",
-                "title": "Second Number Question Title",
-                "type": "General",
-                "answers": [
-                  {
-                    "id": "second-number-answer",
-                    "label": "Second answer in currency label",
-                    "mandatory": true,
-                    "type": "Currency",
-                    "currency": "GBP",
-                    "decimal_places": 2
-                  }
-                ]
-              }
-            },
-
             {
               "type": "CalculatedSummary",
               "id": "currency-total-playback",
@@ -139,16 +119,7 @@
                         "source": "calculated_summary",
                         "identifier": "currency-total-playback"
                       }
-                    }
-                  },
-                  {
-                    "id": "set-maximum-answer",
-                    "description": "This is a description of the maximum value",
-                    "label": "Set a value less than the total above",
-                    "mandatory": true,
-                    "type": "Currency",
-                    "currency": "GBP",
-                    "decimal_places": 2,
+                    },
                     "maximum": {
                       "value": {
                         "source": "calculated_summary",
@@ -171,6 +142,25 @@
                   "text": "Set minimum and maximum values based on your calculated summary total of £{calculated_summary_answer}"
                 },
                 "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "second-number-block",
+              "question": {
+                "id": "second-number-question",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "second-number-answer",
+                    "label": "Second answer in currency label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
               }
             }
           ]
