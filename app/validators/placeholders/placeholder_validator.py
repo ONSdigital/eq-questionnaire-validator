@@ -135,9 +135,9 @@ class PlaceholderValidator(Validator):
             return None
         answer_id = arguments["value"].get("identifier")
         unit = arguments["unit"]
-        if not (
+        if (
             unit
-            != self.questionnaire_schema.answers_with_context[answer_id]["answer"][
+            == self.questionnaire_schema.answers_with_context[answer_id]["answer"][
                 "unit"
             ]
         ):
