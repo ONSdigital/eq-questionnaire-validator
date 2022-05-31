@@ -168,10 +168,13 @@ class PlaceholderValidator(Validator):
             ):
                 self.validate_option_label_from_value_placeholder(argument)
             self.validate_answer_type_for_transform(
-                argument, argument_name, first_transform["transform"]
+                argument=argument,
+                argument_name=argument_name,
+                transform_type=first_transform["transform"],
             )
         self.validate_answer_and_transform_unit_match(
-            first_transform.get("arguments"), first_transform["transform"]
+            arguments=first_transform.get("arguments"),
+            transform_type=first_transform["transform"],
         )
 
         # Previous transform must be referenced in all subsequent transforms
@@ -191,10 +194,13 @@ class PlaceholderValidator(Validator):
                 ):
                     self.validate_option_label_from_value_placeholder(argument)
                 self.validate_answer_type_for_transform(
-                    argument, argument_name, transform["transform"]
+                    argument=argument,
+                    argument_name=argument_name,
+                    transform_type=transform["transform"],
                 )
             self.validate_answer_and_transform_unit_match(
-                transform.get("arguments"), transform["transform"]
+                arguments=transform.get("arguments"),
+                transform_type=transform["transform"],
             )
 
             if not previous_transform_used:
