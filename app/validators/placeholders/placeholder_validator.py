@@ -111,10 +111,10 @@ class PlaceholderValidator(Validator):
     def validate_answer_type_for_transform(
         self, argument, argument_name, transform_type
     ):
-        if any(
-            transform_type not in ["format_unit", "format_percentage"]
-            and argument_name != "value"
-            and argument.get("source") != "answers"
+        if not(
+            transform_type in ["format_unit", "format_percentage"]
+            and argument_name == "value"
+            and argument.get("source") == "answers"
         ):
             return None
         answer_id = argument["identifier"]
