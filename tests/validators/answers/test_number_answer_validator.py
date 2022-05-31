@@ -1,4 +1,6 @@
 from app.validators.answers import NumberAnswerValidator
+from app.validators.questionnaire_schema import QuestionnaireSchema
+from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
 def test_minimum_value():
@@ -78,9 +80,14 @@ def test_invalid_range():
         "minimum": {"value": {"identifier": "answer-4", "source": "answers"}},
         "type": "Percentage",
     }
+    answers = {"answers": [answer]}
     validator = NumberAnswerValidator(answer)
 
-    validator.validate_referred_numeric_answer({"answer-3": {"min": None, "max": None}})
+    questionnaire_schema = QuestionnaireSchema(answers)
+
+    validator.validate_referred_numeric_answer(
+        questionnaire_schema.numeric_answer_ranges
+    )
 
     expected_errors = [
         {
@@ -92,6 +99,32 @@ def test_invalid_range():
             "message": validator.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
             "referenced_id": "answer-5",
             "answer_id": "answer-3",
+        },
+    ]
+
+    assert validator.errors == expected_errors
+
+
+def test_invalid_range_calculated_summary_source():
+    filename = "schemas/invalid/test_invalid_calculated_summary_answer_ranges.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer = schema.get_answer("set-minimum-answer")
+
+    validator = NumberAnswerValidator(answer)
+
+    validator.validate_referred_numeric_answer(schema.numeric_answer_ranges)
+
+    expected_errors = [
+        {
+            "message": validator.MINIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "referenced_id": "currency-total-playback",
+            "answer_id": "set-minimum-answer",
+        },
+        {
+            "message": validator.MAXIMUM_CANNOT_BE_SET_WITH_ANSWER,
+            "referenced_id": "currency-total-playback",
+            "answer_id": "set-minimum-answer",
         },
     ]
 
