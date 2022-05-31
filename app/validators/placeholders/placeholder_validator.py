@@ -98,7 +98,7 @@ class PlaceholderValidator(Validator):
 
         # if answer id doesn't exist, no further validation is done
         if not answer_id_exists:
-            return
+            return None
 
         if not any(
             x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
@@ -116,13 +116,13 @@ class PlaceholderValidator(Validator):
             and argument_name == "value"
             and argument.get("source") == "answers"
         ):
-            return
+            return None
         answer_id = argument["identifier"]
         answer_type = self.questionnaire_schema.answers_with_context[answer_id][
             "answer"
         ]["type"]
         if answer_type.lower() in transform_type:
-            return
+            return None
         self.add_error(
             error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
                 transform=transform_type, answer_type=answer_type
@@ -132,7 +132,7 @@ class PlaceholderValidator(Validator):
 
     def validate_answer_and_transform_unit_match(self, arguments, transform_type):
         if transform_type != "format_unit":
-            return
+            return None
         answer_id = arguments["value"].get("identifier")
         unit = arguments["unit"]
         if not (
@@ -141,7 +141,7 @@ class PlaceholderValidator(Validator):
                 "unit"
             ]
         ):
-            return
+            return None
         self.add_error(
             error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
                 answer_unit=self.questionnaire_schema.answers_with_context[answer_id][
