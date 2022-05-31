@@ -109,3 +109,65 @@ def test_validation_option_label_from_value(answer_id, expected_error):
     validator = PlaceholderValidator(schema_file)
     validator.validate_option_label_from_value_placeholder(answer_id)
     assert validator.errors == expected_error
+
+
+@pytest.mark.parametrize(
+    "argument, argument_name, transform_type, expected_error",
+    [
+        (
+            {"source": "answers", "identifier": "training-percentage"},
+            "value",
+            "format_percentage",
+            [
+                {
+                    "message": error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
+                        transform="format_percentage", answer_type="Unit"
+                    ),
+                    "identifier": "training-percentage",
+                }
+            ],
+        ),
+    ],
+)
+def test_validation_answer_type_for_transform(
+    argument, argument_name, transform_type, expected_error
+):
+    filename = (
+        "schemas/invalid/test_invalid_placeholder_answer_type_from_transform.json"
+    )
+    schema_file = _open_and_load_schema_file(filename)
+    validator = PlaceholderValidator(schema_file)
+    validator.validate_answer_type_for_transform(
+        argument, argument_name, transform_type
+    )
+    assert validator.errors == expected_error
+
+
+@pytest.mark.parametrize(
+    "arguments, transform_type, expected_error",
+    [
+        (
+            {"value": {"identifier": "average-distance"}, "unit": "meter"},
+            "format_unit",
+            [
+                {
+                    "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                        answer_unit="mile",
+                        transform_unit="meter",
+                    ),
+                    "identifier": "average-distance",
+                }
+            ],
+        ),
+    ],
+)
+def test_validation_answer_and_transform_unit_match(
+    arguments, transform_type, expected_error
+):
+    filename = (
+        "schemas/invalid/test_invalid_placeholder_answer_and_transform_unit_match.json"
+    )
+    schema_file = _open_and_load_schema_file(filename)
+    validator = PlaceholderValidator(schema_file)
+    validator.validate_answer_and_transform_unit_match(arguments, transform_type)
+    assert validator.errors == expected_error
