@@ -160,8 +160,8 @@ class PlaceholderValidator(Validator):
         for argument_name in first_transform.get("arguments"):
             argument = first_transform["arguments"][argument_name]
             if (
-                    isinstance(argument, dict)
-                    and argument.get("source") == "previous_transform"
+                isinstance(argument, dict)
+                and argument.get("source") == "previous_transform"
             ):
                 self.add_error(self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF)
 
@@ -171,8 +171,8 @@ class PlaceholderValidator(Validator):
             for argument_name in transform.get("arguments"):
                 argument = transform["arguments"][argument_name]
                 if (
-                        isinstance(argument, dict)
-                        and argument.get("source") == "previous_transform"
+                    isinstance(argument, dict)
+                    and argument.get("source") == "previous_transform"
                 ):
                     previous_transform_used = True
 
@@ -186,8 +186,8 @@ class PlaceholderValidator(Validator):
             for argument_name in transform.get("arguments"):
                 argument = transform["arguments"][argument_name]
                 if (
-                        transform["transform"] == "option_label_from_value"
-                        and argument_name == "answer_id"
+                    transform["transform"] == "option_label_from_value"
+                    and argument_name == "answer_id"
                 ):
                     self.validate_option_label_from_value_placeholder(argument)
 
@@ -196,5 +196,6 @@ class PlaceholderValidator(Validator):
                 )
 
             self.validate_answer_and_transform_unit_match(
-                arguments=transform.get("arguments"), transform_type=transform["transform"]
+                arguments=transform.get("arguments"),
+                transform_type=transform["transform"],
             )
