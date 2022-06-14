@@ -121,8 +121,10 @@ class PlaceholderValidator(Validator):
         answer_type = self.questionnaire_schema.answers_with_context[answer_id][
             "answer"
         ]["type"]
+
         if answer_type.lower() in transform_type:
             return None
+
         self.add_error(
             error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
                 transform=transform_type, answer_type=answer_type
@@ -133,7 +135,9 @@ class PlaceholderValidator(Validator):
     def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
         if transform_type != "format_unit":
             return None
-        answer_id = arguments["value"].get("identifier")
+
+        value = arguments["value"]
+        answer_id = value.get("identifier")
         unit = arguments["unit"]
 
         if (
