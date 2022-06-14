@@ -169,5 +169,5 @@ def test_validation_answer_and_transform_unit_match(
     )
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
-    validator.validate_answer_and_transform_unit_match(arguments, transform_type)
+    validator.validate_answer_and_transform_unit_match(arguments=arguments, transform_type=transform_type)
     assert validator.errors == expected_error
