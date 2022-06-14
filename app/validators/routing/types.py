@@ -52,7 +52,7 @@ def resolve_value_source_json_type(value_source, schema):
 
     if source == "calculated_summary":
         block_id = schema.get_block(value_source["identifier"])
-        answer_id = next(iter(block_id["calculation"]["answers_to_calculate"]))
+        answer_id = block_id["calculation"]["answers_to_calculate"][0]
         answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
         return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
