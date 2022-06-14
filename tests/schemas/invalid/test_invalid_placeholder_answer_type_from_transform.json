@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "Placeholder Test",
   "theme": "default",
-  "description": "A questionnaire to test placeholders",
+  "description": "A questionnaire to demo an invalid answer type for format_percentage transform",
   "navigation": {
     "visible": true
   },

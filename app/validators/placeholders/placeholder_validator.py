@@ -130,11 +130,12 @@ class PlaceholderValidator(Validator):
             identifier=answer_id,
         )
 
-    def validate_answer_and_transform_unit_match(self, arguments, transform_type):
+    def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
         if transform_type != "format_unit":
             return None
         answer_id = arguments["value"].get("identifier")
         unit = arguments["unit"]
+
         if (
             unit
             == self.questionnaire_schema.answers_with_context[answer_id]["answer"][
@@ -142,6 +143,7 @@ class PlaceholderValidator(Validator):
             ]
         ):
             return None
+
         self.add_error(
             error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
                 answer_unit=self.questionnaire_schema.answers_with_context[answer_id][
@@ -152,30 +154,16 @@ class PlaceholderValidator(Validator):
             identifier=answer_id,
         )
 
-    def validate_placeholder_transforms(self, transforms):
+    def _validate_placeholder_previous_transforms(self, transforms):
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
             argument = first_transform["arguments"][argument_name]
             if (
-                isinstance(argument, dict)
-                and argument.get("source") == "previous_transform"
+                    isinstance(argument, dict)
+                    and argument.get("source") == "previous_transform"
             ):
                 self.add_error(self.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF)
-            if (
-                first_transform["transform"] == "option_label_from_value"
-                and argument_name == "answer_id"
-            ):
-                self.validate_option_label_from_value_placeholder(argument)
-            self.validate_answer_type_for_transform(
-                argument=argument,
-                argument_name=argument_name,
-                transform_type=first_transform["transform"],
-            )
-        self.validate_answer_and_transform_unit_match(
-            arguments=first_transform.get("arguments"),
-            transform_type=first_transform["transform"],
-        )
 
         # Previous transform must be referenced in all subsequent transforms
         for transform in transforms[1:]:
@@ -183,25 +171,30 @@ class PlaceholderValidator(Validator):
             for argument_name in transform.get("arguments"):
                 argument = transform["arguments"][argument_name]
                 if (
-                    isinstance(argument, dict)
-                    and argument.get("source") == "previous_transform"
+                        isinstance(argument, dict)
+                        and argument.get("source") == "previous_transform"
                 ):
                     previous_transform_used = True
 
-                if (
-                    transform["transform"] == "option_label_from_value"
-                    and argument_name == "answer_id"
-                ):
-                    self.validate_option_label_from_value_placeholder(argument)
-                self.validate_answer_type_for_transform(
-                    argument=argument,
-                    argument_name=argument_name,
-                    transform_type=transform["transform"],
-                )
-            self.validate_answer_and_transform_unit_match(
-                arguments=transform.get("arguments"),
-                transform_type=transform["transform"],
-            )
-
             if not previous_transform_used:
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
+
+    def validate_placeholder_transforms(self, transforms):
+        self._validate_placeholder_previous_transforms(transforms)
+
+        for transform in transforms:
+            for argument_name in transform.get("arguments"):
+                argument = transform["arguments"][argument_name]
+                if (
+                        transform["transform"] == "option_label_from_value"
+                        and argument_name == "answer_id"
+                ):
+                    self.validate_option_label_from_value_placeholder(argument)
+
+                self.validate_answer_type_for_transform(
+                    transform.get("arguments"), argument_name, transform["transform"]
+                )
+
+            self.validate_answer_and_transform_unit_match(
+                arguments=transform.get("arguments"), transform_type=transform["transform"]
+            )
