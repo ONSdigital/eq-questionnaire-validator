@@ -114,27 +114,24 @@ class PlaceholderValidator(Validator):
         if not (
             transform_type in ["format_unit", "format_percentage"]
             and argument_name == "value"
-            and argument.get("value")
+            and argument.get("value", {}).get("source") == "answers"
         ):
             return None
 
-        if argument["value"].get("source") and argument["value"]["source"] == "answers":
-            answer_id = argument["value"]["identifier"]
-            answer_type = self.questionnaire_schema.answers_with_context[answer_id][
-                "answer"
-            ]["type"]
+        answer_id = argument["value"]["identifier"]
+        answer_type = self.questionnaire_schema.answers_with_context[answer_id][
+            "answer"
+        ]["type"]
 
-            if answer_type.lower() in transform_type:
-                return None
+        if answer_type.lower() in transform_type:
+            return None
 
-            self.add_error(
-                error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
-                    transform=transform_type, answer_type=answer_type
-                ),
-                identifier=answer_id,
-            )
-
-        return None
+        self.add_error(
+            error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
+                transform=transform_type, answer_type=answer_type
+            ),
+            identifier=answer_id,
+        )
 
     def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
         if transform_type != "format_unit":
