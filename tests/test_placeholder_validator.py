@@ -115,7 +115,7 @@ def test_validation_option_label_from_value(answer_id, expected_error):
     "argument, argument_name, transform_type, schema, expected_error",
     [
         (
-            {"source": "answers", "identifier": "training-percentage"},
+            {"value": {"source": "answers", "identifier": "training-percentage"}},
             "value",
             "format_percentage",
             "schemas/invalid/test_invalid_placeholder_answer_type_from_transform.json",
@@ -129,7 +129,7 @@ def test_validation_option_label_from_value(answer_id, expected_error):
             ],
         ),
         (
-            {"source": "answers", "identifier": "training-percentage"},
+            {"value": {"source": "answers", "identifier": "training-percentage"}},
             "value",
             "format_percentage",
             "schemas/invalid/test_invalid_placeholder_answer_type_from_transform_number.json",
