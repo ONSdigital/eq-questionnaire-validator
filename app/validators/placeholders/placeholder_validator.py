@@ -134,6 +134,8 @@ class PlaceholderValidator(Validator):
                 identifier=answer_id,
             )
 
+        return None
+
     def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
         if transform_type != "format_unit":
             return None
