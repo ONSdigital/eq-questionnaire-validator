@@ -43,7 +43,7 @@
       "title": "Percentage Input",
       "groups": [
         {
-          "id": "[percentage-group",
+          "id": "percentage-group",
           "blocks": [
             {
               "type": "Question",
@@ -56,7 +56,7 @@
                     "unit": "mile",
                     "type": "Unit",
                     "unit_length": "long",
-                    "label": "Average commuting distance",
+                    "label": "Percentage of company budget",
                     "default": 0
                   }
                 ],
