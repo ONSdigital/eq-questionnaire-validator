@@ -112,12 +112,13 @@ def test_validation_option_label_from_value(answer_id, expected_error):
 
 
 @pytest.mark.parametrize(
-    "argument, argument_name, transform_type, expected_error",
+    "argument, argument_name, transform_type, schema, expected_error",
     [
         (
             {"source": "answers", "identifier": "training-percentage"},
             "value",
             "format_percentage",
+            "schemas/invalid/test_invalid_placeholder_answer_type_from_transform.json",
             [
                 {
                     "message": error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
@@ -126,15 +127,27 @@ def test_validation_option_label_from_value(answer_id, expected_error):
                     "identifier": "training-percentage",
                 }
             ],
-        )
+        ),
+        (
+            {"source": "answers", "identifier": "training-percentage"},
+            "value",
+            "format_percentage",
+            "schemas/invalid/test_invalid_placeholder_answer_type_from_transform_number.json",
+            [
+                {
+                    "message": error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
+                        transform="format_percentage", answer_type="Number"
+                    ),
+                    "identifier": "training-percentage",
+                }
+            ],
+        ),
     ],
 )
 def test_validation_answer_type_for_transform(
-    argument, argument_name, transform_type, expected_error
+    argument, argument_name, transform_type, schema, expected_error
 ):
-    filename = (
-        "schemas/invalid/test_invalid_placeholder_answer_type_from_transform.json"
-    )
+    filename = schema
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
     validator.validate_answer_type_for_transform(
