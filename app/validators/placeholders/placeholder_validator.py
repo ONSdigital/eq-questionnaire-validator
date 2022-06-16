@@ -117,6 +117,7 @@ class PlaceholderValidator(Validator):
             and argument.get("source") == "answers"
         ):
             return None
+
         answer_id = argument["identifier"]
         answer_type = self.questionnaire_schema.answers_with_context[answer_id][
             "answer"
