@@ -77,6 +77,12 @@
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_number.json#/format_number"
             },
             {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_percentage.json#/format_percentage"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_unit.json#/format_unit"
+            },
+            {
               "$ref": "https://eq.ons.gov.uk/string_interpolation/transforms/format_currency.json#/format_currency"
             },
             {

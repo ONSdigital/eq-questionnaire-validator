@@ -1,0 +1,101 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Placeholder Test",
+  "theme": "default",
+  "description": "A questionnaire to demo an invalid (Number) answer type for format_percentage transform",
+  "navigation": {
+    "visible": true
+  },
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string",
+      "optional": true
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "percentage-section",
+      "title": "Percentage Input",
+      "groups": [
+        {
+          "id": "percentage-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "training-percentage-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "training-percentage",
+                    "mandatory": false,
+                    "type": "Number",
+                    "label": "Percentage of company budget",
+                    "default": 0
+                  }
+                ],
+                "id": "training-percentage-question",
+                "title": "What percentage of the company budget you spend on training ?",
+                "type": "General"
+              }
+            },
+            {
+              "id": "training-percentage-interstitial",
+              "content": {
+                "title": "Percentage of budget spent on training interstitial",
+                "contents": [
+                  {
+                    "description": {
+                      "text": "The percentage of the company budget you spend on training is <em>{answer_percentage}</em>",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer_percentage",
+                          "transforms": [
+                            {
+                              "transform": "format_percentage",
+                              "arguments": {
+                                "value": {
+                                  "source": "answers",
+                                  "identifier": "training-percentage"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "Interstitial"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Placeholder Test",
+  "theme": "default",
+  "description": "A questionnaire to test placeholders",
+  "navigation": {
+    "visible": true
+  },
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string",
+      "optional": true
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "percentage-section",
+      "title": "Percentage Input",
+      "groups": [
+        {
+          "id": "[percentage-group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "average-distance-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "average-distance",
+                    "mandatory": false,
+                    "unit": "mile",
+                    "type": "Unit",
+                    "unit_length": "long",
+                    "label": "Average commuting distance",
+                    "default": 0
+                  }
+                ],
+                "id": "average-distance-question",
+                "title": "What is the average commuting distance of an employee (in miles) ?",
+                "type": "General"
+              }
+            },
+            {
+              "id": "average-distance-interstitial",
+              "content": {
+                "title": "Average commuting distance interstitial",
+                "contents": [
+                  {
+                    "description": {
+                      "text": "The average commuting distance of an employee is <em>{answer_distance}</em>",
+                      "placeholders": [
+                        {
+                          "placeholder": "answer_distance",
+                          "transforms": [
+                            {
+                              "transform": "format_unit",
+                              "arguments": {
+                                "value": {
+                                  "source": "answers",
+                                  "identifier": "average-distance"
+                                },
+                                "unit": "meter",
+                                "unit_length": "long"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "Interstitial"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

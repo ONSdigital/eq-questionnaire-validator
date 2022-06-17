@@ -1,0 +1,34 @@
+{
+  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_unit.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "format_unit": {
+    "type": "object",
+    "properties": {
+      "transform": {
+        "type": "string",
+        "enum": ["format_unit"]
+      },
+      "arguments": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+          },
+          "unit_length": {
+            "description": "The formatting length. e.g. 1h (narrow) / 1 hr (short) / 1 hour (long)",
+            "default": "short",
+            "type": "string",
+            "enum": ["short", "narrow", "long"]
+          },
+          "unit": {
+            "$ref": "https://eq.ons.gov.uk/lists/units.json#/unit"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value", "unit"]
+      }
+    },
+    "additionalProperties": false,
+    "required": ["transform", "arguments"]
+  }
+}
