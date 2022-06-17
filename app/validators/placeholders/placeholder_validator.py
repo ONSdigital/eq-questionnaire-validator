@@ -126,9 +126,12 @@ class PlaceholderValidator(Validator):
         if answer_type.lower() in transform_type:
             return None
 
+        expected_type = transform_type.split("_")[1].title()
         self.add_error(
             error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
-                transform=transform_type, answer_type=answer_type
+                transform=transform_type,
+                expected_type=expected_type,
+                answer_type=answer_type,
             ),
             identifier=answer_id,
         )

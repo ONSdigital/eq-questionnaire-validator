@@ -122,7 +122,9 @@ def test_validation_option_label_from_value(answer_id, expected_error):
             [
                 {
                     "message": error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
-                        transform="format_percentage", answer_type="Unit"
+                        transform="format_percentage",
+                        expected_type="Percentage",
+                        answer_type="Unit",
                     ),
                     "identifier": "training-percentage",
                 }
@@ -136,7 +138,9 @@ def test_validation_option_label_from_value(answer_id, expected_error):
             [
                 {
                     "message": error_messages.ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID.format(
-                        transform="format_percentage", answer_type="Number"
+                        transform="format_percentage",
+                        expected_type="Percentage",
+                        answer_type="Number",
                     ),
                     "identifier": "training-percentage",
                 }
