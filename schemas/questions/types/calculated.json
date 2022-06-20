@@ -43,8 +43,15 @@
               "description": "The id of an answer from which to obtain the total to validate against"
             },
             "value": {
-              "type": "integer",
-              "description": "A hard coded total to validate against"
+              "description": "A hard coded total to validate against or a value source",
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations"
+                }
+              ]
             },
             "answers_to_calculate": {
               "type": "array",
