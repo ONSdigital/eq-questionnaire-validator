@@ -163,7 +163,7 @@
     ]
   },
   "value_source_for_calculations": {
-    "description": "Any value source except location",
+    "description": "Only answer and calculated summary value source are supported in current implementation",
     "anyOf": [
       {
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
