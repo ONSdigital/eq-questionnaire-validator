@@ -45,7 +45,7 @@
             "value": {
               "oneOf": [
                 {
-                  "type": "integer",
+                  "type": "number",
                   "description": "A hard coded total to validate against"
                 },
                 {
