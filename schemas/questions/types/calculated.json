@@ -43,13 +43,14 @@
               "description": "The id of an answer from which to obtain the total to validate against"
             },
             "value": {
-              "description": "A hard coded total to validate against or a value source",
               "oneOf": [
                 {
-                  "type": "integer"
+                  "type": "integer",
+                  "description": "A hard coded total to validate against"
                 },
                 {
-                  "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations"
+                  "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations",
+                  "description": "A value source to validate against"
                 }
               ]
             },
