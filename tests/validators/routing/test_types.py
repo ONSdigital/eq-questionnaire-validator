@@ -12,6 +12,7 @@ from app.validators.routing.types import (
     TYPE_STRING,
     python_type_to_json_type,
     resolve_value_source_json_type,
+    resolve_value_source_calculation_type,
 )
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
@@ -78,6 +79,35 @@ def test_resolve_calculated_summary_value_source_json_type():
 
     assert (
         resolve_value_source_json_type(value_source, questionnaire_schema)
+        == TYPE_NUMBER
+    )
+
+
+def test_resolve_answer_value_source_calculation_type():
+    filename = "schemas/valid/test_valid_value_source_calculations.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    value_source = {"source": "answers", "identifier": "total-answer"}
+
+    assert (
+        resolve_value_source_calculation_type(value_source, questionnaire_schema)
+        == TYPE_NUMBER
+    )
+
+
+def test_resolve_calculated_summary_value_source_calculation_type():
+    filename = "schemas/valid/test_valid_value_source_calculations.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    value_source = {
+        "source": "calculated_summary",
+        "identifier": "number-total-playback",
+    }
+
+    assert (
+        resolve_value_source_calculation_type(value_source, questionnaire_schema)
         == TYPE_NUMBER
     )
 
