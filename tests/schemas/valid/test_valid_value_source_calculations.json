@@ -43,7 +43,9 @@
               "question": {
                 "id": "total-question",
                 "title": "Total",
-                "description": ["Enter a number to breakdown in subsequent questions and calculated summary."],
+                "description": [
+                  "Enter a number to breakdown in subsequent questions and calculated summary."
+                ],
                 "type": "General",
                 "answers": [
                   {
@@ -66,7 +68,9 @@
               "question": {
                 "id": "breakdown-question",
                 "title": "Breakdown validated against an answer value source",
-                "description": ["This is a breakdown of the total number from the previous question."],
+                "description": [
+                  "This is a breakdown of the total number from the previous question."
+                ],
                 "type": "Calculated",
                 "calculations": [
                   {
@@ -75,7 +79,12 @@
                       "source": "answers",
                       "identifier": "total-answer"
                     },
-                    "answers_to_calculate": ["breakdown-1", "breakdown-2", "breakdown-3", "breakdown-4"],
+                    "answers_to_calculate": [
+                      "breakdown-1",
+                      "breakdown-2",
+                      "breakdown-3",
+                      "breakdown-4"
+                    ],
                     "conditions": ["equals"]
                   }
                 ],
@@ -127,7 +136,9 @@
               "question": {
                 "id": "second-breakdown-question",
                 "title": "Breakdown validated against calculated summary value source",
-                "description": ["This is a breakdown of the grand total from the previous calculated summary."],
+                "description": [
+                  "This is a breakdown of the grand total from the previous calculated summary."
+                ],
                 "type": "Calculated",
                 "calculations": [
                   {
@@ -136,7 +147,12 @@
                       "source": "calculated_summary",
                       "identifier": "number-total-playback"
                     },
-                    "answers_to_calculate": ["second-breakdown-1", "second-breakdown-2", "second-breakdown-3", "second-breakdown-4"],
+                    "answers_to_calculate": [
+                      "second-breakdown-1",
+                      "second-breakdown-2",
+                      "second-breakdown-3",
+                      "second-breakdown-4"
+                    ],
                     "conditions": ["equals"]
                   }
                 ],
