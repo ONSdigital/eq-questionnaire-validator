@@ -64,19 +64,5 @@ def resolve_value_source_json_type(value_source, schema):
     return TYPE_STRING
 
 
-def resolve_value_source_calculation_type(value_source, schema):
-    source = value_source["source"]
-    if source == "answers":
-        answer_id = value_source["identifier"]
-        answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
-        return answer_type.lower()
-
-    if source == "calculated_summary":
-        block_id = schema.get_block(value_source["identifier"])
-        answer_id = block_id["calculation"]["answers_to_calculate"][0]
-        answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
-        return answer_type.lower()
-
-
 def python_type_to_json_type(python_type):
     return PYTHON_TYPE_TO_JSON_TYPE[python_type]

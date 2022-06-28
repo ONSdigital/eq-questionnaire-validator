@@ -11,7 +11,6 @@ from app.validators.routing.types import (
     TYPE_OBJECT,
     TYPE_STRING,
     python_type_to_json_type,
-    resolve_value_source_calculation_type,
     resolve_value_source_json_type,
 )
 from tests.test_questionnaire_validator import _open_and_load_schema_file
@@ -90,10 +89,12 @@ def test_resolve_answer_value_source_calculation_type():
 
     value_source = {"source": "answers", "identifier": "total-answer"}
 
-    assert (
-        resolve_value_source_calculation_type(value_source, questionnaire_schema)
-        == TYPE_NUMBER
-    )
+    answer_id = value_source["identifier"]
+    answer_type = (
+        questionnaire_schema.answers_with_context[answer_id]["answer"]["type"]
+    ).lower()
+
+    assert answer_type == TYPE_NUMBER
 
 
 def test_resolve_calculated_summary_value_source_calculation_type():
@@ -106,10 +107,13 @@ def test_resolve_calculated_summary_value_source_calculation_type():
         "identifier": "number-total-playback",
     }
 
-    assert (
-        resolve_value_source_calculation_type(value_source, questionnaire_schema)
-        == TYPE_NUMBER
-    )
+    block_id = questionnaire_schema.get_block(value_source["identifier"])
+    answer_id = block_id["calculation"]["answers_to_calculate"][0]
+    answer_type = (
+        questionnaire_schema.answers_with_context[answer_id]["answer"]["type"]
+    ).lower()
+
+    assert answer_type == TYPE_NUMBER
 
 
 @pytest.mark.parametrize(
