@@ -54,6 +54,28 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "Question",
+              "id": "block-2",
+              "question": {
+                "answers": [
+                  {
+                    "id": "answer-2",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "Estimate",
+                        "value": "Estimate"
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "id": "question-2",
+                "title": "Is this an estimate?",
+                "type": "General"
+              }
             }
           ]
         }
