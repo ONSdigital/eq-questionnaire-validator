@@ -2,6 +2,8 @@ from app.validators.questions.calculated_question_validator import (
     CalculatedQuestionValidator,
 )
 
+DATA_VERSION = "0.0.3"
+
 
 def test_invalid_id_in_answers_to_calculate():
     question = {
@@ -36,7 +38,7 @@ def test_invalid_id_in_answers_to_calculate():
         "title": "Breakdown",
         "type": "Calculated",
     }
-    validator = CalculatedQuestionValidator(question)
+    validator = CalculatedQuestionValidator(question, DATA_VERSION)
     validator.validate()
 
     expected_error_messages = [

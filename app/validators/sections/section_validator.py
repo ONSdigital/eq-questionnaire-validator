@@ -19,6 +19,7 @@ class SectionValidator(Validator):
         self.section = schema_element
         self.questionnaire_schema = questionnaire_schema
         self.context["section_id"] = self.section["id"]
+        self.data_version = questionnaire_schema.schema["data_version"]
 
     def validate(self):
         self.validate_repeat()
@@ -134,7 +135,10 @@ class SectionValidator(Validator):
         question = block_or_variant.get("question")
 
         if question:
-            question_validator = get_question_validator(question)
+            if not isinstance(self.data_version, str):
+                print("test")
+
+            question_validator = get_question_validator(question, self.data_version)
 
             self.errors += question_validator.validate()
 
