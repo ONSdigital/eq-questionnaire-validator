@@ -82,40 +82,6 @@ def test_resolve_calculated_summary_value_source_json_type():
     )
 
 
-def test_resolve_answer_value_source_calculation_type():
-    filename = "schemas/valid/test_valid_value_source_calculations.json"
-
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-
-    value_source = {"source": "answers", "identifier": "total-answer"}
-
-    answer_id = value_source["identifier"]
-    answer_type = (
-        questionnaire_schema.answers_with_context[answer_id]["answer"]["type"]
-    ).lower()
-
-    assert answer_type == TYPE_NUMBER
-
-
-def test_resolve_calculated_summary_value_source_calculation_type():
-    filename = "schemas/valid/test_valid_value_source_calculations.json"
-
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-
-    value_source = {
-        "source": "calculated_summary",
-        "identifier": "number-total-playback",
-    }
-
-    block_id = questionnaire_schema.get_block(value_source["identifier"])
-    answer_id = block_id["calculation"]["answers_to_calculate"][0]
-    answer_type = (
-        questionnaire_schema.answers_with_context[answer_id]["answer"]["type"]
-    ).lower()
-
-    assert answer_type == TYPE_NUMBER
-
-
 @pytest.mark.parametrize(
     "source, selector, json_type",
     [
