@@ -1,8 +1,5 @@
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.questions import get_question_validator
-from app.validators.questions.calculated_question_validator import (
-    CalculatedQuestionValidator,
-)
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
