@@ -3,7 +3,7 @@ from app.validators.validator import Validator
 
 
 class AnswerValidator(Validator):
-    OPTIONS_MISSING_Q_CODE = "Option q_code must be provided"
+    OPTION_MISSING_Q_CODE = "Option q_code must be provided"
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     DETAIL_ANSWER_MISSING_Q_CODE = "Detail answer q_code must be provided"
 
@@ -29,7 +29,7 @@ class AnswerValidator(Validator):
                 for option in self.answer.get("options"):
                     if not option.get("q_code") and not option.get("detail_answer"):
                         self.add_error(
-                            self.OPTIONS_MISSING_Q_CODE, answer_id=self.answer["id"]
+                            self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"]
                         )
                     elif detail_answer := option.get("detail_answer"):
                         if (
