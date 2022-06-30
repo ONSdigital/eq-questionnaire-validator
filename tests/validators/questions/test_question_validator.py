@@ -1,7 +1,5 @@
 from app.validators.questions import get_question_validator
 
-DATA_VERSION = "0.0.3"
-
 
 def test_no_answer_label_single_answer():
     question = {

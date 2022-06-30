@@ -2,8 +2,6 @@ from app.validators.questions.date_range_question_validator import (
     DateRangeQuestionValidator,
 )
 
-DATA_VERSION = "0.0.3"
-
 
 def test_invalid_date_range():
     question = {

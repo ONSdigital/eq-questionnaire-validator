@@ -32,7 +32,10 @@ class AnswerValidator(Validator):
                             self.OPTIONS_MISSING_Q_CODE, answer_id=self.answer["id"]
                         )
                     elif detail_answer := option.get("detail_answer"):
-                        if not detail_answer.get("q_code") and self.answer.get("type") == "Radio":
+                        if (
+                            not detail_answer.get("q_code")
+                            and self.answer.get("type") == "Radio"
+                        ):
                             self.add_error(
                                 self.DETAIL_ANSWER_MISSING_Q_CODE,
                                 answer_id=self.answer["id"],
