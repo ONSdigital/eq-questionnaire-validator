@@ -10,9 +10,13 @@ from app.validators.questions.mutually_exclusive_validator import (
 from app.validators.questions.question_validator import QuestionValidator
 
 
-def get_question_validator(question):
+def get_question_validator(question, *schema):
+    if schema:
+        validators = {
+            "Calculated": CalculatedQuestionValidator,
+        }
+        return validators.get(question["type"], QuestionValidator)(question, schema)
     validators = {
-        "Calculated": CalculatedQuestionValidator,
         "DateRange": DateRangeQuestionValidator,
         "MutuallyExclusive": MutuallyExclusiveQuestionValidator,
     }

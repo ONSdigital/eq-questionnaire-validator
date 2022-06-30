@@ -134,7 +134,12 @@ class SectionValidator(Validator):
         question = block_or_variant.get("question")
 
         if question:
-            question_validator = get_question_validator(question)
+            if question["type"] == "Calculated":
+                question_validator = get_question_validator(
+                    question, self.questionnaire_schema
+                )
+            else:
+                question_validator = get_question_validator(question)
 
             self.errors += question_validator.validate()
 
