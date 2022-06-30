@@ -1,5 +1,5 @@
 from app.validators.questions.question_validator import QuestionValidator
-from app.validators.routing.types import TYPE_NUMBER, ANSWER_TYPE_TO_JSON_TYPE
+from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
 
 class CalculatedQuestionValidator(QuestionValidator):
