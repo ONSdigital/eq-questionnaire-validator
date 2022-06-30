@@ -18,6 +18,4 @@ def get_answer_validator(answer, questionnaire_schema):
     }
     validator_type = validators.get(answer["type"], AnswerValidator)
 
-    if validator_type in [OptionAnswerValidator, NumberAnswerValidator]:
-        return validator_type(answer, questionnaire_schema)
-    return validator_type(answer)
+    return validator_type(answer, questionnaire_schema)

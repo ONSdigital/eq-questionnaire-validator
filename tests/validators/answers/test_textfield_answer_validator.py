@@ -1,4 +1,5 @@
 from app.validators.answers import TextFieldAnswerValidator
+from tests.conftest import get_mock_schema_with_data_version
 
 
 def test_textfield_validator():
@@ -9,7 +10,9 @@ def test_textfield_validator():
         "type": "TextField",
         "suggestions_url": "this isn't a valid url",
     }
-    validator = TextFieldAnswerValidator(answer)
+    validator = TextFieldAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     validator.validate()
 
@@ -26,7 +29,9 @@ def test_textfield_validator_success():
         "type": "TextField",
         "suggestions_url": "http://www.google.com/somepath",
     }
-    validator = TextFieldAnswerValidator(answer)
+    validator = TextFieldAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     validator.validate()
 

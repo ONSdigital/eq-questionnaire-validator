@@ -11,7 +11,7 @@ def test_no_answer_label_single_answer():
         "answers": [{"id": "number-1", "mandatory": False, "type": "Number"}],
     }
 
-    validator = get_question_validator(question, DATA_VERSION)
+    validator = get_question_validator(question)
     validator.validate()
 
     assert not validator.errors
@@ -33,7 +33,7 @@ def test_no_answer_label_multiple_answers():
         ],
     }
 
-    validator = get_question_validator(question, DATA_VERSION)
+    validator = get_question_validator(question)
     validator.validate()
 
     expected_error_messages = [
@@ -76,7 +76,7 @@ def test_no_answer_label_mutually_exclusive():
         ],
     }
 
-    validator = get_question_validator(question, DATA_VERSION)
+    validator = get_question_validator(question)
     validator.validate()
 
     assert not validator.errors
@@ -108,7 +108,7 @@ def test_no_answer_label_two_answers_last_answer_single_checkbox():
         ],
     }
 
-    validator = get_question_validator(question, DATA_VERSION)
+    validator = get_question_validator(question)
     validator.validate()
 
     assert not validator.errors

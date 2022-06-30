@@ -1,5 +1,6 @@
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.answers.number_answer_validator import NumberAnswerValidator
+from tests.conftest import get_mock_schema_with_data_version
 
 
 def test_number_of_decimals():
@@ -11,7 +12,9 @@ def test_number_of_decimals():
         "type": "Number",
     }
 
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     validator.validate_decimals()
 
@@ -33,6 +36,8 @@ def test_invalid_single_date_period():
         "type": "Date",
     }
 
-    answer_validator = DateAnswerValidator(answer)
+    answer_validator = DateAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     assert not answer_validator.is_offset_date_valid()

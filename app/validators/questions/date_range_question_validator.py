@@ -9,8 +9,8 @@ class DateRangeQuestionValidator(QuestionValidator):
         "Days/Months can not be used in period_limit for yyyy date range"
     )
 
-    def __init__(self, question, data_version):
-        super().__init__(question, data_version)
+    def __init__(self, question):
+        super().__init__(question)
 
         self.period_limits = self.question.get("period_limits", {})
 

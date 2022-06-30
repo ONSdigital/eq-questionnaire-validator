@@ -16,7 +16,7 @@ def test_invalid_date_range():
         "type": "DateRange",
     }
 
-    validator = DateRangeQuestionValidator(question, DATA_VERSION)
+    validator = DateRangeQuestionValidator(question)
     validator.validate_range()
 
     expected_error_messages = [
@@ -59,7 +59,7 @@ def test_invalid_yyyy_date_range_period():
         "type": "DateRange",
     }
 
-    validator = DateRangeQuestionValidator(question, DATA_VERSION)
+    validator = DateRangeQuestionValidator(question)
     validator.validate_period_limits()
 
     expected_error_messages = [
@@ -105,7 +105,7 @@ def test_invalid_mm_yyyy_date_range_period():
         "type": "DateRange",
     }
 
-    validator = DateRangeQuestionValidator(question, DATA_VERSION)
+    validator = DateRangeQuestionValidator(question)
     validator.validate_period_limits()
 
     expected_error_messages = [
