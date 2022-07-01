@@ -32,7 +32,11 @@ class AnswerValidator(Validator):
 
         if self.answer.get("options"):
             for option in self.answer.get("options"):
-                if not option.get("q_code") and not option.get("detail_answer"):
+                if (
+                    not option.get("q_code")
+                    and not option.get("detail_answer")
+                    and self.answer.get("type") != "Radio"
+                ):
                     self.add_error(
                         self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"]
                     )
