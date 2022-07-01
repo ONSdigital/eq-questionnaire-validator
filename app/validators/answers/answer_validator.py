@@ -22,6 +22,10 @@ class AnswerValidator(Validator):
         return self.errors
 
     def _validate_q_codes(self):
+
+        if self.questionnaire_schema.schema["data_version"] != "0.0.1":
+            return
+
         question_id = self.questionnaire_schema.get_block_id_by_answer_id(
             self.answer["id"]
         )
@@ -34,9 +38,6 @@ class AnswerValidator(Validator):
             )
             return
         # No check in options as ConfirmationQuestion answer can be Radio type only and Radio options are already checked for q_code presence elsewhere
-
-        if self.questionnaire_schema.schema["data_version"] != "0.0.1":
-            return
 
         if self.answer.get("q_code") and not self.answer.get("options"):
             return
