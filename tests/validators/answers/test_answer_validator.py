@@ -215,3 +215,30 @@ def test_missing_detail_answer_q_code_checkbox():
     expected_error_messages = []
 
     assert expected_error_messages == validator.errors
+
+
+def test_extra_q_code_confirmation_question():
+    filename = "schemas/valid/test_q_codes.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    answer = {
+        "type": "Radio",
+        "id": "confirmation-1-answer",
+        "q_code": "1",
+        "options": [
+            {"label": "Yes this is correct", "value": "Yes this is correct"},
+            {"label": "No I need to change this", "value": "No I need to change this"},
+        ],
+        "mandatory": True,
+    }
+
+    validator = get_answer_validator(answer, schema)
+    validator.validate()
+
+    expected_error_messages = [
+        {
+            "answer_id": "confirmation-1-answer",
+            "message": "Confirmation question has q_code",
+        }
+    ]
+
+    assert expected_error_messages == validator.errors

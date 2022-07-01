@@ -1,3 +1,4 @@
+# pylint: disable=too-many-public-methods
 import collections
 from collections import defaultdict
 from functools import cached_property, lru_cache
@@ -338,6 +339,17 @@ class QuestionnaireSchema:
     @lru_cache
     def _get_path_id(self, path):
         return jp.match1(path + ".id", self.schema)
+
+    @lru_cache
+    def get_question_id_by_answer_id(self, answer_id):
+        for question, context in self.questions_with_context:
+            for answer in question.get("answers", []):
+                if answer_id == answer["id"]:
+                    return context["block"]
+                for option in answer.get("options", []):
+                    detail_answer = option.get("detail_answer")
+                    if detail_answer and answer_id == detail_answer["id"]:
+                        return context["block"]
 
     def _get_numeric_range_values(self, answer, answer_ranges):
         min_value = answer.get("minimum", {}).get("value", {})

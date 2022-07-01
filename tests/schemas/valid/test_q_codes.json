@@ -4,7 +4,7 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.1",
   "survey_id": "0",
-  "title": "Q codes on different blocks",
+  "title": "q_codes on different blocks",
   "theme": "default",
   "description": "A questionnaire to demo q_codes in answers for data version 0.0.1",
   "metadata": [
@@ -150,6 +150,39 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "ConfirmationQuestion",
+              "id": "confirmation-1",
+              "question": {
+                "type": "General",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "confirmation-1-answer",
+                    "options": [
+                      {
+                        "label": "Yes this is correct",
+                        "value": "Yes this is correct"
+                      },
+                      {
+                        "label": "No I need to change this",
+                        "value": "No I need to change this"
+                      }
+                    ],
+                    "mandatory": true
+                  }
+                ],
+                "id": "confirmation-1-question",
+                "title": "The current number of employees for this Company is <em>0</em>, is this correct?"
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "section": "End"
+                  }
+                }
+              ]
             }
           ],
           "id": "default-group"
