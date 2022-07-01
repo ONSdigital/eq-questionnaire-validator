@@ -36,7 +36,6 @@ class AnswerValidator(Validator):
             self.add_error(
                 self.CONFIRMATION_QUESTION_Q_CODE, answer_id=self.answer["id"]
             )
-            return
         # No check in options as ConfirmationQuestion answer can be Radio type only and Radio options are already checked for q_code presence elsewhere
 
         if self.answer.get("q_code") and not self.answer.get("options"):
@@ -44,7 +43,6 @@ class AnswerValidator(Validator):
 
         if not self.answer.get("q_code") and self.answer.get("type") != "Checkbox":
             self.add_error(self.ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"])
-            return
 
         if self.answer.get("options") and self.check_options():
             self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
