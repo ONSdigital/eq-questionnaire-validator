@@ -29,23 +29,24 @@ class AnswerValidator(Validator):
         question_id = self.questionnaire_schema.get_block_id_by_answer_id(
             self.answer["id"]
         )
-
-        if self.questionnaire_schema.get_block(question_id).get(
-            "type"
-        ) == "ConfirmationQuestion" and self.answer.get("q_code"):
+        confirmation_question = (
+            self.questionnaire_schema.get_block(question_id).get("type")
+            == "ConfirmationQuestion"
+        )
+        if confirmation_question and self.answer.get("q_code"):
             self.add_error(
                 self.CONFIRMATION_QUESTION_Q_CODE, answer_id=self.answer["id"]
-            )
-        # No check in options as ConfirmationQuestion answer can be Radio type only and Radio options are already checked for q_code presence elsewhere
+            )  # No check in options as ConfirmationQuestion answer can be Radio type only and Radio options are already checked for q_code presence elsewhere
 
-        if self.answer.get("q_code") and not self.answer.get("options"):
-            return
+        if not confirmation_question:
+            if self.answer.get("q_code") and not self.answer.get("options"):
+                return
 
-        if not self.answer.get("q_code") and self.answer.get("type") != "Checkbox":
-            self.add_error(self.ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"])
+            if not self.answer.get("q_code") and self.answer.get("type") != "Checkbox":
+                self.add_error(self.ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"])
 
-        if self.answer.get("options") and self.check_options():
-            self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
+            if self.answer.get("options") and self.check_options():
+                self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
 
     def check_options(self):
         for option in self.answer.get("options"):
