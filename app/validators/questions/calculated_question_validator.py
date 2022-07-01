@@ -34,7 +34,7 @@ class CalculatedQuestionValidator(QuestionValidator):
 
     def validate_value_source(self):
         """
-        Validates that source answer is of number type
+        Validates that source answer or calculated summary is of number type
         """
         for calculation in self.question.get("calculations"):
             if answer_id := calculation.get("answer_id"):
@@ -44,6 +44,7 @@ class CalculatedQuestionValidator(QuestionValidator):
 
             elif calculation.get("value") and calculation.get("value").get("source"):
                 answer_id = calculation.get("value").get("identifier")
-                self.check_answer_type(
-                    self.schema[0][0].get_answer_type(answer_id), answer_id
-                )
+                if calculation.get("value").get("source") == "answers":
+                    self.check_answer_type(
+                        self.schema[0][0].get_answer_type(answer_id), answer_id
+                    )
