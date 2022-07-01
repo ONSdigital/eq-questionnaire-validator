@@ -21,9 +21,9 @@ class AnswerValidator(Validator):
         return self.errors
 
     def _validate_q_codes(self):
-        if self.questionnaire_schema.schema["data_version"] != "0.0.1" or (
-            self.answer.get("q_code") and not self.answer.get("options")
-        ):
+        if self.questionnaire_schema.schema["data_version"] != "0.0.1":
+            return
+        if self.answer.get("q_code") and not self.answer.get("options"):
             return
 
         if not self.answer.get("q_code") and self.answer.get("type") != "Checkbox":
