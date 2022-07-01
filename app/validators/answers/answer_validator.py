@@ -22,7 +22,7 @@ class AnswerValidator(Validator):
         return self.errors
 
     def _validate_q_codes(self):
-        question_id = self.questionnaire_schema.get_question_id_by_answer_id(
+        question_id = self.questionnaire_schema.get_block_id_by_answer_id(
             self.answer["id"]
         )
 

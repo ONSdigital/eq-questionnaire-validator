@@ -341,7 +341,7 @@ class QuestionnaireSchema:
         return jp.match1(path + ".id", self.schema)
 
     @lru_cache
-    def get_question_id_by_answer_id(self, answer_id):
+    def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
             for answer in question.get("answers", []):
                 if answer_id == answer["id"]:
