@@ -97,20 +97,6 @@
                     "mandatory": false,
                     "decimal_places": 2,
                     "type": "Number"
-                  },
-                  {
-                    "id": "breakdown-3",
-                    "label": "Breakdown 3",
-                    "mandatory": false,
-                    "decimal_places": 2,
-                    "type": "Number"
-                  },
-                  {
-                    "id": "breakdown-4",
-                    "label": "Breakdown 4",
-                    "mandatory": false,
-                    "decimal_places": 2,
-                    "type": "Number"
                   }
                 ]
               }
