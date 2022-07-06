@@ -50,7 +50,7 @@
                 },
                 {
                   "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations",
-                  "description": "A value source to validate against"
+                  "description": "A value source to validate against that resolves to a number."
                 }
               ]
             },
