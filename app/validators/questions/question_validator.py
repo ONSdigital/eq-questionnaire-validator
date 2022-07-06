@@ -7,7 +7,7 @@ class QuestionValidator(Validator):
     )
     question = {}
 
-    def __init__(self, schema_element, *schema):
+    def __init__(self, schema_element, schema=None):
         super().__init__(schema_element)
         self.question = schema_element
         self.answers = self.question.get("answers", [])
