@@ -11,7 +11,7 @@ from app.validators.questions.question_validator import QuestionValidator
 
 
 def get_question_validator(question, schema=None):
-    if schema:
+    if question["type"] == "Calculated":
         validators = {
             "Calculated": CalculatedQuestionValidator,
         }
