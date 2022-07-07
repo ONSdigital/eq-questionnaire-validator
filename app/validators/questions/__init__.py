@@ -10,7 +10,7 @@ from app.validators.questions.mutually_exclusive_validator import (
 from app.validators.questions.question_validator import QuestionValidator
 
 
-def get_question_validator(question, *schema):
+def get_question_validator(question, schema=None):
     if schema:
         validators = {
             "Calculated": CalculatedQuestionValidator,

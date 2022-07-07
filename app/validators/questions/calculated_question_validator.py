@@ -24,7 +24,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                     self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
 
     def _validate_answer_is_numeric(self, answer_id):
-        answer_type = self.schema[0].get_answer_type(answer_id)
+        answer_type = self.schema.get_answer_type(answer_id)
         if ANSWER_TYPE_TO_JSON_TYPE[answer_type.value] != TYPE_NUMBER:
             self.add_error(
                 self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
