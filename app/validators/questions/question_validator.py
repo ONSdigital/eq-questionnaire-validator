@@ -12,7 +12,7 @@ class QuestionValidator(Validator):
         self.question = schema_element
         self.answers = self.question.get("answers", [])
         self.context["question_id"] = schema_element["id"]
-        self.schema = schema or None
+        self.schema = schema
 
     def validate(self):
         if self.question["type"] != "MutuallyExclusive":

@@ -9,7 +9,7 @@ class CalculatedQuestionValidator(QuestionValidator):
     def validate(self):
         super().validate()
         self.validate_calculations()
-        self.validate_value_source()
+        self.validate_calculations_value_source_is_numeric()
         return self.errors
 
     def validate_calculations(self):
@@ -25,6 +25,7 @@ class CalculatedQuestionValidator(QuestionValidator):
 
     def _validate_answer_is_numeric(self, answer_id):
         answer_type = self.schema.get_answer_type(answer_id)
+
         if ANSWER_TYPE_TO_JSON_TYPE[answer_type.value] != TYPE_NUMBER:
             self.add_error(
                 self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
@@ -33,16 +34,19 @@ class CalculatedQuestionValidator(QuestionValidator):
                 identifier=answer_id,
             )
 
-    def validate_value_source(self):
+    def validate_calculations_value_source_is_numeric(self):
         """
         Validates that source answer is of number type
         """
         for calculation in self.question.get("calculations"):
+            value = calculation.get("value")
+
             if answer_id := calculation.get("answer_id"):
                 self._validate_answer_is_numeric(answer_id)
 
-            elif calculation.get("value") and calculation.get("value").get("source"):
-                answer_id = calculation.get("value").get("identifier")
+            elif value and value.get("source"):
+                answer_id = value.get("identifier")
                 # Calculated summary value source is validated elsewhere and must be of a number type
-                if calculation.get("value").get("source") == "answers":
+
+                if value.get("source") == "answers":
                     self._validate_answer_is_numeric(answer_id)
