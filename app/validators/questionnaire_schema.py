@@ -9,6 +9,8 @@ from jsonpath_rw import parse
 from app.answer_type import AnswerType
 
 MAX_NUMBER = 9999999999
+MIN_NUMBER = -999999999
+MAX_DECIMAL_PLACES = 6
 
 
 def has_default_route(routing_rules):
@@ -264,7 +266,7 @@ class QuestionnaireSchema:
 
     @lru_cache
     def get_block(self, block_id):
-        return self.blocks_by_id[block_id]
+        return self.blocks_by_id.get(block_id, None)
 
     @lru_cache
     def get_blocks(self, **filters):
@@ -351,6 +353,12 @@ class QuestionnaireSchema:
                     detail_answer = option.get("detail_answer")
                     if detail_answer and answer_id == detail_answer["id"]:
                         return context["block"]
+
+    @lru_cache
+    def get_block_by_answer_id(self, answer_id):
+        block_id = self.get_block_id_by_answer_id(answer_id)
+
+        return self.get_block(block_id)
 
     def _get_numeric_range_values(self, answer, answer_ranges):
         min_value = answer.get("minimum", {}).get("value", {})

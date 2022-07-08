@@ -118,7 +118,7 @@ def test_missing_option_q_code_checkbox():
 
     expected_error_messages = [
         {
-            "message": validator.OPTION_MISSING_Q_CODE,
+            "message": validator.CHECKBOX_ANSWER_OR_OPTIONS_MUST_HAVE_Q_CODES,
             "answer_id": "checkbox-1-answer",
         },
     ]
@@ -217,7 +217,7 @@ def test_missing_detail_answer_q_code_checkbox():
     assert expected_error_messages == validator.errors
 
 
-def test_extra_q_code_confirmation_question():
+def test_confirmation_question():
     filename = "schemas/valid/test_q_codes.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     answer = {
@@ -237,7 +237,32 @@ def test_extra_q_code_confirmation_question():
     expected_error_messages = [
         {
             "answer_id": "confirmation-1-answer",
-            "message": "Confirmation question has q_code",
+            "message": validator.CONFIRMATION_QUESTION_Q_CODE,
+        }
+    ]
+
+    assert expected_error_messages == validator.errors
+
+
+def test_data_version():
+    # valid schema for test purposes q_code is inject
+    filename = "schemas/valid/test_interstitial_instruction.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    answer = {
+        "q_code": "0",
+        "id": "favourite-lunch",
+        "label": "What is your favourite lunchtime food",
+        "mandatory": False,
+        "type": "TextField",
+    }
+
+    validator = get_answer_validator(answer, schema)
+    validator.validate()
+
+    expected_error_messages = [
+        {
+            "answer_id": "favourite-lunch",
+            "message": validator.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT,
         }
     ]
 
