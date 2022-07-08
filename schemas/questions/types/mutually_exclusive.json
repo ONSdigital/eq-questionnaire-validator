@@ -76,6 +76,9 @@
             },
             {
               "$ref": "https://eq.ons.gov.uk/answers/dropdown.json#/answer"
+            },
+            {
+              "$ref": "https://eq.ons.gov.uk/answers/radio.json#/answer"
             }
           ]
         }
