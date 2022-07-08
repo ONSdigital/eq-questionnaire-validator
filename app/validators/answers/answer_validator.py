@@ -8,10 +8,10 @@ class AnswerValidator(Validator):
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"
     DETAIL_ANSWER_MISSING_Q_CODE = "Detail answer q_code must be provided"
-    CHECKBOX_DETAIL_ANSWER_CONTAINS_Q_CODE = (
+    CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE = (
         "Checkbox detail answer cannot contain q_code"
     )
-    CONFIRMATION_QUESTION_Q_CODE = "Confirmation question has q_code"
+    CONFIRMATION_QUESTION_HAS_Q_CODE = "Confirmation question cannot contain q_code"
     DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT = (
         "q_code can only be used with data_version 0.0.1"
     )
@@ -48,7 +48,7 @@ class AnswerValidator(Validator):
             has_q_code = get_object_containing_key(self.answer, key_name="q_code")
             if has_q_code:
                 self.add_error(
-                    self.CONFIRMATION_QUESTION_Q_CODE
+                    self.CONFIRMATION_QUESTION_HAS_Q_CODE
                     if is_confirmation_question
                     else self.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT,
                     answer_id=self.answer["id"],
@@ -96,7 +96,7 @@ class AnswerValidator(Validator):
             if is_checkbox:
                 if has_q_code:
                     self.add_error(
-                        self.CHECKBOX_DETAIL_ANSWER_CONTAINS_Q_CODE,
+                        self.CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE,
                         answer_id=self.answer["id"],
                     )
             elif not has_q_code:

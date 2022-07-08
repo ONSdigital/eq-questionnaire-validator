@@ -68,7 +68,7 @@ def test_confirmation_question_q_code():
     expected_error_messages = [
         {
             "answer_id": "confirmation-1-answer",
-            "message": validator.CONFIRMATION_QUESTION_Q_CODE,
+            "message": validator.CONFIRMATION_QUESTION_HAS_Q_CODE,
         }
     ]
 
@@ -133,7 +133,7 @@ def test_invalid_q_codes():
         },
         {
             "answer_id": "checkbox-1-answer",
-            "message": AnswerValidator.CHECKBOX_DETAIL_ANSWER_CONTAINS_Q_CODE,
+            "message": AnswerValidator.CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE,
         },
         {
             "answer_id": "checkbox-1-answer",
