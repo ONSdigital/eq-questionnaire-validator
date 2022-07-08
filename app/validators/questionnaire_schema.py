@@ -7,7 +7,8 @@ import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
 
 from app.answer_type import AnswerType
-from app.validators.answers.number_answer_validator import MAX_NUMBER
+
+MAX_NUMBER = 9999999999
 
 
 def has_default_route(routing_rules):
@@ -382,7 +383,7 @@ class QuestionnaireSchema:
     ):
         minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
-            return minimum_value + (1 / 10 ** decimal_places)
+            return minimum_value + (1 / 10**decimal_places)
         return minimum_value
 
     def _get_answer_maximum(
@@ -392,7 +393,7 @@ class QuestionnaireSchema:
             defined_maximum, MAX_NUMBER, answer_ranges
         )
         if exclusive:
-            return maximum_value - (1 / 10 ** decimal_places)
+            return maximum_value - (1 / 10**decimal_places)
         return maximum_value
 
     def _get_numeric_value_for_value_source(
