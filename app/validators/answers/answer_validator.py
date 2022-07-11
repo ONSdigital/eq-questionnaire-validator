@@ -8,9 +8,7 @@ class AnswerValidator(Validator):
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"
     DETAIL_ANSWER_MISSING_Q_CODE = "Detail answer q_code must be provided"
-    CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE = (
-        "Checkbox detail answer cannot contain q_code"
-    )
+    CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE = "Checkbox detail answer cannot contain q_code"
     CONFIRMATION_QUESTION_HAS_Q_CODE = "Confirmation question cannot contain q_code"
     DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT = (
         "q_code can only be used with data_version 0.0.1"
