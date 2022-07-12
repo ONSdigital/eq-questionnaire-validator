@@ -1,7 +1,7 @@
 from app.validators.answers import OptionAnswerValidator
 from app.validators.rules.rule_validator import RulesValidator
 from app.validators.value_source_validator import ValueSourceValidator
-from tests.conftest import get_mock_schema
+from tests.conftest import get_mock_schema, get_mock_schema_with_data_version
 
 
 def test_invalid_mismatching_answer_label_and_value():
@@ -15,7 +15,9 @@ def test_invalid_mismatching_answer_label_and_value():
         ],
     }
 
-    validator = OptionAnswerValidator(answer)
+    validator = OptionAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     expected_errors = [
         {
@@ -50,7 +52,9 @@ def test_unique_answer_options():
         ],
     }
 
-    validator = OptionAnswerValidator(answer)
+    validator = OptionAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
     validator.validate_duplicate_options()
 
     assert validator.errors == [
@@ -79,7 +83,9 @@ def test_validate_default_exists_in_options():
         ],
     }
 
-    validator = OptionAnswerValidator(answer)
+    validator = OptionAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     expected_errors = [
         {
@@ -98,7 +104,9 @@ def test_min_answer_options_without_dynamic_options():
     answer_type = "Checkbox"
     answer = {"id": "answer", "label": "Label", "type": answer_type, "options": []}
 
-    validator = OptionAnswerValidator(answer)
+    validator = OptionAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
     validator.validate_min_options()
 
     assert validator.errors == [
@@ -121,7 +129,9 @@ def test_min_answer_options_with_dynamic_options():
         "dynamic_options": {"values": {}, "transform": {}},
     }
 
-    validator = OptionAnswerValidator(answer)
+    validator = OptionAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
     validator.validate_min_options()
 
     assert validator.errors == [

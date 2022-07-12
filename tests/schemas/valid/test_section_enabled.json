@@ -50,13 +50,11 @@
                     "options": [
                       {
                         "label": "Yes",
-                        "value": "Yes",
-                        "q_code": "0"
+                        "value": "Yes"
                       },
                       {
                         "label": "No",
-                        "value": "No",
-                        "q_code": "1"
+                        "value": "No"
                       }
                     ],
                     "type": "Checkbox",
@@ -103,13 +101,11 @@
                     "options": [
                       {
                         "label": "Yes",
-                        "value": "Yes",
-                        "q_code": "2"
+                        "value": "Yes"
                       },
                       {
                         "label": "No",
-                        "value": "No",
-                        "q_code": "3"
+                        "value": "No"
                       }
                     ],
                     "type": "Checkbox",

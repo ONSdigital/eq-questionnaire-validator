@@ -20,3 +20,7 @@ def get_mock_schema(questionnaire_schema=None, answers_with_context=None):
         questionnaire_schema.answers_with_context = answers_with_context
 
     return questionnaire_schema
+
+
+def get_mock_schema_with_data_version(data_version):
+    return QuestionnaireSchema({"data_version": data_version})

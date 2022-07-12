@@ -31,12 +31,12 @@ class OptionAnswerValidator(AnswerValidator):
         "option label from value answer_id do not match"
     )
 
-    def __init__(self, schema_element, questionnaire_schema=None):
-        super().__init__(schema_element)
-        if questionnaire_schema:
-            self.questionnaire_schema = questionnaire_schema
-            self.list_names = self.questionnaire_schema.list_names
-            self.block_ids = self.questionnaire_schema.block_ids
+    def __init__(self, schema_element, questionnaire_schema):
+        super().__init__(schema_element, questionnaire_schema)
+
+        self.questionnaire_schema = questionnaire_schema
+        self.list_names = self.questionnaire_schema.list_names
+        self.block_ids = self.questionnaire_schema.block_ids
 
     def validate(self):
         super().validate()
