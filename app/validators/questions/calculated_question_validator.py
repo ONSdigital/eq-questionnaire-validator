@@ -43,7 +43,9 @@ class CalculatedQuestionValidator(QuestionValidator):
             value = calculation.get("value")
 
             if answer_id := calculation.get("answer_id"):
-                question_id = self.schema.get_block_id_by_answer_id(answer_id)
+                question_id = self.schema.get_block_by_answer_id(answer_id)["question"][
+                    "id"
+                ]
                 self._validate_answer_is_numeric(
                     question_id=question_id, answer_id=answer_id
                 )
@@ -53,7 +55,9 @@ class CalculatedQuestionValidator(QuestionValidator):
                 # Calculated summary value source is validated elsewhere and must be of a number type
 
                 if value.get("source") == "answers":
-                    question_id = self.schema.get_block_id_by_answer_id(answer_id)
+                    question_id = self.schema.get_block_by_answer_id(answer_id)[
+                        "question"
+                    ]["id"]
                     self._validate_answer_is_numeric(
                         question_id=question_id, answer_id=answer_id
                     )
