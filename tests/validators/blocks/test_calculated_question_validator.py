@@ -62,7 +62,6 @@ def test_invalid_id_in_answers_to_calculate():
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                 answer_type="string"
             ),
-            "referenced_question_id": "total-question",
             "identifier": "total-answer",
             "question_id": "breakdown-question",
         },
