@@ -54,7 +54,7 @@ class AnswerValidator(Validator):
 
             return None
 
-        if self.answer_type == AnswerType.CHECKBOX:
+        if self.answer_type is AnswerType.CHECKBOX:
             self._validate_checkbox_q_code()
 
         else:
