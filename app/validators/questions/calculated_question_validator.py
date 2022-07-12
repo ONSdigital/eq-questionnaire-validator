@@ -31,7 +31,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                     answer_type=ANSWER_TYPE_TO_JSON_TYPE[answer_type.value],
                 ),
-                referenced_by_question=question_id,
+                referenced_question_id=question_id,
                 identifier=answer_id,
             )
 
@@ -43,8 +43,9 @@ class CalculatedQuestionValidator(QuestionValidator):
             value = calculation.get("value")
 
             if answer_id := calculation.get("answer_id"):
+                question_id = self.schema.get_block_id_by_answer_id(answer_id)
                 self._validate_answer_is_numeric(
-                    question_id=self.question.get("id"), answer_id=answer_id
+                    question_id=question_id, answer_id=answer_id
                 )
 
             elif value and value.get("source"):
@@ -52,6 +53,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 # Calculated summary value source is validated elsewhere and must be of a number type
 
                 if value.get("source") == "answers":
+                    question_id = self.schema.get_block_id_by_answer_id(answer_id)
                     self._validate_answer_is_numeric(
-                        question_id=self.question.get("id"), answer_id=answer_id
+                        question_id=question_id, answer_id=answer_id
                     )
