@@ -22,8 +22,8 @@ class NumberAnswerValidator(AnswerValidator):
         "The referenced answer has a greater number of decimal places than answer"
     )
 
-    def __init__(self, schema_element, questionnaire_schema=None):
-        super().__init__(schema_element)
+    def __init__(self, schema_element, questionnaire_schema):
+        super().__init__(schema_element, questionnaire_schema)
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):

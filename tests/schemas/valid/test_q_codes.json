@@ -1,0 +1,193 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.1",
+  "survey_id": "0",
+  "title": "q_codes on different blocks",
+  "theme": "default",
+  "description": "A questionnaire to demo q_codes in answers for data version 0.0.1",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "general-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "general-1-answer",
+                    "q_code": "1",
+                    "mandatory": false,
+                    "type": "Number",
+                    "label": "Leave blank",
+                    "default": 0
+                  }
+                ],
+                "id": "general-1-question",
+                "title": "Don’t enter an answer. A default value will be used",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "checkbox-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "checkbox-1-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "None",
+                        "value": "None",
+                        "q_code": "2"
+                      },
+                      {
+                        "label": "Other",
+                        "q_code": "3",
+                        "description": "Choose any other topping",
+                        "value": "Other",
+                        "detail_answer": {
+                          "mandatory": false,
+                          "id": "checkbox-1-other-answer",
+                          "label": "Please specify other",
+                          "type": "TextField"
+                        }
+                      }
+                    ],
+                    "type": "Checkbox"
+                  }
+                ],
+                "id": "checkbox-1-question",
+                "title": "Which pizza toppings would you like?",
+                "type": "General"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "radio-1-question",
+              "question": {
+                "type": "General",
+                "id": "radio-mandatory-question",
+                "title": "What do you prefer for breakfast?",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "mandatory": false,
+                    "id": "radio-1-answer",
+                    "q_code": "4",
+                    "options": [
+                      {
+                        "label": "Coffee",
+                        "value": "Coffee"
+                      },
+                      {
+                        "label": "Tea",
+                        "value": "Tea"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "radio-2",
+              "question": {
+                "type": "General",
+                "id": "radio-2-question",
+                "title": "What is you favourite breakfast item?",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "mandatory": false,
+                    "id": "radio-2-answer",
+                    "q_code": "5",
+                    "options": [
+                      {
+                        "label": "Toast",
+                        "value": "Toast"
+                      },
+                      {
+                        "label": "Other",
+                        "description": "An answer is not required.",
+                        "value": "Other",
+                        "detail_answer": {
+                          "mandatory": false,
+                          "q_code": "6",
+                          "id": "radio-2-other-answer",
+                          "label": "Please specify other",
+                          "type": "TextField"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "ConfirmationQuestion",
+              "id": "confirmation-1",
+              "question": {
+                "type": "General",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "confirmation-1-answer",
+                    "options": [
+                      {
+                        "label": "Yes this is correct",
+                        "value": "Yes this is correct"
+                      },
+                      {
+                        "label": "No I need to change this",
+                        "value": "No I need to change this"
+                      }
+                    ],
+                    "mandatory": true
+                  }
+                ],
+                "id": "confirmation-1-question",
+                "title": "The current number of employees for this Company is <em>0</em>, is this correct?"
+              },
+              "routing_rules": [
+                {
+                  "goto": {
+                    "section": "End"
+                  }
+                }
+              ]
+            }
+          ],
+          "id": "default-group"
+        }
+      ]
+    }
+  ]
+}

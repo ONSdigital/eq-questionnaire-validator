@@ -203,3 +203,15 @@ def test_id_paths():
             "remove-question",
         ),
     ]
+
+
+def test_get_block_id_by_answer_id():
+    filename = "schemas/valid/test_q_codes.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer_id = "confirmation-1-answer"
+
+    block_id = questionnaire_schema.get_block_id_by_answer_id(answer_id)
+
+    assert block_id == "confirmation-1"

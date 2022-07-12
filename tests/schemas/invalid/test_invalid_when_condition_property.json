@@ -183,7 +183,6 @@
                         "value": "No, I don’t drink any hot drinks"
                       }
                     ],
-                    "q_code": "1",
                     "id": "conditional-routing-answer",
                     "label": "Which conditional question should we jump to?",
                     "mandatory": true,
