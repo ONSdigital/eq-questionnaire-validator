@@ -70,7 +70,7 @@ class AnswerValidator(Validator):
         any_option_missing_q_code = False
         for option in self.answer.get("options", []):
             option_has_q_code = option.get("q_code")
-            is_checkbox = self.answer_type == AnswerType.CHECKBOX
+            is_checkbox = self.answer_type is AnswerType.CHECKBOX
 
             if is_checkbox:
                 if not option_has_q_code:
