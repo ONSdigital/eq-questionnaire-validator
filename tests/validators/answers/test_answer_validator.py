@@ -51,16 +51,8 @@ def test_invalid_single_date_period():
 def test_confirmation_question_q_code():
     filename = "schemas/valid/test_q_codes.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    answer = {
-        "type": "Radio",
-        "id": "confirmation-1-answer",
-        "q_code": "1",
-        "options": [
-            {"label": "Yes this is correct", "value": "Yes this is correct"},
-            {"label": "No I need to change this", "value": "No I need to change this"},
-        ],
-        "mandatory": True,
-    }
+    answer = schema.get_answer("confirmation-1-answer")
+    answer["q_code"] = "1"
 
     validator = get_answer_validator(answer, schema)
     validator.validate()
