@@ -67,17 +67,12 @@ def test_confirmation_question_q_code():
     assert expected_error_messages == validator.errors
 
 
-def test_data_version_q_code():
+def test_data_version_0_0_3_q_code():
     # valid schema for test purposes, q_code is injected
     filename = "schemas/valid/test_interstitial_instruction.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    answer = {
-        "q_code": "0",
-        "id": "favourite-lunch",
-        "label": "What is your favourite lunchtime food",
-        "mandatory": False,
-        "type": "TextField",
-    }
+    answer = schema.get_answer("favourite-lunch")
+    answer["q_code"] = "0"
 
     validator = get_answer_validator(answer, schema)
     validator.validate()
