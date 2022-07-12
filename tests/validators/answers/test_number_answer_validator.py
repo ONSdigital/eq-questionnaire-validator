@@ -1,5 +1,6 @@
 from app.validators.answers import NumberAnswerValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
+from tests.conftest import get_mock_schema_with_data_version
 from tests.test_questionnaire_validator import _open_and_load_schema_file
 
 
@@ -13,7 +14,7 @@ def test_minimum_value():
         "type": "Number",
     }
 
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(answer, questionnaire_schema={})
 
     validator.validate_value_in_limits()
 
@@ -41,7 +42,9 @@ def test_invalid_answer_default():
         "type": "Number",
     }
 
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
     validator.validate_mandatory_has_no_default()
 
     assert validator.errors[0] == {
@@ -62,7 +65,9 @@ def test_are_decimal_places_valid():
         "maximum": {"value": 100},
     }
 
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
     validator.validate_decimal_places()
 
     assert validator.errors[0] == {
@@ -81,7 +86,9 @@ def test_invalid_range():
         "type": "Percentage",
     }
     answers = {"answers": [answer]}
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     questionnaire_schema = QuestionnaireSchema(answers)
 
@@ -111,7 +118,9 @@ def test_invalid_range_calculated_summary_source():
 
     answer = schema.get_answer("set-minimum-answer")
 
-    validator = NumberAnswerValidator(answer)
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
 
     validator.validate_referred_numeric_answer(schema.numeric_answer_ranges)
 
@@ -139,7 +148,8 @@ def test_invalid_numeric_answers():
             "label": "Answer 1",
             "mandatory": False,
             "type": "Number",
-        }
+        },
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_referred_numeric_answer_decimals(
         {
