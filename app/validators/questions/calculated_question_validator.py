@@ -31,7 +31,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                     answer_type=ANSWER_TYPE_TO_JSON_TYPE[answer_type.value],
                 ),
-                question_id=question_id,
+                referenced_by_question=question_id,
                 identifier=answer_id,
             )
 
