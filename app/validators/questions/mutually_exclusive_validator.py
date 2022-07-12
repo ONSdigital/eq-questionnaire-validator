@@ -16,7 +16,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
 
         if (
             self.answers[-1]["type"] != "Checkbox"
-            or self.answers[-1]["type"] != "Radio"
+            and self.answers[-1]["type"] != "Radio"
         ):
             self.add_error(
                 self.NON_CHECKBOX_RADIO_ANSWER, answer_id=self.answers[-1]["id"]
