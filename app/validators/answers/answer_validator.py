@@ -90,7 +90,7 @@ class AnswerValidator(Validator):
     def _validate_detail_answer_q_code(self, option):
         if detail_answer := option.get("detail_answer"):
             has_q_code = detail_answer.get("q_code")
-            is_checkbox = self.answer_type == AnswerType.CHECKBOX
+            is_checkbox = self.answer_type is AnswerType.CHECKBOX
             if is_checkbox:
                 if has_q_code:
                     self.add_error(
