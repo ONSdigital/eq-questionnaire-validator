@@ -31,7 +31,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                     answer_type=ANSWER_TYPE_TO_JSON_TYPE[answer_type.value],
                 ),
-                identifier=answer_id,
+                referenced_answer=answer_id,
             )
 
     def validate_calculations_value_source_is_numeric(self):
