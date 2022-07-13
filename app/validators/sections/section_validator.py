@@ -134,7 +134,9 @@ class SectionValidator(Validator):
         question = block_or_variant.get("question")
 
         if question:
-            question_validator = get_question_validator(question)
+            question_validator = get_question_validator(
+                question, self.questionnaire_schema
+            )
 
             self.errors += question_validator.validate()
 
