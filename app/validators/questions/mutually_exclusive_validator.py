@@ -15,7 +15,6 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
             self.add_error(self.MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY)
 
         if (AnswerType(self.answers[-1]["type"]) not in {AnswerType.CHECKBOX, AnswerType.RADIO}):
-            print(len(self.answers[-1]))
             self.add_error(
                 self.NON_CHECKBOX_RADIO_ANSWER, answer_id=self.answers[-1]["id"]
             )
