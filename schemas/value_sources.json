@@ -161,5 +161,17 @@
         "$ref": "https://eq.ons.gov.uk/value_sources.json#/list_value_source"
       }
     ]
+  },
+  "value_source_for_calculations": {
+    "description": "Only answer and calculated summary value source are supported in current implementation",
+    "anyOf": [
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source",
+        "description": "Only answer types that return numeric answers are valid"
+      },
+      {
+        "$ref": "https://eq.ons.gov.uk/value_sources.json#/calculated_summary_value_source"
+      }
+    ]
   }
 }

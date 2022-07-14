@@ -37,6 +37,31 @@
           "blocks": [
             {
               "type": "Question",
+              "id": "total-block",
+              "question": {
+                "id": "total-question",
+                "title": "Total",
+                "description": [
+                  "Enter a number to breakdown in subsequent questions and calculated summary."
+                ],
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "total-answer",
+                    "label": "Total",
+                    "mandatory": true,
+                    "type": "Number",
+                    "decimal_places": 2,
+                    "minimum": {
+                      "value": 0,
+                      "exclusive": true
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
               "id": "date-block",
               "question": {
                 "answers": [

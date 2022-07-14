@@ -1,0 +1,109 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Calculated question with value sources test survey",
+  "theme": "default",
+  "description": "A survey that tests validation against value sources, answer value source is not one of Number types which is expected for calculations",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Validate sum against answer, calculated summary source",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "total-block",
+              "question": {
+                "id": "total-question",
+                "title": "Total",
+                "description": [
+                  "Enter a number to breakdown in subsequent questions and calculated summary."
+                ],
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "total-answer",
+                    "label": "Total",
+                    "mandatory": true,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "breakdown-block",
+              "question": {
+                "id": "breakdown-question",
+                "title": "Breakdown validated against an answer value source",
+                "description": [
+                  "This is a breakdown of the total number from the previous question."
+                ],
+                "type": "Calculated",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "value": {
+                      "source": "answers",
+                      "identifier": "total-answer"
+                    },
+                    "answers_to_calculate": [
+                      "breakdown-1",
+                      "breakdown-2",
+                      "breakdown-3",
+                      "breakdown-4"
+                    ],
+                    "conditions": ["equals"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "breakdown-1",
+                    "label": "Breakdown 1",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "breakdown-2",
+                    "label": "Breakdown 2",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
