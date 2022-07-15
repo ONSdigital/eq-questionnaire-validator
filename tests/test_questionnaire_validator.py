@@ -404,7 +404,7 @@ def test_invalid_answer_type_for_question_summary_concatenation():
 
     expected_error_messages = [
         {
-            "message": error_messages.UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
+            "message": error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
             "answer_id": "radio-answer",
             "section_id": "default-section",
         }

@@ -10,7 +10,7 @@ ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH = "The answer unit and transform unit mi
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
     "The referenced answer cannot be used to set the maximum of answer"
 )
-UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE = (
+UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE = (
     "Unsupported answer type used for question summary concatenation"
 )
 REQUIRED_HUB_SECTION_UNDEFINED = "Required section for hub is undefined"
