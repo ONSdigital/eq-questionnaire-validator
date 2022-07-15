@@ -186,6 +186,56 @@
                   }
                 }
               }
+            },
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-checkbox-2",
+              "question": {
+                "id": "mutually-exclusive-checkbox-question-2",
+                "type": "MutuallyExclusive",
+                "title": "Were you a resident at any of the following addresses?",
+                "mandatory": true,
+                "answers": [
+                  {
+                    "id": "checkbox-answer",
+                    "label": "Select answer",
+                    "type": "Checkbox",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "7 Evelyn Street, Barry",
+                        "value": "7 Evelyn Street, Barry"
+                      },
+                      {
+                        "label": "251 Argae Lane, Barry",
+                        "value": "251 Argae Lane, Barry"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "radio-exclusive-answer",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "I prefer not to say",
+                        "description": "Some description",
+                        "value": "I prefer not to say"
+                      },
+                      {
+                        "label": "I dont have a house",
+                        "description": "Some description",
+                        "value": "I dont have a house"
+                      }
+                    ]
+                  }
+                ],
+                "validation": {
+                  "messages": {
+                    "MANDATORY_QUESTION": "Select an answer to continue"
+                  }
+                }
+              }
             }
           ]
         }
