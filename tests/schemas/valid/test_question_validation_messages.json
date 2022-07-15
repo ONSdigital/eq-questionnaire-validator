@@ -197,7 +197,7 @@
                 "mandatory": true,
                 "answers": [
                   {
-                    "id": "checkbox-answer",
+                    "id": "checkbox-answer-2",
                     "label": "Select answer",
                     "type": "Checkbox",
                     "mandatory": false,
