@@ -4,7 +4,7 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "Calculated question with value sources test survey",
+  "title": "Calculated question with a number value source test survey",
   "theme": "default",
   "description": "A survey that tests calculation is not checked for answer value source being one of Number types when calculations value is not a dict",
   "metadata": [
@@ -35,36 +35,16 @@
       "groups": [
         {
           "id": "group",
-          "title": "Validate sum against answer, calculated summary source",
+          "title": "Validate sum against value, calculated summary source",
           "blocks": [
-            {
-              "type": "Question",
-              "id": "total-block",
-              "question": {
-                "id": "total-question",
-                "title": "Total",
-                "description": [
-                  "Enter a number to breakdown in subsequent questions and calculated summary."
-                ],
-                "type": "General",
-                "answers": [
-                  {
-                    "id": "total-answer",
-                    "label": "Total",
-                    "mandatory": true,
-                    "type": "TextField"
-                  }
-                ]
-              }
-            },
             {
               "type": "Question",
               "id": "breakdown-block",
               "question": {
                 "id": "breakdown-question",
-                "title": "Breakdown validated against an answer value source",
+                "title": "Breakdown validated against a number value",
                 "description": [
-                  "This is a breakdown of the total number from the previous question."
+                  "This is a breakdown of the total from a number value."
                 ],
                 "type": "Calculated",
                 "calculations": [
