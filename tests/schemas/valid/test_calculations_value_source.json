@@ -71,10 +71,7 @@
                   {
                     "calculation_type": "sum",
                     "value": 100,
-                    "answers_to_calculate": [
-                      "breakdown-1",
-                      "breakdown-2"
-                    ],
+                    "answers_to_calculate": ["breakdown-1", "breakdown-2"],
                     "conditions": ["equals"]
                   }
                 ],
