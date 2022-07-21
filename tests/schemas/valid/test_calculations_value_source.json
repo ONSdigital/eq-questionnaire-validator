@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "Calculated question with a number value source test survey",
   "theme": "default",
-  "description": "A survey that tests calculation is not checked for answer value source being one of Number types when calculations value is not a dict",
+  "description": "A survey that tests validation against a calculated question with a valid number value",
   "metadata": [
     {
       "name": "user_id",
