@@ -62,7 +62,7 @@
                       },
                       {
                         "label": "Other",
-                        "description": "Choose any other topping",
+                        "description": "Choose another nationality",
                         "value": "Other",
                         "detail_answer": {
                           "mandatory": false,
@@ -106,6 +106,56 @@
                     "id": "mutually-exclusive-date-answer-2",
                     "mandatory": false,
                     "type": "Date"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-radio-block",
+              "question": {
+                "id": "mutually-exclusive-radio-question",
+                "type": "MutuallyExclusive",
+                "title": "What is your nationality?",
+                "mandatory": true,
+                "answers": [
+                  {
+                    "id": "radio-answer",
+                    "label": "Select an answer",
+                    "type": "Radio",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "British",
+                        "value": "British"
+                      },
+                      {
+                        "label": "Irish",
+                        "value": "Irish"
+                      },
+                      {
+                        "label": "Other",
+                        "description": "Choose another nationality",
+                        "value": "Other",
+                        "detail_answer": {
+                          "mandatory": false,
+                          "id": "radio-child-other-answer",
+                          "label": "Please specify other",
+                          "type": "TextField"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "checkbox-exclusive-answer-2",
+                    "mandatory": false,
+                    "type": "Checkbox",
+                    "options": [
+                      {
+                        "label": "I prefer not to say",
+                        "value": "I prefer not to say"
+                      }
+                    ]
                   }
                 ]
               }

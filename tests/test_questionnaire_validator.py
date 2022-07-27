@@ -112,6 +112,10 @@ def test_invalid_mutually_exclusive_conditions():
             "answer_id": "mutually-exclusive-date-answer-2",
             "question_id": "mutually-exclusive-date-question",
         },
+        {
+            "message": MutuallyExclusiveQuestionValidator.NON_EXCLUSIVE_RADIO_ANSWER,
+            "question_id": "mutually-exclusive-radio-question",
+        },
     ]
 
     assert expected_errors == validator.errors
