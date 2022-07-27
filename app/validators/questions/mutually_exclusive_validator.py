@@ -7,7 +7,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
     MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (
         "MutuallyExclusive question type cannot contain mandatory answers."
     )
-    NON_CHECKBOX_RADIO_ANSWER = "Question is not of type Checkbox or Radio."
+    INVALID_EXCLUSIVE_ANSWER = "Mutually exclusive answer is not of type Checkbox or Radio."
     NON_EXCLUSIVE_RADIO_ANSWER = (
         "Mutually exclusive questions cannot contain non exclusive Radio answers."
     )
@@ -23,7 +23,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
             AnswerType.RADIO,
         }:
             self.add_error(
-                self.NON_CHECKBOX_RADIO_ANSWER, answer_id=self.answers[-1]["id"]
+                self.INVALID_EXCLUSIVE_ANSWER, answer_id=self.answers[-1]["id"]
             )
 
         if any(

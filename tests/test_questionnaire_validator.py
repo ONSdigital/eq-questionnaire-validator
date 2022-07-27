@@ -108,7 +108,7 @@ def test_invalid_mutually_exclusive_conditions():
             "question_id": "mutually-exclusive-date-question",
         },
         {
-            "message": MutuallyExclusiveQuestionValidator.NON_CHECKBOX_RADIO_ANSWER,
+            "message": MutuallyExclusiveQuestionValidator.INVALID_EXCLUSIVE_ANSWER,
             "answer_id": "mutually-exclusive-date-answer-2",
             "question_id": "mutually-exclusive-date-question",
         },
