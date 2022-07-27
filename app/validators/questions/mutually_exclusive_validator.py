@@ -27,7 +27,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
             )
 
         if any(
-            (AnswerType(answer["type"]) == AnswerType.RADIO) is True
+            (AnswerType(answer["type"]) == AnswerType.RADIO)
             for answer in self.answers[:-1]
         ):
             self.add_error(self.NON_EXCLUSIVE_RADIO_ANSWER)
