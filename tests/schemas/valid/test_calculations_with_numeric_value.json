@@ -1,0 +1,81 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Calculated question with a number value test survey",
+  "theme": "default",
+  "description": "A survey that tests validation against a calculated question with a valid number value",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Validate sum against value, calculated summary source",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "breakdown-block",
+              "question": {
+                "id": "breakdown-question",
+                "title": "Breakdown validated against a number value",
+                "description": [
+                  "This is a breakdown of the total from a number value."
+                ],
+                "type": "Calculated",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "value": 100,
+                    "answers_to_calculate": ["breakdown-1", "breakdown-2"],
+                    "conditions": ["equals"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "breakdown-1",
+                    "label": "Breakdown 1",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "breakdown-2",
+                    "label": "Breakdown 2",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -44,7 +44,7 @@ class CalculatedQuestionValidator(QuestionValidator):
             if answer_id := calculation.get("answer_id"):
                 self._validate_answer_is_numeric(answer_id)
 
-            elif value and value.get("source"):
+            elif isinstance(value, dict) and value.get("source"):
                 answer_id = value.get("identifier")
                 # Calculated summary value source is validated elsewhere and must be of a number type
 
