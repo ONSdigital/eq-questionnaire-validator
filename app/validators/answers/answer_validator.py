@@ -13,7 +13,7 @@ class AnswerValidator(Validator):
     DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT = (
         "q_code can only be used with data_version 0.0.1"
     )
-    CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXLUSIVE = (
+    CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE = (
         "Checkbox answer and option q_code are mutually exclusive"
     )
     CHECKBOX_ANSWER_OR_OPTIONS_MUST_HAVE_Q_CODES = (
@@ -112,7 +112,7 @@ class AnswerValidator(Validator):
             )
             if any_option_has_q_code:
                 self.add_error(
-                    self.CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXLUSIVE,
+                    self.CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE,
                     answer_id=self.answer["id"],
                 )
         elif any_option_missing_q_code:

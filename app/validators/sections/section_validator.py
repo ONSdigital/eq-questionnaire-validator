@@ -153,7 +153,7 @@ class SectionValidator(Validator):
                     "Number",
                 ]:
                     self.add_error(
-                        error_messages.UNSUPPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
+                        error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
                         answer_id=answer["id"],
                     )
                 self.errors += answer_validator.errors

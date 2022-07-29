@@ -1,0 +1,90 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Mutually Exclusive",
+  "theme": "default",
+  "description": "A questionnaire to test mutually exclusive answers",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "mutually-exclusive-checkbox-section",
+      "groups": [
+        {
+          "id": "mutually-exclusive-checkbox-section-group",
+          "title": "mutually exclusive checkbox group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "mutually-exclusive-checkbox",
+              "question": {
+                "id": "mutually-exclusive-checkbox-question",
+                "type": "MutuallyExclusive",
+                "title": "Were you a resident at any of the following addresses?",
+                "mandatory": true,
+                "answers": [
+                  {
+                    "id": "checkbox-answer",
+                    "label": "Select answer",
+                    "type": "Checkbox",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "7 Evelyn Street, Barry",
+                        "value": "7 Evelyn Street, Barry"
+                      },
+                      {
+                        "label": "251 Argae Lane, Barry",
+                        "value": "251 Argae Lane, Barry"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "radio-exclusive-answer",
+                    "mandatory": false,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "I prefer not to say",
+                        "description": "Some description",
+                        "value": "I prefer not to say"
+                      },
+                      {
+                        "label": "I dont have a house",
+                        "description": "Some description",
+                        "value": "I dont have a house"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

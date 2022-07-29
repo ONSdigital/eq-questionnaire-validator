@@ -124,7 +124,7 @@ def test_invalid_q_codes():
         },
         {
             "answer_id": "checkbox-1-answer",
-            "message": AnswerValidator.CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXLUSIVE,
+            "message": AnswerValidator.CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE,
         },
         {
             "answer_id": "checkbox-2-answer",
