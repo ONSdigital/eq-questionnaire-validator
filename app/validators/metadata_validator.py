@@ -8,9 +8,8 @@ class MetadataValidator(Validator):
     MISSING_METADATA = "Metadata not specified in metadata field"
     DUPLICATE_METADATA = "Metadata contains duplicates"
 
-    def __init__(self, metadata, theme_name, form_type=None):
+    def __init__(self, metadata, theme_name):
         self.theme_name = theme_name
-        self.form_type = form_type
         super().__init__(metadata)
 
     def validate(self):
@@ -36,13 +35,6 @@ class MetadataValidator(Validator):
 
         if self.theme_name in ["business", "default", "northernireland"]:
             required_metadata_names.extend(["user_id", "period_id", "ru_name"])
-        elif self.theme_name in ["census", "census-nisra"]:
-            if self.form_type:
-                required_metadata_names.extend(
-                    ["user_id", "period_id", "display_address"]
-                )
-            else:
-                required_metadata_names.extend(["user_id", "period_id"])
 
         for metadata_name in required_metadata_names:
             if metadata_name not in self.metadata_names:

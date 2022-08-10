@@ -25,21 +25,6 @@ def test_mandatory_metadata_census():
     assert not validator.errors
 
 
-def test_mandatory_metadata_census_form_type():
-    metadata = [
-        {"name": "period_id", "type": "string"},
-        {"name": "user_id", "type": "string"},
-    ]
-    validator = MetadataValidator(metadata, "census", "I")
-    validator.validate_mandatory()
-
-    expected_errors = [
-        {"message": validator.MISSING_METADATA, "metadata": "display_address"}
-    ]
-
-    assert validator.errors == expected_errors
-
-
 def test_mandatory_metadata_social():
     metadata = []
     validator = MetadataValidator(metadata, "social")
