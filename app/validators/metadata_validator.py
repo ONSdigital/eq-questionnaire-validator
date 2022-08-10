@@ -30,7 +30,6 @@ class MetadataValidator(Validator):
     def validate_mandatory(self):
         # user_id and period_id required downstream for receipting
         # ru_name required for template rendering in business, default and NI theme
-        # display_address required for template rendering in census, census-nisra theme when form_type exists
         required_metadata_names = []
 
         if self.theme_name in ["business", "default", "northernireland"]:
