@@ -18,7 +18,8 @@ class QuestionnaireValidator(Validator):
 
     def validate(self):
         metadata_validator = MetadataValidator(
-            self.schema_element["metadata"], self.schema_element["theme"]
+            self.schema_element["metadata"],
+            self.schema_element["theme"],
         )
         self.errors += metadata_validator.validate()
 

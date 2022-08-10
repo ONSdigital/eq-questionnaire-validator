@@ -29,11 +29,11 @@ class MetadataValidator(Validator):
 
     def validate_mandatory(self):
         # user_id and period_id required downstream for receipting
-        # ru_name required for template rendering in default and NI theme
-        required_metadata_names = ["user_id", "period_id"]
+        # ru_name required for template rendering in business, default and NI theme
+        required_metadata_names = []
 
-        if self.theme_name in ["default", "northernireland"]:
-            required_metadata_names.append("ru_name")
+        if self.theme_name in ["business", "default", "northernireland"]:
+            required_metadata_names.extend(["user_id", "period_id", "ru_name"])
 
         for metadata_name in required_metadata_names:
             if metadata_name not in self.metadata_names:

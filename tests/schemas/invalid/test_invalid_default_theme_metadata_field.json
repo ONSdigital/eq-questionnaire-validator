@@ -1,0 +1,58 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test default theme schema for required metadata fields present",
+  "description": "Test default theme schema for required metadata fields present",
+  "theme": "default",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group1",
+          "title": "Group 1",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block1",
+              "question": {
+                "id": "block1-question",
+                "title": "Question 1",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "block1-answer",
+                    "label": "Question 1",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
