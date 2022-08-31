@@ -49,6 +49,7 @@ def test_invalid_single_date_period():
 
     assert not answer_validator.is_offset_date_valid()
 
+
 @pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_confirmation_question_q_code():
     filename = "schemas/valid/test_q_codes.json"
@@ -67,6 +68,7 @@ def test_confirmation_question_q_code():
     ]
 
     assert expected_error_messages == validator.errors
+
 
 @pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_data_version_0_0_3_q_code():
@@ -87,6 +89,7 @@ def test_data_version_0_0_3_q_code():
     ]
 
     assert expected_error_messages == validator.errors
+
 
 @pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_invalid_q_codes():
