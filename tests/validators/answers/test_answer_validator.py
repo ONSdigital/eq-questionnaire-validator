@@ -1,3 +1,5 @@
+import pytest
+
 from app.validators.answers import get_answer_validator
 from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
@@ -48,6 +50,7 @@ def test_invalid_single_date_period():
     assert not answer_validator.is_offset_date_valid()
 
 
+@pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_confirmation_question_q_code():
     filename = "schemas/valid/test_q_codes.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -67,6 +70,7 @@ def test_confirmation_question_q_code():
     assert expected_error_messages == validator.errors
 
 
+@pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_data_version_0_0_3_q_code():
     # valid schema for test purposes, q_code is injected
     filename = "schemas/valid/test_interstitial_instruction.json"
@@ -87,6 +91,7 @@ def test_data_version_0_0_3_q_code():
     assert expected_error_messages == validator.errors
 
 
+@pytest.mark.skip(reason="Q Code validation is currently disabled!")
 def test_invalid_q_codes():
     filename = "schemas/invalid/test_invalid_q_code.json"
     json_to_validate = _open_and_load_schema_file(filename)
