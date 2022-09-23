@@ -28,6 +28,8 @@ class SectionValidator(Validator):
             return self.errors
         self.validate_groups()
         self.validate_section_enabled()
+        self.validate_number_of_lists()
+        self.validate_number_of_list_collectors()
         return self.errors
 
     def validate_repeat(self):
@@ -292,3 +294,39 @@ class SectionValidator(Validator):
                 results["number_of_answers"].add(len(results["answer_ids"]))
 
         return results
+
+    def validate_number_of_lists(self):
+        if not self.has_list_summary():
+            if self.has_multiple_lists():
+                self.add_error(error_messages.MULTIPLE_LISTS)
+
+    def validate_number_of_list_collectors(self):
+        if not self.has_list_summary():
+            if self.has_multiple_list_collectors():
+                self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
+
+    def has_list_summary(self):
+        if summary := self.schema_element.get("summary"):
+            if items := summary.get("items"):
+                for item in items:
+                    if item.get("type") == "List":
+                        return True
+
+    def has_multiple_list_collectors(self):
+        list_collector_count = 0
+        for group in self.schema_element.get("groups"):
+            for block in group.get("blocks"):
+                if block["type"] in ["ListCollector"]:
+                    list_collector_count += 1
+        if list_collector_count > 1:
+            return True
+
+    def has_multiple_lists(self):
+        lists = []
+        for group in self.schema_element.get("groups"):
+            for block in group.get("blocks"):
+                if block["type"] in ["ListCollector"]:
+                    if block["for_list"] not in lists:
+                        lists.append(block["for_list"])
+        if len(lists) > 1:
+            return True

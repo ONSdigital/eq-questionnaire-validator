@@ -357,10 +357,14 @@ def test_invalid_repeating_section_list_name():
 
     expected_errors = [
         {
+            "message": error_messages.MULTIPLE_LIST_COLLECTORS,
+            "section_id": "section",
+        },
+        {
             "message": error_messages.FOR_LIST_NEVER_POPULATED,
             "list_name": "non-existent-list",
             "section_id": "personal-details-section",
-        }
+        },
     ]
 
     validator.validate()
