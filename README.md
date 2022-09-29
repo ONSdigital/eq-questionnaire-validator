@@ -8,7 +8,7 @@ It is recommended that you use [Pyenv](https://github.com/pyenv/pyenv) to manage
 
 ### Install Poetry
 ```
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python3 - 
 poetry install
 ```
 
