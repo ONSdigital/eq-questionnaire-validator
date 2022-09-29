@@ -248,6 +248,26 @@
               },
               "page_title": {
                 "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              },
+              "related_answers": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "enum": ["answers"]
+                    },
+                    "identifier": {
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "show_non_item_answers": {
+                "type": "boolean"
               }
             },
             "additionalProperties": false,

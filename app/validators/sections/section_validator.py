@@ -28,8 +28,8 @@ class SectionValidator(Validator):
             return self.errors
         self.validate_groups()
         self.validate_section_enabled()
-        self.validate_number_of_lists()
-        self.validate_number_of_list_collectors()
+        # self.validate_number_of_lists()
+        # self.validate_number_of_list_collectors()
         return self.errors
 
     def validate_repeat(self):
