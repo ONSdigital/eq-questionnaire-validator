@@ -34,6 +34,16 @@
       "id": "section",
       "title": "Who Lives Here",
       "summary": {
+        "items": [
+          {
+            "type": "List",
+            "for_list": "people",
+            "title": "Household members",
+            "add_link_text": "Add someone to this household",
+            "empty_list_text": "There are no householders"
+          }
+        ],
+        "show_non_item_answers": true,
         "show_on_completion": true,
         "page_title": "Summary"
       },
@@ -179,7 +189,7 @@
             {
               "id": "list-collector-2",
               "type": "ListCollector",
-              "for_list": "people",
+              "for_list": "animals",
               "question": {
                 "id": "confirmation-question-2",
                 "type": "General",
@@ -214,13 +224,13 @@
                   "title": "What is the name of the person?",
                   "answers": [
                     {
-                      "id": "first-name",
+                      "id": "first-name-2",
                       "label": "First name",
                       "mandatory": true,
                       "type": "TextField"
                     },
                     {
-                      "id": "last-name",
+                      "id": "last-name-2",
                       "label": "Last name",
                       "mandatory": true,
                       "type": "TextField"
@@ -237,13 +247,13 @@
                   "title": "What is the name of the person?",
                   "answers": [
                     {
-                      "id": "first-name",
+                      "id": "first-name-2",
                       "label": "First name",
                       "mandatory": true,
                       "type": "TextField"
                     },
                     {
-                      "id": "last-name",
+                      "id": "last-name-2",
                       "label": "Last name",
                       "mandatory": true,
                       "type": "TextField"
@@ -294,11 +304,11 @@
                             "list_to_concatenate": [
                               {
                                 "source": "answers",
-                                "identifier": "first-name"
+                                "identifier": "first-name-2"
                               },
                               {
                                 "source": "answers",
-                                "identifier": "last-name"
+                                "identifier": "last-name-2"
                               }
                             ]
                           },

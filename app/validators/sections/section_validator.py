@@ -28,8 +28,8 @@ class SectionValidator(Validator):
             return self.errors
         self.validate_groups()
         self.validate_section_enabled()
-        # self.validate_number_of_lists()
-        # self.validate_number_of_list_collectors()
+        self.validate_number_of_lists()
+        self.validate_number_of_list_collectors()
         return self.errors
 
     def validate_repeat(self):
@@ -296,21 +296,21 @@ class SectionValidator(Validator):
         return results
 
     def validate_number_of_lists(self):
-        if not self.has_list_summary():
-            if self.has_multiple_lists():
-                self.add_error(error_messages.MULTIPLE_LISTS)
+        if self.has_list_summary_with_non_item_answers() and self.has_multiple_lists():
+            self.add_error(error_messages.MULTIPLE_LISTS)
 
     def validate_number_of_list_collectors(self):
-        if not self.has_list_summary():
-            if self.has_multiple_list_collectors():
-                self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
+        if (
+            self.has_list_summary_with_non_item_answers()
+            and self.has_multiple_list_collectors()
+        ):
+            self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
 
-    def has_list_summary(self):
+    def has_list_summary_with_non_item_answers(self):
         if summary := self.schema_element.get("summary"):
-            if items := summary.get("items"):
-                for item in items:
-                    if item.get("type") == "List":
-                        return True
+            show_non_item_answers = summary.get("show_non_item_answers")
+            if summary.get("items") and show_non_item_answers is True:
+                return True
 
     def has_multiple_list_collectors(self):
         list_collector_count = 0
@@ -325,8 +325,10 @@ class SectionValidator(Validator):
         lists = []
         for group in self.schema_element.get("groups"):
             for block in group.get("blocks"):
-                if block["type"] in ["ListCollector"]:
-                    if block["for_list"] not in lists:
-                        lists.append(block["for_list"])
+                if (
+                    block["type"] in ["ListCollector"]
+                    and block["for_list"] not in lists
+                ):
+                    lists.append(block["for_list"])
         if len(lists) > 1:
             return True
