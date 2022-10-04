@@ -1,3 +1,4 @@
+# pylint: disable=too-many-public-methods
 from collections import defaultdict
 
 from app import error_messages
@@ -30,6 +31,9 @@ class SectionValidator(Validator):
         self.validate_section_enabled()
         self.validate_number_of_lists()
         self.validate_number_of_list_collectors()
+        self.validate_show_non_item_answers_when_items_key_exists()
+        self.validate_related_answers_when_show_non_item_answers_exists()
+        self.validate_related_answers_belong_to_list_collector()
         return self.errors
 
     def validate_repeat(self):
@@ -332,3 +336,38 @@ class SectionValidator(Validator):
                     lists.append(block["for_list"])
         if len(lists) > 1:
             return True
+
+    def validate_show_non_item_answers_when_items_key_exists(self):
+        if summary := self.schema_element.get("summary"):
+            if summary.get("show_non_item_answers") and not summary.get("items"):
+                self.add_error(error_messages.ITEMS_NOT_PRESENT)
+
+    def validate_related_answers_when_show_non_item_answers_exists(self):
+        if summary := self.schema_element.get("summary"):
+            if summary.get("show_non_item_answers") and not summary.get(
+                "related_answers"
+            ):
+                self.add_error(error_messages.RELATED_ANSWERS_NOT_PRESENT)
+
+    def validate_related_answers_belong_to_list_collector(self):
+        if not (schema_element := self.schema_element.get("summary")):
+            return
+        if related_answers := schema_element.get("related_answers"):
+            list_collector_ids = []
+            for group in self.schema_element.get("groups"):
+                for block in group.get("blocks"):
+                    if block["type"] in ["ListCollector"]:
+                        list_collector_ids.extend(
+                            iter(
+                                self.questionnaire_schema.get_list_collector_answer_ids(
+                                    block["id"]
+                                )
+                            )
+                        )
+
+            for answer in related_answers:
+                if answer["identifier"] not in list_collector_ids:
+                    self.add_error(
+                        error_messages.RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR,
+                        id=answer["identifier"],
+                    )

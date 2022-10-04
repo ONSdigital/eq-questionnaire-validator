@@ -3,6 +3,11 @@ DUPLICATE_ID_FOUND = "Duplicate id found"
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
 MULTIPLE_LISTS = "Section has multiple lists"
 MULTIPLE_LIST_COLLECTORS = "Section has multiple ListCollector blocks"
+ITEMS_NOT_PRESENT = "items field not present for summary"
+RELATED_ANSWERS_NOT_PRESENT = "related_answers field not present for summary"
+RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = (
+    "related_answers id not present in any list collector"
+)
 ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
     "The referenced answer cannot be used to set the minimum of answer"
 )

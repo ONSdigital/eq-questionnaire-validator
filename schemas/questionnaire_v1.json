@@ -253,17 +253,7 @@
                 "type": "array",
                 "minItems": 1,
                 "items": {
-                  "type": "object",
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": ["answers"]
-                    },
-                    "identifier": {
-                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-                    }
-                  },
-                  "additionalProperties": false
+                  "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
                 }
               },
               "show_non_item_answers": {
