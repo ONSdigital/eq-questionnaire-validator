@@ -21,7 +21,7 @@ eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git"}
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 flake8 = "^4.0.1"
-pylint = "^2.12.2"
+pylint = "^2.15.3"
 pylint-quotes = "^0.2.3"
 pytest-cov = "^3.0.0"
 pytest-xdist = "^2.5.0"
