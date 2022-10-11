@@ -26,7 +26,7 @@ pylint-quotes = "^0.2.3"
 pytest-cov = "^3.0.0"
 pytest-xdist = "^2.5.0"
 pytest-sugar = "^0.9.4"
-black = "^21.10.0"
+black = "^22.10.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
