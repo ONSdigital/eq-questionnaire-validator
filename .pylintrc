@@ -1,4 +1,4 @@
-[MASTER]
+[MAIN]
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
@@ -161,7 +161,7 @@ enable=c-extension-no-member
 
 # The type of string formatting that logging methods do. `old` means using %
 # formatting, `new` is for `{}` formatting.
-logging-format-style=old
+logging-format-style=new
 
 # Logging modules to check that the string format arguments are in logging
 # function parameter format.
@@ -375,7 +375,7 @@ int-import-graph=
 
 # Force import order to recognize a module as part of the standard
 # compatibility libraries.
-known-standard-library=enchant
+known-standard-library=
 
 # Force import order to recognize a module as part of a third party library.
 known-third-party=enchant
