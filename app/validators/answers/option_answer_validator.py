@@ -1,7 +1,7 @@
 from functools import cached_property
 
 from app.answer_type import AnswerType
-from app.validators.answers import AnswerValidator
+from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.rules.rule_validator import RulesValidator
 
 MIN_OPTIONS_BY_ANSWER_TYPE = {
