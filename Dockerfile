@@ -1,10 +1,10 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 RUN apt-get update && apt-get install --no-install-recommends -y git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install "poetry==1.1.12"
+RUN pip install "poetry==1.2.1"
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /usr/src/

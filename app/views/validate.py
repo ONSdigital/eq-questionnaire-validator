@@ -51,7 +51,9 @@ def validate_schema(data):
 
     response = {}
     try:
-        ajv_response = requests.post(AJV_VALIDATOR_URL, json=json_to_validate)
+        ajv_response = requests.post(
+            AJV_VALIDATOR_URL, json=json_to_validate, timeout=10
+        )
         ajv_response_dict = ajv_response.json()
 
         if ajv_response_dict:
