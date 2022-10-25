@@ -46,7 +46,8 @@
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
     },
     "theme": {
-      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+      "enum":["BUSINESS","SOCIAL","DEFAULT","HEALTH","NORTHEN_IRELAND","CENSUS","CENSUS_NISRA"]
     },
     "legal_basis": {
       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
