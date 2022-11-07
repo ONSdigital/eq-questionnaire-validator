@@ -29,8 +29,7 @@ class AnswerValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        # :TODO: Re-introduce once business teams are ready!
-        # self._validate_q_codes()
+        self._validate_q_codes()
 
         return self.errors
 
