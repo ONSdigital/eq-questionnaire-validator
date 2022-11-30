@@ -14,10 +14,14 @@ class CalculatedSummaryBlockValidator(BlockValidator):
     )
     ANSWERS_HAS_INVALID_ID = "Invalid answer id in block's answers_to_calculate"
     ANSWERS_HAS_DUPLICATES = "Duplicate answers in block's answers_to_calculate"
+    ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
+        "Answer ids for calculated summary must be set before calculated summary block"
+    )
+    ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = "Answer ids for calculated summary must be set in the same section as the calculated summary block"
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
-        self.answers_to_calculate = self.block["calculation"]["answers_to_calculate"]
+        self.answers_to_calculate = self.get_calculated_answer_ids()
 
     def validate(self):
         super().validate()
@@ -32,6 +36,10 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             return self.errors
 
         duplicates = find_duplicates(self.answers_to_calculate)
+
+        self.validate_answer_id_set_before_calculated_summary_block()
+
+        self.validate_answer_id_for_calculated_summary_not_in_different_section()
 
         if duplicates:
             self.add_error(self.ANSWERS_HAS_DUPLICATES, duplicate_answers=duplicates)
@@ -49,3 +57,35 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             ):
                 self.add_error(self.ANSWERS_MUST_HAVE_SAME_CURRENCY)
         return self.errors
+
+    def validate_answer_id_set_before_calculated_summary_block(self):
+        for answer_id in self.answers_to_calculate:
+            answer_id_block = self.questionnaire_schema.get_block_by_answer_id(
+                answer_id
+            )
+            if self.questionnaire_schema.block_ids.index(
+                answer_id_block["id"]
+            ) > self.questionnaire_schema.block_ids.index(self.block["id"]):
+                self.add_error(
+                    self.ANSWER_SET_AFTER_CALCULATED_SUMMARY, block=self.block
+                )
+
+    def validate_answer_id_for_calculated_summary_not_in_different_section(self):
+        answer_section_ids = {
+            self.questionnaire_schema.answers_with_context[answer_id]["section"]
+            for answer_id in self.answers_to_calculate
+        }
+        if len(answer_section_ids) > 1:
+            self.add_error(
+                self.ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY,
+                block=self.block,
+            )
+
+    def get_calculated_answer_ids(self):
+        if self.block["calculation"].get("answers_to_calculate"):
+            return self.block["calculation"]["answers_to_calculate"]
+        return [
+            value["identifier"]
+            for value in self.block["calculation"]["operation"]["+"]
+            if value["source"] == "answers"
+        ]

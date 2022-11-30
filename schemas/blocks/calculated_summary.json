@@ -24,26 +24,55 @@
         "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
       },
       "calculation": {
-        "type": "object",
-        "properties": {
-          "calculation_type": {
-            "type": "string",
-            "enum": ["sum"]
-          },
-          "answers_to_calculate": {
-            "type": "array",
-            "minItems": 2,
-            "items": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "calculation_type": {
+                "type": "string",
+                "enum": ["sum"]
+              },
+              "answers_to_calculate": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+                },
+                "description": "The id of the answers from which to do calculated_type to"
+              },
+              "title": {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+              }
             },
-            "description": "The id of the answers from which to do calculated_type to"
+            "additionalProperties": false,
+            "required": ["calculation_type", "answers_to_calculate", "title"]
           },
-          "title": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "object",
+                "properties": {
+                  "+": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations",
+                        "description": "A value source to validate against that resolves to a number."
+                      }
+                    ]
+                  }
+                },
+                "required": ["+"]
+              },
+              "title": {
+                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+              }
+            },
+            "required": ["operation", "title"],
+            "additionalProperties": false
           }
-        },
-        "additionalProperties": false,
-        "required": ["calculation_type", "answers_to_calculate", "title"]
+        ]
       }
     },
     "additionalProperties": false,
