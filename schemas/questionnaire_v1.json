@@ -253,6 +253,9 @@
                       "items": {
                         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
                       }
+                    },
+                    "item_anchor_answer_id": {
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
                     }
                   },
                   "additionalProperties": false
