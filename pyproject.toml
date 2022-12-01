@@ -13,10 +13,10 @@ Flask = "^2.0.2"
 jsonpointer = "^2.2"
 structlog = "^21.5.0"
 python-dateutil = "^2.8.2"
-jsonschema = "^4.4.0"
+jsonschema = "4.4.0"
 jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git"}
+eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.8.0"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
