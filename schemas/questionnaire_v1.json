@@ -256,6 +256,9 @@
                     },
                     "item_anchor_answer_id": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+                    },
+                    "item_label": {
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
                     }
                   },
                   "additionalProperties": false
