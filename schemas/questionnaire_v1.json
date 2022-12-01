@@ -238,6 +238,9 @@
                     "for_list": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
                     },
+                    "title": {
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+                    },
                     "item_title": {
                       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
                     },
