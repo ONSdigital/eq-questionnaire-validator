@@ -12,12 +12,13 @@ Although `q_code` partially supports this, it is misnamed and is not extensible 
 
 ## Proposal
 
-Introduce a new `answer_codes` top-level property to the schema JSON, which maps the answers to a user-defined code.
+Introduce a new optional `answer_codes` top-level property to the schema JSON, which maps the answers to a user-defined code.
 
   - `answer_codes` is an array of objects representing the answer ID and, optionally, the answer value to a user-defined code relationship.
   - Top-level to prevent duplicate mappings, as answers can be duplicated in variants. Additionally, it avoids the need for Runner to map it when Author needs to anyway.
   - This mapping will be filtered to cover only the relevant answers for the submission and then sent in the downstream payload.
   - For answers with options, an optional `answer_value` must be provided to allow mapping to a single option value. The validation that enforces the label must match the value will be removed to prevent downstream mappings from changing when the label changes.
+  - If `answer_codes` are defined, then there must be a code for every answer.
 
 ```js
   ...
