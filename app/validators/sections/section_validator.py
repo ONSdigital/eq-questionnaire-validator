@@ -354,6 +354,8 @@ class SectionValidator(Validator):
             self.validate_related_answers_when_show_non_item_answers_exists(summary)
             if items := summary.get("items"):
                 self.validate_related_answers_belong_to_list_collector(items)
+                self.validate_item_anchor_answer_id_belongs_to_list_collector(items)
+                self.validate_related_answer_has_label(items)
 
     def validate_related_answers_belong_to_list_collector(self, items):
         for item in items:
@@ -375,4 +377,40 @@ class SectionValidator(Validator):
                         self.add_error(
                             error_messages.RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR,
                             id=answer["identifier"],
+                        )
+
+    def validate_item_anchor_answer_id_belongs_to_list_collector(self, items):
+        for item in items:
+            if item_anchor_answer_id := item.get("item_anchor_answer_id"):
+                list_collector_ids = []
+                for group in self.schema_element.get("groups"):
+                    for block in group.get("blocks"):
+                        if block["type"] in ["ListCollector"]:
+                            list_collector_ids.extend(
+                                iter(
+                                    self.questionnaire_schema.get_list_collector_answer_ids(
+                                        block["id"]
+                                    )
+                                )
+                            )
+
+                if item_anchor_answer_id not in list_collector_ids:
+                    self.add_error(
+                        error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR,
+                        id=item_anchor_answer_id,
+                    )
+
+    def validate_related_answer_has_label(self, items):
+        for item in items:
+            if related_answers := item.get("related_answers"):
+                for related_answer in related_answers:
+                    answer = self.questionnaire_schema.get_answer(
+                        related_answer["identifier"]
+                    )
+                    if not answer.get("label"):
+                        self.add_error(
+                            error_messages.NO_LABEL_FOR_RELATED_ANSWER.format(
+                                answer_id=related_answer["identifier"],
+                            ),
+                            id=related_answer["identifier"],
                         )

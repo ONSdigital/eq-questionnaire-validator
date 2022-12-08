@@ -241,9 +241,6 @@
                     "title": {
                       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
                     },
-                    "item_title": {
-                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
-                    },
                     "add_link_text": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
                     },
@@ -255,13 +252,20 @@
                       "minItems": 1,
                       "items": {
                         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
-                      }
+                      },
+                      "description": "Ids of answers to be displayed on list summary"
                     },
                     "item_anchor_answer_id": {
-                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                      "description": "The main answer_id for the item title used as anchor in links on list summary"
                     },
                     "item_label": {
-                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
+                      "description": "The accompanying label for the item title on list summary"
+                    },
+                    "item_title": {
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
+                      "description": "The literal item display name on list summary"
                     }
                   },
                   "additionalProperties": false
