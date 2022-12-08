@@ -361,16 +361,15 @@ class SectionValidator(Validator):
         for item in items:
             if related_answers := item.get("related_answers"):
                 list_collector_ids = []
-                for group in self.schema_element.get("groups"):
-                    for block in group.get("blocks"):
-                        if block["type"] in ["ListCollector"]:
-                            list_collector_ids.extend(
-                                iter(
-                                    self.questionnaire_schema.get_list_collector_answer_ids(
-                                        block["id"]
-                                    )
-                                )
+                blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+                for block in blocks:
+                    list_collector_ids.extend(
+                        iter(
+                            self.questionnaire_schema.get_list_collector_answer_ids(
+                                block["id"]
                             )
+                        )
+                    )
 
                 for answer in related_answers:
                     if answer["identifier"] not in list_collector_ids:
@@ -383,16 +382,15 @@ class SectionValidator(Validator):
         for item in items:
             if item_anchor_answer_id := item.get("item_anchor_answer_id"):
                 list_collector_ids = []
-                for group in self.schema_element.get("groups"):
-                    for block in group.get("blocks"):
-                        if block["type"] in ["ListCollector"]:
-                            list_collector_ids.extend(
-                                iter(
-                                    self.questionnaire_schema.get_list_collector_answer_ids(
-                                        block["id"]
-                                    )
-                                )
+                blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+                for block in blocks:
+                    list_collector_ids.extend(
+                        iter(
+                            self.questionnaire_schema.get_list_collector_answer_ids(
+                                block["id"]
                             )
+                        )
+                    )
 
                 if item_anchor_answer_id not in list_collector_ids:
                     self.add_error(
