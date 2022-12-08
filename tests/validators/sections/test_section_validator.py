@@ -30,6 +30,11 @@ def test_invalid_section_summary_items():
     validator = SectionValidator(section, questionnaire_schema)
 
     expected_errors = [
+        {"message": "Section has multiple lists", "section_id": "section-companies"},
+        {
+            "message": "Section has multiple ListCollector blocks",
+            "section_id": "section-companies",
+        },
         {
             "id": "any-companies-or-branches-answer",
             "message": "related_answers id not present in any list collector",

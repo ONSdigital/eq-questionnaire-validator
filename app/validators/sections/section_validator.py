@@ -325,13 +325,10 @@ class SectionValidator(Validator):
 
     def has_multiple_lists(self):
         lists = []
-        for group in self.schema_element.get("groups"):
-            for block in group.get("blocks"):
-                if (
-                    block["type"] in ["ListCollector"]
-                    and block["for_list"] not in lists
-                ):
-                    lists.append(block["for_list"])
+        blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+        for block in blocks:
+            if block["for_list"] not in lists:
+                lists.append(block["for_list"])
         if len(lists) > 1:
             return True
 
