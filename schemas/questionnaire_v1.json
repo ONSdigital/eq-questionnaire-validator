@@ -278,7 +278,8 @@
                 "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
               },
               "show_non_item_answers": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "When true, this will make related answers visible on list summary as part of section summary"
               }
             },
             "additionalProperties": false,
