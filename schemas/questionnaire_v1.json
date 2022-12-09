@@ -257,7 +257,7 @@
                     },
                     "item_anchor_answer_id": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-                      "description": "The main answer_id for the item title used as anchor in links on list summary"
+                      "description": "The main answer_id for the item title used as anchor in summary links"
                     },
                     "item_label": {
                       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
