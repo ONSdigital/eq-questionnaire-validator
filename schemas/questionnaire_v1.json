@@ -261,11 +261,8 @@
                     },
                     "item_label": {
                       "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
-                      "description": "The accompanying label for the item title on list summary"
-                    },
-                    "item_title": {
-                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
-                      "description": "The literal item display name on list summary"
+                      "description": "The accompanying label for the item title on list summary",
+                      "examples": ["Name of company", "Full name"]
                     }
                   },
                   "additionalProperties": false
@@ -279,7 +276,7 @@
               },
               "show_non_item_answers": {
                 "type": "boolean",
-                "description": "When true, this will make related answers visible on list summary as part of section summary"
+                "description": "When true, non list collector answers will be displayed on the section summary. When false, a list summary is used where only list items are displayed."
               }
             },
             "additionalProperties": false,
