@@ -1,4 +1,3 @@
-# pylint: disable=too-many-public-methods
 from collections import defaultdict
 
 from app import error_messages
@@ -331,11 +330,11 @@ class SectionValidator(Validator):
             len([block.get("for_list") for block in blocks if block not in lists]) > 1
         )
 
-    def validate_show_non_item_answers_when_items_key_exists(self, summary):
+    def _validate_show_non_item_answers_when_items_key_exists(self, summary):
         if summary.get("show_non_item_answers") and not summary.get("items"):
             self.add_error(error_messages.ITEMS_NOT_PRESENT)
 
-    def validate_related_answers_when_show_non_item_answers_exists(self, summary):
+    def _validate_related_answers_when_show_non_item_answers_exists(self, summary):
         if summary.get("show_non_item_answers"):
             related_answers_present = False
             if items := summary.get("items"):
@@ -347,14 +346,14 @@ class SectionValidator(Validator):
 
     def validate_section_summary(self):
         if summary := self.schema_element.get("summary"):
-            self.validate_show_non_item_answers_when_items_key_exists(summary)
-            self.validate_related_answers_when_show_non_item_answers_exists(summary)
+            self._validate_show_non_item_answers_when_items_key_exists(summary)
+            self._validate_related_answers_when_show_non_item_answers_exists(summary)
             if items := summary.get("items"):
-                self.validate_related_answers_belong_to_list_collector(items)
-                self.validate_item_anchor_answer_id_belongs_to_list_collector(items)
-                self.validate_related_answer_has_label(items)
+                self._validate_related_answers_belong_to_list_collector(items)
+                self._validate_item_anchor_answer_id_belongs_to_list_collector(items)
+                self._validate_related_answer_has_label(items)
 
-    def validate_related_answers_belong_to_list_collector(self, items):
+    def _validate_related_answers_belong_to_list_collector(self, items):
         for item in items:
             if related_answers := item.get("related_answers"):
                 list_collector_ids = []
@@ -375,7 +374,7 @@ class SectionValidator(Validator):
                             id=answer["identifier"],
                         )
 
-    def validate_item_anchor_answer_id_belongs_to_list_collector(self, items):
+    def _validate_item_anchor_answer_id_belongs_to_list_collector(self, items):
         for item in items:
             if item_anchor_answer_id := item.get("item_anchor_answer_id"):
                 list_collector_ids = []
@@ -395,7 +394,7 @@ class SectionValidator(Validator):
                         id=item_anchor_answer_id,
                     )
 
-    def validate_related_answer_has_label(self, items):
+    def _validate_related_answer_has_label(self, items):
         for item in items:
             if related_answers := item.get("related_answers"):
                 for related_answer in related_answers:
