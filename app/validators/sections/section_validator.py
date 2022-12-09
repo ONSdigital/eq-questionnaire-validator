@@ -326,11 +326,7 @@ class SectionValidator(Validator):
     def has_multiple_lists(self):
         lists = []
         blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
-        for block in blocks:
-            if block["for_list"] not in lists:
-                lists.append(block["for_list"])
-        if len(lists) > 1:
-            return True
+       return len({block.get("for_list") for block in blocks}) > 1
 
     def validate_show_non_item_answers_when_items_key_exists(self, summary):
         if summary.get("show_non_item_answers") and not summary.get("items"):
