@@ -327,7 +327,7 @@ class SectionValidator(Validator):
         lists = []
 
         return (
-            len([block.get("for_list") for block in blocks if block not in lists]) > 1
+            len({block.get("for_list") for block in blocks if block not in lists}) > 1
         )
 
     def _validate_show_non_item_answers_when_items_key_exists(self, summary):
