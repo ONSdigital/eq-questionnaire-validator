@@ -314,21 +314,26 @@ class SectionValidator(Validator):
                 return True
 
     def has_multiple_list_collectors(self):
-        list_collector_count = 0
+        list_collectors = []
         for group in self.schema_element.get("groups"):
-            for block in group.get("blocks"):
-                if block["type"] in ["ListCollector"]:
-                    list_collector_count += 1
-        if list_collector_count > 1:
-            return True
+            list_collectors.extend(
+                block
+                for block in group.get("blocks")
+                if block["type"] in ["ListCollector"]
+            )
+
+        return len(list_collectors) > 1
 
     def has_multiple_lists(self):
-        blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
         lists = []
+        for group in self.schema_element.get("groups"):
+            lists.extend(
+                block.get("for_list")
+                for block in group.get("blocks")
+                if block["type"] in ["ListCollector"]
+            )
 
-        return (
-            len({block.get("for_list") for block in blocks if block not in lists}) > 1
-        )
+        return len(lists) > 1
 
     def _validate_show_non_item_answers_when_items_key_exists(self, summary):
         if summary.get("show_non_item_answers") and not summary.get("items"):
