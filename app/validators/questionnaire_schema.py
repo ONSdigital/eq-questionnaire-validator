@@ -39,6 +39,23 @@ def find_duplicates(values):
     return [item for item, count in collections.Counter(values).items() if count > 1]
 
 
+def get_values_for_key(block, key, ignore_keys=None):
+    ignore_keys = ignore_keys or []
+    for k, v in block.items():
+        try:
+            if k in ignore_keys:
+                continue
+            if k == key:
+                yield v
+            if isinstance(v, dict):
+                yield from get_values_for_key(v, key, ignore_keys)
+            elif isinstance(v, (list, tuple)):
+                for d in v:
+                    yield from get_values_for_key(d, key, ignore_keys)
+        except AttributeError:
+            continue
+
+
 def get_object_containing_key(data, key_name):
     """
     Get all dicts that contain `key_name` within a piece of data
@@ -412,18 +429,9 @@ class QuestionnaireSchema:
             referred_answer = answer_ranges.get(defined_value["identifier"])
         elif value_source == "calculated_summary":
             calculated_summary_block = self.get_block(defined_value["identifier"])
-            if calculated_summary_block["calculation"].get("answers_to_calculate"):
-                answers_to_calculate: list = calculated_summary_block["calculation"][
-                    "answers_to_calculate"
-                ]
-            else:
-                answers_to_calculate = [
-                    value["identifier"]
-                    for value in calculated_summary_block["calculation"]["operation"][
-                        "+"
-                    ]
-                    if value["source"] == "answers"
-                ]
+            answers_to_calculate = self.get_calculated_answer_ids(
+                calculated_summary_block
+            )
 
             for answer_id in answers_to_calculate:
                 referred_answer = answer_ranges.get(answer_id)
@@ -444,3 +452,20 @@ class QuestionnaireSchema:
             if not referred_answer:
                 return None
         return system_default
+
+    @staticmethod
+    def get_calculated_answer_ids(block):
+        if block["calculation"].get("answers_to_calculate"):
+            return block["calculation"]["answers_to_calculate"]
+
+        values = get_values_for_key(block["calculation"]["operation"], "+")
+
+        calculated_summary_answer_ids = []
+        for value_sources in values:
+            calculated_summary_answer_ids.extend(
+                value_source["identifier"]
+                for value_source in value_sources
+                if value_source["source"] == "answers"
+            )
+
+        return calculated_summary_answer_ids

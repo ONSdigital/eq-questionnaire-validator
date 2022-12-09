@@ -21,7 +21,9 @@ class CalculatedSummaryBlockValidator(BlockValidator):
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
-        self.answers_to_calculate = self.get_calculated_answer_ids()
+        self.answers_to_calculate = self.questionnaire_schema.get_calculated_answer_ids(
+            self.block
+        )
 
     def validate(self):
         super().validate()
@@ -80,12 +82,3 @@ class CalculatedSummaryBlockValidator(BlockValidator):
                 self.ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY,
                 block=self.block,
             )
-
-    def get_calculated_answer_ids(self):
-        if self.block["calculation"].get("answers_to_calculate"):
-            return self.block["calculation"]["answers_to_calculate"]
-        return [
-            value["identifier"]
-            for value in self.block["calculation"]["operation"]["+"]
-            if value["source"] == "answers"
-        ]
