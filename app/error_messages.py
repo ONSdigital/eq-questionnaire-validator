@@ -8,7 +8,7 @@ RELATED_ANSWERS_NOT_PRESENT = "Related_answers field not present for summary"
 RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = (
     "Related_answers id not present in any list collector"
 )
-NO_LABEL_FOR_RELATED_ANSWER = "No label found for {answer_id}, only answers that support labels can be used as related answers"
+NO_LABEL_FOR_RELATED_ANSWER = "No label found for answer '{answer_id}', only answers that support labels can be used as related answers"
 ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR = (
     "Item anchor answer id not present in any list collector"
 )
