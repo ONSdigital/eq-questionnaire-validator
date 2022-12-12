@@ -339,20 +339,9 @@ class SectionValidator(Validator):
         if summary.get("show_non_item_answers") and not summary.get("items"):
             self.add_error(error_messages.ITEMS_NOT_PRESENT)
 
-    def _validate_related_answers_when_show_non_item_answers_exists(self, summary):
-        if summary.get("show_non_item_answers"):
-            related_answers_present = False
-            if items := summary.get("items"):
-                for item in items:
-                    if item.get("related_answers"):
-                        related_answers_present = True
-                if not related_answers_present:
-                    self.add_error(error_messages.RELATED_ANSWERS_NOT_PRESENT)
-
     def validate_section_summary(self):
         if summary := self.schema_element.get("summary"):
             self._validate_show_non_item_answers_when_items_key_exists(summary)
-            self._validate_related_answers_when_show_non_item_answers_exists(summary)
             if items := summary.get("items"):
                 self._validate_related_answers_belong_to_list_collector(items)
                 self._validate_item_anchor_answer_id_belongs_to_list_collector(items)
