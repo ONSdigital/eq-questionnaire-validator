@@ -256,7 +256,6 @@ class RulesValidator(Validator):
         """
         values = get_values_for_key(operator, "+")
 
-        errors = set()
         for value_sources in values:
             for value_source in value_sources:
                 if isinstance(value_source, dict):
@@ -265,15 +264,12 @@ class RulesValidator(Validator):
                             value_source["identifier"]
                         )
                         if answer_type != TYPE_NUMBER:
-                            errors.add((answer_type, value_source["identifier"]))
-
-        for error in errors:
-            self.add_error(
-                self.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                    answer_type=error[0].value,
-                ),
-                referenced_answer=error[1],
-            )
+                            self.add_error(
+                                self.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                                    answer_type=answer_type.value,
+                                ),
+                                referenced_answer=value_source["identifier"],
+                            )
 
     def _validate_options(self, rules, operator_name):
         """

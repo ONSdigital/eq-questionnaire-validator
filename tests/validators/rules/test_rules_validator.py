@@ -273,16 +273,16 @@ def test_validate_nested_sum_operator():
         },
         {
             "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="Checkbox"
+                answer_type="TextField"
             ),
-            "referenced_answer": "checkbox-answer",
+            "referenced_answer": "array-answer",
             "origin_id": "block-id",
         },
         {
             "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="TextField"
+                answer_type="Checkbox"
             ),
-            "referenced_answer": "array-answer",
+            "referenced_answer": "checkbox-answer",
             "origin_id": "block-id",
         },
     ]
