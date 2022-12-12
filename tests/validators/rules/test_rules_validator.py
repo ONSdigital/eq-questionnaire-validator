@@ -215,6 +215,81 @@ def test_validate_count_operator_non_checkbox_answer():
     assert validator.errors == [expected_error]
 
 
+def test_validate_sum_operator():
+    sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}]}
+
+    validator = get_validator(
+        sum_operator,
+        answers_with_context={
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+        },
+    )
+    validator.validate()
+
+    expected_error = {
+        "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+            answer_type="TextField"
+        ),
+        "referenced_answer": "array-answer",
+        "origin_id": "block-id",
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_validate_nested_sum_operator():
+    sum_operator = {
+        "+": [
+            {"+": [{"source": "answers", "identifier": "array-answer"}]},
+            {"+": [{"source": "answers", "identifier": "checkbox-answer"}, ["Yes"]]},
+        ]
+    }
+
+    validator = get_validator(
+        sum_operator,
+        answers_with_context={
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
+            "checkbox-answer": {
+                "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+            },
+        },
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                answer_type="TextField"
+            ),
+            "referenced_answer": "array-answer",
+            "origin_id": "block-id",
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                answer_type="Checkbox"
+            ),
+            "referenced_answer": "checkbox-answer",
+            "origin_id": "block-id",
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                answer_type="Checkbox"
+            ),
+            "referenced_answer": "checkbox-answer",
+            "origin_id": "block-id",
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                answer_type="TextField"
+            ),
+            "referenced_answer": "array-answer",
+            "origin_id": "block-id",
+        },
+    ]
+
+    assert validator.errors == expected_errors
+
+
 def test_map_operator_with_self_reference():
     operator = {
         "map": [

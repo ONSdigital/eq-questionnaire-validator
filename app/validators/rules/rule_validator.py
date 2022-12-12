@@ -1,5 +1,7 @@
 from app import error_messages
 from app.answer_type import AnswerOptionType, AnswerType
+from app.validators.questionnaire_schema import get_values_for_key
+from app.validators.routing.types import TYPE_NUMBER
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -24,6 +26,7 @@ class Operator:
     MAP = "map"
     OPTION_LABEL_FROM_VALUE = "option-label-from-value"
     CONCATENATE = "concatenate"
+    SUM = "+"
 
 
 LOGIC_OPERATORS = [Operator.NOT, Operator.AND, Operator.OR]
@@ -47,8 +50,14 @@ VALUE_OPERATORS = [
     Operator.MAP,
 ]
 
+NUMERIC_OPERATORS = [Operator.SUM]
+
 ALL_OPERATORS = (
-    LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
+    LOGIC_OPERATORS
+    + COMPARISON_OPERATORS
+    + ARRAY_OPERATORS
+    + VALUE_OPERATORS
+    + NUMERIC_OPERATORS
 )
 
 SELF_REFERENCE_KEY = "self"
@@ -68,6 +77,7 @@ class RulesValidator(Validator):
     SELF_REFERENCE_OUTSIDE_MAP_OPERATOR = (
         f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
     )
+    ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID = "Expected the answer type for sum operator to be type 'number' but got type '{answer_type}'"
 
     def __init__(
         self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False
@@ -101,6 +111,9 @@ class RulesValidator(Validator):
 
         elif operator_name == Operator.COUNT:
             self._validate_count_operator(rules)
+
+        elif operator_name == Operator.SUM:
+            self._validate_sum_operator(rules)
 
         elif operator_name == Operator.MAP:
             self._validate_map_operator(rules)
@@ -235,6 +248,31 @@ class RulesValidator(Validator):
             self.add_error(
                 self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
                 value_source=first_argument,
+            )
+
+    def _validate_sum_operator(self, operator):
+        """
+        Validates that an answer value source within a sum operator is numeric
+        """
+        values = get_values_for_key(operator, "+")
+
+        errors = set()
+        for value_sources in values:
+            for value_source in value_sources:
+                if isinstance(value_source, dict):
+                    if value_source.get("source") == "answers":
+                        answer_type = self.questionnaire_schema.get_answer_type(
+                            value_source["identifier"]
+                        )
+                        if answer_type != TYPE_NUMBER:
+                            errors.add((answer_type, value_source["identifier"]))
+
+        for error in errors:
+            self.add_error(
+                self.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
+                    answer_type=error[0].value,
+                ),
+                referenced_answer=error[1],
             )
 
     def _validate_options(self, rules, operator_name):

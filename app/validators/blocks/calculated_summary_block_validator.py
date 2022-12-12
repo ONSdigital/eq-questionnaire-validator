@@ -37,26 +37,22 @@ class CalculatedSummaryBlockValidator(BlockValidator):
             self.add_error(self.ANSWERS_HAS_INVALID_ID, answer_id=str(e).strip("'"))
             return self.errors
 
-        duplicates = find_duplicates(self.answers_to_calculate)
-
         self.validate_answer_id_set_before_calculated_summary_block()
 
         self.validate_answer_id_for_calculated_summary_not_in_different_section()
 
-        if duplicates:
+        if duplicates := find_duplicates(self.answers_to_calculate):
             self.add_error(self.ANSWERS_HAS_DUPLICATES, duplicate_answers=duplicates)
 
-        if not all(answer["type"] == answers[0]["type"] for answer in answers):
+        if any(answer["type"] != answers[0]["type"] for answer in answers):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_TYPE)
             return self.errors
 
         if answers[0]["type"] == "Unit":
-            if not all(answer["unit"] == answers[0]["unit"] for answer in answers):
+            if any(answer["unit"] != answers[0]["unit"] for answer in answers):
                 self.add_error(self.ANSWERS_MUST_HAVE_SAME_UNIT)
         elif answers[0]["type"] == "Currency":
-            if not all(
-                answer["currency"] == answers[0]["currency"] for answer in answers
-            ):
+            if any(answer["currency"] != answers[0]["currency"] for answer in answers):
                 self.add_error(self.ANSWERS_MUST_HAVE_SAME_CURRENCY)
         return self.errors
 
