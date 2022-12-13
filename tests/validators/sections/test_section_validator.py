@@ -45,9 +45,8 @@ def test_invalid_section_summary_items():
     validator = SectionValidator(section, questionnaire_schema)
 
     expected_errors = [
-        {"message": "Section has multiple lists", "section_id": "section-companies"},
         {
-            "message": "Section has multiple ListCollector blocks",
+            "message": "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers",
             "section_id": "section-companies",
         },
         {

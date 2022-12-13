@@ -28,7 +28,6 @@ class SectionValidator(Validator):
             return self.errors
         self.validate_groups()
         self.validate_section_enabled()
-        self.validate_number_of_lists()
         self.validate_number_of_list_collectors()
         self.validate_section_summary()
         return self.errors
@@ -296,10 +295,6 @@ class SectionValidator(Validator):
 
         return results
 
-    def validate_number_of_lists(self):
-        if self.has_list_summary_with_non_item_answers() and self.has_multiple_lists():
-            self.add_error(error_messages.MULTIPLE_LISTS)
-
     def validate_number_of_list_collectors(self):
         if (
             self.has_list_summary_with_non_item_answers()
@@ -322,17 +317,6 @@ class SectionValidator(Validator):
             )
 
         return len(list_collectors) > 1
-
-    def has_multiple_lists(self):
-        lists = []
-        for group in self.schema_element.get("groups"):
-            lists.extend(
-                block.get("for_list")
-                for block in group.get("blocks")
-                if block["type"] in ["ListCollector"]
-            )
-
-        return len(lists) > 1
 
     def _validate_show_non_item_answers_when_items_key_exists(self, summary):
         if summary.get("show_non_item_answers") and not summary.get("items"):

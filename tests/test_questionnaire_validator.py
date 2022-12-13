@@ -425,10 +425,6 @@ def test_multiple_list_collectors_and_lists_in_single_section():
 
     expected_errors = [
         {
-            "message": error_messages.MULTIPLE_LISTS,
-            "section_id": "section",
-        },
-        {
             "message": error_messages.MULTIPLE_LIST_COLLECTORS,
             "section_id": "section",
         },
