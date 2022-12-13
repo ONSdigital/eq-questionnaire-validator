@@ -250,6 +250,7 @@
                     "related_answers": {
                       "type": "array",
                       "minItems": 1,
+                      "uniqueItems": true,
                       "items": {
                         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
                       },
