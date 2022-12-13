@@ -347,24 +347,29 @@ class SectionValidator(Validator):
                         )
 
     def _validate_item_anchor_answer_id_belongs_to_list_collector(self, items):
+        list_collector_ids = set()
+        items_map = {}
         for item in items:
-            if item_anchor_answer_id := item.get("item_anchor_answer_id"):
-                list_collector_ids = []
-                blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
-                for block in blocks:
-                    list_collector_ids.extend(
-                        iter(
-                            self.questionnaire_schema.get_list_collector_answer_ids(
-                                block["id"]
-                            )
+            if (item_anchor_answer_id := item.get("item_anchor_answer_id")) and (
+                for_list := item.get("for_list")
+            ):
+                items_map[for_list] = item_anchor_answer_id
+
+        blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+        for list_name, anchor_answer_id in items_map.items():
+            for block in blocks:
+                if block["for_list"] == list_name:
+                    list_collector_ids = (
+                        self.questionnaire_schema.get_list_collector_answer_ids(
+                            block["id"]
                         )
                     )
 
-                if item_anchor_answer_id not in list_collector_ids:
-                    self.add_error(
-                        error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR,
-                        id=item_anchor_answer_id,
-                    )
+            if anchor_answer_id not in list_collector_ids:
+                self.add_error(
+                    error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR,
+                    id=anchor_answer_id,
+                )
 
     def _validate_related_answer_has_label(self, items):
         for item in items:
