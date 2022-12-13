@@ -310,8 +310,7 @@ class SectionValidator(Validator):
     def has_list_summary_with_non_item_answers(self):
         if summary := self.schema_element.get("summary"):
             show_non_item_answers = summary.get("show_non_item_answers")
-            if summary.get("items") and show_non_item_answers is True:
-                return True
+            return summary.get("items") and show_non_item_answers
 
     def has_multiple_list_collectors(self):
         list_collectors = []
