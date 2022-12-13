@@ -257,7 +257,7 @@
                       "description": "Value sources of answers to be displayed on the list summary, excluding the answer used for the item title"
                     },
                     "item_anchor_answer_id": {
-                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
                       "description": "The main answer_id for the item title used as anchor in summary links"
                     },
                     "item_label": {
