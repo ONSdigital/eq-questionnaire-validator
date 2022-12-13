@@ -253,7 +253,7 @@
                       "items": {
                         "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
                       },
-                      "description": "Ids of answers to be displayed on list summary"
+                      "description": "Value sources of answers to be displayed on the list summary, excluding the answer used for the item title"
                     },
                     "item_anchor_answer_id": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
@@ -278,6 +278,9 @@
                 "type": "boolean",
                 "description": "When true, non list collector answers will be displayed on the section summary. When false, a list summary is used where only list items are displayed."
               }
+            },
+            "dependencies": {
+              "show_non_item_answers": ["items"]
             },
             "additionalProperties": false,
             "required": ["show_on_completion"]

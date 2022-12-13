@@ -23,21 +23,6 @@ def test_invalid_list_reference_in_custom_summary():
     assert validator.errors == expected_errors
 
 
-def test_section_summary_items_fields_missing():
-    filename = "schemas/invalid/test_invalid_list_collector_section_summary_fields_missing.json"
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    section = questionnaire_schema.get_section("section")
-    validator = SectionValidator(section, questionnaire_schema)
-
-    expected_errors = [
-        {"message": "Items field not present for summary", "section_id": "section"}
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_invalid_section_summary_items():
     filename = "schemas/invalid/test_invalid_list_collector_section_summary_items.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))

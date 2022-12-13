@@ -2,7 +2,6 @@ DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 DUPLICATE_ID_FOUND = "Duplicate id found"
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
 MULTIPLE_LIST_COLLECTORS = "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers"
-ITEMS_NOT_PRESENT = "Items field not present for summary"
 RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = (
     "Related_answers id not present in any list collector"
 )
