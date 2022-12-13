@@ -29,7 +29,7 @@ class SectionValidator(Validator):
         self.validate_groups()
         self.validate_section_enabled()
         self.validate_number_of_list_collectors()
-        self.validate_section_summary()
+        self.validate_section_summary_items()
         return self.errors
 
     def validate_repeat(self):
@@ -318,7 +318,7 @@ class SectionValidator(Validator):
 
         return len(list_collectors) > 1
 
-    def validate_section_summary(self):
+    def validate_section_summary_items(self):
         summary_items = self.schema_element.get("summary", {}).get("items", [])
         if not summary_items:
             return None
