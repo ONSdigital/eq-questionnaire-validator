@@ -280,11 +280,18 @@
                 "description": "When true, non list collector answers will be displayed on the section summary. When false, a list summary is used where only list items are displayed."
               }
             },
-            "dependencies": {
-              "show_non_item_answers": ["items"]
+            "if": {
+              "properties": {
+                "show_non_item_answers": { "not": { "const": true } }
+              }
             },
-            "additionalProperties": false,
-            "required": ["show_on_completion"]
+            "then": {
+              "required": ["show_on_completion"]
+            },
+            "else": {
+              "required": ["items", "show_on_completion"]
+            },
+            "additionalProperties": false
           },
           "show_on_hub": {
             "type": "boolean",
