@@ -20,6 +20,8 @@ Introduce a new optional `answer_codes` top-level property to the schema JSON, w
   - For answers with options, an optional `answer_value` must be provided to allow mapping to a single option value. The validation that enforces the label must match the value will be removed to prevent downstream mappings from changing when the label changes.
   - If `answer_codes` are defined, then there must be a code for every answer.
 
+**Example:**
+
 ```js
   ...
   "answer_codes": [
@@ -63,9 +65,9 @@ Example option answer with a user-defined code:
 
 ```js
 {
-  "answer_id": "option-answer",
-    "answer_value": "Value 1",
-    "code": "8a"
+  "answer_id": "option-answer", 
+  "answer_value": "Value 1",
+  "code": "8a"
 }
 ```
 
@@ -79,7 +81,7 @@ This means the user-defined code for answer id `option-answer` with a value of `
 ```js
 {
   "answer_id": "option-answer",
-    "code": "8"
+  "code": "8"
 }
 ```
 
@@ -99,7 +101,7 @@ This mapping implies that regardless of the value selected by the respondent, th
 ```js
 {
   "answer_id": "radio-answer",
-    "code": "1"
+  "code": "1"
 }
 ```
 
@@ -110,8 +112,8 @@ This mapping implies that option value `2022-01-01` has a code for `1a` whereas 
 ```js
 {
   "answer_id": "radio-answer",
-    "answer_value": "2022-01-01",
-    "code": "1a"
+  "answer_value": "2022-01-01",
+  "code": "1a"
 },
 {
   "answer_id": "radio-answer",
@@ -131,19 +133,19 @@ _**JSON Schema:**_
 ```js
 {
   "id": "radio-answer",
-    "mandatory": false,
-    "type": "Radio",
-    "dynamic_options": {
+  "mandatory": false,
+  "type": "Radio",
+  "dynamic_options": {
     "values": {...}
   },
   "transform": {...}
-},
-"options": [
-  {
-    "label": "None of the above",
-    "value": "None"
-  }
-]
+  },
+  "options": [
+    {
+      "label": "None of the above",
+      "value": "None"
+    }
+  ]
 }
 ```
 
@@ -152,7 +154,7 @@ _**Answer codes:**_
 ```js
 {
   "answer_id": "radio-answer",
-    "code": "1"  // Used for any dynamic options
+  "code": "1"  // Used for any dynamic options
 },
 {
   "answer_id": "radio-answer",
