@@ -319,10 +319,19 @@ class SectionValidator(Validator):
         return len(list_collectors) > 1
 
     def validate_section_summary(self):
+        items_map = {}
         if summary := self.schema_element.get("summary"):
             if items := summary.get("items"):
+                for item in items:
+                    if (
+                        item_anchor_answer_id := item.get("item_anchor_answer_id")
+                    ) and (for_list := item.get("for_list")):
+                        items_map[for_list] = item_anchor_answer_id
+                        self._validate_item_anchor_answer_id_belongs_to_list_collector(
+                            items_map
+                        )
+
                 self._validate_related_answers_belong_to_list_collector(items)
-                self._validate_item_anchor_answer_id_belongs_to_list_collector(items)
                 self._validate_related_answer_has_label(items)
 
     def _validate_related_answers_belong_to_list_collector(self, items):
@@ -346,14 +355,8 @@ class SectionValidator(Validator):
                             id=answer["identifier"],
                         )
 
-    def _validate_item_anchor_answer_id_belongs_to_list_collector(self, items):
+    def _validate_item_anchor_answer_id_belongs_to_list_collector(self, items_map):
         list_collector_ids = set()
-        items_map = {}
-        for item in items:
-            if (item_anchor_answer_id := item.get("item_anchor_answer_id")) and (
-                for_list := item.get("for_list")
-            ):
-                items_map[for_list] = item_anchor_answer_id
 
         blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
         for list_name, anchor_answer_id in items_map.items():
