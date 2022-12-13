@@ -36,8 +36,8 @@ def test_invalid_section_summary_items():
         },
         {
             "id": "any-companies-or-branches-answer",
-            "message": "Item anchor answer id '{answer_id}' not present in any list "
-            "collector for list name '{list_name}'",
+            "message": "Item anchor answer id 'any-companies-or-branches-answer' not present in any list "
+            "collector for list name 'companies'",
             "section_id": "section-companies",
         },
         {

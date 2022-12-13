@@ -337,7 +337,9 @@ class SectionValidator(Validator):
 
             if item_anchor_answer_id := item.get("item_anchor_answer_id"):
                 self._validate_item_anchor_answer_id_belongs_to_list_collector(
-                    item_anchor_answer_id, list_collector_answer_ids_for_list
+                    item_anchor_answer_id,
+                    list_collector_answer_ids_for_list,
+                    item["for_list"],
                 )
 
             for answer_source in item.get("related_answers", []):
@@ -356,11 +358,13 @@ class SectionValidator(Validator):
             )
 
     def _validate_item_anchor_answer_id_belongs_to_list_collector(
-        self, anchor_answer_id, list_collector_answer_ids
+        self, anchor_answer_id, list_collector_answer_ids, list_name
     ):
         if anchor_answer_id not in list_collector_answer_ids:
             self.add_error(
-                error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR,
+                error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR.format(
+                    answer_id=anchor_answer_id, list_name=list_name
+                ),
                 id=anchor_answer_id,
             )
 
