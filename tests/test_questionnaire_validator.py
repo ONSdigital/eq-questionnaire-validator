@@ -360,7 +360,7 @@ def test_invalid_repeating_section_list_name():
             "message": error_messages.FOR_LIST_NEVER_POPULATED,
             "list_name": "non-existent-list",
             "section_id": "personal-details-section",
-        }
+        },
     ]
 
     validator.validate()
@@ -417,3 +417,19 @@ def test_invalid_answer_type_for_question_summary_concatenation():
     validator.validate()
 
     assert validator.errors == expected_error_messages
+
+
+def test_multiple_list_collectors_and_lists_in_single_section():
+    filename = "schemas/invalid/test_invalid_multiple_list_collectors_and_lists.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": error_messages.MULTIPLE_LIST_COLLECTORS,
+            "section_id": "section",
+        },
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors

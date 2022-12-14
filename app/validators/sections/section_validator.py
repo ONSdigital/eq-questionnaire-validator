@@ -28,6 +28,8 @@ class SectionValidator(Validator):
             return self.errors
         self.validate_groups()
         self.validate_section_enabled()
+        self.validate_number_of_list_collectors()
+        self.validate_section_summary_items()
         return self.errors
 
     def validate_repeat(self):
@@ -292,3 +294,86 @@ class SectionValidator(Validator):
                 results["number_of_answers"].add(len(results["answer_ids"]))
 
         return results
+
+    def validate_number_of_list_collectors(self):
+        if (
+            self.has_list_summary_with_non_item_answers()
+            and self.has_multiple_list_collectors()
+        ):
+            self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
+
+    def has_list_summary_with_non_item_answers(self):
+        if summary := self.schema_element.get("summary"):
+            show_non_item_answers = summary.get("show_non_item_answers")
+            return summary.get("items") and show_non_item_answers
+
+    def has_multiple_list_collectors(self):
+        list_collectors = []
+        for group in self.schema_element.get("groups"):
+            list_collectors.extend(
+                block
+                for block in group.get("blocks")
+                if block["type"] in ["ListCollector"]
+            )
+
+        return len(list_collectors) > 1
+
+    def validate_section_summary_items(self):
+        summary_items = self.schema_element.get("summary", {}).get("items", [])
+        if not summary_items:
+            return None
+
+        blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+        list_collector_answer_ids_by_list = defaultdict(list)
+        for block in blocks:
+            list_collector_answer_ids_by_list[block["for_list"]].extend(
+                self.questionnaire_schema.get_list_collector_answer_ids(block["id"])
+            )
+
+        for item in summary_items:
+            list_collector_answer_ids_for_list = list_collector_answer_ids_by_list[
+                item["for_list"]
+            ]
+
+            if item_anchor_answer_id := item.get("item_anchor_answer_id"):
+                self._validate_item_anchor_answer_id_belongs_to_list_collector(
+                    item_anchor_answer_id,
+                    list_collector_answer_ids_for_list,
+                    item["for_list"],
+                )
+
+            for answer_source in item.get("related_answers", []):
+                self._validate_related_answer_belong_to_list_collector(
+                    answer_source, list_collector_answer_ids_for_list
+                )
+                self._validate_related_answer_has_label(answer_source)
+
+    def _validate_related_answer_belong_to_list_collector(
+        self, answer_source, list_collector_answer_ids
+    ):
+        if answer_source["identifier"] not in list_collector_answer_ids:
+            self.add_error(
+                error_messages.RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR,
+                id=answer_source["identifier"],
+            )
+
+    def _validate_item_anchor_answer_id_belongs_to_list_collector(
+        self, anchor_answer_id, list_collector_answer_ids, list_name
+    ):
+        if anchor_answer_id not in list_collector_answer_ids:
+            self.add_error(
+                error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR.format(
+                    answer_id=anchor_answer_id, list_name=list_name
+                ),
+                id=anchor_answer_id,
+            )
+
+    def _validate_related_answer_has_label(self, answer_source):
+        answer = self.questionnaire_schema.get_answer(answer_source["identifier"])
+        if not answer.get("label"):
+            self.add_error(
+                error_messages.NO_LABEL_FOR_RELATED_ANSWER.format(
+                    answer_id=answer_source["identifier"],
+                ),
+                id=answer_source["identifier"],
+            )

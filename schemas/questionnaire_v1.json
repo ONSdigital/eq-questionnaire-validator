@@ -246,6 +246,24 @@
                     },
                     "empty_list_text": {
                       "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+                    },
+                    "related_answers": {
+                      "type": "array",
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "items": {
+                        "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
+                      },
+                      "description": "Value sources of answers to be displayed on the list summary, excluding the answer used for the item title"
+                    },
+                    "item_anchor_answer_id": {
+                      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+                      "description": "The main answer_id for the item title used as anchor in summary links"
+                    },
+                    "item_label": {
+                      "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders",
+                      "description": "The accompanying label for the item title on list summary",
+                      "examples": ["Name of company", "Full name"]
                     }
                   },
                   "additionalProperties": false
@@ -256,10 +274,24 @@
               },
               "page_title": {
                 "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              },
+              "show_non_item_answers": {
+                "type": "boolean",
+                "description": "When true, non list collector answers will be displayed on the section summary. When false, a list summary is used where only list items are displayed."
               }
             },
-            "additionalProperties": false,
-            "required": ["show_on_completion"]
+            "if": {
+              "properties": {
+                "show_non_item_answers": { "not": { "const": true } }
+              }
+            },
+            "then": {
+              "required": ["show_on_completion"]
+            },
+            "else": {
+              "required": ["items", "show_on_completion"]
+            },
+            "additionalProperties": false
           },
           "show_on_hub": {
             "type": "boolean",
