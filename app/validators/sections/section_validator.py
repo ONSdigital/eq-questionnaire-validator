@@ -6,9 +6,9 @@ from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.questions import get_question_validator
 from app.validators.routing.new_routing_validator import NewRoutingValidator
-from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.routing.when_rule_validator import WhenRuleValidator
+from app.validators.rules.rule_validator import RulesValidator
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -56,7 +56,7 @@ class SectionValidator(Validator):
 
         elif isinstance(section_enabled, dict):
             when = section_enabled["when"]
-            when_validator = NewWhenRuleValidator(
+            when_validator = RulesValidator(
                 when, self.section["id"], self.questionnaire_schema
             )
             self.errors += when_validator.validate()
@@ -73,7 +73,7 @@ class SectionValidator(Validator):
             self.errors += when_validator.validate()
 
     def validate_new_skip_conditions(self, skip_condition, origin_id):
-        when_validator = NewWhenRuleValidator(
+        when_validator = RulesValidator(
             skip_condition["when"], origin_id, self.questionnaire_schema
         )
         self.errors += when_validator.validate()
@@ -183,7 +183,7 @@ class SectionValidator(Validator):
                 self.errors += when_validator.validate()
 
             elif isinstance(when_clause, dict):
-                when_validator = NewWhenRuleValidator(
+                when_validator = RulesValidator(
                     when_clause, self.section["id"], self.questionnaire_schema
                 )
                 self.errors += when_validator.validate()

@@ -207,9 +207,12 @@ def test_validate_count_operator_non_checkbox_answer():
     validator.validate()
 
     expected_error = {
-        "message": validator.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
-        "origin_id": ORIGIN_ID,
-        "value_source": {"source": "answers", "identifier": "array-answer"},
+        "argument_type": "string",
+        "argument_value": {"identifier": "array-answer", "source": "answers"},
+        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+        "operator": "count",
+        "origin_id": "block-id",
+        "valid_types": ["number"],
     }
 
     assert validator.errors == [expected_error]
@@ -227,11 +230,12 @@ def test_validate_sum_operator():
     validator.validate()
 
     expected_error = {
-        "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-            answer_type="TextField"
-        ),
-        "referenced_answer": "array-answer",
+        "argument_type": "string",
+        "argument_value": {"identifier": "array-answer", "source": "answers"},
+        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+        "operator": "+",
         "origin_id": "block-id",
+        "valid_types": ["number"],
     }
 
     assert validator.errors == [expected_error]
@@ -258,32 +262,24 @@ def test_validate_nested_sum_operator():
 
     expected_errors = [
         {
-            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="TextField"
-            ),
-            "referenced_answer": "array-answer",
+            "argument_type": "object",
+            "argument_value": {
+                "+": [{"identifier": "array-answer", "source": "answers"}]
+            },
+            "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+            "operator": "+",
             "origin_id": "block-id",
+            "valid_types": ["number"],
         },
         {
-            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="Checkbox"
-            ),
-            "referenced_answer": "checkbox-answer",
+            "argument_type": "object",
+            "argument_value": {
+                "+": [{"identifier": "checkbox-answer", "source": "answers"}, ["Yes"]]
+            },
+            "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+            "operator": "+",
             "origin_id": "block-id",
-        },
-        {
-            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="TextField"
-            ),
-            "referenced_answer": "array-answer",
-            "origin_id": "block-id",
-        },
-        {
-            "message": validator.ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID.format(
-                answer_type="Checkbox"
-            ),
-            "referenced_answer": "checkbox-answer",
-            "origin_id": "block-id",
+            "valid_types": ["number"],
         },
     ]
 
