@@ -444,8 +444,9 @@ class QuestionnaireSchema:
         value_sources = get_object_containing_key(
             block["calculation"]["operation"], "source"
         )
+
         return [
             source[1]["identifier"]
             for source in value_sources
-            if source[0] == "answers"
+            if source[1]["source"] == "answers"
         ]
