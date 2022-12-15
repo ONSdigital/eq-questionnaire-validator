@@ -458,14 +458,7 @@ class QuestionnaireSchema:
         if block["calculation"].get("answers_to_calculate"):
             return block["calculation"]["answers_to_calculate"]
 
-        values = get_values_for_key(block["calculation"]["operation"], "+")
-
-        calculated_summary_answer_ids = []
-        for value_sources in values:
-            calculated_summary_answer_ids.extend(
-                value_source["identifier"]
-                for value_source in value_sources
-                if value_source["source"] == "answers"
-            )
-
-        return calculated_summary_answer_ids
+        value_sources = get_object_containing_key(
+            block["calculation"]["operation"], "source"
+        )
+        return [source[1]["identifier"] for source in value_sources]

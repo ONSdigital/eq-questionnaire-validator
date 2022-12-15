@@ -332,12 +332,10 @@
                       "identifier": "third-number-answer"
                     },
                     {
-                      "source": "answers",
-                      "identifier": "fourth-number-answer"
-                    },
-                    {
-                      "source": "answers",
-                      "identifier": "fourth-and-a-half-number-answer-also-in-total"
+                      "+": [
+                        {"source": "answers", "identifier": "fourth-number-answer"},
+                        {"source": "answers", "identifier": "fourth-and-a-half-number-answer-also-in-total"}
+                      ]
                     }
                   ]
                 },

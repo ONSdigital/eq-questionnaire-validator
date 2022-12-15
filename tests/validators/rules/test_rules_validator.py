@@ -244,8 +244,13 @@ def test_validate_sum_operator():
 def test_validate_nested_sum_operator():
     sum_operator = {
         "+": [
-            {"+": [{"source": "answers", "identifier": "array-answer"}]},
-            {"+": [{"source": "answers", "identifier": "checkbox-answer"}, ["Yes"]]},
+            {
+                "+": [
+                    {"source": "answers", "identifier": "array-answer"},
+                    {"source": "answers", "identifier": "checkbox-answer"},
+                ]
+            },
+            {"source": "answers", "identifier": "number-answer"},
         ]
     }
 
@@ -256,6 +261,7 @@ def test_validate_nested_sum_operator():
             "checkbox-answer": {
                 "answer": {"id": "checkbox-answer", "type": "Checkbox"}
             },
+            "number-answer": {"answer": {"id": "array-answer", "type": "Number"}},
         },
     )
     validator.validate()
@@ -264,19 +270,12 @@ def test_validate_nested_sum_operator():
         {
             "argument_type": "object",
             "argument_value": {
-                "+": [{"identifier": "array-answer", "source": "answers"}]
+                "+": [
+                    {"identifier": "array-answer", "source": "answers"},
+                    {"identifier": "checkbox-answer", "source": "answers"},
+                ]
             },
-            "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
-            "operator": "+",
-            "origin_id": "block-id",
-            "valid_types": ["number"],
-        },
-        {
-            "argument_type": "object",
-            "argument_value": {
-                "+": [{"identifier": "checkbox-answer", "source": "answers"}, ["Yes"]]
-            },
-            "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+            "message": "Invalid argument type for operator",
             "operator": "+",
             "origin_id": "block-id",
             "valid_types": ["number"],
