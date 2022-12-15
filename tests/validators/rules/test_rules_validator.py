@@ -219,7 +219,7 @@ def test_validate_count_operator_non_checkbox_answer():
 
 
 def test_validate_sum_operator():
-    sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}]}
+    sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}, 10]}
 
     validator = get_validator(
         sum_operator,
