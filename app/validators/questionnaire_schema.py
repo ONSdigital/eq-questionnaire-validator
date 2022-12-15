@@ -39,23 +39,6 @@ def find_duplicates(values):
     return [item for item, count in collections.Counter(values).items() if count > 1]
 
 
-def get_values_for_key(block, key, ignore_keys=None):
-    ignore_keys = ignore_keys or []
-    for k, v in block.items():
-        try:
-            if k in ignore_keys:
-                continue
-            if k == key:
-                yield v
-            if isinstance(v, dict):
-                yield from get_values_for_key(v, key, ignore_keys)
-            elif isinstance(v, (list, tuple)):
-                for d in v:
-                    yield from get_values_for_key(d, key, ignore_keys)
-        except AttributeError:
-            continue
-
-
 def get_object_containing_key(data, key_name):
     """
     Get all dicts that contain `key_name` within a piece of data
