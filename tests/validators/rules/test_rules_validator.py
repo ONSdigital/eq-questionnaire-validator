@@ -212,7 +212,7 @@ def test_validate_count_operator_non_checkbox_answer():
         "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
         "operator": "count",
         "origin_id": "block-id",
-        "valid_types": ["number"],
+        "valid_types": ["array"],
     }
 
     assert validator.errors == [expected_error]

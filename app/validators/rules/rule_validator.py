@@ -290,7 +290,7 @@ class RulesValidator(Validator):
         if operator_name == Operator.DATE:
             return TYPE_DATE
 
-        if operator_name == Operator.COUNT:
+        if operator_name in NUMERIC_OPERATORS:
             return TYPE_NUMBER
 
         return TYPE_BOOLEAN
@@ -363,5 +363,8 @@ class RulesValidator(Validator):
             return (
                 [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
             )
-        if operator_name in [Operator.COUNT, Operator.SUM]:
+        if operator_name == Operator.COUNT:
+            return [TYPE_ARRAY]
+
+        if operator_name == Operator.SUM:
             return [TYPE_NUMBER]
