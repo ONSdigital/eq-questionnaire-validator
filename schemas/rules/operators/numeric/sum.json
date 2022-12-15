@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/value/sum.json",
-  "description": "Returns the sum of items in an array. Accepts a single argument which is the array",
+  "$id": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json",
+  "description": "Returns the sum of items in an array. Accepts an array of answer value sources",
   "type": "object",
   "sum_answer_values": {
     "properties": {
