@@ -54,7 +54,7 @@
               "operation": {
                 "type": "object",
                 "properties": {
-                  "$ref": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json"
+                  "$ref": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json#/sum_answer_values"
                 },
                 "required": ["+"]
               },
