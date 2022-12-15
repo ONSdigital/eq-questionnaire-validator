@@ -35,6 +35,7 @@
               "answers_to_calculate": {
                 "type": "array",
                 "minItems": 2,
+                "uniqueItems": true,
                 "items": {
                   "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
                 },

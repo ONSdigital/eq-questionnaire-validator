@@ -154,27 +154,8 @@ def test_invalid_calculated_summary_answer_in_different_section():
 
     expected_error_messages = [
         {
-            "block": {
-                "calculation": {
-                    "operation": {
-                        "+": [
-                            {"identifier": "first-number-answer", "source": "answers"},
-                            {"identifier": "second-number-answer", "source": "answers"},
-                            {
-                                "identifier": "second-number-answer-also-in-total",
-                                "source": "answers",
-                            },
-                            {"identifier": "third-number-answer", "source": "answers"},
-                        ]
-                    },
-                    "title": "Grand total of previous values",
-                },
-                "id": "currency-total-playback",
-                "title": "We calculate the total of currency values entered to be "
-                "%(total)s. Is this correct? (Skipped Fourth)",
-                "type": "CalculatedSummary",
-            },
             "block_id": "currency-total-playback",
+            "section_ids": {"section-1", "section-2"},
             "message": CalculatedSummaryBlockValidator.ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY,
         }
     ]

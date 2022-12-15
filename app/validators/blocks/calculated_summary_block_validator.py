@@ -58,11 +58,11 @@ class CalculatedSummaryBlockValidator(BlockValidator):
 
     def validate_answer_id_set_before_calculated_summary_block(self):
         for answer_id in self.answers_to_calculate:
-            answer_id_block = self.questionnaire_schema.get_block_by_answer_id(
+            answer_id_block = self.questionnaire_schema.get_block_id_by_answer_id(
                 answer_id
             )
             if self.questionnaire_schema.block_ids.index(
-                answer_id_block["id"]
+                answer_id_block
             ) > self.questionnaire_schema.block_ids.index(self.block["id"]):
                 self.add_error(
                     self.ANSWER_SET_AFTER_CALCULATED_SUMMARY, block=self.block
@@ -76,5 +76,6 @@ class CalculatedSummaryBlockValidator(BlockValidator):
         if len(answer_section_ids) > 1:
             self.add_error(
                 self.ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY,
-                block=self.block,
+                block_id=self.block["id"],
+                section_ids=answer_section_ids,
             )
