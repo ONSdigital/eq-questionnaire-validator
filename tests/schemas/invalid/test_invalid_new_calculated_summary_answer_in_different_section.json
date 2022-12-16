@@ -1,0 +1,159 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Calculated Summary",
+  "theme": "default",
+  "description": "A questionnaire to demo an invalid calculated summary with a with a answer_id in a separate section",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Section 1",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "first-number-block",
+              "question": {
+                "id": "first-number-question",
+                "title": "First Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "first-number-answer",
+                    "label": "First answer label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
+              }
+            }
+          ],
+          "id": "section-1-group",
+          "title": "Section 1"
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Section 2",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "second-number-block",
+              "question": {
+                "id": "second-number-question",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "second-number-answer",
+                    "label": "Second answer in currency label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  },
+                  {
+                    "id": "second-number-answer-unit-total",
+                    "label": "Second answer label in unit total",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit_length": "short",
+                    "unit": "length-centimeter"
+                  },
+                  {
+                    "id": "second-number-answer-also-in-total",
+                    "label": "Second answer label also in currency total (optional)",
+                    "mandatory": false,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "third-number-block",
+              "question": {
+                "id": "third-number-question",
+                "title": "Third Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "third-number-answer",
+                    "label": "Third answer label",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP",
+                    "decimal_places": 2
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "currency-total-playback",
+              "title": "We calculate the total of currency values entered to be %(total)s. Is this correct? (Skipped Fourth)",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "first-number-answer"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "second-number-answer"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "second-number-answer-also-in-total"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "third-number-answer"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ],
+          "id": "section-2-group",
+          "title": "Section 2"
+        }
+      ]
+    }
+  ]
+}
