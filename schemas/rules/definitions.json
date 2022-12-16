@@ -50,6 +50,12 @@
       }
     ]
   },
+  "numeric_operators": {
+    "description": "All operators that resolve to a numeric value",
+    "oneOf": [
+      { "$ref": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json" }
+    ]
+  },
   "non_array_value_operators": {
     "description": "All operators that resolve to a non-array value",
     "oneOf": [
