@@ -1,4 +1,4 @@
-from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
+from app.validators.rules.rule_validator import RulesValidator
 from app.validators.validator import Validator
 
 
@@ -70,7 +70,7 @@ class NewRoutingValidator(Validator):
 
     def validate_routing_rule(self, rule):
         if rule and "when" in rule:
-            when_validator = NewWhenRuleValidator(
+            when_validator = RulesValidator(
                 rule["when"], self.origin_id, self.questionnaire_schema
             )
             self.errors += when_validator.validate()

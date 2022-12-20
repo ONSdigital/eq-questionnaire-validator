@@ -1,5 +1,15 @@
 from app import error_messages
 from app.answer_type import AnswerOptionType, AnswerType
+from app.validators.routing.types import (
+    TYPE_ARRAY,
+    TYPE_BOOLEAN,
+    TYPE_DATE,
+    TYPE_NULL,
+    TYPE_NUMBER,
+    TYPE_STRING,
+    python_type_to_json_type,
+    resolve_value_source_json_type,
+)
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -24,6 +34,7 @@ class Operator:
     MAP = "map"
     OPTION_LABEL_FROM_VALUE = "option-label-from-value"
     CONCATENATE = "concatenate"
+    SUM = "+"
 
 
 LOGIC_OPERATORS = [Operator.NOT, Operator.AND, Operator.OR]
@@ -47,8 +58,21 @@ VALUE_OPERATORS = [
     Operator.MAP,
 ]
 
+NUMERIC_OPERATORS = [Operator.SUM, Operator.COUNT]
+
 ALL_OPERATORS = (
-    LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS
+    LOGIC_OPERATORS
+    + COMPARISON_OPERATORS
+    + ARRAY_OPERATORS
+    + VALUE_OPERATORS
+    + NUMERIC_OPERATORS
+)
+
+ALL_WHEN_RULE_OPERATORS = (
+    LOGIC_OPERATORS
+    + COMPARISON_OPERATORS
+    + ARRAY_OPERATORS
+    + [Operator.DATE, Operator.COUNT]
 )
 
 SELF_REFERENCE_KEY = "self"
@@ -68,6 +92,9 @@ class RulesValidator(Validator):
     SELF_REFERENCE_OUTSIDE_MAP_OPERATOR = (
         f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
     )
+    ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID = "Expected the answer type for sum operator to be type 'number' but got type '{answer_type}'"
+    OPERATOR_ARGUMENT_TYPE_MISMATCH = "Argument types don't match"
+    INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
 
     def __init__(
         self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False
@@ -83,6 +110,7 @@ class RulesValidator(Validator):
         Validate that the top level rules are valid
         """
         self._validate_rule(self.rules, allow_self_reference=self.allow_self_reference)
+        self._validate_operator_arguments(self.rules)
         return self.errors
 
     def _validate_rule(self, rules, *, allow_self_reference):
@@ -98,9 +126,6 @@ class RulesValidator(Validator):
 
         if operator_name == Operator.DATE:
             self._validate_date_operator(rules)
-
-        elif operator_name == Operator.COUNT:
-            self._validate_count_operator(rules)
 
         elif operator_name == Operator.MAP:
             self._validate_map_operator(rules)
@@ -221,22 +246,6 @@ class RulesValidator(Validator):
                 value_source=first_argument,
             )
 
-    def _validate_count_operator(self, operator):
-        """
-        Validates that an answer value source within a count operator is of type Checkbox
-        """
-        first_argument = operator["count"][0]
-        if (
-            isinstance(first_argument, dict)
-            and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
-            != AnswerType.CHECKBOX
-        ):
-            self.add_error(
-                self.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
-                value_source=first_argument,
-            )
-
     def _validate_options(self, rules, operator_name):
         """
         Validates that answer options referenced in a rule exist
@@ -262,3 +271,100 @@ class RulesValidator(Validator):
                         value=value,
                         answer_options=list(option_values),
                     )
+
+    def _validate_operator_arguments(self, rule):
+        operator_name = next(iter(rule))
+        argument_types = self._get_argument_types_for_operator(rule[operator_name])
+
+        if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS + NUMERIC_OPERATORS:
+            self._validate_comparison_operator_argument_types(
+                rule, operator_name, argument_types
+            )
+
+        if (
+            operator_name in COMPARISON_OPERATORS + [Operator.ALL_IN, Operator.ANY_IN]
+            and TYPE_NULL not in argument_types
+        ):
+            self._validate_argument_types_match(rule, argument_types)
+
+        if operator_name == Operator.DATE:
+            return TYPE_DATE
+
+        if operator_name in NUMERIC_OPERATORS:
+            return TYPE_NUMBER
+
+        return TYPE_BOOLEAN
+
+    def _get_argument_types_for_operator(self, arguments):
+        argument_types = []
+        for argument in arguments:
+            if isinstance(argument, dict) and any(
+                operator in argument for operator in ALL_WHEN_RULE_OPERATORS
+            ):
+                argument_type = self._validate_operator_arguments(argument)
+            elif isinstance(argument, dict) and "source" in argument:
+                argument_type = resolve_value_source_json_type(
+                    argument, self.questionnaire_schema
+                )
+            else:
+                argument_type = python_type_to_json_type(type(argument).__name__)
+
+            argument_types.append(argument_type)
+
+        return argument_types
+
+    def _validate_argument_types_match(self, rule, argument_types):
+        """
+        Validates that all arguments are of the same type
+        """
+        if len(set(argument_types)) > 1:
+            self.add_error(
+                self.OPERATOR_ARGUMENT_TYPE_MISMATCH,
+                rule=str(rule),
+                argument_types=argument_types,
+            )
+
+    def _validate_comparison_operator_argument_types(
+        self, rule, operator_name, argument_types
+    ):
+        """
+        Validates that all arguments are of the correct type for the operator
+        """
+        for argument_position, _ in enumerate(rule[operator_name]):
+            valid_types = self._get_valid_types_for_operator(
+                operator_name, argument_position=argument_position
+            )
+            if argument_types[argument_position] not in valid_types:
+                self.add_error(
+                    self.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+                    argument_value=rule[operator_name][argument_position],
+                    argument_type=argument_types[argument_position],
+                    operator=operator_name,
+                    valid_types=valid_types,
+                )
+
+    @staticmethod
+    def _get_valid_types_for_operator(operator_name, argument_position):
+        if operator_name in [Operator.EQUAL, Operator.NOT_EQUAL]:
+            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
+
+        if operator_name in [
+            Operator.LESS_THAN,
+            Operator.LESS_THAN_OR_EQUAL,
+            Operator.GREATER_THAN,
+            Operator.GREATER_THAN_OR_EQUAL,
+        ]:
+            return [TYPE_DATE, TYPE_NUMBER]
+
+        if operator_name in [Operator.ANY_IN, Operator.ALL_IN]:
+            return [TYPE_ARRAY]
+
+        if operator_name == Operator.IN:
+            return (
+                [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
+            )
+        if operator_name == Operator.COUNT:
+            return [TYPE_ARRAY]
+
+        if operator_name == Operator.SUM:
+            return [TYPE_NUMBER]
