@@ -376,6 +376,10 @@
         },
         "required": ["id", "groups"]
       }
+    },
+    "preview_questions": {
+      "type": "boolean",
+      "description": "A flag that is used to determine if the questions are previewed before the questionnaire start"
     }
   },
   "additionalProperties": false
