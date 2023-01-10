@@ -40,6 +40,15 @@ class QuestionnaireValidator(Validator):
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
+
+        if self.schema_element.get("preview_questions"):
+            blocks = self.questionnaire_schema.get_blocks()
+            has_introduction_blocks = any(
+                block["type"] == "Introduction" for block in blocks
+            )
+            if not has_introduction_blocks:
+                self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
+
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):

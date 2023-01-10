@@ -37,3 +37,4 @@ VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = (
 VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = (
     "Variants have more than one question type for block."
 )
+NO_INTRODUCTION_BLOCK = "No introduction block for preview questions in schema"
