@@ -49,6 +49,13 @@ class QuestionnaireValidator(Validator):
             if not has_introduction_blocks:
                 self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
 
+        if self.schema_element["questionnaire_flow"].get("type") == "Hub":
+            for section in self.schema_element.get("sections"):
+                if not section.get("title"):
+                    self.add_error(
+                        error_messages.NO_SECTION_TITLE, section_id=section.get("id")
+                    )
+
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
