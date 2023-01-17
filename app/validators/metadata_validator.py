@@ -32,7 +32,14 @@ class MetadataValidator(Validator):
         # ru_name required for template rendering in business, default and NI theme
         required_metadata_names = []
 
-        if self.theme_name in ["business", "default", "northernireland", "beis", "orr"]:
+        if self.theme_name in [
+            "business",
+            "default",
+            "northernireland",
+            "beis",
+            "beis-ni",
+            "orr",
+        ]:
             required_metadata_names.extend(["user_id", "period_id", "ru_name"])
 
         for metadata_name in required_metadata_names:
