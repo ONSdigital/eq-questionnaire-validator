@@ -42,19 +42,8 @@ class QuestionnaireValidator(Validator):
         )
 
         if self.schema_element.get("preview_questions"):
-            blocks = self.questionnaire_schema.get_blocks()
-            has_introduction_blocks = any(
-                block["type"] == "Introduction" for block in blocks
-            )
-            if not has_introduction_blocks:
-                self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
-
-        if self.schema_element["questionnaire_flow"].get("type") == "Hub":
-            for section in self.schema_element.get("sections"):
-                if not section.get("title"):
-                    self.add_error(
-                        error_messages.NO_SECTION_TITLE, section_id=section.get("id")
-                    )
+            self.validate_introduction_block()
+            self.validate_section_title()
 
         return self.errors
 
@@ -109,4 +98,20 @@ class QuestionnaireValidator(Validator):
                     self.add_error(
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
+                    )
+
+    def validate_introduction_block(self):
+        blocks = self.questionnaire_schema.get_blocks()
+        has_introduction_blocks = any(
+            block["type"] == "Introduction" for block in blocks
+        )
+        if not has_introduction_blocks:
+            self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
+
+    def validate_section_title(self):
+        if self.schema_element["questionnaire_flow"].get("type") == "Hub":
+            for section in self.schema_element.get("sections"):
+                if not section.get("title"):
+                    self.add_error(
+                        error_messages.NO_SECTION_TITLE, section_id=section.get("id")
                     )
