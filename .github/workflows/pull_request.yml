@@ -9,13 +9,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
           echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: "12.14.1"
       - run: |
@@ -23,11 +23,11 @@ jobs:
 
       - name: Get yarn cache
         id: get-yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
       - name: Cache yarn modules
         id: cache-yarn
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.get-yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -43,7 +43,7 @@ jobs:
           virtualenvs-path: ~/.virtualenvs
 
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-virtualenv
         with:
           path: ~/.virtualenvs
@@ -58,10 +58,10 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run:
           echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: |
@@ -75,7 +75,7 @@ jobs:
           virtualenvs-path: ~/.virtualenvs
 
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-virtualenv
         with:
           path: ~/.virtualenvs
@@ -89,7 +89,7 @@ jobs:
   docker-push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Tag
         run: |
           CLEAN_TAG=$(echo "${{ github.event.pull_request.head.ref  }}"  | tr / -)
