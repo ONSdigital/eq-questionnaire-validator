@@ -95,20 +95,23 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "group": "checkboxes",
-                    "when": [
+                  "group": "checkboxes",
+                  "when": {
+                    "!=": [
                       {
-                        "id": "employment-status-answer",
-                        "condition": "set"
-                      }
+                        "count": [
+                          {
+                            "source": "answers",
+                            "identifier": "employment-status-answer"
+                          }
+                        ]
+                      },
+                      0
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "employment-type"
-                  }
+                  "block": "employment-type"
                 }
               ]
             },

@@ -1,73 +1,76 @@
-from app.validators.questionnaire_schema import is_contained_in_dict_list
-from app.validators.routing.when_rule_validator import WhenRuleValidator
+from app.validators.rules.rule_validator import RulesValidator
 from app.validators.validator import Validator
 
 
 class RoutingValidator(Validator):
-    ROUTE_TARGET_INVALID = "Routing rule routes to invalid target"
-    ROUTE_MUST_CONTAIN_DEFAULT = (
-        "The routing rules for group or block must contain a default routing rule without a "
-        "when rule"
+    ROUTING_RULES_DO_NOT_HAVE_A_DEFAULT_RULE = (
+        "Routing rules do not have a default rule"
     )
-    ROUTE_HAS_TOO_MANY_DEFAULTS = "The routing rules for group or block cannot contain multiple default routing rules."
+    ROUTING_RULES_HAS_TOO_MANY_DEFAULTS = (
+        "Routing rules have more than one default rule"
+    )
+    ROUTING_RULE_BLOCK_TARGET_INVALID = "Routing rule routes to invalid block"
+    ROUTING_RULE_GROUP_TARGET_INVALID = "Routing rule routes to invalid group"
 
-    def __init__(self, element, group, questionnaire_schema):
-        super().__init__(element)
+    def __init__(self, routing_rules, group, origin_id, questionnaire_schema):
+        super().__init__(routing_rules)
+        self.routing_rules = routing_rules
         self.group = group
+        self.origin_id = origin_id
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        self.validate_routing_rules_have_default(
-            self.schema_element.get("routing_rules", []), self.schema_element["id"]
-        )
+        self.validate_routing_rules_has_single_default_rule(self.routing_rules)
 
-        for rule in self.schema_element.get("routing_rules", []):
-            self.validate_routing_rule_target(self.group["blocks"], "block", rule)
-            self.validate_routing_rule_target(
-                self.questionnaire_schema.groups, "group", rule
-            )
+        block_ids = [block["id"] for block in self.group["blocks"]]
+
+        for rule in self.routing_rules:
+            if "block" in rule:
+                self.validate_routing_rule_block_target(rule, block_ids)
+            elif "group" in rule:
+                self.validate_routing_rule_group_target(
+                    rule, self.questionnaire_schema.group_ids
+                )
             self.validate_routing_rule(rule)
 
         return self.errors
 
+    def validate_routing_rules_has_single_default_rule(self, rules):
+        """
+        Ensure that a set of routing rules contains one default rule, without a when clause.
+        """
+        default_routing_rule_count = sum("when" not in rule for rule in rules)
+
+        if not default_routing_rule_count:
+            self.add_error(
+                self.ROUTING_RULES_DO_NOT_HAVE_A_DEFAULT_RULE, origin_id=self.origin_id
+            )
+        elif default_routing_rule_count > 1:
+            self.add_error(
+                self.ROUTING_RULES_HAS_TOO_MANY_DEFAULTS, origin_id=self.origin_id
+            )
+
+    def validate_routing_rule_block_target(self, rule, block_ids):
+        destination_block_id = rule["block"]
+        if destination_block_id not in block_ids:
+            self.add_error(
+                self.ROUTING_RULE_BLOCK_TARGET_INVALID,
+                origin_id=self.origin_id,
+                destination_id=destination_block_id,
+            )
+
+    def validate_routing_rule_group_target(self, rule, group_ids):
+        destination_group_id = rule["group"]
+        if destination_group_id not in group_ids:
+            self.add_error(
+                self.ROUTING_RULE_GROUP_TARGET_INVALID,
+                origin_id=self.origin_id,
+                destination_id=destination_group_id,
+            )
+
     def validate_routing_rule(self, rule):
-        rule = rule.get("goto")
         if rule and "when" in rule:
-            when_validator = WhenRuleValidator(
-                rule["when"], self.schema_element["id"], self.questionnaire_schema
+            when_validator = RulesValidator(
+                rule["when"], self.origin_id, self.questionnaire_schema
             )
             self.errors += when_validator.validate()
-
-    def validate_routing_rule_target(self, dict_list, goto_key, rule):
-        if "goto" in rule and goto_key in rule["goto"].keys():
-            referenced_id = rule["goto"][goto_key]
-
-            if not is_contained_in_dict_list(dict_list, referenced_id):
-                self.add_error(
-                    self.ROUTE_TARGET_INVALID,
-                    goto_key=goto_key,
-                    referenced_id=referenced_id,
-                )
-
-    def validate_routing_rules_have_default(self, rules, block_or_group_id):
-        """
-        Ensure that a set of routing rules contains a default, without a when clause.
-        """
-
-        if rules and all(("goto" in rule for rule in rules)):
-            default_routing_rule_count = 0
-
-            for rule in rules:
-                rule_directive = rule.get("goto")
-                if rule_directive and "when" not in rule_directive:
-                    default_routing_rule_count += 1
-
-            if not default_routing_rule_count:
-                self.add_error(
-                    self.ROUTE_MUST_CONTAIN_DEFAULT, block_or_group_id=block_or_group_id
-                )
-            elif default_routing_rule_count > 1:
-                self.add_error(
-                    self.ROUTE_HAS_TOO_MANY_DEFAULTS,
-                    block_or_group_id=block_or_group_id,
-                )

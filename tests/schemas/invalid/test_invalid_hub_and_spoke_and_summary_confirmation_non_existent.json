@@ -29,7 +29,9 @@
     {
       "id": "employment-section",
       "title": "Employment",
-      "summary": { "show_on_completion": true },
+      "summary": {
+        "show_on_completion": true
+      },
       "groups": [
         {
           "id": "radio",
@@ -93,20 +95,19 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "group": "checkboxes",
-                    "when": [
+                  "group": "checkboxes",
+                  "when": {
+                    "!=": [
                       {
-                        "id": "employment-status-answer",
-                        "condition": "set"
-                      }
+                        "identifier": "employment-status-answer",
+                        "source": "answers"
+                      },
+                      null
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "employment-type"
-                  }
+                  "block": "employment-type"
                 }
               ]
             },
