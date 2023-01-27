@@ -33,14 +33,7 @@
         "$ref": "definitions.json#/content"
       },
       "when": {
-        "oneOf": [
-          {
-            "$ref": "../when_rule/definitions.json#/when"
-          },
-          {
-            "$ref": "../rules/boolean_rule.json"
-          }
-        ]
+        "$ref": "../rules/boolean_rule.json"
       }
     },
     "additionalProperties": false,
@@ -61,14 +54,7 @@
         "$ref": "../questions/definitions.json#/question"
       },
       "when": {
-        "oneOf": [
-          {
-            "$ref": "../when_rule/definitions.json#/when"
-          },
-          {
-            "$ref": "../rules/boolean_rule.json"
-          }
-        ]
+        "$ref": "../rules/boolean_rule.json"
       }
     },
     "additionalProperties": false,

@@ -13,28 +13,6 @@ MIN_NUMBER = -999999999
 MAX_DECIMAL_PLACES = 6
 
 
-def has_default_route(routing_rules):
-    for rule in routing_rules:
-        if "goto" not in rule or "when" not in rule["goto"].keys():
-            return True
-    return False
-
-
-def get_routing_when_list(routing_rules):
-    when_list = []
-    for rule in routing_rules:
-        when_clause = rule.get("goto", {})
-        when_list.append(when_clause)
-    return when_list
-
-
-def is_contained_in_dict_list(dict_list, key_id):
-    for dict_to_check in dict_list:
-        if dict_to_check["id"] == key_id:
-            return True
-    return False
-
-
 def find_duplicates(values):
     return [item for item, count in collections.Counter(values).items() if count > 1]
 

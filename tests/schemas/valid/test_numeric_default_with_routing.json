@@ -50,21 +50,19 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "block-3",
-                    "when": [
+                  "block": "block-3",
+                  "when": {
+                    "==": [
                       {
-                        "condition": "equals",
-                        "id": "answer-1",
-                        "value": 0
-                      }
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      0
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "block-2"
-                  }
+                  "block": "block-2"
                 }
               ],
               "type": "Question"
