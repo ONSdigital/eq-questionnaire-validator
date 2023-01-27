@@ -33,14 +33,8 @@
         "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/content"
       },
       "when": {
-        "oneOf": [
-          {
-            "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
-          },
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
-          }
-        ]
+          "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
+        }
       }
     },
     "additionalProperties": false,
@@ -61,14 +55,8 @@
         "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
       },
       "when": {
-        "oneOf": [
-          {
-            "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
-          },
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
-          }
-        ]
+          "$ref": "https://eq.ons.gov.uk/rules/boolean_rule.json"
+        }
       }
     },
     "additionalProperties": false,

@@ -86,23 +86,7 @@
       "additionalProperties": false
     }
   },
-  "original_skip_conditions": {
-    "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
-    "type": "array",
-    "minItems": 1,
-    "uniqueItems": true,
-    "items": {
-      "type": "object",
-      "properties": {
-        "when": {
-          "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
-        }
-      },
-      "additionalProperties": false
-    },
-    "required": ["when"]
-  },
-  "new_skip_conditions": {
+  "skip_conditions": {
     "description": "Allows an element to be skipped when a condition has been met. By adding more than one `when` element it will evaluate as an or rule.",
     "type": "object",
     "properties": {
@@ -113,33 +97,7 @@
     "additionalProperties": false,
     "required": ["when"]
   },
-  "skip_conditions": {
-    "oneOf": [
-      {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_skip_conditions"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_skip_conditions"
-      }
-    ]
-  },
-  "original_section_enabled": {
-    "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
-    "type": "array",
-    "minItems": 1,
-    "uniqueItems": true,
-    "items": {
-      "type": "object",
-      "properties": {
-        "when": {
-          "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
-        }
-      },
-      "additionalProperties": false
-    },
-    "required": ["when"]
-  },
-  "new_section_enabled": {
+  "section_enabled": {
     "description": "When the value evaluates to false, this section will not be included in the questionnaire. When the enabled key is not present, the default value is true. By adding more than one `when` element it will evaluate as an or rule.",
     "type": "object",
     "properties": {
@@ -303,51 +261,7 @@
       }
     ]
   },
-  "original_routing_rules": {
-    "type": "array",
-    "description": "Used to direct the journey through a survey (in conjunction with navigation).",
-    "items": {
-      "type": "object",
-      "properties": {
-        "goto": {
-          "type": "object",
-          "properties": {
-            "block": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-              "description": "The id of another block in the same group."
-            },
-            "group": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-              "description": "The id of another group. The first block in that group will be routed to."
-            },
-            "section": {
-              "type": "string",
-              "description": "Routes to the end of the current section",
-              "enum": ["End"]
-            },
-            "when": {
-              "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/when"
-            }
-          },
-          "oneOf": [
-            {
-              "required": ["block"]
-            },
-            {
-              "required": ["group"]
-            },
-            {
-              "required": ["section"]
-            }
-          ],
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false,
-      "required": ["goto"]
-    }
-  },
-  "new_routing_rules": {
+  "routing_rules": {
     "type": "array",
     "description": "Used to direct the journey through a survey (in conjunction with navigation).",
     "items": {
@@ -383,16 +297,6 @@
       ],
       "additionalProperties": false
     }
-  },
-  "routing_rules": {
-    "oneOf": [
-      {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_routing_rules"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_routing_rules"
-      }
-    ]
   },
   "non_empty_string": {
     "type": "string",

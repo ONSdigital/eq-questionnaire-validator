@@ -390,14 +390,7 @@
             }
           },
           "enabled": {
-            "oneOf": [
-              {
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/original_section_enabled"
-              },
-              {
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/new_section_enabled"
-              }
-            ]
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/section_enabled"
           }
         },
         "required": ["id", "groups"]
