@@ -71,6 +71,31 @@
       "pattern": "^GB-[A-Z]{3}$",
       "description": "An ISO 3166-2:GB region code"
     },
+    "answer_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "pattern": "^[a-zA-Z0-9-_]+$",
+            "description": "User defined answer code for a matching answer id"
+          },
+          "answer_id": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "Answer id of the answer code"
+          },
+          "value": {
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "description": "Answer id of the answer code"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["answer_id", "code"]
+      }
+    },
     "metadata": {
       "type": "array",
       "items": {
