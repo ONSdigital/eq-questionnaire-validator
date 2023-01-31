@@ -282,3 +282,61 @@ def test_incorrect_answer_value_set_in_answer_code():
     ]
 
     assert validator.errors == expected_errors
+
+
+def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
+    filename = "schemas/valid/test_dynamic_answer_options_dynamic_date_driven.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    validator = AnswerCodeValidator(
+        "0.0.3", questionnaire_schema.schema["answer_codes"], questionnaire_schema
+    )
+
+    validator.validate()
+
+    assert not validator.errors
+
+
+def test_invalid_value_in_answer_code_for_dynamic_options():
+    filename = "schemas/valid/test_dynamic_answer_options_dynamic_date_driven.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer_codes = [
+        {"answer_id": "dynamic-checkbox-answer", "code": "1"},
+        {"answer_id": "dynamic-checkbox-answer", "value": "No favourite", "code": "1a"},
+        {"answer_id": "dynamic-radio-answer", "code": "2"},
+        {
+            "answer_id": "dynamic-radio-answer",
+            "value": "I don’t have a favourite",
+            "code": "2a",
+        },
+        {"answer_id": "dynamic-dropdown-answer", "code": "3"},
+        {
+            "answer_id": "dynamic-dropdown-answer",
+            "value": "I don’t have a favourite",
+            "code": "3a",
+        },
+    ]
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+            "answer_codes_for_options": [
+                {"answer_id": "dynamic-checkbox-answer", "code": "1"},
+                {
+                    "answer_id": "dynamic-checkbox-answer",
+                    "code": "1a",
+                    "value": "No favourite",
+                },
+            ],
+            "value": "No favourite",
+        }
+    ]
+
+    assert validator.errors == expected_errors

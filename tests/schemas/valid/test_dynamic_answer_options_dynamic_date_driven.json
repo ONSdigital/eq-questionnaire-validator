@@ -21,6 +21,35 @@
       "type": "string"
     }
   ],
+  "answer_codes": [
+    {
+      "answer_id": "dynamic-checkbox-answer",
+      "code": "1"
+    },
+    {
+      "answer_id": "dynamic-checkbox-answer",
+      "value": "I don’t have a favourite",
+      "code": "1a"
+    },
+    {
+      "answer_id": "dynamic-radio-answer",
+      "code": "2"
+    },
+    {
+      "answer_id": "dynamic-radio-answer",
+      "value": "I don’t have a favourite",
+      "code": "2a"
+    },
+    {
+      "answer_id": "dynamic-dropdown-answer",
+      "code": "3"
+    },
+    {
+      "answer_id": "dynamic-dropdown-answer",
+      "value": "I don’t have a favourite",
+      "code": "3a"
+    }
+  ],
   "questionnaire_flow": {
     "type": "Linear",
     "options": {

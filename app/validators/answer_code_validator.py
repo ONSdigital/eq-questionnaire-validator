@@ -99,8 +99,12 @@ class AnswerCodeValidator(Validator):
                     "value" not in answer_code
                     for answer_code in answer_codes_for_options
                 ):
-                    self.add_error(
-                        self.MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS,
-                        answer_options=answer["answer"]["options"],
-                        answer_codes_for_options=answer_codes_for_options,
-                    )
+                    # Multiple answer codes for options are allowed where options are dynamic
+                    if not answers_with_context[answer_id]["answer"].get(
+                        "dynamic_options"
+                    ):
+                        self.add_error(
+                            self.MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS,
+                            answer_options=answer["answer"]["options"],
+                            answer_codes_for_options=answer_codes_for_options,
+                        )
