@@ -45,6 +45,9 @@ class SectionValidator(Validator):
 
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
+        if not isinstance(section_enabled, dict):
+            return
+
         when = section_enabled["when"]
         when_validator = RulesValidator(
             when, self.section["id"], self.questionnaire_schema
@@ -98,7 +101,9 @@ class SectionValidator(Validator):
                 questionnaire_schema=self.questionnaire_schema,
             )
             self.errors += routing_validator.validate()
-        if "skip_conditions" in schema_element:
+        if "skip_conditions" in schema_element and isinstance(
+            schema_element["skip_conditions"], dict
+        ):
             self.validate_skip_conditions(
                 schema_element["skip_conditions"], schema_element["id"]
             )
@@ -148,10 +153,11 @@ class SectionValidator(Validator):
 
         for variant in all_variants:
             when_clause = variant.get("when", [])
-            when_validator = RulesValidator(
-                when_clause, self.section["id"], self.questionnaire_schema
-            )
-            self.errors += when_validator.validate()
+            if isinstance(when_clause, dict):
+                when_validator = RulesValidator(
+                    when_clause, self.section["id"], self.questionnaire_schema
+                )
+                self.errors += when_validator.validate()
 
         self.validate_variant_fields(block, question_variants)
 

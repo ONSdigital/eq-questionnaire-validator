@@ -32,7 +32,11 @@ class SchemaValidator(Validator):
         ]:
             for filename in glob.glob(glob_path):
                 with open(filename, encoding="utf8") as schema_file:
-                    json_data = load(schema_file)
+                    try:
+                        json_data = load(schema_file)
+                    except Exception as e:
+                        content = schema_file.read()
+                        print(content)
                     store[json_data["$id"]] = json_data
         return store
 
