@@ -75,17 +75,17 @@
     },
     {
       "id": "optionally-enabled-section",
-      "enabled": [
-        {
-          "when": [
+      "enabled": {
+        "when": {
+          "in": [
+            "Yes",
             {
-              "id": "mandatory-checkbox-answer",
-              "condition": "contains any",
-              "values": ["Yes"]
+              "source": "answers",
+              "identifier": "mandatory-checkbox-answer"
             }
           ]
         }
-      ],
+      },
       "groups": [
         {
           "blocks": [
