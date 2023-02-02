@@ -16,6 +16,9 @@ class AnswerCodeValidator(Validator):
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
         "Values specified in answer code and answer options do not match"
     )
+    DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
+        "Dynamic options must have an answer code set at the parent level"
+    )
 
     def __init__(self, data_version, answer_codes, questionnaire_schema):
         self.data_version = data_version
@@ -34,6 +37,7 @@ class AnswerCodeValidator(Validator):
         self.validate_missing_answer_id()
         self.validate_missing_answer_codes()
         self.validate_answer_codes_at_option_level()
+        self.validate_dynamic_options()
         return self.errors
 
     def validate_data_version(self):
@@ -59,11 +63,30 @@ class AnswerCodeValidator(Validator):
             if answer_id not in self.answer_codes_answer_ids:
                 self.add_error(self.MISSING_ANSWER_CODE, answer_id=answer_id)
 
-    def validate_answer_codes_at_option_level(self):
-        answers_with_context = self.questionnaire_schema.answers_with_context
+    def validate_dynamic_options(self):
+        for answer_id in self.questionnaire_schema.answers_with_context:
+            answer = self.questionnaire_schema.answers_with_context[answer_id]
 
-        for answer_id in answers_with_context:
-            answer = answers_with_context[answer_id]
+            if "dynamic_options" in answer["answer"]:
+                answer_codes_for_options = [
+                    answer_code
+                    for answer_code in self.answer_codes
+                    if answer_code["answer_id"] == answer_id
+                ]
+
+                top_level_answer_code_count = sum(
+                    "answer_value" not in answer_code
+                    for answer_code in answer_codes_for_options
+                )
+                if top_level_answer_code_count == 0:
+                    self.add_error(
+                        self.DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL,
+                        answer_codes_for_options=answer_codes_for_options,
+                    )
+
+    def validate_answer_codes_at_option_level(self):
+        for answer_id in self.questionnaire_schema.answers_with_context:
+            answer = self.questionnaire_schema.answers_with_context[answer_id]
 
             if "options" in answer["answer"]:
                 values = []
@@ -111,9 +134,9 @@ class AnswerCodeValidator(Validator):
                                 answer_codes_for_options=answer_codes_for_options,
                             )
 
-                    elif not answers_with_context[answer_id]["answer"].get(
-                        "dynamic_options"
-                    ):
+                    elif not self.questionnaire_schema.answers_with_context[answer_id][
+                        "answer"
+                    ].get("dynamic_options"):
                         self.add_error(
                             self.MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS,
                             answer_options=answer["answer"]["options"],
