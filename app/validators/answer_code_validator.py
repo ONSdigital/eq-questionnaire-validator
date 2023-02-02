@@ -25,6 +25,7 @@ class AnswerCodeValidator(Validator):
         self.answer_codes_answer_ids = {
             answer["answer_id"] for answer in self.answer_codes
         }
+        self.all_answer_ids = list(self.questionnaire_schema.answers_with_context)
         super().__init__(questionnaire_schema)
 
     def validate(self):
@@ -46,19 +47,15 @@ class AnswerCodeValidator(Validator):
             self.add_error(self.DUPLICATE_ANSWER_CODE_FOUND, duplicates=duplicates)
 
     def validate_missing_answer_id(self):
-        all_answer_ids = list(self.questionnaire_schema.answers_with_context)
-
         for answer_code_id in self.answer_codes_answer_ids:
-            if answer_code_id not in all_answer_ids:
+            if answer_code_id not in self.all_answer_ids:
                 self.add_error(
                     self.ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA,
                     answer_id=answer_code_id,
                 )
 
     def validate_missing_answer_codes(self):
-        all_answer_ids = list(self.questionnaire_schema.answers_with_context)
-
-        for answer_id in all_answer_ids:
+        for answer_id in self.all_answer_ids:
             if answer_id not in self.answer_codes_answer_ids:
                 self.add_error(self.MISSING_ANSWER_CODE, answer_id=answer_id)
 
