@@ -28,7 +28,7 @@
     },
     {
       "answer_id": "dynamic-checkbox-answer",
-      "value": "I don’t have a favourite",
+      "answer_value": "I don’t have a favourite",
       "code": "1a"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "answer_id": "dynamic-radio-answer",
-      "value": "I don’t have a favourite",
+      "answer_value": "I don’t have a favourite",
       "code": "2a"
     },
     {
@@ -46,7 +46,7 @@
     },
     {
       "answer_id": "dynamic-dropdown-answer",
-      "value": "I don’t have a favourite",
+      "answer_value": "I don’t have a favourite",
       "code": "3a"
     }
   ],

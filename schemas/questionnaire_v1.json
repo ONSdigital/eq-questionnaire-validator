@@ -80,16 +80,16 @@
         "properties": {
           "code": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "pattern": "^[a-zA-Z0-9-_]+$",
+            "pattern": "^[a-zA-Z0-9._-]+$",
             "description": "User defined answer code for a matching answer id"
           },
           "answer_id": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
             "description": "Answer id of the answer code"
           },
-          "value": {
+          "answer_value": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "Answer id of the answer code"
+            "description": "Optional answer value for the given answer code"
           }
         },
         "additionalProperties": false,

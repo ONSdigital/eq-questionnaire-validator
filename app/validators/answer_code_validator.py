@@ -79,7 +79,8 @@ class AnswerCodeValidator(Validator):
                 ]
 
                 if len(values) != len(answer_codes_for_options) and all(
-                    "value" in answer_code for answer_code in answer_codes_for_options
+                    "answer_value" in answer_code
+                    for answer_code in answer_codes_for_options
                 ):
                     self.add_error(
                         self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
@@ -88,15 +89,18 @@ class AnswerCodeValidator(Validator):
                     )
 
                 for answer_code in answer_codes_for_options:
-                    if answer_code.get("value") and answer_code["value"] not in values:
+                    if (
+                        answer_code.get("answer_value")
+                        and answer_code["answer_value"] not in values
+                    ):
                         self.add_error(
                             self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-                            value=answer_code["value"],
+                            answer_value=answer_code["answer_value"],
                             answer_codes_for_options=answer_codes_for_options,
                         )
 
                 if len(answer_codes_for_options) != 1 and any(
-                    "value" not in answer_code
+                    "answer_value" not in answer_code
                     for answer_code in answer_codes_for_options
                 ):
                     # Multiple answer codes for options are allowed where options are dynamic

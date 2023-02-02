@@ -23,15 +23,27 @@ def test_duplicate_answer_codes():
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
-        {"answer_id": "mandatory-checkbox-answer", "value": "None", "code": "1a"},
         {
             "answer_id": "mandatory-checkbox-answer",
-            "value": "Ham & Cheese",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
             "code": "1b",
         },
-        {"answer_id": "mandatory-checkbox-answer", "value": "Ham", "code": "1c"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Pepperoni", "code": "1d"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Other", "code": "1e"},
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
         {"answer_id": "other-answer-mandatory", "code": "1f"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
@@ -56,15 +68,27 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
-        {"answer_id": "mandatory-checkbox-answer", "value": "None", "code": "1a"},
         {
             "answer_id": "mandatory-checkbox-answer",
-            "value": "Ham & Cheese",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
             "code": "1b",
         },
-        {"answer_id": "mandatory-checkbox-answer", "value": "Ham", "code": "1c"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Pepperoni", "code": "1d"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Other", "code": "1e"},
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
         {"answer_id": "other-answer-mandatory", "code": "1f"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
@@ -110,14 +134,22 @@ def test_answer_code_missing_for_answer_options():
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
-        {"answer_id": "mandatory-checkbox-answer", "value": "None", "code": "1a"},
         {
             "answer_id": "mandatory-checkbox-answer",
-            "value": "Ham & Cheese",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
             "code": "1b",
         },
-        {"answer_id": "mandatory-checkbox-answer", "value": "Ham", "code": "1c"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Other", "code": "1e"},
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
         {"answer_id": "other-answer-mandatory", "code": "1f"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
@@ -137,22 +169,22 @@ def test_answer_code_missing_for_answer_options():
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1a",
-                    "value": "None",
+                    "answer_value": "None",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1b",
-                    "value": "Ham & Cheese",
+                    "answer_value": "Ham & Cheese",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1c",
-                    "value": "Ham",
+                    "answer_value": "Ham",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1e",
-                    "value": "Other",
+                    "answer_value": "Other",
                 },
             ],
             "answer_options": [
@@ -182,15 +214,27 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
-        {"answer_id": "mandatory-checkbox-answer", "value": "None", "code": "1a"},
         {
             "answer_id": "mandatory-checkbox-answer",
-            "value": "Ham & Cheese",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
             "code": "1b",
         },
-        {"answer_id": "mandatory-checkbox-answer", "value": "Ham", "code": "1c"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Pepperoni", "code": "1d"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Other", "code": "1e"},
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
         {"answer_id": "other-answer-mandatory", "code": "1f"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2a"},
@@ -226,15 +270,27 @@ def test_incorrect_answer_value_set_in_answer_code():
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
-        {"answer_id": "mandatory-checkbox-answer", "value": "None", "code": "1a"},
         {
             "answer_id": "mandatory-checkbox-answer",
-            "value": "Ham & Cheese",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
             "code": "1b",
         },
-        {"answer_id": "mandatory-checkbox-answer", "value": "Ham", "code": "1c"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Pepperonis", "code": "1d"},
-        {"answer_id": "mandatory-checkbox-answer", "value": "Other", "code": "1e"},
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperonis",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
         {"answer_id": "other-answer-mandatory", "code": "1f"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
@@ -254,30 +310,30 @@ def test_incorrect_answer_value_set_in_answer_code():
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1a",
-                    "value": "None",
+                    "answer_value": "None",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1b",
-                    "value": "Ham & Cheese",
+                    "answer_value": "Ham & Cheese",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1c",
-                    "value": "Ham",
+                    "answer_value": "Ham",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1d",
-                    "value": "Pepperonis",
+                    "answer_value": "Pepperonis",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
                     "code": "1e",
-                    "value": "Other",
+                    "answer_value": "Other",
                 },
             ],
-            "value": "Pepperonis",
+            "answer_value": "Pepperonis",
         }
     ]
 
@@ -305,17 +361,21 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
 
     answer_codes = [
         {"answer_id": "dynamic-checkbox-answer", "code": "1"},
-        {"answer_id": "dynamic-checkbox-answer", "value": "No favourite", "code": "1a"},
+        {
+            "answer_id": "dynamic-checkbox-answer",
+            "answer_value": "No favourite",
+            "code": "1a",
+        },
         {"answer_id": "dynamic-radio-answer", "code": "2"},
         {
             "answer_id": "dynamic-radio-answer",
-            "value": "I don’t have a favourite",
+            "answer_value": "I don’t have a favourite",
             "code": "2a",
         },
         {"answer_id": "dynamic-dropdown-answer", "code": "3"},
         {
             "answer_id": "dynamic-dropdown-answer",
-            "value": "I don’t have a favourite",
+            "answer_value": "I don’t have a favourite",
             "code": "3a",
         },
     ]
@@ -332,10 +392,10 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
                 {
                     "answer_id": "dynamic-checkbox-answer",
                     "code": "1a",
-                    "value": "No favourite",
+                    "answer_value": "No favourite",
                 },
             ],
-            "value": "No favourite",
+            "answer_value": "No favourite",
         }
     ]
 
