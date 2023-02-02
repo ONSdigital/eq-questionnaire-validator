@@ -207,12 +207,82 @@ def test_validate_count_operator_non_checkbox_answer():
     validator.validate()
 
     expected_error = {
-        "message": validator.COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER,
-        "origin_id": ORIGIN_ID,
-        "value_source": {"source": "answers", "identifier": "array-answer"},
+        "argument_type": "string",
+        "argument_value": {"identifier": "array-answer", "source": "answers"},
+        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+        "operator": "count",
+        "origin_id": "block-id",
+        "valid_types": ["array"],
     }
 
     assert validator.errors == [expected_error]
+
+
+def test_validate_sum_operator():
+    sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}, 10]}
+
+    validator = get_validator(
+        sum_operator,
+        answers_with_context={
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+        },
+    )
+    validator.validate()
+
+    expected_error = {
+        "argument_type": "string",
+        "argument_value": {"identifier": "array-answer", "source": "answers"},
+        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+        "operator": "+",
+        "origin_id": "block-id",
+        "valid_types": ["number"],
+    }
+
+    assert validator.errors == [expected_error]
+
+
+def test_validate_nested_sum_operator():
+    sum_operator = {
+        "+": [
+            {
+                "+": [
+                    {"source": "answers", "identifier": "array-answer"},
+                    {"source": "answers", "identifier": "checkbox-answer"},
+                ]
+            },
+            {"source": "answers", "identifier": "number-answer"},
+        ]
+    }
+
+    validator = get_validator(
+        sum_operator,
+        answers_with_context={
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
+            "checkbox-answer": {
+                "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+            },
+            "number-answer": {"answer": {"id": "array-answer", "type": "Number"}},
+        },
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "argument_type": "object",
+            "argument_value": {
+                "+": [
+                    {"identifier": "array-answer", "source": "answers"},
+                    {"identifier": "checkbox-answer", "source": "answers"},
+                ]
+            },
+            "message": "Invalid argument type for operator",
+            "operator": "+",
+            "origin_id": "block-id",
+            "valid_types": ["number"],
+        },
+    ]
+
+    assert validator.errors == expected_errors
 
 
 def test_map_operator_with_self_reference():

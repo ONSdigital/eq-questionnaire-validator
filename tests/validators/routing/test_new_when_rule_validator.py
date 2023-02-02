@@ -1,6 +1,5 @@
 import pytest
 
-from app.validators.routing.new_when_rule_validator import NewWhenRuleValidator
 from app.validators.routing.types import (
     TYPE_ARRAY,
     TYPE_DATE,
@@ -9,6 +8,7 @@ from app.validators.routing.types import (
     TYPE_OBJECT,
     TYPE_STRING,
 )
+from app.validators.rules.rule_validator import RulesValidator
 from tests.conftest import get_mock_schema
 
 ORIGIN_ID = "block-id"
@@ -19,7 +19,7 @@ default_answer_with_context = {
 
 
 def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None):
-    return NewWhenRuleValidator(
+    return RulesValidator(
         rule, ORIGIN_ID, get_mock_schema(questionnaire_schema, answers_with_context)
     )
 
