@@ -204,7 +204,32 @@ def test_answer_code_missing_for_answer_options():
                     "value": "Other",
                 },
             ],
-        }
+        },
+        {
+            "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+            "answer_codes_for_options": [
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1a",
+                    "answer_value": "None",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1b",
+                    "answer_value": "Ham & Cheese",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1c",
+                    "answer_value": "Ham",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1e",
+                    "answer_value": "Other",
+                },
+            ],
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -258,7 +283,17 @@ def test_answer_code_missing_for_answer_options_only_one_value_set():
                     "value": "Other",
                 },
             ],
-        }
+        },
+        {
+            "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+            "answer_codes_for_options": [
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1",
+                    "answer_value": "Ham",
+                },
+            ],
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -304,7 +339,7 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
 
     expected_errors = [
         {
-            "message": validator.MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS,
+            "message": validator.MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL,
             "answer_codes_for_options": [
                 {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
                 {"answer_id": "mandatory-checkbox-answer-2", "code": "2a"},
@@ -313,6 +348,79 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
                 {"label": "None", "value": "None"},
                 {"label": "Mozzarella", "value": "Mozzarella"},
                 {"label": "Onions", "value": "Onions"},
+            ],
+        }
+    ]
+
+    assert validator.errors == expected_errors
+
+
+def test_answer_code_with_duplicate_option_answer_values():
+    filename = "schemas/valid/test_answer_codes.json"
+
+    answer_codes = [
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
+            "code": "1b",
+        },
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1e",
+        },
+        {"answer_id": "other-answer-mandatory", "code": "1g"},
+        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
+        {"answer_id": "name-answer", "code": "3"},
+        {"answer_id": "name-answer-2", "code": "4"},
+    ]
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+            "answer_codes_for_options": [
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "answer_value": "None",
+                    "code": "1a",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "answer_value": "Ham & Cheese",
+                    "code": "1b",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "answer_value": "Ham",
+                    "code": "1c",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "answer_value": "Pepperoni",
+                    "code": "1d",
+                },
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "answer_value": "Pepperoni",
+                    "code": "1e",
+                },
             ],
         }
     ]

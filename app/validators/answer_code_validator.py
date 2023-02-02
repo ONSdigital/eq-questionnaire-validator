@@ -12,7 +12,7 @@ class AnswerCodeValidator(Validator):
         "No matching answer id found in the schema for the given answer code"
     )
     ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = "Number of answer codes does not match number of answers for an answer with multiple options"
-    MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS = "Only one answer code should be set for answers with answer options if not specifying a value"
+    MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
         "Values specified in answer code and answer options do not match"
     )
@@ -98,47 +98,69 @@ class AnswerCodeValidator(Validator):
                     if answer_code["answer_id"] == answer_id
                 ]
 
-                if len(values) != len(answer_codes_for_options) and all(
-                    "answer_value" in answer_code
-                    for answer_code in answer_codes_for_options
-                ):
+                self.validate_missing_answer_codes_for_answer_options(
+                    answer=answer,
+                    answer_id=answer_id,
+                    answer_codes_for_options=answer_codes_for_options,
+                    values=values,
+                )
+                self.validate_incorrect_values_in_answer_options(
+                    answer_codes_for_options=answer_codes_for_options, values=values
+                )
+
+    def validate_missing_answer_codes_for_answer_options(
+        self, answer, answer_id, answer_codes_for_options, values
+    ):
+        if len(values) != len(answer_codes_for_options) and all(
+            "answer_value" in answer_code for answer_code in answer_codes_for_options
+        ):
+            self.add_error(
+                self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
+                answer_options=answer["answer"]["options"],
+                answer_codes_for_options=answer_codes_for_options,
+            )
+
+        if any(
+            "answer_value" not in answer_code
+            for answer_code in answer_codes_for_options
+        ):
+            if len(answer_codes_for_options) == 1:
+                if len(values) != 1 and "answer_value" in answer_codes_for_options[0]:
                     self.add_error(
                         self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
                         answer_options=answer["answer"]["options"],
                         answer_codes_for_options=answer_codes_for_options,
                     )
 
-                for answer_code in answer_codes_for_options:
-                    if (
-                        answer_code.get("answer_value")
-                        and answer_code["answer_value"] not in values
-                    ):
-                        self.add_error(
-                            self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-                            answer_value=answer_code["answer_value"],
-                            answer_codes_for_options=answer_codes_for_options,
-                        )
+            elif not self.questionnaire_schema.answers_with_context[answer_id][
+                "answer"
+            ].get("dynamic_options"):
+                # Multiple answer codes are only allowed at the parent level where options are dynamic
+                self.add_error(
+                    self.MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL,
+                    answer_options=answer["answer"]["options"],
+                    answer_codes_for_options=answer_codes_for_options,
+                )
 
-                if any(
-                    "answer_value" not in answer_code
-                    for answer_code in answer_codes_for_options
-                ):
-                    if len(answer_codes_for_options) == 1:
-                        if (
-                            len(values) != 1
-                            and "answer_value" in answer_codes_for_options[0]
-                        ):
-                            self.add_error(
-                                self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
-                                answer_options=answer["answer"]["options"],
-                                answer_codes_for_options=answer_codes_for_options,
-                            )
+    def validate_incorrect_values_in_answer_options(
+        self, answer_codes_for_options, values
+    ):
+        answer_values = set()
+        for answer_code in answer_codes_for_options:
+            if answer_code.get("answer_value"):
+                answer_values.add(answer_code["answer_value"])
 
-                    elif not self.questionnaire_schema.answers_with_context[answer_id][
-                        "answer"
-                    ].get("dynamic_options"):
-                        self.add_error(
-                            self.MORE_THAN_ONE_ANSWER_CODE_SET_FOR_ANSWER_OPTIONS,
-                            answer_options=answer["answer"]["options"],
-                            answer_codes_for_options=answer_codes_for_options,
-                        )
+                if answer_code["answer_value"] not in values:
+                    self.add_error(
+                        self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+                        answer_value=answer_code["answer_value"],
+                        answer_codes_for_options=answer_codes_for_options,
+                    )
+
+        if len(answer_values) != len(values) and any(
+            "answer_value" in answer_code for answer_code in answer_codes_for_options
+        ):
+            self.add_error(
+                self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
+                answer_codes_for_options=answer_codes_for_options,
+            )
