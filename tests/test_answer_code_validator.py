@@ -210,6 +210,60 @@ def test_answer_code_missing_for_answer_options():
     assert validator.errors == expected_errors
 
 
+def test_answer_code_missing_for_answer_options_only_one_value_set():
+    filename = "schemas/valid/test_answer_codes.json"
+
+    answer_codes = [
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham",
+            "code": "1",
+        },
+        {"answer_id": "other-answer-mandatory", "code": "1f"},
+        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
+        {"answer_id": "name-answer", "code": "3"},
+        {"answer_id": "name-answer-2", "code": "4"},
+    ]
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
+            "answer_codes_for_options": [
+                {
+                    "answer_id": "mandatory-checkbox-answer",
+                    "code": "1",
+                    "answer_value": "Ham",
+                },
+            ],
+            "answer_options": [
+                {"label": "None", "value": "None"},
+                {"label": "Ham & Cheese", "value": "Ham & Cheese"},
+                {"label": "Ham", "value": "Ham"},
+                {"label": "Pepperoni", "value": "Pepperoni"},
+                {
+                    "description": "Choose any other topping",
+                    "detail_answer": {
+                        "id": "other-answer-mandatory",
+                        "label": "Please specify other",
+                        "mandatory": True,
+                        "type": "TextField",
+                    },
+                    "label": "Other",
+                    "value": "Other",
+                },
+            ],
+        }
+    ]
+
+    assert validator.errors == expected_errors
+
+
 def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
     filename = "schemas/valid/test_answer_codes.json"
 

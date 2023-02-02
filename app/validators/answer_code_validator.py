@@ -96,12 +96,22 @@ class AnswerCodeValidator(Validator):
                             answer_codes_for_options=answer_codes_for_options,
                         )
 
-                if len(answer_codes_for_options) != 1 and any(
+                if any(
                     "answer_value" not in answer_code
                     for answer_code in answer_codes_for_options
                 ):
-                    # Multiple answer codes for options are allowed where options are dynamic
-                    if not answers_with_context[answer_id]["answer"].get(
+                    if len(answer_codes_for_options) == 1:
+                        if (
+                            len(values) != 1
+                            and "answer_value" in answer_codes_for_options[0]
+                        ):
+                            self.add_error(
+                                self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
+                                answer_options=answer["answer"]["options"],
+                                answer_codes_for_options=answer_codes_for_options,
+                            )
+
+                    elif not answers_with_context[answer_id]["answer"].get(
                         "dynamic_options"
                     ):
                         self.add_error(
