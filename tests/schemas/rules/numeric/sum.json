@@ -1,0 +1,38 @@
+[
+  {
+    "description": "Sum with answer value sources",
+    "+": [
+      {
+        "source": "answers",
+        "identifier": "answer-1"
+      },
+      {
+        "source": "answers",
+        "identifier": "answer-2"
+      }
+    ]
+  },
+  {
+    "description": "Sum with nested answer value sources",
+    "+": [
+      {
+        "source": "answers",
+        "identifier": "answer-1"
+      },
+      {
+        "source": "answers",
+        "identifier": "answer-2"
+      },
+      {
+        "+": [
+          { "source": "answers", "identifier": "answer-3" },
+          { "source": "answers", "identifier": "answer-4" }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Sum with raw values",
+    "+": [[1, 2, 3]]
+  }
+]

@@ -412,9 +412,9 @@ class QuestionnaireSchema:
             referred_answer = answer_ranges.get(defined_value["identifier"])
         elif value_source == "calculated_summary":
             calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = calculated_summary_block["calculation"][
-                "answers_to_calculate"
-            ]
+            answers_to_calculate = self.get_calculated_answer_ids(
+                calculated_summary_block
+            )
 
             for answer_id in answers_to_calculate:
                 referred_answer = answer_ranges.get(answer_id)
@@ -435,3 +435,18 @@ class QuestionnaireSchema:
             if not referred_answer:
                 return None
         return system_default
+
+    @staticmethod
+    def get_calculated_answer_ids(block):
+        if block["calculation"].get("answers_to_calculate"):
+            return block["calculation"]["answers_to_calculate"]
+
+        value_sources = get_object_containing_key(
+            block["calculation"]["operation"], "source"
+        )
+
+        return [
+            source[1]["identifier"]
+            for source in value_sources
+            if source[1]["source"] == "answers"
+        ]
