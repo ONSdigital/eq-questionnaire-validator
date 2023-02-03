@@ -14,7 +14,9 @@ class AnswerCodeValidator(Validator):
     ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS = (
         "Answer values can only be set for answers that support answer options"
     )
-    ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = "The number of answer codes does not match number of answer options"
+    ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = (
+        "The number of answer codes does not match number of answer options"
+    )
     MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
         "Values specified in answer code and answer options do not match"
