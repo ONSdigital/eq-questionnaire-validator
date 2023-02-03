@@ -85,7 +85,7 @@
           },
           "answer_id": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
-            "description": "Answer id of the answer code"
+            "description": "The `answer_id` this `code` mapping is for."
           },
           "answer_value": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
