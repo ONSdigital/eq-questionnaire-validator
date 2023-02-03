@@ -89,7 +89,7 @@
           },
           "answer_value": {
             "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
-            "description": "Optional answer value for the given answer code"
+            "description": "Optional answer value for the given answer code. This should only used for answers that support `options`."
           }
         },
         "additionalProperties": false,
