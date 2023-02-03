@@ -11,6 +11,9 @@ class AnswerCodeValidator(Validator):
     ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA = (
         "No matching answer id found in the schema for the given answer code"
     )
+    ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS = (
+        "Answer values can only be set for answers that support answer options"
+    )
     ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = "Number of answer codes does not match number of answers for an answer with multiple options"
     MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
@@ -107,6 +110,16 @@ class AnswerCodeValidator(Validator):
                 self.validate_incorrect_values_in_answer_options(
                     answer_codes_for_options=answer_codes_for_options, values=values
                 )
+
+            else:
+                for answer_code in self.answer_codes:
+                    if answer_code["answer_id"] == answer_id and (
+                        "answer_value" in answer_code
+                    ):
+                        self.add_error(
+                            self.ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS,
+                            answer_code=answer_code,
+                        )
 
     def validate_missing_answer_codes_for_answer_options(
         self, answer, answer_id, answer_codes_for_options, values

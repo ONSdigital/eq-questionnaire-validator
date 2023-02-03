@@ -112,6 +112,57 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
     assert validator.errors == expected_errors
 
 
+def test_answer_value_set_for_answer_without_answer_options():
+    filename = "schemas/valid/test_answer_codes.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer_codes = [
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "None",
+            "code": "1a",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Ham & Cheese",
+            "code": "1b",
+        },
+        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Pepperoni",
+            "code": "1d",
+        },
+        {
+            "answer_id": "mandatory-checkbox-answer",
+            "answer_value": "Other",
+            "code": "1e",
+        },
+        {"answer_id": "other-answer-mandatory", "code": "1f"},
+        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
+        {"answer_id": "name-answer", "answer_value": "missing_value", "code": "3"},
+        {"answer_id": "name-answer-2", "code": "4"},
+    ]
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS,
+            "answer_code": {
+                "answer_id": "name-answer",
+                "answer_value": "missing_value",
+                "code": "3",
+            },
+        }
+    ]
+
+    assert validator.errors == expected_errors
+
+
 def test_answer_code_not_set_for_answer_found_in_schema():
     filename = "schemas/invalid/test_invalid_answer_codes_answer_id_with_no_code.json"
 
