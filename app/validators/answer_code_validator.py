@@ -18,9 +18,7 @@ class AnswerCodeValidator(Validator):
         "The number of answer codes does not match number of answer options"
     )
     MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
-    INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
-        "Values specified in answer code and answer options do not match"
-    )
+    INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = "Values specified in answer code and answer options do not match or they are of different lengths."
     DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
         "Dynamic options must have an answer code set at the parent level"
     )
@@ -60,7 +58,7 @@ class AnswerCodeValidator(Validator):
             if answer_code_id not in self.all_answer_ids:
                 self.add_error(
                     self.ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA,
-                    answer_id=answer_code_id,
+                    **{"answer_codes.answer_id": answer_code_id},
                 )
 
     def validate_missing_answer_codes(self):
@@ -169,7 +167,7 @@ class AnswerCodeValidator(Validator):
                     self.add_error(
                         self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
                         answer_code=answer_code,
-                        allowed_values=answer_codes_for_options,
+                        allowed_values=values,
                     )
 
         if len(answer_values) != len(values) and any(

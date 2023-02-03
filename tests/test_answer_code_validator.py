@@ -105,7 +105,7 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
     expected_errors = [
         {
             "message": validator.ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA,
-            "answer_id": "name-answer-3",
+            "answer_codes.answer_id": "name-answer-3",
         }
     ]
 
@@ -522,33 +522,7 @@ def test_incorrect_answer_value_set_in_answer_code():
     expected_errors = [
         {
             "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-            "allowed_values": [
-                {
-                    "answer_id": "mandatory-checkbox-answer",
-                    "answer_value": "None",
-                    "code": "1a",
-                },
-                {
-                    "answer_id": "mandatory-checkbox-answer",
-                    "answer_value": "Ham & Cheese",
-                    "code": "1b",
-                },
-                {
-                    "answer_id": "mandatory-checkbox-answer",
-                    "answer_value": "Ham",
-                    "code": "1c",
-                },
-                {
-                    "answer_id": "mandatory-checkbox-answer",
-                    "answer_value": "Pepperonis",
-                    "code": "1d",
-                },
-                {
-                    "answer_id": "mandatory-checkbox-answer",
-                    "answer_value": "Other",
-                    "code": "1e",
-                },
-            ],
+            "allowed_values": ["None", "Ham & Cheese", "Ham", "Pepperoni", "Other"],
             "answer_code": {
                 "answer_id": "mandatory-checkbox-answer",
                 "answer_value": "Pepperonis",
@@ -652,14 +626,7 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
     expected_errors = [
         {
             "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-            "allowed_values": [
-                {"answer_id": "dynamic-checkbox-answer", "code": "1"},
-                {
-                    "answer_id": "dynamic-checkbox-answer",
-                    "code": "1a",
-                    "answer_value": "No favourite",
-                },
-            ],
+            "allowed_values": ["I don’t have a favourite"],
             "answer_code": {
                 "answer_id": "dynamic-checkbox-answer",
                 "answer_value": "No favourite",
