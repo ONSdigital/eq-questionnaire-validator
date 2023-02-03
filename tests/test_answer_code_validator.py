@@ -280,6 +280,7 @@ def test_answer_code_missing_for_answer_options():
                     "answer_value": "Other",
                 },
             ],
+            "allowed_values": ["None", "Ham & Cheese", "Ham", "Pepperoni", "Other"],
         },
     ]
 
@@ -344,6 +345,7 @@ def test_answer_code_missing_for_answer_options_only_one_value_set():
                     "answer_value": "Ham",
                 },
             ],
+            "allowed_values": ["None", "Ham & Cheese", "Ham", "Pepperoni", "Other"],
         },
     ]
 
@@ -473,6 +475,7 @@ def test_answer_code_with_duplicate_option_answer_values():
                     "code": "1e",
                 },
             ],
+            "allowed_values": ["None", "Ham & Cheese", "Ham", "Pepperoni", "Other"],
         }
     ]
 

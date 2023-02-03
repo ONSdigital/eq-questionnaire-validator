@@ -176,4 +176,5 @@ class AnswerCodeValidator(Validator):
             self.add_error(
                 self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
                 answer_codes_for_options=answer_codes_for_options,
+                allowed_values=values,
             )
