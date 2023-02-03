@@ -519,34 +519,38 @@ def test_incorrect_answer_value_set_in_answer_code():
     expected_errors = [
         {
             "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-            "answer_codes_for_options": [
+            "allowed_values": [
                 {
                     "answer_id": "mandatory-checkbox-answer",
-                    "code": "1a",
                     "answer_value": "None",
+                    "code": "1a",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
-                    "code": "1b",
                     "answer_value": "Ham & Cheese",
+                    "code": "1b",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
-                    "code": "1c",
                     "answer_value": "Ham",
+                    "code": "1c",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
-                    "code": "1d",
                     "answer_value": "Pepperonis",
+                    "code": "1d",
                 },
                 {
                     "answer_id": "mandatory-checkbox-answer",
-                    "code": "1e",
                     "answer_value": "Other",
+                    "code": "1e",
                 },
             ],
-            "answer_value": "Pepperonis",
+            "answer_code": {
+                "answer_id": "mandatory-checkbox-answer",
+                "answer_value": "Pepperonis",
+                "code": "1d",
+            },
         }
     ]
 
@@ -645,7 +649,7 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
     expected_errors = [
         {
             "message": validator.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-            "answer_codes_for_options": [
+            "allowed_values": [
                 {"answer_id": "dynamic-checkbox-answer", "code": "1"},
                 {
                     "answer_id": "dynamic-checkbox-answer",
@@ -653,7 +657,11 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
                     "answer_value": "No favourite",
                 },
             ],
-            "answer_value": "No favourite",
+            "answer_code": {
+                "answer_id": "dynamic-checkbox-answer",
+                "answer_value": "No favourite",
+                "code": "1a",
+            },
         }
     ]
 

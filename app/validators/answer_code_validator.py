@@ -166,8 +166,8 @@ class AnswerCodeValidator(Validator):
                 if answer_code["answer_value"] not in values:
                     self.add_error(
                         self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
-                        answer_value=answer_code["answer_value"],
-                        answer_codes_for_options=answer_codes_for_options,
+                        answer_code=answer_code,
+                        allowed_values=answer_codes_for_options,
                     )
 
         if len(answer_values) != len(values) and any(
