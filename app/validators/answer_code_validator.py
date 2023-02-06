@@ -177,10 +177,10 @@ class AnswerCodeValidator(Validator):
     ):
         answer_values = set()
         for answer_code in answer_codes_for_options:
-            if answer_code.get("answer_value"):
-                answer_values.add(answer_code["answer_value"])
+            if answer_value := answer_code.get("answer_value"):
+                answer_values.add(answer_value)
 
-                if answer_code["answer_value"] not in values:
+                if answer_value not in values:
                     self.add_error(
                         self.INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS,
                         answer_code=answer_code,
