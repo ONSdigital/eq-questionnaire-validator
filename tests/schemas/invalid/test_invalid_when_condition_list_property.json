@@ -1,70 +1,72 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "language": "en",
-    "schema_version": "0.0.2",
-    "data_version": "0.0.3",
-    "survey_id": "0",
-    "title": "Other input fields",
-    "theme": "default",
-    "description": "An invalid questionnaire to demo a when condition referencing a list that doesn’t exist",
-    "metadata": [
-        {
-            "name": "user_id",
-            "type": "string"
-        },
-        {
-            "name": "period_id",
-            "type": "string"
-        },
-        {
-            "name": "ru_name",
-            "type": "string"
-        }
-    ],
-    "questionnaire_flow": {
-        "type": "Linear",
-        "options": {
-            "summary": {
-                "collapsible": false
-            }
-        }
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.2",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Other input fields",
+  "theme": "default",
+  "description": "An invalid questionnaire to demo a when condition referencing a list that doesn’t exist",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
     },
-    "sections": [
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
         {
-            "id": "default-section",
-            "groups": [
-                {
-                    "blocks": [
-                        {
-                            "type": "Question",
-                            "id": "block",
-                            "question": {
-                                "id": "question",
-                                "title": "What is your favourite list?",
-                                "type": "General",
-                                "answers": [
-                                    {
-                                        "id": "answer",
-                                        "label": "Label",
-                                        "mandatory": false,
-                                        "type": "TextField"
-                                    }
-                                ]
-                            },
-                            "skip_conditions": {
-                                "when": [
-                                    {
-                                        "list": "non-existent-list-name",
-                                        "condition": "equals",
-                                        "value": 1
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "id": "checkboxes"
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block",
+              "question": {
+                "id": "question",
+                "title": "What is your favourite list?",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "answer",
+                    "label": "Label",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ]
+              },
+              "skip_conditions": {
+                "when": {
+                  "==": [
+                    {
+                      "source": "list",
+                      "identifier": "non-existent-list-name"
+                    },
+                    1
+                  ]
                 }
-            ]
+              }
+            }
+          ],
+          "id": "checkboxes"
         }
-    ]
+      ]
+    }
+  ]
 }

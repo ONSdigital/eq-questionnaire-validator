@@ -1,1015 +1,1019 @@
 {
-    "mime_type": "application/json/ons/eq",
-    "language": "en",
-    "schema_version": "0.0.1",
-    "data_version": "0.0.3",
-    "survey_id": "0",
-    "title": "Hub & Spoke",
-    "theme": "default",
-    "description": "A questionnaire to demo hub and spoke functionality",
-    "metadata": [
-        {
-            "name": "user_id",
-            "type": "string"
-        },
-        {
-            "name": "period_id",
-            "type": "string"
-        },
-        {
-            "name": "ru_name",
-            "type": "string"
-        }
-    ],
-    "questionnaire_flow": {
-        "type": "Hub",
-        "options": {}
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Hub & Spoke",
+  "theme": "default",
+  "description": "A questionnaire to demo hub and spoke functionality",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
     },
-    "sections": [
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Hub",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "section",
+      "title": "Household",
+      "groups": [
         {
-            "id": "section",
-            "title": "Household",
-            "groups": [
-                {
-                    "id": "group",
-                    "title": "List",
-                    "blocks": [
+          "id": "group",
+          "title": "List",
+          "blocks": [
+            {
+              "id": "primary-person-list-collector",
+              "type": "PrimaryPersonListCollector",
+              "for_list": "people",
+              "add_or_edit_block": {
+                "id": "add-or-edit-primary-person",
+                "type": "PrimaryPersonListAddOrEditQuestion",
+                "question": {
+                  "id": "primary-person-add-or-edit-question",
+                  "type": "General",
+                  "title": "What is your name",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "question": {
+                "id": "primary-confirmation-question",
+                "type": "General",
+                "title": "Do you live here?",
+                "answers": [
+                  {
+                    "id": "you-live-here",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
                         {
-                            "id": "primary-person-list-collector",
-                            "type": "PrimaryPersonListCollector",
-                            "for_list": "people",
-                            "add_or_edit_block": {
-                                "id": "add-or-edit-primary-person",
-                                "type": "PrimaryPersonListAddOrEditQuestion",
-                                "question": {
-                                    "id": "primary-person-add-or-edit-question",
-                                    "type": "General",
-                                    "title": "What is your name",
-                                    "answers": [
-                                        {
-                                            "id": "first-name",
-                                            "label": "First name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        },
-                                        {
-                                            "id": "last-name",
-                                            "label": "Last name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        }
-                                    ]
-                                }
-                            },
-                            "question": {
-                                "id": "primary-confirmation-question",
-                                "type": "General",
-                                "title": "Do you live here?",
-                                "answers": [
-                                    {
-                                        "id": "you-live-here",
-                                        "mandatory": true,
-                                        "type": "Radio",
-                                        "options": [
-                                            {
-                                                "label": "Yes",
-                                                "value": "Yes",
-                                                "action": {
-                                                    "type": "RedirectToListAddBlock"
-                                                }
-                                            },
-                                            {
-                                                "label": "No",
-                                                "value": "No"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
                         },
                         {
-                            "id": "list-collector",
-                            "type": "ListCollector",
-                            "for_list": "people",
-                            "question": {
-                                "id": "confirmation-question",
-                                "type": "General",
-                                "title": "Does anyone else live here?",
-                                "answers": [
-                                    {
-                                        "id": "anyone-else",
-                                        "mandatory": true,
-                                        "type": "Radio",
-                                        "options": [
-                                            {
-                                                "label": "Yes",
-                                                "value": "Yes",
-                                                "action": {
-                                                    "type": "RedirectToListAddBlock"
-                                                }
-                                            },
-                                            {
-                                                "label": "No",
-                                                "value": "No"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            "add_block": {
-                                "id": "add-person",
-                                "type": "ListAddQuestion",
-                                "question": {
-                                    "id": "add-question",
-                                    "type": "General",
-                                    "title": "What is the name of the person?",
-                                    "answers": [
-                                        {
-                                            "id": "first-name",
-                                            "label": "First name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        },
-                                        {
-                                            "id": "last-name",
-                                            "label": "Last name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        }
-                                    ]
-                                }
-                            },
-                            "edit_block": {
-                                "id": "edit-person",
-                                "type": "ListEditQuestion",
-                                "question": {
-                                    "id": "edit-question",
-                                    "type": "General",
-                                    "title": "What is the name of the person?",
-                                    "answers": [
-                                        {
-                                            "id": "first-name",
-                                            "label": "First name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        },
-                                        {
-                                            "id": "last-name",
-                                            "label": "Last name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        }
-                                    ]
-                                }
-                            },
-                            "remove_block": {
-                                "id": "remove-person",
-                                "type": "ListRemoveQuestion",
-                                "question": {
-                                    "id": "remove-question",
-                                    "type": "General",
-                                    "title": "Are you sure you want to remove this person?",
-                                    "answers": [
-                                        {
-                                            "id": "remove-confirmation",
-                                            "mandatory": true,
-                                            "type": "Radio",
-                                            "options": [
-                                                {
-                                                    "label": "Yes",
-                                                    "value": "Yes",
-                                                    "action": {
-                                                        "type": "RemoveListItemAndAnswers"
-                                                    }
-                                                },
-                                                {
-                                                    "label": "No",
-                                                    "value": "No"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            },
-                            "summary": {
-                                "title": "Household members",
-                                "item_title": {
-                                    "text": "{person_name}",
-                                    "placeholders": [
-                                        {
-                                            "placeholder": "person_name",
-                                            "transforms": [
-                                                {
-                                                    "arguments": {
-                                                        "delimiter": " ",
-                                                        "list_to_concatenate": [
-                                                            {
-                                                                "source": "answers",
-                                                                "identifier": "first-name"
-                                                            },
-                                                            {
-                                                                "source": "answers",
-                                                                "identifier": "last-name"
-                                                            }
-                                                        ]
-                                                    },
-                                                    "transform": "concatenate_list"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            }
+                          "label": "No",
+                          "value": "No"
                         }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "extra-list-group",
+          "title": "Another List",
+          "blocks": [
+            {
+              "id": "next-interstitial",
+              "content": {
+                "title": "Another list",
+                "contents": [
+                  {
+                    "description": "You have added some people to the ‘people’ list. Next we’ll test another list collector adding to the same list. This should still have the same list of people."
+                  }
+                ]
+              },
+              "type": "Interstitial"
+            },
+            {
+              "id": "another-list-collector-block",
+              "type": "ListCollector",
+              "for_list": "people",
+              "question": {
+                "id": "another-confirmation-question",
+                "type": "General",
+                "title": "This list collector will add to the same ‘people’ list. Add someone else?",
+                "answers": [
+                  {
+                    "id": "another-anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
                     ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "another-add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "another-add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "another-edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "another-edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "another-remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "another-remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "another-remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "personal-details-section",
+      "title": "Personal Details",
+      "repeat": {
+        "for_list": "non-existent-list",
+        "title": {
+          "text": "{person_name}",
+          "placeholders": [
+            {
+              "placeholder": "person_name",
+              "transforms": [
+                {
+                  "transform": "concatenate_list",
+                  "arguments": {
+                    "list_to_concatenate": [
+                      {
+                        "source": "answers",
+                        "identifier": "first-name"
+                      },
+                      {
+                        "source": "answers",
+                        "identifier": "last-name"
+                      }
+                    ],
+                    "delimiter": " "
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "groups": [
+        {
+          "id": "personal-details-group",
+          "title": "Personal Details",
+          "blocks": [
+            {
+              "id": "proxy",
+              "question": {
+                "answers": [
+                  {
+                    "default": "Yes",
+                    "id": "proxy-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "No, I’m answering for myself",
+                        "value": "No, I’m answering for myself"
+                      },
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "proxy-question",
+                "title": "Are you answering the questions on behalf of someone else?",
+                "type": "General"
+              },
+              "type": "Question"
+            },
+            {
+              "id": "date-of-birth",
+              "question_variants": [
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "date-of-birth-answer",
+                        "mandatory": true,
+                        "maximum": {
+                          "value": "now"
+                        },
+                        "minimum": {
+                          "offset_by": {
+                            "years": -115
+                          },
+                          "value": "2019-10-13"
+                        },
+                        "type": "Date"
+                      }
+                    ],
+                    "guidance": {
+                      "contents": [
+                        {
+                          "description": "For example 31 12 1970"
+                        }
+                      ]
+                    },
+                    "id": "date-of-birth-question",
+                    "title": "What is your date of birth?",
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "No, I’m answering for myself"
+                    ]
+                  }
                 },
                 {
-                    "id": "extra-list-group",
-                    "title": "Another List",
-                    "blocks": [
-                        {
-                            "id": "next-interstitial",
-                            "content": {
-                                "title": "Another list",
-                                "contents": [
-                                    {
-                                        "description": "You have added some people to the ‘people’ list. Next we’ll test another list collector adding to the same list. This should still have the same list of people."
-                                    }
-                                ]
-                            },
-                            "type": "Interstitial"
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "date-of-birth-answer",
+                        "mandatory": true,
+                        "maximum": {
+                          "value": "now"
                         },
+                        "minimum": {
+                          "offset_by": {
+                            "years": -115
+                          },
+                          "value": "2019-10-13"
+                        },
+                        "type": "Date"
+                      }
+                    ],
+                    "guidance": {
+                      "contents": [
                         {
-                            "id": "another-list-collector-block",
-                            "type": "ListCollector",
-                            "for_list": "people",
-                            "question": {
-                                "id": "another-confirmation-question",
-                                "type": "General",
-                                "title": "This list collector will add to the same ‘people’ list. Add someone else?",
-                                "answers": [
-                                    {
-                                        "id": "another-anyone-else",
-                                        "mandatory": true,
-                                        "type": "Radio",
-                                        "options": [
-                                            {
-                                                "label": "Yes",
-                                                "value": "Yes",
-                                                "action": {
-                                                    "type": "RedirectToListAddBlock"
-                                                }
-                                            },
-                                            {
-                                                "label": "No",
-                                                "value": "No"
-                                            }
-                                        ]
-                                    }
+                          "description": "For example 31 12 1970"
+                        }
+                      ]
+                    },
+                    "id": "date-of-birth-question",
+                    "title": {
+                      "placeholders": [
+                        {
+                          "placeholder": "person_name_possessive",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "delimiter": " ",
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "first-name"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "last-name"
+                                  }
                                 ]
+                              },
+                              "transform": "concatenate_list"
                             },
-                            "add_block": {
-                                "id": "another-add-person",
-                                "type": "ListAddQuestion",
-                                "question": {
-                                    "id": "another-add-question",
-                                    "type": "General",
-                                    "title": "What is the name of the person?",
-                                    "answers": [
-                                        {
-                                            "id": "first-name",
-                                            "label": "First name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        },
-                                        {
-                                            "id": "last-name",
-                                            "label": "Last name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        }
-                                    ]
+                            {
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "previous_transform"
                                 }
-                            },
-                            "edit_block": {
-                                "id": "another-edit-person",
-                                "type": "ListEditQuestion",
-                                "question": {
-                                    "id": "another-edit-question",
-                                    "type": "General",
-                                    "title": "What is the name of the person?",
-                                    "answers": [
-                                        {
-                                            "id": "first-name",
-                                            "label": "First name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        },
-                                        {
-                                            "id": "last-name",
-                                            "label": "Last name",
-                                            "mandatory": true,
-                                            "type": "TextField"
-                                        }
-                                    ]
-                                }
-                            },
-                            "remove_block": {
-                                "id": "another-remove-person",
-                                "type": "ListRemoveQuestion",
-                                "question": {
-                                    "id": "another-remove-question",
-                                    "type": "General",
-                                    "title": "Are you sure you want to remove this person?",
-                                    "answers": [
-                                        {
-                                            "id": "another-remove-confirmation",
-                                            "mandatory": true,
-                                            "type": "Radio",
-                                            "options": [
-                                                {
-                                                    "label": "Yes",
-                                                    "value": "Yes",
-                                                    "action": {
-                                                        "type": "RemoveListItemAndAnswers"
-                                                    }
-                                                },
-                                                {
-                                                    "label": "No",
-                                                    "value": "No"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            },
-                            "summary": {
-                                "title": "Household members",
-                                "item_title": {
-                                    "text": "{person_name}",
-                                    "placeholders": [
-                                        {
-                                            "placeholder": "person_name",
-                                            "transforms": [
-                                                {
-                                                    "arguments": {
-                                                        "delimiter": " ",
-                                                        "list_to_concatenate": [
-                                                            {
-                                                                "source": "answers",
-                                                                "identifier": "first-name"
-                                                            },
-                                                            {
-                                                                "source": "answers",
-                                                                "identifier": "last-name"
-                                                            }
-                                                        ]
-                                                    },
-                                                    "transform": "concatenate_list"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
+                              },
+                              "transform": "format_possessive"
                             }
+                          ]
                         }
+                      ],
+                      "text": "What is <em>{person_name_possessive}</em> date of birth?"
+                    },
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "Yes"
                     ]
+                  }
                 }
-            ]
-        },
-        {
-            "id": "personal-details-section",
-            "title": "Personal Details",
-            "repeat": {
-                "for_list": "non-existent-list",
-                "title": {
-                    "text": "{person_name}",
-                    "placeholders": [
-                        {
-                            "placeholder": "person_name",
-                            "transforms": [
-                                {
-                                    "transform": "concatenate_list",
-                                    "arguments": {
-                                        "list_to_concatenate": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "first-name"
-                                            },
-                                            {
-                                                "source": "answers",
-                                                "identifier": "last-name"
-                                            }
-                                        ],
-                                        "delimiter": " "
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
+              ],
+              "type": "Question"
             },
-            "groups": [
+            {
+              "id": "confirm-dob",
+              "question_variants": [
                 {
-                    "id": "personal-details-group",
-                    "title": "Personal Details",
-                    "blocks": [
-                        {
-                            "id": "proxy",
-                            "question": {
-                                "answers": [
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "confirm-date-of-birth-answer",
+                        "mandatory": true,
+                        "options": [
+                          {
+                            "label": {
+                              "placeholders": [
+                                {
+                                  "placeholder": "age",
+                                  "transforms": [
                                     {
-                                        "default": "Yes",
-                                        "id": "proxy-answer",
-                                        "mandatory": false,
-                                        "options": [
-                                            {
-                                                "label": "No, I’m answering for myself",
-                                                "value": "No, I’m answering for myself"
-                                            },
-                                            {
-                                                "label": "Yes",
-                                                "value": "Yes"
-                                            }
-                                        ],
-                                        "type": "Radio"
+                                      "arguments": {
+                                        "first_date": {
+                                          "identifier": "date-of-birth-answer",
+                                          "source": "answers"
+                                        },
+                                        "second_date": {
+                                          "value": "now"
+                                        }
+                                      },
+                                      "transform": "calculate_date_difference"
                                     }
-                                ],
-                                "id": "proxy-question",
-                                "title": "Are you answering the questions on behalf of someone else?",
-                                "type": "General"
+                                  ]
+                                }
+                              ],
+                              "text": "Yes, I am {age} old"
                             },
-                            "type": "Question"
-                        },
+                            "value": "Yes, I am {age} old"
+                          },
+                          {
+                            "label": "No, I need to change my date of birth",
+                            "value": "No, I need to change my date of birth"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "confirm-date-of-birth",
+                    "title": {
+                      "placeholders": [
                         {
-                            "id": "date-of-birth",
-                            "question_variants": [
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "date-of-birth-answer",
-                                                "mandatory": true,
-                                                "maximum": {
-                                                    "value": "now"
-                                                },
-                                                "minimum": {
-                                                    "offset_by": {
-                                                        "years": -115
-                                                    },
-                                                    "value": "2019-10-13"
-                                                },
-                                                "type": "Date"
-                                            }
-                                        ],
-                                        "guidance": {
-                                            "contents": [
-                                                {
-                                                    "description": "For example 31 12 1970"
-                                                }
-                                            ]
-                                        },
-                                        "id": "date-of-birth-question",
-                                        "title": "What is your date of birth?",
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "No, I’m answering for myself"
-                                        ]
-                                    }
+                          "placeholder": "age",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "first_date": {
+                                  "identifier": "date-of-birth-answer",
+                                  "source": "answers"
                                 },
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "date-of-birth-answer",
-                                                "mandatory": true,
-                                                "maximum": {
-                                                    "value": "now"
-                                                },
-                                                "minimum": {
-                                                    "offset_by": {
-                                                        "years": -115
-                                                    },
-                                                    "value": "2019-10-13"
-                                                },
-                                                "type": "Date"
-                                            }
-                                        ],
-                                        "guidance": {
-                                            "contents": [
-                                                {
-                                                    "description": "For example 31 12 1970"
-                                                }
-                                            ]
-                                        },
-                                        "id": "date-of-birth-question",
-                                        "title": {
-                                            "placeholders": [
-                                                {
-                                                    "placeholder": "person_name_possessive",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "delimiter": " ",
-                                                                "list_to_concatenate": [
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "first-name"
-                                                                    },
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "last-name"
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "transform": "concatenate_list"
-                                                        },
-                                                        {
-                                                            "arguments": {
-                                                                "string_to_format": {
-                                                                    "source": "previous_transform"
-                                                                }
-                                                            },
-                                                            "transform": "format_possessive"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "text": "What is <em>{person_name_possessive}</em> date of birth?"
-                                        },
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "Yes"
-                                        ]
-                                    }
+                                "second_date": {
+                                  "value": "now"
                                 }
-                            ],
-                            "type": "Question"
-                        },
-                        {
-                            "id": "confirm-dob",
-                            "question_variants": [
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "confirm-date-of-birth-answer",
-                                                "mandatory": true,
-                                                "options": [
-                                                    {
-                                                        "label": {
-                                                            "placeholders": [
-                                                                {
-                                                                    "placeholder": "age",
-                                                                    "transforms": [
-                                                                        {
-                                                                            "arguments": {
-                                                                                "first_date": {
-                                                                                    "identifier": "date-of-birth-answer",
-                                                                                    "source": "answers"
-                                                                                },
-                                                                                "second_date": {
-                                                                                    "value": "now"
-                                                                                }
-                                                                            },
-                                                                            "transform": "calculate_date_difference"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "text": "Yes, I am {age} old"
-                                                        },
-                                                        "value": "Yes, I am {age} old"
-                                                    },
-                                                    {
-                                                        "label": "No, I need to change my date of birth",
-                                                        "value": "No, I need to change my date of birth"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "id": "confirm-date-of-birth",
-                                        "title": {
-                                            "placeholders": [
-                                                {
-                                                    "placeholder": "age",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "first_date": {
-                                                                    "identifier": "date-of-birth-answer",
-                                                                    "source": "answers"
-                                                                },
-                                                                "second_date": {
-                                                                    "value": "now"
-                                                                }
-                                                            },
-                                                            "transform": "calculate_date_difference"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "text": "You are {age} old. Is this correct?"
-                                        },
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "No, I’m answering for myself"
-                                        ]
-                                    }
-                                },
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "confirm-date-of-birth-answer",
-                                                "mandatory": true,
-                                                "options": [
-                                                    {
-                                                        "label": {
-                                                            "placeholders": [
-                                                                {
-                                                                    "placeholder": "person_name",
-                                                                    "transforms": [
-                                                                        {
-                                                                            "arguments": {
-                                                                                "delimiter": " ",
-                                                                                "list_to_concatenate": [
-                                                                                    {
-                                                                                        "source": "answers",
-                                                                                        "identifier": "first-name"
-                                                                                    },
-                                                                                    {
-                                                                                        "source": "answers",
-                                                                                        "identifier": "last-name"
-                                                                                    }
-                                                                                ]
-                                                                            },
-                                                                            "transform": "concatenate_list"
-                                                                        }
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "placeholder": "age",
-                                                                    "transforms": [
-                                                                        {
-                                                                            "arguments": {
-                                                                                "first_date": {
-                                                                                    "identifier": "date-of-birth-answer",
-                                                                                    "source": "answers"
-                                                                                },
-                                                                                "second_date": {
-                                                                                    "value": "now"
-                                                                                }
-                                                                            },
-                                                                            "transform": "calculate_date_difference"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "text": "Yes, {person_name} is {age} old"
-                                                        },
-                                                        "value": "Yes, {person_name} is {age} old"
-                                                    },
-                                                    {
-                                                        "label": "No, I need to change their date of birth",
-                                                        "value": "No, I need to change their date of birth"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "id": "confirm-date-of-birth",
-                                        "title": {
-                                            "placeholders": [
-                                                {
-                                                    "placeholder": "person_name",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "delimiter": " ",
-                                                                "list_to_concatenate": [
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "first-name"
-                                                                    },
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "last-name"
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "transform": "concatenate_list"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "placeholder": "age",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "first_date": {
-                                                                    "identifier": "date-of-birth-answer",
-                                                                    "source": "answers"
-                                                                },
-                                                                "second_date": {
-                                                                    "value": "now"
-                                                                }
-                                                            },
-                                                            "transform": "calculate_date_difference"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "text": "{person_name} is {age} old. Is this correct?"
-                                        },
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "Yes"
-                                        ]
-                                    }
-                                }
-                            ],
-                            "routing_rules": [
-                                {
-                                    "block": "date-of-birth",
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "confirm-date-of-birth-answer"
-                                            },
-                                            "No, I need to change my date of birth"
-                                        ]
-                                    }
-                                },
-                                {
-                                    "block": "sex"
-                                }
-                            ],
-                            "type": "ConfirmationQuestion"
-                        },
-                        {
-                            "id": "sex",
-                            "question_variants": [
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "sex-answer",
-                                                "mandatory": false,
-                                                "options": [
-                                                    {
-                                                        "label": "Female",
-                                                        "value": "Female"
-                                                    },
-                                                    {
-                                                        "label": "Male",
-                                                        "value": "Male"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "guidance": {
-                                            "contents": [
-                                                {
-                                                    "description": "A question about gender will follow"
-                                                }
-                                            ]
-                                        },
-                                        "id": "sex-question",
-                                        "title": "What is your sex?",
-                                        "type": "General"
-                                    },
-                                    "when": [
-                                        {
-                                            "condition": "equals",
-                                            "id": "proxy-answer",
-                                            "value": "No, I’m answering for myself"
-                                        },
-                                        {
-                                            "condition": "less than or equal to",
-                                            "date_comparison": {
-                                                "offset_by": {
-                                                    "years": -16
-                                                },
-                                                "value": "now"
-                                            },
-                                            "id": "date-of-birth-answer"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "sex-answer",
-                                                "mandatory": false,
-                                                "options": [
-                                                    {
-                                                        "label": "Female",
-                                                        "value": "Female"
-                                                    },
-                                                    {
-                                                        "label": "Male",
-                                                        "value": "Male"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "guidance": {
-                                            "contents": [
-                                                {
-                                                    "description": "A question about gender will follow"
-                                                }
-                                            ]
-                                        },
-                                        "id": "sex-question",
-                                        "title": {
-                                            "placeholders": [
-                                                {
-                                                    "placeholder": "person_name_possessive",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "delimiter": " ",
-                                                                "list_to_concatenate": [
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "first-name"
-                                                                    },
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "last-name"
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "transform": "concatenate_list"
-                                                        },
-                                                        {
-                                                            "arguments": {
-                                                                "string_to_format": {
-                                                                    "source": "previous_transform"
-                                                                }
-                                                            },
-                                                            "transform": "format_possessive"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "text": "What is <em>{person_name_possessive}</em> sex?"
-                                        },
-                                        "type": "General"
-                                    },
-                                    "when": [
-                                        {
-                                            "condition": "equals",
-                                            "id": "proxy-answer",
-                                            "value": "Yes"
-                                        },
-                                        {
-                                            "condition": "less than or equal to",
-                                            "date_comparison": {
-                                                "offset_by": {
-                                                    "years": -16
-                                                },
-                                                "value": "now"
-                                            },
-                                            "id": "date-of-birth-answer"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "sex-answer",
-                                                "mandatory": false,
-                                                "options": [
-                                                    {
-                                                        "label": "Female",
-                                                        "value": "Female"
-                                                    },
-                                                    {
-                                                        "label": "Male",
-                                                        "value": "Male"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "id": "sex-question",
-                                        "title": "What is your sex?",
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "No, I’m answering for myself"
-                                        ]
-                                    }
-                                },
-                                {
-                                    "question": {
-                                        "answers": [
-                                            {
-                                                "id": "sex-answer",
-                                                "mandatory": false,
-                                                "options": [
-                                                    {
-                                                        "label": "Female",
-                                                        "value": "Female"
-                                                    },
-                                                    {
-                                                        "label": "Male",
-                                                        "value": "Male"
-                                                    }
-                                                ],
-                                                "type": "Radio"
-                                            }
-                                        ],
-                                        "id": "sex-question",
-                                        "title": {
-                                            "placeholders": [
-                                                {
-                                                    "placeholder": "person_name_possessive",
-                                                    "transforms": [
-                                                        {
-                                                            "arguments": {
-                                                                "delimiter": " ",
-                                                                "list_to_concatenate": [
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "first-name"
-                                                                    },
-                                                                    {
-                                                                        "source": "answers",
-                                                                        "identifier": "last-name"
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "transform": "concatenate_list"
-                                                        },
-                                                        {
-                                                            "arguments": {
-                                                                "string_to_format": {
-                                                                    "source": "previous_transform"
-                                                                }
-                                                            },
-                                                            "transform": "format_possessive"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "text": "What is <em>{person_name_possessive}</em> sex?"
-                                        },
-                                        "type": "General"
-                                    },
-                                    "when": {
-                                        "==": [
-                                            {
-                                                "source": "answers",
-                                                "identifier": "proxy-answer"
-                                            },
-                                            "Yes"
-                                        ]
-                                    }
-                                }
-                            ],
-                            "type": "Question"
+                              },
+                              "transform": "calculate_date_difference"
+                            }
+                          ]
                         }
+                      ],
+                      "text": "You are {age} old. Is this correct?"
+                    },
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "No, I’m answering for myself"
                     ]
+                  }
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "confirm-date-of-birth-answer",
+                        "mandatory": true,
+                        "options": [
+                          {
+                            "label": {
+                              "placeholders": [
+                                {
+                                  "placeholder": "person_name",
+                                  "transforms": [
+                                    {
+                                      "arguments": {
+                                        "delimiter": " ",
+                                        "list_to_concatenate": [
+                                          {
+                                            "source": "answers",
+                                            "identifier": "first-name"
+                                          },
+                                          {
+                                            "source": "answers",
+                                            "identifier": "last-name"
+                                          }
+                                        ]
+                                      },
+                                      "transform": "concatenate_list"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "placeholder": "age",
+                                  "transforms": [
+                                    {
+                                      "arguments": {
+                                        "first_date": {
+                                          "identifier": "date-of-birth-answer",
+                                          "source": "answers"
+                                        },
+                                        "second_date": {
+                                          "value": "now"
+                                        }
+                                      },
+                                      "transform": "calculate_date_difference"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "text": "Yes, {person_name} is {age} old"
+                            },
+                            "value": "Yes, {person_name} is {age} old"
+                          },
+                          {
+                            "label": "No, I need to change their date of birth",
+                            "value": "No, I need to change their date of birth"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "confirm-date-of-birth",
+                    "title": {
+                      "placeholders": [
+                        {
+                          "placeholder": "person_name",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "delimiter": " ",
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "first-name"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "last-name"
+                                  }
+                                ]
+                              },
+                              "transform": "concatenate_list"
+                            }
+                          ]
+                        },
+                        {
+                          "placeholder": "age",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "first_date": {
+                                  "identifier": "date-of-birth-answer",
+                                  "source": "answers"
+                                },
+                                "second_date": {
+                                  "value": "now"
+                                }
+                              },
+                              "transform": "calculate_date_difference"
+                            }
+                          ]
+                        }
+                      ],
+                      "text": "{person_name} is {age} old. Is this correct?"
+                    },
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "Yes"
+                    ]
+                  }
                 }
-            ]
+              ],
+              "routing_rules": [
+                {
+                  "block": "date-of-birth",
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "confirm-date-of-birth-answer"
+                      },
+                      "No, I need to change my date of birth"
+                    ]
+                  }
+                },
+                {
+                  "block": "sex"
+                }
+              ],
+              "type": "ConfirmationQuestion"
+            },
+            {
+              "id": "sex",
+              "question_variants": [
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "sex-answer",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Female",
+                            "value": "Female"
+                          },
+                          {
+                            "label": "Male",
+                            "value": "Male"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "guidance": {
+                      "contents": [
+                        {
+                          "description": "A question about gender will follow"
+                        }
+                      ]
+                    },
+                    "id": "sex-question",
+                    "title": "What is your sex?",
+                    "type": "General"
+                  },
+                  "when": {
+                    "and": [
+                      {
+                        "==": [
+                          { "identifier": "proxy-answer", "source": "answers" },
+                          "No, I’m answering for myself"
+                        ]
+                      },
+                      {
+                        "<=": [
+                          { "date": ["now", { "years": -16 }] },
+                          {
+                            "source": "answers",
+                            "identifier": "date-of-birth-answer"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "sex-answer",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Female",
+                            "value": "Female"
+                          },
+                          {
+                            "label": "Male",
+                            "value": "Male"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "guidance": {
+                      "contents": [
+                        {
+                          "description": "A question about gender will follow"
+                        }
+                      ]
+                    },
+                    "id": "sex-question",
+                    "title": {
+                      "placeholders": [
+                        {
+                          "placeholder": "person_name_possessive",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "delimiter": " ",
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "first-name"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "last-name"
+                                  }
+                                ]
+                              },
+                              "transform": "concatenate_list"
+                            },
+                            {
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "previous_transform"
+                                }
+                              },
+                              "transform": "format_possessive"
+                            }
+                          ]
+                        }
+                      ],
+                      "text": "What is <em>{person_name_possessive}</em> sex?"
+                    },
+                    "type": "General"
+                  },
+                  "when": {
+                    "and": [
+                      {
+                        "==": [
+                          { "identifier": "proxy-answer", "source": "answers" },
+                          "Yes"
+                        ]
+                      },
+                      {
+                        "<=": [
+                          { "date": ["now", { "years": -16 }] },
+                          {
+                            "source": "answers",
+                            "identifier": "date-of-birth-answer"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "sex-answer",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Female",
+                            "value": "Female"
+                          },
+                          {
+                            "label": "Male",
+                            "value": "Male"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "sex-question",
+                    "title": "What is your sex?",
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "No, I’m answering for myself"
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "sex-answer",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Female",
+                            "value": "Female"
+                          },
+                          {
+                            "label": "Male",
+                            "value": "Male"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "sex-question",
+                    "title": {
+                      "placeholders": [
+                        {
+                          "placeholder": "person_name_possessive",
+                          "transforms": [
+                            {
+                              "arguments": {
+                                "delimiter": " ",
+                                "list_to_concatenate": [
+                                  {
+                                    "source": "answers",
+                                    "identifier": "first-name"
+                                  },
+                                  {
+                                    "source": "answers",
+                                    "identifier": "last-name"
+                                  }
+                                ]
+                              },
+                              "transform": "concatenate_list"
+                            },
+                            {
+                              "arguments": {
+                                "string_to_format": {
+                                  "source": "previous_transform"
+                                }
+                              },
+                              "transform": "format_possessive"
+                            }
+                          ]
+                        }
+                      ],
+                      "text": "What is <em>{person_name_possessive}</em> sex?"
+                    },
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "proxy-answer"
+                      },
+                      "Yes"
+                    ]
+                  }
+                }
+              ],
+              "type": "Question"
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }
