@@ -22,6 +22,9 @@ class AnswerCodeValidator(Validator):
     DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
         "Dynamic options must have an answer code set at the parent level"
     )
+    INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR = (
+        "Answer codes are not supported for list edit and remove question types"
+    )
 
     def __init__(self, data_version, answer_codes, questionnaire_schema):
         self.data_version = data_version
@@ -63,6 +66,15 @@ class AnswerCodeValidator(Validator):
 
     def validate_missing_answer_codes(self):
         for answer_id in self.all_answer_ids:
+            block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
+
+            if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
+                if answer_id in self.answer_codes_answer_ids:
+                    self.add_error(
+                        self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR, answer_id=answer_id
+                    )
+                break
+
             if answer_id not in self.answer_codes_answer_ids:
                 self.add_error(self.MISSING_ANSWER_CODE, answer_id=answer_id)
 
@@ -90,6 +102,11 @@ class AnswerCodeValidator(Validator):
     def validate_answer_codes_at_option_level(self):
         for answer_id in self.questionnaire_schema.answers_with_context:
             answer = self.questionnaire_schema.answers_with_context[answer_id]
+
+            block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
+
+            if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
+                break
 
             if "options" in answer["answer"]:
                 values = []

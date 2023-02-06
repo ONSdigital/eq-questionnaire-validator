@@ -636,3 +636,63 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
     ]
 
     assert validator.errors == expected_errors
+
+
+def test_missing_answer_codes_for_list_add_questions():
+    filename = "schemas/valid/test_answer_codes_list_collector.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer_codes = [
+        {"answer_id": "any-companies-or-branches-answer", "code": "1"},
+        {"answer_id": "company-or-branch-name", "code": "1a"},
+        {"answer_id": "authorised-insurer-radio", "code": "1c"},
+        {"answer_id": "any-other-companies-or-branches-answer", "code": "2"},
+        {"answer_id": "confirmation-checkbox-answer", "code": "3"},
+        {"answer_id": "anyone-else", "code": "4"},
+        {"answer_id": "householder-checkbox-answer", "code": "5"},
+    ]
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.MISSING_ANSWER_CODE,
+            "answer_id": "registration-number",
+        }
+    ]
+
+    assert validator.errors == expected_errors
+
+
+def test_invalid_answer_codes_for_list_collector_remove_question():
+    filename = "schemas/valid/test_answer_codes_list_collector.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer_codes = [
+        {"answer_id": "any-companies-or-branches-answer", "code": "1"},
+        {"answer_id": "company-or-branch-name", "code": "1a"},
+        {"answer_id": "registration-number", "code": "1b"},
+        {"answer_id": "authorised-insurer-radio", "code": "1c"},
+        {"answer_id": "any-other-companies-or-branches-answer", "code": "2"},
+        {"answer_id": "confirmation-checkbox-answer", "code": "3"},
+        {"answer_id": "anyone-else", "code": "4"},
+        {"answer_id": "householder-checkbox-answer", "code": "5"},
+        {"answer_id": "remove-confirmation", "code": "5a"},
+    ]
+
+    validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
+
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR,
+            "answer_id": "remove-confirmation",
+        }
+    ]
+
+    assert validator.errors == expected_errors
