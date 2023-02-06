@@ -1,4 +1,3 @@
-from app.validators.questionnaire_schema import find_duplicates
 from app.validators.validator import Validator
 
 
@@ -19,9 +18,7 @@ class AnswerCodeValidator(Validator):
     )
     MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = "Values specified in answer code and answer options do not match or they are of different lengths."
-    DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
-        "Dynamic options must have an answer code set at the parent level"
-    )
+    DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = "Answers with dynamic options must have an answer code mapping without answer value"
     INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR = (
         "Answer codes are not supported for list edit and remove question types"
     )
@@ -51,10 +48,19 @@ class AnswerCodeValidator(Validator):
             self.add_error(self.INCORRECT_DATA_VERSION_FOR_ANSWER_CODES)
 
     def validate_duplicate_answer_codes(self):
-        duplicates = find_duplicates(self.codes)
-
-        if len(duplicates) > 0:
-            self.add_error(self.DUPLICATE_ANSWER_CODE_FOUND, duplicates=duplicates)
+        duplicate_answer_ids = [
+            answer_code["answer_id"]
+            for answer_code in self.answer_codes
+            if "answer_value" not in answer_code
+        ]
+        if duplicates := {
+            answer_id
+            for answer_id in duplicate_answer_ids
+            if duplicate_answer_ids.count(answer_id) > 1
+        }:
+            self.add_error(
+                self.DUPLICATE_ANSWER_CODE_FOUND, duplicate_answer_ids=duplicates
+            )
 
     def validate_missing_answer_id(self):
         for answer_code_id in self.answer_codes_answer_ids:
@@ -136,6 +142,7 @@ class AnswerCodeValidator(Validator):
                         self.add_error(
                             self.ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS,
                             answer_code=answer_code,
+                            answer_id=answer_id,
                         )
 
     def validate_missing_answer_codes_for_answer_options(
@@ -148,6 +155,7 @@ class AnswerCodeValidator(Validator):
                 self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
                 answer_options=answer["answer"]["options"],
                 answer_codes_for_options=answer_codes_for_options,
+                answer_id=answer_id,
             )
 
         if any(
