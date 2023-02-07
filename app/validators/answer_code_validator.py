@@ -1,3 +1,4 @@
+from app.validators.questionnaire_schema import find_duplicates
 from app.validators.validator import Validator
 
 
@@ -6,6 +7,7 @@ class AnswerCodeValidator(Validator):
         "Answer codes are only supported in data version 0.0.3"
     )
     DUPLICATE_ANSWER_CODE_FOUND = "Answer codes must be unique"
+    DUPLICATE_ANSWER_ID_FOUND = "Answer ids must only have one answer code unless answer codes are being set against answer values"
     MISSING_ANSWER_CODE = "No answer codes found for answer_id set in the schema"
     ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA = (
         "No matching answer id found in the schema for the given answer code"
@@ -48,19 +50,25 @@ class AnswerCodeValidator(Validator):
             self.add_error(self.INCORRECT_DATA_VERSION_FOR_ANSWER_CODES)
 
     def validate_duplicate_answer_codes(self):
-        duplicate_answer_ids = [
-            answer_code["answer_id"]
-            for answer_code in self.answer_codes
-            if "answer_value" not in answer_code
-        ]
-        if duplicates := {
-            answer_id
-            for answer_id in duplicate_answer_ids
-            if duplicate_answer_ids.count(answer_id) > 1
-        }:
-            self.add_error(
-                self.DUPLICATE_ANSWER_CODE_FOUND, duplicate_answer_ids=duplicates
-            )
+        duplicates = find_duplicates(self.codes)
+
+        if len(duplicates) > 0:
+            self.add_error(self.DUPLICATE_ANSWER_CODE_FOUND, duplicates=duplicates)
+        else:
+            duplicate_answer_ids = [
+                answer_code["answer_id"]
+                for answer_code in self.answer_codes
+                if "answer_value" not in answer_code
+            ]
+            if duplicate_ids := {
+                answer_id
+                for answer_id in duplicate_answer_ids
+                if duplicate_answer_ids.count(answer_id) > 1
+            }:
+                self.add_error(
+                    self.DUPLICATE_ANSWER_ID_FOUND,
+                    duplicate_answer_ids=list(duplicate_ids),
+                )
 
     def validate_missing_answer_id(self):
         for answer_code_id in self.answer_codes_answer_ids:

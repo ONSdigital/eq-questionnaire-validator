@@ -60,7 +60,7 @@ def test_duplicate_answer_codes():
     expected_errors = [
         {
             "message": validator.DUPLICATE_ANSWER_CODE_FOUND,
-            "duplicate_answer_ids": {"name-answer"},
+            "duplicates": ["3"],
         }
     ]
 
@@ -107,8 +107,8 @@ def test_duplicate_answer_id_for_answer_code():
 
     expected_errors = [
         {
-            "message": validator.DUPLICATE_ANSWER_CODE_FOUND,
-            "duplicate_answer_ids": {"name-answer"},
+            "message": validator.DUPLICATE_ANSWER_ID_FOUND,
+            "duplicate_answer_ids": ["name-answer"],
         }
     ]
 
@@ -446,8 +446,8 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
 
     expected_errors = [
         {
-            "message": validator.DUPLICATE_ANSWER_CODE_FOUND,
-            "duplicate_answer_ids": {"mandatory-checkbox-answer-2"},
+            "message": validator.DUPLICATE_ANSWER_ID_FOUND,
+            "duplicate_answer_ids": ["mandatory-checkbox-answer-2"],
         },
         {
             "message": validator.MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL,
