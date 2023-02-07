@@ -455,11 +455,7 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
                 {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
                 {"answer_id": "mandatory-checkbox-answer-2", "code": "2a"},
             ],
-            "answer_options": [
-                {"label": "None", "value": "None"},
-                {"label": "Mozzarella", "value": "Mozzarella"},
-                {"label": "Onions", "value": "Onions"},
-            ],
+            "answer_options": ["None", "Mozzarella", "Onions"],
         },
     ]
 

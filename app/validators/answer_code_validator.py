@@ -174,7 +174,7 @@ class AnswerCodeValidator(Validator):
                 if len(values) != 1 and "answer_value" in answer_codes_for_options[0]:
                     self.add_error(
                         self.ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS,
-                        answer_options=answer["answer"]["options"],
+                        answer_options=values,
                         answer_codes_for_options=answer_codes_for_options,
                     )
 
@@ -184,7 +184,7 @@ class AnswerCodeValidator(Validator):
                 # Multiple answer codes are only allowed at the parent level where options are dynamic
                 self.add_error(
                     self.MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL,
-                    answer_options=answer["answer"]["options"],
+                    answer_options=values,
                     answer_codes_for_options=answer_codes_for_options,
                 )
 
