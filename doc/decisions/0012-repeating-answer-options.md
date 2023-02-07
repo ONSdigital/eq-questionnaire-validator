@@ -23,11 +23,11 @@ Introduce a new `repeating_answers` object that will handle the generation of an
 
 Properties and uses:
 
-- `dynamic_options`
+- `repeating_answers`
     - Used to define the an array of questions that will be asked for each answer in the list.
     - Structure to follow the structure for regular question answers.
 
-### Dynamic answer options
+### Repeating answer options
 
 ```json
 {
