@@ -73,7 +73,7 @@ Properties and uses:
 
 ## Consequences
 
-- Dynamic answer options can be driven a list or a sequence of values.
-- Consistent with other answer structure.
+- Dynamic answer options can be driven by a list or a sequence of values.
+- Consistent with answer structure.
 - Consistent with new rules structure.
-- Although we resolve an answer value to its label when using Checkbox answers to drive the dynamic options, support for translations are out of scope, and no guarantees are provided.
+- List item IDs need to be set in repeating answers so that they can be focused when the user goes to change one from the summary.
