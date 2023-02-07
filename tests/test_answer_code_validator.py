@@ -61,7 +61,8 @@ def test_duplicate_answer_codes():
         {
             "message": validator.DUPLICATE_ANSWER_CODE_FOUND,
             "duplicates": ["3"],
-        }
+        },
+        {"duplicates": ["name-answer"], "message": validator.DUPLICATE_ANSWER_ID_FOUND},
     ]
 
     assert validator.errors == expected_errors

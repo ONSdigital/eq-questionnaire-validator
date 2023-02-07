@@ -54,17 +54,17 @@ class AnswerCodeValidator(Validator):
 
         if len(duplicates) > 0:
             self.add_error(self.DUPLICATE_ANSWER_CODE_FOUND, duplicates=duplicates)
-        else:
-            duplicate_answer_ids = [
-                answer_code["answer_id"]
-                for answer_code in self.answer_codes
-                if "answer_value" not in answer_code
-            ]
-            if duplicate_ids := find_duplicates(duplicate_answer_ids):
-                self.add_error(
-                    self.DUPLICATE_ANSWER_ID_FOUND,
-                    duplicates=list(duplicate_ids),
-                )
+
+        duplicate_answer_ids = [
+            answer_code["answer_id"]
+            for answer_code in self.answer_codes
+            if "answer_value" not in answer_code
+        ]
+        if duplicate_ids := find_duplicates(duplicate_answer_ids):
+            self.add_error(
+                self.DUPLICATE_ANSWER_ID_FOUND,
+                duplicates=list(duplicate_ids),
+            )
 
     def validate_missing_answer_id(self):
         for answer_code_id in self.answer_codes_answer_ids:
