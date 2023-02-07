@@ -38,7 +38,7 @@ class AnswerCodeValidator(Validator):
 
     def validate(self):
         self.validate_data_version()
-        self.validate_duplicate_answer_codes()
+        self.validate_duplicates()
         self.validate_missing_answer_id()
         self.validate_missing_answer_codes()
         self.validate_answer_codes_at_option_level()
@@ -49,7 +49,7 @@ class AnswerCodeValidator(Validator):
         if self.data_version != "0.0.3":
             self.add_error(self.INCORRECT_DATA_VERSION_FOR_ANSWER_CODES)
 
-    def validate_duplicate_answer_codes(self):
+    def validate_duplicates(self):
         duplicates = find_duplicates(self.codes)
 
         if len(duplicates) > 0:
@@ -60,14 +60,10 @@ class AnswerCodeValidator(Validator):
                 for answer_code in self.answer_codes
                 if "answer_value" not in answer_code
             ]
-            if duplicate_ids := {
-                answer_id
-                for answer_id in duplicate_answer_ids
-                if duplicate_answer_ids.count(answer_id) > 1
-            }:
+            if duplicate_ids := find_duplicates(duplicate_answer_ids):
                 self.add_error(
                     self.DUPLICATE_ANSWER_ID_FOUND,
-                    duplicate_answer_ids=list(duplicate_ids),
+                    duplicates=list(duplicate_ids),
                 )
 
     def validate_missing_answer_id(self):
