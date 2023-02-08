@@ -21,6 +21,28 @@
       "type": "string"
     }
   ],
+  "answer_codes": [
+    {
+      "answer_id": "mandatory-checkbox-answer",
+      "code": "1"
+    },
+    {
+      "answer_id": "other-answer-mandatory",
+      "code": "1a"
+    },
+    {
+      "answer_id": "dynamic-checkbox-answer",
+      "code": "2"
+    },
+    {
+      "answer_id": "dynamic-radio-answer",
+      "code": "3"
+    },
+    {
+      "answer_id": "dynamic-dropdown-answer",
+      "code": "4"
+    }
+  ],
   "questionnaire_flow": {
     "type": "Linear",
     "options": {
