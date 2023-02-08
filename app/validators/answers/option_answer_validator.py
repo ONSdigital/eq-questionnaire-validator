@@ -14,7 +14,6 @@ MIN_OPTIONS_BY_ANSWER_TYPE = {
 class OptionAnswerValidator(AnswerValidator):
     DUPLICATE_LABEL = "Duplicate label found"
     DUPLICATE_VALUE = "Duplicate value found"
-    ANSWER_LABEL_VALUE_MISMATCH = "Found mismatching answer value for label"
     LIST_NAME_MISSING = "List name defined in action params does not exist"
     BLOCK_ID_MISSING = "Block id defined in action params does not exist"
     ANSWER_DEFAULT_MISSING = "Couldn't find matching value for answer default"
@@ -42,7 +41,6 @@ class OptionAnswerValidator(AnswerValidator):
         super().validate()
         self.validate_min_options()
         self.validate_duplicate_options()
-        self.validate_labels_and_values_match()
         self.validate_default_exists_in_options()
         self.validate_dynamic_options()
         return self.errors
@@ -89,21 +87,6 @@ class OptionAnswerValidator(AnswerValidator):
 
             labels.add(option["label"])
             values.add(option["value"])
-
-    def validate_labels_and_values_match(self):
-        for option in self.options:
-            if "text_plural" in option["label"]:
-                continue
-
-            if isinstance(option["label"], str):
-                label = option["label"]
-            else:
-                label = option["label"]["text"]
-
-            if label != option["value"]:
-                self.add_error(
-                    self.ANSWER_LABEL_VALUE_MISMATCH, label=label, value=option["value"]
-                )
 
     def validate_default_exists_in_options(self):
         default_value = self.answer.get("default")
