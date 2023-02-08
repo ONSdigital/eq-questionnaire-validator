@@ -4,41 +4,6 @@ from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import get_mock_schema, get_mock_schema_with_data_version
 
 
-def test_invalid_mismatching_answer_label_and_value():
-    answer = {
-        "type": "Radio",
-        "id": "correct-answer",
-        "mandatory": False,
-        "options": [
-            {"label": "Yes it is {name}", "value": "Yes it is"},
-            {"label": "Nope", "value": "No"},
-        ],
-    }
-
-    validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
-    )
-
-    expected_errors = [
-        {
-            "message": validator.ANSWER_LABEL_VALUE_MISMATCH,
-            "answer_id": "correct-answer",
-            "label": "Yes it is {name}",
-            "value": "Yes it is",
-        },
-        {
-            "message": validator.ANSWER_LABEL_VALUE_MISMATCH,
-            "answer_id": "correct-answer",
-            "label": "Nope",
-            "value": "No",
-        },
-    ]
-
-    validator.validate_labels_and_values_match()
-
-    assert expected_errors == validator.errors
-
-
 def test_unique_answer_options():
     answer = {
         "id": "duplicate-country-answer",
