@@ -71,6 +71,69 @@ Properties and uses:
 }
 ```
 
+### Repeating answer options within a repeat
+
+```json
+{
+    "id": "shopping-section",
+    "title": "Shopping",
+    "summary": { "show_on_completion": true },
+    "repeat": {
+        "for_list": "people",
+        "title": {
+            "text": "{person_name}",
+            "placeholders": [
+                {
+                    "placeholder": "person_name"
+                }
+            ]
+        }
+    },
+    "groups": [
+        {
+            "blocks": [
+                {
+                    "question": {
+                        "id": "percentage-of-research",
+                        "title": {
+                            "text": "What percentage of {person_name}'s shopping is done in each shop?",
+                            "placeholders": [
+                                {
+                                    "placeholder": "person_name"
+                                }
+                            ]
+                        },
+                        "type": "Question",
+                        "repeating_answers": [
+                            {
+                                "description": "Percentage of shopping at {transformed_value}",
+                                "id": "percentage-of-shopping-{transformed_value}",
+                                "mandatory": false,
+                                "type": "Percentage",
+                                "maximum": {
+                                    "value": 100
+                                },
+                                "decimal_places": 2,
+                            },
+                            {
+                                "transform": {
+                                    "values": {
+                                        "source": "list",
+                                        "identifier": "shop_name",
+                                        "id_selector": "items"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+- Being in a repeating section should not have any impact one the proposed design
+
 ## Consequences
 
 - Dynamic answer options can be driven by a list or a sequence of values.
