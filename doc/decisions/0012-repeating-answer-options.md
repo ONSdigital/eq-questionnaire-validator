@@ -34,7 +34,7 @@ Properties and uses:
     "question": {
         "id": "percentage-of-research",
         "title": {
-            "text": "What percentage of R&D carried out by {company_name} was at each postcode",
+            "text": "What percentage of your shopping is done at {company_name}",
             "placeholders": [
                 {
                     "placeholder": "company_name",
@@ -48,8 +48,8 @@ Properties and uses:
         "type": "Question",
         "repeating_answers": [
             {
-                "description": "Percentage of R&D carried out at {transformed_value}",
-                "id": "percentage-of-research-{transformed_value}",
+                "description": "Percentage of your shopping done at {company_name}",
+                "id": "percentage-of-shopping-{company_name}",
                 "mandatory": false,
                 "type": "Percentage",
                 "maximum": {
@@ -61,7 +61,7 @@ Properties and uses:
                 "transform": {
                     "values": {
                         "source": "list",
-                        "identifier": "post_codes",
+                        "identifier": "shop",
                         "id_selector": "items"
                     }
                 }
