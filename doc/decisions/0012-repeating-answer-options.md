@@ -34,7 +34,7 @@ Properties and uses:
     "question": {
         "id": "percentage-of-research",
         "title": {
-            "text": "Which percentage of R&D carried out by {company_name} was at each postcode",
+            "text": "What percentage of R&D carried out by {company_name} was at each postcode",
             "placeholders": [
                 {
                     "placeholder": "company_name",
