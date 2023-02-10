@@ -70,6 +70,10 @@ Properties and uses:
     }
 }
 ```
+- `repeating_answers`
+    - An array of objects the first one would contain the answer objects and the second one would contain any transforms needed that would be applied to the list.
+    - The answers and transform would be in the same shape as other answers and be resolved in the same way.
+
 
 ### Repeating answer options within a repeat
 
