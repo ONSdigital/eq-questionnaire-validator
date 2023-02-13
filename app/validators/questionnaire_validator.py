@@ -3,6 +3,7 @@ import re
 from eq_translations.survey_schema import SurveySchema
 
 from app import error_messages
+from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplicates
@@ -40,10 +41,18 @@ class QuestionnaireValidator(Validator):
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
-
+        
         if self.schema_element.get("preview_questions"):
             self.validate_introduction_block()
             self.validate_section_title()
+
+        if answer_codes := self.schema_element.get("answer_codes"):
+            answer_code_validator = AnswerCodeValidator(
+                data_version=self.schema_element["data_version"],
+                answer_codes=answer_codes,
+                questionnaire_schema=self.questionnaire_schema,
+            )
+            self.errors += answer_code_validator.validate()
 
         return self.errors
 
