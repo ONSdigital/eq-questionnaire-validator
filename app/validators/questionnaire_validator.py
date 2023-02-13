@@ -41,7 +41,7 @@ class QuestionnaireValidator(Validator):
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
-        
+
         if self.schema_element.get("preview_questions"):
             self.validate_introduction_block()
             self.validate_section_title()
