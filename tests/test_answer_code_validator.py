@@ -716,7 +716,15 @@ def test_missing_answer_codes_for_list_add_questions():
         {
             "message": validator.MISSING_ANSWER_CODE,
             "answer_id": "registration-number",
-        }
+        },
+        {
+            "message": validator.MISSING_ANSWER_CODE,
+            "answer_id": "first-name",
+        },
+        {
+            "message": validator.MISSING_ANSWER_CODE,
+            "answer_id": "last-name",
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -747,7 +755,15 @@ def test_invalid_answer_codes_for_list_collector_remove_question():
         {
             "message": validator.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR,
             "answer_id": "remove-confirmation",
-        }
+        },
+        {
+            "message": validator.MISSING_ANSWER_CODE,
+            "answer_id": "first-name",
+        },
+        {
+            "message": validator.MISSING_ANSWER_CODE,
+            "answer_id": "last-name",
+        },
     ]
 
     assert validator.errors == expected_errors
