@@ -1,27 +1,27 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/list_add_edit_remove_question.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "blocks/list_add_edit_remove_question.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "cancel_text": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "type": {
         "type": "string",
         "enum": ["ListAddQuestion", "ListEditQuestion", "ListRemoveQuestion"]
       },
       "question": {
-        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
+        "$ref": "../questions/definitions.json#/question"
       },
       "question_variants": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/question_variants"
+        "$ref": "definitions.json#/question_variants"
       }
     },
     "additionalProperties": false,

@@ -1,15 +1,13 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/logic/and.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rules/operators/logic/and.json",
   "description": "Evaluates boolean `and`",
   "type": "object",
   "properties": {
     "and": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/boolean_operators"
-      }
+      "items": { "$ref": "../../definitions.json#/boolean_operators" }
     }
   },
   "required": ["and"],

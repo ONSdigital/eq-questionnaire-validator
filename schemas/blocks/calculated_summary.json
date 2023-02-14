@@ -1,27 +1,27 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/calculated_summary.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "blocks/calculated_summary.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "type": {
         "type": "string",
         "enum": ["CalculatedSummary"]
       },
       "title": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "routing_rules": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
+        "$ref": "../common_definitions.json#/routing_rules"
       },
       "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
+        "$ref": "../common_definitions.json#/skip_conditions"
       },
       "calculation": {
         "oneOf": [
@@ -37,12 +37,12 @@
                 "minItems": 2,
                 "uniqueItems": true,
                 "items": {
-                  "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+                  "$ref": "../common_definitions.json#/identifier"
                 },
                 "description": "The id of the answers from which to do calculated_type to"
               },
               "title": {
-                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+                "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
               }
             },
             "additionalProperties": false,
@@ -54,12 +54,12 @@
               "operation": {
                 "type": "object",
                 "properties": {
-                  "$ref": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json#/sum_answer_values"
+                  "$ref": "../rules/operators/numeric/sum.json#/sum_answer_values"
                 },
                 "required": ["+"]
               },
               "title": {
-                "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+                "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
               }
             },
             "required": ["operation", "title"],

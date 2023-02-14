@@ -1,15 +1,13 @@
 {
-  "$id": "https://eq.ons.gov.uk/questionnaire_flow/hub.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "questionnaire_flow/hub.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "options": {
     "type": "object",
     "properties": {
       "required_completed_sections": {
         "description": "The sections that need to be complete prior to the hub displaying",
         "type": "array",
-        "items": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
-        },
+        "items": { "$ref": "../common_definitions.json#/non_empty_string" },
         "minItems": 1
       }
     },

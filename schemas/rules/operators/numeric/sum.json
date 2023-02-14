@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rules/operators/numeric/sum.json",
   "description": "Returns the sum of items in an array. Accepts an array of answer value sources",
   "type": "object",
   "sum_answer_values": {
@@ -8,10 +8,8 @@
       "+": {
         "type": "array",
         "minItems": 2,
-        "items": [
-          {
-            "$ref": "https://eq.ons.gov.uk/value_sources.json#/answer_value_source"
-          }
+        "prefixItems": [
+          { "$ref": "../../../value_sources.json#/answer_value_source" }
         ]
       }
     },

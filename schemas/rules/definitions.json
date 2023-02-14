@@ -1,118 +1,86 @@
 {
-  "$id": "https://eq.ons.gov.uk/rules/definitions.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "rules/definitions.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "boolean_operators": {
     "description": "All operators that resolve to a boolean",
     "oneOf": [
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/equal.json" },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/not-equal.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/less-than-or-equal.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json"
-      },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/array/in.json" },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/array/any-in.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/array/all-in.json"
-      },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/and.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/or.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/logic/not.json" }
+      { "$ref": "operators/comparison/equal.json" },
+      { "$ref": "operators/comparison/not-equal.json" },
+      { "$ref": "operators/comparison/less-than.json" },
+      { "$ref": "operators/comparison/less-than-or-equal.json" },
+      { "$ref": "operators/comparison/greater-than.json" },
+      { "$ref": "operators/comparison/greater-than-or-equal.json" },
+      { "$ref": "operators/array/in.json" },
+      { "$ref": "operators/array/any-in.json" },
+      { "$ref": "operators/array/all-in.json" },
+      { "$ref": "operators/logic/and.json" },
+      { "$ref": "operators/logic/or.json" },
+      { "$ref": "operators/logic/not.json" }
     ]
   },
   "value_operators": {
     "description": "All operators that resolve to a value",
     "oneOf": [
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-range.json" },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
-      },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/option-label-from-value.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/concatenate.json"
-      }
+      { "$ref": "operators/value/count.json" },
+      { "$ref": "operators/value/date.json" },
+      { "$ref": "operators/value/date-range.json" },
+      { "$ref": "operators/value/format-date.json" },
+      { "$ref": "operators/value/map.json" },
+      { "$ref": "operators/value/option-label-from-value.json" },
+      { "$ref": "operators/value/concatenate.json" }
     ]
   },
   "numeric_operators": {
     "description": "All operators that resolve to a numeric value",
-    "oneOf": [
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/numeric/sum.json" }
-    ]
+    "oneOf": [{ "$ref": "operators/numeric/sum.json" }]
   },
   "non_array_value_operators": {
     "description": "All operators that resolve to a non-array value",
     "oneOf": [
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json" },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/format-date.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/option-label-from-value.json"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/rules/operators/value/concatenate.json"
-      }
+      { "$ref": "operators/value/count.json" },
+      { "$ref": "operators/value/date.json" },
+      { "$ref": "operators/value/format-date.json" },
+      { "$ref": "operators/value/option-label-from-value.json" },
+      { "$ref": "operators/value/concatenate.json" }
     ]
   },
   "list_value_operators": {
     "description": "All operators that resolve to a list of values",
     "oneOf": [
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/date-range.json" },
-      { "$ref": "https://eq.ons.gov.uk/rules/operators/value/map.json" }
+      { "$ref": "operators/value/date-range.json" },
+      { "$ref": "operators/value/map.json" }
     ]
   },
   "any_value": {
     "description": "Any value",
     "oneOf": [
-      { "type": ["number", "string", "array", "null"] },
       {
-        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
-      }
+        "type": ["number", "string", "array", "null"]
+      },
+      { "$ref": "../value_sources.json#/any_value_source" }
     ]
   },
   "any_value_except_array": {
     "description": "Any value",
     "oneOf": [
-      { "type": ["number", "string", "null"] },
       {
-        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
-      }
+        "type": ["number", "string", "null"]
+      },
+      { "$ref": "../value_sources.json#/any_value_source" }
     ]
   },
   "number_value": {
     "description": "Any number value",
     "oneOf": [
       { "type": "number" },
-      {
-        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
-      }
+      { "$ref": "../value_sources.json#/any_value_source" }
     ]
   },
   "array_value": {
     "description": "Any array value",
     "oneOf": [
       { "type": "array" },
-      {
-        "$ref": "https://eq.ons.gov.uk/value_sources.json#/any_value_source"
-      }
+      { "$ref": "../value_sources.json#/any_value_source" }
     ]
   }
 }

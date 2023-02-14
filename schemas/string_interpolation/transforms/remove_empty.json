@@ -1,6 +1,6 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/remove_empty.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "string_interpolation/transforms/remove_empty.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "remove_empty": {
     "description": "A transform for removing empty items from a list",
     "type": "object",
@@ -14,7 +14,7 @@
         "properties": {
           "list_to_filter": {
             "description": "This should be set to something that produces a list e.g. an answer that repeats, or provide multiple answer ids.",
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           }
         },
         "additionalProperties": false,

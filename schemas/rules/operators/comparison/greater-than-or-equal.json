@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/greater-than-or-equal.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rules/operators/comparison/greater-than-or-equal.json",
   "description": "Evaluates if the first argument is greater than or equal to the second",
   "type": "object",
   "properties": {
@@ -10,15 +10,9 @@
       "maxItems": 2,
       "items": {
         "anyOf": [
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/number_value"
-          },
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
-          },
-          {
-            "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json"
-          }
+          { "$ref": "../../definitions.json#/number_value" },
+          { "$ref": "../value/date.json" },
+          { "$ref": "../value/count.json" }
         ]
       }
     }

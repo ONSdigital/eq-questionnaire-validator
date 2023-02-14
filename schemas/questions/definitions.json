@@ -1,20 +1,12 @@
 {
-  "$id": "https://eq.ons.gov.uk/questions/definitions.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "questions/definitions.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
     "oneOf": [
-      {
-        "$ref": "https://eq.ons.gov.uk/questions/types/general.json#/question"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/questions/types/calculated.json#/question"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/questions/types/date_range.json#/question"
-      },
-      {
-        "$ref": "https://eq.ons.gov.uk/questions/types/mutually_exclusive.json#/question"
-      }
+      { "$ref": "types/general.json#/question" },
+      { "$ref": "types/calculated.json#/question" },
+      { "$ref": "types/date_range.json#/question" },
+      { "$ref": "types/mutually_exclusive.json#/question" }
     ]
   },
   "summary": {

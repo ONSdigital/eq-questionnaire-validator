@@ -1,5 +1,5 @@
 {
-  "$id": "https://eq.ons.gov.uk/questionnaire_flow/definitions.json",
+  "$id": "questionnaire_flow/definitions.json",
   "flow": {
     "type": "object",
     "properties": {
@@ -7,29 +7,24 @@
         "type": "string",
         "enum": ["Linear", "Hub"]
       },
-      "options": {
-        "type": "object"
-      }
+      "options": { "type": "object" }
     },
     "oneOf": [
       {
         "properties": {
           "type": { "const": "Hub" },
-          "options": {
-            "$ref": "https://eq.ons.gov.uk/questionnaire_flow/hub.json#/options"
-          }
+          "options": { "$ref": "hub.json#/options" }
         }
       },
       {
         "properties": {
           "type": { "const": "Linear" },
-          "options": {
-            "$ref": "https://eq.ons.gov.uk/questionnaire_flow/linear.json#/options"
-          }
+          "options": { "$ref": "linear.json#/options" }
         }
       }
     ],
     "additionalProperties": false,
     "required": ["type", "options"]
-  }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
 }

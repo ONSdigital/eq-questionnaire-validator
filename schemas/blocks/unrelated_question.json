@@ -1,30 +1,30 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/unrelated_question.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "blocks/unrelated_question.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "type": {
         "type": "string",
         "enum": ["UnrelatedQuestion"]
       },
       "title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "list_summary": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/list_summary"
+        "$ref": "definitions.json#/list_summary"
       },
       "question": {
-        "$ref": "https://eq.ons.gov.uk/questions/definitions.json#/question"
+        "$ref": "../questions/definitions.json#/question"
       },
       "question_variants": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/question_variants"
+        "$ref": "definitions.json#/question_variants"
       }
     },
     "additionalProperties": false,

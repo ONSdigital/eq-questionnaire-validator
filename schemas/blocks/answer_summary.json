@@ -1,44 +1,44 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/answer_summary.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "blocks/answer_summary.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "title": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "type": {
         "type": "string",
         "enum": ["AnswerSummary"]
       },
       "label": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "routing_rules": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
+        "$ref": "../common_definitions.json#/routing_rules"
       },
       "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
+        "$ref": "../common_definitions.json#/skip_conditions"
       },
       "answer_ids": {
         "type": "array",
         "items": {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+          "$ref": "../common_definitions.json#/non_empty_string"
         },
         "minItems": 1,
         "uniqueItems": true
       },
       "answer_label": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "icon": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       }
     },
     "additionalProperties": false,

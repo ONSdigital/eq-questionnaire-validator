@@ -1,6 +1,6 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/format_name.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "string_interpolation/transforms/format_name.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "format_name": {
     "type": "object",
     "properties": {
@@ -12,16 +12,16 @@
         "type": "object",
         "properties": {
           "include_middle_names": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           },
           "first_name": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           },
           "middle_names": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           },
           "last_name": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           }
         },
         "additionalProperties": false,
