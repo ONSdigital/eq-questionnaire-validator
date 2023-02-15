@@ -1,5 +1,5 @@
 {
-  "$id": "lists/currencies.json",
+  "$id": "file:///lists/currencies.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "Currency codes as defined by ISO 4217",
   "currency": {

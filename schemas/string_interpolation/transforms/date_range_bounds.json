@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/date_range_bounds.json",
+  "$id": "file:///string_interpolation/transforms/date_range_bounds.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "date_range_bounds": {
     "description": "A transform for generating the start and end date of a date range from a reference date, offset number of weeks, number of days in range and an optional first day of the week.",

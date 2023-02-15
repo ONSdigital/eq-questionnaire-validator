@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/value/date-range.json",
+  "$id": "file:///rules/operators/value/date-range.json",
   "description": "Generates a sequence of datetime objects for a specified range from a given date. The first argument takes a datetime object generated using the `date` operator, and the second argument is the range in days",
   "type": "object",
   "properties": {

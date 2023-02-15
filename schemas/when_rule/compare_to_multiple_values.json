@@ -1,5 +1,5 @@
 {
-  "$id": "when_rule/compare_to_multiple_values.json",
+  "$id": "file:///when_rule/compare_to_multiple_values.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "description": "Comparison against multiple values",

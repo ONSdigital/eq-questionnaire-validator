@@ -1,18 +1,17 @@
-const Ajv = require("ajv");
-const fs = require("fs");
-const glob = require("glob");
-const express = require("express");
-const app = express();
-const debug = require("debug")("ajv-schema-validator");
+import Ajv2020 from "ajv/dist/2020.js";
+import fs from "fs";
+import glob from "glob";
+import express from "express";
+import Debug from "debug";
 
-const ajv = new Ajv({
-  meta: false,
-  extendRefs: true,
-  unknownFormats: "ignore",
-  allErrors: false,
-  schemaId: "auto",
+const debug = Debug("ajv-schema-validator");
+
+const app = express();
+
+const ajValidator = new Ajv2020({
+  allErrors: true,
+  strict: false,
 });
-ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-07.json"));
 
 app.use(
   express.json({
@@ -31,10 +30,10 @@ app.get("/status", (req, res, next) => {
 glob("schemas/**/*.json", (er, schemas) => {
   schemas.forEach((currentSchema) => {
     const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
-    ajv.addSchema(JSON.parse(data));
+    ajValidator.addSchema(JSON.parse(data));
   });
-
-  const validate = ajv.compile(require("../schemas/questionnaire_v1.json"));
+  const baseSchema = fs.readFileSync("schemas/questionnaire_v1.json");
+  const validate = ajValidator.compile(baseSchema);
 
   app.post("/validate", (req, res, next) => {
     const valid = validate(req.body);

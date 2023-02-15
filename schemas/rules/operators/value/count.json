@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/value/count.json",
+  "$id": "file:///rules/operators/value/count.json",
   "description": "Returns the count of items in an array. Accepts a single argument which is the array",
   "type": "object",
   "properties": {

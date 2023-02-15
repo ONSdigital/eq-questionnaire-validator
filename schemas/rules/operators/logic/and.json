@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/logic/and.json",
+  "$id": "file:///rules/operators/logic/and.json",
   "description": "Evaluates boolean `and`",
   "type": "object",
   "properties": {

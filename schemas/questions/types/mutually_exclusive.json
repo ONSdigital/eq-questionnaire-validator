@@ -1,5 +1,5 @@
 {
-  "$id": "questions/types/mutually_exclusive.json",
+  "$id": "file:///questions/types/mutually_exclusive.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
     "type": "object",

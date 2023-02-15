@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/format_number.json",
+  "$id": "file:///string_interpolation/transforms/format_number.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "format_number": {
     "type": "object",

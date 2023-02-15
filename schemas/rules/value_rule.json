@@ -1,5 +1,5 @@
 {
-  "$id": "rules/value_rule.json",
+  "$id": "file:///rules/value_rule.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "description": "Top level value operator rule",

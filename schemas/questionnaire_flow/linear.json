@@ -1,5 +1,5 @@
 {
-  "$id": "questionnaire_flow/linear.json",
+  "$id": "file:///questionnaire_flow/linear.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "options": {
     "type": "object",

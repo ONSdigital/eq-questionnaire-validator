@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/contains.json",
+  "$id": "file:///string_interpolation/transforms/contains.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "contains": {
     "type": "object",

@@ -1,5 +1,5 @@
 {
-  "$id": "common_definitions.json",
+  "$id": "file:///common_definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "q_code": {
     "$ref": "#/non_empty_string",

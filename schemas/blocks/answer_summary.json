@@ -1,5 +1,5 @@
 {
-  "$id": "blocks/answer_summary.json",
+  "$id": "file:///blocks/answer_summary.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",

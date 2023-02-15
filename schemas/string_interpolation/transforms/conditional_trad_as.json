@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/conditional_trad_as.json",
+  "$id": "file:///string_interpolation/transforms/conditional_trad_as.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "conditional_trad_as": {
     "type": "object",

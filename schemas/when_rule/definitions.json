@@ -1,5 +1,5 @@
 {
-  "$id": "when_rule/definitions.json",
+  "$id": "file:///when_rule/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "when": {
     "type": "array",

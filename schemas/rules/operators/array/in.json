@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/array/in.json",
+  "$id": "file:///rules/operators/array/in.json",
   "description": "Evaluates if a value is in an array",
   "type": "object",
   "properties": {

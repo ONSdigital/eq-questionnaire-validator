@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/comparison/equal.json",
+  "$id": "file:///rules/operators/comparison/equal.json",
   "description": "Evaluates if the arguments are equal",
   "type": "object",
   "properties": {

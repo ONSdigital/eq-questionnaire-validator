@@ -1,5 +1,5 @@
 {
-  "$id": "blocks/introduction.json",
+  "$id": "file:///blocks/introduction.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",

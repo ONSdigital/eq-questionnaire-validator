@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/remove_empty.json",
+  "$id": "file:///string_interpolation/transforms/remove_empty.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "remove_empty": {
     "description": "A transform for removing empty items from a list",

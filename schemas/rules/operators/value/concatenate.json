@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "rules/operators/value/concatenate.json",
+  "$id": "file:///rules/operators/value/concatenate.json",
   "description": "Joins a list of strings together with a delimiter. Takes two arguments, the list of strings and the delimiter.",
   "type": "object",
   "properties": {

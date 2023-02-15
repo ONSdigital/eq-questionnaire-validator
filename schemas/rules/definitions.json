@@ -1,5 +1,5 @@
 {
-  "$id": "rules/definitions.json",
+  "$id": "file:///rules/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "boolean_operators": {
     "description": "All operators that resolve to a boolean",

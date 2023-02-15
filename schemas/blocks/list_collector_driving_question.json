@@ -1,5 +1,5 @@
 {
-  "$id": "blocks/list_collector_driving_question.json",
+  "$id": "file:///blocks/list_collector_driving_question.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",

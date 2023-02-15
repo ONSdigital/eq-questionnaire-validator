@@ -1,5 +1,5 @@
 {
-  "$id": "string_interpolation/transforms/format_date_range.json",
+  "$id": "file:///string_interpolation/transforms/format_date_range.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "format_date_range": {
     "description": "A transform for formatting a pair of dates representing the start and end of a date range.",
