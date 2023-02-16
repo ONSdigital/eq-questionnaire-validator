@@ -17,34 +17,32 @@ Additional requirements:
 
 ## Proposal
 
-Introduce a new `dynamic_answers` object that will handle the generation of any repeating answers based on a list.
+Introduce a new `dynamic_answers` object that will handle the generation of any repeating answers based on a list of items.
 
 ## Properties and uses:
 
 ### `dynamic_answers`
 
-- A new property within the Question block that supports answers based on a list of items, answers, or arbitrary functions 
+- A new property within the `question` block that supports answers based on a list of items, answers, or arbitrary functions 
   that return a sequence of values.
 - `dynamic_answers` will contain two top level properties, `values` and `answers`.
 - `dynamic_answers` can be used alongside the existing static `answers` property, allowing for static and dynamic answers 
   on the same page.
 - `dynaic_answers` must have at least one but can contain multiple `answers` to be iterated over for each literal list item.
-- `dynamic_answers` will be limited to single block i.e. they will only be displayed on one page.
+- `dynamic_answers` will be limited to a single block i.e. they will only be displayed on one page.
   
 #### `dynamic_answers.values`
 
-- This field will contain the source for the list of literal values to be repeated over.
+- This field will contain the `source` for the list of literal values to be repeated over.
 - The `values` property will follow existing patterns and allow either a `Value Source` or a `Value Operator` as per the schema examples below.
 - There must be at least one item in the list being used to generate dynamic answers.
   
 #### `dynamic_answers.answers`
 - This property allows a list of answer blocks, as there can be more than one dynamic answer for each literal list item.
-- The `answers` property should be able to support any of the properties that would be supported in a normal/static answer block.
-- All the properties within the `dynamic_answers.answers` block that can contain text displayed to the user will need to support placeholder transforms. For example, answer labels which currently do not allow placeholders
-  will need to be extended to support this. 
+- The `answers` property should be able to support any of the properties that would be supported in a normal/static `answer` block.
+- All the properties within the `dynamic_answers.answers` block that can contain text displayed to the user will need to support placeholder transforms. For example, answer labels which currently do not allow placeholders will need to be extended to support this. 
 - The structure should be consistent with a regular static answer block.
-- For `dynamic_answers.answers` blocks, the answer `id` will simply be a prefix, and a unique identifier will need to be added to the prefix at runtime. This is required in order for us
-to be able to render the id in other parts of the questionnaire.
+- For `dynamic_answers.answers` blocks, the answer `id` will simply be a prefix, and a unique identifier will need to be added to the prefix at runtime. This is required in order for us to be able to render the id in other parts of the questionnaire.
 
 ### Dynamic answers based on a list source
 ```json
@@ -89,8 +87,7 @@ to be able to render the id in other parts of the questionnaire.
   }
 }
 ```
-- For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers
-have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
+- For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
 - The list collector cannot be empty.  
 
 ### Dynamic answers based on a list of answers
@@ -140,10 +137,10 @@ have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
 }
 ```
 - For dynamic answers driven by answer value sources, for each list item, a unique identifier like the answer value will need to be appended to the `id` in the `dynamic_answers.answer` block e.g. `"id": "percentage-of-shopping-{value}`.
-- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be converted to lowercase to be consistent with a valid answer `id`  
+- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be converted to lowercase to be consistent with a valid answer `id`.
 - Dynamic answers can only be generated if there is at least one answer value.  
-- In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept `self` added in order to support
-dynamic answer options. This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
+- In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept [`self` added in order to support
+dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self). This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
   
 #### Dynamic Answers based on an arbitrary function
 
@@ -217,19 +214,16 @@ dynamic answer options. This is required so that we can pipe the value of the li
     }
 }
 ```
--The example above shows a dynamic answer that is based on a list of dates generated by, this extends the usage of the map operator 
-that was implemented in order to support dynamic answer options.
-- Similarly to the example based on an answer value source, a unique identifer such as the answer value generated would need to 
-be generated in order to be appended to the answer `id` prefix.
-
+-The example above shows a dynamic answer that is based on a list of dates generated by a function, this extends the usage of the [map operator 
+that was implemented in order to support dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self).
+- Similarly to the example based on an answer value source, a unique identifer such as the answer value for the item being processed would need to be appended to the answer `id` prefix at runtime in order to generate a unique answer `id`.
 
 ## Downstream Processing
 
 We need to be able to identify which dynamic answers have been answered when sending the payload downstream to SDC. 
 
-For Dynamic Answers driven by list collector sources, to do this we would need to include the `list_item_id` for the answered item. As a result,
+For Dynamic Answers driven by list collector sources, to do this, we would need to include the `list_item_id` for the answered item. As a result,
 the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
-
 ```
 answer_id: "some-id"
 list_item_id: a
@@ -240,7 +234,7 @@ list_item_id: 2
 answer_value: 1
 ```
 
-For other sources, we will not have a list item id, so we would send the dynamically generated `answer_id` downstream as per the checkbox example below:
+For other sources, where there is no `list_item_id`, we would send the dynamically generated `answer_id` (e.g `answer-id-{value}`) downstream as per the checkbox example below:
 ```
 "answer-id": "some-id-a"
 answer_value: 1
@@ -254,7 +248,7 @@ answer_value: 1
 
 ## Answer Codes
 
-As answer ids used for dynamic answers will only be prefixed values, only one answer code would be able to be set against each dynamic answer (using the id prefix) e.g.
+As answer ids used for dynamic answers will only be prefixed values in the schema, only one answer code would be able to be set against each dynamic answer (using the id prefix) e.g.
 ```
 "answer-id": "some-id-prefix"
 "code": 1
@@ -263,7 +257,7 @@ As answer ids used for dynamic answers will only be prefixed values, only one an
 ## Consequences
 
 - Dynamic answer options can be driven by a list sources, answer sources or functions.
-- All the new properties make use of existing patterns  
+- All the new properties make use of or extend existing patterns.
 - Consistent with existing answer structure.
 - Extends the use of `self` and `map` that were introduced in order to support dynamic answer options.
-- Should be extensible for future feature i.e. prepop.
+- Should be extensible for future features new types of list sources i.e. prepop.
