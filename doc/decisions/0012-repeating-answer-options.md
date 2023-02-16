@@ -4,143 +4,266 @@
 
 We need the ability to dynamically generate answers based on a list item.
 
-We need to support dynamic options that are driven by:
+We need to support dynamic answers that are driven by:
 
 - List collectors
 - Arbitrary functions that return a sequence of values.
+- Checkbox answers
 
 Additional requirements:
 
-- Ability for the label and value to be different
-- When driven by list collectors, the option's `value` is the `list_item_id` and the `label` is some transformed value on answers stored against the list item id, e.g. `FirstName LastName`.
-- When driven by answers, the option's `value` should be the answer value, and the `label` should be resolved to the schema label based on the answer id, list item id, and option value.
-- Supports translated schemas since we are resolving to the label.
-- Values to resolve correctly when inside and outside of repeats.
+- Dynamic answers need to be identifiable for downstream processing
+- Dynamic answers need to be able to support user defined answer codes
 
 ## Proposal
 
-Introduce a new `repeating_answers` object that will handle the generation of any dynamic options.
+Introduce a new `dynamic_answers` object that will handle the generation of any repeating answers based on a list.
 
-Properties and uses:
+## Properties and uses:
 
-- `repeating_answers`
-    - Used to define the an array of questions that will be asked for each answer in the list.
-    - Structure to follow the structure for regular question answers.
+### `dynamic_answers`
 
-### Repeating answer options
+- A new property within the Question block that supports answers based on a list of items, answers, or arbitrary functions 
+  that return a sequence of values.
+- `dynamic_answers` will contain two top level properties, `values` and `answers`.
+- `dynamic_answers` can be used alongside the existing static `answers` property, allowing for static and dynamic answers 
+  on the same page.
+- `dynaic_answers` must have at least one but can contain multiple `answers` to be iterated over for each literal list item.
+- `dynamic_answers` will be limited to single block i.e. they will only be displayed on one page.
+  
+#### `dynamic_answers.values`
+
+- This field will contain the source for the list of literal values to be repeated over.
+- The `values` property will follow existing patterns and allow either a `Value Source` or a `Value Operator` as per the schema examples below.
+- There must be at least one item in the list being used to generate dynamic answers.
+  
+#### `dynamic_answers.answers`
+- This property allows a list of answer blocks, as there can be more than one dynamic answer for each literal list item.
+- The `answers` property should be able to support any of the properties that would be supported in a normal/static answer block.
+- All the properties within the `dynamic_answers.answers` block that can contain text displayed to the user will need to support placeholder transforms. For example, answer labels which currently do not allow placeholders
+  will need to be extended to support this. 
+- The structure should be consistent with a regular static answer block.
+- For `dynamic_answers.answers` blocks, the answer `id` will simply be a prefix, and a unique identifier will need to be added to the prefix at runtime. This is required in order for us
+to be able to render the id in other parts of the questionnaire.
+
+### Dynamic answers based on a list source
+```json
+{
+  "question": {
+    "id": "percentage-of-research",
+    "title": "Some title",
+    "type": "Question",
+    "answers": [
+      ...
+    ],
+    "dynamic_answers": {
+      "values": {
+        "source": "list",
+        "identifier": "postcodes",
+        "selector": "items"
+      },
+      "answers": [
+        {
+          "description": {
+            "text": "Percentage of shopping at {transformed_value}",
+            "placeholders": [
+              {
+                "placeholder": "transformed_value",
+                "value": {
+                  "source": "answers",
+                  "identifier": "postcode"
+                }
+              }
+            ]
+          },
+          "id": "percentage-of-shopping",
+          "mandatory": false,
+          "type": "Percentage",
+          "maximum": {
+            "value": 100
+          },
+          "decimal_places": 2
+        }
+      ]
+    }
+  }
+}
+```
+- For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers
+have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
+- The list collector cannot be empty.  
+
+### Dynamic answers based on a list of answers
+
+```json
+{
+  "question": {
+    "id": "percentage-of-research",
+    "title": "Some title",
+    "type": "Question",
+    "answers": [...],
+    "dynamic_answers": {
+      "values": {
+        "source": "answers",
+        "identifier": "checkbox-answer"
+      },
+      "answers": [
+        {
+          "description": {
+            "text": "Percentage of shopping at {transformed_value}",
+            "placeholders": [
+              {
+                "placeholder": "transformed_value",
+                "transforms": [
+                  {
+                    "transform": "option_label_from_value",
+                    "arguments": {
+                      "value": "self",
+                      "answer_id": "checkbox-answer"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "id": "percentage-of-shopping",
+          "mandatory": false,
+          "type": "Percentage",
+          "maximum": {
+            "value": 100
+          },
+          "decimal_places": 2
+        }
+      ]
+    }
+  }
+}
+```
+- For dynamic answers driven by answer value sources, for each list item, a unique identifier like the answer value will need to be appended to the `id` in the `dynamic_answers.answer` block e.g. `"id": "percentage-of-shopping-{value}`.
+- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be converted to lowercase to be consistent with a valid answer `id`  
+- Dynamic answers can only be generated if there is at least one answer value.  
+- In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept `self` added in order to support
+dynamic answer options. This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
+  
+#### Dynamic Answers based on an arbitrary function
 
 ```json
 {
     "question": {
         "id": "percentage-of-research",
-        "title": {
-            "text": "What percentage of R&D carried out by {company_name} was at each postcode",
-            "placeholders": [
-                {
-                    "placeholder": "company_name",
-                    "value": {
-                        "source": "metadata",
-                        "identifier": "ru_name"
+        "title": "Some title",
+        "type": "Question",
+        "answers": [
+            ...
+        ],
+        "dynamic_answers": {
+            "values": {
+                "map": [
+                    {
+                        "format-date": [
+                            "self",
+                            "%Y-%m-%d"
+                        ]
+                    },
+                    {
+                        "date-range": [
+                            {
+                                "date": [
+                                    {
+                                        "source": "response_metadata",
+                                        "identifier": "started_at"
+                                    },
+                                    {
+                                        "days": -7,
+                                        "day_of_week": "MONDAY"
+                                    }
+                                ]
+                            },
+                            7
+                        ]
                     }
+                ]
+            },
+            "answers": [
+                {
+                    "description": {
+                        "text": "Percentage of shopping on {date}",
+                        "placeholders": [
+                            {
+                                "placeholder": "date",
+                                "transforms": [
+                                    {
+                                        "transform": "format_date",
+                                        "format-date": [
+                                            "self",
+                                            "%A %d %B %Y",
+                                            "%Y-%m-%d"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "id": "percentage-of-shopping",
+                    "mandatory": false,
+                    "type": "Percentage",
+                    "maximum": {
+                        "value": 100
+                    },
+                    "decimal_places": 2
                 }
             ]
-        },
-        "type": "Question",
-        "repeating_answers": [
-            {
-                "description": "Percentage of R&D carried out at {transformed_value}",
-                "id": "percentage-of-research-{transformed_value}",
-                "mandatory": false,
-                "type": "Percentage",
-                "maximum": {
-                    "value": 100
-                },
-                "decimal_places": 2
-            },
-            {
-                "transform": {
-                    "values": {
-                        "source": "list",
-                        "identifier": "post_codes",
-                        "id_selector": "items"
-                    }
-                }
-            }
-        ]
+        }
     }
 }
 ```
-- `repeating_answers`
-    - An array of objects the first one would contain the answer objects and the second one would contain any transforms needed that would be applied to the list.
-    - The answers and transform would be in the same shape as other answers and be resolved in the same way.
+-The example above shows a dynamic answer that is based on a list of dates generated by, this extends the usage of the map operator 
+that was implemented in order to support dynamic answer options.
+- Similarly to the example based on an answer value source, a unique identifer such as the answer value generated would need to 
+be generated in order to be appended to the answer `id` prefix.
 
 
-### Repeating answer options within a repeat
+## Downstream Processing
 
-```json
-{
-    "id": "shopping-section",
-    "title": "Shopping",
-    "summary": { "show_on_completion": true },
-    "repeat": {
-        "for_list": "people",
-        "title": {
-            "text": "{person_name}",
-            "placeholders": [
-                {
-                    "placeholder": "person_name"
-                }
-            ]
-        }
-    },
-    "groups": [
-        {
-            "blocks": [
-                {
-                    "question": {
-                        "id": "percentage-of-research",
-                        "title": {
-                            "text": "What percentage of {person_name}'s shopping is done in each shop?",
-                            "placeholders": [
-                                {
-                                    "placeholder": "person_name"
-                                }
-                            ]
-                        },
-                        "type": "Question",
-                        "repeating_answers": [
-                            {
-                                "description": "Percentage of shopping at {transformed_value}",
-                                "id": "percentage-of-shopping-{transformed_value}",
-                                "mandatory": false,
-                                "type": "Percentage",
-                                "maximum": {
-                                    "value": 100
-                                },
-                                "decimal_places": 2,
-                            },
-                            {
-                                "transform": {
-                                    "values": {
-                                        "source": "list",
-                                        "identifier": "shop_name",
-                                        "id_selector": "items"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
-    ]
-}
+We need to be able to identify which dynamic answers have been answered when sending the payload downstream to SDC. 
+
+For Dynamic Answers driven by list collector sources, to do this we would need to include the `list_item_id` for the answered item. As a result,
+the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
+
 ```
-- Being in a repeating section should not have any impact one the proposed design
+answer_id: "some-id"
+list_item_id: a
+answer_value: 1
+
+answer_id: "some-id"
+list_item_id: 2
+answer_value: 1
+```
+
+For other sources, we will not have a list item id, so we would send the dynamically generated `answer_id` downstream as per the checkbox example below:
+```
+"answer-id": "some-id-a"
+answer_value: 1
+
+"answer-id": "some-id-b"
+"answer_value": 2
+
+"answer-id": "some-id-c"
+"answer_value": 3
+```
+
+## Answer Codes
+
+As answer ids used for dynamic answers will only be prefixed values, only one answer code would be able to be set against each dynamic answer (using the id prefix) e.g.
+```
+"answer-id": "some-id-prefix"
+"code": 1
+```
 
 ## Consequences
 
-- Dynamic answer options can be driven by a list or a sequence of values.
-- Consistent with answer structure.
-- Consistent with new rules structure.
-- List item IDs need to be set in repeating answers so that they can be focused when the user goes to change one from the summary.
+- Dynamic answer options can be driven by a list sources, answer sources or functions.
+- All the new properties make use of existing patterns  
+- Consistent with existing answer structure.
+- Extends the use of `self` and `map` that were introduced in order to support dynamic answer options.
+- Should be extensible for future feature i.e. prepop.
