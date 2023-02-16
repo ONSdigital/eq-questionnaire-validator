@@ -81,7 +81,7 @@ class AnswerCodeValidator(Validator):
                     self.add_error(
                         self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR, answer_id=answer_id
                     )
-                break
+                continue
 
             if answer_id not in self.answer_codes_answer_ids:
                 self.add_error(self.MISSING_ANSWER_CODE, answer_id=answer_id)
@@ -114,7 +114,7 @@ class AnswerCodeValidator(Validator):
             block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
 
             if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
-                break
+                continue
 
             if "options" in answer["answer"]:
                 values = []
