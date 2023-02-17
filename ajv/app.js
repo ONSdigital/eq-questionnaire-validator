@@ -37,8 +37,8 @@ glob("schemas/**/*.json", (er, schemas) => {
   const validate = ajv.compile(require("../schemas/questionnaire_v1.json"));
 
   app.post("/validate", (req, res, next) => {
-    const valid = validate(req.body);
     debug("Validating questionnaire: " + req.body.title);
+    const valid = validate(req.body);
     if (!valid) {
       return res.json({
         success: false,
