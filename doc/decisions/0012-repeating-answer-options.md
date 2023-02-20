@@ -7,7 +7,7 @@ We need the ability to dynamically generate answers based on a list item.
 We need to support dynamic answers that are driven by:
 
 - List collectors
-- Arbitrary functions that return a sequence of values.
+- Arbitrary functions that return a sequence of values
 - Checkbox answers
 
 Additional requirements:
@@ -28,7 +28,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 - `dynamic_answers` will contain two top level properties, `values` and `answers`.
 - `dynamic_answers` can be used alongside the existing static `answers` property, allowing for static and dynamic answers 
   on the same page.
-- `dynaic_answers` must have at least one but can contain multiple `answers` to be iterated over for each literal list item.
+- `dynamic_answers` must have at least one but can contain multiple `answers` to be iterated over for each literal list item.
 - `dynamic_answers` will be limited to a single block i.e. they will only be displayed on one page.
   
 #### `dynamic_answers.values`
@@ -51,9 +51,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
     "id": "percentage-of-research",
     "title": "Some title",
     "type": "Question",
-    "answers": [
-      ...
-    ],
+    "answers": [...],
     "dynamic_answers": {
       "values": {
         "source": "list",
@@ -88,7 +86,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 }
 ```
 - For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
-- The list collector cannot be empty.  
+- The list collector cannot be empty.
 
 ### Dynamic answers based on a list of answers
 
@@ -146,77 +144,75 @@ dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator
 
 ```json
 {
-    "question": {
-        "id": "percentage-of-research",
-        "title": "Some title",
-        "type": "Question",
-        "answers": [
-            ...
-        ],
-        "dynamic_answers": {
-            "values": {
-                "map": [
-                    {
-                        "format-date": [
-                            "self",
-                            "%Y-%m-%d"
-                        ]
-                    },
-                    {
-                        "date-range": [
-                            {
-                                "date": [
-                                    {
-                                        "source": "response_metadata",
-                                        "identifier": "started_at"
-                                    },
-                                    {
-                                        "days": -7,
-                                        "day_of_week": "MONDAY"
-                                    }
-                                ]
-                            },
-                            7
-                        ]
-                    }
-                ]
-            },
-            "answers": [
-                {
-                    "description": {
-                        "text": "Percentage of shopping on {date}",
-                        "placeholders": [
-                            {
-                                "placeholder": "date",
-                                "transforms": [
-                                    {
-                                        "transform": "format_date",
-                                        "format-date": [
-                                            "self",
-                                            "%A %d %B %Y",
-                                            "%Y-%m-%d"
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "id": "percentage-of-shopping",
-                    "mandatory": false,
-                    "type": "Percentage",
-                    "maximum": {
-                        "value": 100
-                    },
-                    "decimal_places": 2
-                }
+  "question": {
+    "id": "percentage-of-research",
+    "title": "Some title",
+    "type": "Question",
+    "answers": [...],
+    "dynamic_answers": {
+      "values": {
+        "map": [
+          {
+            "format-date": [
+              "self",
+              "%Y-%m-%d"
             ]
+          },
+          {
+            "date-range": [
+              {
+                "date": [
+                  {
+                    "source": "response_metadata",
+                    "identifier": "started_at"
+                  },
+                  {
+                    "days": -7,
+                    "day_of_week": "MONDAY"
+                  }
+                ]
+              },
+              7
+            ]
+          }
+        ]
+      },
+      "answers": [
+        {
+          "description": {
+            "text": "Percentage of shopping on {date}",
+            "placeholders": [
+              {
+                "placeholder": "date",
+                "transforms": [
+                  {
+                    "transform": "format_date",
+                    "format-date": [
+                      "self",
+                      "%A %d %B %Y",
+                      "%Y-%m-%d"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "id": "percentage-of-shopping",
+          "mandatory": false,
+          "type": "Percentage",
+          "maximum": {
+            "value": 100
+          },
+          "decimal_places": 2
         }
+      ]
     }
+  }
 }
 ```
--The example above shows a dynamic answer that is based on a list of dates generated by a function, this extends the usage of the [map operator 
+- The example above shows a dynamic answer that is based on a list of dates generated by a function, this extends the usage of the [map operator 
 that was implemented in order to support dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self).
-- Similarly to the example based on an answer value source, a unique identifer such as the answer value for the item being processed would need to be appended to the answer `id` prefix at runtime in order to generate a unique answer `id`.
+- Similarly to the example based on an answer value source, a unique identifier such as the answer value for the item being processed would need to be appended to the answer `id` prefix at runtime in order to generate a unique answer `id`.
 
 ## Downstream Processing
 
@@ -230,8 +226,8 @@ list_item_id: a
 answer_value: 1
 
 answer_id: "some-id"
-list_item_id: 2
-answer_value: 1
+list_item_id: b
+answer_value: 2
 ```
 
 For other sources, where there is no `list_item_id`, we would send the dynamically generated `answer_id` (e.g `answer-id-{value}`) downstream as per the checkbox example below:
