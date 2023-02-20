@@ -51,7 +51,6 @@
     "properties": {
       "placeholder": {
         "description": "The placeholder in the string that will be replaced e.g. 'test' is the placeholder in 'My {test} string'.",
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
         "pattern": "^[0-9a-z_]+$"
       },
       "value": {
