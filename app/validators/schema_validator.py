@@ -42,7 +42,6 @@ class SchemaValidator(Validator):
             self.schema_validator.validate(self.schema_element)
             return {}
         except ValidationError as e:
-            print(e)
             match = best_match([e])
             path = "/".join(str(path_element) for path_element in e.path)
             error = {
