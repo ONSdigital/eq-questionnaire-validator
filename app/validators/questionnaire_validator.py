@@ -44,7 +44,6 @@ class QuestionnaireValidator(Validator):
 
         if self.schema_element.get("preview_questions"):
             self.validate_introduction_block()
-            self.validate_section_title()
 
         if answer_codes := self.schema_element.get("answer_codes"):
             answer_code_validator = AnswerCodeValidator(
@@ -116,11 +115,3 @@ class QuestionnaireValidator(Validator):
         )
         if not has_introduction_blocks:
             self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
-
-    def validate_section_title(self):
-        if self.schema_element["questionnaire_flow"].get("type") == "Hub":
-            for section in self.schema_element.get("sections"):
-                if not section.get("title"):
-                    self.add_error(
-                        error_messages.NO_SECTION_TITLE, section_id=section.get("id")
-                    )

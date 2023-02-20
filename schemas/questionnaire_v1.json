@@ -400,7 +400,19 @@
             ]
           }
         },
-        "required": ["id", "groups"]
+        "allOf": [
+          {
+            "if": {
+              "properties": { "questionnaire_flow": { "const": "Hub" } }
+            },
+            "then": {
+              "required": ["id", "groups", "title"]
+            },
+            "else": {
+              "required": ["id", "groups"]
+            }
+          }
+        ]
       }
     },
     "preview_questions": {
