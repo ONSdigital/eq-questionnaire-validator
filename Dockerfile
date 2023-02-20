@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install "poetry==1.2.1"
+RUN pip install "poetry==1.3.2"
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /usr/src/
