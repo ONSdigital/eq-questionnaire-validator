@@ -12,8 +12,12 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "value": { "$ref": "../definitions.json#/placeholder_value_sources" },
-          "answer_id": { "type": "string" }
+          "value": {
+            "$ref": "../definitions.json#/placeholder_value_sources"
+          },
+          "answer_id": {
+            "type": "string"
+          }
         },
         "required": ["value", "answer_id"],
         "additionalProperties": false

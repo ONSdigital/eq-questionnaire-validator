@@ -10,9 +10,15 @@
       "maxItems": 2,
       "items": {
         "anyOf": [
-          { "$ref": "../../definitions.json#/number_value" },
-          { "$ref": "../value/date.json" },
-          { "$ref": "../value/count.json" }
+          {
+            "$ref": "../../definitions.json#/number_value"
+          },
+          {
+            "$ref": "../value/date.json"
+          },
+          {
+            "$ref": "../value/count.json"
+          }
         ]
       }
     }

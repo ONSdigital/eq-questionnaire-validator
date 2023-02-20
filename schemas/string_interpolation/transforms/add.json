@@ -13,22 +13,30 @@
         "properties": {
           "lhs": {
             "anyOf": [
-              { "$ref": "../definitions.json#/placeholder_value_sources" },
+              {
+                "$ref": "../definitions.json#/placeholder_value_sources"
+              },
               {
                 "type": "object",
                 "properties": {
-                  "value": { "type": "number" }
+                  "value": {
+                    "type": "number"
+                  }
                 }
               }
             ]
           },
           "rhs": {
             "anyOf": [
-              { "$ref": "../definitions.json#/placeholder_value_sources" },
+              {
+                "$ref": "../definitions.json#/placeholder_value_sources"
+              },
               {
                 "type": "object",
                 "properties": {
-                  "value": { "type": "number" }
+                  "value": {
+                    "type": "number"
+                  }
                 }
               }
             ]

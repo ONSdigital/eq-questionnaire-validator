@@ -4,8 +4,12 @@
   "type": "object",
   "description": "Comparison against a single value",
   "properties": {
-    "id": { "$ref": "definitions.json#/answer_identifier" },
-    "meta": { "$ref": "../common_definitions.json#/metadata_identifier" },
+    "id": {
+      "$ref": "definitions.json#/answer_identifier"
+    },
+    "meta": {
+      "$ref": "../common_definitions.json#/metadata_identifier"
+    },
     "condition": {
       "enum": [
         "equals",
@@ -18,9 +22,15 @@
         "less than or equal to"
       ]
     },
-    "value": { "$ref": "definitions.json#/comparison_value" },
-    "comparison": { "$ref": "definitions.json#/answer_comparison_object" },
-    "date_comparison": { "$ref": "definitions.json#/date_comparison_value" }
+    "value": {
+      "$ref": "definitions.json#/comparison_value"
+    },
+    "comparison": {
+      "$ref": "definitions.json#/answer_comparison_object"
+    },
+    "date_comparison": {
+      "$ref": "definitions.json#/date_comparison_value"
+    }
   },
   "required": ["condition"],
   "allOf": [

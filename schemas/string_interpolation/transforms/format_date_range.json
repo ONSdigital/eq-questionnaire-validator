@@ -22,7 +22,9 @@
                   "$ref": "../definitions.json#/placeholder_value_sources"
                 }
               },
-              { "$ref": "../definitions.json#/chained_source" }
+              {
+                "$ref": "../definitions.json#/chained_source"
+              }
             ]
           }
         },

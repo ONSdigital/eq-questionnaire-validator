@@ -4,15 +4,25 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "type": {
         "type": "string",
         "enum": ["Dropdown"]
       },
-      "mandatory": { "type": "boolean" },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
       "placeholder": {
         "description": "The placeholder text to be used for the select field.",
         "$ref": "../common_definitions.json#/non_empty_string"
@@ -20,8 +30,12 @@
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "dynamic_options": { "$ref": "definitions.json#/dynamic_options" },
-      "options": { "$ref": "definitions.json#/options" },
+      "dynamic_options": {
+        "$ref": "definitions.json#/dynamic_options"
+      },
+      "options": {
+        "$ref": "definitions.json#/options"
+      },
       "validation": {
         "type": "object",
         "properties": {

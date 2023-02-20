@@ -7,7 +7,9 @@
     "or": {
       "type": "array",
       "minItems": 2,
-      "items": { "$ref": "../../definitions.json#/boolean_operators" }
+      "items": {
+        "$ref": "../../definitions.json#/boolean_operators"
+      }
     }
   },
   "required": ["or"],

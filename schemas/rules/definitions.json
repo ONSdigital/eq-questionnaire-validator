@@ -4,51 +4,107 @@
   "boolean_operators": {
     "description": "All operators that resolve to a boolean",
     "oneOf": [
-      { "$ref": "operators/comparison/equal.json" },
-      { "$ref": "operators/comparison/not-equal.json" },
-      { "$ref": "operators/comparison/less-than.json" },
-      { "$ref": "operators/comparison/less-than-or-equal.json" },
-      { "$ref": "operators/comparison/greater-than.json" },
-      { "$ref": "operators/comparison/greater-than-or-equal.json" },
-      { "$ref": "operators/array/in.json" },
-      { "$ref": "operators/array/any-in.json" },
-      { "$ref": "operators/array/all-in.json" },
-      { "$ref": "operators/logic/and.json" },
-      { "$ref": "operators/logic/or.json" },
-      { "$ref": "operators/logic/not.json" }
+      {
+        "$ref": "operators/comparison/equal.json"
+      },
+      {
+        "$ref": "operators/comparison/not-equal.json"
+      },
+      {
+        "$ref": "operators/comparison/less-than.json"
+      },
+      {
+        "$ref": "operators/comparison/less-than-or-equal.json"
+      },
+      {
+        "$ref": "operators/comparison/greater-than.json"
+      },
+      {
+        "$ref": "operators/comparison/greater-than-or-equal.json"
+      },
+      {
+        "$ref": "operators/array/in.json"
+      },
+      {
+        "$ref": "operators/array/any-in.json"
+      },
+      {
+        "$ref": "operators/array/all-in.json"
+      },
+      {
+        "$ref": "operators/logic/and.json"
+      },
+      {
+        "$ref": "operators/logic/or.json"
+      },
+      {
+        "$ref": "operators/logic/not.json"
+      }
     ]
   },
   "value_operators": {
     "description": "All operators that resolve to a value",
     "oneOf": [
-      { "$ref": "operators/value/count.json" },
-      { "$ref": "operators/value/date.json" },
-      { "$ref": "operators/value/date-range.json" },
-      { "$ref": "operators/value/format-date.json" },
-      { "$ref": "operators/value/map.json" },
-      { "$ref": "operators/value/option-label-from-value.json" },
-      { "$ref": "operators/value/concatenate.json" }
+      {
+        "$ref": "operators/value/count.json"
+      },
+      {
+        "$ref": "operators/value/date.json"
+      },
+      {
+        "$ref": "operators/value/date-range.json"
+      },
+      {
+        "$ref": "operators/value/format-date.json"
+      },
+      {
+        "$ref": "operators/value/map.json"
+      },
+      {
+        "$ref": "operators/value/option-label-from-value.json"
+      },
+      {
+        "$ref": "operators/value/concatenate.json"
+      }
     ]
   },
   "numeric_operators": {
     "description": "All operators that resolve to a numeric value",
-    "oneOf": [{ "$ref": "operators/numeric/sum.json" }]
+    "oneOf": [
+      {
+        "$ref": "operators/numeric/sum.json"
+      }
+    ]
   },
   "non_array_value_operators": {
     "description": "All operators that resolve to a non-array value",
     "oneOf": [
-      { "$ref": "operators/value/count.json" },
-      { "$ref": "operators/value/date.json" },
-      { "$ref": "operators/value/format-date.json" },
-      { "$ref": "operators/value/option-label-from-value.json" },
-      { "$ref": "operators/value/concatenate.json" }
+      {
+        "$ref": "operators/value/count.json"
+      },
+      {
+        "$ref": "operators/value/date.json"
+      },
+      {
+        "$ref": "operators/value/format-date.json"
+      },
+      {
+        "$ref": "operators/value/option-label-from-value.json"
+      },
+      {
+        "$ref": "operators/value/concatenate.json"
+      }
     ]
   },
   "list_value_operators": {
     "description": "All operators that resolve to a list of values",
     "oneOf": [
-      { "$ref": "operators/value/date-range.json" },
-      { "$ref": "operators/value/map.json" }
+      {
+        "$ref": "operators/value/date-range.json"
+      },
+      {
+        "$ref": "operators/value/map.json"
+      }
     ]
   },
   "any_value": {
@@ -57,7 +113,9 @@
       {
         "type": ["number", "string", "array", "null"]
       },
-      { "$ref": "../value_sources.json#/any_value_source" }
+      {
+        "$ref": "../value_sources.json#/any_value_source"
+      }
     ]
   },
   "any_value_except_array": {
@@ -66,21 +124,31 @@
       {
         "type": ["number", "string", "null"]
       },
-      { "$ref": "../value_sources.json#/any_value_source" }
+      {
+        "$ref": "../value_sources.json#/any_value_source"
+      }
     ]
   },
   "number_value": {
     "description": "Any number value",
     "oneOf": [
-      { "type": "number" },
-      { "$ref": "../value_sources.json#/any_value_source" }
+      {
+        "type": "number"
+      },
+      {
+        "$ref": "../value_sources.json#/any_value_source"
+      }
     ]
   },
   "array_value": {
     "description": "Any array value",
     "oneOf": [
-      { "type": "array" },
-      { "$ref": "../value_sources.json#/any_value_source" }
+      {
+        "type": "array"
+      },
+      {
+        "$ref": "../value_sources.json#/any_value_source"
+      }
     ]
   }
 }

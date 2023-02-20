@@ -4,10 +4,18 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "label": { "type": "string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "type": "string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -15,7 +23,9 @@
         "type": "string",
         "enum": ["MobileNumber"]
       },
-      "mandatory": { "type": "boolean" },
+      "mandatory": {
+        "type": "boolean"
+      },
       "validation": {
         "type": "object",
         "properties": {

@@ -7,7 +7,9 @@
       "required_completed_sections": {
         "description": "The sections that need to be complete prior to the hub displaying",
         "type": "array",
-        "items": { "$ref": "../common_definitions.json#/non_empty_string" },
+        "items": {
+          "$ref": "../common_definitions.json#/non_empty_string"
+        },
         "minItems": 1
       }
     },

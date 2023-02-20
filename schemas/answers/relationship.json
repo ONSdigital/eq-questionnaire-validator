@@ -4,9 +4,15 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -20,8 +26,12 @@
         "items": {
           "type": "object",
           "properties": {
-            "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-            "value": { "$ref": "../common_definitions.json#/non_empty_string" },
+            "label": {
+              "$ref": "../common_definitions.json#/non_empty_string"
+            },
+            "value": {
+              "$ref": "../common_definitions.json#/non_empty_string"
+            },
             "title": {
               "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
             },
@@ -37,7 +47,9 @@
           "required": ["label", "value", "title", "playback"]
         }
       },
-      "mandatory": { "type": "boolean" },
+      "mandatory": {
+        "type": "boolean"
+      },
       "playback": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       }

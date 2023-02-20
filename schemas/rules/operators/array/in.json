@@ -9,8 +9,12 @@
       "minItems": 2,
       "maxItems": 2,
       "prefixItems": [
-        { "$ref": "../../definitions.json#/any_value_except_array" },
-        { "$ref": "../../definitions.json#/array_value" }
+        {
+          "$ref": "../../definitions.json#/any_value_except_array"
+        },
+        {
+          "$ref": "../../definitions.json#/array_value"
+        }
       ]
     }
   },

@@ -16,15 +16,23 @@
               "type": "string",
               "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now|self)$"
             },
-            { "$ref": "../../../value_sources.json#/any_value_source" }
+            {
+              "$ref": "../../../value_sources.json#/any_value_source"
+            }
           ]
         },
         {
           "type": "object",
           "properties": {
-            "days": { "type": "integer" },
-            "months": { "type": "integer" },
-            "years": { "type": "integer" },
+            "days": {
+              "type": "integer"
+            },
+            "months": {
+              "type": "integer"
+            },
+            "years": {
+              "type": "integer"
+            },
             "day_of_week": {
               "enum": [
                 "MONDAY",

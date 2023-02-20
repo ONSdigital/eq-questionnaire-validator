@@ -4,16 +4,24 @@
   "question": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../../common_definitions.json#/identifier" },
+      "id": {
+        "$ref": "../../common_definitions.json#/identifier"
+      },
       "title": {
         "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "number": { "$ref": "../../common_definitions.json#/non_empty_string" },
+      "number": {
+        "$ref": "../../common_definitions.json#/non_empty_string"
+      },
       "description": {
         "$ref": "../../common_definitions.json#/string_array_with_placeholders"
       },
-      "warning": { "$ref": "../../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "../../common_definitions.json#/guidance" },
+      "warning": {
+        "$ref": "../../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "../../common_definitions.json#/guidance"
+      },
       "type": {
         "type": "string",
         "enum": ["DateRange"]
@@ -26,9 +34,15 @@
             "type": "object",
             "description": "minimum limit for the period to be greater than.",
             "properties": {
-              "days": { "type": "integer" },
-              "months": { "type": "integer" },
-              "years": { "type": "integer" }
+              "days": {
+                "type": "integer"
+              },
+              "months": {
+                "type": "integer"
+              },
+              "years": {
+                "type": "integer"
+              }
             },
             "additionalProperties": false,
             "anyOf": [
@@ -47,9 +61,15 @@
             "type": "object",
             "description": "minimum limit for the period to be greater than.",
             "properties": {
-              "days": { "type": "integer" },
-              "months": { "type": "integer" },
-              "years": { "type": "integer" }
+              "days": {
+                "type": "integer"
+              },
+              "months": {
+                "type": "integer"
+              },
+              "years": {
+                "type": "integer"
+              }
             },
             "additionalProperties": false,
             "anyOf": [
@@ -81,9 +101,15 @@
         "maxItems": 2,
         "items": {
           "oneOf": [
-            { "$ref": "../../answers/date.json#/answer" },
-            { "$ref": "../../answers/month_year_date.json#/answer" },
-            { "$ref": "../../answers/year_date.json#/answer" }
+            {
+              "$ref": "../../answers/date.json#/answer"
+            },
+            {
+              "$ref": "../../answers/month_year_date.json#/answer"
+            },
+            {
+              "$ref": "../../answers/year_date.json#/answer"
+            }
           ]
         }
       },

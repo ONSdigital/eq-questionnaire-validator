@@ -4,16 +4,24 @@
   "question": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../../common_definitions.json#/identifier" },
+      "id": {
+        "$ref": "../../common_definitions.json#/identifier"
+      },
       "title": {
         "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
-      "number": { "$ref": "../../common_definitions.json#/non_empty_string" },
+      "number": {
+        "$ref": "../../common_definitions.json#/non_empty_string"
+      },
       "description": {
         "$ref": "../../common_definitions.json#/string_array_with_placeholders"
       },
-      "warning": { "$ref": "../../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "../../common_definitions.json#/guidance" },
+      "warning": {
+        "$ref": "../../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "../../common_definitions.json#/guidance"
+      },
       "type": {
         "type": "string",
         "enum": ["Calculated"]
@@ -46,7 +54,9 @@
             "answers_to_calculate": {
               "type": "array",
               "minItems": 2,
-              "items": { "$ref": "../../common_definitions.json#/identifier" },
+              "items": {
+                "$ref": "../../common_definitions.json#/identifier"
+              },
               "description": "The id of the answers from which to do calculated_type to"
             },
             "conditions": {
@@ -56,9 +66,15 @@
               "uniqueItems": true,
               "items": {
                 "anyOf": [
-                  { "required": "less than" },
-                  { "required": "greater than" },
-                  { "required": "equals" }
+                  {
+                    "required": "less than"
+                  },
+                  {
+                    "required": "greater than"
+                  },
+                  {
+                    "required": "equals"
+                  }
                 ]
               },
               "description": "The conditions wanted to used for grouped validations, 2 items adds an 'OR' condition"
@@ -80,10 +96,18 @@
         "minItems": 1,
         "items": {
           "oneOf": [
-            { "$ref": "../../answers/currency.json#/answer" },
-            { "$ref": "../../answers/number.json#/answer" },
-            { "$ref": "../../answers/percentage.json#/answer" },
-            { "$ref": "../../answers/unit.json#/answer" }
+            {
+              "$ref": "../../answers/currency.json#/answer"
+            },
+            {
+              "$ref": "../../answers/number.json#/answer"
+            },
+            {
+              "$ref": "../../answers/percentage.json#/answer"
+            },
+            {
+              "$ref": "../../answers/unit.json#/answer"
+            }
           ]
         }
       },
@@ -112,7 +136,9 @@
       },
       "additionalProperties": false,
       "required": ["id", "type", "calculations", "answers", "title"],
-      "$defs": { "$ref": "../../common_definitions.json#/question_definitions" }
+      "$defs": {
+        "$ref": "../../common_definitions.json#/question_definitions"
+      }
     }
   }
 }

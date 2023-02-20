@@ -9,8 +9,9 @@ const debug = Debug("ajv-schema-validator");
 const app = express();
 
 const ajValidator = new Ajv2020({
-  allErrors: true,
-  strict: false,
+  allErrors: false,
+  strict: true,
+  strictSchema: false, // to avoid key errors as a part of strict being true. https://ajv.js.org/options.html#strictschema
 });
 
 app.use(

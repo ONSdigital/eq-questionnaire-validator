@@ -18,9 +18,15 @@
     "language": {
       "enum": ["cy", "en", "eo", "ga"]
     },
-    "messages": { "$ref": "common_definitions.json#/messages" },
-    "mime_type": { "type": "string" },
-    "schema_version": { "type": "string" },
+    "messages": {
+      "$ref": "common_definitions.json#/messages"
+    },
+    "mime_type": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
     "data_version": {
       "enum": ["0.0.1", "0.0.3"]
     },
@@ -33,8 +39,12 @@
       "description": "The amount of time in seconds before timing out a users session.",
       "type": "integer"
     },
-    "title": { "$ref": "common_definitions.json#/non_empty_string" },
-    "description": { "$ref": "common_definitions.json#/non_empty_string" },
+    "title": {
+      "$ref": "common_definitions.json#/non_empty_string"
+    },
+    "description": {
+      "$ref": "common_definitions.json#/non_empty_string"
+    },
     "theme": {
       "enum": [
         "business",
@@ -49,7 +59,9 @@
         "census-nisra"
       ]
     },
-    "legal_basis": { "$ref": "common_definitions.json#/non_empty_string" },
+    "legal_basis": {
+      "$ref": "common_definitions.json#/non_empty_string"
+    },
     "form_type": {
       "type": "string",
       "pattern": "^[0-9A-Za-z_]+$"
@@ -124,14 +136,18 @@
     "variables": {
       "type": "object",
       "properties": {
-        "period": { "$ref": "common_definitions.json#/non_empty_string" }
+        "period": {
+          "$ref": "common_definitions.json#/non_empty_string"
+        }
       }
     },
     "navigation": {
       "type": "object",
       "description": "Used in conjunction with routing to take user through a survey. ",
       "properties": {
-        "visible": { "type": "boolean" }
+        "visible": {
+          "type": "boolean"
+        }
       }
     },
     "questionnaire_flow": {
@@ -167,7 +183,9 @@
           "description": "Guidance displayed after the questionnaire is submitted.",
           "type": "object",
           "properties": {
-            "contents": { "$ref": "common_definitions.json#/contents" }
+            "contents": {
+              "$ref": "common_definitions.json#/contents"
+            }
           },
           "required": ["contents"],
           "additionalProperties": false
@@ -198,7 +216,9 @@
         "additionalProperties": false,
         "type": "object",
         "properties": {
-          "id": { "$ref": "common_definitions.json#/identifier" },
+          "id": {
+            "$ref": "common_definitions.json#/identifier"
+          },
           "title": {
             "$ref": "common_definitions.json#/non_empty_string",
             "description": "Title used for the navigation container."
@@ -230,7 +250,9 @@
                 "type": "boolean",
                 "description": "A boolean that is used to determine whether to show the section summary on completion of the section."
               },
-              "collapsible": { "type": "boolean" },
+              "collapsible": {
+                "type": "boolean"
+              },
               "items": {
                 "type": "array",
                 "minItems": 1,
@@ -289,7 +311,9 @@
             "if": {
               "properties": {
                 "show_non_item_answers": {
-                  "not": { "const": true }
+                  "not": {
+                    "const": true
+                  }
                 }
               }
             },
@@ -311,11 +335,15 @@
             "items": {
               "type": "object",
               "properties": {
-                "id": { "$ref": "common_definitions.json#/identifier" },
+                "id": {
+                  "$ref": "common_definitions.json#/identifier"
+                },
                 "title": {
                   "$ref": "common_definitions.json#/non_empty_string"
                 },
-                "hide_in_navigation": { "type": "boolean" },
+                "hide_in_navigation": {
+                  "type": "boolean"
+                },
                 "skip_conditions": {
                   "$ref": "common_definitions.json#/skip_conditions"
                 },
@@ -327,20 +355,36 @@
                   "minItems": 1,
                   "items": {
                     "oneOf": [
-                      { "$ref": "blocks/answer_summary.json#/block" },
-                      { "$ref": "blocks/calculated_summary.json#/block" },
-                      { "$ref": "blocks/confirmation_question.json#/block" },
-                      { "$ref": "blocks/interstitial.json#/block" },
-                      { "$ref": "blocks/introduction.json#/block" },
-                      { "$ref": "blocks/list_collector.json#/block" },
+                      {
+                        "$ref": "blocks/answer_summary.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/calculated_summary.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/confirmation_question.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/interstitial.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/introduction.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/list_collector.json#/block"
+                      },
                       {
                         "$ref": "blocks/list_collector_driving_question.json#/block"
                       },
                       {
                         "$ref": "blocks/primary_person_list_collector.json#/block"
                       },
-                      { "$ref": "blocks/question.json#/block" },
-                      { "$ref": "blocks/relationship_collector.json#/block" }
+                      {
+                        "$ref": "blocks/question.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/relationship_collector.json#/block"
+                      }
                     ]
                   }
                 }
@@ -351,8 +395,12 @@
           },
           "enabled": {
             "oneOf": [
-              { "$ref": "common_definitions.json#/original_section_enabled" },
-              { "$ref": "common_definitions.json#/new_section_enabled" }
+              {
+                "$ref": "common_definitions.json#/original_section_enabled"
+              },
+              {
+                "$ref": "common_definitions.json#/new_section_enabled"
+              }
             ]
           }
         },

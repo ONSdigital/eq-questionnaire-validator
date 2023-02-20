@@ -13,8 +13,12 @@
         "properties": {
           "date_to_format": {
             "oneOf": [
-              { "$ref": "../definitions.json#/placeholder_value_sources" },
-              { "$ref": "../../common_definitions.json#/date_value" }
+              {
+                "$ref": "../definitions.json#/placeholder_value_sources"
+              },
+              {
+                "$ref": "../../common_definitions.json#/date_value"
+              }
             ]
           },
           "date_format": {

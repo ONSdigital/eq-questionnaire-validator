@@ -9,8 +9,12 @@
       "minItems": 2,
       "maxItems": 2,
       "prefixItems": [
-        { "$ref": "../value/format-date.json" },
-        { "$ref": "../value/date-range.json" }
+        {
+          "$ref": "../value/format-date.json"
+        },
+        {
+          "$ref": "../value/date-range.json"
+        }
       ]
     }
   },

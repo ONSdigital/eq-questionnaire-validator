@@ -14,7 +14,9 @@
           "list_to_check": {
             "$ref": "../definitions.json#/placeholder_value_sources"
           },
-          "value": { "$ref": "../definitions.json#/placeholder_value_sources" }
+          "value": {
+            "$ref": "../definitions.json#/placeholder_value_sources"
+          }
         },
         "additionalProperties": false,
         "required": ["list_to_check", "value"]

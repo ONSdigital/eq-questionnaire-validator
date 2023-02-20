@@ -11,14 +11,18 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "value": { "$ref": "../definitions.json#/placeholder_value_sources" },
+          "value": {
+            "$ref": "../definitions.json#/placeholder_value_sources"
+          },
           "unit_length": {
             "description": "The formatting length. e.g. 1h (narrow) / 1 hr (short) / 1 hour (long)",
             "default": "short",
             "type": "string",
             "enum": ["short", "narrow", "long"]
           },
-          "unit": { "$ref": "../../lists/units.json#/unit" }
+          "unit": {
+            "$ref": "../../lists/units.json#/unit"
+          }
         },
         "additionalProperties": false,
         "required": ["value", "unit"]

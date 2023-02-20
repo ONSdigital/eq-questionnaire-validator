@@ -6,15 +6,23 @@
       {
         "description": "String with no placeholders.",
         "$ref": "../common_definitions.json#/non_empty_string",
-        "not": { "pattern": "({[_a-zA-Z0-9]*})+" }
+        "not": {
+          "pattern": "({[_a-zA-Z0-9]*})+"
+        }
       },
       {
         "description": "An object that represents a string with placeholders.",
         "type": "object",
         "properties": {
-          "text": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "text_plural": { "$ref": "#/text_plural" },
-          "placeholders": { "$ref": "#/placeholders" }
+          "text": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "text_plural": {
+            "$ref": "#/text_plural"
+          },
+          "placeholders": {
+            "$ref": "#/placeholders"
+          }
         },
         "additionalProperties": false,
         "required": ["placeholders"],
@@ -32,7 +40,9 @@
   "placeholders": {
     "description": "A mapping of string placeholders to their values.",
     "type": "array",
-    "items": { "$ref": "#/placeholder" },
+    "items": {
+      "$ref": "#/placeholder"
+    },
     "minItems": 1
   },
   "placeholder": {
@@ -54,35 +64,75 @@
         "items": {
           "type": "object",
           "anyOf": [
-            { "$ref": "transforms/contains.json#/contains" },
-            { "$ref": "transforms/list_has_items.json#/list_has_items" },
-            { "$ref": "transforms/format_name.json#/format_name" },
-            { "$ref": "transforms/format_number.json#/format_number" },
-            { "$ref": "transforms/format_percentage.json#/format_percentage" },
-            { "$ref": "transforms/format_unit.json#/format_unit" },
-            { "$ref": "transforms/format_currency.json#/format_currency" },
-            { "$ref": "transforms/format_date.json#/format_date" },
-            { "$ref": "transforms/format_date_range.json#/format_date_range" },
+            {
+              "$ref": "transforms/contains.json#/contains"
+            },
+            {
+              "$ref": "transforms/list_has_items.json#/list_has_items"
+            },
+            {
+              "$ref": "transforms/format_name.json#/format_name"
+            },
+            {
+              "$ref": "transforms/format_number.json#/format_number"
+            },
+            {
+              "$ref": "transforms/format_percentage.json#/format_percentage"
+            },
+            {
+              "$ref": "transforms/format_unit.json#/format_unit"
+            },
+            {
+              "$ref": "transforms/format_currency.json#/format_currency"
+            },
+            {
+              "$ref": "transforms/format_date.json#/format_date"
+            },
+            {
+              "$ref": "transforms/format_date_range.json#/format_date_range"
+            },
             {
               "$ref": "transforms/calculate_date_difference.json#/calculate_date_difference"
             },
-            { "$ref": "transforms/concatenate_list.json#/concatenate_list" },
-            { "$ref": "transforms/format_list.json#/format_list" },
-            { "$ref": "transforms/format_possessive.json#/format_possessive" },
+            {
+              "$ref": "transforms/concatenate_list.json#/concatenate_list"
+            },
+            {
+              "$ref": "transforms/format_list.json#/format_list"
+            },
+            {
+              "$ref": "transforms/format_possessive.json#/format_possessive"
+            },
             {
               "$ref": "transforms/first_non_empty_item.json#/first_non_empty_item"
             },
-            { "$ref": "transforms/remove_empty.json#/remove_empty" },
-            { "$ref": "transforms/number_to_words.json#/number_to_words" },
-            { "$ref": "transforms/add.json#/add" },
-            { "$ref": "transforms/format_ordinal.json#/format_ordinal" },
-            { "$ref": "transforms/email_link.json#/email_link" },
+            {
+              "$ref": "transforms/remove_empty.json#/remove_empty"
+            },
+            {
+              "$ref": "transforms/number_to_words.json#/number_to_words"
+            },
+            {
+              "$ref": "transforms/add.json#/add"
+            },
+            {
+              "$ref": "transforms/format_ordinal.json#/format_ordinal"
+            },
+            {
+              "$ref": "transforms/email_link.json#/email_link"
+            },
             {
               "$ref": "transforms/telephone_number_link.json#/telephone_number_link"
             },
-            { "$ref": "transforms/date_range_bounds.json#/date_range_bounds" },
-            { "$ref": "transforms/format_date_range.json#/format_date_range" },
-            { "$ref": "transforms/list_item_count.json#/list_item_count" },
+            {
+              "$ref": "transforms/date_range_bounds.json#/date_range_bounds"
+            },
+            {
+              "$ref": "transforms/format_date_range.json#/format_date_range"
+            },
+            {
+              "$ref": "transforms/list_item_count.json#/list_item_count"
+            },
             {
               "$ref": "transforms/option_label_from_value.json#/option_label_from_value"
             },
@@ -106,8 +156,12 @@
   },
   "placeholder_value_sources": {
     "oneOf": [
-      { "$ref": "#/chained_source" },
-      { "$ref": "../value_sources.json#/any_value_source" }
+      {
+        "$ref": "#/chained_source"
+      },
+      {
+        "$ref": "../value_sources.json#/any_value_source"
+      }
     ]
   },
   "chained_source": {
@@ -130,12 +184,24 @@
         "description": "Plural forms of the text. Uses the CLDR plural categories. One or more of these properties will be present dependent on the language.",
         "type": "object",
         "properties": {
-          "zero": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "one": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "two": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "few": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "many": { "$ref": "../common_definitions.json#/non_empty_string" },
-          "other": { "$ref": "../common_definitions.json#/non_empty_string" }
+          "zero": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "one": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "two": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "few": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "many": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          },
+          "other": {
+            "$ref": "../common_definitions.json#/non_empty_string"
+          }
         },
         "additionalProperties": false,
         "required": ["other"]

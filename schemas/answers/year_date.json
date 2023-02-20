@@ -4,10 +4,18 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -15,7 +23,9 @@
         "type": "string",
         "enum": ["YearDate"]
       },
-      "mandatory": { "type": "boolean" },
+      "mandatory": {
+        "type": "boolean"
+      },
       "validation": {
         "type": "object",
         "properties": {
@@ -36,8 +46,12 @@
         "type": "object",
         "description": "minimum offset date for user entered date to be larger than.",
         "properties": {
-          "value": { "$ref": "../common_definitions.json#/value_reference" },
-          "offset_by": { "$ref": "../common_definitions.json#/offset_by_yyyy" }
+          "value": {
+            "$ref": "../common_definitions.json#/value_reference"
+          },
+          "offset_by": {
+            "$ref": "../common_definitions.json#/offset_by_yyyy"
+          }
         },
         "additionalProperties": false,
         "oneOf": [
@@ -56,8 +70,12 @@
         "type": "object",
         "description": "maximum offset date for user entered date to be lower than.",
         "properties": {
-          "value": { "$ref": "../common_definitions.json#/value_reference" },
-          "offset_by": { "$ref": "../common_definitions.json#/offset_by_yyyy" }
+          "value": {
+            "$ref": "../common_definitions.json#/value_reference"
+          },
+          "offset_by": {
+            "$ref": "../common_definitions.json#/offset_by_yyyy"
+          }
         },
         "additionalProperties": false,
         "oneOf": [

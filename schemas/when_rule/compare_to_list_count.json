@@ -4,7 +4,9 @@
   "type": "object",
   "description": "Comparison against a list count",
   "properties": {
-    "list": { "$ref": "definitions.json#/list" },
+    "list": {
+      "$ref": "definitions.json#/list"
+    },
     "condition": {
       "enum": [
         "equals",

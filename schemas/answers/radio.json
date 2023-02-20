@@ -4,14 +4,22 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
       "voluntary": {
         "description": "If set to true, and an option is selected then there will be an option to unselect",
         "type": "boolean"
       },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -19,9 +27,15 @@
         "type": "string",
         "enum": ["Radio"]
       },
-      "dynamic_options": { "$ref": "definitions.json#/dynamic_options" },
-      "options": { "$ref": "definitions.json#/options" },
-      "mandatory": { "type": "boolean" },
+      "dynamic_options": {
+        "$ref": "definitions.json#/dynamic_options"
+      },
+      "options": {
+        "$ref": "definitions.json#/options"
+      },
+      "mandatory": {
+        "type": "boolean"
+      },
       "default": {
         "$ref": "../common_definitions.json#/non_empty_string",
         "description": "Default value if no answer given"
@@ -49,13 +63,17 @@
     ],
     "if": {
       "properties": {
-        "mandatory": { "const": true }
+        "mandatory": {
+          "const": true
+        }
       }
     },
     "then": {
       "properties": {
         "voluntary": {
-          "not": { "const": true }
+          "not": {
+            "const": true
+          }
         }
       }
     }

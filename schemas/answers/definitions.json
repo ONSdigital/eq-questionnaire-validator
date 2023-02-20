@@ -14,13 +14,23 @@
         "label": {
           "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
         },
-        "value": { "$ref": "../common_definitions.json#/non_empty_string" },
-        "q_code": { "$ref": "../common_definitions.json#/q_code" },
+        "value": {
+          "$ref": "../common_definitions.json#/non_empty_string"
+        },
+        "q_code": {
+          "$ref": "../common_definitions.json#/q_code"
+        },
         "detail_answer": {
           "oneOf": [
-            { "$ref": "text_field.json#/answer" },
-            { "$ref": "number.json#/answer" },
-            { "$ref": "dropdown.json#/answer" }
+            {
+              "$ref": "text_field.json#/answer"
+            },
+            {
+              "$ref": "number.json#/answer"
+            },
+            {
+              "$ref": "dropdown.json#/answer"
+            }
           ]
         },
         "description": {
@@ -54,8 +64,12 @@
     "properties": {
       "values": {
         "oneOf": [
-          { "$ref": "../rules/operators/value/map.json" },
-          { "$ref": "../value_sources.json#/any_value_source_except_location" }
+          {
+            "$ref": "../rules/operators/value/map.json"
+          },
+          {
+            "$ref": "../value_sources.json#/any_value_source_except_location"
+          }
         ]
       },
       "transform": {
@@ -68,7 +82,9 @@
   "min_value": {
     "type": "object",
     "properties": {
-      "value": { "$ref": "../common_definitions.json#/value_reference" },
+      "value": {
+        "$ref": "../common_definitions.json#/value_reference"
+      },
       "exclusive": {
         "type": "boolean",
         "description": "Whether validation is exclusive of value or not"
@@ -79,7 +95,9 @@
   "max_value": {
     "type": "object",
     "properties": {
-      "value": { "$ref": "../common_definitions.json#/value_reference" },
+      "value": {
+        "$ref": "../common_definitions.json#/value_reference"
+      },
       "exclusive": {
         "type": "boolean",
         "description": "Whether validation is exclusive of value or not"
@@ -99,7 +117,9 @@
         "$ref": "../common_definitions.json#/non_empty_string",
         "description": "The text that is used for the 'Hide guidance' link."
       },
-      "contents": { "$ref": "../common_definitions.json#/contents" }
+      "contents": {
+        "$ref": "../common_definitions.json#/contents"
+      }
     },
     "additionalProperties": false
   }

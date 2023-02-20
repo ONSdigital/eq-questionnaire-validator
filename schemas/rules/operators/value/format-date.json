@@ -16,7 +16,9 @@
               "description": "Used to reference the current value of an iteration. Must resolve to a datetime object",
               "const": "self"
             },
-            { "$ref": "../value/date.json" }
+            {
+              "$ref": "../value/date.json"
+            }
           ]
         },
         {

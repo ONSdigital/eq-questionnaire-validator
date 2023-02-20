@@ -4,10 +4,18 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -15,8 +23,12 @@
         "type": "string",
         "enum": ["TextArea"]
       },
-      "mandatory": { "type": "boolean" },
-      "max_length": { "type": "integer" },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "max_length": {
+        "type": "integer"
+      },
       "rows": {
         "type": "integer",
         "minimum": 2

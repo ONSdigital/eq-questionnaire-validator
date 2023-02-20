@@ -4,14 +4,22 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "type": {
         "type": "string",
         "enum": ["Address"]
       },
-      "mandatory": { "type": "boolean" },
+      "mandatory": {
+        "type": "boolean"
+      },
       "validation": {
         "type": "object",
         "properties": {

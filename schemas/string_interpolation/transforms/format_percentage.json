@@ -11,7 +11,9 @@
       "arguments": {
         "type": "object",
         "properties": {
-          "value": { "$ref": "../definitions.json#/placeholder_value_sources" }
+          "value": {
+            "$ref": "../definitions.json#/placeholder_value_sources"
+          }
         },
         "additionalProperties": false,
         "required": ["value"]

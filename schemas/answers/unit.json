@@ -4,10 +4,18 @@
   "answer": {
     "type": "object",
     "properties": {
-      "id": { "$ref": "../common_definitions.json#/identifier" },
-      "q_code": { "$ref": "../common_definitions.json#/q_code" },
-      "label": { "$ref": "../common_definitions.json#/non_empty_string" },
-      "guidance": { "$ref": "definitions.json#/answer_guidance" },
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "q_code": {
+        "$ref": "../common_definitions.json#/q_code"
+      },
+      "label": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "guidance": {
+        "$ref": "definitions.json#/answer_guidance"
+      },
       "description": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
@@ -15,8 +23,12 @@
         "type": "string",
         "enum": ["Unit"]
       },
-      "mandatory": { "type": "boolean" },
-      "max_length": { "type": "integer" },
+      "mandatory": {
+        "type": "boolean"
+      },
+      "max_length": {
+        "type": "integer"
+      },
       "decimal_places": {
         "type": "integer",
         "description": "Number of decimal places allowed"
@@ -25,9 +37,15 @@
         "type": "integer",
         "description": "Default value if no answer given"
       },
-      "maximum": { "$ref": "definitions.json#/max_value" },
-      "minimum": { "$ref": "definitions.json#/min_value" },
-      "unit": { "$ref": "../lists/units.json#/unit" },
+      "maximum": {
+        "$ref": "definitions.json#/max_value"
+      },
+      "minimum": {
+        "$ref": "definitions.json#/min_value"
+      },
+      "unit": {
+        "$ref": "../lists/units.json#/unit"
+      },
       "unit_length": {
         "type": "string",
         "enum": ["short", "narrow", "long"]
@@ -63,7 +81,9 @@
           }
         }
       },
-      "calculated": { "$ref": "definitions.json#/calculated" }
+      "calculated": {
+        "$ref": "definitions.json#/calculated"
+      }
     },
     "additionalProperties": false,
     "required": ["id", "type", "mandatory", "unit", "unit_length", "label"]

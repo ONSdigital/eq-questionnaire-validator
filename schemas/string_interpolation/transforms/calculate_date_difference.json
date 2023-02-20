@@ -13,14 +13,22 @@
         "properties": {
           "first_date": {
             "oneOf": [
-              { "$ref": "../definitions.json#/placeholder_value_sources" },
-              { "$ref": "../../common_definitions.json#/date_value" }
+              {
+                "$ref": "../definitions.json#/placeholder_value_sources"
+              },
+              {
+                "$ref": "../../common_definitions.json#/date_value"
+              }
             ]
           },
           "second_date": {
             "oneOf": [
-              { "$ref": "../definitions.json#/placeholder_value_sources" },
-              { "$ref": "../../common_definitions.json#/date_value" }
+              {
+                "$ref": "../definitions.json#/placeholder_value_sources"
+              },
+              {
+                "$ref": "../../common_definitions.json#/date_value"
+              }
             ]
           }
         },

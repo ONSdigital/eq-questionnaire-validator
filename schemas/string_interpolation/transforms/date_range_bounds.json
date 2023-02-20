@@ -15,7 +15,9 @@
           "reference_date": {
             "$ref": "../definitions.json#/placeholder_value_sources"
           },
-          "offset_full_weeks": { "type": "integer" },
+          "offset_full_weeks": {
+            "type": "integer"
+          },
           "days_in_range": {
             "type": "integer",
             "minimum": 1

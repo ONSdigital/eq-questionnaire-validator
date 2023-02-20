@@ -7,19 +7,29 @@
         "type": "string",
         "enum": ["Linear", "Hub"]
       },
-      "options": { "type": "object" }
+      "options": {
+        "type": "object"
+      }
     },
     "oneOf": [
       {
         "properties": {
-          "type": { "const": "Hub" },
-          "options": { "$ref": "hub.json#/options" }
+          "type": {
+            "const": "Hub"
+          },
+          "options": {
+            "$ref": "hub.json#/options"
+          }
         }
       },
       {
         "properties": {
-          "type": { "const": "Linear" },
-          "options": { "$ref": "linear.json#/options" }
+          "type": {
+            "const": "Linear"
+          },
+          "options": {
+            "$ref": "linear.json#/options"
+          }
         }
       }
     ],

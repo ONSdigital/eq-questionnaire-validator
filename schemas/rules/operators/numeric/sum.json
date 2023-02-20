@@ -9,7 +9,9 @@
         "type": "array",
         "minItems": 2,
         "prefixItems": [
-          { "$ref": "../../../value_sources.json#/answer_value_source" }
+          {
+            "$ref": "../../../value_sources.json#/answer_value_source"
+          }
         ]
       }
     },
