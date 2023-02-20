@@ -400,19 +400,20 @@
             ]
           }
         },
-        "allOf": [
-          {
-            "if": {
-              "properties": { "questionnaire_flow": { "const": "Hub" } }
-            },
-            "then": {
-              "required": ["id", "groups", "title"]
-            },
-            "else": {
-              "required": ["id", "groups"]
+
+        "if": {
+          "properties": {
+            "questionnaire_flow": {
+              "properties": { "type": { "const": "Linear" } }
             }
           }
-        ]
+        },
+        "then": {
+          "required": ["id", "groups"]
+        },
+        "else": {
+          "required": ["id", "groups", "title"]
+        }
       }
     },
     "preview_questions": {
