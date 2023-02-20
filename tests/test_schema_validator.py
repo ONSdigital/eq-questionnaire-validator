@@ -97,3 +97,17 @@ def test_returns_pointer():
     validator.validate()
 
     assert validator.errors[0]["pointer"] == "/survey_id"
+
+
+def test_invalid_q_code_regex_pattern():
+    file = "schemas/invalid/test_invalid_q_code_regex_pattern.json"
+    json_to_validate = _open_and_load_schema_file(file)
+
+    validator = SchemaValidator(json_to_validate)
+
+    validator.validate()
+
+    assert (
+        validator.errors[0]["message"]
+        == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"
+    )

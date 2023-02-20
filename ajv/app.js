@@ -37,8 +37,8 @@ glob("schemas/**/*.json", (er, schemas) => {
   const validate = ajValidator.compile(baseSchema);
 
   app.post("/validate", (req, res, next) => {
-    const valid = validate(req.body);
     debug("Validating questionnaire: " + req.body.title);
+    const valid = validate(req.body);
     if (!valid) {
       return res.json({
         success: false,

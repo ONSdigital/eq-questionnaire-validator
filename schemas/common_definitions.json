@@ -4,7 +4,7 @@
   "q_code": {
     "$ref": "#/non_empty_string",
     "description": "A question code used by downstream systems to identify answers.",
-    "pattern": "^[0-9a-z]+$"
+    "pattern": "^[a-zA-Z0-9._-]+$"
   },
   "identifier": {
     "type": "string",

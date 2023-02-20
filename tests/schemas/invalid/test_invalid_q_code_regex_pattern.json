@@ -1,0 +1,63 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.1",
+  "survey_id": "0",
+  "title": "q_codes on different blocks",
+  "theme": "default",
+  "description": "A questionnaire to test q_code regex pattern for an answer",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "general-1",
+              "question": {
+                "answers": [
+                  {
+                    "id": "general-1-answer",
+                    "q_code": "&*fgh er*R",
+                    "mandatory": false,
+                    "type": "Number",
+                    "label": "Leave blank",
+                    "default": 0
+                  }
+                ],
+                "id": "general-1-question",
+                "title": "Don’t enter an answer. A default value will be used",
+                "type": "General"
+              }
+            }
+          ],
+          "id": "default-group"
+        }
+      ]
+    }
+  ]
+}
