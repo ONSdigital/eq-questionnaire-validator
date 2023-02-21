@@ -79,7 +79,6 @@
         "type": "object",
         "properties": {
           "code": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "pattern": "^[a-zA-Z0-9._-]+$",
             "description": "User defined answer code for a matching answer id"
           },
@@ -102,7 +101,6 @@
         "type": "object",
         "properties": {
           "name": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
             "pattern": "^[a-zA-Z0-9-_]+$"
           },
           "type": {
