@@ -1,0 +1,142 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "144",
+  "theme": "default",
+  "preview_questions": true,
+  "title": "Test introduction block missing when preview questions enabled",
+  "legal_basis": "Notice is given under section 999 of the Test Act 2000",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "ru_ref",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string",
+      "optional": true
+    },
+    {
+      "name": "ref_p_start_date",
+      "type": "date"
+    },
+    {
+      "name": "ref_p_end_date",
+      "type": "date"
+    },
+    {
+      "name": "display_address",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "introduction-section",
+      "title": "Main section",
+      "summary": {
+        "page_title": "Summary title",
+        "show_on_completion": true
+      },
+      "groups": [
+        {
+          "id": "introduction-group",
+          "title": "General Business Information",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "report-radio",
+              "question": {
+                "description": [
+                  "<p>Your return should relate to the calendar year 2021.</p>"
+                ],
+                "instruction": ["Select your answer"],
+                "answers": [
+                  {
+                    "id": "report-radio-answer",
+                    "mandatory": true,
+                    "description": "Choose Yes or No answer",
+                    "guidance": {
+                      "show_guidance": "Show more information",
+                      "hide_guidance": "Show more information",
+                      "contents": [
+                        {
+                          "description": "You can only pick one answer"
+                        }
+                      ]
+                    },
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ],
+                "id": "report-radio-question",
+                "title": {
+                  "text": "Are you able to report for the calendar month {ref_p_start_date} to {ref_p_end_date}?",
+                  "placeholders": [
+                    {
+                      "placeholder": "ref_p_start_date",
+                      "transforms": [
+                        {
+                          "transform": "format_date",
+                          "arguments": {
+                            "date_to_format": {
+                              "source": "metadata",
+                              "identifier": "ref_p_start_date"
+                            },
+                            "date_format": "d MMMM yyyy"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "placeholder": "ref_p_end_date",
+                      "transforms": [
+                        {
+                          "transform": "format_date",
+                          "arguments": {
+                            "date_to_format": {
+                              "source": "metadata",
+                              "identifier": "ref_p_end_date"
+                            },
+                            "date_format": "d MMMM yyyy"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "type": "General"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
