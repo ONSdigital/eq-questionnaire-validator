@@ -218,29 +218,39 @@ that was implemented in order to support dynamic answer options](https://github.
 
 We need to be able to identify which dynamic answers have been answered when sending the payload downstream to SDC. 
 
-For Dynamic Answers driven by list collector sources, to do this, we would need to include the `list_item_id` for the answered item. As a result,
-the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
+For Dynamic Answers driven by list collector sources, to do this, we would need to include the `list_item_id` for the answered item. As a result, the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
 ```
-answer_id: "some-id"
-list_item_id: a
-answer_value: 1
-
-answer_id: "some-id"
-list_item_id: b
-answer_value: 2
+{
+  answer_id: "some-id"
+  list_item_id: a
+  answer_value: 1
+},
+{
+  answer_id: "some-id"
+  list_item_id: b
+  answer_value: 2
+}
 ```
 
-For other sources, where there is no `list_item_id`, we would send the dynamically generated `answer_id` (e.g `answer-id-{value}`) downstream as per the checkbox example below:
+For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources but instead of it being set to a automatically generated value we would set it to something related to each answer as per the checkbox example below:
 ```
-"answer-id": "some-id-a"
-answer_value: 1
-
-"answer-id": "some-id-b"
-"answer_value": 2
-
-"answer-id": "some-id-c"
-"answer_value": 3
+{
+  "answer_id": "percentage-of-shopping",
+  "value": 20,
+  "list_item_id": "Tesco"
+},
+{
+  "answer_id": "percentage-of-shopping",
+  "value": 50,
+  "list_item_id": "Asda"
+},
+{
+  "answer_id": "percentage-of-shopping",
+  "value": 30,
+  "list_item_id": "Aldi"
+}
 ```
+This is something we will need to discuss with downstream teams as the will need to know we are using it in this way. We will also need to discuss it with Author because they will need to know that they need to be set but must be unique within the `dynamic_answers` object. These will be then concatenated with the `answer_id` and any spaces will be replaced with dashes in order to be valid ids when set in the HTML.
 
 ## Answer Codes
 
