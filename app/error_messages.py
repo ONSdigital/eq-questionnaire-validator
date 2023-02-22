@@ -37,5 +37,4 @@ VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = (
 VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = (
     "Variants have more than one question type for block."
 )
-NO_INTRODUCTION_BLOCK = "No introduction block for preview questions in schema"
-NO_SECTION_TITLE = "No section title for section in schema using hub"
+NO_INTRODUCTION_BLOCK = "No introduction block found. Introduction block is mandatory when using the preview questions feature."
