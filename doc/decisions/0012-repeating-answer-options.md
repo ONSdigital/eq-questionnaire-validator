@@ -135,7 +135,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 }
 ```
 - For dynamic answers driven by answer value sources, for each list item, a unique identifier like the answer value will need to be appended to the `id` in the `dynamic_answers.answer` block e.g. `"id": "percentage-of-shopping-{value}`.
-- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be converted to lowercase to be consistent with a valid answer `id`.
+- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be formatted (eg. hyphens, lowercase) to be consistent with a valid answer `id`.
 - Dynamic answers can only be generated if there is at least one answer value.  
 - In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept [`self` added in order to support
 dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self). This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
