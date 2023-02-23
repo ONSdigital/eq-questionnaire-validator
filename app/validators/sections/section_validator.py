@@ -150,8 +150,7 @@ class SectionValidator(Validator):
             )
 
         for variant in all_variants:
-            when_clause = variant.get("when", [])
-            if isinstance(when_clause, dict):
+            if when_clause := variant.get("when", None):
                 when_validator = RulesValidator(
                     when_clause, self.section["id"], self.questionnaire_schema
                 )
