@@ -64,8 +64,25 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.2"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
+
+      - name: Get yarn cache
+        id: get-yarn-cache
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache yarn modules
+        id: cache-yarn
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.get-yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        run: yarn install
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
