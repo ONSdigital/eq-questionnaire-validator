@@ -19,6 +19,9 @@
       "warning": {
         "$ref": "../../common_definitions.json#/non_empty_string"
       },
+      "definitions": {
+        "$ref": "../../common_definitions.json#/question_definitions"
+      },
       "guidance": {
         "$ref": "../../common_definitions.json#/guidance"
       },
@@ -67,13 +70,13 @@
               "items": {
                 "anyOf": [
                   {
-                    "required": "less than"
+                    "required": ["less than"]
                   },
                   {
-                    "required": "greater than"
+                    "required": ["greater than"]
                   },
                   {
-                    "required": "equals"
+                    "required": ["equals"]
                   }
                 ]
               },
@@ -135,10 +138,7 @@
         "additionalProperties": false
       },
       "additionalProperties": false,
-      "required": ["id", "type", "calculations", "answers", "title"],
-      "$defs": {
-        "$ref": "../../common_definitions.json#/question_definitions"
-      }
+      "required": ["id", "type", "calculations", "answers", "title"]
     }
   }
 }

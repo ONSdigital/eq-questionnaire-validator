@@ -2,7 +2,6 @@
   "$id": "file:///common_definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "q_code": {
-    "$ref": "#/non_empty_string",
     "description": "A question code used by downstream systems to identify answers.",
     "pattern": "^[a-zA-Z0-9._-]+$"
   },
@@ -12,7 +11,6 @@
     "pattern": "^[a-z0-9][a-z0-9\\-]*[a-z0-9]$"
   },
   "metadata_identifier": {
-    "$ref": "#/non_empty_string",
     "description": "The id of a metadata provided by the calling service from which to obtain the value",
     "pattern": "^[a-z0-9][a-z0-9\\-_]*[a-z0-9]$"
   },
@@ -30,23 +28,6 @@
     "minItems": 1,
     "items": {
       "type": "object",
-      "anyOf": [
-        {
-          "required": ["title"]
-        },
-        {
-          "required": ["description"]
-        },
-        {
-          "required": ["list"]
-        },
-        {
-          "required": ["definition"]
-        },
-        {
-          "required": ["guidance"]
-        }
-      ],
       "properties": {
         "title": {
           "$ref": "string_interpolation/definitions.json#/string_with_placeholders"
@@ -67,7 +48,24 @@
           "$ref": "#/guidance"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": ["title"]
+        },
+        {
+          "required": ["description"]
+        },
+        {
+          "required": ["list"]
+        },
+        {
+          "required": ["definition"]
+        },
+        {
+          "required": ["guidance"]
+        }
+      ]
     }
   },
   "definition": {
@@ -250,7 +248,6 @@
     "type:": "object",
     "properties": {
       "value": {
-        "$ref": "#/non_empty_string",
         "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}|\\d{4}|now)$"
       }
     },

@@ -22,6 +22,9 @@
       "warning": {
         "$ref": "../../common_definitions.json#/non_empty_string"
       },
+      "definitions": {
+        "$ref": "../../common_definitions.json#/question_definitions"
+      },
       "guidance": {
         "$ref": "../../common_definitions.json#/guidance"
       },
@@ -87,9 +90,6 @@
             }
           ]
         }
-      },
-      "$defs": {
-        "$ref": "../../common_definitions.json#/question_definitions"
       }
     },
     "additionalProperties": false,
