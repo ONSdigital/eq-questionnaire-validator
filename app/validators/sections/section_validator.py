@@ -101,9 +101,7 @@ class SectionValidator(Validator):
                 questionnaire_schema=self.questionnaire_schema,
             )
             self.errors += routing_validator.validate()
-        if "skip_conditions" in schema_element and isinstance(
-            schema_element["skip_conditions"], dict
-        ):
+        if "skip_conditions" in schema_element:
             self.validate_skip_conditions(
                 schema_element["skip_conditions"], schema_element["id"]
             )
