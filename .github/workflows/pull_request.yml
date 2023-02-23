@@ -17,7 +17,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: "12.14.1"
+          node-version: "18.14.2"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
 
