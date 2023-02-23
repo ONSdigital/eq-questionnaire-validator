@@ -6,11 +6,15 @@ import fs from "fs";
 // Configure chai
 chai.use(chaiHttp);
 chai.should();
+const path = require("path");
 describe("AJV schema Validator", () => {
   describe("GET /validate", () => {
     it("test_invalid_question_description", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_question_description.json"
+        path.join(
+          __dirname,
+          "schemas/invalid/test_invalid_question_description.json"
+        )
       );
       chai
         .request(app)
@@ -32,7 +36,7 @@ describe("AJV schema Validator", () => {
     });
     it("test_valid_question_description", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_question_description.json"
+        path.join(__dirname, "schemas/valid/test_question_description.json")
       );
       chai
         .request(app)
@@ -48,7 +52,7 @@ describe("AJV schema Validator", () => {
     });
     it("test_valid_placeholder", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_placeholder_full.json"
+        path.join(__dirname, "schemas/valid/test_placeholder_full.json")
       );
       chai
         .request(app)
@@ -64,7 +68,10 @@ describe("AJV schema Validator", () => {
     });
     it("test_invalid_placeholder", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_placeholder_full.json"
+        path.join(
+          __dirname,
+          "schemas/invalid/test_invalid_placeholder_full.json"
+        )
       );
       chai
         .request(app)
@@ -83,7 +90,7 @@ describe("AJV schema Validator", () => {
     });
     it("test_valid_new_routing_and", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_new_routing_and.json"
+        path.join(__dirname, "schemas/valid/test_new_routing_and.json")
       );
       chai
         .request(app)
@@ -99,7 +106,10 @@ describe("AJV schema Validator", () => {
     });
     it("test_invalid_new_routing_and", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_new_routing_and.json"
+        path.join(
+          __dirname,
+          "schemas/invalid/test_invalid_new_routing_and.json"
+        )
       );
       chai
         .request(app)
