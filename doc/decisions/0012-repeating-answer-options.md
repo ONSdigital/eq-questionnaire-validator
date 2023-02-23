@@ -232,7 +232,7 @@ For Dynamic Answers driven by list collector sources, to do this, we would need 
 }
 ```
 
-For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources but instead of it being set to a automatically generated value we would set it to something related to each answer as per the checkbox example below:
+For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources but instead of it being set to an automatically generated value we would set it to something related to each answer as per the checkbox example below:
 ```
 {
   "answer_id": "percentage-of-shopping",
@@ -250,7 +250,7 @@ For other sources, we would set the `list_item_id` and use it the same way it is
   "list_item_id": "Aldi"
 }
 ```
-This is something we will need to discuss with downstream teams as the will need to know we are using it in this way. We will also need to discuss it with Author because they will need to know that they need to be set but must be unique within the `dynamic_answers` object. These will be then concatenated with the `answer_id` and any spaces will be replaced with dashes in order to be valid ids when set in the HTML.
+This is something we will need to discuss with downstream teams as they will need to know we are using it in this way. We will also need to discuss it with Author because they will need to know that they need to be set but must be unique within the `dynamic_answers` object. These will be then concatenated with the `answer_id` and any spaces will be replaced with dashes in order to be valid ids when set in the HTML.
 
 ## Answer Codes
 
