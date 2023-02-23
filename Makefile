@@ -20,6 +20,7 @@ lint-python:
 
 test:
 	poetry run ./scripts/run_tests_unit.sh
+	npm test
 
 format: format-python
 	yarn format

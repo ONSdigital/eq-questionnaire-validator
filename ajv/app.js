@@ -10,7 +10,7 @@ const app = express();
 
 const ajValidator = new Ajv2020({
   allErrors: false,
-  strict: true, // With strict on we are getting issues with $ref example "Error: strict mode: missing type "string" for keyword "pattern""
+  strict: false, // With strict on we are getting issues with $ref example "Error: strict mode: missing type "string" for keyword "pattern""
   strictSchema: false, // https://ajv.js.org/options.html#strictschema
 });
 
