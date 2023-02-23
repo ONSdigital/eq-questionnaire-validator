@@ -20,5 +20,6 @@ function display_result {
 }
 
 py.test -n auto --cov-config=.coveragerc --cov --cov-report html
+yarn test
 
 display_result $? 3 "Unit tests"
