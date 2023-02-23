@@ -45,7 +45,7 @@ class SectionValidator(Validator):
 
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
-        if not isinstance(section_enabled, dict):
+        if not section_enabled:
             return
 
         when = section_enabled["when"]
