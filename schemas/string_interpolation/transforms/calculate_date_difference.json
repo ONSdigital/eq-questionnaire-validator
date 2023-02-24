@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/calculate_date_difference.json",
+  "$id": "/string_interpolation/transforms/calculate_date_difference.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "calculate_date_difference": {
     "type": "object",

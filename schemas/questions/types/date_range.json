@@ -1,5 +1,5 @@
 {
-  "$id": "file:///questions/types/date_range.json",
+  "$id": "/questions/types/date_range.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
     "type": "object",

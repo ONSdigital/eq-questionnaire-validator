@@ -1,5 +1,5 @@
 {
-  "$id": "file:///answers/definitions.json",
+  "$id": "/answers/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "calculated": {
     "type": "boolean",

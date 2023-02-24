@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/array/any-in.json",
+  "$id": "/rules/operators/array/any-in.json",
   "description": "Evaluates if any value from the first array is in the second array",
   "type": "object",
   "properties": {

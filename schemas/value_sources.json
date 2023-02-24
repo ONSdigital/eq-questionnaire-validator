@@ -1,5 +1,5 @@
 {
-  "$id": "file:///value_sources.json",
+  "$id": "/value_sources.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "answer_value_source": {
     "description": "A reference to an answer. When resolved this can be a number, string, array, object or null.",

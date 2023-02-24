@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/value/format-date.json",
+  "$id": "/rules/operators/value/format-date.json",
   "description": "Formats a datetime object into the specified format. Takes two arguments, the datetime object and the date format.",
   "type": "object",
   "properties": {

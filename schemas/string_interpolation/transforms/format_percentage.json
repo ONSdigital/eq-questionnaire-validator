@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/format_percentage.json",
+  "$id": "/string_interpolation/transforms/format_percentage.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "format_percentage": {
     "type": "object",

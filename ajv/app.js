@@ -10,8 +10,11 @@ const app = express();
 
 const ajValidator = new Ajv2020({
   allErrors: false,
-  strict: false, // With strict on we are getting issues with $ref example "Error: strict mode: missing type "string" for keyword "pattern""
-  strictSchema: false, // https://ajv.js.org/options.html#strictschema
+  strict: "log",
+  strictRequired: false, // this has been included to avoid required implementation inside anyOf/oneOf
+  strictTypes: false, // this has been included to avoid missing types as strict mode is true
+  strictSchema: false, // this has been included to avoid unknown keyword errors ad strict mode is true
+  strictTuples: false, // this has been included due to https://github.com/ajv-validator/ajv/issues/1417
 });
 
 app.use(

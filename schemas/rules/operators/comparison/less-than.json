@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/comparison/less-than.json",
+  "$id": "/rules/operators/comparison/less-than.json",
   "description": "Evaluates if the first argument is less than the second",
   "type": "object",
   "properties": {

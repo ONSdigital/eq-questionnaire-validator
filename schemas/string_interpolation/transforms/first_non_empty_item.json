@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/first_non_empty_item.json",
+  "$id": "/string_interpolation/transforms/first_non_empty_item.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "first_non_empty_item": {
     "description": "A transform for selecting the first non empty item",

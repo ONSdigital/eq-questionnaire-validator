@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/logic/not.json",
+  "$id": "/rules/operators/logic/not.json",
   "description": "Evaluates boolean `not`",
   "type": "object",
   "properties": {

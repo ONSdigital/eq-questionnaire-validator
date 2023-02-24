@@ -275,7 +275,7 @@ def test_validate_nested_sum_operator():
                     {"identifier": "checkbox-answer", "source": "answers"},
                 ]
             },
-            "message": "Invalid argument type for operator",
+            "message": "invalid argument type for operator",
             "operator": "+",
             "origin_id": "block-id",
             "valid_types": ["number"],

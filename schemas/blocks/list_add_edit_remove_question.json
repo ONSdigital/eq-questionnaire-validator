@@ -1,5 +1,5 @@
 {
-  "$id": "file:///blocks/list_add_edit_remove_question.json",
+  "$id": "/blocks/list_add_edit_remove_question.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",

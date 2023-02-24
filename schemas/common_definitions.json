@@ -1,5 +1,5 @@
 {
-  "$id": "file:///common_definitions.json",
+  "$id": "/common_definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "q_code": {
     "description": "A question code used by downstream systems to identify answers.",

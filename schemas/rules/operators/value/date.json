@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/value/date.json",
+  "$id": "/rules/operators/value/date.json",
   "description": "Casts a value to a date. First argument is a date, second is an optional offset",
   "type": "object",
   "properties": {

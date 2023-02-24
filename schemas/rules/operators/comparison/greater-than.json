@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///rules/operators/comparison/greater-than.json",
+  "$id": "/rules/operators/comparison/greater-than.json",
   "description": "Evaluates if the first argument is greater than the second",
   "type": "object",
   "properties": {

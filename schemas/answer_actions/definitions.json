@@ -1,5 +1,5 @@
 {
-  "$id": "file:///answer_actions/definitions.json",
+  "$id": "/answer_actions/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "redirect_to_list_add_block": {
     "type": "object",

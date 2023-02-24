@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/add.json",
+  "$id": "/string_interpolation/transforms/add.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "add": {
     "type": "object",

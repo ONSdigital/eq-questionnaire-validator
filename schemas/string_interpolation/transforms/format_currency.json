@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/format_currency.json",
+  "$id": "/string_interpolation/transforms/format_currency.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "format_currency": {
     "type": "object",

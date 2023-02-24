@@ -1,5 +1,5 @@
 {
-  "$id": "file:///lists/units.json",
+  "$id": "/lists/units.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "unit": {
     "description": "Internationalised units for length, area, volume, and others.",

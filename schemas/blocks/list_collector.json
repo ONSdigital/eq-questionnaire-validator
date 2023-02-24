@@ -1,5 +1,5 @@
 {
-  "$id": "file:///blocks/list_collector.json",
+  "$id": "/blocks/list_collector.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "summary": {
     "type": "object",

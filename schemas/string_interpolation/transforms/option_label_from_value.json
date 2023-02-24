@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "file:///string_interpolation/transforms/option_label_from_value.json",
+  "$id": "/string_interpolation/transforms/option_label_from_value.json",
   "option_label_from_value": {
     "description": "Get the label of an answer option based on its value. Takes two arguments, the option value and the answer id",
     "type": "object",

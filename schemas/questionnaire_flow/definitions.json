@@ -1,5 +1,5 @@
 {
-  "$id": "file:///questionnaire_flow/definitions.json",
+  "$id": "/questionnaire_flow/definitions.json",
   "flow": {
     "type": "object",
     "properties": {

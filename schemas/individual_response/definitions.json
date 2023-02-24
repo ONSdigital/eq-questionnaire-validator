@@ -1,5 +1,5 @@
 {
-  "$id": "file:///individual_response/definitions.json",
+  "$id": "/individual_response/definitions.json",
   "individual_response": {
     "type": "object",
     "properties": {

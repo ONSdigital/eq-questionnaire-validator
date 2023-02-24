@@ -1,5 +1,5 @@
 {
-  "$id": "file:///answers/percentage.json",
+  "$id": "/answers/percentage.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "answer": {
     "type": "object",

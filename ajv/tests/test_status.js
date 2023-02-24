@@ -6,8 +6,8 @@ import app from "../app";
 chai.use(chaiHttp);
 chai.should();
 describe("AJV api status", () => {
-  describe("POST /", () => {
-    it("should get ok status", (done) => {
+  describe("GET /status", () => {
+    it("ajv should be live", (done) => {
       chai
         .request(app)
         .get("/status")

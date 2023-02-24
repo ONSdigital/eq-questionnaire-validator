@@ -94,7 +94,7 @@ class RulesValidator(Validator):
     )
     ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID = "Expected the answer type for sum operator to be type 'number' but got type '{answer_type}'"
     OPERATOR_ARGUMENT_TYPE_MISMATCH = "Argument types don't match"
-    INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
+    INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "invalid argument type for operator"
 
     def __init__(
         self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False

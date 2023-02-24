@@ -1,5 +1,5 @@
 {
-  "$id": "file:///blocks/definitions.json",
+  "$id": "/blocks/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "content": {
     "description": "Block level content block",

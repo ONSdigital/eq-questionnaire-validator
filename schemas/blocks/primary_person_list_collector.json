@@ -1,5 +1,5 @@
 {
-  "$id": "file:///blocks/primary_person_list_collector.json",
+  "$id": "/blocks/primary_person_list_collector.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",

@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/transforms/list_item_count.json",
+  "$id": "/string_interpolation/transforms/list_item_count.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "list_item_count": {
     "description": "A transform for outputting the number of items in a list",

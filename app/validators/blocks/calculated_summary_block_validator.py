@@ -12,7 +12,7 @@ class CalculatedSummaryBlockValidator(BlockValidator):
     ANSWERS_MUST_HAVE_SAME_UNIT = (
         "All answers in block's answers_to_calculate must be of the same unit"
     )
-    ANSWERS_HAS_INVALID_ID = "Invalid answer id in block's answers_to_calculate"
+    ANSWERS_HAS_INVALID_ID = "invalid answer id in block's answers_to_calculate"
     ANSWERS_HAS_DUPLICATES = "Duplicate answers in block's answers_to_calculate"
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"

@@ -1,5 +1,5 @@
 {
-  "$id": "file:///string_interpolation/definitions.json",
+  "$id": "/string_interpolation/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "string_with_placeholders": {
     "oneOf": [

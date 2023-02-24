@@ -1,5 +1,5 @@
 {
-  "$id": "file:///rules/non_array_value_rule.json",
+  "$id": "/rules/non_array_value_rule.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "description": "Top level non array value operator rule",

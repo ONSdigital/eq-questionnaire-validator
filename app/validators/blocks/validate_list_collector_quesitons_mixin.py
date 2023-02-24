@@ -10,7 +10,7 @@ def _options_contain_action_type(options, expected_action):
 
 
 class ValidateListCollectorQuestionsMixin(Validator):
-    MISSING_SAME_NAME_ANSWER_ID = "Invalid id in same_name_answer_ids"
+    MISSING_SAME_NAME_ANSWER_ID = "invalid id in same_name_answer_ids"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

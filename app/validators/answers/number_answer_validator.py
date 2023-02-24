@@ -11,7 +11,7 @@ class NumberAnswerValidator(AnswerValidator):
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
     DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
     DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
-    ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
+    ANSWER_RANGE_INVALID = "invalid range of min and max is possible for answer"
     MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
         "The referenced answer cannot be used to set the minimum of answer"
     )
