@@ -54,7 +54,7 @@ jobs:
       - name: Lint
         run: make lint
       - name: Test
-        run: make lint
+        run: make test
 
   docker-push:
     runs-on: ubuntu-22.04
