@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  lint_and_test:
+  lint:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -51,10 +51,58 @@ jobs:
       - name: Install virtual environment
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: poetry install
-      - name: Lint
+      - name: Lint Python
         run: make lint
-      - name: Test
-        run: make test
+
+  test-unit:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - run:
+          echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.2"
+      - run: |
+          echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
+
+      - name: Get yarn cache
+        id: get-yarn-cache
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache yarn modules
+        id: cache-yarn
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.get-yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        run: yarn install
+      - name: Running yarn tests
+        run: make test-yarn
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.1
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v3
+        id: cache-virtualenv
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
+      - name: Install virtual environment
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        run: poetry install
+      - name: Running unit tests
+        run: make test-unit
 
   docker-push:
     runs-on: ubuntu-22.04
