@@ -44,13 +44,12 @@
     }
   ],
   "questionnaire_flow": {
-    "type": "Linear",
+    "type": "Hub",
     "options": {}
   },
   "sections": [
     {
       "id": "introduction-section",
-      "title": "Main section",
       "summary": {
         "page_title": "Summary title",
         "show_on_completion": true

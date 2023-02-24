@@ -398,20 +398,7 @@
             ]
           }
         },
-
-        "if": {
-          "properties": {
-            "questionnaire_flow": {
-              "properties": { "type": { "const": "Linear" } }
-            }
-          }
-        },
-        "then": {
-          "required": ["id", "groups"]
-        },
-        "else": {
-          "required": ["id", "groups", "title"]
-        }
+        "required": ["id", "groups"]
       }
     },
     "preview_questions": {
@@ -419,5 +406,29 @@
       "description": "A flag that is used to determine if the questions can be previewed before the questionnaire start"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "questionnaire_flow": {
+            "properties": {
+              "type": {
+                "const": "Hub"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "sections": {
+            "items": {
+              "required": ["title"]
+            }
+          }
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }
