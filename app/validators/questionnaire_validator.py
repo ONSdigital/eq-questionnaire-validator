@@ -114,4 +114,4 @@ class QuestionnaireValidator(Validator):
             block["type"] == "Introduction" for block in blocks
         )
         if not has_introduction_blocks:
-            self.add_error(error_messages.NO_INTRODUCTION_BLOCK)
+            self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)

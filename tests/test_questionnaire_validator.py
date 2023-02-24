@@ -442,7 +442,7 @@ def test_introduction_block_not_in_schema():
 
     expected_errors = [
         {
-            "message": error_messages.NO_INTRODUCTION_BLOCK,
+            "message": error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK,
         },
     ]
     validator.validate_introduction_block()
