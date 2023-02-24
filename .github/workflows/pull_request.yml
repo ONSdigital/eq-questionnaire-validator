@@ -103,7 +103,7 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: poetry install
       - name: Running unit tests
-        run: make test-unit
+        run: make test
 
   docker-push:
     runs-on: ubuntu-22.04
