@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  lint and test:
+  lint_and_test:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
