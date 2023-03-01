@@ -88,7 +88,6 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 }
 ```
 - For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
-- The list collector cannot be empty.
 
 ### Dynamic answers based on a list of answers
 
@@ -137,9 +136,8 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 }
 ```
 
-- For dynamic answers driven by answer value sources, for each list item, a unique identifier like the answer value will need to be appended to the `id` in the `dynamic_answers.answer` block e.g. `"id": "percentage-of-shopping-{value}`.
-- We would need to enforce that any value used to be appended to the prefix would need to be unique, and would have to be formatted (eg. hyphens, lowercase) to be consistent with a valid answer `id`.
-- Dynamic answers can only be generated if there is at least one answer value.  
+- `list_item_id` can now be an answer value or the output of a function, not just list collector ids.
+- Dynamic answers can only be generated if there is at least one answer value.
 - In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept [`self` added in order to support
 dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self). This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
 
@@ -222,21 +220,22 @@ that was implemented in order to support dynamic answer options](https://github.
 
 We need to be able to identify which dynamic answers have been answered when sending the payload downstream to SDC. 
 
-For Dynamic Answers driven by list collector sources, to do this, we would need to include the `list_item_id` for the answered item. As a result, the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
+For Dynamic Answers driven by list collector sources, we would need to include the `list_item_id` for the answered item. As a result, the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is dynamically generated at run time with the appended `list_item_id` outlined above e.g.
 ```
 {
-  answer_id: "some-id"
-  list_item_id: a
-  answer_value: 1
+  "answer_id": "percentage-of-shopping"
+  "value": 70
+  "list_item_id": afghjf
+  
 },
 {
-  answer_id: "some-id"
-  list_item_id: b
-  answer_value: 2
+  "answer_id": "percentage-of-shopping"
+  "value": 30
+  "list_item_id": fdhjfl
 }
 ```
 
-For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources but instead of it being set to an automatically generated value we would set it to something related to each answer as per the checkbox example below:
+For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources but instead of it being set to an automatically generated value we would set it to to the option value with any spaces replaced with hyphens as per the checkbox example below:
 ```
 {
   "answer_id": "percentage-of-shopping",
