@@ -43,7 +43,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 - All the properties within the `dynamic_answers.answers` block that can contain text displayed to the user will need to support placeholder transforms. For example, answer labels which currently do not allow placeholders will need to be extended to support this.
 - `dynamic_options` cannot be used inside `dynamic_answers`.
 - The structure should be consistent with a regular static answer block.
-- For `dynamic_answers.answers` blocks, the answer `id` will simply be a prefix, and a unique identifier will need to be added to the prefix at runtime. This is required in order for us to be able to render the id in other parts of the questionnaire.
+- For `dynamic_answers.answers` blocks, the answer `id` will simply be a prefix, and a unique identifier will need to be added to the prefix at runtime. This is required in order for us to be able to render the id in other parts of the questionnaire. This id made of the prefix and unique identifier will only be used for front end rendering purposes. We will still use just the `list_item_id` for storage even if it isn't a list collector.
 
 ### Dynamic answers based on a list source
 
@@ -87,7 +87,8 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
   }
 }
 ```
-- For dynamic answers driven by list collectors, for each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`.
+- For dynamic answers driven by list collectors, for front end purposes each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`. For storage we will just use the `list_item_id`.
+- Answer sources within a loop must be resolved using the `list_item_id` to resolve the current iterations value.
 
 ### Dynamic answers based on a list of answers
 
