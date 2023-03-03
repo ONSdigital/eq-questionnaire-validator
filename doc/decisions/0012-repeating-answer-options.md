@@ -87,7 +87,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
   }
 }
 ```
-- For dynamic answers driven by list collectors, for front end purposes each list item, at runtime the `list-item-id` or `selector` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_item_id}`. For storage we will just use the `list_item_id`.
+- For dynamic answers driven by list collectors, for front end purposes each list item, at runtime the `list-item-id` will be appended to the `id` used in the `dynamic_answers.answer` block, so that all answers have unique ids e.g. `"id": "percentage-of-shopping-{list_item_id}`. For storage we will just use the combination of `answer_id` and `list_item_id`.
 - Answer sources within a loop must be resolved using the `list_item_id` to resolve the current iterations value.
 
 ### Dynamic answers based on a list of answers
