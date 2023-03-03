@@ -137,7 +137,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 }
 ```
 
-- `list_item_id` can now be an answer value or the output of a function, not just list collector ids.
+- `list_item_id` can now be an answer value or the output of a function, not just list collector ids. To make sure it is a valid id for storage we will replace any spaces with hyphens.
 - Dynamic answers can only be generated if there is at least one value.
 - In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept [`self` added in order to support
 dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self). This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
@@ -258,9 +258,11 @@ This is something we will need to discuss with downstream teams as they will nee
 ## Answer Codes
 
 As answer ids used for dynamic answers will only be prefixed values in the schema, only one answer code would be able to be set against each dynamic answer (using the id prefix) e.g.
-```
-"answer-id": "some-id-prefix"
-"code": 1
+```json
+{
+  "answer-id": "some-id-prefix",
+  "code": 1
+}
 ```
 
 ## Consequences
