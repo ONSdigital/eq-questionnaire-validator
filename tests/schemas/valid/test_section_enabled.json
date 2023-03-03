@@ -22,7 +22,7 @@
     }
   ],
   "questionnaire_flow": {
-    "type": "Linear",
+    "type": "Hub",
     "options": {
       "summary": {
         "collapsible": false

@@ -101,10 +101,8 @@ class SectionValidator(Validator):
                 questionnaire_schema=self.questionnaire_schema,
             )
             self.errors += routing_validator.validate()
-        if "skip_conditions" in schema_element:
-            self.validate_skip_conditions(
-                schema_element["skip_conditions"], schema_element["id"]
-            )
+        if skip_conditions := schema_element.get("skip_conditions"):
+            self.validate_skip_conditions(skip_conditions, schema_element["id"])
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
@@ -150,7 +148,7 @@ class SectionValidator(Validator):
             )
 
         for variant in all_variants:
-            if when_clause := variant.get("when", None):
+            if when_clause := variant.get("when"):
                 when_validator = RulesValidator(
                     when_clause, self.section["id"], self.questionnaire_schema
                 )
