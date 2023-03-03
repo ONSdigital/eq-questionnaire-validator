@@ -138,7 +138,7 @@ Introduce a new `dynamic_answers` object that will handle the generation of any 
 ```
 
 - `list_item_id` can now be an answer value or the output of a function, not just list collector ids.
-- Dynamic answers can only be generated if there is at least one answer value.
+- Dynamic answers can only be generated if there is at least one value.
 - In order to support examples like the schema above, Placeholders will need to be extended to support the new value `self`, which will allow the placeholder resolve the answer value for the current literal list item being processed. This is similar to the concept [`self` added in order to support
 dynamic answer options](https://github.com/ONSdigital/eq-questionnaire-validator/blob/master/doc/decisions/0010-dynamic-answer-options.md#resolving-the-value-for-self). This is required so that we can pipe the value of the literal item being processed into any user displayed text field.
 
