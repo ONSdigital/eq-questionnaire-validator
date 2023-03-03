@@ -2,7 +2,7 @@ from app.validators.validator import Validator
 
 
 class WhenRuleValidator(Validator):
-    LIST_REFERENCE_INVALID = "invalid list reference"
+    LIST_REFERENCE_INVALID = "Invalid list reference"
     CHECKBOX_MUST_USE_CORRECT_CONDITION = (
         "The condition cannot be used with `Checkbox` answer type"
     )

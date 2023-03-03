@@ -2,9 +2,9 @@ from app.validators.validator import Validator
 
 
 class ValueSourceValidator(Validator):
-    COMPOSITE_ANSWER_INVALID = "invalid composite answer"
-    COMPOSITE_ANSWER_FIELD_INVALID = "invalid field for composite answer"
-    SOURCE_REFERENCE_INVALID = "invalid {} source reference"
+    COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
+    COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
+    SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
     ANSWER_SOURCE_REFERENCE_INVALID = SOURCE_REFERENCE_INVALID.format("answers")
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
