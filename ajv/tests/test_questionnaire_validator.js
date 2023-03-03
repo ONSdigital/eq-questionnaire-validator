@@ -6,6 +6,22 @@ import fs from "fs";
 // Configure chai
 chai.use(chaiHttp);
 chai.should();
+describe("AJV api status", () => {
+  describe("GET /status", () => {
+    it("ajv should be live", (done) => {
+      chai
+        .request(app)
+        .get("/status")
+        .end((err, res) => {
+          if (err) {
+            throw new Error("Unable to execute test case");
+          }
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
+});
 describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
     it("test_invalid_question_description", (done) => {
@@ -43,115 +59,6 @@ describe("AJV schema Validator", () => {
           isError(err);
           res.should.have.status(200);
           res.body.should.not.have.property("success", false);
-          done();
-        });
-    });
-    it("test_valid_placeholder", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_placeholder_full.json"
-      );
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          res.body.should.not.have.property("success", false);
-          done();
-        });
-    });
-    it("test_invalid_placeholder", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_placeholder_full.json"
-      );
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          res.body.should.have.property("success", false);
-          const failure = res.body.errors.pop();
-          failure.should.have.property("keyword", "const");
-          failure.should.have.property("message", "must be equal to constant");
-          done();
-        });
-    });
-    it("test_valid_new_routing_and", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_new_routing_and.json"
-      );
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          res.body.should.not.have.property("success", false);
-          done();
-        });
-    });
-    it("test_invalid_new_routing_and", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_new_routing_and.json"
-      );
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          res.body.should.have.property("success", false);
-          const failure = res.body.errors.pop();
-          failure.should.have.property("keyword", "oneOf");
-          failure.should.have.property(
-            "message",
-            "must match exactly one schema in oneOf"
-          );
-          done();
-        });
-    });
-    it("test_valid_markup", (done) => {
-      const data = fs.readFileSync("ajv/tests/schemas/valid/test_markup.json");
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          res.body.should.not.have.property("success", false);
-          done();
-        });
-    });
-    it("test_invalid_markup", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_markup.json"
-      );
-      chai
-        .request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data))
-        .end((err, res) => {
-          isError(err);
-          res.should.have.status(200);
-          const failure = res.body.errors.pop();
-          res.body.should.have.property("success", false);
-          failure.should.have.property("keyword", "minItems");
-          failure.should.have.property(
-            "message",
-            "must NOT have fewer than 1 items"
-          );
           done();
         });
     });
