@@ -79,7 +79,7 @@ def test_are_decimal_places_valid():
 def test_invalid_range():
     answer = {
         "id": "answer-3",
-        "label": "invalid References",
+        "label": "Invalid References",
         "mandatory": False,
         "maximum": {"value": {"identifier": "answer-5", "source": "answers"}},
         "minimum": {"value": {"identifier": "answer-4", "source": "answers"}},
