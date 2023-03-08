@@ -12,7 +12,7 @@
   },
   "metadata_identifier": {
     "description": "The id of a metadata provided by the calling service from which to obtain the value",
-    "pattern": "^[a-z0-9][a-z0-9\\-_]*[a-z0-9]$"
+    "pattern": "^[A-Za-z0-9][A-Za-z0-9\\-_]*[A-Za-z0-9]$"
   },
   "question_definitions": {
     "description": "Allows customisation of question definition title and description.",
