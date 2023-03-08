@@ -10,7 +10,7 @@ const app = express();
 
 const ajValidator = new Ajv2020({
   allErrors: false,
-  strict: "log",
+  strict: true,
   strictRequired: false, // this has been included to avoid required implementation inside anyOf/oneOf
   strictTypes: false, // this has been included to avoid missing types as strict mode is true
   strictSchema: false, // this has been included to avoid unknown keyword errors ad strict mode is true
