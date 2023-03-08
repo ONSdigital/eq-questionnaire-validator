@@ -433,3 +433,18 @@ def test_multiple_list_collectors_and_lists_in_single_section():
     validator.validate()
 
     assert validator.errors == expected_errors
+
+
+def test_introduction_block_not_in_schema():
+    filename = "schemas/invalid/test_invalid_introduction_block.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "message": error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK,
+        },
+    ]
+    validator.validate_introduction_block()
+
+    assert validator.errors == expected_errors

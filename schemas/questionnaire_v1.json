@@ -404,7 +404,35 @@
         },
         "required": ["id", "groups"]
       }
+    },
+    "preview_questions": {
+      "type": "boolean",
+      "description": "A flag that is used to determine if the questions can be previewed before the questionnaire start"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "questionnaire_flow": {
+            "properties": {
+              "type": {
+                "const": "Hub"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "sections": {
+            "items": {
+              "required": ["title"]
+            }
+          }
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }

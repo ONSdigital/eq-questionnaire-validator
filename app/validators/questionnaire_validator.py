@@ -42,6 +42,9 @@ class QuestionnaireValidator(Validator):
             self.questionnaire_schema.section_ids, required_hub_section_ids
         )
 
+        if self.schema_element.get("preview_questions"):
+            self.validate_introduction_block()
+
         if answer_codes := self.schema_element.get("answer_codes"):
             answer_code_validator = AnswerCodeValidator(
                 data_version=self.schema_element["data_version"],
@@ -104,3 +107,11 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
+    def validate_introduction_block(self):
+        blocks = self.questionnaire_schema.get_blocks()
+        has_introduction_blocks = any(
+            block["type"] == "Introduction" for block in blocks
+        )
+        if not has_introduction_blocks:
+            self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
