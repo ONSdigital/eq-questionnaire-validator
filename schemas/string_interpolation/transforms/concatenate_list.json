@@ -1,6 +1,6 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/concatenate_list.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/string_interpolation/transforms/concatenate_list.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "concatenate_list": {
     "description": "A transform for joining lists of strings together with a delimiter e.g. with a list of ['a','b'] and delimeter ' ' the output would be 'a b'.",
     "type": "object",
@@ -16,12 +16,12 @@
             "description": "A list of value_sources to concatenate.",
             "type": "array",
             "items": {
-              "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+              "$ref": "../definitions.json#/placeholder_value_sources"
             }
           },
           "delimiter": {
             "description": "The delimiter to use, common ones are ' ' for names and ', ' for addresses.",
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            "$ref": "../../common_definitions.json#/non_empty_string"
           }
         },
         "additionalProperties": false,
