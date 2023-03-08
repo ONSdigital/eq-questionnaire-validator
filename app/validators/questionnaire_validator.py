@@ -104,3 +104,22 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
+    def validate_white_spaces(self):
+        schema_object = SurveySchema(self.schema_element)
+
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for text in values_to_check:
+                if text and (
+                    text.startswith(" ") or text.endswith(" ") or "  " in text
+                ):
+                    self.add_error(
+                        error_messages.INVALID_WHITESPACE_FOUND,
+                        pointer=translatable_item.pointer,
+                    )
