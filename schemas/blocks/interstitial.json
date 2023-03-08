@@ -1,36 +1,36 @@
 {
-  "$id": "https://eq.ons.gov.uk/blocks/interstitial.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/blocks/interstitial.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "block": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "number": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "page_title": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "type": {
         "type": "string",
         "enum": ["Interstitial"]
       },
       "content_variants": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/content_variants"
+        "$ref": "definitions.json#/content_variants"
       },
       "content": {
-        "$ref": "https://eq.ons.gov.uk/blocks/definitions.json#/content"
+        "$ref": "definitions.json#/content"
       },
       "routing_rules": {
-        "ref": "https://eq.ons.gov.uk/common_definitions.json#/routing_rules"
+        "ref": "../common_definitions.json#/routing_rules"
       },
       "skip_conditions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/skip_conditions"
+        "$ref": "../common_definitions.json#/skip_conditions"
       },
       "interviewer_only": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/interviewer_only"
+        "$ref": "../common_definitions.json#/interviewer_only"
       }
     },
     "additionalProperties": false,

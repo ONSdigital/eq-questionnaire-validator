@@ -1,29 +1,29 @@
 {
-  "$id": "https://eq.ons.gov.uk/questions/types/date_range.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/questions/types/date_range.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../../common_definitions.json#/identifier"
       },
       "title": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../../common_definitions.json#/non_empty_string"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_array_with_placeholders"
+        "$ref": "../../common_definitions.json#/string_array_with_placeholders"
       },
       "definitions": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "warning": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../../common_definitions.json#/non_empty_string"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/guidance"
+        "$ref": "../../common_definitions.json#/guidance"
       },
       "type": {
         "type": "string",
@@ -105,13 +105,13 @@
         "items": {
           "oneOf": [
             {
-              "$ref": "https://eq.ons.gov.uk/answers/date.json#/answer"
+              "$ref": "../../answers/date.json#/answer"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answers/month_year_date.json#/answer"
+              "$ref": "../../answers/month_year_date.json#/answer"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answers/year_date.json#/answer"
+              "$ref": "../../answers/year_date.json#/answer"
             }
           ]
         }
@@ -121,13 +121,13 @@
         "properties": {
           "messages": {
             "INVALID_DATE_RANGE": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "DATE_PERIOD_TOO_SMALL": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "DATE_PERIOD_TOO_LARGE": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             }
           }
         },

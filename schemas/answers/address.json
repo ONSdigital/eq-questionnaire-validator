@@ -1,17 +1,17 @@
 {
-  "$id": "https://eq.ons.gov.uk/answers/address.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/answers/address.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "answer": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "q_code": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
+        "$ref": "../common_definitions.json#/q_code"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
+        "$ref": "definitions.json#/answer_guidance"
       },
       "type": {
         "type": "string",
@@ -25,7 +25,7 @@
         "properties": {
           "messages": {
             "MANDATORY_ADDRESS": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             }
           }
         }
