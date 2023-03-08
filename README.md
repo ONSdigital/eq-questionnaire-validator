@@ -28,6 +28,12 @@ Any errors in these schemas will cause a failure.
 To run the app's unit tests:
 
 ```
+make test-unit
+```
+
+To run the app's unit tests and yarn tests:
+
+```
 make test
 ```
 
@@ -55,6 +61,12 @@ Install yarn and node dependencies:
 ```
 npm i -g yarn
 yarn
+```
+
+To run the ajv validator tests:
+
+```
+make test-yarn
 ```
 
 ## Formatting json

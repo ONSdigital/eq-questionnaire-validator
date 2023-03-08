@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/comparison/equal.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/rules/operators/comparison/equal.json",
   "description": "Evaluates if the arguments are equal",
   "type": "object",
   "properties": {
@@ -11,13 +11,13 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/any_value"
+            "$ref": "../../definitions.json#/any_value"
           },
           {
-            "$ref": "https://eq.ons.gov.uk/rules/operators/value/date.json"
+            "$ref": "../value/date.json"
           },
           {
-            "$ref": "https://eq.ons.gov.uk/rules/operators/value/count.json"
+            "$ref": "../value/count.json"
           }
         ]
       }

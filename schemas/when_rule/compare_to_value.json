@@ -1,14 +1,14 @@
 {
-  "$id": "https://eq.ons.gov.uk/when_rule/compare_to_value.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/when_rule/compare_to_value.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "description": "Comparison against a single value",
   "properties": {
     "id": {
-      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_identifier"
+      "$ref": "definitions.json#/answer_identifier"
     },
     "meta": {
-      "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier"
+      "$ref": "../common_definitions.json#/metadata_identifier"
     },
     "condition": {
       "enum": [
@@ -23,13 +23,13 @@
       ]
     },
     "value": {
-      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/comparison_value"
+      "$ref": "definitions.json#/comparison_value"
     },
     "comparison": {
-      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_comparison_object"
+      "$ref": "definitions.json#/answer_comparison_object"
     },
     "date_comparison": {
-      "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/date_comparison_value"
+      "$ref": "definitions.json#/date_comparison_value"
     }
   },
   "required": ["condition"],

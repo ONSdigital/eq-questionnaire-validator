@@ -1,7 +1,8 @@
 import glob
 from json import load
 
-from jsonschema import Draft7Validator, RefResolver, ValidationError
+from jsonschema import Draft202012Validator as DraftValidator
+from jsonschema import RefResolver, ValidationError
 from jsonschema.exceptions import SchemaError, best_match
 
 from app.validators.validator import Validator
@@ -15,11 +16,11 @@ class SchemaValidator(Validator):
             self.schema = load(schema_data)
 
         resolver = RefResolver(
-            base_uri="https://eq.ons.gov.uk/",
+            base_uri="",
             referrer=self.schema,
             store=self.lookup_ref_store(),
         )
-        self.schema_validator = Draft7Validator(self.schema, resolver=resolver)
+        self.schema_validator = DraftValidator(self.schema, resolver=resolver)
 
     @staticmethod
     def lookup_ref_store():

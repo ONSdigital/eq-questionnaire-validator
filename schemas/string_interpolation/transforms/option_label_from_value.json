@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/option_label_from_value.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/string_interpolation/transforms/option_label_from_value.json",
   "option_label_from_value": {
     "description": "Get the label of an answer option based on its value. Takes two arguments, the option value and the answer id",
     "type": "object",
@@ -13,7 +13,7 @@
         "type": "object",
         "properties": {
           "value": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           },
           "answer_id": {
             "type": "string"
