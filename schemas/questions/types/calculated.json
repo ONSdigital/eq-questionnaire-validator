@@ -1,29 +1,29 @@
 {
-  "$id": "https://eq.ons.gov.uk/questions/types/calculated.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/questions/types/calculated.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../../common_definitions.json#/identifier"
       },
       "title": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "number": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../../common_definitions.json#/non_empty_string"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/string_array_with_placeholders"
+        "$ref": "../../common_definitions.json#/string_array_with_placeholders"
       },
       "warning": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../../common_definitions.json#/non_empty_string"
       },
       "definitions": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/question_definitions"
+        "$ref": "../../common_definitions.json#/question_definitions"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/guidance"
+        "$ref": "../../common_definitions.json#/guidance"
       },
       "type": {
         "type": "string",
@@ -39,7 +39,7 @@
               "enum": ["sum"]
             },
             "answer_id": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+              "$ref": "../../common_definitions.json#/non_empty_string",
               "description": "The id of an answer from which to obtain the total to validate against"
             },
             "value": {
@@ -49,7 +49,7 @@
                   "description": "A hard coded total to validate against"
                 },
                 {
-                  "$ref": "https://eq.ons.gov.uk/value_sources.json#/value_source_for_calculations",
+                  "$ref": "../../value_sources.json#/value_source_for_calculations",
                   "description": "A value source to validate against that resolves to a number."
                 }
               ]
@@ -58,7 +58,7 @@
               "type": "array",
               "minItems": 2,
               "items": {
-                "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+                "$ref": "../../common_definitions.json#/identifier"
               },
               "description": "The id of the answers from which to do calculated_type to"
             },
@@ -70,13 +70,13 @@
               "items": {
                 "anyOf": [
                   {
-                    "required": "less than"
+                    "required": ["less than"]
                   },
                   {
-                    "required": "greater than"
+                    "required": ["greater than"]
                   },
                   {
-                    "required": "equals"
+                    "required": ["equals"]
                   }
                 ]
               },
@@ -100,16 +100,16 @@
         "items": {
           "oneOf": [
             {
-              "$ref": "https://eq.ons.gov.uk/answers/currency.json#/answer"
+              "$ref": "../../answers/currency.json#/answer"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answers/number.json#/answer"
+              "$ref": "../../answers/number.json#/answer"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answers/percentage.json#/answer"
+              "$ref": "../../answers/percentage.json#/answer"
             },
             {
-              "$ref": "https://eq.ons.gov.uk/answers/unit.json#/answer"
+              "$ref": "../../answers/unit.json#/answer"
             }
           ]
         }
@@ -119,19 +119,19 @@
         "properties": {
           "messages": {
             "TOTAL_SUM_NOT_EQUALS": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "TOTAL_SUM_NOT_LESS_THAN": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "TOTAL_SUM_NOT_GREATER_THAN": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "TOTAL_SUM_NOT_GREATER_THAN_OR_EQUALS": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             },
             "TOTAL_SUM_NOT_LESS_THAN_OR_EQUALS": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../../common_definitions.json#/non_empty_string"
             }
           }
         },

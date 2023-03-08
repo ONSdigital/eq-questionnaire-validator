@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/array/all-in.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/rules/operators/array/all-in.json",
   "description": "Evaluates if all values from the first array are in the second array",
   "type": "object",
   "properties": {
@@ -9,7 +9,7 @@
       "minItems": 2,
       "maxItems": 2,
       "items": {
-        "$ref": "https://eq.ons.gov.uk/rules/definitions.json#/array_value"
+        "$ref": "../../definitions.json#/array_value"
       }
     }
   },

@@ -1,6 +1,6 @@
 {
-  "$id": "https://eq.ons.gov.uk/string_interpolation/transforms/email_link.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/string_interpolation/transforms/email_link.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "email_link": {
     "type": "object",
     "properties": {
@@ -16,10 +16,10 @@
             "pattern": "^[A-Za-z0-9._+-]+@[A-Za-z0-9.-]+.[A-Za-z.]+$"
           },
           "email_subject": {
-            "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+            "$ref": "../../common_definitions.json#/non_empty_string"
           },
           "email_subject_append": {
-            "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/placeholder_value_sources"
+            "$ref": "../definitions.json#/placeholder_value_sources"
           }
         },
         "additionalProperties": false,

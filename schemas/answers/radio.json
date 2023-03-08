@@ -1,27 +1,27 @@
 {
-  "$id": "https://eq.ons.gov.uk/answers/radio.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/answers/radio.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "answer": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "q_code": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
+        "$ref": "../common_definitions.json#/q_code"
       },
       "voluntary": {
         "description": "If set to true, and an option is selected then there will be an option to unselect",
         "type": "boolean"
       },
       "label": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
+        "$ref": "definitions.json#/answer_guidance"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "type": {
         "type": "string",
@@ -37,7 +37,7 @@
         "type": "boolean"
       },
       "default": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "$ref": "../common_definitions.json#/non_empty_string",
         "description": "Default value if no answer given"
       },
       "validation": {
@@ -45,7 +45,7 @@
         "properties": {
           "messages": {
             "MANDATORY_RADIO": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             }
           }
         }
@@ -62,10 +62,20 @@
       }
     ],
     "if": {
-      "properties": { "mandatory": { "const": true } }
+      "properties": {
+        "mandatory": {
+          "const": true
+        }
+      }
     },
     "then": {
-      "properties": { "voluntary": { "not": { "const": true } } }
+      "properties": {
+        "voluntary": {
+          "not": {
+            "const": true
+          }
+        }
+      }
     }
   }
 }
