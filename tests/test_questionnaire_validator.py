@@ -407,12 +407,24 @@ def test_invalid_whitespaces_in_schema():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_error_messages = [
-        {"message": error_messages.INVALID_WHITESPACE_FOUND, "pointer": pointer}
-        for pointer in [
-            "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
-            "/sections/0/groups/0/blocks/0/question/description/0",
-            "/sections/0/groups/0/blocks/0/question/answers/0/label",
-            "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+        {
+            "message": error_messages.INVALID_WHITESPACE_FOUND.format(text=text),
+            "pointer": pointer,
+        }
+        for text, pointer in [
+            (
+                "What is this persons  age?",
+                "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+            ),
+            (
+                " The persons age",
+                "/sections/0/groups/0/blocks/0/question/description/0",
+            ),
+            ("Your age? ", "/sections/0/groups/0/blocks/0/question/answers/0/label"),
+            (
+                " Guidance Line 1",
+                "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+            ),
         ]
     ]
     validator.validate_white_spaces()
