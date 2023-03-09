@@ -29,6 +29,7 @@ class QuestionnaireValidator(Validator):
 
         self.validate_duplicates()
         self.validate_smart_quotes()
+        self.validate_white_spaces()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
