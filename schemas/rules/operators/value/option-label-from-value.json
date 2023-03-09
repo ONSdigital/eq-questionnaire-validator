@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://eq.ons.gov.uk/rules/operators/value/option-label-from-value.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/rules/operators/value/option-label-from-value.json",
   "description": "Get the label of an answer option based on its value. Takes two arguments, the option value and the answer id",
   "type": "object",
   "properties": {
@@ -8,13 +8,13 @@
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
-      "items": [
+      "prefixItems": [
         {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+          "$ref": "../../../common_definitions.json#/non_empty_string",
           "description": "The value of the option"
         },
         {
-          "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier",
+          "$ref": "../../../common_definitions.json#/identifier",
           "description": "The answer id to which the option belongs to"
         }
       ]

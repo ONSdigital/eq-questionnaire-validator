@@ -1,18 +1,21 @@
-const Ajv = require("ajv");
-const fs = require("fs");
-const glob = require("glob");
-const express = require("express");
-const app = express();
-const debug = require("debug")("ajv-schema-validator");
+import Ajv2020 from "ajv/dist/2020.js";
+import fs from "fs";
+import glob from "glob";
+import express from "express";
+import Debug from "debug";
 
-const ajv = new Ajv({
-  meta: false,
-  extendRefs: true,
-  unknownFormats: "ignore",
+const debug = Debug("ajv-schema-validator");
+
+const app = express();
+
+const ajValidator = new Ajv2020({
   allErrors: false,
-  schemaId: "auto",
+  strict: true,
+  strictRequired: false, // this has been included to avoid required implementation inside anyOf/oneOf
+  strictTypes: false, // this has been included to avoid missing types as strict mode is true
+  strictSchema: false, // this has been included to avoid unknown keyword errors ad strict mode is true
+  strictTuples: false, // this has been included due to https://github.com/ajv-validator/ajv/issues/1417
 });
-ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-07.json"));
 
 app.use(
   express.json({
@@ -24,17 +27,22 @@ app.listen(5002, () => {
   debug("Server running on port 5002");
 });
 
+// Export our app for testing purposes
+export default app;
+
 app.get("/status", (req, res, next) => {
   return res.sendStatus(200);
 });
 
 glob("schemas/**/*.json", (er, schemas) => {
   schemas.forEach((currentSchema) => {
-    const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
-    ajv.addSchema(JSON.parse(data));
+    if (!(currentSchema.valueOf() === "schemas/questionnaire_v1.json")) {
+      const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
+      ajValidator.addSchema(JSON.parse(data)).compile(true);
+    }
   });
-
-  const validate = ajv.compile(require("../schemas/questionnaire_v1.json"));
+  const baseSchema = fs.readFileSync("schemas/questionnaire_v1.json");
+  const validate = ajValidator.compile(JSON.parse(baseSchema));
 
   app.post("/validate", (req, res, next) => {
     debug("Validating questionnaire: " + req.body.title);
@@ -43,7 +51,7 @@ glob("schemas/**/*.json", (er, schemas) => {
       return res.json({
         success: false,
         errors: validate.errors.sort((errorA, errorB) => {
-          return errorA.dataPath.length - errorB.dataPath.length;
+          return errorA.instancePath.length - errorB.instancePath.length;
         }),
       });
     }

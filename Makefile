@@ -18,8 +18,13 @@ lint: lint-python
 lint-python:
 	poetry run ./scripts/run_lint_python.sh
 
-test:
+test-unit:
 	poetry run ./scripts/run_tests_unit.sh
+
+test-yarn:
+	yarn test
+
+test: test-unit test-yarn
 
 format: format-python
 	yarn format
