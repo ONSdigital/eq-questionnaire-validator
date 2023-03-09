@@ -408,8 +408,9 @@ def test_invalid_whitespaces_in_schema():
 
     expected_error_messages = [
         {
-            "message": error_messages.INVALID_WHITESPACE_FOUND.format(text=text),
+            "message": error_messages.INVALID_WHITESPACE_FOUND,
             "pointer": pointer,
+            "text": text
         }
         for text, pointer in [
             (

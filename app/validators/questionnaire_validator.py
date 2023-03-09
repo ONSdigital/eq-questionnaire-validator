@@ -121,6 +121,7 @@ class QuestionnaireValidator(Validator):
                     text.startswith(" ") or text.endswith(" ") or "  " in text
                 ):
                     self.add_error(
-                        error_messages.INVALID_WHITESPACE_FOUND.format(text=text),
+                        error_messages.INVALID_WHITESPACE_FOUND,
                         pointer=translatable_item.pointer,
+                        text=text
                     )
