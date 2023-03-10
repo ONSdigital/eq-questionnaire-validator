@@ -410,7 +410,7 @@ def test_invalid_whitespaces_in_schema():
         {
             "message": error_messages.INVALID_WHITESPACE_FOUND,
             "pointer": pointer,
-            "text": text
+            "text": text,
         }
         for text, pointer in [
             (

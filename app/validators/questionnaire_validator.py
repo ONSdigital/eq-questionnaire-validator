@@ -126,9 +126,9 @@ class QuestionnaireValidator(Validator):
                     self.add_error(
                         error_messages.INVALID_WHITESPACE_FOUND,
                         pointer=translatable_item.pointer,
-                        text=text
+                        text=text,
                     )
-                    
+
     def validate_introduction_block(self):
         blocks = self.questionnaire_schema.get_blocks()
         has_introduction_blocks = any(
