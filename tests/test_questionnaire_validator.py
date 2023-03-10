@@ -401,6 +401,38 @@ def test_invalid_quotes_in_schema():
     assert validator.errors == expected_error_messages
 
 
+def test_invalid_whitespaces_in_schema():
+    filename = "schemas/invalid/test_invalid_whitespaces_in_schema_text.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_messages = [
+        {
+            "message": error_messages.INVALID_WHITESPACE_FOUND,
+            "pointer": pointer,
+            "text": text,
+        }
+        for text, pointer in [
+            (
+                "What is this persons  age?",
+                "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+            ),
+            (
+                " The persons age",
+                "/sections/0/groups/0/blocks/0/question/description/0",
+            ),
+            ("Your age? ", "/sections/0/groups/0/blocks/0/question/answers/0/label"),
+            (
+                " Guidance Line 1",
+                "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+            ),
+        ]
+    ]
+    validator.validate_white_spaces()
+
+    assert validator.errors == expected_error_messages
+
+
 def test_invalid_answer_type_for_question_summary_concatenation():
     filename = "schemas/invalid/test_invalid_answer_type_for_question_summary.json"
 
