@@ -1,23 +1,23 @@
 {
-  "$id": "https://eq.ons.gov.uk/answers/number.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/answers/number.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "answer": {
     "type": "object",
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/identifier"
+        "$ref": "../common_definitions.json#/identifier"
       },
       "q_code": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/q_code"
+        "$ref": "../common_definitions.json#/q_code"
       },
       "label": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+        "$ref": "../common_definitions.json#/non_empty_string"
       },
       "guidance": {
-        "$ref": "https://eq.ons.gov.uk/answers/definitions.json#/answer_guidance"
+        "$ref": "definitions.json#/answer_guidance"
       },
       "description": {
-        "$ref": "https://eq.ons.gov.uk/string_interpolation/definitions.json#/string_with_placeholders"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "type": {
         "type": "string",
@@ -51,28 +51,28 @@
         "properties": {
           "messages": {
             "MANDATORY_NUMBER": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "NUMBER_TOO_SMALL": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "NUMBER_TOO_LARGE": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "NUMBER_TOO_SMALL_EXCLUSIVE": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "NUMBER_TOO_LARGE_EXCLUSIVE": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "INVALID_NUMBER": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "INVALID_INTEGER": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             },
             "INVALID_DECIMAL": {
-              "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string"
+              "$ref": "../common_definitions.json#/non_empty_string"
             }
           }
         }

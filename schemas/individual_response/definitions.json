@@ -1,5 +1,5 @@
 {
-  "$id": "https://eq.ons.gov.uk/individual_response/definitions.json",
+  "$id": "/individual_response/definitions.json",
   "individual_response": {
     "type": "object",
     "properties": {
@@ -8,15 +8,16 @@
         "type": "boolean"
       },
       "for_list": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "$ref": "../common_definitions.json#/non_empty_string",
         "description": "The list from which an individual response can be requested"
       },
       "individual_section_id": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+        "$ref": "../common_definitions.json#/non_empty_string",
         "description": "The id of the individual section for which an individual response can be requested"
       }
     },
     "additionalProperties": false,
     "required": ["for_list", "individual_section_id"]
-  }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
 }

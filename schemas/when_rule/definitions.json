@@ -1,6 +1,6 @@
 {
-  "$id": "https://eq.ons.gov.uk/when_rule/definitions.json",
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/when_rule/definitions.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "when": {
     "type": "array",
     "items": {
@@ -25,11 +25,11 @@
     "minItems": 1
   },
   "answer_identifier": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+    "$ref": "../common_definitions.json#/non_empty_string",
     "description": "The id of an answer from which to obtain the value"
   },
   "location_identifier": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+    "$ref": "../common_definitions.json#/non_empty_string",
     "description": "The id of a location attribute from which to obtain the value"
   },
   "comparison_value": {
@@ -47,7 +47,7 @@
     "additionalProperties": false,
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/answer_identifier"
+        "$ref": "definitions.json#/answer_identifier"
       },
       "source": {
         "type": "string",
@@ -62,7 +62,7 @@
     "additionalProperties": false,
     "properties": {
       "id": {
-        "$ref": "https://eq.ons.gov.uk/when_rule/definitions.json#/location_identifier"
+        "$ref": "definitions.json#/location_identifier"
       },
       "source": {
         "type": "string",
@@ -78,13 +78,13 @@
         "$ref": "#/answer_identifier"
       },
       "meta": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/metadata_identifier"
+        "$ref": "../common_definitions.json#/metadata_identifier"
       },
       "value": {
-        "pattern": "^(now|\\d{4}\\-(0?[1-9]|1[012])(|\\-(0?[1-9]|[12][0-9]|3[01])))$"
+        "pattern": "^(now|\\d{4}-(0?[1-9]|1[012])(|-(0?[1-9]|[12][0-9]|3[01])))$"
       },
       "offset_by": {
-        "$ref": "https://eq.ons.gov.uk/common_definitions.json#/offset_by_yyyy_mm_dd"
+        "$ref": "../common_definitions.json#/offset_by_yyyy_mm_dd"
       }
     },
     "additionalProperties": false,
@@ -101,11 +101,11 @@
     ]
   },
   "list": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+    "$ref": "../common_definitions.json#/non_empty_string",
     "description": "The name of a list"
   },
   "id_selector": {
-    "$ref": "https://eq.ons.gov.uk/common_definitions.json#/non_empty_string",
+    "$ref": "../common_definitions.json#/non_empty_string",
     "description": "The attribute to use from the list as the identifier"
   }
 }
