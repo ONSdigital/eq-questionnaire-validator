@@ -4,14 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "Other input fields",
+  "title": "Test Section Enabled",
   "theme": "default",
-  "description": "A questionnaire to demo checkbox field Other input.",
-  "messages": {
-    "NUMBER_TOO_LARGE": "Number is too large",
-    "NUMBER_TOO_SMALL": "Number cannot be less than zero",
-    "INVALID_NUMBER": "Please enter an integer"
-  },
+  "description": "A questionnaire to demo new section enabled key usage",
   "metadata": [
     {
       "name": "user_id",
@@ -28,25 +23,22 @@
   ],
   "questionnaire_flow": {
     "type": "Hub",
-    "options": {
-      "required_completed_sections": ["default-section"]
-    }
+    "options": {}
   },
   "sections": [
     {
-      "id": "default-section",
-      "title": "default section",
+      "id": "section-1",
+      "title": "Section 1",
       "groups": [
         {
           "blocks": [
             {
+              "id": "section-1-block",
               "type": "Question",
-              "id": "mandatory-checkbox",
               "question": {
                 "answers": [
                   {
-                    "id": "mandatory-checkbox-answer",
-                    "label": "Label",
+                    "id": "section-1-answer",
                     "mandatory": true,
                     "options": [
                       {
@@ -58,71 +50,53 @@
                         "value": "No"
                       }
                     ],
-                    "type": "Checkbox",
-                    "validation": {
-                      "messages": {}
-                    }
+                    "type": "Checkbox"
                   }
                 ],
-                "id": "mandatory-checkbox-question",
-                "title": "Should the second section be enabled?",
+                "description": ["Choose ‘Yes’ to enable section 2."],
+                "id": "section-1-question",
+                "title": "Do you want to enable section 2?",
                 "type": "General"
               }
             }
           ],
-          "id": "checkboxes"
+          "id": "section-1-group",
+          "title": "Section 1"
         }
       ]
     },
     {
-      "title": "another section",
-      "id": "optionally-enabled-section",
-      "enabled": [
-        {
-          "when": [
+      "id": "section-2",
+      "title": "Section 2",
+      "enabled": {
+        "when": {
+          "in": [
+            "Yes",
             {
-              "id": "mandatory-checkbox-answer",
-              "condition": "contains any",
-              "values": ["Yes"]
+              "source": "answers",
+              "identifier": "section-1-answer"
             }
           ]
         }
-      ],
+      },
       "groups": [
         {
           "blocks": [
             {
-              "type": "Question",
-              "id": "non-mandatory-checkbox",
-              "question": {
-                "answers": [
+              "id": "section-2-interstitial",
+              "content": {
+                "title": "Section 2 interstitial",
+                "contents": [
                   {
-                    "id": "non-mandatory-checkbox-answer",
-                    "label": "Label",
-                    "mandatory": true,
-                    "options": [
-                      {
-                        "label": "Yes",
-                        "value": "Yes"
-                      },
-                      {
-                        "label": "No",
-                        "value": "No"
-                      }
-                    ],
-                    "type": "Checkbox",
-                    "validation": {
-                      "messages": {}
-                    }
+                    "description": "You should be only able to see this interstitial page if you chose ‘Yes’ in the previous question."
                   }
-                ],
-                "id": "non-mandatory-checkbox-question",
-                "title": "Was this section shown?",
-                "type": "General"
-              }
+                ]
+              },
+              "type": "Interstitial"
             }
           ],
-          "id": "second-section-checkboxes"
+          "id": "section-2-group",
+          "title": "Section 2"
         }
       ]
     }

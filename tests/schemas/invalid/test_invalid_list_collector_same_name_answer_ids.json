@@ -140,39 +140,45 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "section": "End",
-                    "when": [
+                  "section": "End",
+                  "when": {
+                    "and": [
                       {
-                        "condition": "equals",
-                        "id": "anyone-usually-live-at-answer",
-                        "value": "No"
+                        "==": [
+                          {
+                            "source": "answers",
+                            "identifier": "anyone-usually-live-at-answer"
+                          },
+                          "No"
+                        ]
                       },
                       {
-                        "condition": "less than",
-                        "list": "people",
-                        "value": 1
+                        "==": [
+                          {
+                            "identifier": "you-live-here",
+                            "source": "answers"
+                          },
+                          "No"
+                        ]
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "list-collector"
-                  }
+                  "block": "list-collector"
                 }
               ],
-              "skip_conditions": [
-                {
-                  "when": [
+              "skip_conditions": {
+                "when": {
+                  "==": [
                     {
-                      "condition": "equals",
-                      "id": "you-live-here",
-                      "value": "Yes"
-                    }
+                      "identifier": "you-live-here",
+                      "source": "answers"
+                    },
+                    "No"
                   ]
                 }
-              ],
+              },
               "type": "Question"
             },
             {

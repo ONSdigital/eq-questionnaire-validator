@@ -55,25 +55,23 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "route-comparison-3",
-                    "when": [
+                  "block": "route-comparison-3",
+                  "when": {
+                    "==": [
                       {
-                        "list": "people",
-                        "id_selector": "primary_person",
-                        "condition": "equals",
-                        "comparison": {
-                          "id": "from_list_item_id",
-                          "source": "location"
-                        }
+                        "source": "list",
+                        "identifier": "people",
+                        "id_selector": "primary_person"
+                      },
+                      {
+                        "source": "location",
+                        "identifier": "from_list_item_id"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "route-comparison-3"
-                  }
+                  "block": "route-comparison-3"
                 }
               ]
             },

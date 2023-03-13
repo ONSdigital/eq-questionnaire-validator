@@ -51,17 +51,17 @@
                   }
                 ]
               },
-              "skip_conditions": [
-                {
-                  "when": [
+              "skip_conditions": {
+                "when": {
+                  "==": [
                     {
-                      "list": "non-existent-list-name",
-                      "condition": "equals",
-                      "value": 1
-                    }
+                      "source": "list",
+                      "identifier": "non-existent-list-name"
+                    },
+                    1
                   ]
                 }
-              ]
+              }
             }
           ],
           "id": "checkboxes"

@@ -73,13 +73,15 @@
                       }
                     ]
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "greater than",
-                      "value": "16"
-                    }
-                  ]
+                  "when": {
+                    ">": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "16"
+                    ]
+                  }
                 },
                 {
                   "question": {
@@ -95,13 +97,15 @@
                       }
                     ]
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "less than or equal to",
-                      "value": "16"
-                    }
-                  ]
+                  "when": {
+                    "<=": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "16"
+                    ]
+                  }
                 }
               ]
             },
