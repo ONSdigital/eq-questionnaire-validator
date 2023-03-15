@@ -5,9 +5,9 @@
   "data_version": "0.0.3",
   "survey_id": "0",
   "session_timeout_in_seconds": 3,
-  "title": "Test Question Variants",
+  "title": "Test Invalid Whitespaces",
   "theme": "default",
-  "description": "A questionnaire to test default values in question variants",
+  "description": "A questionnaire to test invalid whitespaces",
   "metadata": [
     {
       "name": "user_id",
@@ -45,10 +45,21 @@
                 "id": "question-1",
                 "type": "General",
                 "title": "What is your age?",
+                "description": " The persons age",
                 "answers": [
                   {
+                    "guidance": {
+                      "contents": [
+                        {
+                          "description": "Guidance Description",
+                          "list": [" Guidance Line 1", "Guidance Line 2"]
+                        }
+                      ],
+                      "hide_guidance": "Hide Guidance",
+                      "show_guidance": "Show Guidance"
+                    },
                     "id": "answer-1",
-                    "label": "Your age?",
+                    "label": "Your age? ",
                     "mandatory": false,
                     "type": "Number"
                   }
@@ -63,26 +74,23 @@
                   "question": {
                     "id": "question-2",
                     "type": "General",
-                    "title": "What is your age?",
+                    "title": "What is this persons  age?",
                     "answers": [
                       {
-                        "default": 0,
                         "id": "answer-2",
-                        "label": "Your age?",
+                        "label": "The persons age?",
                         "mandatory": false,
                         "type": "Number"
                       }
                     ]
                   },
-                  "when": {
-                    ">": [
-                      {
-                        "source": "answers",
-                        "identifier": "answer-1"
-                      },
-                      16
-                    ]
-                  }
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "greater than",
+                      "value": "16"
+                    }
+                  ]
                 },
                 {
                   "question": {
@@ -91,7 +99,6 @@
                     "title": "What is your age?",
                     "answers": [
                       {
-                        "default": 1,
                         "id": "answer-2",
                         "label": "Your age?",
                         "mandatory": false,
@@ -99,15 +106,13 @@
                       }
                     ]
                   },
-                  "when": {
-                    "<=": [
-                      {
-                        "source": "answers",
-                        "identifier": "answer-1"
-                      },
-                      16
-                    ]
-                  }
+                  "when": [
+                    {
+                      "id": "answer-1",
+                      "condition": "less than or equal to",
+                      "value": "16"
+                    }
+                  ]
                 }
               ]
             }

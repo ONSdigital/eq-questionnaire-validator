@@ -29,6 +29,7 @@ class QuestionnaireValidator(Validator):
 
         self.validate_duplicates()
         self.validate_smart_quotes()
+        self.validate_white_spaces()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
@@ -106,6 +107,26 @@ class QuestionnaireValidator(Validator):
                     self.add_error(
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
+                    )
+
+    def validate_white_spaces(self):
+        schema_object = SurveySchema(self.schema_element)
+
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for text in values_to_check:
+                if text and (
+                    text.startswith(" ") or text.endswith(" ") or "  " in text
+                ):
+                    self.add_error(
+                        error_messages.INVALID_WHITESPACE_FOUND,
+                        pointer=translatable_item.pointer,
+                        text=text,
                     )
 
     def validate_introduction_block(self):

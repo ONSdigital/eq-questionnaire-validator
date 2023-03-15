@@ -79,21 +79,19 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "section": "End",
-                    "when": [
+                  "section": "End",
+                  "when": {
+                    "==": [
                       {
-                        "id": "anyone-else",
-                        "condition": "equals",
-                        "value": "No"
-                      }
+                        "identifier": "anyone-else",
+                        "source": "answers"
+                      },
+                      "No"
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ],
               "add_block": {

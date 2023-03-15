@@ -97,17 +97,19 @@
                       "title": "A title",
                       "type": "General"
                     },
-                    "when": [
-                      {
-                        "comparison": {
-                          "id": "list_item_id",
-                          "source": "location"
+                    "when": {
+                      "==": [
+                        {
+                          "source": "location",
+                          "identifier": "list_item_id"
                         },
-                        "condition": "equals",
-                        "id_selector": "primary_person",
-                        "list": "household"
-                      }
-                    ]
+                        {
+                          "source": "list",
+                          "identifier": "household",
+                          "selector": "primary_person"
+                        }
+                      ]
+                    }
                   },
                   {
                     "question": {
@@ -160,17 +162,19 @@
                       },
                       "type": "General"
                     },
-                    "when": [
-                      {
-                        "comparison": {
-                          "id": "list_item_id",
-                          "source": "location"
+                    "when": {
+                      "!=": [
+                        {
+                          "source": "location",
+                          "identifier": "list_item_id"
                         },
-                        "condition": "not equals",
-                        "id_selector": "primary_person",
-                        "list": "household"
-                      }
-                    ]
+                        {
+                          "source": "list",
+                          "identifier": "household",
+                          "selector": "primary_person"
+                        }
+                      ]
+                    }
                   }
                 ],
                 "type": "ListEditQuestion"

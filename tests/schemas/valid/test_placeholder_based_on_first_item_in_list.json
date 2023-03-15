@@ -221,17 +221,19 @@
                     ],
                     "title": "List Status"
                   },
-                  "when": [
-                    {
-                      "list": "people",
-                      "id_selector": "first",
-                      "condition": "equals",
-                      "comparison": {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "list",
+                        "identifier": "people",
+                        "selector": "first"
+                      },
+                      {
                         "source": "location",
-                        "id": "list_item_id"
+                        "identifier": "list_item_id"
                       }
-                    }
-                  ]
+                    ]
+                  }
                 },
                 {
                   "content": {
@@ -242,17 +244,19 @@
                     ],
                     "title": "List Status"
                   },
-                  "when": [
-                    {
-                      "list": "people",
-                      "id_selector": "first",
-                      "condition": "not equals",
-                      "comparison": {
+                  "when": {
+                    "!=": [
+                      {
+                        "source": "list",
+                        "identifier": "people",
+                        "selector": "first"
+                      },
+                      {
                         "source": "location",
-                        "id": "list_item_id"
+                        "identifier": "list_item_id"
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ],
               "id": "list-status",
@@ -302,17 +306,19 @@
                     "title": "What is your second favourite drink?",
                     "type": "General"
                   },
-                  "when": [
-                    {
-                      "list": "people",
-                      "id_selector": "first",
-                      "condition": "equals",
-                      "comparison": {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "list",
+                        "identifier": "people",
+                        "selector": "first"
+                      },
+                      {
                         "source": "location",
-                        "id": "list_item_id"
+                        "identifier": "list_item_id"
                       }
-                    }
-                  ]
+                    ]
+                  }
                 },
                 {
                   "question": {
@@ -353,17 +359,19 @@
                     "title": "What is your second favourite drink?",
                     "type": "General"
                   },
-                  "when": [
-                    {
-                      "list": "people",
-                      "id_selector": "first",
-                      "condition": "not equals",
-                      "comparison": {
+                  "when": {
+                    "!=": [
+                      {
+                        "source": "list",
+                        "identifier": "people",
+                        "selector": "first"
+                      },
+                      {
                         "source": "location",
-                        "id": "list_item_id"
+                        "identifier": "list_item_id"
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ],
               "type": "Question"

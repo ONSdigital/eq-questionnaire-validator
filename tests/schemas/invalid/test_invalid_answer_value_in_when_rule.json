@@ -71,98 +71,102 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "country-interstitial-one",
-                    "when": [
+                  "block": "country-interstitial-one",
+                  "when": {
+                    "in": [
+                      "France",
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains",
-                        "value": "France"
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "any-in": [
+                      ["France", "Italy"],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains any",
-                        "values": ["France", "Italy"]
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "any-in": [
+                      ["France", "Austria"],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains any",
-                        "values": ["France", "Austria"]
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-one",
-                    "when": [
+                  "block": "country-interstitial-one",
+                  "when": {
+                    "in": [
+                      7,
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains",
-                        "value": 7
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ]
             },
             {
               "id": "country-interstitial-any",
               "type": "Interstitial",
-              "skip_conditions": [
-                {
-                  "when": [
+              "skip_conditions": {
+                "when": {
+                  "in": [
+                    "France",
                     {
-                      "id": "country-checkbox-answer",
-                      "condition": "contains",
-                      "value": "French"
+                      "source": "answers",
+                      "identifier": "country-checkbox-answer"
                     }
                   ]
                 }
-              ],
+              },
               "content_variants": [
                 {
                   "content": {
                     "title": "This will be shown only if you chose Italy"
                   },
-                  "when": [
-                    {
-                      "id": "country-checkbox-answer",
-                      "condition": "contains",
-                      "value": "Italy"
-                    }
-                  ]
+                  "when": {
+                    "in": [
+                      "Italy",
+                      {
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
+                      }
+                    ]
+                  }
                 },
                 {
                   "content": {
                     "title": "This will be shown only if you don’t chose Italy."
                   },
-                  "when": [
-                    {
-                      "id": "country-checkbox-answer",
-                      "condition": "not contains",
-                      "value": "Italian"
+                  "when": {
+                    "not": {
+                      "in": [
+                        "Italian",
+                        {
+                          "source": "answers",
+                          "identifier": "country-checkbox-answer"
+                        }
+                      ]
                     }
-                  ]
+                  }
                 }
               ]
             },

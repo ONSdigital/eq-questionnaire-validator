@@ -71,33 +71,31 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "country-interstitial-all",
-                    "when": [
+                  "block": "country-interstitial-all",
+                  "when": {
+                    "all-in": [
+                      ["India", "Azerbaijan", "Liechtenstein"],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains all",
-                        "values": ["India", "Azerbaijan", "Liechtenstein"]
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "all-in": [
+                      ["India", "Azerbaijan"],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains any",
-                        "values": ["India", "Azerbaijan"]
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ]
             },
@@ -141,38 +139,40 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "country-interstitial-all",
-                    "when": [
+                  "block": "country-interstitial-all",
+                  "when": {
+                    "in": [
                       {
-                        "id": "conditional-routing-answer",
-                        "condition": "equals any",
-                        "values": ["Yes", "Sometimes"]
-                      }
+                        "source": "answers",
+                        "identifier": "conditional-routing-answer"
+                      },
+                      ["Yes", "Sometimes"]
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "not": [
                       {
-                        "id": "conditional-routing-answer",
-                        "condition": "not equals any",
-                        "values": [
-                          "Yes",
-                          "Sometimes",
-                          "I don’t like coffee",
-                          "No, I don’t drink any hot drinks"
+                        "in": [
+                          {
+                            "source": "answers",
+                            "identifier": "conditional-routing-answer"
+                          },
+                          [
+                            "Yes",
+                            "Sometimes",
+                            "I don’t like coffee",
+                            "No, I don’t drink any hot drinks"
+                          ]
                         ]
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ]
             },
