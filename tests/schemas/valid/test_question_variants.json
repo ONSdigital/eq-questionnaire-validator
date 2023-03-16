@@ -90,13 +90,15 @@
                       }
                     ]
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "equals",
-                      "value": "Yes"
-                    }
-                  ]
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "Yes"
+                    ]
+                  }
                 },
                 {
                   "question": {
@@ -121,13 +123,15 @@
                       }
                     ]
                   },
-                  "when": [
-                    {
-                      "id": "answer-1",
-                      "condition": "equals",
-                      "value": "No"
-                    }
-                  ]
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "answer-1"
+                      },
+                      "No"
+                    ]
+                  }
                 }
               ]
             }

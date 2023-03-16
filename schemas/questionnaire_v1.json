@@ -392,14 +392,7 @@
             }
           },
           "enabled": {
-            "oneOf": [
-              {
-                "$ref": "common_definitions.json#/original_section_enabled"
-              },
-              {
-                "$ref": "common_definitions.json#/new_section_enabled"
-              }
-            ]
+            "$ref": "common_definitions.json#/section_enabled"
           }
         },
         "required": ["id", "groups"]

@@ -95,60 +95,58 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "country-interstitial-all",
-                    "when": [
+                  "block": "country-interstitial-all",
+                  "when": {
+                    "in": [
+                      "Malta",
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains all",
-                        "value": "Malta"
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "any-in": [
+                      [],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains any",
-                        "values": []
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "any-in": [
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "contains any",
-                        "comparison": {
-                          "id": "country-checkbox-answer2",
-                          "source": "answers"
-                        }
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer2"
+                      },
+                      {
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "any-in": [
+                      ["India"],
                       {
-                        "id": "country-checkbox-answer",
-                        "condition": "equals any",
-                        "values": ["India"]
+                        "source": "answers",
+                        "identifier": "country-checkbox-answer"
                       }
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ]
             },
@@ -192,33 +190,31 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "country-interstitial-all",
-                    "when": [
+                  "block": "country-interstitial-all",
+                  "when": {
+                    "==": [
                       {
-                        "id": "conditional-routing-answer",
-                        "condition": "equals any",
-                        "value": "Yes"
-                      }
+                        "source": "answers",
+                        "identifier": "conditional-routing-answer"
+                      },
+                      "Yes"
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "country-interstitial-any",
-                    "when": [
+                  "block": "country-interstitial-any",
+                  "when": {
+                    "!=": [
                       {
-                        "id": "conditional-routing-answer",
-                        "condition": "not equals any",
-                        "value": "Sometimes"
-                      }
+                        "source": "answers",
+                        "identifier": "conditional-routing-answer"
+                      },
+                      "Sometimes"
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "section": "End"
-                  }
+                  "section": "End"
                 }
               ]
             },

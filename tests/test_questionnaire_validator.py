@@ -9,7 +9,6 @@ from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
-from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.schema_validator import SchemaValidator
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import find_all_json_files
@@ -44,56 +43,6 @@ def test_param_valid_schemas(valid_schema_filename):
 
         assert not validator.errors
         assert not schema_validator.errors
-
-
-def test_answer_comparisons_invalid_comparison_id():
-    """Ensures that when answer comparison is used, the comparison_id is a valid answer id"""
-    filename = "schemas/invalid/test_invalid_answer_comparison_id.json"
-
-    expected_error_messages = [
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-2",
-            "key": "comparison.id",
-            "referenced_id": "route-comparison-2",
-        },
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-3",
-            "key": "comparison.id",
-            "referenced_id": "equals-answers",
-        },
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-4",
-            "key": "comparison.id",
-            "referenced_id": "less-than-answers",
-        },
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-5",
-            "key": "comparison.id",
-            "referenced_id": "less-than-answers",
-        },
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-6",
-            "key": "comparison.id",
-            "referenced_id": "greater-than-answers",
-        },
-        {
-            "message": WhenRuleValidator.NON_EXISTENT_WHEN_KEY,
-            "answer_id": "bad-answer-id-7",
-            "key": "id",
-            "referenced_id": "greater-than-answers",
-        },
-    ]
-
-    json_to_validate = _open_and_load_schema_file(filename)
-    questionnaire_validator = QuestionnaireValidator(json_to_validate)
-    questionnaire_validator.validate()
-
-    assert expected_error_messages == questionnaire_validator.errors
 
 
 def test_invalid_mutually_exclusive_conditions():
@@ -297,45 +246,6 @@ def test_inconsistent_types_in_variants():
     assert expected_errors == validator.errors
 
 
-def test_invalid_when_condition_property():
-    filename = "schemas/invalid/test_invalid_when_condition_property.json"
-
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": WhenRuleValidator.NON_CHECKBOX_COMPARISON_ID,
-            "comparison_id": "country-checkbox-answer2",
-            "condition": "contains any",
-        },
-        {
-            "message": WhenRuleValidator.CHECKBOX_MUST_USE_CORRECT_CONDITION,
-            "condition": "equals any",
-            "answer_id": "country-checkbox-answer",
-        },
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
-def test_invalid_list_name_in_when_rule():
-    filename = "schemas/invalid/test_invalid_when_condition_list_property.json"
-    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
-
-    expected_errors = [
-        {
-            "message": WhenRuleValidator.LIST_REFERENCE_INVALID,
-            "list_name": "non-existent-list-name",
-        }
-    ]
-
-    validator.validate()
-
-    assert validator.errors == expected_errors
-
-
 def test_non_existent_list_name_in_relationship():
     filename = "schemas/invalid/test_invalid_relationship_list_doesnt_exist.json"
 
@@ -397,6 +307,38 @@ def test_invalid_quotes_in_schema():
         ]
     ]
     validator.validate_smart_quotes()
+
+    assert validator.errors == expected_error_messages
+
+
+def test_invalid_whitespaces_in_schema():
+    filename = "schemas/invalid/test_invalid_whitespaces_in_schema_text.json"
+
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_messages = [
+        {
+            "message": error_messages.INVALID_WHITESPACE_FOUND,
+            "pointer": pointer,
+            "text": text,
+        }
+        for text, pointer in [
+            (
+                "What is this persons  age?",
+                "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+            ),
+            (
+                " The persons age",
+                "/sections/0/groups/0/blocks/0/question/description/0",
+            ),
+            ("Your age? ", "/sections/0/groups/0/blocks/0/question/answers/0/label"),
+            (
+                " Guidance Line 1",
+                "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+            ),
+        ]
+    ]
+    validator.validate_white_spaces()
 
     assert validator.errors == expected_error_messages
 

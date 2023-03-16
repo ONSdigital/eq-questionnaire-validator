@@ -29,7 +29,9 @@
     {
       "id": "section",
       "title": "People",
-      "summary": { "show_on_completion": true },
+      "summary": {
+        "show_on_completion": true
+      },
       "groups": [
         {
           "id": "group",
@@ -109,21 +111,19 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "section": "End",
-                    "when": [
+                  "section": "End",
+                  "when": {
+                    "==": [
                       {
-                        "id": "anyone-usually-live-at-answer",
-                        "condition": "equals",
-                        "value": "No"
-                      }
+                        "source": "answers",
+                        "identifier": "anyone-usually-live-at-answer"
+                      },
+                      "No"
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "anyone-else-live-at"
-                  }
+                  "block": "anyone-else-live-at"
                 }
               ]
             },

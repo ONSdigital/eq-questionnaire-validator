@@ -93,21 +93,19 @@
               },
               "routing_rules": [
                 {
-                  "goto": {
-                    "block": "confirmation-checkbox",
-                    "when": [
+                  "block": "confirmation-checkbox",
+                  "when": {
+                    "==": [
                       {
-                        "id": "any-companies-or-branches-answer",
-                        "condition": "equals",
-                        "value": "No"
-                      }
+                        "source": "answers",
+                        "identifier": "any-companies-or-branches-answer"
+                      },
+                      "No"
                     ]
                   }
                 },
                 {
-                  "goto": {
-                    "block": "any-other-companies-or-branches"
-                  }
+                  "block": "any-other-companies-or-branches"
                 }
               ]
             },

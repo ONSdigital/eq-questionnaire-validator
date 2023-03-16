@@ -5,9 +5,7 @@ from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.questions import get_question_validator
-from app.validators.routing.new_routing_validator import NewRoutingValidator
 from app.validators.routing.routing_validator import RoutingValidator
-from app.validators.routing.when_rule_validator import WhenRuleValidator
 from app.validators.rules.rule_validator import RulesValidator
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
@@ -47,34 +45,20 @@ class SectionValidator(Validator):
 
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
+        if not section_enabled:
+            return
 
-        if isinstance(section_enabled, list):
-            for enabled in section_enabled:
-                when = enabled["when"]
-                when_validator = WhenRuleValidator(
-                    when, self.section["id"], self.questionnaire_schema
-                )
-                self.errors += when_validator.validate()
-
-        elif isinstance(section_enabled, dict):
-            when = section_enabled["when"]
-            when_validator = RulesValidator(
-                when, self.section["id"], self.questionnaire_schema
-            )
-            self.errors += when_validator.validate()
+        when = section_enabled["when"]
+        when_validator = RulesValidator(
+            when, self.section["id"], self.questionnaire_schema
+        )
+        self.errors += when_validator.validate()
 
     def validate_list_exists(self, list_name):
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
-    def validate_skip_conditions(self, skip_conditions, origin_id):
-        for skip_condition in skip_conditions:
-            when_validator = WhenRuleValidator(
-                skip_condition["when"], origin_id, self.questionnaire_schema
-            )
-            self.errors += when_validator.validate()
-
-    def validate_new_skip_conditions(self, skip_condition, origin_id):
+    def validate_skip_conditions(self, skip_condition, origin_id):
         when_validator = RulesValidator(
             skip_condition["when"], origin_id, self.questionnaire_schema
         )
@@ -110,27 +94,15 @@ class SectionValidator(Validator):
 
     def validate_routing(self, schema_element, group):
         if "routing_rules" in schema_element:
-            if any("goto" in rule for rule in schema_element["routing_rules"]):
-                routing_validator = RoutingValidator(
-                    schema_element, group, self.questionnaire_schema
-                )
-            else:
-                routing_validator = NewRoutingValidator(
-                    routing_rules=schema_element["routing_rules"],
-                    group=group,
-                    origin_id=schema_element["id"],
-                    questionnaire_schema=self.questionnaire_schema,
-                )
+            routing_validator = RoutingValidator(
+                routing_rules=schema_element["routing_rules"],
+                group=group,
+                origin_id=schema_element["id"],
+                questionnaire_schema=self.questionnaire_schema,
+            )
             self.errors += routing_validator.validate()
-        if "skip_conditions" in schema_element:
-            if isinstance(schema_element["skip_conditions"], list):
-                self.validate_skip_conditions(
-                    schema_element["skip_conditions"], schema_element["id"]
-                )
-            elif isinstance(schema_element["skip_conditions"], dict):
-                self.validate_new_skip_conditions(
-                    schema_element["skip_conditions"], schema_element["id"]
-                )
+        if skip_conditions := schema_element.get("skip_conditions"):
+            self.validate_skip_conditions(skip_conditions, schema_element["id"])
 
     def validate_question(self, block_or_variant):
         question = block_or_variant.get("question")
@@ -176,15 +148,7 @@ class SectionValidator(Validator):
             )
 
         for variant in all_variants:
-            when_clause = variant.get("when", [])
-
-            if isinstance(when_clause, list):
-                when_validator = WhenRuleValidator(
-                    when_clause, block["id"], self.questionnaire_schema
-                )
-                self.errors += when_validator.validate()
-
-            elif isinstance(when_clause, dict):
+            if when_clause := variant.get("when"):
                 when_validator = RulesValidator(
                     when_clause, self.section["id"], self.questionnaire_schema
                 )
