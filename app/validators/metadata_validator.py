@@ -36,8 +36,8 @@ class MetadataValidator(Validator):
             "business",
             "default",
             "northernireland",
-            "beis",
-            "beis-ni",
+            "dbt-dsit",
+            "dbt-dsit-ni",
             "orr",
         ]:
             required_metadata_names.extend(["user_id", "period_id", "ru_name"])
