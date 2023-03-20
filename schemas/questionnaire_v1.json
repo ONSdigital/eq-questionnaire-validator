@@ -52,10 +52,10 @@
         "default",
         "health",
         "northernireland",
-        "beis",
-        "beis-ni",
         "dbt",
         "dbt-ni",
+        "dbt-dsit",
+        "dbt-dsit-ni",
         "orr",
         "census",
         "census-nisra"
