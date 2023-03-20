@@ -38,6 +38,8 @@ class MetadataValidator(Validator):
             "northernireland",
             "beis",
             "beis-ni",
+            "dbt",
+            "dbt-ni",
             "orr",
         ]:
             required_metadata_names.extend(["user_id", "period_id", "ru_name"])
