@@ -36,6 +36,8 @@ class MetadataValidator(Validator):
             "business",
             "default",
             "northernireland",
+            "dbt",
+            "dbt-ni",
             "dbt-dsit",
             "dbt-dsit-ni",
             "orr",

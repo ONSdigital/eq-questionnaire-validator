@@ -52,6 +52,8 @@
         "default",
         "health",
         "northernireland",
+        "dbt",
+        "dbt-ni",
         "dbt-dsit",
         "dbt-dsit-ni",
         "orr",
