@@ -35,9 +35,75 @@
         "type": "string",
         "enum": ["General"]
       },
+      "dynamic_answers": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "object",
+            "source": ["answers"],
+            "identifier": {
+              "$ref": "../../common_definitions.json#/non_empty_string"
+            }
+          }
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "../../answers/address.json#/answer"
+              },
+              {
+                "$ref": "../../answers/checkbox.json#/answer"
+              },
+              {
+                "$ref": "../../answers/currency.json#/answer"
+              },
+              {
+                "$ref": "../../answers/date.json#/answer"
+              },
+              {
+                "$ref": "../../answers/month_year_date.json#/answer"
+              },
+              {
+                "$ref": "../../answers/year_date.json#/answer"
+              },
+              {
+                "$ref": "../../answers/duration.json#/answer"
+              },
+              {
+                "$ref": "../../answers/number.json#/answer"
+              },
+              {
+                "$ref": "../../answers/percentage.json#/answer"
+              },
+              {
+                "$ref": "../../answers/radio.json#/answer"
+              },
+              {
+                "$ref": "../../answers/text_area.json#/answer"
+              },
+              {
+                "$ref": "../../answers/text_field.json#/answer"
+              },
+              {
+                "$ref": "../../answers/unit.json#/answer"
+              },
+              {
+                "$ref": "../../answers/dropdown.json#/answer"
+              },
+              {
+                "$ref": "../../answers/relationship.json#/answer"
+              },
+              {
+                "$ref": "../../answers/mobile_number.json#/answer"
+              }
+            ]
+          }
+        }
+      },
       "answers": {
         "type": "array",
-        "minItems": 1,
         "items": {
           "oneOf": [
             {
