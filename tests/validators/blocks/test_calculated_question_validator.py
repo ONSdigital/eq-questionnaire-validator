@@ -1,6 +1,6 @@
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.questions import get_question_validator
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_id_in_answers_to_calculate():

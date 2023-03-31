@@ -1,6 +1,6 @@
 from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_actions():

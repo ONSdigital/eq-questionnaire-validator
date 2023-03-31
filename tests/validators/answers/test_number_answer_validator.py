@@ -1,7 +1,7 @@
 from app.validators.answers import NumberAnswerValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.conftest import get_mock_schema_with_data_version
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_minimum_value():
