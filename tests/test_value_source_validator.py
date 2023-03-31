@@ -20,6 +20,8 @@ def test_invalid_source_reference(value_source):
     )
     questionnaire_schema.list_names = ["list-1"]
     questionnaire_schema.calculated_summary_block_ids = ["block-1"]
+    questionnaire_schema.block_ids = ["block-2"]
+    questionnaire_schema.section_ids = ["section-1"]
     questionnaire_schema.answers_with_context = {
         "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
     }
@@ -34,6 +36,46 @@ def test_invalid_source_reference(value_source):
         value_source["source"]
     )
     assert error["identifier"] == value_source["identifier"]
+    assert error["json_path"] == "some.json.path"
+
+
+def test_invalid_progress_source_reference():
+    invalid_value_source = {
+        "source": "progress",
+        "selector": "block",
+        "identifier": "people",
+    }
+    questionnaire_schema = QuestionnaireSchema(
+        {"metadata": [{"name": "metatata-1", "type": "string"}]}
+    )
+    questionnaire_schema.block_ids = ["blocktest"]
+    questionnaire_schema.block_ids_without_sub_blocks = ["blocktest"]
+    questionnaire_schema.section_ids = ["sectiontest"]
+
+    questionnaire_schema.answers_with_context = {
+        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
+    }
+
+    mock_block = {
+        "id": "blocktest",
+        "skip_conditions": {"when": {"==": [invalid_value_source, 1]}},
+    }
+    mock_section = {"id": "sectiontest", "blocks": [mock_block]}
+
+    validator = ValueSourceValidator(
+        invalid_value_source,
+        "some.json.path",
+        questionnaire_schema,
+        parent_section=mock_section,
+        parent_block=mock_block,
+    )
+    validator.validate()
+
+    error = validator.errors[0]
+    assert error["message"] == ValueSourceValidator.SOURCE_REFERENCE_INVALID.format(
+        invalid_value_source["source"]
+    )
+    assert error["identifier"] == invalid_value_source["identifier"]
     assert error["json_path"] == "some.json.path"
 
 

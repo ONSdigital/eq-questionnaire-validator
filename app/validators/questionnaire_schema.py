@@ -26,8 +26,28 @@ def get_object_containing_key(data, key_name):
     """
     matches = []
     for match in parse(f"$..{key_name}").find(data):
-        matches.append((str(match.full_path), match.context.value))
+        parent_block = get_parent_block_from_match(match)
+        matches.append((str(match.full_path), match.context.value, parent_block))
     return matches
+
+
+def get_parent_block_from_match(match) -> dict | None:
+    walked_contexts = [match.context]
+
+    while walked_contexts[-1] is not None:
+        current_context = walked_contexts[-1]
+        if "blocks" not in current_context.value:
+            walked_contexts.append(current_context.context)
+        else:
+            break
+
+    # No block found and reached top of JSON file
+    if walked_contexts[-1] is None:
+        return None
+
+    block = walked_contexts[-3].value
+
+    return block
 
 
 def get_element_value(key, match):
@@ -65,6 +85,7 @@ class QuestionnaireSchema:
             block["id"]: block for block in self.blocks + self.sub_blocks
         }
         self.block_ids = list(self.blocks_by_id.keys())
+        self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
         self.calculated_summary_block_ids = {
             block["id"]
             for block in self.blocks_by_id.values()
@@ -73,6 +94,12 @@ class QuestionnaireSchema:
         self.sections = jp.match("$.sections[*]", self.schema)
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
+        self.blocks_by_section_id = {
+            section["id"]: [
+                block for group in section["groups"] for block in group["blocks"]
+            ]
+            for section in self.sections
+        }
 
         self.groups = jp.match("$..groups[*]", self.schema)
         self.groups_by_id = {group["id"]: group for group in self.groups}
@@ -428,3 +455,16 @@ class QuestionnaireSchema:
             for source in value_sources
             if source[1]["source"] == "answers"
         ]
+
+    def is_repeating_section(self, section_id: str) -> bool:
+        return "repeat" in self.sections_by_id[section_id]
+
+    def get_parent_section_for_block(self, block_id) -> dict | None:
+        for section_id, blocks in self.blocks_by_section_id.items():
+            for block in blocks:
+                if block_id == block["id"]:
+                    return self.sections_by_id[section_id]
+
+    def is_block_in_repeating_section(self, block_id: str) -> bool:
+        parent_section = self.get_parent_section_for_block(block_id)
+        return parent_section and self.is_repeating_section(parent_section["id"])

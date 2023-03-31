@@ -66,12 +66,14 @@ class SectionValidator(Validator):
 
     def validate_value_sources(self):
         source_references = get_object_containing_key(self.section, "identifier")
-        for json_path, source_reference in source_references:
+        for json_path, source_reference, parent_block in source_references:
             if "source" in source_reference:
                 value_source_validator = ValueSourceValidator(
                     value_source=source_reference,
                     json_path=json_path,
                     questionnaire_schema=self.questionnaire_schema,
+                    parent_section=self.section,
+                    parent_block=parent_block,
                 )
                 self.errors += value_source_validator.validate()
 

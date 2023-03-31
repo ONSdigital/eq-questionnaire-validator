@@ -63,7 +63,7 @@ class BlockValidator(Validator):
 
     def validate_placeholder_answer_self_references(self):
         source_references = get_object_containing_key(self.block, "identifier")
-        for json_path, source_reference in source_references:
+        for json_path, source_reference, _ in source_references:
             if source_reference["source"] == "answers":
                 identifiers = (
                     source_reference["identifier"]

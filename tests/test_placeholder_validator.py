@@ -3,7 +3,7 @@ import pytest
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.value_source_validator import ValueSourceValidator
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_repeating_section_title_placeholders():

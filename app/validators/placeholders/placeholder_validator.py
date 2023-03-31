@@ -27,7 +27,7 @@ class PlaceholderValidator(Validator):
         strings_with_placeholders = get_object_containing_key(
             self.schema_element, "placeholders"
         )
-        for _, placeholder_object in strings_with_placeholders:
+        for _, placeholder_object, __ in strings_with_placeholders:
             self.validate_placeholder_object(placeholder_object)
 
         return self.errors
