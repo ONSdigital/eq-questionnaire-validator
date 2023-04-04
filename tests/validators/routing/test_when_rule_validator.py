@@ -286,6 +286,16 @@ def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
             {"source": "list", "identifier": "a-list", "selector": "same_name_items"},
         ),
         ("==", {"source": "location", "identifier": "list_item_id"}, "list-item-id"),
+        (
+            "==",
+            {"source": "progress", "selector": "block", "identifier": "block-id"},
+            "list-item-id",
+        ),
+        (
+            "==",
+            {"source": "progress", "selector": "section", "identifier": "section-id"},
+            "COMPLETED",
+        ),
     ],
 )
 def test_validate_value_sources(operator_name, first_argument, second_argument):

@@ -2,7 +2,7 @@ from app.validators.blocks.list_collector_driving_question_validator import (
     ListCollectorDrivingQuestionValidator,
 )
 from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_driving_question_multiple_driving_questions():

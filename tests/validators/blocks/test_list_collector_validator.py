@@ -1,6 +1,6 @@
 from app.validators.blocks import ListCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():

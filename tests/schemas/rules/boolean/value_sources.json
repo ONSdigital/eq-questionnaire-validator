@@ -39,5 +39,18 @@
         }
       ]
     }
+  },
+  {
+    "description": "A progress source",
+    "rule": {
+      "==": [
+        {
+          "source": "progress",
+          "selector": "block",
+          "identifier": "block-1"
+        },
+        "COMPLETED"
+      ]
+    }
   }
 ]

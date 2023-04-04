@@ -138,6 +138,9 @@
       },
       {
         "$ref": "#/location_value_source"
+      },
+      {
+        "$ref": "#/progress_value_source"
       }
     ]
   },
@@ -158,6 +161,9 @@
       },
       {
         "$ref": "#/list_value_source"
+      },
+      {
+        "$ref": "#/progress_value_source"
       }
     ]
   },
@@ -172,5 +178,26 @@
         "$ref": "#/calculated_summary_value_source"
       }
     ]
+  },
+  "progress_value_source": {
+    "description": "The progression status of a section or a block. When resolved it returns the string COMPLETED or any status or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "/common_definitions.json#/identifier",
+        "description": "The object identifier, ID of section or block"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["progress"]
+      },
+      "selector": {
+        "description": "The type of object to get the progress status for. Either a section or a block.",
+        "type": "string",
+        "enum": ["section", "block"]
+      }
+    },
+    "required": ["identifier", "source", "selector"],
+    "additionalProperties": false
   }
 }

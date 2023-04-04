@@ -1,0 +1,215 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Invalid progress value source non linear",
+  "theme": "default",
+  "description": "An invalid test schema for a progress value source in a non linear flow",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "first-section",
+      "groups": [
+        {
+          "id": "s1-g1",
+          "title": "First section first group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "s1-b1",
+              "question": {
+                "id": "s1-q1",
+                "title": "S1 Q1",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s1-q1-a1",
+                    "label": "S1 Q1 A1",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "s1-b2",
+              "question": {
+                "id": "s1-q2",
+                "title": "S1 Q2",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s1-q2-a1",
+                    "label": "S1 Q2 A1",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "block": "s1-b1",
+                  "when": {
+                    "==": [
+                      {
+                        "source": "progress",
+                        "selector": "block",
+                        "identifier": "s1-b3"
+                      },
+                      "COMPLETED"
+                    ]
+                  }
+                },
+                {
+                  "block": "s1-b4"
+                }
+              ]
+            },
+            {
+              "type": "Question",
+              "id": "s1-b3",
+              "question": {
+                "id": "s1-q3",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s1-a3",
+                    "label": "S1 A3",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "s1-b4",
+              "question": {
+                "id": "s1-q4",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s1-a4",
+                    "label": "S1 A4",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "s1-b5",
+              "question": {
+                "id": "s1-q5",
+                "title": "Second Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s1-a5",
+                    "label": "S1 A5",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ],
+                "skip_conditions": {
+                  "when": {
+                    "or": [
+                      {
+                        "==": [
+                          {
+                            "source": "progress",
+                            "selector": "block",
+                            "identifier": "s2-b1"
+                          },
+                          "COMPLETED"
+                        ]
+                      },
+                      {
+                        "==": [
+                          {
+                            "source": "progress",
+                            "selector": "section",
+                            "identifier": "second-section"
+                          },
+                          "COMPLETED"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "second-section",
+      "groups": [
+        {
+          "id": "s2-g1",
+          "title": "Second section first group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "s2-b1",
+              "question": {
+                "id": "s2-q1",
+                "title": "S2 Q1",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s2-q1-a1",
+                    "label": "S2 Q1 A1",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "s2-b2",
+              "question": {
+                "id": "s2-q3",
+                "title": "S2 Q2",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "s2-q2-a1",
+                    "label": "S2 Q2 A1",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

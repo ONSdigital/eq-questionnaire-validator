@@ -1,7 +1,7 @@
 from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.sections.section_validator import SectionValidator
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_list_reference_in_custom_summary():

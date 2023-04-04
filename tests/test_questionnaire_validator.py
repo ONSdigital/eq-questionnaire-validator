@@ -1,4 +1,3 @@
-import os
 from json import load
 
 import pytest
@@ -12,17 +11,11 @@ from app.validators.questions import MutuallyExclusiveQuestionValidator
 from app.validators.schema_validator import SchemaValidator
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import find_all_json_files
+from tests.utils import _open_and_load_schema_file
 
 logger = getLogger()
 
 configure(logger_factory=LoggerFactory())
-
-
-def _open_and_load_schema_file(file):
-    with open(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), file), encoding="utf8"
-    ) as json_file:
-        return load(json_file)
 
 
 @pytest.mark.parametrize(

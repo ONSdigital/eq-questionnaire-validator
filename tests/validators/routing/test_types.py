@@ -13,7 +13,7 @@ from app.validators.routing.types import (
     python_type_to_json_type,
     resolve_value_source_json_type,
 )
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 @pytest.mark.parametrize(

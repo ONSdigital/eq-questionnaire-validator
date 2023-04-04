@@ -1,6 +1,6 @@
 from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
-from tests.test_questionnaire_validator import _open_and_load_schema_file
+from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_answer_action_redirect_to_list_add_block_no_params():
