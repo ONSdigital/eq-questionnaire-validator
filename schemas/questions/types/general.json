@@ -40,7 +40,7 @@
         "properties": {
           "values": {
             "type": "object",
-            "source": ["answers", "list"],
+            "source": ["list"],
             "identifier": {
               "$ref": "../../common_definitions.json#/non_empty_string"
             }
