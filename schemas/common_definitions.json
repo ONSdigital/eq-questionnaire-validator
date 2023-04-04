@@ -14,10 +14,9 @@
     "description": "The id of a metadata provided by the calling service from which to obtain the value",
     "pattern": "^[A-Za-z0-9][A-Za-z0-9\\-_]*[A-Za-z0-9]$"
   },
-  "question_definitions": {
+  "question_definition": {
     "description": "Allows customisation of question definition title and description.",
-    "type": "array",
-    "minItems": 1,
+    "type": "object",
     "items": {
       "$ref": "#/definition"
     }
