@@ -8,7 +8,7 @@ from jsonpath_rw import parse
 
 from app.answer_type import AnswerType
 
-MAX_NUMBER = 9999999999
+MAX_NUMBER = 9999999999999
 MIN_NUMBER = -999999999
 MAX_DECIMAL_PLACES = 6
 
