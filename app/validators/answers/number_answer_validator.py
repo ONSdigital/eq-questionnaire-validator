@@ -1,7 +1,7 @@
 from app.validators.answers.answer_validator import AnswerValidator
 
-MAX_NUMBER = 9999999999999
-MIN_NUMBER = -999999999999
+MAX_NUMBER = 9_999_999_999_999
+MIN_NUMBER = -999_999_999_999
 MAX_DECIMAL_PLACES = 6
 
 
