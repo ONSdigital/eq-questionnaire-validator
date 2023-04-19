@@ -85,7 +85,9 @@
               }
             ]
           }
-        }
+        },
+        "additionalProperties": false,
+        "required": ["answers", "values"]
       },
       "answers": {
         "type": "array",
