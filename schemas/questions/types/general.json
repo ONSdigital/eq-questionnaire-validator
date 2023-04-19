@@ -39,23 +39,17 @@
         "type": "object",
         "properties": {
           "values": {
-            "type": "object",
-            "source": ["list"],
-            "identifier": {
-              "$ref": "../../common_definitions.json#/non_empty_string"
-            }
+            "oneOf": [
+              {
+                "$ref": "../../value_sources.json#/list_value_source"
+              }
+            ]
           }
         },
         "answers": {
           "type": "array",
           "items": {
             "oneOf": [
-              {
-                "$ref": "../../answers/address.json#/answer"
-              },
-              {
-                "$ref": "../../answers/checkbox.json#/answer"
-              },
               {
                 "$ref": "../../answers/currency.json#/answer"
               },
@@ -78,9 +72,6 @@
                 "$ref": "../../answers/percentage.json#/answer"
               },
               {
-                "$ref": "../../answers/radio.json#/answer"
-              },
-              {
                 "$ref": "../../answers/text_area.json#/answer"
               },
               {
@@ -88,12 +79,6 @@
               },
               {
                 "$ref": "../../answers/unit.json#/answer"
-              },
-              {
-                "$ref": "../../answers/dropdown.json#/answer"
-              },
-              {
-                "$ref": "../../answers/relationship.json#/answer"
               },
               {
                 "$ref": "../../answers/mobile_number.json#/answer"
