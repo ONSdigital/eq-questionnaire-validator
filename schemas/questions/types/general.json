@@ -143,6 +143,24 @@
         }
       }
     },
+    "allOf": [
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "required": ["dynamic_answers"]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "answers": {
+              "minItems": 1
+            }
+          }
+        }
+      }
+    ],
     "additionalProperties": false,
     "required": ["id", "type", "answers", "title"]
   }
