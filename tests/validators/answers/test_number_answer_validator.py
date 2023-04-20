@@ -9,8 +9,8 @@ def test_minimum_value():
         "id": "answer-4",
         "label": "Max/Min out of system limits",
         "mandatory": False,
-        "maximum": {"value": 99_999_999_999_999},
-        "minimum": {"value": -99_999_999_999_999},
+        "maximum": {"value": 9_999_999_999_999_999},
+        "minimum": {"value": -999_999_999_999_999},
         "type": "Number",
     }
 
@@ -20,15 +20,15 @@ def test_minimum_value():
 
     assert validator.errors[0] == {
         "message": validator.MINIMUM_LESS_THAN_LIMIT,
-        "value": -99_999_999_999_999,
-        "limit": -999_999_999_999,
+        "value": -999_999_999_999_999,
+        "limit": -99_999_999_999_999,
         "answer_id": "answer-4",
     }
 
     assert validator.errors[1] == {
         "message": validator.MAXIMUM_GREATER_THAN_LIMIT,
-        "value": 99_999_999_999_999,
-        "limit": 999_999_999_9999,
+        "value": 9_999_999_999_999_999,
+        "limit": 999_999_999_999_999,
         "answer_id": "answer-4",
     }
 
