@@ -164,6 +164,6 @@
       }
     ],
     "additionalProperties": false,
-    "required": ["id", "type", "answers", "title"]
+    "required": ["id", "type", "title"]
   }
 }

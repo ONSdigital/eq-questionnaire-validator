@@ -249,8 +249,7 @@ class QuestionnaireSchema:
     @cached_property
     def answers(self):
         for question, _ in self.questions_with_context:
-            for answer in question["answers"]:
-                yield answer
+            yield from question.get("answers", [])
 
     @lru_cache
     def get_answer(self, answer_id):
