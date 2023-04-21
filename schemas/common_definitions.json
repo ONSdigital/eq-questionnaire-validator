@@ -26,9 +26,7 @@
   "question_definition": {
     "description": "Allows customisation of question definition title and description.",
     "type": "object",
-    "items": {
-      "$ref": "#/definition"
-    }
+    "$ref": "#/definition"
   },
   "contents": {
     "description": "Collection of flexible content (headings, paragraphs, lists).",
