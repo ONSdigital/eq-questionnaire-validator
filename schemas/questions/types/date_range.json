@@ -19,6 +19,9 @@
       "definitions": {
         "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
       },
+      "definition": {
+        "$ref": "../../string_interpolation/definitions.json#/string_with_placeholders"
+      },
       "warning": {
         "$ref": "../../common_definitions.json#/non_empty_string"
       },

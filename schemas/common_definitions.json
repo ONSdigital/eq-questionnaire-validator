@@ -18,9 +18,15 @@
     "description": "Allows customisation of question definition title and description.",
     "type": "array",
     "minItems": 1,
+    "maxItems": 1,
     "items": {
       "$ref": "#/definition"
     }
+  },
+  "question_definition": {
+    "description": "Allows customisation of question definition title and description.",
+    "type": "object",
+    "$ref": "#/definition"
   },
   "contents": {
     "description": "Collection of flexible content (headings, paragraphs, lists).",

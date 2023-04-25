@@ -22,6 +22,9 @@
       "definitions": {
         "$ref": "../../common_definitions.json#/question_definitions"
       },
+      "definition": {
+        "$ref": "../../common_definitions.json#/question_definition"
+      },
       "guidance": {
         "$ref": "../../common_definitions.json#/guidance"
       },
