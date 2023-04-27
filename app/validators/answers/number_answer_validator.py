@@ -77,7 +77,7 @@ class NumberAnswerValidator(AnswerValidator):
             source = answer_source_max_value.get("source")
             answers_with_context = self.questionnaire_schema.numeric_answer_ranges
             answer_source_max_value = (
-                self.questionnaire_schema._get_numeric_value_for_value_source(
+                self.questionnaire_schema.get_numeric_value_for_value_source(
                     source, answer_source_max_value, answers_with_context
                 )
             )
@@ -95,7 +95,7 @@ class NumberAnswerValidator(AnswerValidator):
             source = answer_source_min_value.get("source")
             answers_with_context = self.questionnaire_schema.numeric_answer_ranges
             answer_source_min_value = (
-                self.questionnaire_schema._get_numeric_value_for_value_source(
+                self.questionnaire_schema.get_numeric_value_for_value_source(
                     source, answer_source_min_value, answers_with_context
                 )
             )

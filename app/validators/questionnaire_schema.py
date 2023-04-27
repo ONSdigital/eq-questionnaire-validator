@@ -409,7 +409,7 @@ class QuestionnaireSchema:
             return maximum_value - (1 / 10**decimal_places)
         return maximum_value
 
-    def _get_numeric_value_for_value_source(
+    def get_numeric_value_for_value_source(
         self, value_source, defined_value, answer_ranges
     ):
         referred_answer = None
@@ -431,7 +431,7 @@ class QuestionnaireSchema:
         if not isinstance(defined_value, dict):
             return defined_value
         if source := defined_value.get("source"):
-            referred_answer = self._get_numeric_value_for_value_source(
+            referred_answer = self.get_numeric_value_for_value_source(
                 value_source=source,
                 defined_value=defined_value,
                 answer_ranges=answer_ranges,
