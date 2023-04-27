@@ -409,24 +409,6 @@ class QuestionnaireSchema:
             return maximum_value - (1 / 10**decimal_places)
         return maximum_value
 
-    def get_numeric_value_for_value_source(
-        self, value_source, defined_value, answer_ranges
-    ):
-        referred_answer = None
-        if value_source == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-        elif value_source == "calculated_summary":
-            calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculated_answer_ids(
-                calculated_summary_block
-            )
-
-            for answer_id in answers_to_calculate:
-                referred_answer = answer_ranges.get(answer_id)
-                if referred_answer is None:
-                    return None
-        return referred_answer
-
     def _get_numeric_value(self, defined_value, system_default, answer_ranges):
         if not isinstance(defined_value, dict):
             return defined_value
@@ -468,3 +450,21 @@ class QuestionnaireSchema:
     def is_block_in_repeating_section(self, block_id: str) -> bool:
         parent_section = self.get_parent_section_for_block(block_id)
         return parent_section and self.is_repeating_section(parent_section["id"])
+
+    def get_numeric_value_for_value_source(
+        self, value_source, defined_value, answer_ranges
+    ):
+        referred_answer = None
+        if value_source == "answers":
+            referred_answer = answer_ranges.get(defined_value["identifier"])
+        elif value_source == "calculated_summary":
+            calculated_summary_block = self.get_block(defined_value["identifier"])
+            answers_to_calculate = self.get_calculated_answer_ids(
+                calculated_summary_block
+            )
+
+            for answer_id in answers_to_calculate:
+                referred_answer = answer_ranges.get(answer_id)
+                if referred_answer is None:
+                    return None
+        return referred_answer
