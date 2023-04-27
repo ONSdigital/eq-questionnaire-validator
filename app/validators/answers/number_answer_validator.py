@@ -60,6 +60,8 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
+        answer_source_min_value = self.answer.get("minimum", {}).get("value", {})
+        answer_source_max_value = self.answer.get("maximum", {}).get("value", {})
 
         if isinstance(min_value, int) and min_value < MIN_NUMBER:
             self.add_error(
@@ -70,6 +72,42 @@ class NumberAnswerValidator(AnswerValidator):
             self.add_error(
                 self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER
             )
+
+        if isinstance(answer_source_max_value, dict):
+            source = answer_source_max_value.get("source")
+            answers_with_context = self.questionnaire_schema.numeric_answer_ranges
+            answer_source_max_value = (
+                self.questionnaire_schema._get_numeric_value_for_value_source(
+                    source, answer_source_max_value, answers_with_context
+                )
+            )
+            if (
+                isinstance(answer_source_max_value, int)
+                and answer_source_max_value > MAX_NUMBER
+            ):
+                self.add_error(
+                    self.MAXIMUM_GREATER_THAN_LIMIT,
+                    value=answer_source_max_value,
+                    limit=MAX_NUMBER,
+                )
+
+        if isinstance(answer_source_min_value, dict):
+            source = answer_source_min_value.get("source")
+            answers_with_context = self.questionnaire_schema.numeric_answer_ranges
+            answer_source_min_value = (
+                self.questionnaire_schema._get_numeric_value_for_value_source(
+                    source, answer_source_min_value, answers_with_context
+                )
+            )
+            if (
+                isinstance(answer_source_min_value, int)
+                and answer_source_min_value > MIN_NUMBER
+            ):
+                self.add_error(
+                    self.MINIMUM_LESS_THAN_LIMIT,
+                    value=answer_source_max_value,
+                    limit=MIN_NUMBER,
+                )
 
     def are_decimal_places_valid(self):
         if "calculated" in self.answer:
