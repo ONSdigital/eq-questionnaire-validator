@@ -12,7 +12,7 @@ This could be achieved with the introduction of a new transform object, one that
 
 ## Proposal
 
-We will add an optional `page_title` property to page definitions (both block and non-block pages). This property, when provided, will override any question or content page title definitions for that page. If it is ommitted, the page title will still be determined from a question or content definition depending on the definition type. For ListCollectorAction blocks, the `page_title` property can also be defined on the ListCollectorAction
+We will add an optional `page_title` property to page definitions (both block and non-block pages). This property, when provided, will override any question or content page title definitions for that page. If it is omitted, the page title will still be determined from a question or content definition depending on the definition type. For ListCollectorAction blocks, the `page_title` property can also be defined on the ListCollectorAction
 
 Python's string formatting will be used to resolve the `list_item_index` and `to_list_item_index` parameters. Note that the `to_list_item_index` will only be available for Relationship block types. If either `list_item_index` (or `to_list_item_index` where applicable) cannot be resolved, the question or content title will be used.
 
