@@ -31,7 +31,6 @@ class NumberAnswerValidator(AnswerValidator):
 
         self.validate_decimal_places()
         self.validate_mandatory_has_no_default()
-        self.validate_referred_numeric_answer_decimals
         self.validate_decimals()
 
         if self.questionnaire_schema:
@@ -51,13 +50,15 @@ class NumberAnswerValidator(AnswerValidator):
                 self.questionnaire_schema.numeric_answer_ranges
             )
 
+            self.validate_value_in_limits()
+
         return self.errors
 
     def validate_mandatory_has_no_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
 
-    def validate_referred_numeric_answer_decimals(self):
+    def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
         answer_source_min_value = self.answer.get("minimum", {}).get("value", {})
@@ -76,36 +77,36 @@ class NumberAnswerValidator(AnswerValidator):
         if isinstance(answer_source_max_value, dict):
             source = answer_source_max_value.get("source")
             answers_with_context = self.questionnaire_schema.numeric_answer_ranges
-            answer_source_max_value = (
+            value_source_max_value = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
                     source, answer_source_max_value, answers_with_context
                 )
             )
             if (
-                isinstance(answer_source_max_value, int)
-                and answer_source_max_value < MAX_NUMBER
+                isinstance(value_source_max_value, int)
+                and value_source_max_value < MAX_NUMBER
             ):
                 self.add_error(
                     self.MAXIMUM_GREATER_THAN_LIMIT,
-                    value=answer_source_max_value,
+                    value=value_source_max_value,
                     limit=MAX_NUMBER,
                 )
 
         if isinstance(answer_source_min_value, dict):
             source = answer_source_min_value.get("source")
             answers_with_context = self.questionnaire_schema.numeric_answer_ranges
-            answer_source_min_value = (
+            value_source_min_value = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
                     source, answer_source_min_value, answers_with_context
                 )
             )
             if (
-                isinstance(answer_source_min_value, int)
-                and answer_source_min_value > MIN_NUMBER
+                isinstance(value_source_min_value, int)
+                and value_source_min_value > MIN_NUMBER
             ):
                 self.add_error(
                     self.MINIMUM_LESS_THAN_LIMIT,
-                    value=answer_source_max_value,
+                    value=value_source_min_value,
                     limit=MIN_NUMBER,
                 )
 

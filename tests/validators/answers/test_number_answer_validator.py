@@ -16,7 +16,7 @@ def test_minimum_value():
 
     validator = NumberAnswerValidator(answer, questionnaire_schema={})
 
-    validator.validate_referred_numeric_answer_decimals()
+    validator.validate_value_in_limits()
 
     assert validator.errors[0] == {
         "message": validator.MINIMUM_LESS_THAN_LIMIT,
