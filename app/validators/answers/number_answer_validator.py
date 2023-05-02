@@ -31,7 +31,7 @@ class NumberAnswerValidator(AnswerValidator):
 
         self.validate_decimal_places()
         self.validate_mandatory_has_no_default()
-        self.validate_value_in_limits()
+        self.validate_referred_numeric_answer_decimals
         self.validate_decimals()
 
         if self.questionnaire_schema:
@@ -57,7 +57,7 @@ class NumberAnswerValidator(AnswerValidator):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
 
-    def validate_value_in_limits(self):
+    def validate_referred_numeric_answer_decimals(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
         answer_source_min_value = self.answer.get("minimum", {}).get("value", {})
