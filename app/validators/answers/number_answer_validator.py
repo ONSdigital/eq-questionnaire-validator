@@ -102,7 +102,7 @@ class NumberAnswerValidator(AnswerValidator):
             )
             if (
                 isinstance(value_source_min_value, int)
-                and value_source_min_value > MIN_NUMBER
+                and value_source_min_value < MIN_NUMBER
             ):
                 self.add_error(
                     self.MINIMUM_LESS_THAN_LIMIT,
