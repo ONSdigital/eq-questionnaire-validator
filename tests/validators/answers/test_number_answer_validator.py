@@ -1,5 +1,9 @@
 from app.validators.answers import NumberAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema, MAX_NUMBER, MIN_NUMBER
+from app.validators.questionnaire_schema import (
+    MAX_NUMBER,
+    MIN_NUMBER,
+    QuestionnaireSchema,
+)
 from tests.conftest import get_mock_schema_with_data_version
 from tests.utils import _open_and_load_schema_file
 

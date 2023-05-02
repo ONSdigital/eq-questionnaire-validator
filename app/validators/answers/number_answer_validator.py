@@ -76,7 +76,9 @@ class NumberAnswerValidator(AnswerValidator):
             )
             if referred_answer["min"] < MIN_NUMBER:
                 self.add_error(
-                    self.MINIMUM_LESS_THAN_LIMIT, value=referred_answer["min"], limit=MIN_NUMBER
+                    self.MINIMUM_LESS_THAN_LIMIT,
+                    value=referred_answer["min"],
+                    limit=MIN_NUMBER,
                 )
 
         if isinstance(max_value, int) and max_value > MAX_NUMBER:
@@ -92,7 +94,9 @@ class NumberAnswerValidator(AnswerValidator):
             )
             if referred_answer["max"] > MAX_NUMBER:
                 self.add_error(
-                    self.MAXIMUM_GREATER_THAN_LIMIT, value=referred_answer["max"], limit=MAX_NUMBER
+                    self.MAXIMUM_GREATER_THAN_LIMIT,
+                    value=referred_answer["max"],
+                    limit=MAX_NUMBER,
                 )
 
     def are_decimal_places_valid(self):
