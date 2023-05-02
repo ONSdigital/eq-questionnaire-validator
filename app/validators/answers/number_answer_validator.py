@@ -61,53 +61,38 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
-        answer_source_min_value = self.answer.get("minimum", {}).get("value", {})
-        answer_source_max_value = self.answer.get("maximum", {}).get("value", {})
+        answer_ranges = self.questionnaire_schema.numeric_answer_ranges
 
         if isinstance(min_value, int) and min_value < MIN_NUMBER:
             self.add_error(
                 self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=MIN_NUMBER
             )
+        elif isinstance(min_value, dict):
+            source = min_value["source"]
+            referred_answer = (
+                self.questionnaire_schema.get_numeric_value_for_value_source(
+                    source, min_value, answer_ranges
+                )
+            )
+            if referred_answer["min"] < MIN_NUMBER:
+                self.add_error(
+                    self.MINIMUM_LESS_THAN_LIMIT, value=referred_answer["min"], limit=MIN_NUMBER
+                )
 
         if isinstance(max_value, int) and max_value > MAX_NUMBER:
             self.add_error(
                 self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER
             )
-
-        if isinstance(answer_source_max_value, dict):
-            source = answer_source_max_value.get("source")
-            answers_with_context = self.questionnaire_schema.numeric_answer_ranges
-            value_source_max_value = (
+        elif isinstance(min_value, dict):
+            source = max_value["source"]
+            referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    source, answer_source_max_value, answers_with_context
+                    source, min_value, answer_ranges
                 )
             )
-            if (
-                isinstance(value_source_max_value, int)
-                and value_source_max_value > MAX_NUMBER
-            ):
+            if referred_answer["max"] > MAX_NUMBER:
                 self.add_error(
-                    self.MAXIMUM_GREATER_THAN_LIMIT,
-                    value=value_source_max_value,
-                    limit=MAX_NUMBER,
-                )
-
-        if isinstance(answer_source_min_value, dict):
-            source = answer_source_min_value.get("source")
-            answers_with_context = self.questionnaire_schema.numeric_answer_ranges
-            value_source_min_value = (
-                self.questionnaire_schema.get_numeric_value_for_value_source(
-                    source, answer_source_min_value, answers_with_context
-                )
-            )
-            if (
-                isinstance(value_source_min_value, int)
-                and value_source_min_value < MIN_NUMBER
-            ):
-                self.add_error(
-                    self.MINIMUM_LESS_THAN_LIMIT,
-                    value=value_source_min_value,
-                    limit=MIN_NUMBER,
+                    self.MAXIMUM_GREATER_THAN_LIMIT, value=referred_answer["max"], limit=MAX_NUMBER
                 )
 
     def are_decimal_places_valid(self):
