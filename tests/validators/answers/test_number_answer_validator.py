@@ -1,5 +1,5 @@
 from app.validators.answers import NumberAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, MAX_NUMBER, MIN_NUMBER
 from tests.conftest import get_mock_schema_with_data_version
 from tests.utils import _open_and_load_schema_file
 
@@ -9,8 +9,8 @@ def test_minimum_value():
         "id": "answer-4",
         "label": "Max/Min out of system limits",
         "mandatory": False,
-        "maximum": {"value": 9_999_999_999_999_999},
-        "minimum": {"value": -999_999_999_999_999},
+        "maximum": {"value": MAX_NUMBER},
+        "minimum": {"value": MIN_NUMBER},
         "type": "Number",
     }
 
@@ -20,14 +20,14 @@ def test_minimum_value():
 
     assert validator.errors[0] == {
         "message": validator.MINIMUM_LESS_THAN_LIMIT,
-        "value": -999_999_999_999_999,
+        "value": MIN_NUMBER,
         "limit": -99_999_999_999_999,
         "answer_id": "answer-4",
     }
 
     assert validator.errors[1] == {
         "message": validator.MAXIMUM_GREATER_THAN_LIMIT,
-        "value": 9_999_999_999_999_999,
+        "value": MAX_NUMBER,
         "limit": 999_999_999_999_999,
         "answer_id": "answer-4",
     }
