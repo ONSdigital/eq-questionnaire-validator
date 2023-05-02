@@ -84,7 +84,7 @@ class NumberAnswerValidator(AnswerValidator):
             )
             if (
                 isinstance(value_source_max_value, int)
-                and value_source_max_value < MAX_NUMBER
+                and value_source_max_value > MAX_NUMBER
             ):
                 self.add_error(
                     self.MAXIMUM_GREATER_THAN_LIMIT,
