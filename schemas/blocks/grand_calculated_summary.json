@@ -9,9 +9,7 @@
       },
       "type": {
         "type": "string",
-        "enum": [
-          "GrandCalculatedSummary"
-        ]
+        "enum": ["GrandCalculatedSummary"]
       },
       "title": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
@@ -29,31 +27,17 @@
         "type": "object",
         "properties": {
           "operation": {
-            "type": "object",
-            "properties": {
-              "$ref": "../rules/operators/numeric/sum.json#/sum_calculated_summary_values"
-            },
-            "required": [
-              "+"
-            ]
+            "$ref": "../rules/operators/numeric/sum.json#/sum_calculated_summary_values"
           },
           "title": {
             "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
           }
         },
-        "required": [
-          "operation",
-          "title"
-        ],
+        "required": ["operation", "title"],
         "additionalProperties": false
       }
     },
     "additionalProperties": false,
-    "required": [
-      "id",
-      "type",
-      "title",
-      "calculation"
-    ]
+    "required": ["id", "type", "title", "calculation"]
   }
 }
