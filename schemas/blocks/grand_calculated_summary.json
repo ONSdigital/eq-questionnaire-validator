@@ -1,0 +1,59 @@
+{
+  "$id": "/blocks/grand_calculated_summary.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "GrandCalculatedSummary"
+        ]
+      },
+      "title": {
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+      },
+      "page_title": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "routing_rules": {
+        "$ref": "../common_definitions.json#/routing_rules"
+      },
+      "skip_conditions": {
+        "$ref": "../common_definitions.json#/skip_conditions"
+      },
+      "calculation": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "object",
+            "properties": {
+              "$ref": "../rules/operators/numeric/sum.json#/sum_calculated_summary_values"
+            },
+            "required": [
+              "+"
+            ]
+          },
+          "title": {
+            "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
+          }
+        },
+        "required": [
+          "operation",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "type",
+      "title",
+      "calculation"
+    ]
+  }
+}
