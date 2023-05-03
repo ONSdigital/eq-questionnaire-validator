@@ -8,8 +8,8 @@ from jsonpath_rw import parse
 
 from app.answer_type import AnswerType
 
-MAX_NUMBER = 9999999999
-MIN_NUMBER = -999999999
+MAX_NUMBER = 999_999_999_999_999
+MIN_NUMBER = -99_999_999_999_999
 MAX_DECIMAL_PLACES = 6
 
 
@@ -409,29 +409,11 @@ class QuestionnaireSchema:
             return maximum_value - (1 / 10**decimal_places)
         return maximum_value
 
-    def _get_numeric_value_for_value_source(
-        self, value_source, defined_value, answer_ranges
-    ):
-        referred_answer = None
-        if value_source == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-        elif value_source == "calculated_summary":
-            calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculated_answer_ids(
-                calculated_summary_block
-            )
-
-            for answer_id in answers_to_calculate:
-                referred_answer = answer_ranges.get(answer_id)
-                if referred_answer is None:
-                    return None
-        return referred_answer
-
     def _get_numeric_value(self, defined_value, system_default, answer_ranges):
         if not isinstance(defined_value, dict):
             return defined_value
         if source := defined_value.get("source"):
-            referred_answer = self._get_numeric_value_for_value_source(
+            referred_answer = self.get_numeric_value_for_value_source(
                 value_source=source,
                 defined_value=defined_value,
                 answer_ranges=answer_ranges,
@@ -468,3 +450,21 @@ class QuestionnaireSchema:
     def is_block_in_repeating_section(self, block_id: str) -> bool:
         parent_section = self.get_parent_section_for_block(block_id)
         return parent_section and self.is_repeating_section(parent_section["id"])
+
+    def get_numeric_value_for_value_source(
+        self, value_source, defined_value, answer_ranges
+    ):
+        referred_answer = None
+        if value_source == "answers":
+            referred_answer = answer_ranges.get(defined_value["identifier"])
+        elif value_source == "calculated_summary":
+            calculated_summary_block = self.get_block(defined_value["identifier"])
+            answers_to_calculate = self.get_calculated_answer_ids(
+                calculated_summary_block
+            )
+
+            for answer_id in answers_to_calculate:
+                referred_answer = answer_ranges.get(answer_id)
+                if referred_answer is None:
+                    return None
+        return referred_answer
