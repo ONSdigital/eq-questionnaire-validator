@@ -424,7 +424,11 @@ class QuestionnaireSchema:
         return system_default
 
     @staticmethod
-    def get_calculated_answer_ids(block):
+    def get_calculation_block_ids(block, source_type: str):
+        """
+        Returns the list of block ids of type source_type used in a calculation object,
+        e.g. answers for a calculated summary, or calculated summaries for a grand calculated summary
+        """
         if block["calculation"].get("answers_to_calculate"):
             return block["calculation"]["answers_to_calculate"]
 
@@ -435,7 +439,7 @@ class QuestionnaireSchema:
         return [
             source[1]["identifier"]
             for source in value_sources
-            if source[1]["source"] == "answers"
+            if source[1]["source"] == source_type
         ]
 
     def is_repeating_section(self, section_id: str) -> bool:
@@ -459,8 +463,8 @@ class QuestionnaireSchema:
             referred_answer = answer_ranges.get(defined_value["identifier"])
         elif value_source == "calculated_summary":
             calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculated_answer_ids(
-                calculated_summary_block
+            answers_to_calculate = self.get_calculation_block_ids(
+                calculated_summary_block, "answers"
             )
 
             for answer_id in answers_to_calculate:
