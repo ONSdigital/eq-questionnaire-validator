@@ -1,4 +1,3 @@
-from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import (
     find_dictionary_duplicates,
@@ -11,7 +10,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Duplicate calculated summaries in block's value sources"
     )
     CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = "Cannot have two calculated summaries referencing exactly the same answers in a grand calculated summary"
-    CALCULATED_SUMMARY_CONFIRMED_AFTER_GRAND_CALCULATED_SUMMARY = "All calculated summaries must be confirmed before grand calculated summary block"
+    CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY = "Cannot have a grand calculated summary before a calculated summary that it depends on"
     GRAND_CALCULATED_SUMMARY_HAS_INVALID_SOURCE = (
         "All value sources for grand calculated summary must be calculated summaries"
     )
@@ -86,8 +85,9 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 calculated_summary_id
             ) > self.questionnaire_schema.block_ids.index(self.block["id"]):
                 self.add_error(
-                    self.CALCULATED_SUMMARY_CONFIRMED_AFTER_GRAND_CALCULATED_SUMMARY,
-                    block=self.block,
+                    self.CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY,
+                    block_id=self.block["id"],
+                    calculated_summary_id=calculated_summary_id,
                 )
 
     def validate_grand_calculated_summary_sources_are_calculated_summaries(self):

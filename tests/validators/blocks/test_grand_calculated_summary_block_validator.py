@@ -65,3 +65,28 @@ def test_invalid_grand_calculated_summary():
         errors += validator.validate()
 
     assert errors == expected_error_messages
+
+
+def test_invalid_grand_calculated_summary_before_calculated_summary():
+    """Asserts invalid `when` a grand calculated summary comes after a calculated summary it references"""
+    filename = "schemas/invalid/test_invalid_grand_calculated_summary_before_calculated_summary.json"
+    json_to_validate = _open_and_load_schema_file(filename)
+
+    expected_error_messages = [
+        {
+            "calculated_summary_id": "calculated-currency-2",
+            "block_id": "grand-calculated-summary-before-calculated-summary-error",
+            "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY,
+        }
+    ]
+
+    questionnaire_schema = QuestionnaireSchema(json_to_validate)
+    errors = []
+
+    block = questionnaire_schema.get_block(
+        "grand-calculated-summary-before-calculated-summary-error"
+    )
+    validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)
+    errors += validator.validate()
+
+    assert errors == expected_error_messages
