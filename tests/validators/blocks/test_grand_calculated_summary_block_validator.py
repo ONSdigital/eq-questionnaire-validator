@@ -6,7 +6,7 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_grand_calculated_summary():
-    """Asserts invalid when:
+    """Asserts invalid `when`:
     types, currencies or units are not of the same type for GrandCalculatedSummary
     or when there are duplicate calculated summaries in the calculation,
     or when there are two calculated summaries with a duplicate answer set
