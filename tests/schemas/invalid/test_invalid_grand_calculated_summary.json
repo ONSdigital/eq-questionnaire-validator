@@ -433,6 +433,44 @@
                 },
                 "title": "Grand total of previous values"
               }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-source-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q1-a1"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-id-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "invalid"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
             }
           ]
         }

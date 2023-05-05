@@ -2,6 +2,7 @@
 import collections
 from collections import defaultdict
 from functools import cached_property, lru_cache
+from typing import Iterable, TypeVar
 
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
@@ -12,9 +13,20 @@ MAX_NUMBER = 999_999_999_999_999
 MIN_NUMBER = -99_999_999_999_999
 MAX_DECIMAL_PLACES = 6
 
+T = TypeVar("T")
+K = TypeVar("K")
 
-def find_duplicates(values):
+
+def find_duplicates(values: Iterable[T]) -> list[T]:
     return [item for item, count in collections.Counter(values).items() if count > 1]
+
+
+def find_dictionary_duplicates(dictionary: dict[K, T]) -> list[K]:
+    """
+    Find keys with duplicate values
+    """
+    value_counts = collections.Counter(dictionary.values())
+    return [key for key, value in dictionary.items() if value_counts[value] > 1]
 
 
 def get_object_containing_key(data, key_name):

@@ -28,7 +28,10 @@ class CalculationBlockValidator(BlockValidator):
     )
     ANSWERS_HAS_INVALID_ID = "Invalid answer id in block's answers_to_calculate"
 
-    def get_answers(self, answers_to_calculate):
+    def get_answers(self, answers_to_calculate) -> list[dict] | None:
+        """
+        Returns the answers only if all of them have valid ids
+        """
         try:
             return [
                 self.questionnaire_schema.answers_with_context[answer_id]["answer"]
@@ -37,10 +40,7 @@ class CalculationBlockValidator(BlockValidator):
         except KeyError as e:
             self.add_error(self.ANSWERS_HAS_INVALID_ID, answer_id=str(e).strip("'"))
 
-    def validate_answer_types(self, answers):
-        """
-        Validates answers types
-        """
+    def validate_answer_types(self, answers: list[dict]) -> None:
         answer_type = answers[0]["type"]
         if not key_value_is_unique(answers, "type"):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_TYPE)
