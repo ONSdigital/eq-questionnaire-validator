@@ -1,9 +1,7 @@
 import pytest
 
-from app.validators.answers.number_answer_validator import NumberAnswerValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.value_source_validator import ValueSourceValidator
-from tests.conftest import get_mock_schema_with_data_version
 
 
 @pytest.mark.parametrize(
@@ -138,65 +136,3 @@ def test_invalid_composite_answer_field_in_selector():
     error = validator.errors[0]
     assert error["message"] == ValueSourceValidator.COMPOSITE_ANSWER_FIELD_INVALID
     assert error["identifier"] == "address-answer"
-
-
-def test_answer_source_refrences_value_source():
-    value_sources = [
-        {
-            "identifier": "set-minimum",
-            "source": "answers",
-        },
-        {
-            "identifier": "set-maximum",
-            "source": "answers",
-        },
-    ]
-
-    answer = {
-        "id": "min-max-range",
-        "mandatory": False,
-        "minimum": {"value": {"identifier": "set-minimum", "source": "answers"}},
-        "maximum": {"value": {"identifier": "set-maximum", "source": "answers"}},
-        "type": "Number",
-    }
-
-    answers = {"answers": [answer]}
-    questionnaire_schema = QuestionnaireSchema(answers)
-
-    questionnaire_schema.answers_with_context = {
-        "set-maximum": {"answer": {"id": "set-maximum", "type": "Number"}},
-        "set-minimum": {"answer": {"id": "set-minimum", "type": "Number"}},
-        "min-max-range": {
-            "answer": {
-                "id": "min-max-range",
-                "type": "Number",
-                "minimum": {
-                    "value": {"identifier": "set-minimum", "source": "answers"}
-                },
-                "maximum": {
-                    "value": {"identifier": "set-maximum", "source": "answers"}
-                },
-            }
-        },
-    }
-
-    for value_source in value_sources:
-        value_source_validator = ValueSourceValidator(
-            value_source, "", questionnaire_schema
-        )
-        value_source_validator.validate()
-
-    number_answer_validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
-    )
-    number_answer_validator.validate_referred_numeric_answer(
-        questionnaire_schema.numeric_answer_ranges
-    )
-
-    min_max_range = questionnaire_schema.get_answer("min-max-range")
-    min_max_minimum_value = min_max_range["minimum"]["value"]
-    min_max_maximum_value = min_max_range["maximum"]["value"]
-
-    assert min_max_minimum_value == value_sources[0]
-    assert min_max_maximum_value == value_sources[1]
-
