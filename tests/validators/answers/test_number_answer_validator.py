@@ -209,7 +209,6 @@ def test_invalid_maximum_minimum_value_from_answer_source():
     validator.validate_value_in_limits()
 
     errors = validator.errors
-    print(errors)
 
     expected_errors = [
         {
@@ -225,5 +224,5 @@ def test_invalid_maximum_minimum_value_from_answer_source():
             "answer_id": "min-max-range",
         },
     ]
-    
+
     assert errors == expected_errors
