@@ -50,6 +50,7 @@
           },
           "answers": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "oneOf": [
                 {
@@ -94,6 +95,7 @@
       },
       "answers": {
         "type": "array",
+        "minItems": 1,
         "items": {
           "oneOf": [
             {
@@ -148,25 +150,17 @@
         }
       }
     },
-    "allOf": [
-      {
-        "if": {
-          "not": {
-            "properties": {
-              "required": ["dynamic_answers"]
-            }
-          }
-        },
-        "then": {
-          "properties": {
-            "answers": {
-              "minItems": 1
-            }
-          }
-        }
+    "if": {
+      "not": {
+        "required": ["dynamic_answers"]
       }
-    ],
-    "additionalProperties": false,
-    "required": ["id", "type", "title"]
+    },
+    "then": {
+      "required": ["id", "type", "title", "answers"]
+    },
+    "else": {
+      "required": ["id", "type", "title"]
+    },
+    "additionalProperties": false
   }
 }
