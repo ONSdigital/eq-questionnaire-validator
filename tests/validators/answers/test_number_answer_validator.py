@@ -192,7 +192,7 @@ def test_invalid_maximum_minimum_value_from_answer_source():
             {
                 "id": "set-minimum",
                 "type": "Number",
-                "minimum": {"value": -999_999_999_999_999},
+                "minimum": {"value": -9_999_999_999_999_999},
             },
             {
                 "id": "set-maximum",
