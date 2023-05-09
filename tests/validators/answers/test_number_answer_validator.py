@@ -206,7 +206,7 @@ def test_invalid_maximum_minimum_value_from_answer_source():
 
     validator = NumberAnswerValidator(answer, questionnaire_schema)
 
-    errors = validator.validate_value_in_limits().errors
+    validator.validate_value_in_limits()
 
     expected_errors = [
         {
@@ -223,4 +223,4 @@ def test_invalid_maximum_minimum_value_from_answer_source():
         },
     ]
 
-    assert errors == expected_errors
+    assert validator.errors == expected_errors
