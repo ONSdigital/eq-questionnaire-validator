@@ -209,5 +209,21 @@ def test_invalid_maximum_minimum_value_from_answer_source():
     validator.validate_value_in_limits()
 
     errors = validator.errors
-    assert errors[0]["message"] == validator.MINIMUM_LESS_THAN_LIMIT
-    assert errors[1]["message"] == validator.MAXIMUM_GREATER_THAN_LIMIT
+    print(errors)
+
+    expected_errors = [
+        {
+            "message": "Minimum value is less than system limit",
+            "value": -9999999999999999,
+            "limit": -999999999999999,
+            "answer_id": "min-max-range",
+        },
+        {
+            "message": "Maximum value is greater than system limit",
+            "value": 9999999999999999,
+            "limit": 999999999999999,
+            "answer_id": "min-max-range",
+        },
+    ]
+    
+    assert errors == expected_errors
