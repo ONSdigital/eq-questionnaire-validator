@@ -116,23 +116,9 @@ class SectionValidator(Validator):
 
             self.errors += question_validator.validate()
 
-            for answer in question.get("answers", []):
-                answer_validator = get_answer_validator(
-                    answer, self.questionnaire_schema
-                )
-
-                answer_validator.validate()
-
-                if question.get("summary") and answer["type"] not in [
-                    "TextField",
-                    "Checkbox",
-                    "Number",
-                ]:
-                    self.add_error(
-                        error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
-                        answer_id=answer["id"],
-                    )
-                self.errors += answer_validator.errors
+            self._validate_answers(question, question.get("answers", []))
+            if dynamic_answers := question.get("dynamic_answers", {}):
+                self._validate_answers(question, dynamic_answers["answers"])
 
     def validate_variants(self, block):
         question_variants = block.get("question_variants", [])
@@ -343,3 +329,20 @@ class SectionValidator(Validator):
                 ),
                 id=answer_source["identifier"],
             )
+
+    def _validate_answers(self, question, answers):
+        for answer in answers:
+            answer_validator = get_answer_validator(answer, self.questionnaire_schema)
+
+            answer_validator.validate()
+
+            if question.get("summary") and answer["type"] not in [
+                "TextField",
+                "Checkbox",
+                "Number",
+            ]:
+                self.add_error(
+                    error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
+                    answer_id=answer["id"],
+                )
+            self.errors += answer_validator.errors
