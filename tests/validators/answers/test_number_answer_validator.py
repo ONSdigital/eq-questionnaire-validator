@@ -211,14 +211,14 @@ def test_invalid_maximum_minimum_value_from_answer_source():
     expected_errors = [
         {
             "message": validator.MINIMUM_LESS_THAN_LIMIT,
-            "value": -9999999999999999,
-            "limit": -999999999999999,
+            "value": -9_999_999_999_999_999,
+            "limit": MIN_NUMBER,
             "answer_id": "min-max-range",
         },
         {
             "message": validator.MAXIMUM_GREATER_THAN_LIMIT,
-            "value": 9999999999999999,
-            "limit": 999999999999999,
+            "value": 9_999_999_999_999_999,
+            "limit": MAX_NUMBER,
             "answer_id": "min-max-range",
         },
     ]
