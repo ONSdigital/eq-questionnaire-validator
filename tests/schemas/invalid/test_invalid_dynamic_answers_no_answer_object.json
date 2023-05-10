@@ -1,0 +1,50 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Dynamic Answers",
+  "theme": "default",
+  "description": "A questionnaire to demo an invalid block without dynamic answers and answer object",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {}
+  },
+  "sections": [
+    {
+      "id": "section",
+      "title": "List Collector Section",
+      "groups": [
+        {
+          "id": "group",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "dynamic-answer-block",
+              "question": {
+                "id": "dynamic-answer-block-question",
+                "title": "How much do you spend at each of the following supermarket?",
+                "type": "General"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
