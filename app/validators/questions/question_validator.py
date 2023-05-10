@@ -10,7 +10,11 @@ class QuestionValidator(Validator):
     def __init__(self, schema_element, schema=None):
         super().__init__(schema_element)
         self.question = schema_element
-        self.answers = self.question.get("answers", [])
+        if self.question.get("dynamic_answers", {}):
+            self.dynamic_answers = self.question["dynamic_answers"]["answers"]
+        else:
+            self.dynamic_answers = []
+        self.answers = self.question.get("answers", []) + self.dynamic_answers
         self.context["question_id"] = schema_element["id"]
         self.schema = schema
 
