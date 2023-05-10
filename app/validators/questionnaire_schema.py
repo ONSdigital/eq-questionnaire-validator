@@ -141,20 +141,28 @@ class QuestionnaireSchema:
         if self._answers_with_context:
             return self._answers_with_context
 
-        answers = {}
+        answers_dict = {}
         for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                answers[answer["id"]] = {"answer": answer, **context}
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer:
-                        answers[detail_answer["id"]] = {
-                            "answer": detail_answer,
-                            **context,
-                        }
+            if question.get("dynamic_answers", []):
+                self.capture_answers(
+                    context, question["dynamic_answers"]["answers"], answers_dict
+                )
+            if question.get("answers", []):
+                self.capture_answers(context, question["answers"], answers_dict)
 
-        self._answers_with_context = answers
+        self._answers_with_context = answers_dict
         return self._answers_with_context
+
+    def capture_answers(self, context, answers, answers_dict):
+        for answer in answers:
+            answers_dict[answer["id"]] = {"answer": answer, **context}
+            for option in answer.get("options", []):
+                detail_answer = option.get("detail_answer")
+                if detail_answer:
+                    answers_dict[detail_answer["id"]] = {
+                        "answer": detail_answer,
+                        **context,
+                    }
 
     @answers_with_context.setter
     def answers_with_context(self, value):
@@ -249,7 +257,13 @@ class QuestionnaireSchema:
     @cached_property
     def answers(self):
         for question, _ in self.questions_with_context:
-            yield from question.get("answers", [])
+            for answers_type in ["answers", "dynamic_answers"]:
+                if answers_type == "dynamic_answers":
+                    dynamic_answers = question.get(answers_type, {})
+                    if dynamic_answers:
+                        yield from dynamic_answers["answers"]
+                else:
+                    yield from question.get(answers_type, [])
 
     @lru_cache
     def get_answer(self, answer_id):
@@ -334,13 +348,22 @@ class QuestionnaireSchema:
     @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return {
-            answer["id"] for question in questions for answer in question["answers"]
-        }
+        answer_ids = []
+        for question in questions:
+            if question.get("answers", []):
+                for answer in question["answers"]:
+                    answer_ids.append(answer["id"])
+            if question.get("dynamic_answers", []):
+                for answer in question["dynamic_answers"]["answers"]:
+                    answer_ids.append(answer["id"])
+
+        return set(answer_ids)
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
+        if questions[0].get("dynamic_answers"):
+            return questions[0]["dynamic_answers"]["answers"][0]
         return questions[0]["answers"][0]
 
     @lru_cache
@@ -350,13 +373,25 @@ class QuestionnaireSchema:
     @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                if answer_id == answer["id"]:
+            if question.get("dynamic_answers", {}):
+                if block_id := self.capture_block_id_for_answer(
+                    answer_id, context, question["dynamic_answers"]["answers"]
+                ):
+                    return block_id
+            if answers := question.get("answers", []):
+                if block_id := self.capture_block_id_for_answer(
+                    answer_id, context, answers
+                ):
+                    return block_id
+
+    def capture_block_id_for_answer(self, answer_id, context, answers):
+        for answer in answers:
+            if answer_id == answer["id"]:
+                return context["block"]
+            for option in answer.get("options", []):
+                detail_answer = option.get("detail_answer")
+                if detail_answer and answer_id == detail_answer["id"]:
                     return context["block"]
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer and answer_id == detail_answer["id"]:
-                        return context["block"]
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):

@@ -215,3 +215,103 @@ def test_get_block_id_by_answer_id():
     block_id = questionnaire_schema.get_block_id_by_answer_id(answer_id)
 
     assert block_id == "confirmation-1"
+
+
+def test_dynamic_answers_with_context():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.answers_with_context["percentage-of-shopping"] == {
+        "answer": {
+            "label": {
+                "text": "Percentage of shopping at {transformed_value}",
+                "placeholders": [
+                    {
+                        "placeholder": "transformed_value",
+                        "value": {
+                            "source": "answers",
+                            "identifier": "supermarket-name",
+                        },
+                    }
+                ],
+            },
+            "id": "percentage-of-shopping",
+            "mandatory": False,
+            "type": "Percentage",
+            "maximum": {"value": 100},
+            "decimal_places": 0,
+        },
+        "section": "section",
+        "block": "dynamic-answer",
+        "group_id": "group",
+    }
+
+
+def test_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answers = list(questionnaire_schema.answers)
+
+    assert answers[7] == {
+        "label": {
+            "text": "Percentage of shopping at {transformed_value}",
+            "placeholders": [
+                {
+                    "placeholder": "transformed_value",
+                    "value": {"source": "answers", "identifier": "supermarket-name"},
+                }
+            ],
+        },
+        "id": "percentage-of-shopping",
+        "mandatory": False,
+        "type": "Percentage",
+        "maximum": {"value": 100},
+        "decimal_places": 0,
+    }
+
+
+def test_get_all_answer_ids_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.get_all_answer_ids("dynamic-answer") == {
+        "percentage-of-shopping"
+    }
+
+
+def test_get_first_answer_in_block_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.get_first_answer_in_block("dynamic-answer") == {
+        "label": {
+            "text": "Percentage of shopping at {transformed_value}",
+            "placeholders": [
+                {
+                    "placeholder": "transformed_value",
+                    "value": {"source": "answers", "identifier": "supermarket-name"},
+                }
+            ],
+        },
+        "id": "percentage-of-shopping",
+        "mandatory": False,
+        "type": "Percentage",
+        "maximum": {"value": 100},
+        "decimal_places": 0,
+    }
+
+
+def test_get_block_id_by_answer_id_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert (
+        questionnaire_schema.get_block_id_by_answer_id("percentage-of-shopping")
+        == "dynamic-answer"
+    )
