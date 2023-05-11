@@ -257,13 +257,7 @@ class QuestionnaireSchema:
     @cached_property
     def answers(self):
         for question, _ in self.questions_with_context:
-            for answers_type in ["answers", "dynamic_answers"]:
-                if answers_type == "dynamic_answers":
-                    dynamic_answers = question.get(answers_type, {})
-                    if dynamic_answers:
-                        yield from dynamic_answers["answers"]
-                else:
-                    yield from question.get(answers_type, [])
+            yield from self.get_answers_from_question(question)
 
     @lru_cache
     def get_answer(self, answer_id):
