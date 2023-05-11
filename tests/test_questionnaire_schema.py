@@ -217,7 +217,7 @@ def test_get_block_id_by_answer_id():
     assert block_id == "confirmation-1"
 
 
-def test_dynamic_answers_with_context():
+def test_answers_with_context():
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -336,7 +336,7 @@ def test_dynamic_answers_with_context():
     }
 
 
-def test_dynamic_answers():
+def test_answers_method():
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
