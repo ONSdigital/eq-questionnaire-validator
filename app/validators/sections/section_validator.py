@@ -3,7 +3,10 @@ from collections import defaultdict
 from app import error_messages
 from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
-from app.validators.questionnaire_schema import get_object_containing_key
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    get_object_containing_key,
+)
 from app.validators.questions import get_question_validator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.rules.rule_validator import RulesValidator
@@ -116,23 +119,7 @@ class SectionValidator(Validator):
 
             self.errors += question_validator.validate()
 
-            for answer in question.get("answers", []):
-                answer_validator = get_answer_validator(
-                    answer, self.questionnaire_schema
-                )
-
-                answer_validator.validate()
-
-                if question.get("summary") and answer["type"] not in [
-                    "TextField",
-                    "Checkbox",
-                    "Number",
-                ]:
-                    self.add_error(
-                        error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
-                        answer_id=answer["id"],
-                    )
-                self.errors += answer_validator.errors
+            self._validate_answers(question)
 
     def validate_variants(self, block):
         question_variants = block.get("question_variants", [])
@@ -343,3 +330,20 @@ class SectionValidator(Validator):
                 ),
                 id=answer_source["identifier"],
             )
+
+    def _validate_answers(self, question):
+        for answer in QuestionnaireSchema.get_answers_from_question(question):
+            answer_validator = get_answer_validator(answer, self.questionnaire_schema)
+
+            answer_validator.validate()
+
+            if question.get("summary") and answer["type"] not in [
+                "TextField",
+                "Checkbox",
+                "Number",
+            ]:
+                self.add_error(
+                    error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
+                    answer_id=answer["id"],
+                )
+            self.errors += answer_validator.errors

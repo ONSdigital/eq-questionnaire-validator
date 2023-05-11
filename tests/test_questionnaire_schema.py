@@ -215,3 +215,320 @@ def test_get_block_id_by_answer_id():
     block_id = questionnaire_schema.get_block_id_by_answer_id(answer_id)
 
     assert block_id == "confirmation-1"
+
+
+def test_answers_with_context():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.answers_with_context == {
+        "any-supermarket-answer": {
+            "answer": {
+                "id": "any-supermarket-answer",
+                "mandatory": True,
+                "options": [
+                    {
+                        "action": {
+                            "params": {
+                                "block_id": "add-supermarket",
+                                "list_name": "supermarkets",
+                            },
+                            "type": "RedirectToListAddBlock",
+                        },
+                        "label": "Yes",
+                        "value": "Yes",
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+                "type": "Radio",
+            },
+            "block": "any-supermarket",
+            "group_id": "group",
+            "section": "section",
+        },
+        "days-a-week": {
+            "answer": {
+                "decimal_places": 0,
+                "id": "days-a-week",
+                "label": {
+                    "placeholders": [
+                        {
+                            "placeholder": "transformed_value",
+                            "value": {
+                                "identifier": "supermarket-name",
+                                "source": "answers",
+                            },
+                        }
+                    ],
+                    "text": "How many days a week you shop " "at {transformed_value}",
+                },
+                "mandatory": True,
+                "maximum": {"value": 7},
+                "minimum": {"value": 1},
+                "type": "Number",
+            },
+            "block": "dynamic-answer",
+            "group_id": "group",
+            "section": "section",
+        },
+        "list-collector-answer": {
+            "answer": {
+                "id": "list-collector-answer",
+                "mandatory": True,
+                "options": [
+                    {
+                        "action": {"type": "RedirectToListAddBlock"},
+                        "label": "Yes",
+                        "value": "Yes",
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+                "type": "Radio",
+            },
+            "block": "list-collector",
+            "group_id": "group",
+            "section": "section",
+        },
+        "percentage-of-shopping": {
+            "answer": {
+                "decimal_places": 0,
+                "id": "percentage-of-shopping",
+                "label": {
+                    "placeholders": [
+                        {
+                            "placeholder": "transformed_value",
+                            "value": {
+                                "identifier": "supermarket-name",
+                                "source": "answers",
+                            },
+                        }
+                    ],
+                    "text": "Percentage of " "shopping at " "{transformed_value}",
+                },
+                "mandatory": False,
+                "maximum": {"value": 100},
+                "type": "Percentage",
+            },
+            "block": "dynamic-answer",
+            "group_id": "group",
+            "section": "section",
+        },
+        "remove-confirmation": {
+            "answer": {
+                "id": "remove-confirmation",
+                "mandatory": True,
+                "options": [
+                    {
+                        "action": {"type": "RemoveListItemAndAnswers"},
+                        "label": "Yes",
+                        "value": "Yes",
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+                "type": "Radio",
+            },
+            "block": "remove-supermarket",
+            "group_id": "group",
+            "section": "section",
+        },
+        "set-maximum": {
+            "answer": {
+                "decimal_places": 2,
+                "description": "Maximum amount of spending at this " "supermarket",
+                "id": "set-maximum",
+                "label": "Maximum amount of spending",
+                "mandatory": True,
+                "maximum": {"value": 10000},
+                "minimum": {"value": 1001},
+                "type": "Number",
+            },
+            "block": "edit-supermarket",
+            "group_id": "group",
+            "section": "section",
+        },
+        "supermarket-name": {
+            "answer": {
+                "id": "supermarket-name",
+                "label": "Supermarket",
+                "mandatory": True,
+                "type": "TextField",
+            },
+            "block": "edit-supermarket",
+            "group_id": "group",
+            "section": "section",
+        },
+    }
+
+
+def test_answers_method():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answers = list(questionnaire_schema.answers)
+
+    assert answers == [
+        {
+            "id": "any-supermarket-answer",
+            "mandatory": True,
+            "options": [
+                {
+                    "action": {
+                        "params": {
+                            "block_id": "add-supermarket",
+                            "list_name": "supermarkets",
+                        },
+                        "type": "RedirectToListAddBlock",
+                    },
+                    "label": "Yes",
+                    "value": "Yes",
+                },
+                {"label": "No", "value": "No"},
+            ],
+            "type": "Radio",
+        },
+        {
+            "id": "list-collector-answer",
+            "mandatory": True,
+            "options": [
+                {
+                    "action": {"type": "RedirectToListAddBlock"},
+                    "label": "Yes",
+                    "value": "Yes",
+                },
+                {"label": "No", "value": "No"},
+            ],
+            "type": "Radio",
+        },
+        {
+            "id": "supermarket-name",
+            "label": "Supermarket",
+            "mandatory": True,
+            "type": "TextField",
+        },
+        {
+            "decimal_places": 2,
+            "description": "Maximum amount of spending at this supermarket, should be "
+            "between 1001 and 10000",
+            "id": "set-maximum",
+            "label": "Maximum Spending",
+            "mandatory": True,
+            "maximum": {"value": 10000},
+            "minimum": {"value": 1001},
+            "type": "Number",
+        },
+        {
+            "id": "supermarket-name",
+            "label": "Supermarket",
+            "mandatory": True,
+            "type": "TextField",
+        },
+        {
+            "decimal_places": 2,
+            "description": "Maximum amount of spending at this supermarket",
+            "id": "set-maximum",
+            "label": "Maximum amount of spending",
+            "mandatory": True,
+            "maximum": {"value": 10000},
+            "minimum": {"value": 1001},
+            "type": "Number",
+        },
+        {
+            "id": "remove-confirmation",
+            "mandatory": True,
+            "options": [
+                {
+                    "action": {"type": "RemoveListItemAndAnswers"},
+                    "label": "Yes",
+                    "value": "Yes",
+                },
+                {"label": "No", "value": "No"},
+            ],
+            "type": "Radio",
+        },
+        {
+            "decimal_places": 0,
+            "id": "percentage-of-shopping",
+            "label": {
+                "placeholders": [
+                    {
+                        "placeholder": "transformed_value",
+                        "value": {
+                            "identifier": "supermarket-name",
+                            "source": "answers",
+                        },
+                    }
+                ],
+                "text": "Percentage of shopping at {transformed_value}",
+            },
+            "mandatory": False,
+            "maximum": {"value": 100},
+            "type": "Percentage",
+        },
+        {
+            "decimal_places": 0,
+            "id": "days-a-week",
+            "label": {
+                "placeholders": [
+                    {
+                        "placeholder": "transformed_value",
+                        "value": {
+                            "identifier": "supermarket-name",
+                            "source": "answers",
+                        },
+                    }
+                ],
+                "text": "How many days a week you shop at {transformed_value}",
+            },
+            "mandatory": True,
+            "maximum": {"value": 7},
+            "minimum": {"value": 1},
+            "type": "Number",
+        },
+    ]
+
+
+def test_get_all_answer_ids_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.get_all_answer_ids("dynamic-answer") == {
+        "days-a-week",
+        "percentage-of-shopping",
+    }
+
+
+def test_get_first_answer_in_block_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert questionnaire_schema.get_first_answer_in_block("dynamic-answer") == {
+        "label": {
+            "text": "Percentage of shopping at {transformed_value}",
+            "placeholders": [
+                {
+                    "placeholder": "transformed_value",
+                    "value": {"source": "answers", "identifier": "supermarket-name"},
+                }
+            ],
+        },
+        "id": "percentage-of-shopping",
+        "mandatory": False,
+        "type": "Percentage",
+        "maximum": {"value": 100},
+        "decimal_places": 0,
+    }
+
+
+def test_get_block_id_by_answer_id_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert (
+        questionnaire_schema.get_block_id_by_answer_id("percentage-of-shopping")
+        == "dynamic-answer"
+    )

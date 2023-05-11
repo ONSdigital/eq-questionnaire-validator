@@ -141,20 +141,28 @@ class QuestionnaireSchema:
         if self._answers_with_context:
             return self._answers_with_context
 
-        answers = {}
+        answers_dict = {}
         for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                answers[answer["id"]] = {"answer": answer, **context}
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer:
-                        answers[detail_answer["id"]] = {
-                            "answer": detail_answer,
-                            **context,
-                        }
+            self.capture_answers(
+                answers=self.get_answers_from_question(question),
+                answers_dict=answers_dict,
+                context=context,
+            )
 
-        self._answers_with_context = answers
+        self._answers_with_context = answers_dict
         return self._answers_with_context
+
+    @staticmethod
+    def capture_answers(*, answers, answers_dict, context):
+        for answer in answers:
+            answers_dict[answer["id"]] = {"answer": answer, **context}
+            for option in answer.get("options", []):
+                detail_answer = option.get("detail_answer")
+                if detail_answer:
+                    answers_dict[detail_answer["id"]] = {
+                        "answer": detail_answer,
+                        **context,
+                    }
 
     @answers_with_context.setter
     def answers_with_context(self, value):
@@ -249,8 +257,7 @@ class QuestionnaireSchema:
     @cached_property
     def answers(self):
         for question, _ in self.questions_with_context:
-            for answer in question["answers"]:
-                yield answer
+            yield from self.get_answers_from_question(question)
 
     @lru_cache
     def get_answer(self, answer_id):
@@ -336,13 +343,15 @@ class QuestionnaireSchema:
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return {
-            answer["id"] for question in questions for answer in question["answers"]
+            answer["id"]
+            for question in questions
+            for answer in self.get_answers_from_question(question)
         }
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return questions[0]["answers"][0]
+        return self.get_answers_from_question(questions[0])[0]
 
     @lru_cache
     def _get_path_id(self, path):
@@ -351,13 +360,22 @@ class QuestionnaireSchema:
     @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
-            for answer in question.get("answers", []):
-                if answer_id == answer["id"]:
+            if block_id := self.get_block_id_for_answer(
+                answer_id=answer_id,
+                answers=self.get_answers_from_question(question),
+                context=context,
+            ):
+                return block_id
+
+    @staticmethod
+    def get_block_id_for_answer(*, answer_id, answers, context):
+        for answer in answers:
+            if answer_id == answer["id"]:
+                return context["block"]
+            for option in answer.get("options", []):
+                detail_answer = option.get("detail_answer")
+                if detail_answer and answer_id == detail_answer["id"]:
                     return context["block"]
-                for option in answer.get("options", []):
-                    detail_answer = option.get("detail_answer")
-                    if detail_answer and answer_id == detail_answer["id"]:
-                        return context["block"]
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):
@@ -468,3 +486,10 @@ class QuestionnaireSchema:
                 if referred_answer is None:
                     return None
         return referred_answer
+
+    @staticmethod
+    def get_answers_from_question(question):
+        return [
+            *question.get("dynamic_answers", {}).get("answers", []),
+            *question.get("answers", []),
+        ]

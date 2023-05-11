@@ -11,7 +11,7 @@
         "$ref": "../common_definitions.json#/q_code"
       },
       "label": {
-        "type": "string"
+        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
       },
       "guidance": {
         "$ref": "definitions.json#/answer_guidance"
