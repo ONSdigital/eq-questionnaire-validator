@@ -42,11 +42,7 @@
         "type": "object",
         "properties": {
           "values": {
-            "oneOf": [
-              {
-                "$ref": "../../value_sources.json#/list_value_source"
-              }
-            ]
+            "$ref": "../../value_sources.json#/list_value_source"
           },
           "answers": {
             "type": "array",
