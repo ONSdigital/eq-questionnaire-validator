@@ -502,3 +502,10 @@ class QuestionnaireSchema:
                 if referred_answer is None:
                     return None
         return referred_answer
+
+    @staticmethod
+    def get_answers_from_question(question):
+        return [
+            *question.get("dynamic_answers", {}).get("answers", []),
+            *question.get("answers", []),
+        ]
