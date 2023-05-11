@@ -143,17 +143,17 @@ class QuestionnaireSchema:
 
         answers_dict = {}
         for question, context in self.questions_with_context:
-            if question.get("dynamic_answers", []):
-                self.capture_answers(
-                    context, question["dynamic_answers"]["answers"], answers_dict
-                )
-            if question.get("answers", []):
-                self.capture_answers(context, question["answers"], answers_dict)
+            self.capture_answers(
+                answers=self.get_answers_from_question(question),
+                answers_dict=answers_dict,
+                context=context,
+            )
 
         self._answers_with_context = answers_dict
         return self._answers_with_context
 
-    def capture_answers(self, context, answers, answers_dict):
+    @staticmethod
+    def capture_answers(*, answers, answers_dict, context):
         for answer in answers:
             answers_dict[answer["id"]] = {"answer": answer, **context}
             for option in answer.get("options", []):
@@ -342,7 +342,6 @@ class QuestionnaireSchema:
     @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        answer_ids = set()
         return {
             answer["id"]
             for question in questions
@@ -352,9 +351,7 @@ class QuestionnaireSchema:
     @lru_cache
     def get_first_answer_in_block(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        if questions[0].get("dynamic_answers"):
-            return questions[0]["dynamic_answers"]["answers"][0]
-        return questions[0]["answers"][0]
+        return self.get_answers_from_question(questions[0])[0]
 
     @lru_cache
     def _get_path_id(self, path):
@@ -364,17 +361,20 @@ class QuestionnaireSchema:
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
             if dynamic_answers := question.get("dynamic_answers", {}):
-                if block_id := self.capture_block_id_for_answer(
-                    answer_id, context, dynamic_answers["answers"]
+                if block_id := self.return_block_id_for_answer(
+                    answer_id=answer_id,
+                    answers=dynamic_answers["answers"],
+                    context=context,
                 ):
                     return block_id
             if answers := question.get("answers", []):
-                if block_id := self.capture_block_id_for_answer(
-                    answer_id, context, answers
+                if block_id := self.return_block_id_for_answer(
+                    answer_id=answer_id, answers=answers, context=context
                 ):
                     return block_id
 
-    def capture_block_id_for_answer(self, answer_id, context, answers):
+    @staticmethod
+    def return_block_id_for_answer(*, answer_id, answers, context):
         for answer in answers:
             if answer_id == answer["id"]:
                 return context["block"]
