@@ -222,8 +222,206 @@ def test_dynamic_answers_with_context():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert questionnaire_schema.answers_with_context["percentage-of-shopping"] == {
-        "answer": {
+    assert questionnaire_schema.answers_with_context == {
+        "any-supermarket-answer": {
+            "answer": {
+                "type": "Radio",
+                "id": "any-supermarket-answer",
+                "mandatory": True,
+                "options": [
+                    {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                            "type": "RedirectToListAddBlock",
+                            "params": {
+                                "block_id": "add-supermarket",
+                                "list_name": "supermarkets",
+                            },
+                        },
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+            },
+            "section": "section",
+            "block": "any-supermarket",
+            "group_id": "group",
+        },
+        "list-collector-answer": {
+            "answer": {
+                "id": "list-collector-answer",
+                "mandatory": True,
+                "type": "Radio",
+                "options": [
+                    {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {"type": "RedirectToListAddBlock"},
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+            },
+            "section": "section",
+            "block": "list-collector",
+            "group_id": "group",
+        },
+        "supermarket-name": {
+            "answer": {
+                "id": "supermarket-name",
+                "label": "Supermarket",
+                "mandatory": True,
+                "type": "TextField",
+            },
+            "section": "section",
+            "block": "edit-supermarket",
+            "group_id": "group",
+        },
+        "set-maximum": {
+            "answer": {
+                "id": "set-maximum",
+                "description": "Maximum amount of spending at this supermarket",
+                "label": "Maximum amount of spending",
+                "mandatory": True,
+                "type": "Number",
+                "decimal_places": 2,
+                "minimum": {"value": 1001},
+                "maximum": {"value": 10000},
+            },
+            "section": "section",
+            "block": "edit-supermarket",
+            "group_id": "group",
+        },
+        "remove-confirmation": {
+            "answer": {
+                "id": "remove-confirmation",
+                "mandatory": True,
+                "type": "Radio",
+                "options": [
+                    {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {"type": "RemoveListItemAndAnswers"},
+                    },
+                    {"label": "No", "value": "No"},
+                ],
+            },
+            "section": "section",
+            "block": "remove-supermarket",
+            "group_id": "group",
+        },
+        "percentage-of-shopping": {
+            "answer": {
+                "label": {
+                    "text": "Percentage of shopping at {transformed_value}",
+                    "placeholders": [
+                        {
+                            "placeholder": "transformed_value",
+                            "value": {
+                                "source": "answers",
+                                "identifier": "supermarket-name",
+                            },
+                        }
+                    ],
+                },
+                "id": "percentage-of-shopping",
+                "mandatory": False,
+                "type": "Percentage",
+                "maximum": {"value": 100},
+                "decimal_places": 0,
+            },
+            "section": "section",
+            "block": "dynamic-answer",
+            "group_id": "group",
+        },
+    }
+
+
+def test_dynamic_answers():
+    filename = "schemas/valid/test_dynamic_answers_list_source.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answers = list(questionnaire_schema.answers)
+
+    assert answers == [
+        {
+            "type": "Radio",
+            "id": "any-supermarket-answer",
+            "mandatory": True,
+            "options": [
+                {
+                    "label": "Yes",
+                    "value": "Yes",
+                    "action": {
+                        "type": "RedirectToListAddBlock",
+                        "params": {
+                            "block_id": "add-supermarket",
+                            "list_name": "supermarkets",
+                        },
+                    },
+                },
+                {"label": "No", "value": "No"},
+            ],
+        },
+        {
+            "id": "list-collector-answer",
+            "mandatory": True,
+            "type": "Radio",
+            "options": [
+                {
+                    "label": "Yes",
+                    "value": "Yes",
+                    "action": {"type": "RedirectToListAddBlock"},
+                },
+                {"label": "No", "value": "No"},
+            ],
+        },
+        {
+            "id": "supermarket-name",
+            "label": "Supermarket",
+            "mandatory": True,
+            "type": "TextField",
+        },
+        {
+            "id": "set-maximum",
+            "description": "Maximum amount of spending at this supermarket, should be between 1001 and 10000",
+            "label": "Maximum Spending",
+            "mandatory": True,
+            "type": "Number",
+            "decimal_places": 2,
+            "minimum": {"value": 1001},
+            "maximum": {"value": 10000},
+        },
+        {
+            "id": "supermarket-name",
+            "label": "Supermarket",
+            "mandatory": True,
+            "type": "TextField",
+        },
+        {
+            "id": "set-maximum",
+            "description": "Maximum amount of spending at this supermarket",
+            "label": "Maximum amount of spending",
+            "mandatory": True,
+            "type": "Number",
+            "decimal_places": 2,
+            "minimum": {"value": 1001},
+            "maximum": {"value": 10000},
+        },
+        {
+            "id": "remove-confirmation",
+            "mandatory": True,
+            "type": "Radio",
+            "options": [
+                {
+                    "label": "Yes",
+                    "value": "Yes",
+                    "action": {"type": "RemoveListItemAndAnswers"},
+                },
+                {"label": "No", "value": "No"},
+            ],
+        },
+        {
             "label": {
                 "text": "Percentage of shopping at {transformed_value}",
                 "placeholders": [
@@ -242,35 +440,7 @@ def test_dynamic_answers_with_context():
             "maximum": {"value": 100},
             "decimal_places": 0,
         },
-        "section": "section",
-        "block": "dynamic-answer",
-        "group_id": "group",
-    }
-
-
-def test_dynamic_answers():
-    filename = "schemas/valid/test_dynamic_answers_list_source.json"
-
-    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-
-    answers = list(questionnaire_schema.answers)
-
-    assert answers[7] == {
-        "label": {
-            "text": "Percentage of shopping at {transformed_value}",
-            "placeholders": [
-                {
-                    "placeholder": "transformed_value",
-                    "value": {"source": "answers", "identifier": "supermarket-name"},
-                }
-            ],
-        },
-        "id": "percentage-of-shopping",
-        "mandatory": False,
-        "type": "Percentage",
-        "maximum": {"value": 100},
-        "decimal_places": 0,
-    }
+    ]
 
 
 def test_get_all_answer_ids_dynamic_answers():
