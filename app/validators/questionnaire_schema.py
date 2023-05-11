@@ -350,11 +350,11 @@ class QuestionnaireSchema:
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         answer_ids = []
         for question in questions:
-            if question.get("answers", []):
-                for answer in question["answers"]:
+            if answers := question.get("answers", []):
+                for answer in answers:
                     answer_ids.append(answer["id"])
-            if question.get("dynamic_answers", []):
-                for answer in question["dynamic_answers"]["answers"]:
+            if dynamic_answers := question.get("dynamic_answers", []):
+                for answer in dynamic_answers["answers"]:
                     answer_ids.append(answer["id"])
 
         return set(answer_ids)
@@ -373,9 +373,9 @@ class QuestionnaireSchema:
     @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
-            if question.get("dynamic_answers", {}):
+            if dynamic_answers := question.get("dynamic_answers", {}):
                 if block_id := self.capture_block_id_for_answer(
-                    answer_id, context, question["dynamic_answers"]["answers"]
+                    answer_id, context, dynamic_answers["answers"]
                 ):
                     return block_id
             if answers := question.get("answers", []):
