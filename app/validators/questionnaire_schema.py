@@ -348,16 +348,16 @@ class QuestionnaireSchema:
     @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        answer_ids = []
+        answer_ids = set()
         for question in questions:
             if answers := question.get("answers", []):
                 for answer in answers:
-                    answer_ids.append(answer["id"])
+                    answer_ids.add(answer["id"])
             if dynamic_answers := question.get("dynamic_answers", []):
                 for answer in dynamic_answers["answers"]:
-                    answer_ids.append(answer["id"])
+                    answer_ids.add(answer["id"])
 
-        return set(answer_ids)
+        return answer_ids
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):
