@@ -119,9 +119,7 @@ class SectionValidator(Validator):
 
             self.errors += question_validator.validate()
 
-            self._validate_answers(
-                question, QuestionnaireSchema.get_answers_from_question(question)
-            )
+            self._validate_answers(question)
 
     def validate_variants(self, block):
         question_variants = block.get("question_variants", [])
@@ -333,8 +331,8 @@ class SectionValidator(Validator):
                 id=answer_source["identifier"],
             )
 
-    def _validate_answers(self, question, answers):
-        for answer in answers:
+    def _validate_answers(self, question):
+        for answer in QuestionnaireSchema.get_answers_from_question(question):
             answer_validator = get_answer_validator(answer, self.questionnaire_schema)
 
             answer_validator.validate()
