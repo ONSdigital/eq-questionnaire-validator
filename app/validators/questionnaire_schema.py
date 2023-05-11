@@ -360,18 +360,12 @@ class QuestionnaireSchema:
     @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
-            if dynamic_answers := question.get("dynamic_answers", {}):
-                if block_id := self.return_block_id_for_answer(
-                    answer_id=answer_id,
-                    answers=dynamic_answers["answers"],
-                    context=context,
-                ):
-                    return block_id
-            if answers := question.get("answers", []):
-                if block_id := self.return_block_id_for_answer(
-                    answer_id=answer_id, answers=answers, context=context
-                ):
-                    return block_id
+            if block_id := self.return_block_id_for_answer(
+                answer_id=answer_id,
+                answers=self.get_answers_from_question(question),
+                context=context,
+            ):
+                return block_id
 
     @staticmethod
     def return_block_id_for_answer(*, answer_id, answers, context):

@@ -3,7 +3,10 @@ from collections import defaultdict
 from app import error_messages
 from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
-from app.validators.questionnaire_schema import get_object_containing_key
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    get_object_containing_key,
+)
 from app.validators.questions import get_question_validator
 from app.validators.routing.routing_validator import RoutingValidator
 from app.validators.rules.rule_validator import RulesValidator
@@ -116,9 +119,9 @@ class SectionValidator(Validator):
 
             self.errors += question_validator.validate()
 
-            self._validate_answers(question, question.get("answers", []))
-            if dynamic_answers := question.get("dynamic_answers", {}):
-                self._validate_answers(question, dynamic_answers["answers"])
+            self._validate_answers(
+                question, QuestionnaireSchema.get_answers_from_question(question)
+            )
 
     def validate_variants(self, block):
         question_variants = block.get("question_variants", [])
