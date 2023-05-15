@@ -19,7 +19,7 @@ We already support multiple value sources in eQ Runner, such as `answers`, `meta
 
 **Example supplementary data:**
 
-The JSON runner will use for the supplementary data and will be part of the SDS API response. The data itself would be encrypted; an example response would look like this:
+The JSON Runner will use for the supplementary data will be part of the SDS API response. The data itself would be encrypted; an example response would look like this:
 
 ```yaml
 {
