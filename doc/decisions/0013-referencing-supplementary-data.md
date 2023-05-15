@@ -14,7 +14,7 @@ The structure of the supplementary data is documented at https://github.com/ONSd
 
 ## Proposal
 
-Introduce a new `supplementary-data` value source to allow referencing supplementary data within the questionnaire.
+Introduce a new `supplementary_data` value source to allow referencing supplementary data within the questionnaire.
 We already support multiple value sources in eQ Runner, such as `answers`, `metadata`, `list` etc. Therefore, we will extend the existing value source feature to support supplementary data.
 
 **Example supplementary data:**
