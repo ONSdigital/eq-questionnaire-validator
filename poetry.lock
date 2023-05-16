@@ -256,7 +256,7 @@ graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "eq-translations"
-version = "4.8.0"
+version = "4.9.0"
 description = "Translations infrastructure for EQ Questionnaire Runner"
 category = "main"
 optional = false
@@ -275,7 +275,7 @@ tqdm = "*"
 [package.source]
 type = "git"
 url = "https://github.com/ONSDigital/eq-translations.git"
-reference = "v4.8.0"
+reference = "v4.9.0"
 resolved_reference = "204f7610d4f82a25c5ed7c428623a88b8d7adab2"
 
 [[package]]
