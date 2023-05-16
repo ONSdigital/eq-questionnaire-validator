@@ -1,4 +1,3 @@
-from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import find_duplicates
 
