@@ -14,7 +14,7 @@ def test_minimum_value():
         "label": "Max/Min out of system limits",
         "mandatory": False,
         "maximum": {"value": 9_999_999_999_999_999},
-        "minimum": {"value": -999_999_999_999_999},
+        "minimum": {"value": -9_999_999_999_999_999},
         "type": "Number",
     }
 
@@ -24,7 +24,7 @@ def test_minimum_value():
 
     assert validator.errors[0] == {
         "message": validator.MINIMUM_LESS_THAN_LIMIT,
-        "value": -999_999_999_999_999,
+        "value": -9_999_999_999_999_999,
         "limit": MIN_NUMBER,
         "answer_id": "answer-4",
     }
@@ -172,6 +172,55 @@ def test_invalid_numeric_answers():
             "referenced_id": "answer-2",
             "answer_id": "answer-1",
         }
+    ]
+
+    assert validator.errors == expected_errors
+
+
+def test_invalid_maximum_minimum_value_from_answer_source():
+    answer = {
+        "id": "min-max-range",
+        "mandatory": False,
+        "minimum": {"value": {"identifier": "set-minimum", "source": "answers"}},
+        "maximum": {"value": {"identifier": "set-maximum", "source": "answers"}},
+        "type": "Number",
+    }
+
+    answers = {
+        "answers": [
+            answer,
+            {
+                "id": "set-minimum",
+                "type": "Number",
+                "minimum": {"value": -9_999_999_999_999_999},
+            },
+            {
+                "id": "set-maximum",
+                "type": "Number",
+                "maximum": {"value": 9_999_999_999_999_999},
+            },
+        ]
+    }
+
+    questionnaire_schema = QuestionnaireSchema(answers)
+
+    validator = NumberAnswerValidator(answer, questionnaire_schema)
+
+    validator.validate_value_in_limits()
+
+    expected_errors = [
+        {
+            "message": validator.MINIMUM_LESS_THAN_LIMIT,
+            "value": -9_999_999_999_999_999,
+            "limit": MIN_NUMBER,
+            "answer_id": "min-max-range",
+        },
+        {
+            "message": validator.MAXIMUM_GREATER_THAN_LIMIT,
+            "value": 9_999_999_999_999_999,
+            "limit": MAX_NUMBER,
+            "answer_id": "min-max-range",
+        },
     ]
 
     assert validator.errors == expected_errors

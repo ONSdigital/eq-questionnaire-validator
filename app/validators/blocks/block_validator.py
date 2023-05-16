@@ -40,7 +40,7 @@ class BlockValidator(Validator):
         questions = self.questionnaire_schema.get_all_questions_for_block(self.block)
 
         for question in questions:
-            for answer in question["answers"]:
+            for answer in question.get("answers", []):
                 for option in answer.get("options", []):
                     action = option.get("action")
 
