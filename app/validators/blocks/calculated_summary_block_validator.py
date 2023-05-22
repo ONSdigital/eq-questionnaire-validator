@@ -1,9 +1,7 @@
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
-from app.validators.questionnaire_schema import find_duplicates
 
 
 class CalculatedSummaryBlockValidator(CalculationBlockValidator):
-    ANSWERS_HAS_DUPLICATES = "Duplicate answers in block's answers_to_calculate"
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )
@@ -23,9 +21,6 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
 
         self.validate_answer_id_set_before_calculated_summary_block()
         self.validate_answer_id_for_calculated_summary_not_in_different_section()
-
-        if duplicates := find_duplicates(self.answers_to_calculate):
-            self.add_error(self.ANSWERS_HAS_DUPLICATES, duplicate_answers=duplicates)
 
         self.validate_answer_types(answers)
 

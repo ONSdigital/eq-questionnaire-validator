@@ -29,19 +29,9 @@ def test_invalid_grand_calculated_summary():
             "block_id": "grand-calculated-summary-unit-error",
         },
         {
-            "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARIES_HAS_DUPLICATES,
-            "block_id": "grand-calculated-summary-duplicate-calculated-summary-error",
-            "duplicates": ["calculated-number-1"],
-        },
-        {
             "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS,
             "block_id": "grand-calculated-summary-duplicate-answer-set-error",
             "duplicate_answers": ["calculated-unit-1", "calculated-unit-1-duplicate"],
-        },
-        {
-            "message": GrandCalculatedSummaryBlockValidator.GRAND_CALCULATED_SUMMARY_HAS_INVALID_SOURCE,
-            "block_id": "grand-calculated-summary-source-error",
-            "value_source": {"identifier": "q1-a1", "source": "answers"},
         },
         {
             "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_HAS_INVALID_ID,
@@ -55,9 +45,7 @@ def test_invalid_grand_calculated_summary():
         "grand-calculated-summary-type-error",
         "grand-calculated-summary-currency-error",
         "grand-calculated-summary-unit-error",
-        "grand-calculated-summary-duplicate-calculated-summary-error",
         "grand-calculated-summary-duplicate-answer-set-error",
-        "grand-calculated-summary-source-error",
         "grand-calculated-summary-id-error",
     ]:
         block = questionnaire_schema.get_block(block_id)

@@ -398,25 +398,6 @@
             },
             {
               "type": "GrandCalculatedSummary",
-              "id": "grand-calculated-summary-duplicate-calculated-summary-error",
-              "calculation": {
-                "operation": {
-                  "+": [
-                    {
-                      "source": "calculated_summary",
-                      "identifier": "calculated-number-1"
-                    },
-                    {
-                      "source": "calculated_summary",
-                      "identifier": "calculated-number-1"
-                    }
-                  ]
-                },
-                "title": "Grand total of previous values"
-              }
-            },
-            {
-              "type": "GrandCalculatedSummary",
               "id": "grand-calculated-summary-duplicate-answer-set-error",
               "calculation": {
                 "operation": {
@@ -428,25 +409,6 @@
                     {
                       "source": "calculated_summary",
                       "identifier": "calculated-unit-1-duplicate"
-                    }
-                  ]
-                },
-                "title": "Grand total of previous values"
-              }
-            },
-            {
-              "type": "GrandCalculatedSummary",
-              "id": "grand-calculated-summary-source-error",
-              "calculation": {
-                "operation": {
-                  "+": [
-                    {
-                      "source": "calculated_summary",
-                      "identifier": "calculated-currency-1"
-                    },
-                    {
-                      "source": "answers",
-                      "identifier": "q1-a1"
                     }
                   ]
                 },

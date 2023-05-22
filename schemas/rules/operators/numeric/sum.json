@@ -9,6 +9,7 @@
       "+": {
         "type": "array",
         "minItems": 2,
+        "uniqueItems": true,
         "prefixItems": [
           {
             "$ref": "../../../value_sources.json#/answer_value_source"
@@ -25,6 +26,7 @@
       "+": {
         "type": "array",
         "minItems": 2,
+        "uniqueItems": true,
         "prefixItems": [
           {
             "$ref": "../../../value_sources.json#/calculated_summary_value_source"

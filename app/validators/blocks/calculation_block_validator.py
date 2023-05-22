@@ -1,12 +1,12 @@
 from app.validators.blocks.block_validator import BlockValidator
 
 
-def key_value_is_unique(dictionaries: list[dict], key: str) -> bool:
+def is_value_for_key_unique(dictionaries: list[dict], key: str) -> bool:
     """
     checks if every dictionary provided has the same value for the given key
     """
     if not dictionaries:
-        raise ValueError("check for unique keys can't be called with an empty list")
+        raise ValueError("check for unique values can't be called with an empty list")
     first_value = dictionaries[0].get(key)
     return all(dictionary.get(key) == first_value for dictionary in dictionaries)
 
@@ -42,11 +42,13 @@ class CalculationBlockValidator(BlockValidator):
 
     def validate_answer_types(self, answers: list[dict]) -> None:
         answer_type = answers[0]["type"]
-        if not key_value_is_unique(answers, "type"):
+        if not is_value_for_key_unique(answers, "type"):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_TYPE)
             return
 
-        if answer_type == "Unit" and not key_value_is_unique(answers, "unit"):
+        if answer_type == "Unit" and not is_value_for_key_unique(answers, "unit"):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_UNIT)
-        elif answer_type == "Currency" and not key_value_is_unique(answers, "currency"):
+        elif answer_type == "Currency" and not is_value_for_key_unique(
+            answers, "currency"
+        ):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_CURRENCY)
