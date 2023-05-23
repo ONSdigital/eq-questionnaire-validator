@@ -34,8 +34,7 @@ The JSON that is decrypted from the above `data` property would look like this:
 ```json
 {
   "schema_version": "v1",
-  "key_field": "ru_ref",
-  "ru_ref": "79900005222",
+  "identifier": "79900005222",
   "note": {
     "title": "Volume of total production",
     "description": "Figures should cover the total quantity of the goods produced during the period of the return",
@@ -46,27 +45,24 @@ The JSON that is decrypted from the above `data` property would look like this:
   },
   "guidance": "Some guidance about the survey",
   "items": {
-    "products": {
-      "key_field": "identifier",
-      "values": [
-        {
+    "products": [
+       {
           "identifier": "89929001",
           "name": "Articles and equipment for sports or outdoor games",
           "value_sales": {
-            "answer_code": "12345",
-            "label": "Value of sales"
+             "answer_code": "12345",
+             "label": "Value of sales"
           }
-        },
-        {
+       },
+       {
           "identifier": "201630601",
           "name": "Other Minerals",
           "value_sales": {
-            "answer_code": "54321",
-            "label": "Value of sales"
+             "answer_code": "54321",
+             "label": "Value of sales"
           }
-        }
-      ]
-    }
+       }
+    ]
   }
 }
 ```
@@ -127,7 +123,7 @@ Referencing data for repeating items works similarly to non-repeating items. The
 A key point to understand here is that referencing data for a repeating item will only be supported in the context of a "repeat". For example, inside the list collector child pages, such as the repeating questions, or anywhere inside a repeating section.
 This is because, in both cases, Runner will have access to the list item id of the current item, which is what Runner will use to look up the data for the correct item. This is identical to how values for **answers** are resolved inside a repeat. We use the answer ID and the list item ID to resolve the value.
 
-For both the examples below, we'll assume the list item id for the location (URL) is `abCdE`, which behind the scenes is Runner's ID which maps to the SDS ID `89929001` (`items.products.values.identifier`).
+For both the examples below, we'll assume the list item id for the location (URL) is `abCdE`, which behind the scenes is Runner's ID which maps to the SDS ID `89929001` (`items.products[].identifier`).
 
 1. **Referencing simple key-value data:**
 
