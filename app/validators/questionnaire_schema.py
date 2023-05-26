@@ -2,7 +2,7 @@
 import collections
 from collections import defaultdict
 from functools import cached_property, lru_cache
-from typing import Iterable, TypeVar
+from typing import Iterable, Mapping, TypeVar
 
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
@@ -454,7 +454,7 @@ class QuestionnaireSchema:
         return system_default
 
     @staticmethod
-    def get_calculation_block_ids(block, source_type: str):
+    def get_calculation_block_ids(block: Mapping, source_type: str) -> list[str]:
         """
         Returns the list of block ids of type source_type used in a calculation object,
         e.g. answers for a calculated summary, or calculated summaries for a grand calculated summary
