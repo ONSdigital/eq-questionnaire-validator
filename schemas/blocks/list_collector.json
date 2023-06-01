@@ -45,6 +45,9 @@
       "add_block": {
         "$ref": "list_add_edit_remove_question.json#/block"
       },
+      "repeating_blocks": {
+        "$ref": "list_repeating_blocks.json#/repeating_blocks"
+      },
       "edit_block": {
         "$ref": "list_add_edit_remove_question.json#/block"
       },

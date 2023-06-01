@@ -1,0 +1,11 @@
+{
+  "$id": "/blocks/list_repeating_blocks.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "repeating_blocks": {
+    "type": "array",
+    "minItems": 1,
+    "items": {
+      "$ref": "list_repeating_block.json#/block"
+    }
+  }
+}
