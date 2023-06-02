@@ -28,15 +28,6 @@ def test_invalid_calculated_summary():
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_DUPLICATES,
-            "block_id": "total-playback-duplicate-error",
-            "duplicate_answers": ["fourth-number-answer", "sixth-number-answer"],
-        },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
-            "block_id": "total-playback-duplicate-error",
-        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -46,7 +37,6 @@ def test_invalid_calculated_summary():
         "total-playback-currency-error",
         "total-playback-unit-error",
         "total-playback-answer-error",
-        "total-playback-duplicate-error",
     ]:
         block = questionnaire_schema.get_block(block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
@@ -78,15 +68,6 @@ def test_invalid_new_calculated_summary():
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_DUPLICATES,
-            "block_id": "total-playback-duplicate-error",
-            "duplicate_answers": ["fourth-number-answer", "sixth-number-answer"],
-        },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
-            "block_id": "total-playback-duplicate-error",
-        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -96,7 +77,6 @@ def test_invalid_new_calculated_summary():
         "total-playback-currency-error",
         "total-playback-unit-error",
         "total-playback-answer-error",
-        "total-playback-duplicate-error",
     ]:
         block = questionnaire_schema.get_block(block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)

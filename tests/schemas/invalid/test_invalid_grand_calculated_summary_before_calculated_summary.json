@@ -1,0 +1,154 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Grand Calculated Summary Before Calculated Summary",
+  "theme": "default",
+  "description": "A survey that tests a grand calculated summary before one of the calculated summaries it depends on",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "groups": [
+        {
+          "id": "group-1",
+          "title": "Calculated summary currency 1",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-1",
+              "question": {
+                "id": "question-1",
+                "title": "Currency Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q1-a1",
+                    "label": "Currency Value 1",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  },
+                  {
+                    "id": "q1-a2",
+                    "label": "Currency Value 2",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-currency-1",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q1-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q1-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-before-calculated-summary-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "Question",
+              "id": "block-2",
+              "question": {
+                "id": "question-2",
+                "title": "Currency Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q2-a1",
+                    "label": "Currency Value 1",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  },
+                  {
+                    "id": "q2-a2",
+                    "label": "Currency Value 2",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-currency-2",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q2-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q2-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

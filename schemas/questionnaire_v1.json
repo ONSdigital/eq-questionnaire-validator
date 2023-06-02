@@ -362,6 +362,9 @@
                         "$ref": "blocks/calculated_summary.json#/block"
                       },
                       {
+                        "$ref": "blocks/grand_calculated_summary.json#/block"
+                      },
+                      {
                         "$ref": "blocks/confirmation_question.json#/block"
                       },
                       {

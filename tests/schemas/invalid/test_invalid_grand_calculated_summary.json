@@ -1,0 +1,442 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test Grand Calculated Summary Answer Types",
+  "theme": "default",
+  "description": "A survey that tests mismatching answer types and duplicates in grand calculated summaries",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "groups": [
+        {
+          "id": "group-1",
+          "title": "Calculated summary currency GBP",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-1",
+              "question": {
+                "id": "question-1",
+                "title": "Currency Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q1-a1",
+                    "label": "Currency Value 1",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  },
+                  {
+                    "id": "q1-a2",
+                    "label": "Currency Value 2",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "GBP"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-currency-1",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q1-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q1-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "groups": [
+        {
+          "id": "group-2",
+          "title": "Calculated summary number",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-2",
+              "question": {
+                "id": "question-2",
+                "title": "Number Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q2-a1",
+                    "label": "Number Value 1",
+                    "mandatory": true,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "q2-a2",
+                    "label": "Number Value 2",
+                    "mandatory": true,
+                    "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-number-1",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q2-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q2-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "groups": [
+        {
+          "id": "group-3",
+          "title": "Calculated summary currency EUR",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-3",
+              "question": {
+                "id": "question-3",
+                "title": "Currency Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q3-a1",
+                    "label": "Currency Value 1",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "EUR"
+                  },
+                  {
+                    "id": "q3-a2",
+                    "label": "Currency Value 2",
+                    "mandatory": true,
+                    "type": "Currency",
+                    "currency": "EUR"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-currency-2",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q3-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q3-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-4",
+      "groups": [
+        {
+          "id": "group-4",
+          "title": "Calculated summary unit cm",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-4",
+              "question": {
+                "id": "question-4",
+                "title": "Unit Question",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q4-a1",
+                    "label": "Unit Value 1",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit": "length-centimeter",
+                    "unit_length": "short"
+                  },
+                  {
+                    "id": "q4-a2",
+                    "label": "Unit Value 2",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit": "length-centimeter",
+                    "unit_length": "short"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-unit-1",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q4-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q4-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-unit-1-duplicate",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q4-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q4-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-5",
+      "groups": [
+        {
+          "id": "group-5",
+          "title": "Calculated summary unit miles",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "block-5",
+              "question": {
+                "id": "question-5",
+                "title": "Unit Question Miles",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "q5-a1",
+                    "label": "Unit Value 1",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit": "mile",
+                    "unit_length": "short"
+                  },
+                  {
+                    "id": "q5-a2",
+                    "label": "Unit Value 2",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit": "mile",
+                    "unit_length": "short"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "calculated-unit-2",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "q5-a1"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "q5-a2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grand-calculated-summaries",
+      "groups": [
+        {
+          "id": "gcs-group",
+          "title": "Grand Calculated Summary Error Tests",
+          "blocks": [
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-type-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-number-1"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-currency-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-unit-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-unit-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-unit-2"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-duplicate-answer-set-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-unit-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-unit-1-duplicate"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            },
+            {
+              "type": "GrandCalculatedSummary",
+              "id": "grand-calculated-summary-id-error",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "calculated-currency-1"
+                    },
+                    {
+                      "source": "calculated_summary",
+                      "identifier": "invalid"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

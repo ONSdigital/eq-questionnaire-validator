@@ -198,22 +198,6 @@
                 ],
                 "title": "Grand total of previous values"
               }
-            },
-            {
-              "type": "CalculatedSummary",
-              "id": "total-playback-duplicate-error",
-              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
-              "calculation": {
-                "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "fourth-number-answer",
-                  "fourth-number-answer",
-                  "fifth-number-answer",
-                  "sixth-number-answer",
-                  "sixth-number-answer"
-                ],
-                "title": "Grand total of previous values"
-              }
             }
           ]
         }
