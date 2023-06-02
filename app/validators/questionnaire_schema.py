@@ -454,7 +454,7 @@ class QuestionnaireSchema:
         return system_default
 
     @staticmethod
-    def get_calculation_block_ids(block: Mapping, source_type: str) -> list[str]:
+    def get_calculation_block_ids(*, block: Mapping, source_type: str) -> list[str]:
         """
         Returns the list of block ids of type source_type used in a calculation object,
         e.g. answers for a calculated summary, or calculated summaries for a grand calculated summary
@@ -494,7 +494,7 @@ class QuestionnaireSchema:
         elif value_source == "calculated_summary":
             calculated_summary_block = self.get_block(defined_value["identifier"])
             answers_to_calculate = self.get_calculation_block_ids(
-                calculated_summary_block, "answers"
+                block=calculated_summary_block, source_type="answers"
             )
 
             for answer_id in answers_to_calculate:

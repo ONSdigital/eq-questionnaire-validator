@@ -16,7 +16,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         self.calculated_summary_answers: dict[str, tuple[str, ...]] = {}
         self.calculated_summaries_to_calculate = (
             self.questionnaire_schema.get_calculation_block_ids(
-                self.block, "calculated_summary"
+                block=self.block, source_type="calculated_summary"
             )
         )
 
@@ -54,7 +54,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 self.add_error(self.CALCULATED_SUMMARY_HAS_INVALID_ID)
                 return self.errors
             answers = self.questionnaire_schema.get_calculation_block_ids(
-                calculated_summary_block, "answers"
+                block=calculated_summary_block, source_type="answers"
             )
             self.answers_to_calculate.extend(answers)
             self.calculated_summary_answers[calculated_summary_id] = tuple(answers)

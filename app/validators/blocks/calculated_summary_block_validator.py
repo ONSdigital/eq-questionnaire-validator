@@ -10,7 +10,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
         self.answers_to_calculate = self.questionnaire_schema.get_calculation_block_ids(
-            self.block, "answers"
+            block=self.block, source_type="answers"
         )
 
     def validate(self):
