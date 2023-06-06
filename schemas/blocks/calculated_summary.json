@@ -52,11 +52,7 @@
             "type": "object",
             "properties": {
               "operation": {
-                "type": "object",
-                "properties": {
-                  "$ref": "../rules/operators/numeric/sum.json#/sum_answer_values"
-                },
-                "required": ["+"]
+                "$ref": "../rules/operators/numeric/sum.json#/sum_answer_values"
               },
               "title": {
                 "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"

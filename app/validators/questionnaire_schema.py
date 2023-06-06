@@ -2,6 +2,7 @@
 import collections
 from collections import defaultdict
 from functools import cached_property, lru_cache
+from typing import Iterable, Mapping, TypeVar
 
 import jsonpath_rw_ext as jp
 from jsonpath_rw import parse
@@ -12,9 +13,20 @@ MAX_NUMBER = 999_999_999_999_999
 MIN_NUMBER = -999_999_999_999_999
 MAX_DECIMAL_PLACES = 6
 
+T = TypeVar("T")
+K = TypeVar("K")
 
-def find_duplicates(values):
+
+def find_duplicates(values: Iterable[T]) -> list[T]:
     return [item for item, count in collections.Counter(values).items() if count > 1]
+
+
+def find_dictionary_duplicates(dictionary: dict[K, T]) -> list[K]:
+    """
+    Find keys with duplicate values
+    """
+    value_counts = collections.Counter(dictionary.values())
+    return [key for key, value in dictionary.items() if value_counts[value] > 1]
 
 
 def get_object_containing_key(data, key_name):
@@ -442,7 +454,11 @@ class QuestionnaireSchema:
         return system_default
 
     @staticmethod
-    def get_calculated_answer_ids(block):
+    def get_calculation_block_ids(*, block: Mapping, source_type: str) -> list[str]:
+        """
+        Returns the list of block ids of type source_type used in a calculation object,
+        e.g. answers for a calculated summary, or calculated summaries for a grand calculated summary
+        """
         if block["calculation"].get("answers_to_calculate"):
             return block["calculation"]["answers_to_calculate"]
 
@@ -453,7 +469,7 @@ class QuestionnaireSchema:
         return [
             source[1]["identifier"]
             for source in value_sources
-            if source[1]["source"] == "answers"
+            if source[1]["source"] == source_type
         ]
 
     def is_repeating_section(self, section_id: str) -> bool:
@@ -477,8 +493,8 @@ class QuestionnaireSchema:
             referred_answer = answer_ranges.get(defined_value["identifier"])
         elif value_source == "calculated_summary":
             calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculated_answer_ids(
-                calculated_summary_block
+            answers_to_calculate = self.get_calculation_block_ids(
+                block=calculated_summary_block, source_type="answers"
             )
 
             for answer_id in answers_to_calculate:
