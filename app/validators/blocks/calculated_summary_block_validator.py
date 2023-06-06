@@ -6,7 +6,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Answer ids for calculated summary must be set before calculated summary block"
     )
     ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = "Answer ids for calculated summary must be set in the same section as the calculated summary block"
-    CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless that answer is for a list of dynamic answers"
+    CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless it is a dynamic answer"
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
