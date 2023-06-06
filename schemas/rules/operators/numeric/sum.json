@@ -8,7 +8,7 @@
     "properties": {
       "+": {
         "type": "array",
-        "minItems": 2,
+        "minItems": 1,
         "uniqueItems": true,
         "prefixItems": [
           {

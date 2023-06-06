@@ -258,6 +258,22 @@
                 },
                 "title": "Grand total of previous values"
               }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "total-playback-not-enough-answers",
+              "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "fourth-number-answer"
+                    }
+                  ]
+                },
+                "title": "Grand total of previous values"
+              }
             }
           ]
         }

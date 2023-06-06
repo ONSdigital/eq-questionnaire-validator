@@ -68,6 +68,10 @@ def test_invalid_new_calculated_summary():
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
+        {
+            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+            "block_id": "total-playback-not-enough-answers",
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -77,6 +81,7 @@ def test_invalid_new_calculated_summary():
         "total-playback-currency-error",
         "total-playback-unit-error",
         "total-playback-answer-error",
+        "total-playback-not-enough-answers",
     ]:
         block = questionnaire_schema.get_block(block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)

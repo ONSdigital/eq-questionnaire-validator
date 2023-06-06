@@ -6,6 +6,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Answer ids for calculated summary must be set before calculated summary block"
     )
     ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = "Answer ids for calculated summary must be set in the same section as the calculated summary block"
+    CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless that answer is for a list of dynamic answers"
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
@@ -19,12 +20,28 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         if (answers := self.get_answers(self.answers_to_calculate)) is None:
             return self.errors
 
+        self.validate_single_answer_is_for_dynamic_answers(answers)
         self.validate_answer_id_set_before_calculated_summary_block()
         self.validate_answer_id_for_calculated_summary_not_in_different_section()
 
         self.validate_answer_types(answers)
 
         return self.errors
+
+    def validate_single_answer_is_for_dynamic_answers(self, answers: list[dict]):
+        """Validate that if there is only one answer in the answers_to_calculate list, it's for dynamic answers"""
+        if len(answers) > 1:
+            return
+        # minItems = 1 so answers won't be empty
+        single_answer = answers[0]
+        question_block = self.questionnaire_schema.get_block_by_answer_id(
+            single_answer["id"]
+        )
+        if not question_block["question"].get("dynamic_answers"):
+            self.add_error(
+                self.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+                block_id=self.block["id"],
+            )
 
     def validate_answer_id_set_before_calculated_summary_block(self):
         for answer_id in self.answers_to_calculate:
