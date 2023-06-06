@@ -33,11 +33,9 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         if len(answers) > 1:
             return
         # minItems = 1 so answers won't be empty
-        single_answer = answers[0]
-        question_block = self.questionnaire_schema.get_block_by_answer_id(
-            single_answer["id"]
-        )
-        if not question_block["question"].get("dynamic_answers"):
+        single_answer_id = answers[0]["id"]
+        question_block_id = self.questionnaire_schema.get_block_id_by_answer_id(single_answer_id)
+        if single_answer_id not in self.questionnaire_schema.get_all_dynamic_answer_ids(question_block_id):
             self.add_error(
                 self.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
                 block_id=self.block["id"],
