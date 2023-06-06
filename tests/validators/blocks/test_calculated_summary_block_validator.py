@@ -159,7 +159,7 @@ def test_invalid_calculated_summary_with_single_static_answer():
     """Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer
     this particular test is for the edge case where the question has both dynamic and static answers
     and the calculated summary is referring to a static one."""
-    filename = "schemas/invalid/test_invalid_calculated_summary_with_dynamic_answers.json"
+    filename = "schemas/invalid/test_invalid_new_calculated_summary_with_dynamic_answers.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
     expected_error_messages = [
