@@ -41,6 +41,8 @@ class MetadataValidator(Validator):
             "dbt-dsit",
             "dbt-dsit-ni",
             "orr",
+            "desnz",
+            "desnz-ni",
         ]:
             required_metadata_names.extend(["user_id", "period_id", "ru_name"])
 
