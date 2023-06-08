@@ -21,7 +21,9 @@ class CalculatedQuestionValidator(QuestionValidator):
         answer_ids = [answer["id"] for answer in self.answers]
         for calculation in self.question.get("calculations"):
             answer_ids_list = calculation["answers_to_calculate"]
-            if len(answer_ids_list) == 1 and not self._answer_id_belongs_to_dynamic_answer(
+            if len(
+                answer_ids_list
+            ) == 1 and not self._answer_id_belongs_to_dynamic_answer(
                 answer_ids_list[0]
             ):
                 self.add_error(
