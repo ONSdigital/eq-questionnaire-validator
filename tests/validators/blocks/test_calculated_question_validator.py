@@ -75,39 +75,7 @@ def test_answers_to_calculate_too_short():
         "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
     )
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    question = {
-        "answers": [
-            {
-                "label": {
-                    "text": "Percentage of shopping elsewhere",
-                    "placeholders": [
-                        {
-                            "placeholder": "transformed_value",
-                            "value": {
-                                "source": "answers",
-                                "identifier": "supermarket-name",
-                            },
-                        }
-                    ],
-                },
-                "id": "percentage-of-shopping-elsewhere",
-                "mandatory": False,
-                "type": "Percentage",
-                "maximum": {"value": 100},
-                "decimal_places": 0,
-            }
-        ],
-        "calculations": [
-            {
-                "calculation_type": "sum",
-                "value": 1000,
-                "answers_to_calculate": ["percentage-of-shopping-elsewhere"],
-                "conditions": ["equals"],
-            }
-        ],
-        "id": "dynamic-answer-only-question",
-        "type": "Calculated",
-    }
+    question = schema.blocks_by_id["dynamic-answer-only"]["question"]
 
     validator = get_question_validator(question, schema)
     validator.validate()
