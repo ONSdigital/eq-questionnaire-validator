@@ -57,6 +57,8 @@
         "dbt-dsit",
         "dbt-dsit-ni",
         "orr",
+        "desnz",
+        "desnz-ni",
         "census",
         "census-nisra"
       ]
