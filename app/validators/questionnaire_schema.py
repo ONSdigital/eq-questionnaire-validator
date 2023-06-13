@@ -360,6 +360,7 @@ class QuestionnaireSchema:
             for answer in self.get_answers_from_question(question)
         }
 
+    @lru_cache
     def get_all_dynamic_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return {

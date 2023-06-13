@@ -167,6 +167,7 @@ def test_invalid_calculated_summary_with_single_static_answer():
     expected_error_messages = [
         {
             "block_id": "invalid-calculated-summary-with-single-static-answer",
+            "answer_id": "cost-of-season-ticket",
             "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
         }
     ]

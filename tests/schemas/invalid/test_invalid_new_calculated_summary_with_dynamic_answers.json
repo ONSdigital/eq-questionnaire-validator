@@ -6,7 +6,7 @@
   "survey_id": "0",
   "title": "Calculated Summary with Dynamic Answers",
   "theme": "default",
-  "description": "demo of invalid calculated summary which references a single static answer from a question with both static and dynamic answers.",
+  "description": "Demo of invalid calculated summary which references a single static answer from a question with both static and dynamic answers.",
   "metadata": [
     {
       "name": "user_id",
