@@ -21,10 +21,10 @@ class CalculatedQuestionValidator(QuestionValidator):
         answer_ids = [answer["id"] for answer in self.answers]
         for calculation in self.question.get("calculations"):
             answer_ids_list = calculation["answers_to_calculate"]
-            if len(
-                answer_ids_list
-            ) == 1 and not self._answer_id_belongs_to_dynamic_answer(
-                answer_ids_list[0]
+            if len(answer_ids_list) == 1 and answer_ids_list[
+                0
+            ] not in self.schema.get_all_dynamic_answer_ids(
+                self.schema.get_block_by_answer_id(answer_ids_list[0])["id"]
             ):
                 self.add_error(
                     self.ANSWERS_TO_CALCULATE_TOO_SHORT.format(
@@ -62,10 +62,3 @@ class CalculatedQuestionValidator(QuestionValidator):
 
                 if value.get("source") == "answers":
                     self._validate_answer_is_numeric(answer_id)
-
-    def _answer_id_belongs_to_dynamic_answer(self, answer_id):
-        dynamic_answer_ids = [
-            answer["id"]
-            for answer in self.question.get("dynamic_answers", {}).get("answers", [])
-        ]
-        return answer_id in dynamic_answer_ids
