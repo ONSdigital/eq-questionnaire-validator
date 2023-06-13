@@ -71,6 +71,7 @@ def test_invalid_new_calculated_summary():
         {
             "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
             "block_id": "total-playback-not-enough-answers",
+            "answer_id": "fourth-number-answer",
         },
     ]
 
