@@ -96,6 +96,15 @@ class SectionValidator(Validator):
 
             self.validate_question(block)
             self.validate_variants(block)
+            # Repeating blocks must be validated here instead of from ListCollectorValidator as the latter cannot do standard block validation
+            for repeating_block in block.get("repeating_blocks", []):
+                block_validator = get_block_validator(
+                    repeating_block, self.questionnaire_schema
+                )
+                self.errors += block_validator.validate()
+
+                self.validate_question(repeating_block)
+                self.validate_variants(repeating_block)
 
     def validate_routing(self, schema_element, group):
         if "routing_rules" in schema_element:

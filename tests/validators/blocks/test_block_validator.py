@@ -93,3 +93,22 @@ def test_invalid_self_reference():
         }
     ]
     assert validator.errors == expected_errors
+
+
+def test_invalid_list_collector_repeating_blocks_placeholder_references_same_block():
+    filename = "schemas/invalid/test_invalid_list_collector_repeating_blocks_placeholder_references_same_block.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("companies-repeating-block-1")
+    validator = BlockValidator(block, questionnaire_schema)
+    validator.validate()
+
+    expected_errors = [
+        {
+            "block_id": "companies-repeating-block-1",
+            "identifier": "registration-number",
+            "message": validator.PLACEHOLDER_ANSWER_SELF_REFERENCE,
+        }
+    ]
+
+    assert expected_errors == validator.errors
