@@ -57,6 +57,8 @@
         "dbt-dsit",
         "dbt-dsit-ni",
         "orr",
+        "desnz",
+        "desnz-ni",
         "census",
         "census-nisra"
       ]
@@ -360,6 +362,9 @@
                       },
                       {
                         "$ref": "blocks/calculated_summary.json#/block"
+                      },
+                      {
+                        "$ref": "blocks/grand_calculated_summary.json#/block"
                       },
                       {
                         "$ref": "blocks/confirmation_question.json#/block"
