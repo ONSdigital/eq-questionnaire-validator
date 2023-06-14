@@ -68,3 +68,25 @@ def test_invalid_id_in_answers_to_calculate():
     ]
 
     assert expected_error_messages == validator.errors
+
+
+def test_answers_to_calculate_too_short():
+    filename = (
+        "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
+    )
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    question = schema.blocks_by_id["dynamic-answer-only"]["question"]
+
+    validator = get_question_validator(question, schema)
+    validator.validate()
+
+    expected_error_messages = [
+        {
+            "message": validator.ANSWERS_TO_CALCULATE_TOO_SHORT.format(
+                list=["percentage-of-shopping-elsewhere"]
+            ),
+            "question_id": "dynamic-answer-only-question",
+        }
+    ]
+
+    assert expected_error_messages == validator.errors
