@@ -144,19 +144,23 @@ class PlaceholderValidator(Validator):
         answer_id = value.get("identifier")
         unit = arguments["unit"]
 
-        if self.errors or (
-            unit
-            == self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                "unit"
-            ]
-        ):
+        if value.get("source") == "calculated_summary":
+            answers_unit = (
+                self.questionnaire_schema.get_calculated_summary_source_answer_ids(
+                    answer_id
+                )
+            )
+        else:
+            answers_unit = self.questionnaire_schema.answers_with_context[answer_id][
+                "answer"
+            ]["unit"]
+
+        if self.errors or (unit == answers_unit):
             return None
 
         self.add_error(
             error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit=self.questionnaire_schema.answers_with_context[answer_id][
-                    "answer"
-                ]["unit"],
+                answer_unit=answers_unit,
                 transform_unit=unit,
             ),
             identifier=answer_id,

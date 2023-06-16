@@ -517,3 +517,11 @@ class QuestionnaireSchema:
             *question.get("dynamic_answers", {}).get("answers", []),
             *question.get("answers", []),
         ]
+
+    def get_calculated_summary_source_answer_ids(self, block_id):
+        operations = self.get_block(block_id)["calculation"]["operation"]
+        for operation in operations:
+            for item in operations[operation]:
+                if item["source"] == "answers":
+                    answer = self.get_answer(item["identifier"])
+                    return answer["unit"]
