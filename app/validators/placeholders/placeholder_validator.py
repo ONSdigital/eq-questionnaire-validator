@@ -145,15 +145,18 @@ class PlaceholderValidator(Validator):
         unit = arguments["unit"]
 
         if value.get("source") == "calculated_summary":
-            answers_unit = (
-                self.questionnaire_schema.get_calculated_summary_source_answer_ids(
-                    answer_id
-                )
-            )
+            if answer_ids := self.questionnaire_schema.get_calculation_block_ids(
+                block=self.questionnaire_schema.get_block(value.get("identifier")),
+                source_type="answers",
+            ):
+                core_answer_id = answer_ids[0]
+
         else:
-            answers_unit = self.questionnaire_schema.answers_with_context[answer_id][
-                "answer"
-            ]["unit"]
+            core_answer_id = value.get("identifier")
+
+        answers_unit = self.questionnaire_schema.answers_with_context[core_answer_id][
+            "answer"
+        ]["unit"]
 
         if self.errors or (unit == answers_unit):
             return None
