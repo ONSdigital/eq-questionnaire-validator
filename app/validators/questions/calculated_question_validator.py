@@ -5,6 +5,7 @@ from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 class CalculatedQuestionValidator(QuestionValidator):
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
+    ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
         super().validate()
@@ -19,7 +20,18 @@ class CalculatedQuestionValidator(QuestionValidator):
         """
         answer_ids = [answer["id"] for answer in self.answers]
         for calculation in self.question.get("calculations"):
-            for answer_id in calculation["answers_to_calculate"]:
+            answer_ids_list = calculation["answers_to_calculate"]
+            if len(answer_ids_list) == 1 and answer_ids_list[
+                0
+            ] not in self.schema.get_all_dynamic_answer_ids(
+                self.schema.get_block_by_answer_id(answer_ids_list[0])["id"]
+            ):
+                self.add_error(
+                    self.ANSWERS_TO_CALCULATE_TOO_SHORT.format(
+                        list=answer_ids_list,
+                    )
+                )
+            for answer_id in answer_ids_list:
                 if answer_id not in answer_ids:
                     self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
 
