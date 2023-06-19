@@ -434,7 +434,7 @@ class QuestionnaireSchema:
     ):
         minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
-            return minimum_value + (1 / 10**decimal_places)
+            return minimum_value + (1 / 10 ** decimal_places)
         return minimum_value
 
     def _get_answer_maximum(
@@ -444,7 +444,7 @@ class QuestionnaireSchema:
             defined_maximum, MAX_NUMBER, answer_ranges
         )
         if exclusive:
-            return maximum_value - (1 / 10**decimal_places)
+            return maximum_value - (1 / 10 ** decimal_places)
         return maximum_value
 
     def _get_numeric_value(self, defined_value, system_default, answer_ranges):

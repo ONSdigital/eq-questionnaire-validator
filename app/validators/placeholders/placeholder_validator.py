@@ -143,31 +143,32 @@ class PlaceholderValidator(Validator):
         value = arguments["value"]
         answer_id = value.get("identifier")
         unit = arguments["unit"]
+        source_answer_ids = []
 
         if value.get("source") == "calculated_summary":
-            if answer_ids := self.questionnaire_schema.get_calculation_block_ids(
+            if calculated_summary_source_answer_ids := self.questionnaire_schema.get_calculation_block_ids(
                 block=self.questionnaire_schema.get_block(value.get("identifier")),
                 source_type="answers",
             ):
-                core_answer_id = answer_ids[0]
+                source_answer_ids = calculated_summary_source_answer_ids
 
         else:
-            core_answer_id = value.get("identifier")
+            source_answer_ids.append(value.get("identifier"))
 
-        answers_unit = self.questionnaire_schema.answers_with_context[core_answer_id][
-            "answer"
-        ]["unit"]
+        for source_answer_id in source_answer_ids:
 
-        if self.errors or (unit == answers_unit):
-            return None
+            answers_unit = self.questionnaire_schema.answers_with_context[
+                source_answer_id
+            ]["answer"]["unit"]
 
-        self.add_error(
-            error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit=answers_unit,
-                transform_unit=unit,
-            ),
-            identifier=answer_id,
-        )
+            if unit != answers_unit:
+                self.add_error(
+                    error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                        answer_unit=answers_unit,
+                        transform_unit=unit,
+                    ),
+                    identifier=answer_id,
+                )
 
     def _validate_placeholder_previous_transforms(self, transforms):
         # First transform can't reference a previous transform
