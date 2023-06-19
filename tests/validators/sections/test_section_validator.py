@@ -1,4 +1,5 @@
 from app import error_messages
+from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.sections.section_validator import SectionValidator
 from tests.utils import _open_and_load_schema_file
@@ -56,3 +57,22 @@ def test_invalid_section_summary_items():
     validator.validate()
 
     assert validator.errors == expected_errors
+
+
+def test_invalid_list_collector_repeating_blocks_validated_from_section_validator():
+    filename = "schemas/invalid/test_invalid_list_collector_repeating_blocks_placeholder_references_same_block.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    section = questionnaire_schema.get_section("section-companies")
+    validator = SectionValidator(section, questionnaire_schema)
+    validator.validate()
+
+    expected_errors = [
+        {
+            "block_id": "companies-repeating-block-1",
+            "identifier": "registration-number",
+            "message": BlockValidator.PLACEHOLDER_ANSWER_SELF_REFERENCE,
+        }
+    ]
+
+    assert expected_errors == validator.errors
