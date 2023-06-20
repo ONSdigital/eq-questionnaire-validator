@@ -2,6 +2,7 @@ import pytest
 
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
+from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.utils import _open_and_load_schema_file
 
@@ -189,3 +190,41 @@ def test_validation_answer_and_transform_unit_match(
         arguments=arguments, transform_type=transform_type
     )
     assert validator.errors == expected_error
+
+
+def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
+    filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
+    schema_file = _open_and_load_schema_file(filename)
+    validator = PlaceholderValidator(schema_file)
+    validator.validate()
+    assert validator.errors == [
+        {
+            "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                answer_unit="length-centimeter", transform_unit="length-meter"
+            ),
+            "identifier": "unit-total-playback",
+        },
+    ]
+
+
+@pytest.mark.parametrize(
+    "answer_id",
+    ["first-number-answer-unit-total", "second-number-answer-unit-total"],
+)
+def test_validation_answer_and_transform_unit_single_source_answer_mismatch(answer_id):
+    filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
+    schema_file = _open_and_load_schema_file(filename)
+    schema = QuestionnaireSchema(schema_file)
+    answer = schema.get_answer(answer_id)
+    answer["unit"] = "length-meter"
+
+    validator = PlaceholderValidator(schema_file)
+    validator.validate()
+    assert validator.errors == [
+        {
+            "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                answer_unit="length-centimeter", transform_unit="length-meter"
+            ),
+            "identifier": "unit-total-playback",
+        },
+    ]

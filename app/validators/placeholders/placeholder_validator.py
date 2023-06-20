@@ -141,26 +141,35 @@ class PlaceholderValidator(Validator):
             return None
 
         value = arguments["value"]
-        answer_id = value.get("identifier")
+        identifier = value.get("identifier")
         unit = arguments["unit"]
+        source_answer_ids = []
 
-        if self.errors or (
-            unit
-            == self.questionnaire_schema.answers_with_context[answer_id]["answer"][
-                "unit"
-            ]
-        ):
-            return None
+        if value.get("source") == "calculated_summary":
+            if calculated_summary_source_answer_ids := self.questionnaire_schema.get_calculation_block_ids(
+                block=self.questionnaire_schema.get_block(identifier),
+                source_type="answers",
+            ):
+                source_answer_ids = calculated_summary_source_answer_ids
 
-        self.add_error(
-            error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit=self.questionnaire_schema.answers_with_context[answer_id][
-                    "answer"
-                ]["unit"],
-                transform_unit=unit,
-            ),
-            identifier=answer_id,
-        )
+        else:
+            source_answer_ids.append(identifier)
+
+        for source_answer_id in source_answer_ids:
+
+            answer_unit = self.questionnaire_schema.answers_with_context[
+                source_answer_id
+            ]["answer"]["unit"]
+
+            if unit != answer_unit:
+                self.add_error(
+                    error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
+                        answer_unit=answer_unit,
+                        transform_unit=unit,
+                    ),
+                    identifier=identifier,
+                )
+                break
 
     def _validate_placeholder_previous_transforms(self, transforms):
         # First transform can't reference a previous transform
