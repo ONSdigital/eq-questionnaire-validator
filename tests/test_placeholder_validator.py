@@ -213,30 +213,15 @@ def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
     ]
 
 
-def test_validation_answer_and_transform_unit_single_source_answer_mismatch():
+@pytest.mark.parametrize(
+    "answer_id",
+    ["first-number-answer-unit-total", "second-number-answer-unit-total"],
+)
+def test_validation_answer_and_transform_unit_single_source_answer_mismatch(answer_id):
     filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
     schema_file = _open_and_load_schema_file(filename)
     schema = QuestionnaireSchema(schema_file)
-    answer = schema.get_answer("second-number-answer-unit-total")
-    answer["unit"] = "length-meter"
-
-    validator = PlaceholderValidator(schema_file)
-    validator.validate()
-    assert validator.errors == [
-        {
-            "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit="length-centimeter", transform_unit="length-meter"
-            ),
-            "identifier": "unit-total-playback",
-        },
-    ]
-
-
-def test_validation_answer_and_transform_unit_first_source_answer_mismatch():
-    filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
-    schema_file = _open_and_load_schema_file(filename)
-    schema = QuestionnaireSchema(schema_file)
-    answer = schema.get_answer("first-number-answer-unit-total")
+    answer = schema.get_answer(answer_id)
     answer["unit"] = "length-meter"
 
     validator = PlaceholderValidator(schema_file)
