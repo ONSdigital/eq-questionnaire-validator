@@ -169,6 +169,7 @@ class PlaceholderValidator(Validator):
                     ),
                     identifier=identifier,
                 )
+                break
 
     def _validate_placeholder_previous_transforms(self, transforms):
         # First transform can't reference a previous transform

@@ -204,12 +204,6 @@ def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
             ),
             "identifier": "unit-total-playback",
         },
-        {
-            "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit="length-centimeter", transform_unit="length-meter"
-            ),
-            "identifier": "unit-total-playback",
-        },
     ]
 
 
