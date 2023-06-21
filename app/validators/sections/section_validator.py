@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from app import error_messages
 from app.validators.answers import get_answer_validator
-from app.validators.blocks import ListCollectorValidator, get_block_validator
+from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
     get_object_containing_key,
@@ -96,9 +96,7 @@ class SectionValidator(Validator):
 
             self.validate_question(block)
             self.validate_variants(block)
-
-            if isinstance(block_validator, ListCollectorValidator):
-                self.validate_repeating_blocks(block)
+            self.validate_repeating_blocks(block)
 
     def validate_routing(self, schema_element, group):
         if "routing_rules" in schema_element:
