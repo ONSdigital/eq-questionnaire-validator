@@ -46,7 +46,11 @@
         "$ref": "list_add_edit_remove_question.json#/block"
       },
       "repeating_blocks": {
-        "$ref": "list_repeating_blocks.json#/repeating_blocks"
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "list_repeating_block.json#/block"
+        }
       },
       "edit_block": {
         "$ref": "list_add_edit_remove_question.json#/block"
