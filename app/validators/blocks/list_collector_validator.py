@@ -29,6 +29,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         "Multiple list collectors populate a list using different "
         "answer_ids in the add block"
     )
+    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
     def validate(self):
         super().validate()
@@ -59,6 +60,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
+            self.validate_single_repeating_blocks_list_collector()
         except KeyError as e:
             self.add_error(self.LIST_COLLECTOR_KEY_MISSING, key=e)
 
@@ -99,5 +101,19 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             if difference:
                 self.add_error(
                     self.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+                    list_name=list_name,
+                )
+
+    def validate_single_repeating_blocks_list_collector(self):
+        if self.block.get("repeating_blocks"):
+            list_name = self.block["for_list"]
+
+            other_list_collectors = self.questionnaire_schema.get_other_blocks(
+                self.block["id"], for_list=list_name, type="ListCollector"
+            )
+
+            if other_list_collectors:
+                self.add_error(
+                    self.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
                     list_name=list_name,
                 )
