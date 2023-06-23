@@ -47,57 +47,6 @@
           "id": "group",
           "blocks": [
             {
-              "type": "ListCollectorDrivingQuestion",
-              "id": "any-transport",
-              "for_list": "transport",
-              "question": {
-                "type": "General",
-                "id": "any-transport-question",
-                "title": "Do you use public transport?",
-                "answers": [
-                  {
-                    "type": "Radio",
-                    "id": "any-transport-answer",
-                    "mandatory": true,
-                    "options": [
-                      {
-                        "label": "Yes",
-                        "value": "Yes",
-                        "action": {
-                          "type": "RedirectToListAddBlock",
-                          "params": {
-                            "block_id": "add-transport",
-                            "list_name": "transport"
-                          }
-                        }
-                      },
-                      {
-                        "label": "No",
-                        "value": "No"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "routing_rules": [
-                {
-                  "section": "End",
-                  "when": {
-                    "==": [
-                      {
-                        "source": "answers",
-                        "identifier": "any-transport-answer"
-                      },
-                      "No"
-                    ]
-                  }
-                },
-                {
-                  "block": "list-collector"
-                }
-              ]
-            },
-            {
               "id": "list-collector",
               "type": "ListCollector",
               "for_list": "transport",
