@@ -68,6 +68,11 @@ def test_invalid_new_calculated_summary():
             "answer_id": "seventh-number-answer",
             "block_id": "total-playback-answer-error",
         },
+        {
+            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+            "block_id": "total-playback-not-enough-answers",
+            "answer_id": "fourth-number-answer",
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -77,6 +82,7 @@ def test_invalid_new_calculated_summary():
         "total-playback-currency-error",
         "total-playback-unit-error",
         "total-playback-answer-error",
+        "total-playback-not-enough-answers",
     ]:
         block = questionnaire_schema.get_block(block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
@@ -144,6 +150,35 @@ def test_invalid_calculated_summary_answer_in_different_section():
     errors = []
 
     block = questionnaire_schema.get_block("currency-total-playback")
+    validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
+    errors += validator.validate()
+
+    assert errors == expected_error_messages
+
+
+def test_invalid_calculated_summary_with_single_static_answer():
+    """Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer
+    this particular test is for the edge case where the question has both dynamic and static answers
+    and the calculated summary is referring to a static one."""
+    filename = (
+        "schemas/invalid/test_invalid_new_calculated_summary_with_dynamic_answers.json"
+    )
+    json_to_validate = _open_and_load_schema_file(filename)
+
+    expected_error_messages = [
+        {
+            "block_id": "invalid-calculated-summary-with-single-static-answer",
+            "answer_id": "cost-of-season-ticket",
+            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+        }
+    ]
+
+    questionnaire_schema = QuestionnaireSchema(json_to_validate)
+    errors = []
+
+    block = questionnaire_schema.get_block(
+        "invalid-calculated-summary-with-single-static-answer"
+    )
     validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
     errors += validator.validate()
 
