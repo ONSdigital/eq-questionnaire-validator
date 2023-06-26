@@ -1,0 +1,24 @@
+{
+  "$id": "/blocks/list_repeating_block.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "block": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "../common_definitions.json#/identifier"
+      },
+      "page_title": {
+        "$ref": "../common_definitions.json#/non_empty_string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["ListRepeatingQuestion"]
+      },
+      "question": {
+        "$ref": "../questions/definitions.json#/question"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["id", "type", "question"]
+  }
+}

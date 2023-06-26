@@ -74,7 +74,11 @@ def get_element_value(key, match):
 def get_context_from_match(match):
     full_path = str(match.full_path)
     section = get_element_value("sections", match)
-    block = get_element_value("blocks", match)
+    block = (
+        get_element_value("repeating_blocks", match)
+        if "repeating_blocks" in full_path
+        else get_element_value("blocks", match)
+    )
     block_id = block["id"]
     group = get_element_value("groups", match)
 
@@ -93,8 +97,10 @@ class QuestionnaireSchema:
         self.sub_blocks = jp.match(
             "$..[add_block, edit_block, add_or_edit_block, remove_block]", self.schema
         )
+        self.repeating_blocks = jp.match("$..repeating_blocks[*]", self.schema)
         self.blocks_by_id = {
-            block["id"]: block for block in self.blocks + self.sub_blocks
+            block["id"]: block
+            for block in self.blocks + self.sub_blocks + self.repeating_blocks
         }
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
