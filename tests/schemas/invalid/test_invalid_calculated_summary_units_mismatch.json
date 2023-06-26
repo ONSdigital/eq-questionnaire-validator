@@ -1,0 +1,127 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "A test schema to demo Calculated Summary",
+  "theme": "default",
+  "description": "A schema to demo Calculated Summary usage in value source.",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "default-section",
+      "groups": [
+        {
+          "id": "group",
+          "title": "Total a range of values",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "first-number-block",
+              "question": {
+                "id": "first-number-question",
+                "title": "First Number Question Title",
+                "type": "General",
+                "answers": [
+                  {
+                    "id": "first-number-answer-unit-total",
+                    "label": "Second answer label in unit total",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit_length": "short",
+                    "unit": "length-centimeter"
+                  },
+                  {
+                    "id": "second-number-answer-unit-total",
+                    "label": "Third answer label in unit total",
+                    "mandatory": true,
+                    "type": "Unit",
+                    "unit_length": "short",
+                    "unit": "length-centimeter"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CalculatedSummary",
+              "id": "unit-total-playback",
+              "title": "We calculate the total of unit values entered to be %(total)s. Is this correct?",
+              "page_title": "Total Unit Values",
+              "calculation": {
+                "operation": {
+                  "+": [
+                    {
+                      "source": "answers",
+                      "identifier": "first-number-answer-unit-total"
+                    },
+                    {
+                      "source": "answers",
+                      "identifier": "second-number-answer-unit-total"
+                    }
+                  ]
+                },
+                "title": "Total of previous values"
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "calculated-summary-total-confirmation",
+              "content": {
+                "title": "You have provided the following grand totals.",
+                "contents": [
+                  {
+                    "list": [
+                      {
+                        "text": "Total unit values: <em>{unit_total}</em>",
+                        "placeholders": [
+                          {
+                            "placeholder": "unit_total",
+                            "transforms": [
+                              {
+                                "transform": "format_unit",
+                                "arguments": {
+                                  "value": {
+                                    "source": "calculated_summary",
+                                    "identifier": "unit-total-playback"
+                                  },
+                                  "unit": "length-meter",
+                                  "unit_length": "long"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
