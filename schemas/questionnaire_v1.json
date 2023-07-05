@@ -379,6 +379,9 @@
                         "$ref": "blocks/list_collector.json#/block"
                       },
                       {
+                        "$ref": "blocks/list_collector_content.json#/block"
+                      },
+                      {
                         "$ref": "blocks/list_collector_driving_question.json#/block"
                       },
                       {
