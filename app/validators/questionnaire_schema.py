@@ -1,5 +1,6 @@
 # pylint: disable=too-many-public-methods
 import collections
+import re
 from collections import defaultdict
 from functools import cached_property, lru_cache
 from typing import Iterable, Mapping, TypeVar
@@ -71,6 +72,16 @@ def get_element_value(key, match):
     return get_element_value(key, match.context)
 
 
+def json_path_position(match) -> tuple[int, ...]:
+    """
+    Given a match, whose json path will look like 'sections[x].groups[y].blocks[z]...'
+    return a tuple of (x, y, z, ...) to represent the position of the match within the schema
+    """
+    path = str(match.full_path)
+    indices = re.findall(r"\[(\d+)]", path)
+    return tuple(int(index) for index in indices)
+
+
 def get_context_from_match(match):
     full_path = str(match.full_path)
     section = get_element_value("sections", match)
@@ -92,16 +103,19 @@ def get_context_from_match(match):
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
-
-        self.blocks = jp.match("$..blocks[*]", self.schema)
-        self.sub_blocks = jp.match(
-            "$..[add_block, edit_block, add_or_edit_block, remove_block]", self.schema
+        self.matches = [
+            *parse("$..blocks[*]").find(self.schema),
+            *parse("$..[add_block, edit_block, add_or_edit_block, remove_block]").find(
+                self.schema
+            ),
+            *parse("$..repeating_blocks[*]").find(self.schema),
+        ]
+        # order the blocks by the order that they occur in the json schema
+        self.sorted_matches = sorted(
+            (match for match in self.matches), key=json_path_position
         )
-        self.repeating_blocks = jp.match("$..repeating_blocks[*]", self.schema)
-        self.blocks_by_id = {
-            block["id"]: block
-            for block in self.blocks + self.sub_blocks + self.repeating_blocks
-        }
+        self.blocks = [match.value for match in self.sorted_matches]
+        self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
         self.calculated_summary_block_ids = {
