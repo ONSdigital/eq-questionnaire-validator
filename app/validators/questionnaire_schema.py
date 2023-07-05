@@ -111,9 +111,7 @@ class QuestionnaireSchema:
             *parse("$..repeating_blocks[*]").find(self.schema),
         ]
         # order the blocks by the order that they occur in the json schema
-        self.sorted_matches = sorted(
-            (match for match in self.matches), key=json_path_position
-        )
+        self.sorted_matches = sorted(self.matches, key=json_path_position)
         self.blocks = [match.value for match in self.sorted_matches]
         self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.block_ids = list(self.blocks_by_id.keys())
