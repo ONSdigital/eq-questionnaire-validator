@@ -1,19 +1,6 @@
 {
   "$id": "/blocks/list_collector_content.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "summary": {
-    "type": "object",
-    "properties": {
-      "item_title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      },
-      "title": {
-        "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
-      }
-    },
-    "additionalProperties": false,
-    "required": ["item_title", "title"]
-  },
   "block": {
     "type": "object",
     "properties": {
@@ -47,26 +34,18 @@
         }
       },
       "summary": {
-        "$ref": "list_collector_content.json#/summary"
+        "$ref": "list_collector.json#/summary"
       }
     },
     "additionalProperties": false,
-    "if": {
-      "not": {
+    "required": ["id", "type", "for_list"],
+    "oneOf": [
+      {
         "required": ["content"]
+      },
+      {
+        "required": ["content_variants"]
       }
-    },
-    "then": {
-      "required": [
-        "id",
-        "type",
-        "for_list",
-        "content_variants",
-        "repeating_blocks"
-      ]
-    },
-    "else": {
-      "required": ["id", "type", "for_list", "content", "repeating_blocks"]
-    }
+    ]
   }
 }
