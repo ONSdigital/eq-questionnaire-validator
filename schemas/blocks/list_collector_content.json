@@ -25,18 +25,10 @@
         "enum": ["ListCollectorContent"]
       },
       "content": {
-        "description": "Content title and contents.",
-        "type": "object",
-        "required": ["title", "contents"],
-        "properties": {
-          "title": {
-            "$ref": "../common_definitions.json#/non_empty_string"
-          },
-          "contents": {
-            "$ref": "../common_definitions.json#/contents"
-          }
-        },
-        "additionalProperties": false
+        "$ref": "definitions.json#/content"
+      },
+      "content_variants": {
+        "$ref": "definitions.json#/content_variants"
       },
       "page_title": {
         "$ref": "../common_definitions.json#/non_empty_string"
@@ -59,6 +51,22 @@
       }
     },
     "additionalProperties": false,
-    "required": ["id", "type", "for_list", "content", "repeating_blocks"]
+    "if": {
+      "not": {
+        "required": ["content"]
+      }
+    },
+    "then": {
+      "required": [
+        "id",
+        "type",
+        "for_list",
+        "content_variants",
+        "repeating_blocks"
+      ]
+    },
+    "else": {
+      "required": ["id", "type", "for_list", "content", "repeating_blocks"]
+    }
   }
 }
