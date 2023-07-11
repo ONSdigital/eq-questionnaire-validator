@@ -6,7 +6,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Answer ids for calculated summary must be set before calculated summary block"
     )
     ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = "Answer ids for calculated summary must be set in the same section as the calculated summary block"
-    CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless it is a dynamic answer"
+    CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless it is a repeating answer"
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)
@@ -32,25 +32,23 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         """Validate that if there is only one answer in the answers_to_calculate list, it's for repeating answers"""
         if len(answers) == 1:
             single_answer_id = answers[0]["id"]
+            question_block = self.questionnaire_schema.get_block_by_answer_id(
+                single_answer_id
+            )
             # check if its dynamic
             if (
                 single_answer_id
                 in self.questionnaire_schema.get_all_dynamic_answer_ids(
-                    self.questionnaire_schema.get_block_id_by_answer_id(
-                        single_answer_id
-                    )
+                    question_block["id"]
                 )
             ):
                 return
             # check if it's for a repeating question
-            question_block = self.questionnaire_schema.get_block_by_answer_id(
-                single_answer_id
-            )
             if question_block["type"] == "ListRepeatingQuestion":
                 return
 
             self.add_error(
-                self.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+                self.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
                 block_id=self.block["id"],
                 answer_id=single_answer_id,
             )
