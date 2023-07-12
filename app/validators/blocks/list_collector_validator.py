@@ -111,8 +111,13 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             other_list_collectors = self.questionnaire_schema.get_other_blocks(
                 self.block["id"], for_list=list_name, type="ListCollector"
             )
+            other_list_collector_contents = self.questionnaire_schema.get_other_blocks(
+                self.block["id"], for_list=list_name, type="ListCollectorContent"
+            )
 
-            if other_list_collectors:
+            if (
+                other_list_collector_contents and len(other_list_collector_contents) > 1
+            ) or other_list_collectors:
                 self.add_error(
                     self.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
                     list_name=list_name,
