@@ -10,12 +10,6 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 class ListCollectorContentValidator(
     BlockValidator, ValidateListCollectorQuestionsMixin
 ):
-    LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollectorContent"
-    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = (
-        "List may only have one List Collector and List Collector Content, if "
-        "the List Collector Content features Repeating Blocks"
-    )
-
     def validate(self):
         super().validate()
 

@@ -29,7 +29,10 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         "Multiple list collectors populate a list using different "
         "answer_ids in the add block"
     )
-    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
+    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = (
+        "List may only have one List Collector and List Collector Content, if "
+        "the List Collector Content or List Collector features Repeating Blocks"
+    )
 
     def validate(self):
         super().validate()

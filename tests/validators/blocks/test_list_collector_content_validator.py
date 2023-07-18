@@ -1,4 +1,5 @@
 from app.validators.blocks import ListCollectorContentValidator
+from app.validators.blocks.list_collector_validator import ListCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
@@ -12,7 +13,7 @@ def test_invalid_list_collector_content_with_extra_list_collector_content_block(
 
     expected_errors = [
         {
-            "message": validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
+            "message": ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
             "block_id": "list-collector-content",
             "list_name": "companies",
         }
