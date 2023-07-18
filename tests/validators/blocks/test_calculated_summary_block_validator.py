@@ -69,7 +69,7 @@ def test_invalid_new_calculated_summary():
             "block_id": "total-playback-answer-error",
         },
         {
-            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
             "block_id": "total-playback-not-enough-answers",
             "answer_id": "fourth-number-answer",
         },
@@ -169,7 +169,7 @@ def test_invalid_calculated_summary_with_single_static_answer():
         {
             "block_id": "invalid-calculated-summary-with-single-static-answer",
             "answer_id": "cost-of-season-ticket",
-            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_DYNAMIC_SINGLE_ANSWER,
+            "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
         }
     ]
 
