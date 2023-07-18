@@ -60,7 +60,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
-            self.validate_single_repeating_blocks_list_collector()
+            validate_repeating_blocks_list_collectors(
+                self, "ListCollector", "ListCollectorContent"
+            )
         except KeyError as e:
             self.add_error(self.LIST_COLLECTOR_KEY_MISSING, key=e)
 
@@ -104,21 +106,27 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                     list_name=list_name,
                 )
 
-    def validate_single_repeating_blocks_list_collector(self):
-        if self.block.get("repeating_blocks"):
-            list_name = self.block["for_list"]
 
-            other_list_collectors = self.questionnaire_schema.get_other_blocks(
-                self.block["id"], for_list=list_name, type="ListCollector"
-            )
-            other_list_collector_contents = self.questionnaire_schema.get_other_blocks(
-                self.block["id"], for_list=list_name, type="ListCollectorContent"
-            )
+def validate_repeating_blocks_list_collectors(validator, same_type, other_type):
+    if validator.block.get("repeating_blocks"):
+        list_name = validator.block["for_list"]
 
-            if (
-                other_list_collector_contents and len(other_list_collector_contents) > 1
-            ) or other_list_collectors:
-                self.add_error(
-                    self.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
-                    list_name=list_name,
-                )
+        other_list_collectors_other_types = (
+            validator.questionnaire_schema.get_other_blocks(
+                validator.block["id"], for_list=list_name, type=other_type
+            )
+        )
+        other_list_collector_same_types = (
+            validator.questionnaire_schema.get_other_blocks(
+                validator.block["id"], for_list=list_name, type=same_type
+            )
+        )
+
+        if (
+            other_list_collectors_other_types
+            and len(other_list_collectors_other_types) > 1
+        ) or other_list_collector_same_types:
+            validator.add_error(
+                validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
+                list_name=list_name,
+            )
