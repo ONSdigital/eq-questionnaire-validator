@@ -111,21 +111,18 @@ def validate_repeating_blocks_list_collectors(validator, same_type, other_type):
     if validator.block.get("repeating_blocks"):
         list_name = validator.block["for_list"]
 
-        other_list_collectors_other_types = (
-            validator.questionnaire_schema.get_other_blocks(
-                validator.block["id"], for_list=list_name, type=other_type
-            )
+        list_collectors_other_type = validator.questionnaire_schema.get_other_blocks(
+            validator.block["id"], for_list=list_name, type=other_type
         )
-        other_list_collector_same_types = (
+        other_list_collectors_same_type = (
             validator.questionnaire_schema.get_other_blocks(
                 validator.block["id"], for_list=list_name, type=same_type
             )
         )
 
         if (
-            other_list_collectors_other_types
-            and len(other_list_collectors_other_types) > 1
-        ) or other_list_collector_same_types:
+            list_collectors_other_type and len(list_collectors_other_type) > 1
+        ) or other_list_collectors_same_type:
             validator.add_error(
                 validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
                 list_name=list_name,
