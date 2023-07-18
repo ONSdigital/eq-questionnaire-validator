@@ -127,6 +127,6 @@ def validate_repeating_blocks_list_collectors(validator, same_type, other_type):
             list_collectors_other_type and len(list_collectors_other_type) > 1
         ) or other_list_collectors_same_type:
             validator.add_error(
-                validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
+                ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
                 list_name=list_name,
             )
