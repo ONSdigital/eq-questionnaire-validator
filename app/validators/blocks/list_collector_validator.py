@@ -122,9 +122,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 )
             )
 
-            if (
-                list_collectors_other_type and len(list_collectors_other_type) > 1
-            ) or other_list_collectors_same_type:
+            if len(list_collectors_other_type) > 1 or other_list_collectors_same_type:
                 self.add_error(
                     ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
                     list_name=list_name,
