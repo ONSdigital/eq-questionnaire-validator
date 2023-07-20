@@ -1,20 +1,19 @@
-from app.validators.blocks.block_validator import BlockValidator
-from app.validators.blocks.list_collector_validator import (
-    validate_repeating_blocks_list_collectors,
-)
+from app.validators.blocks.list_collector_validator import ListCollectorValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
 )
 
 
 class ListCollectorContentValidator(
-    BlockValidator, ValidateListCollectorQuestionsMixin
+    ListCollectorValidator, ValidateListCollectorQuestionsMixin
 ):
     def validate(self):
-        super().validate()
+        self.validate_id_relationships_used_with_relationship_collector()
+        self.validate_redirect_to_list_add_block_params()
+        self.validate_placeholder_answer_self_references()
 
-        validate_repeating_blocks_list_collectors(
-            self, "ListCollectorContent", "ListCollector"
+        self.validate_repeating_blocks_list_collectors(
+            "ListCollectorContent", "ListCollector"
         )
 
         return self.errors
