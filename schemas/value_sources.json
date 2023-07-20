@@ -141,6 +141,9 @@
       },
       {
         "$ref": "#/progress_value_source"
+      },
+      {
+        "$ref": "#/supplementary_data_value_source"
       }
     ]
   },
@@ -164,11 +167,14 @@
       },
       {
         "$ref": "#/progress_value_source"
+      },
+      {
+        "$ref": "#/supplementary_data_value_source"
       }
     ]
   },
   "value_source_for_calculations": {
-    "description": "Only answer and calculated summary value source are supported in current implementation",
+    "description": "Only answer, calculated summary and supplementary data value source are supported in current implementation",
     "anyOf": [
       {
         "$ref": "#/answer_value_source",
@@ -176,6 +182,10 @@
       },
       {
         "$ref": "#/calculated_summary_value_source"
+      },
+      {
+        "$ref": "#/supplementary_data_value_source",
+        "description": "Only supplementary data values that return numeric answers are valid"
       }
     ]
   },
@@ -198,6 +208,29 @@
       }
     },
     "required": ["identifier", "source", "selector"],
+    "additionalProperties": false
+  },
+  "supplementary_data_value_source": {
+    "description": "A reference to a value from supplementary data. When resolved this can be a number, string, array or null.",
+    "type": "object",
+    "properties": {
+      "identifier": {
+        "$ref": "common_definitions.json#/non_empty_string",
+        "description": "The top level key within `data` for the source of the data"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["supplementary_data"]
+      },
+      "selectors": {
+        "description": "A list of selectors for accessing data within a nested structure",
+        "type": "array",
+        "items": {
+          "$ref": "common_definitions.json#/non_empty_string"
+        }
+      }
+    },
+    "required": ["identifier", "source"],
     "additionalProperties": false
   }
 }
