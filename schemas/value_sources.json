@@ -220,11 +220,12 @@
       },
       "source": {
         "type": "string",
-        "enum": ["supplementary_data"]
+        "const": "supplementary_data"
       },
       "selectors": {
         "description": "A list of selectors for accessing data within a nested structure",
         "type": "array",
+        "minItems": 1,
         "items": {
           "$ref": "common_definitions.json#/non_empty_string"
         }

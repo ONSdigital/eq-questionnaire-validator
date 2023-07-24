@@ -59,6 +59,32 @@
     }
   },
   {
+    "description": "A date answer equal to a supplementary date with an offset",
+    "rule": {
+      "==": [
+        {
+          "date": [
+            {
+              "source": "answers",
+              "identifier": "answer-1"
+            }
+          ]
+        },
+        {
+          "date": [
+            {
+              "source": "supplementary_data",
+              "identifier": "date"
+            },
+            {
+              "years": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "description": "A date answer equal to another date answer with an offset",
     "rule": {
       "==": [

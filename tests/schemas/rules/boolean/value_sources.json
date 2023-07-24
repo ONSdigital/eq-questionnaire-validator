@@ -52,5 +52,30 @@
         "COMPLETED"
       ]
     }
+  },
+  {
+    "description": "A supplementary data source",
+    "rule": {
+      "==": [
+        {
+          "source": "supplementary_data",
+          "identifier": "top_level_key"
+        },
+        "Top level supplementary data"
+      ]
+    }
+  },
+  {
+    "description": "A nested supplementary data source",
+    "rule": {
+      "==": [
+        {
+          "source": "supplementary_data",
+          "identifier": "top_level_key",
+          "selectors": ["selector_1", "selector_2"]
+        },
+        "Nested supplementary data"
+      ]
+    }
   }
 ]
