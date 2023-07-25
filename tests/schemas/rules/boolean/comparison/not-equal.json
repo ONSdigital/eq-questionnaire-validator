@@ -31,5 +31,21 @@
         }
       ]
     }
+  },
+  {
+    "description": "An answer and supplementary data value",
+    "rule": {
+      "!=": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        {
+          "source": "supplementary_data",
+          "identifier": "top_level_key",
+          "selectors": ["selector"]
+        }
+      ]
+    }
   }
 ]
