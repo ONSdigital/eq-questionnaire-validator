@@ -34,5 +34,19 @@
   {
     "description": "Sum with raw values",
     "+": [[1, 2, 3]]
+  },
+  {
+    "description": "Sum with supplementary data value sources",
+    "+": [
+      {
+        "source": "supplementary_data",
+        "identifier": "key_1",
+        "selectors": ["selector"]
+      },
+      {
+        "source": "supplementary_data",
+        "identifier": "key_2"
+      }
+    ]
   }
 ]

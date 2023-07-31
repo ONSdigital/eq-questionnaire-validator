@@ -22,5 +22,21 @@
         }
       ]
     }
+  },
+  {
+    "description": "Does supplementary data contain an answer value",
+    "rule": {
+      "in": [
+        {
+          "source": "answers",
+          "identifier": "answer-1"
+        },
+        {
+          "source": "supplementary_data",
+          "identifier": "top_level_key",
+          "selectors": ["selector"]
+        }
+      ]
+    }
   }
 ]
