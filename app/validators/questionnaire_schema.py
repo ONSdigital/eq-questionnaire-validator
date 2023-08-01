@@ -536,3 +536,16 @@ class QuestionnaireSchema:
             *question.get("dynamic_answers", {}).get("answers", []),
             *question.get("answers", []),
         ]
+
+    def get_section_block_ids(self, current_section=None):
+        block_ids = []
+        section = self.get_section(current_section)
+        for group in section.get("groups"):
+            block_ids.extend(block["id"] for block in group.get("blocks"))
+        return block_ids
+
+    def get_section_id_for_block(self, block):
+        for section in self.sections:
+            for group in section.get("groups"):
+                if block in group.get("blocks"):
+                    return section["id"]

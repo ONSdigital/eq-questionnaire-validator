@@ -110,20 +110,24 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 )
 
     def validate_repeating_blocks_list_collectors(self, same_type, other_type):
-        if self.block.get("repeating_blocks"):
-            list_name = self.block["for_list"]
-
-            list_collectors_other_type = self.questionnaire_schema.get_other_blocks(
-                self.block["id"], for_list=list_name, type=other_type
+        if not self.block.get("repeating_blocks"):
+            return
+        list_name = self.block["for_list"]
+        section_id = self.questionnaire_schema.get_section_id_for_block(self.block)
+        list_collectors_other_type = self.questionnaire_schema.get_other_blocks(
+            self.block["id"], for_list=list_name, type=other_type
+        )
+        other_list_collectors_same_type = self.questionnaire_schema.get_other_blocks(
+            self.block["id"], for_list=list_name, type=same_type
+        )
+        if [
+            list_collector
+            for list_collector in list_collectors_other_type
+            + other_list_collectors_same_type
+            if list_collector["id"]
+            in self.questionnaire_schema.get_section_block_ids(section_id)
+        ]:
+            self.add_error(
+                ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
+                list_name=list_name,
             )
-            other_list_collectors_same_type = (
-                self.questionnaire_schema.get_other_blocks(
-                    self.block["id"], for_list=list_name, type=same_type
-                )
-            )
-
-            if len(list_collectors_other_type) > 1 or other_list_collectors_same_type:
-                self.add_error(
-                    ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
-                    list_name=list_name,
-                )
