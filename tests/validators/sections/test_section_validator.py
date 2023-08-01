@@ -32,13 +32,19 @@ def test_invalid_section_summary_items():
 
     expected_errors = [
         {
-            "message": "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers",
+            "for_lists": ["companies", "people"],
+            "message": "Multiple for_lists in a section when section summary enabled",
+            "section_id": "section-companies",
+        },
+        {
+            "message": "Section cannot contain multiple ListCollector blocks with a "
+            "summary showing non-item answers",
             "section_id": "section-companies",
         },
         {
             "id": "any-companies-or-branches-answer",
-            "message": "Item anchor answer id 'any-companies-or-branches-answer' not present in any list "
-            "collector for list name 'companies'",
+            "message": "Item anchor answer id 'any-companies-or-branches-answer' not "
+            "present in any list collector for list name 'companies'",
             "section_id": "section-companies",
         },
         {
