@@ -32,11 +32,6 @@ def test_invalid_section_summary_items():
 
     expected_errors = [
         {
-            "for_lists": ["companies", "people"],
-            "message": "Multiple for_lists in a section when section summary enabled",
-            "section_id": "section-companies",
-        },
-        {
             "message": "Section cannot contain multiple ListCollector blocks with a "
             "summary showing non-item answers",
             "section_id": "section-companies",
