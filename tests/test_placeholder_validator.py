@@ -170,7 +170,7 @@ def test_validation_answer_type_for_transform(
             [
                 {
                     "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                        answer_unit="mile", transform_unit="meter"
+                        answer_unit="length-mile", transform_unit="meter"
                     ),
                     "identifier": "average-distance",
                 }

@@ -381,7 +381,7 @@
                   {
                     "id": "average-distance",
                     "mandatory": false,
-                    "unit": "mile",
+                    "unit": "length-mile",
                     "type": "Unit",
                     "unit_length": "long",
                     "label": "Average commuting distance",
@@ -419,7 +419,7 @@
                                   "source": "answers",
                                   "identifier": "average-distance"
                                 },
-                                "unit": "mile",
+                                "unit": "length-mile",
                                 "unit_length": "long"
                               }
                             }
