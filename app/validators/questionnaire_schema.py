@@ -538,11 +538,7 @@ class QuestionnaireSchema:
         ]
 
     def get_section_block_ids(self, current_section=None):
-        block_ids = []
-        section = self.get_section(current_section)
-        for group in section.get("groups"):
-            block_ids.extend(block["id"] for block in group.get("blocks"))
-        return block_ids
+        return [block["id"] for block in self.blocks_by_section_id[current_section]]
 
     def get_section_id_for_block(self, block):
         for section in self.sections:
