@@ -40,7 +40,7 @@ class SectionValidator(Validator):
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        if not (section_summary := self.section.get("summary", None)):
+        if not (section_summary := self.section.get("summary")):
             return
         for item in section_summary.get("items", []):
             self.validate_list_exists(item.get("for_list"))
@@ -49,15 +49,15 @@ class SectionValidator(Validator):
         content_block_in_section = False
 
         for block_id in self.questionnaire_schema.get_section_block_ids(
-            self.section.get("id")
+            self.section["id"]
         ):
             block = self.questionnaire_schema.get_block(block_id)
             if (
-                block.get("type") in ["ListCollector", "ListCollectorContent"]
-                and block.get("for_list") not in for_lists
+                block["type"] in ["ListCollector", "ListCollectorContent"]
+                and block["for_list"] not in for_lists
             ):
-                for_lists.append(block.get("for_list"))
-            if block.get("type") == "ListCollectorContent":
+                for_lists.append(block["for_list"])
+            if block["type"] == "ListCollectorContent":
                 content_block_in_section = True
 
         if len(for_lists) > 1 and content_block_in_section:
