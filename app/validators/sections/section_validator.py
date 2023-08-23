@@ -45,23 +45,24 @@ class SectionValidator(Validator):
         for item in section_summary.get("items", []):
             self.validate_list_exists(item.get("for_list"))
 
-        for_lists = []
-        content_block_in_section = False
+        if section_summary.get("items"):
+            for_lists = []
 
-        for block_id in self.questionnaire_schema.get_section_block_ids(
-            self.section["id"]
-        ):
-            block = self.questionnaire_schema.get_block(block_id)
-            if (
-                block["type"] in ["ListCollector", "ListCollectorContent"]
-                and block["for_list"] not in for_lists
+            for block_id in self.questionnaire_schema.get_section_block_ids(
+                self.section["id"]
             ):
-                for_lists.append(block["for_list"])
-            if block["type"] == "ListCollectorContent":
-                content_block_in_section = True
+                block = self.questionnaire_schema.get_block(block_id)
+                if (
+                    block["type"] in ["ListCollector", "ListCollectorContent"]
+                    and block["for_list"] not in for_lists
+                ):
+                    for_lists.append(block["for_list"])
 
-        if len(for_lists) > 1 and content_block_in_section:
-            self.add_error(error_messages.MULTIPLE_FOR_LISTS, for_lists=for_lists)
+                elif block["type"] in ["ListCollector", "ListCollectorContent"]:
+                    self.add_error(
+                        error_messages.MULTIPLE_LIST_COLLECTORS_WITH_LIST_SUMMARY_ENABLED,
+                        for_list=block["for_list"],
+                    )
 
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
