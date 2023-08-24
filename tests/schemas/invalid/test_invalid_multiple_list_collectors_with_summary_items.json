@@ -254,21 +254,20 @@
                     }
                   ]
                 }
-              },
-              "summary": {
-                "title": "Companies or UK branches",
-                "item_title": {
-                  "text": "{company_name}",
-                  "placeholders": [
-                    {
-                      "placeholder": "company_name",
-                      "value": {
-                        "source": "answers",
-                        "identifier": "company-or-branch-name"
-                      }
-                    }
-                  ]
-                }
+              }
+            },
+            {
+              "id": "list-collector-content",
+              "type": "ListCollectorContent",
+              "page_title": "Companies",
+              "for_list": "companies",
+              "content": {
+                "title": "Companies",
+                "contents": [
+                  {
+                    "description": "You have previously reported the following companies. Press continue to updated registration and trading information."
+                  }
+                ]
               }
             },
             {
@@ -310,88 +309,6 @@
                     3
                   ]
                 }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "section-list-collector-contents",
-      "title": "List Collector Contents",
-      "summary": {
-        "show_on_completion": true,
-        "items": [
-          {
-            "type": "List",
-            "for_list": "companies",
-            "title": "Companies or UK branches",
-            "item_label": "Name of UK company or branch"
-          }
-        ],
-        "show_non_item_answers": true
-      },
-      "groups": [
-        {
-          "id": "group-list-collector-contents",
-          "title": "Companies",
-          "blocks": [
-            {
-              "id": "list-collector-content",
-              "type": "ListCollectorContent",
-              "page_title": "Companies",
-              "for_list": "companies",
-              "summary": {
-                "title": "Companies or UK branches",
-                "item_title": {
-                  "text": "{company_name}",
-                  "placeholders": [
-                    {
-                      "placeholder": "company_name",
-                      "value": {
-                        "source": "answers",
-                        "identifier": "company-or-branch-name"
-                      }
-                    }
-                  ]
-                }
-              },
-              "content": {
-                "title": "Companies",
-                "contents": [
-                  {
-                    "description": "You have previously reported the following companies. Press continue to updated registration and trading information."
-                  }
-                ]
-              }
-            },
-            {
-              "id": "list-collector-content-2",
-              "type": "ListCollectorContent",
-              "page_title": "Companies",
-              "for_list": "companies",
-              "summary": {
-                "title": "Companies or UK branches",
-                "item_title": {
-                  "text": "{company_name}",
-                  "placeholders": [
-                    {
-                      "placeholder": "company_name",
-                      "value": {
-                        "source": "answers",
-                        "identifier": "company-or-branch-name"
-                      }
-                    }
-                  ]
-                }
-              },
-              "content": {
-                "title": "Companies",
-                "contents": [
-                  {
-                    "description": "You have previously reported the following companies. Press continue to updated registration and trading information."
-                  }
-                ]
               }
             }
           ]
