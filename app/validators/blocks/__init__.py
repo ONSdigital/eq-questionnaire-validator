@@ -5,9 +5,6 @@ from app.validators.blocks.calculated_summary_block_validator import (
 from app.validators.blocks.grand_calculated_summary_block_validator import (
     GrandCalculatedSummaryBlockValidator,
 )
-from app.validators.blocks.list_collector_content_validator import (
-    ListCollectorContentValidator,
-)
 from app.validators.blocks.list_collector_driving_question_validator import (
     ListCollectorDrivingQuestionValidator,
 )
@@ -26,7 +23,6 @@ def get_block_validator(block, questionnaire_schema):
         "GrandCalculatedSummary": GrandCalculatedSummaryBlockValidator,
         "PrimaryPersonListCollector": PrimaryPersonListCollectorValidator,
         "ListCollector": ListCollectorValidator,
-        "ListCollectorContent": ListCollectorContentValidator,
         "ListCollectorDrivingQuestion": ListCollectorDrivingQuestionValidator,
         "RelationshipCollector": RelationshipCollectorValidator,
     }

@@ -42,27 +42,11 @@ class SectionValidator(Validator):
     def validate_summary(self):
         if not (section_summary := self.section.get("summary")):
             return
-        for item in section_summary.get("items", []):
-            self.validate_list_exists(item.get("for_list"))
 
-        if section_summary.get("items"):
-            for_lists = []
-
-            for block_id in self.questionnaire_schema.get_section_block_ids(
-                self.section["id"]
-            ):
-                block = self.questionnaire_schema.get_block(block_id)
-                if (
-                    block["type"] in ["ListCollector", "ListCollectorContent"]
-                    and block["for_list"] not in for_lists
-                ):
-                    for_lists.append(block["for_list"])
-
-                elif block["type"] in ["ListCollector", "ListCollectorContent"]:
-                    self.add_error(
-                        error_messages.MULTIPLE_LIST_COLLECTORS_WITH_LIST_SUMMARY_ENABLED,
-                        for_list=block["for_list"],
-                    )
+        if section_summary.get("items", []):
+            self._validate_multiple_list_collectors()
+            for item in section_summary.get("items", []):
+                self.validate_list_exists(item.get("for_list"))
 
     def validate_section_enabled(self):
         section_enabled = self.section.get("enabled", None)
@@ -378,3 +362,23 @@ class SectionValidator(Validator):
                     answer_id=answer["id"],
                 )
             self.errors += answer_validator.errors
+
+    def _validate_multiple_list_collectors(self):
+        for_lists = []
+
+        for block_id in self.questionnaire_schema.get_section_block_ids(
+            self.section["id"]
+        ):
+            block = self.questionnaire_schema.get_block(block_id)
+            if block["type"] in ["ListCollector", "ListCollectorContent"]:
+                if block.get("summary"):
+                    break
+
+                if block["for_list"] not in for_lists:
+                    for_lists.append(block["for_list"])
+
+                else:
+                    self.add_error(
+                        error_messages.MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED,
+                        for_list=block["for_list"],
+                    )
