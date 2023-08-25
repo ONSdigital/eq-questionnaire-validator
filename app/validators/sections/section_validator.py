@@ -375,9 +375,10 @@ class SectionValidator(Validator):
         ):
             block = self.questionnaire_schema.get_block(block_id)
             if block["type"] in ["ListCollector", "ListCollectorContent"]:
+                # Validation of two list collectors for the same list is disabled if summary is enabled
                 if block.get("summary"):
                     break
-
+                # Two list collectors for different lists in the same section are allowed
                 if block["for_list"] not in for_lists:
                     for_lists.append(block["for_list"])
 
