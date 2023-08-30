@@ -32,13 +32,14 @@ def test_invalid_section_summary_items():
 
     expected_errors = [
         {
-            "message": "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers",
+            "message": "Section cannot contain multiple ListCollector blocks with a "
+            "summary showing non-item answers",
             "section_id": "section-companies",
         },
         {
             "id": "any-companies-or-branches-answer",
-            "message": "Item anchor answer id 'any-companies-or-branches-answer' not present in any list "
-            "collector for list name 'companies'",
+            "message": "Item anchor answer id 'any-companies-or-branches-answer' not "
+            "present in any list collector for list name 'companies'",
             "section_id": "section-companies",
         },
         {
@@ -75,4 +76,24 @@ def test_invalid_list_collector_repeating_blocks_validated_from_section_validato
         }
     ]
 
+    assert expected_errors == validator.errors
+
+
+def test_invalid_multiple_list_collectors_when_summary_with_items_enabled():
+    filename = (
+        "schemas/invalid/test_invalid_multiple_list_collectors_with_summary_items.json"
+    )
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    section = questionnaire_schema.get_section("section-companies")
+    validator = SectionValidator(section, questionnaire_schema)
+    validator.validate()
+
+    expected_errors = [
+        {
+            "for_list": "companies",
+            "section_id": "section-companies",
+            "message": error_messages.MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED,
+        }
+    ]
     assert expected_errors == validator.errors

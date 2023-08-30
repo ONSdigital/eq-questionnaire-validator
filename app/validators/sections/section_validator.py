@@ -23,10 +23,10 @@ class SectionValidator(Validator):
 
     def validate(self):
         self.validate_repeat()
-        self.validate_summary()
         self.validate_value_sources()
         if self.errors:  # return when value sources are not valid
             return self.errors
+        self.validate_summary()
         self.validate_groups()
         self.validate_section_enabled()
         self.validate_number_of_list_collectors()
@@ -40,9 +40,15 @@ class SectionValidator(Validator):
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        section_summary = self.section.get("summary", None)
+        """
+        We validate here: if there is a summary without items or there is no summary or there is a list summary
+        within a section then we allow multiple list collectors otherwise we disallow them
+        """
+        if not (section_summary := self.section.get("summary")):
+            return
 
-        if section_summary:
+        if section_summary.get("items", []):
+            self._validate_multiple_list_collectors()
             for item in section_summary.get("items", []):
                 self.validate_list_exists(item.get("for_list"))
 
@@ -360,3 +366,24 @@ class SectionValidator(Validator):
                     answer_id=answer["id"],
                 )
             self.errors += answer_validator.errors
+
+    def _validate_multiple_list_collectors(self):
+        for_lists = []
+
+        for block_id in self.questionnaire_schema.get_section_block_ids(
+            self.section["id"]
+        ):
+            block = self.questionnaire_schema.get_block(block_id)
+            if block["type"] in ["ListCollector", "ListCollectorContent"]:
+                # Validation of two list collectors for the same list is disabled if summary is enabled
+                if block.get("summary"):
+                    break
+                # Two list collectors for different lists in the same section are allowed
+                if block["for_list"] not in for_lists:
+                    for_lists.append(block["for_list"])
+
+                else:
+                    self.add_error(
+                        error_messages.MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED,
+                        for_list=block["for_list"],
+                    )
