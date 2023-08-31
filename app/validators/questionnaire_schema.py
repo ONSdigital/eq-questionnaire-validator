@@ -135,9 +135,13 @@ class QuestionnaireSchema:
         self.groups_by_id = {group["id"]: group for group in self.groups}
         self.group_ids = list(self.groups_by_id.keys())
 
-        self.list_names = jp.match(
+        self.supplementary_lists = self.schema.get("supplementary_data", {}).get(
+            "lists", []
+        )
+        self.list_collector_names = jp.match(
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
+        self.list_names = self.list_collector_names + self.supplementary_lists
 
         self._answers_with_context = {}
 

@@ -21,14 +21,11 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
         "The list collector remove block does not contain a Radio answer type"
     )
-    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
-        "The list collector block contains an add block and edit block"
-        " with different answer ids"
+    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = (
+        "List collectors cannot be for a list which comes from supplementary data"
     )
-    NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = (
-        "Multiple list collectors populate a list using different "
-        "answer_ids in the add block"
-    )
+    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
+    NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = "Multiple list collectors populate a list using different answer_ids in the add block"
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
     def validate(self):
@@ -61,6 +58,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             self.validate_list_collector_answer_ids(self.block)
             self.validate_other_list_collectors()
             self.validate_single_repeating_blocks_list_collector()
+            self.validate_not_for_supplementary_list()
         except KeyError as e:
             self.add_error(self.LIST_COLLECTOR_KEY_MISSING, key=e)
 
@@ -81,6 +79,16 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         if add_answer_ids.symmetric_difference(edit_answer_ids):
             self.add_error(
                 self.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH, block_id=block["id"]
+            )
+
+    def validate_not_for_supplementary_list(self):
+        """
+        Standard list collectors cannot be used for a supplementary list, as these may not be edited
+        """
+        if self.block["for_list"] in self.questionnaire_schema.supplementary_lists:
+            self.add_error(
+                self.LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID,
+                list_name=self.block["for_list"],
             )
 
     def validate_other_list_collectors(self):

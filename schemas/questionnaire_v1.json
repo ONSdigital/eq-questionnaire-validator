@@ -45,6 +45,21 @@
     "description": {
       "$ref": "common_definitions.json#/non_empty_string"
     },
+    "supplementary_data": {
+      "type": "object",
+      "description": "A object containing the lists which come from supplementary data",
+      "properties": {
+        "lists": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common_definitions.json#/non_empty_string"
+          }
+        }
+      },
+      "required": ["lists"],
+      "additionalProperties": false
+    },
     "theme": {
       "enum": [
         "business",
