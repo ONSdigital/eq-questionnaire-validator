@@ -105,15 +105,14 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 )
 
     def validate_single_repeating_blocks_list_collector(self):
-        if self.block.get("repeating_blocks"):
-            list_name = self.block["for_list"]
-
-            other_list_collectors = self.questionnaire_schema.get_other_blocks(
-                self.block["id"], for_list=list_name, type="ListCollector"
+        if not self.block.get("repeating_blocks"):
+            return
+        list_name = self.block["for_list"]
+        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+            self.block["id"], for_list=list_name, type="ListCollector"
+        )
+        if other_list_collectors:
+            self.add_error(
+                ListCollectorValidator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
+                list_name=list_name,
             )
-
-            if other_list_collectors:
-                self.add_error(
-                    self.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
-                    list_name=list_name,
-                )
