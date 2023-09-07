@@ -5,6 +5,7 @@ from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 class CalculatedQuestionValidator(QuestionValidator):
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
+    ANSWER_TYPES_FOR_CALCULATION_MISMATCH = "Expected the answer types for calculation to be same type but got {answer_types}'"
     ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
@@ -55,6 +56,9 @@ class CalculatedQuestionValidator(QuestionValidator):
 
             if answer_id := calculation.get("answer_id"):
                 self._validate_answer_is_numeric(answer_id)
+                self._validate_answers_are_same_numeric_type(
+                    calculation.get("answers_to_calculate"), answer_id
+                )
 
             elif isinstance(value, dict) and value.get("source"):
                 answer_id = value.get("identifier")
@@ -62,3 +66,17 @@ class CalculatedQuestionValidator(QuestionValidator):
 
                 if value.get("source") == "answers":
                     self._validate_answer_is_numeric(answer_id)
+
+    def _validate_answers_are_same_numeric_type(self, answers_to_calculate, answer_id):
+        types = [self.schema.get_answer_type(answer_id)]
+        types.extend(
+            self.schema.get_answer_type(answer) for answer in answers_to_calculate
+        )
+        types_set = set(types)
+        if len(types_set) > 1:
+            self.add_error(
+                self.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
+                    answer_types=types_set,
+                ),
+                referenced_answer=answer_id,
+            )
