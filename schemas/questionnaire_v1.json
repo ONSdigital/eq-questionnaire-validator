@@ -54,7 +54,8 @@
           "minItems": 1,
           "items": {
             "$ref": "common_definitions.json#/non_empty_string"
-          }
+          },
+          "uniqueItems": true
         }
       },
       "required": ["lists"],
