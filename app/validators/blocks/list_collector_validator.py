@@ -21,9 +21,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
         "The list collector remove block does not contain a Radio answer type"
     )
-    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = (
-        "Non content list collectors cannot be for a list which comes from supplementary data"
-    )
+    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
     NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = "Multiple list collectors populate a list using different answer_ids in the add block"
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
