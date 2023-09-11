@@ -1,7 +1,7 @@
 DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 INVALID_WHITESPACE_FOUND = "Found invalid white space(s) in schema text"
 DUPLICATE_ID_FOUND = "Duplicate id found"
-FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks"
+FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks or supplementary data sources"
 MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED = "Section cannot have multiple list collectors that populate the same list when summary with items are enabled."
 MULTIPLE_LIST_COLLECTORS = "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers"
 RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = (
