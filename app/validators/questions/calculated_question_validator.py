@@ -11,6 +11,9 @@ class CalculatedQuestionValidator(QuestionValidator):
     def validate(self):
         super().validate()
         self.validate_calculations()
+        if self.errors:
+            # If there are missing answers/not enough, exit to prevent errors in validation of the types
+            return self.errors
         self.validate_calculations_numeric_matching_answer_types()
         return self.errors
 

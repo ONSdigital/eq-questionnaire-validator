@@ -62,7 +62,7 @@
               "id": "breakdown-block",
               "question": {
                 "id": "breakdown-question",
-                "title": "Breakdown validated against an answer value source",
+                "title": "Breakdown with missing answers validated against an answer value source",
                 "description": [
                   "This is a breakdown of the total number from the previous question."
                 ],
@@ -97,6 +97,46 @@
                     "mandatory": false,
                     "decimal_places": 2,
                     "type": "Number"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Question",
+              "id": "additional-breakdown-block",
+              "question": {
+                "id": "additional-breakdown-question",
+                "title": "Breakdown validated against an invalid type of answer",
+                "description": [
+                  "This is a breakdown of the total number from the first question."
+                ],
+                "type": "Calculated",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "value": {
+                      "source": "answers",
+                      "identifier": "total-answer"
+                    },
+                    "answers_to_calculate": [
+                      "additional-breakdown-1",
+                      "additional-breakdown-2"
+                    ],
+                    "conditions": ["equals"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "additional-breakdown-1",
+                    "label": "Additional Breakdown 1",
+                    "mandatory": false,
+                    "type": "TextField"
+                  },
+                  {
+                    "id": "additional-breakdown-2",
+                    "label": "Additional Breakdown 2",
+                    "mandatory": false,
+                    "type": "TextField"
                   }
                 ]
               }

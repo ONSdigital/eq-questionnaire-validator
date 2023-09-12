@@ -3,46 +3,10 @@ from app.validators.questions import get_question_validator
 from tests.utils import _open_and_load_schema_file
 
 
-def test_invalid_id_in_answers_to_calculate():
+def test_missing_id_in_answers_to_calculate():
     filename = "schemas/invalid/test_invalid_calculations_value_source.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    question = {
-        "id": "breakdown-question",
-        "title": "Breakdown validated against an answer value source",
-        "description": [
-            "This is a breakdown of the total number from the previous question."
-        ],
-        "type": "Calculated",
-        "calculations": [
-            {
-                "calculation_type": "sum",
-                "value": {"source": "answers", "identifier": "total-answer"},
-                "answers_to_calculate": [
-                    "breakdown-1",
-                    "breakdown-2",
-                    "breakdown-3",
-                    "breakdown-4",
-                ],
-                "conditions": ["equals"],
-            }
-        ],
-        "answers": [
-            {
-                "id": "breakdown-1",
-                "label": "Breakdown 1",
-                "mandatory": False,
-                "decimal_places": 2,
-                "type": "Number",
-            },
-            {
-                "id": "breakdown-2",
-                "label": "Breakdown 2",
-                "mandatory": False,
-                "decimal_places": 2,
-                "type": "Number",
-            },
-        ],
-    }
+    question = schema.blocks_by_id["breakdown-block"]["question"]
 
     validator = get_question_validator(question, schema)
     validator.validate()
@@ -58,13 +22,27 @@ def test_invalid_id_in_answers_to_calculate():
             "question_id": "breakdown-question",
             "answer_id": "breakdown-4",
         },
+    ]
+
+    assert expected_error_messages == validator.errors
+
+
+def test_invalid_answer_type_in_answers_to_calculate():
+    filename = "schemas/invalid/test_invalid_calculations_value_source.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    question = schema.blocks_by_id["additional-breakdown-block"]["question"]
+
+    validator = get_question_validator(question, schema)
+    validator.validate()
+
+    expected_error_messages = [
         {
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                 answer_type="string"
             ),
             "referenced_answer": "total-answer",
-            "question_id": "breakdown-question",
-        },
+            "question_id": "additional-breakdown-question",
+        }
     ]
 
     assert expected_error_messages == validator.errors
@@ -99,13 +77,9 @@ def test_invalid_different_numeric_answer_types():
     filename = "schemas/invalid/test_invalid_validation_sum_against_total_different_answer_types.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    errors: list[dict] = []
-
-    for block_id in ["breakdown-block", "additional-breakdown-block"]:
-        question = schema.blocks_by_id[block_id]["question"]
-        validator = get_question_validator(question, schema)
-        validator.validate()
-        errors.extend(validator.errors)
+    question = schema.blocks_by_id["breakdown-block"]["question"]
+    validator = get_question_validator(question, schema)
+    validator.validate()
 
     expected_error_messages = [
         {
@@ -114,14 +88,7 @@ def test_invalid_different_numeric_answer_types():
             ),
             "question_id": "breakdown-question",
             "referenced_answer": "total-answer",
-        },
-        {
-            "message": validator.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
-                answer_types=["Currency", "Number"]
-            ),
-            "question_id": "additional-breakdown-question",
-            "referenced_answer": "total-answer",
-        },
-    ]
+        }
+    ] * 2  # calculation with answer_id and value_source both exhibit the error
 
-    assert expected_error_messages == errors
+    assert expected_error_messages == validator.errors
