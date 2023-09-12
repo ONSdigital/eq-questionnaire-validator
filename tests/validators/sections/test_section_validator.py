@@ -97,3 +97,29 @@ def test_invalid_multiple_list_collectors_when_summary_with_items_enabled():
         }
     ]
     assert expected_errors == validator.errors
+
+
+def test_invalid_repeating_section_for_non_existent_list():
+    """
+    Tests that you cannot have a repeating section with a for_list that is not from either:
+    1) a standard list collector
+    2) the supplementary lists property for the schema
+    """
+    filename = "schemas/invalid/test_invalid_supplementary_data_list_collector.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    validator = SectionValidator(
+        questionnaire_schema.get_section("section-4"),
+        questionnaire_schema,
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": error_messages.FOR_LIST_NEVER_POPULATED,
+            "section_id": "section-4",
+            "list_name": "employees",
+        }
+    ]
+
+    assert expected_errors == validator.errors
