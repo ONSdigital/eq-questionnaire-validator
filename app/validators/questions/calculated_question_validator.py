@@ -11,7 +11,7 @@ class CalculatedQuestionValidator(QuestionValidator):
     def validate(self):
         super().validate()
         self.validate_calculations()
-        self.validate_calculations_value_source_is_numeric()
+        self.validate_calculations_numeric_matching_answer_types()
         return self.errors
 
     def validate_calculations(self):
@@ -47,36 +47,35 @@ class CalculatedQuestionValidator(QuestionValidator):
                 referenced_answer=answer_id,
             )
 
-    def validate_calculations_value_source_is_numeric(self):
+    def validate_calculations_numeric_matching_answer_types(self):
         """
-        Validates that source answer is of number type
+        Validates that source answer is of number type, and that the answers_to_calculate match that type
         """
         for calculation in self.question.get("calculations"):
-            value = calculation.get("value")
+            if not (answer_id := calculation.get("answer_id")):
+                value = calculation.get("value")
+                # Calculated summary value source is validated elsewhere and must be of a number type
+                if isinstance(value, dict) and value.get("source") == "answers":
+                    answer_id = value.get("identifier")
 
-            if answer_id := calculation.get("answer_id"):
+            if answer_id:
                 self._validate_answer_is_numeric(answer_id)
                 self._validate_answers_are_same_numeric_type(
                     calculation.get("answers_to_calculate"), answer_id
                 )
 
-            elif isinstance(value, dict) and value.get("source"):
-                answer_id = value.get("identifier")
-                # Calculated summary value source is validated elsewhere and must be of a number type
-
-                if value.get("source") == "answers":
-                    self._validate_answer_is_numeric(answer_id)
-
     def _validate_answers_are_same_numeric_type(self, answers_to_calculate, answer_id):
-        types = [self.schema.get_answer_type(answer_id)]
-        types.extend(
-            self.schema.get_answer_type(answer) for answer in answers_to_calculate
-        )
-        types_set = set(types)
-        if len(types_set) > 1:
+        """
+        Checks that the answers to calculate and the answer_id are all the same type
+        """
+        types = {
+            self.schema.get_answer_type(answer).value
+            for answer in [answer_id, *answers_to_calculate]
+        }
+        if len(types) > 1:
             self.add_error(
                 self.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
-                    answer_types=types_set,
+                    answer_types=sorted(types),
                 ),
                 referenced_answer=answer_id,
             )

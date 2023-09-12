@@ -90,3 +90,38 @@ def test_answers_to_calculate_too_short():
     ]
 
     assert expected_error_messages == validator.errors
+
+
+def test_invalid_different_numeric_answer_types():
+    """
+    Validation for answers to calculate that have a different type to the answer_id they are being calculated against
+    """
+    filename = "schemas/invalid/test_invalid_validation_sum_against_total_different_answer_types.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    errors: list[dict] = []
+
+    for block_id in ["breakdown-block", "additional-breakdown-block"]:
+        question = schema.blocks_by_id[block_id]["question"]
+        validator = get_question_validator(question, schema)
+        validator.validate()
+        errors.extend(validator.errors)
+
+    expected_error_messages = [
+        {
+            "message": validator.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
+                answer_types=["Currency", "Number"]
+            ),
+            "question_id": "breakdown-question",
+            "referenced_answer": "total-answer",
+        },
+        {
+            "message": validator.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
+                answer_types=["Currency", "Number"]
+            ),
+            "question_id": "additional-breakdown-question",
+            "referenced_answer": "total-answer",
+        },
+    ]
+
+    assert expected_error_messages == errors

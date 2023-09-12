@@ -108,6 +108,62 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "Question",
+              "id": "additional-breakdown-block",
+              "question": {
+                "id": "additional-breakdown-question",
+                "title": "Additional Breakdown",
+                "type": "Calculated",
+                "warning": "These answers must add up to the total provided in the first question",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "value": {
+                      "source": "answers",
+                      "identifier": "total-answer"
+                    },
+                    "answers_to_calculate": [
+                      "additional-breakdown-1",
+                      "additional-breakdown-2",
+                      "additional-breakdown-3",
+                      "additional-breakdown-4"
+                    ],
+                    "conditions": ["equals"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "additional-breakdown-1",
+                    "label": "Additional Breakdown 1",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "additional-breakdown-2",
+                    "label": "Additional Breakdown 2",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "additional-breakdown-3",
+                    "label": "Additional Breakdown 3",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  },
+                  {
+                    "id": "additional-breakdown-4",
+                    "label": "Additional Breakdown 4",
+                    "mandatory": false,
+                    "decimal_places": 2,
+                    "type": "Number"
+                  }
+                ]
+              }
             }
           ]
         }
