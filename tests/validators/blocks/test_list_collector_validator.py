@@ -153,3 +153,27 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
     ]
 
     assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_for_supplementary_list():
+    """
+    Tests that you cannot have a normal list collector for a supplementary list
+    """
+    filename = "schemas/invalid/test_invalid_supplementary_data_list_collector.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    validator = ListCollectorValidator(
+        questionnaire_schema.get_block("list-collector-additional"),
+        questionnaire_schema,
+    )
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": ListCollectorValidator.LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID,
+            "block_id": "list-collector-additional",
+            "list_name": "additional-employees",
+        }
+    ]
+
+    assert expected_errors == validator.errors
