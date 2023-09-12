@@ -79,8 +79,8 @@
                   {
                     "calculation_type": "sum",
                     "value": {
-                        "source": "answers",
-                        "identifier": "total-answer"
+                      "source": "answers",
+                      "identifier": "total-answer"
                     },
                     "answers_to_calculate": [
                       "breakdown-1",
