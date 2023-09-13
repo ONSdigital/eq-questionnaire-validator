@@ -140,6 +140,40 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "Question",
+              "id": "text-breakdown-block",
+              "question": {
+                "id": "text-breakdown-question",
+                "title": "Text fields validated against an number",
+                "type": "Calculated",
+                "calculations": [
+                  {
+                    "calculation_type": "sum",
+                    "value": 100,
+                    "answers_to_calculate": [
+                      "text-breakdown-1",
+                      "text-breakdown-2"
+                    ],
+                    "conditions": ["equals"]
+                  }
+                ],
+                "answers": [
+                  {
+                    "id": "text-breakdown-1",
+                    "label": "Text Breakdown 1",
+                    "mandatory": false,
+                    "type": "TextField"
+                  },
+                  {
+                    "id": "text-breakdown-2",
+                    "label": "Text Breakdown 2",
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ]
+              }
             }
           ]
         }

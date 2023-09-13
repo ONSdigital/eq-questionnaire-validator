@@ -28,6 +28,9 @@ def test_missing_id_in_answers_to_calculate():
 
 
 def test_invalid_answer_type_in_answers_to_calculate():
+    """
+    Check non-numeric answer types are invalid when all answer types match
+    """
     filename = "schemas/invalid/test_invalid_calculations_value_source.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     question = schema.blocks_by_id["additional-breakdown-block"]["question"]
@@ -40,9 +43,54 @@ def test_invalid_answer_type_in_answers_to_calculate():
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
                 answer_type="string"
             ),
-            "referenced_answer": "total-answer",
+            "answer_id": "total-answer",
             "question_id": "additional-breakdown-question",
-        }
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
+                answer_type="string"
+            ),
+            "answer_id": "additional-breakdown-1",
+            "question_id": "additional-breakdown-question",
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
+                answer_type="string"
+            ),
+            "answer_id": "additional-breakdown-2",
+            "question_id": "additional-breakdown-question",
+        },
+    ]
+
+    assert expected_error_messages == validator.errors
+
+
+def test_invalid_answer_type_in_answers_to_calculate_against_numeric_value():
+    """
+    Validate answers_to_calculate contains only numeric values independent of whether answer_id exists
+    """
+    filename = "schemas/invalid/test_invalid_calculations_value_source.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    question = schema.blocks_by_id["text-breakdown-block"]["question"]
+
+    validator = get_question_validator(question, schema)
+    validator.validate()
+
+    expected_error_messages = [
+        {
+            "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
+                answer_type="string"
+            ),
+            "answer_id": "text-breakdown-1",
+            "question_id": "text-breakdown-question",
+        },
+        {
+            "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
+                answer_type="string"
+            ),
+            "answer_id": "text-breakdown-2",
+            "question_id": "text-breakdown-question",
+        },
     ]
 
     assert expected_error_messages == validator.errors
@@ -87,7 +135,6 @@ def test_invalid_different_numeric_answer_types():
                 answer_types=["Currency", "Number"]
             ),
             "question_id": "breakdown-question",
-            "referenced_answer": "total-answer",
         }
     ] * 2  # calculation with answer_id and value_source both exhibit the error
 

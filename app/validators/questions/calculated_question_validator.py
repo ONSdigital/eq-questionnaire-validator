@@ -17,6 +17,15 @@ class CalculatedQuestionValidator(QuestionValidator):
         self.validate_calculations_numeric_matching_answer_types()
         return self.errors
 
+    def get_answer_types(
+        self, answer_id: str | None, answers_to_calculate: list[str]
+    ) -> dict[str, str]:
+        return {
+            answer: self.schema.get_answer_type(answer).value
+            for answer in [answer_id, *answers_to_calculate]
+            if answer
+        }
+
     def validate_calculations(self):
         """
         Validates that any answer ids within the 'answer_to_group'
@@ -39,16 +48,16 @@ class CalculatedQuestionValidator(QuestionValidator):
                 if answer_id not in answer_ids:
                     self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
 
-    def _validate_answer_is_numeric(self, answer_id):
-        answer_type = self.schema.get_answer_type(answer_id)
+    def _validate_answers_are_numeric(self, answer_types: dict[str, str]):
+        for answer_id, answer_type in answer_types.items():
 
-        if ANSWER_TYPE_TO_JSON_TYPE[answer_type.value] != TYPE_NUMBER:
-            self.add_error(
-                self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
-                    answer_type=ANSWER_TYPE_TO_JSON_TYPE[answer_type.value],
-                ),
-                referenced_answer=answer_id,
-            )
+            if ANSWER_TYPE_TO_JSON_TYPE[answer_type] != TYPE_NUMBER:
+                self.add_error(
+                    self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
+                        answer_type=ANSWER_TYPE_TO_JSON_TYPE[answer_type],
+                    ),
+                    answer_id=answer_id,
+                )
 
     def validate_calculations_numeric_matching_answer_types(self):
         """
@@ -61,24 +70,20 @@ class CalculatedQuestionValidator(QuestionValidator):
                 if isinstance(value, dict) and value.get("source") == "answers":
                     answer_id = value.get("identifier")
 
-            if answer_id:
-                self._validate_answer_is_numeric(answer_id)
-                self._validate_answers_are_same_numeric_type(
-                    calculation.get("answers_to_calculate"), answer_id
-                )
+            answer_types = self.get_answer_types(
+                answer_id, calculation.get("answers_to_calculate")
+            )
+            self._validate_answers_are_numeric(answer_types)
+            self._validate_answers_are_same_numeric_type(answer_types)
 
-    def _validate_answers_are_same_numeric_type(self, answers_to_calculate, answer_id):
+    def _validate_answers_are_same_numeric_type(self, answer_types: dict[str, str]):
         """
-        Checks that the answers to calculate and the answer_id are all the same type
+        Checks that the answers to calculate and any answer_id are all the same type
         """
-        types = {
-            self.schema.get_answer_type(answer).value
-            for answer in [answer_id, *answers_to_calculate]
-        }
-        if len(types) > 1:
+        distinct_types = set(answer_types.values())
+        if len(distinct_types) > 1:
             self.add_error(
                 self.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(
-                    answer_types=sorted(types),
+                    answer_types=sorted(distinct_types),
                 ),
-                referenced_answer=answer_id,
             )
