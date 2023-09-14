@@ -59,11 +59,9 @@ class AnswerValidator(Validator):
 
         else:
             if not self.answer.get("q_code"):
-
                 self.add_error(self.ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"])
 
             if self.answer.get("options") and self._validate_options_q_code():
-
                 self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
 
     def _validate_options_q_code(self):

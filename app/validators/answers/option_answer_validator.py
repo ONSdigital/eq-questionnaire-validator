@@ -74,7 +74,6 @@ class OptionAnswerValidator(AnswerValidator):
         values = set()
 
         for option in self.options:
-
             # labels can have placeholders, in which case we won't know if they are a duplicate or not
             if isinstance(option["label"], dict):
                 continue
@@ -123,12 +122,10 @@ class OptionAnswerValidator(AnswerValidator):
         transform = self.dynamic_options["transform"]
 
         if value_source["source"] == "answers":
-
             if (
                 self.questionnaire_schema.get_answer_type(value_source["identifier"])
                 != AnswerType.CHECKBOX
             ):
-
                 self.add_error(
                     self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
                     value_source=value_source,

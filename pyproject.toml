@@ -8,25 +8,25 @@ description = "API for questionnaire schema validation"
 authors = ["ONSDigital"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-Flask = "^2.0.2"
-jsonpointer = "^2.2"
-structlog = "^21.5.0"
+python = "^3.11"
+Flask = "^2.3.3"
+jsonpointer = "^2.4"
+structlog = "^23.1.0"
 python-dateutil = "^2.8.2"
 jsonschema = "4.4.0"
 jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.9.0"}
+eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.9.1"}
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
-flake8 = "^4.0.1"
-pylint = "^2.15.4"
+pytest = "^7.4.2"
+flake8 = "^6.1.0"
+pylint = "^2.17.5"
 pylint-quotes = "^0.2.3"
-pytest-cov = "^3.0.0"
-pytest-xdist = "^2.5.0"
+pytest-cov = "^4.1.0"
+pytest-xdist = "^3.3.1"
 pytest-sugar = "^0.9.4"
-black = "^22.10.0"
+black = "^23.9.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
