@@ -17,7 +17,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         self.validate_calculations_numeric_matching_answer_types()
         return self.errors
 
-    def get_answer_types(
+    def _get_answer_types(
         self, answer_id: str | None, answers_to_calculate: list[str]
     ) -> dict[str, str]:
         return {
@@ -70,7 +70,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 if isinstance(value, dict) and value.get("source") == "answers":
                     answer_id = value.get("identifier")
 
-            answer_types = self.get_answer_types(
+            answer_types = self._get_answer_types(
                 answer_id, calculation.get("answers_to_calculate")
             )
             self._validate_answers_are_numeric(answer_types)
