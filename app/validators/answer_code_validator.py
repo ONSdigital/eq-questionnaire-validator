@@ -60,7 +60,6 @@ class AnswerCodeValidator(Validator):
             (self.codes, self.DUPLICATE_ANSWER_CODE_FOUND),
             (answer_ids, self.DUPLICATE_ANSWER_ID_FOUND),
         ]:
-
             if duplicates := find_duplicates(values):
                 self.add_error(error_message, duplicates=list(duplicates))
 

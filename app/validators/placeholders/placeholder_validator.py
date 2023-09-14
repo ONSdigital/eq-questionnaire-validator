@@ -156,7 +156,6 @@ class PlaceholderValidator(Validator):
             source_answer_ids.append(identifier)
 
         for source_answer_id in source_answer_ids:
-
             answer_unit = self.questionnaire_schema.answers_with_context[
                 source_answer_id
             ]["answer"]["unit"]

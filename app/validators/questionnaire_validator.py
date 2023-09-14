@@ -57,7 +57,6 @@ class QuestionnaireValidator(Validator):
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
-
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
                 self.add_error(
@@ -88,7 +87,6 @@ class QuestionnaireValidator(Validator):
             )
 
     def validate_smart_quotes(self):
-
         schema_object = SurveySchema(self.schema_element)
 
         # pylint: disable=invalid-string-quote
