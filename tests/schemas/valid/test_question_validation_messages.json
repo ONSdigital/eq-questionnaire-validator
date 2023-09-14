@@ -50,7 +50,8 @@
                     "id": "total-answer",
                     "label": "Total",
                     "mandatory": true,
-                    "type": "Number",
+                    "type": "Currency",
+                    "currency": "GBP",
                     "decimal_places": 2,
                     "minimum": {
                       "value": 0,
