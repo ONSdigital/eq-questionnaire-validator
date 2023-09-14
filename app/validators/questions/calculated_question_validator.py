@@ -50,7 +50,6 @@ class CalculatedQuestionValidator(QuestionValidator):
 
     def _validate_answers_are_numeric(self, answer_types: dict[str, str]):
         for answer_id, answer_type in answer_types.items():
-
             if ANSWER_TYPE_TO_JSON_TYPE[answer_type] != TYPE_NUMBER:
                 self.add_error(
                     self.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(
