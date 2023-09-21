@@ -12,7 +12,10 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Invalid calculated summary id in block's answers_to_calculate"
     )
     REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT = "Cannot have a non-repeating grand calculated summary reference a repeating calculated summary"
-    CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION = "Cannot have a repeating grand calculated summary reference a repeating calculated summary in a different repeating section"
+    CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION = (
+        "Cannot have a repeating grand calculated summary reference"
+        " a repeating calculated summary in a different repeating section"
+    )
 
     def __init__(self, block, questionnaire_schema: QuestionnaireSchema):
         super().__init__(block, questionnaire_schema)
