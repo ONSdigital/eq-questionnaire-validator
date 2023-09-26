@@ -473,7 +473,7 @@ class QuestionnaireSchema:
     def _get_numeric_value(self, defined_value, system_default, answer_ranges):
         if not isinstance(defined_value, dict):
             return defined_value
-        if source := defined_value.get("source"):
+        if defined_value.get("source"):
             referred_answer = self.get_numeric_value_for_value_source(
                 value_source=defined_value,
                 answer_ranges=answer_ranges,
