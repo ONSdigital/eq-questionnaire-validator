@@ -383,3 +383,26 @@ def test_introduction_block_not_in_schema():
     validator.validate_introduction_block()
 
     assert validator.errors == expected_errors
+
+
+def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
+    """Asserts `invalid` when a value source references an invalid calculated or grand calculated summary id"""
+    filename = "schemas/invalid/test_invalid_value_source_calculated_and_grand_calculated_summary.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "identifier": "first-number-block",
+            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders.[0].transforms.[0].arguments.number.identifier",
+            "message": "Invalid calculated_summary source reference",
+        },
+        {
+            "identifier": "currency-total-playback",
+            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders.[0].transforms.[0].arguments.number.identifier",
+            "message": "Invalid grand_calculated_summary source reference",
+        },
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors

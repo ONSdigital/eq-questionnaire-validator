@@ -116,11 +116,12 @@ class QuestionnaireSchema:
         self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
-        self.calculated_summary_block_ids = {
-            block["id"]
-            for block in self.blocks_by_id.values()
-            if block["type"] == "CalculatedSummary"
-        }
+        self.calculated_summary_block_ids = self.get_block_ids_by_block_type(
+            "CalculatedSummary"
+        )
+        self.grand_calculated_summary_block_ids = self.get_block_ids_by_block_type(
+            "GrandCalculatedSummary"
+        )
         self.sections = jp.match("$.sections[*]", self.schema)
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
@@ -144,6 +145,10 @@ class QuestionnaireSchema:
         self.list_names = self.list_collector_names + self.supplementary_lists
 
         self._answers_with_context = {}
+
+    @lru_cache
+    def get_block_ids_by_block_type(self, block_type: str) -> list[str]:
+        return [block["id"] for block in self.blocks if block["type"] == block_type]
 
     @cached_property
     def numeric_answer_ranges(self):
