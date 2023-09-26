@@ -475,8 +475,7 @@ class QuestionnaireSchema:
             return defined_value
         if source := defined_value.get("source"):
             referred_answer = self.get_numeric_value_for_value_source(
-                value_source=source,
-                defined_value=defined_value,
+                value_source=defined_value,
                 answer_ranges=answer_ranges,
             )
             # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
@@ -503,6 +502,30 @@ class QuestionnaireSchema:
             if source[1]["source"] == source_type
         ]
 
+    def get_calculation_answer_ids(self, value_source: Mapping[str, str]) -> list[str]:
+        """
+        Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
+        or the list of included answer ids in the case of a calculated or grand calculated summary
+        """
+        source = value_source.get("source")
+        identifier = value_source.get("identifier")
+
+        if source == "calculated_summary":
+            return self.get_calculation_block_ids(
+                block=self.get_block(identifier), source_type="answers"
+            )
+        if source == "grand_calculated_summary":
+            return [
+                answer_id
+                for calculated_summary_id in self.get_calculation_block_ids(
+                    block=self.get_block(identifier), source_type="calculated_summary"
+                )
+                for answer_id in self.get_calculation_block_ids(
+                    block=self.get_block(calculated_summary_id), source_type="answers"
+                )
+            ]
+        return [identifier]
+
     def is_repeating_section(self, section_id: str) -> bool:
         return "repeat" in self.sections_by_id[section_id]
 
@@ -517,21 +540,14 @@ class QuestionnaireSchema:
         return parent_section and self.is_repeating_section(parent_section["id"])
 
     def get_numeric_value_for_value_source(
-        self, value_source, defined_value, answer_ranges
-    ):
+        self, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
+    ) -> Mapping | None:
         referred_answer = None
-        if value_source == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-        elif value_source == "calculated_summary":
-            calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculation_block_ids(
-                block=calculated_summary_block, source_type="answers"
-            )
-
-            for answer_id in answers_to_calculate:
-                referred_answer = answer_ranges.get(answer_id)
-                if referred_answer is None:
-                    return None
+        answers_to_calculate = self.get_calculation_answer_ids(value_source)
+        for answer_id in answers_to_calculate:
+            referred_answer = answer_ranges.get(answer_id)
+            if referred_answer is None:
+                return None
         return referred_answer
 
     @staticmethod

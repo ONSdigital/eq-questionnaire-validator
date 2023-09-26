@@ -140,20 +140,12 @@ class PlaceholderValidator(Validator):
         if transform_type != "format_unit":
             return None
 
-        value = arguments["value"]
-        identifier = value.get("identifier")
+        value_source = arguments["value"]
         unit = arguments["unit"]
-        source_answer_ids = []
 
-        if value.get("source") == "calculated_summary":
-            if calculated_summary_source_answer_ids := self.questionnaire_schema.get_calculation_block_ids(
-                block=self.questionnaire_schema.get_block(identifier),
-                source_type="answers",
-            ):
-                source_answer_ids = calculated_summary_source_answer_ids
-
-        else:
-            source_answer_ids.append(identifier)
+        source_answer_ids = self.questionnaire_schema.get_calculation_answer_ids(
+            value_source
+        )
 
         for source_answer_id in source_answer_ids:
             answer_unit = self.questionnaire_schema.answers_with_context[
@@ -166,7 +158,7 @@ class PlaceholderValidator(Validator):
                         answer_unit=answer_unit,
                         transform_unit=unit,
                     ),
-                    identifier=identifier,
+                    identifier=value_source.get("identifier"),
                 )
                 break
 

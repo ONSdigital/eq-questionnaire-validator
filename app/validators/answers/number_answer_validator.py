@@ -67,11 +67,10 @@ class NumberAnswerValidator(AnswerValidator):
                 self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=MIN_NUMBER
             )
         elif isinstance(min_value, dict):
-            source = min_value["source"]
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    source, min_value, answer_ranges
+                    min_value, answer_ranges
                 )
             )
             if referred_answer["min"] < MIN_NUMBER:
@@ -86,11 +85,10 @@ class NumberAnswerValidator(AnswerValidator):
                 self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER
             )
         elif isinstance(max_value, dict):
-            source = max_value["source"]
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    source, max_value, answer_ranges
+                    max_value, answer_ranges
                 )
             )
             if referred_answer["max"] > MAX_NUMBER:
