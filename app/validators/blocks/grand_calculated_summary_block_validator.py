@@ -1,3 +1,5 @@
+from typing import Mapping
+
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
@@ -17,7 +19,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         " a repeating calculated summary in a different repeating section"
     )
 
-    def __init__(self, block, questionnaire_schema: QuestionnaireSchema):
+    def __init__(self, block: Mapping, questionnaire_schema: QuestionnaireSchema):
         super().__init__(block, questionnaire_schema)
         self.answers_to_calculate: list[str] = []
         # check calculated summary answers sets to verify no two calculated summaries are identical

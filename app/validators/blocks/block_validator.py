@@ -1,3 +1,5 @@
+from typing import Mapping
+
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
     get_object_containing_key,
@@ -13,7 +15,9 @@ class BlockValidator(Validator):
         "Placeholder references an answer in the same block (self-reference)"
     )
 
-    def __init__(self, block_element, questionnaire_schema: QuestionnaireSchema):
+    def __init__(
+        self, block_element: Mapping, questionnaire_schema: QuestionnaireSchema
+    ):
         super().__init__(block_element)
         self.questionnaire_schema = questionnaire_schema
         self.block = block_element
