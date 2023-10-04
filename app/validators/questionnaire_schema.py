@@ -544,7 +544,11 @@ class QuestionnaireSchema:
     def get_section_block_ids(self, current_section=None):
         return [block["id"] for block in self.blocks_by_section_id[current_section]]
 
-    def get_section_id_for_block(self, block):
+    def get_section_id_for_block(self, block: Mapping) -> str | None:
         for section_id, blocks in self.blocks_by_section_id.items():
             if block in blocks:
                 return section_id
+
+    def get_section_id_for_block_id(self, block_id: str) -> str | None:
+        if block := self.get_block(block_id):
+            return self.get_section_id_for_block(block)
