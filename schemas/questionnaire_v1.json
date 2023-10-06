@@ -279,7 +279,7 @@
                   "properties": {
                     "type": {
                       "type": "string",
-                      "enum": ["List"]
+                      "const": "List"
                     },
                     "for_list": {
                       "$ref": "common_definitions.json#/non_empty_string"

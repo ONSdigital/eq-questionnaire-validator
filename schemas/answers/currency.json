@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Currency"]
+        "const": "Currency"
       },
       "mandatory": {
         "type": "boolean"

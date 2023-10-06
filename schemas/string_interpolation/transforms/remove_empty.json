@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["remove_empty"]
+        "const": "remove_empty"
       },
       "arguments": {
         "type": "object",

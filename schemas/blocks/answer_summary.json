@@ -15,7 +15,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["AnswerSummary"]
+        "const": "AnswerSummary"
       },
       "label": {
         "$ref": "../common_definitions.json#/non_empty_string"

@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["MobileNumber"]
+        "const": "MobileNumber"
       },
       "mandatory": {
         "type": "boolean"

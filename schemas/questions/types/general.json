@@ -36,7 +36,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["General"]
+        "const": "General"
       },
       "dynamic_answers": {
         "type": "object",

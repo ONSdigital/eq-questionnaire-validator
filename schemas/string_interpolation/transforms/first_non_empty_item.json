@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["first_non_empty_item"]
+        "const": "first_non_empty_item"
       },
       "arguments": {
         "type": "object",

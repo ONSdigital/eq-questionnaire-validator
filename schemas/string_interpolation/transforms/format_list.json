@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_list"]
+        "const": "format_list"
       },
       "arguments": {
         "type": "object",

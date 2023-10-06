@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["concatenate_list"]
+        "const": "concatenate_list"
       },
       "arguments": {
         "type": "object",

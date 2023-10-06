@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["TextArea"]
+        "const": "TextArea"
       },
       "mandatory": {
         "type": "boolean"
