@@ -41,7 +41,7 @@ describe("AJV schema Validator", () => {
           failure.should.have.property("keyword", "const");
           failure.should.have.property(
             "message",
-            "must be equal to one of the allowed values"
+            "must be equal to constant"
           );
           done();
         });
