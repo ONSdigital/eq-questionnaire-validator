@@ -69,7 +69,7 @@
     "type": "object",
     "properties": {
       "identifier": {
-        "$ref": "common_definitions.json#/metadata_identifier",
+        "$ref": "common_definitions.json#/identifier",
         "description": "The block ID for the Calculated Summary"
       },
       "source": {
@@ -85,7 +85,7 @@
     "type": "object",
     "properties": {
       "identifier": {
-        "$ref": "common_definitions.json#/metadata_identifier",
+        "$ref": "common_definitions.json#/identifier",
         "description": "The block ID for the Grand Calculated Summary"
       },
       "source": {
@@ -101,7 +101,7 @@
     "type": "object",
     "properties": {
       "identifier": {
-        "$ref": "common_definitions.json#/metadata_identifier",
+        "$ref": "common_definitions.json#/identifier",
         "description": "The list name"
       },
       "source": {

@@ -143,7 +143,7 @@ class PlaceholderValidator(Validator):
         value_source = arguments["value"]
         unit = arguments["unit"]
 
-        source_answer_ids = self.questionnaire_schema.get_calculation_answer_ids(
+        source_answer_ids = self.questionnaire_schema.get_answer_ids_for_value_source(
             value_source
         )
 

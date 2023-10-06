@@ -116,10 +116,10 @@ class QuestionnaireSchema:
         self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
-        self.calculated_summary_block_ids = self.get_block_ids_by_block_type(
+        self.calculated_summary_block_ids = self.get_block_ids_for_block_type(
             "CalculatedSummary"
         )
-        self.grand_calculated_summary_block_ids = self.get_block_ids_by_block_type(
+        self.grand_calculated_summary_block_ids = self.get_block_ids_for_block_type(
             "GrandCalculatedSummary"
         )
         self.sections = jp.match("$.sections[*]", self.schema)
@@ -147,7 +147,7 @@ class QuestionnaireSchema:
         self._answers_with_context = {}
 
     @lru_cache
-    def get_block_ids_by_block_type(self, block_type: str) -> list[str]:
+    def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
         return [block["id"] for block in self.blocks if block["type"] == block_type]
 
     @cached_property
@@ -507,7 +507,7 @@ class QuestionnaireSchema:
             if source[1]["source"] == source_type
         ]
 
-    def get_calculation_answer_ids(self, value_source: Mapping[str, str]) -> list[str]:
+    def get_answer_ids_for_value_source(self, value_source: Mapping[str, str]) -> list[str]:
         """
         Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
         or the list of included answer ids in the case of a calculated or grand calculated summary
@@ -548,7 +548,7 @@ class QuestionnaireSchema:
         self, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
     ) -> Mapping | None:
         referred_answer = None
-        answers_to_calculate = self.get_calculation_answer_ids(value_source)
+        answers_to_calculate = self.get_answer_ids_for_value_source(value_source)
         for answer_id in answers_to_calculate:
             referred_answer = answer_ranges.get(answer_id)
             if referred_answer is None:
