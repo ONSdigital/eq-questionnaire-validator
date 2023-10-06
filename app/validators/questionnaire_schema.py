@@ -507,7 +507,9 @@ class QuestionnaireSchema:
             if source[1]["source"] == source_type
         ]
 
-    def get_answer_ids_for_value_source(self, value_source: Mapping[str, str]) -> list[str]:
+    def get_answer_ids_for_value_source(
+        self, value_source: Mapping[str, str]
+    ) -> list[str]:
         """
         Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
         or the list of included answer ids in the case of a calculated or grand calculated summary
