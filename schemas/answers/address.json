@@ -15,7 +15,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Address"]
+        "const": "Address"
       },
       "mandatory": {
         "type": "boolean"

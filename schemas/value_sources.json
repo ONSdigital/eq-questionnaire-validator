@@ -11,7 +11,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["answers"]
+        "const": "answers"
       },
       "list_item_selector": {
         "description": "The identifier and source of list item",
@@ -42,7 +42,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["metadata"]
+        "const": "metadata"
       }
     },
     "required": ["identifier", "source"],
@@ -58,7 +58,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["response_metadata"]
+        "const": "response_metadata"
       }
     },
     "required": ["identifier", "source"],
@@ -74,7 +74,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["calculated_summary"]
+        "const": "calculated_summary"
       }
     },
     "required": ["identifier", "source"],
@@ -90,7 +90,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["list"]
+        "const": "list"
       },
       "selector": {
         "description": "The list property name to select",
@@ -112,7 +112,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["location"]
+        "const": "location"
       }
     },
     "required": ["identifier", "source"],
@@ -199,7 +199,7 @@
       },
       "source": {
         "type": "string",
-        "enum": ["progress"]
+        "const": "progress"
       },
       "selector": {
         "description": "The type of object to get the progress status for. Either a section or a block.",

@@ -9,7 +9,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["ListCollectorContent"]
+        "const": "ListCollectorContent"
       },
       "content": {
         "$ref": "definitions.json#/content"

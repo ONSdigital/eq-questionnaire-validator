@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_ordinal"]
+        "const": "format_ordinal"
       },
       "arguments": {
         "type": "object",
@@ -19,7 +19,7 @@
             "properties": {
               "value": {
                 "type": "string",
-                "enum": ["a_or_an"]
+                "const": "a_or_an"
               }
             }
           }

@@ -33,7 +33,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["TextField"]
+        "const": "TextField"
       },
       "mandatory": {
         "type": "boolean"

@@ -6,7 +6,7 @@
     "description": "An action that redirects to the list add block",
     "properties": {
       "type": {
-        "enum": ["RedirectToListAddBlock"]
+        "const": "RedirectToListAddBlock"
       },
       "params": {
         "type": "object",
@@ -30,7 +30,7 @@
     "description": "An action that removes a list item and all answers associated with it",
     "properties": {
       "type": {
-        "enum": ["RemoveListItemAndAnswers"]
+        "const": "RemoveListItemAndAnswers"
       }
     },
     "additionalProperties": false,
@@ -41,7 +41,7 @@
     "description": "An action that removes the remaining unrelated relationships after an `unrelated_block`",
     "properties": {
       "type": {
-        "enum": ["RemoveUnrelatedRelationships"]
+        "const": "RemoveUnrelatedRelationships"
       }
     },
     "additionalProperties": false,
@@ -52,7 +52,7 @@
     "description": "An action that adds 'Unrelated' relationships for the remaining relationships after an `unrelated_block`",
     "properties": {
       "type": {
-        "enum": ["AddUnrelatedRelationships"]
+        "const": "AddUnrelatedRelationships"
       }
     },
     "additionalProperties": false,

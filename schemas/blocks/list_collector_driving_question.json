@@ -18,7 +18,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["ListCollectorDrivingQuestion"]
+        "const": "ListCollectorDrivingQuestion"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"

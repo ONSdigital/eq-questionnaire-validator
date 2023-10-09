@@ -24,9 +24,9 @@ describe("AJV api status", () => {
 });
 describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
-    it("test_invalid_question_description", (done) => {
+    it("test_invalid_block_type", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_question_description.json"
+        "ajv/tests/schemas/invalid/test_invalid_block_type.json"
       );
       chai
         .request(app)
@@ -38,10 +38,10 @@ describe("AJV schema Validator", () => {
           res.should.have.status(200);
           const failure = res.body.errors.pop();
           res.body.should.have.property("success", false);
-          failure.should.have.property("keyword", "enum");
+          failure.should.have.property("keyword", "const");
           failure.should.have.property(
             "message",
-            "must be equal to one of the allowed values"
+            "must be equal to constant"
           );
           done();
         });
