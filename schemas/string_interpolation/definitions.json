@@ -169,7 +169,7 @@
     "properties": {
       "source": {
         "type": "string",
-        "enum": ["previous_transform"]
+        "const": "previous_transform"
       }
     },
     "additionalProperties": false,

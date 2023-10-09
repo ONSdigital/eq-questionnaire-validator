@@ -9,7 +9,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["GrandCalculatedSummary"]
+        "const": "GrandCalculatedSummary"
       },
       "title": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"

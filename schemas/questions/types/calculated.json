@@ -30,7 +30,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Calculated"]
+        "const": "Calculated"
       },
       "dynamic_answers": {
         "type": "object",
@@ -69,7 +69,7 @@
           "properties": {
             "calculation_type": {
               "type": "string",
-              "enum": ["sum"]
+              "const": "sum"
             },
             "answer_id": {
               "$ref": "../../common_definitions.json#/non_empty_string",

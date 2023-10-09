@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["date_range_bounds"]
+        "const": "date_range_bounds"
       },
       "arguments": {
         "type": "object",

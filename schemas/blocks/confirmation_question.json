@@ -15,7 +15,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["ConfirmationQuestion"]
+        "const": "ConfirmationQuestion"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"

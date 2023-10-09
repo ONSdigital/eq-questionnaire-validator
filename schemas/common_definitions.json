@@ -285,7 +285,7 @@
         "section": {
           "type": "string",
           "description": "Routes to the end of the current section",
-          "enum": ["End"]
+          "const": "End"
         },
         "when": {
           "$ref": "rules/boolean_rule.json"

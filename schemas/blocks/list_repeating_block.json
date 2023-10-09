@@ -12,7 +12,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["ListRepeatingQuestion"]
+        "const": "ListRepeatingQuestion"
       },
       "question": {
         "$ref": "../questions/definitions.json#/question"

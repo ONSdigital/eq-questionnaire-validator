@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_percentage"]
+        "const": "format_percentage"
       },
       "arguments": {
         "type": "object",

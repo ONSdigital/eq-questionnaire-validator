@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["conditional_trad_as"]
+        "const": "conditional_trad_as"
       },
       "arguments": {
         "type": "object",
@@ -15,11 +15,11 @@
             "properties": {
               "identifier": {
                 "type": "string",
-                "enum": ["trad_as"]
+                "const": "trad_as"
               },
               "source": {
                 "type": "string",
-                "enum": ["metadata"]
+                "const": "metadata"
               }
             },
             "additionalProperties": false,

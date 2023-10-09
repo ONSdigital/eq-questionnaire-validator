@@ -15,7 +15,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Introduction"]
+        "const": "Introduction"
       },
       "primary_content": {
         "type": "array",

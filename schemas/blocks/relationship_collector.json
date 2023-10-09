@@ -6,11 +6,11 @@
     "properties": {
       "id": {
         "type": "string",
-        "enum": ["relationships"]
+        "const": "relationships"
       },
       "type": {
         "type": "string",
-        "enum": ["RelationshipCollector"]
+        "const": "RelationshipCollector"
       },
       "title": {
         "$ref": "../common_definitions.json#/non_empty_string"

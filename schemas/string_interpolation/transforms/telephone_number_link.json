@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["telephone_number_link"]
+        "const": "telephone_number_link"
       },
       "arguments": {
         "type": "object",
