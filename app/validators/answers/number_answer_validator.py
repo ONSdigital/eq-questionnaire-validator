@@ -70,7 +70,7 @@ class NumberAnswerValidator(AnswerValidator):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    min_value, answer_ranges
+                    value_source=min_value, answer_ranges=answer_ranges
                 )
             )
             if referred_answer["min"] < MIN_NUMBER:
@@ -88,7 +88,7 @@ class NumberAnswerValidator(AnswerValidator):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    max_value, answer_ranges
+                    value_source=max_value, answer_ranges=answer_ranges
                 )
             )
             if referred_answer["max"] > MAX_NUMBER:

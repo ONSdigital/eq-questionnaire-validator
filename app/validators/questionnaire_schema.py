@@ -547,7 +547,7 @@ class QuestionnaireSchema:
         return parent_section and self.is_repeating_section(parent_section["id"])
 
     def get_numeric_value_for_value_source(
-        self, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
+        self, *, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
     ) -> Mapping | None:
         referred_answer = None
         answers_to_calculate = self.get_answer_ids_for_value_source(value_source)
