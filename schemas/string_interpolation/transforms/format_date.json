@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_date"]
+        "const": "format_date"
       },
       "arguments": {
         "type": "object",

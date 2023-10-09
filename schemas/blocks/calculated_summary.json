@@ -9,7 +9,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["CalculatedSummary"]
+        "const": "CalculatedSummary"
       },
       "title": {
         "$ref": "../string_interpolation/definitions.json#/string_with_placeholders"
@@ -30,7 +30,7 @@
             "properties": {
               "calculation_type": {
                 "type": "string",
-                "enum": ["sum"]
+                "const": "sum"
               },
               "answers_to_calculate": {
                 "type": "array",

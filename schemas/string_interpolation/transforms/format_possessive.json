@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_possessive"]
+        "const": "format_possessive"
       },
       "arguments": {
         "type": "object",

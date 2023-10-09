@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["MonthYearDate"]
+        "const": "MonthYearDate"
       },
       "mandatory": {
         "type": "boolean"

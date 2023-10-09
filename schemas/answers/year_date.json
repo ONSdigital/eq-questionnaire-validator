@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["YearDate"]
+        "const": "YearDate"
       },
       "mandatory": {
         "type": "boolean"

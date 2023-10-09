@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Percentage"]
+        "const": "Percentage"
       },
       "mandatory": {
         "type": "boolean"

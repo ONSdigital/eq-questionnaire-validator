@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["list_item_count"]
+        "const": "list_item_count"
       },
       "arguments": {
         "type": "object",

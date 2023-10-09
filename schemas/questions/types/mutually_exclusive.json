@@ -33,7 +33,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["MutuallyExclusive"]
+        "const": "MutuallyExclusive"
       },
       "mandatory": {
         "type": "boolean"

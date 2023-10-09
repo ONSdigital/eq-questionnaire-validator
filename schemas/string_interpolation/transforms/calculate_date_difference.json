@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["calculate_date_difference"]
+        "const": "calculate_date_difference"
       },
       "arguments": {
         "type": "object",

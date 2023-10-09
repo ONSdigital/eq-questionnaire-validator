@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["option_label_from_value"]
+        "const": "option_label_from_value"
       },
       "arguments": {
         "type": "object",

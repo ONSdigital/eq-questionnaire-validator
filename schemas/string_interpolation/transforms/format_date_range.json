@@ -7,7 +7,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["format_date_range"]
+        "const": "format_date_range"
       },
       "arguments": {
         "type": "object",

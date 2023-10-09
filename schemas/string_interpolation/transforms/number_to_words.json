@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["number_to_words"]
+        "const": "number_to_words"
       },
       "arguments": {
         "type": "object",

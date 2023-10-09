@@ -21,7 +21,7 @@
       },
       "type": {
         "type": "string",
-        "enum": ["Duration"]
+        "const": "Duration"
       },
       "mandatory": {
         "type": "boolean"

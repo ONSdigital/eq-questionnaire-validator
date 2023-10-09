@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["list_has_items"]
+        "const": "list_has_items"
       },
       "arguments": {
         "type": "object",

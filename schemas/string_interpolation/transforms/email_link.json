@@ -6,7 +6,7 @@
     "properties": {
       "transform": {
         "type": "string",
-        "enum": ["email_link"]
+        "const": "email_link"
       },
       "arguments": {
         "type": "object",
