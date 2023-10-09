@@ -24,9 +24,9 @@ describe("AJV api status", () => {
 });
 describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
-    it("test_invalid_question_description", (done) => {
+    it("test_invalid_block_type", (done) => {
       const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_question_description.json"
+        "ajv/tests/schemas/invalid/test_invalid_block_type.json"
       );
       chai
         .request(app)
