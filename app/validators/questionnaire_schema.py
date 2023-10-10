@@ -514,8 +514,8 @@ class QuestionnaireSchema:
         Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
         or the list of included answer ids in the case of a calculated or grand calculated summary
         """
-        source = value_source.get("source")
-        identifier = value_source.get("identifier")
+        source = value_source["source"]
+        identifier = value_source["identifier"]
 
         if source == "calculated_summary":
             return self.get_calculation_block_ids(
