@@ -4,9 +4,9 @@
   "schema_version": "0.0.1",
   "data_version": "0.0.3",
   "survey_id": "0",
-  "title": "A test schema to demo Calculated Summary",
+  "title": "A test schema to demo invalid value sources",
   "theme": "default",
-  "description": "A schema to showcase Calculated Summary page and usage in value source.",
+  "description": "A schema to showcase invalid Calculated Summary and Grand Calculated Summary Value sources.",
   "metadata": [
     {
       "name": "user_id",
@@ -75,7 +75,6 @@
                 ]
               }
             },
-
             {
               "type": "CalculatedSummary",
               "id": "currency-total-playback",
@@ -91,7 +90,7 @@
             },
             {
               "type": "Interstitial",
-              "id": "calculated-summary-reconfirm",
+              "id": "invalid-value-sources-block",
               "content": {
                 "title": "You have provided the following grand total.",
                 "contents": [
@@ -109,6 +108,25 @@
                                   "number": {
                                     "source": "calculated_summary",
                                     "identifier": "first-number-block"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "text": "Grand total currency values: <em>{grand_total}</em>",
+                        "placeholders": [
+                          {
+                            "placeholder": "grand_total",
+                            "transforms": [
+                              {
+                                "transform": "format_currency",
+                                "arguments": {
+                                  "number": {
+                                    "source": "grand_calculated_summary",
+                                    "identifier": "currency-total-playback"
                                   }
                                 }
                               }

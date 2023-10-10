@@ -165,7 +165,10 @@ def test_validation_answer_type_for_transform(
     "arguments, transform_type, expected_error",
     [
         (
-            {"value": {"identifier": "average-distance"}, "unit": "meter"},
+            {
+                "value": {"source": "answers", "identifier": "average-distance"},
+                "unit": "meter",
+            },
             "format_unit",
             [
                 {
