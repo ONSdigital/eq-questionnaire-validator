@@ -46,6 +46,7 @@ class ValueSourceValidator(Validator):
             "response_metadata": self.RESPONSE_METADATA_IDENTIFIERS,
             "list": self.questionnaire_schema.list_names,
             "calculated_summary": self.questionnaire_schema.calculated_summary_block_ids,
+            "grand_calculated_summary": self.questionnaire_schema.grand_calculated_summary_block_ids,
         }
 
         if self.value_source["source"] == "progress":
@@ -173,7 +174,7 @@ class ValueSourceValidator(Validator):
 
     def _validate_source_reference(self, identifiers, source):
         valid_identifiers = self._valid_source_identifiers_map.get(source)
-        if not valid_identifiers:
+        if valid_identifiers is None:
             return None
 
         for identifier in identifiers:

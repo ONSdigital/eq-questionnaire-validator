@@ -116,11 +116,12 @@ class QuestionnaireSchema:
         self.blocks_by_id = {block["id"]: block for block in self.blocks}
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
-        self.calculated_summary_block_ids = {
-            block["id"]
-            for block in self.blocks_by_id.values()
-            if block["type"] == "CalculatedSummary"
-        }
+        self.calculated_summary_block_ids = self.get_block_ids_for_block_type(
+            "CalculatedSummary"
+        )
+        self.grand_calculated_summary_block_ids = self.get_block_ids_for_block_type(
+            "GrandCalculatedSummary"
+        )
         self.sections = jp.match("$.sections[*]", self.schema)
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
@@ -144,6 +145,10 @@ class QuestionnaireSchema:
         self.list_names = self.list_collector_names + self.supplementary_lists
 
         self._answers_with_context = {}
+
+    @lru_cache
+    def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
+        return [block["id"] for block in self.blocks if block["type"] == block_type]
 
     @cached_property
     def numeric_answer_ranges(self):
@@ -473,10 +478,9 @@ class QuestionnaireSchema:
     def _get_numeric_value(self, defined_value, system_default, answer_ranges):
         if not isinstance(defined_value, dict):
             return defined_value
-        if source := defined_value.get("source"):
+        if defined_value.get("source"):
             referred_answer = self.get_numeric_value_for_value_source(
-                value_source=source,
-                defined_value=defined_value,
+                value_source=defined_value,
                 answer_ranges=answer_ranges,
             )
             # Referred answer is not valid (picked up by _validate_referred_numeric_answer)
@@ -503,6 +507,32 @@ class QuestionnaireSchema:
             if source[1]["source"] == source_type
         ]
 
+    def get_answer_ids_for_value_source(
+        self, value_source: Mapping[str, str]
+    ) -> list[str]:
+        """
+        Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
+        or the list of included answer ids in the case of a calculated or grand calculated summary
+        """
+        source = value_source["source"]
+        identifier = value_source["identifier"]
+
+        if source == "calculated_summary":
+            return self.get_calculation_block_ids(
+                block=self.get_block(identifier), source_type="answers"
+            )
+        if source == "grand_calculated_summary":
+            return [
+                answer_id
+                for calculated_summary_id in self.get_calculation_block_ids(
+                    block=self.get_block(identifier), source_type="calculated_summary"
+                )
+                for answer_id in self.get_calculation_block_ids(
+                    block=self.get_block(calculated_summary_id), source_type="answers"
+                )
+            ]
+        return [identifier]
+
     def is_repeating_section(self, section_id: str) -> bool:
         return "repeat" in self.sections_by_id[section_id]
 
@@ -517,21 +547,14 @@ class QuestionnaireSchema:
         return parent_section and self.is_repeating_section(parent_section["id"])
 
     def get_numeric_value_for_value_source(
-        self, value_source, defined_value, answer_ranges
-    ):
+        self, *, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
+    ) -> Mapping | None:
         referred_answer = None
-        if value_source == "answers":
-            referred_answer = answer_ranges.get(defined_value["identifier"])
-        elif value_source == "calculated_summary":
-            calculated_summary_block = self.get_block(defined_value["identifier"])
-            answers_to_calculate = self.get_calculation_block_ids(
-                block=calculated_summary_block, source_type="answers"
-            )
-
-            for answer_id in answers_to_calculate:
-                referred_answer = answer_ranges.get(answer_id)
-                if referred_answer is None:
-                    return None
+        answers_to_calculate = self.get_answer_ids_for_value_source(value_source)
+        for answer_id in answers_to_calculate:
+            referred_answer = answer_ranges.get(answer_id)
+            if referred_answer is None:
+                return None
         return referred_answer
 
     @staticmethod
