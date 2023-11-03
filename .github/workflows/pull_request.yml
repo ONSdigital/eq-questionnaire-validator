@@ -17,7 +17,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.14.2"
+          node-version-file: ".nvmrc"
           cache: "yarn"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
@@ -55,7 +55,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.14.2"
+          node-version-file: ".nvmrc"
           cache: "yarn"
       - run: |
           echo "PYTHON_VERSION=$(python -c 'import platform; print(platform.python_version())')" >> $GITHUB_ENV
