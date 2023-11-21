@@ -31,7 +31,7 @@ To run the app's unit tests:
 make test-unit
 ```
 
-To run the app's unit tests and yarn tests:
+To run the app's unit tests and ajv validator tests:
 
 ```
 make test
@@ -56,17 +56,25 @@ brew install nvm
 nvm install
 ```
 
-Install yarn and node dependencies:
+Install node dependencies:
 
 ```
-npm i -g yarn
-yarn
+npm install
+```
+
+To install additional dependencies use:
+```
+npm install [dev dependency] --save-dev 
+```
+or
+```
+npm install [dev dependency]
 ```
 
 To run the ajv validator tests:
 
 ```
-make test-yarn
+make test-ajv
 ```
 
 ## Formatting json
