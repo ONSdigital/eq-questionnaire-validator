@@ -9,14 +9,14 @@
   },
   "type": "module",
   "scripts": {
-    "test": "mocha --require babel-register ajv/tests/*.js --exit",
-    "lint": "yarn lint:schemas && yarn lint:test-schemas && yarn lint:ajv",
+    "test": "mocha --require @babel/register ajv/tests/*.js --exit",
+    "lint": "npm run lint:schemas && npm run lint:test-schemas && npm run lint:ajv",
     "start": "DEBUG=ajv-schema-validator node ajv/app.js &",
     "stop": "kill -9 $(lsof -ti:5002)",
     "lint:schemas": "prettier --check \"schemas/**/*.json\" && eslint \"schemas/**/*.json\"",
     "lint:test-schemas": "prettier --check \"tests/schemas/**/*.json\" && eslint \"tests/schemas/**/*.json\"",
     "lint:ajv": "prettier --check \"ajv/**/*.js\" && eslint \"ajv/**/*.js\"",
-    "format": "yarn format:schemas && yarn format:test-schemas && yarn format:ajv",
+    "format": "npm run format:schemas && npm run format:test-schemas && npm run format:ajv",
     "format:schemas": "prettier \"schemas/**/*.json\" --write && eslint --fix \"schemas/**/*.json\"",
     "format:test-schemas": "prettier \"tests/schemas/**/*.json\" --write && eslint --fix \"tests/schemas/**/*.json\"",
     "format:ajv": "prettier \"ajv/**/*.js\" --write && eslint --fix \"ajv/**/*.js\""
@@ -39,6 +39,12 @@
     "glob": "*"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "chai": "*",
+    "chai-http": "*",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-chai-friendly": "^0.7.2",
@@ -48,13 +54,9 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
     "fancy-log": "^1.3.3",
-    "prettier": "^2.4.1",
-    "babel-cli": "*",
-    "babel-preset-env": "*",
-    "chai": "*",
-    "chai-http": "*",
     "mocha": "*",
-    "nodemon": "*"
+    "nodemon": "*",
+    "prettier": "^2.4.1"
   },
   "prettier": {}
 }
