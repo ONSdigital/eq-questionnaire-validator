@@ -143,6 +143,19 @@ class QuestionnaireSchema:
             '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
         )
         self.list_names = self.list_collector_names + self.supplementary_lists
+        self.list_names_by_repeating_block_id = {
+            block["id"]: list_collector["for_list"]
+            for list_collector in jp.match(
+                '$..blocks[?(@.type=="ListCollector")]', self.schema
+            )
+            for block in list_collector.get("repeating_blocks", [])
+        }
+        self.list_names_by_dynamic_answer_id = {
+            answer["id"]: dynamic_answer["values"]["identifier"]
+            for dynamic_answer in jp.match("$..dynamic_answers[*]", self.schema)
+            if dynamic_answer["values"]["source"] == "list"
+            for answer in dynamic_answer["answers"]
+        }
 
         self._answers_with_context = {}
 
@@ -395,6 +408,19 @@ class QuestionnaireSchema:
             for question in questions
             for answer in question.get("dynamic_answers", {}).get("answers", [])
         }
+
+    def get_list_name_for_answer_id(self, answer_id: str) -> str | None:
+        """If the answer is repeating, return the name of the list it repeats over, otherwise None"""
+        if list_name := self.list_names_by_dynamic_answer_id.get(answer_id):
+            return list_name
+        block = self.get_block_by_answer_id(answer_id)
+        if list_name := self.list_names_by_repeating_block_id.get(block["id"]):
+            return list_name
+        if block["type"] == "ListCollector":
+            return block["for_list"]
+        section = self.get_parent_section_for_block(block["id"])
+        if section.get("repeat"):
+            return section["repeat"]["for_list"]
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):
