@@ -62,15 +62,6 @@ Install node dependencies:
 npm install
 ```
 
-To install additional dependencies use:
-```
-npm install [dev dependency] --save-dev 
-```
-or
-```
-npm install [dev dependency]
-```
-
 To run the ajv validator tests:
 
 ```
