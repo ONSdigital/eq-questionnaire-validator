@@ -21,6 +21,9 @@ class NumberAnswerValidator(AnswerValidator):
     GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
         "The referenced answer has a greater number of decimal places than answer"
     )
+    MAX_MIN_IS_STRING = (
+        "The minimum or maximum value is a string"
+    )
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
@@ -50,6 +53,8 @@ class NumberAnswerValidator(AnswerValidator):
                 self.questionnaire_schema.numeric_answer_ranges
             )
 
+            self.validate_min_max_is_number()
+
             self.validate_value_in_limits()
 
         return self.errors
@@ -57,6 +62,27 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_mandatory_has_no_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
+
+    def validate_min_max_is_number(self):
+        min_value = self.answer.get("minimum", {}).get("value", 0)
+        max_value = self.answer.get("maximum", {}).get("value", 0)
+
+        # Get minimum / maximum and iterate through to ensure value is not a string
+        for x in [min_value, max_value]:
+            if isinstance(x, str):
+                self.add_error(
+                    self.MAX_MIN_IS_STRING
+                )
+#######################################################################################
+        # if isinstance(min_value, str):
+        #     self.add_error(
+        #         self.MINIMUM_IS_STRING
+        #     )
+        #
+        # if isinstance(max_value, str):
+        #     self.add_error(
+        #         self.MAXIMUM_IS_STRING
+        #     )
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)

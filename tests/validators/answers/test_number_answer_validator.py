@@ -79,6 +79,47 @@ def test_are_decimal_places_valid():
         "answer_id": "total-percentage",
     }
 
+def test_maximum_set_as_string():
+    answer = {
+        "id": "total-percentage",
+        "label": "Total",
+        "mandatory": False,
+        "q_code": "10002",
+        "type": "Percentage",
+        "maximum": {"value": "100"},
+    }
+
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
+    validator.validate_min_max_is_number()
+
+    assert validator.errors[0] == {
+        "message": validator.MAX_MIN_IS_STRING,
+        "answer_id": "total-percentage",
+    }
+
+def test_minimum_set_as_string():
+    answer = {
+        "calculated": True,
+        "description": "The total percentages should be 100%",
+        "id": "total-percentage",
+        "label": "Total",
+        "mandatory": False,
+        "q_code": "10002",
+        "type": "Percentage",
+        "maximum": {"value": "0"},
+    }
+
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
+    validator.validate_min_max_is_number()
+
+    assert validator.errors[0] == {
+        "message": validator.MAX_MIN_IS_STRING,
+        "answer_id": "total-percentage",
+    }
 
 def test_invalid_range():
     answer = {
