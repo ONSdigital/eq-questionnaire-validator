@@ -32,9 +32,29 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD,
             "list_name": "people",
             "block_id": "list-collector",
+        }
+    ]
+
+    assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different_list_collector():
+    filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different_list_collector.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("list-collector")
+    validator = ListCollectorValidator(block, questionnaire_schema)
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD,
+            "list_name": "people",
+            "block_id": "list-collector",
+            "other_list_collector_name": "visitor"
         }
     ]
 
