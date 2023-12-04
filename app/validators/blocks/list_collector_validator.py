@@ -23,7 +23,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     )
     LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
-    NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD = "Multiple list collectors populate a list using different answer_ids in the add block"
+    NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD = "Multiple list collectors with same name populate a list using different answer_ids in the add block"
+    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD = "Different list collectors populate a list using duplicate answer_ids in the add block"
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
     def validate(self):
@@ -96,18 +97,31 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         )
 
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
-            self.block["id"], for_list=list_name, type="ListCollector"
+            self.block["id"], type="ListCollector"
         )
 
         for other_list_collector in other_list_collectors:
+            other_list_collector_name = other_list_collector["for_list"]
+            is_matching_list_collector = other_list_collector_name == list_name
             other_add_ids = self.questionnaire_schema.get_all_answer_ids(
                 other_list_collector["add_block"]["id"]
             )
-            difference = add_answer_ids.symmetric_difference(other_add_ids)
-            if difference:
+            has_other_add_id_duplicates = any(
+                add_answer_id in other_add_ids
+                for add_answer_id in add_answer_ids
+            )
+
+            if is_matching_list_collector:
+                if add_answer_ids.symmetric_difference(other_add_ids):
+                    self.add_error(
+                        self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD,
+                        list_name=list_name,
+                    )
+            elif has_other_add_id_duplicates:
                 self.add_error(
-                    self.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+                    self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD,
                     list_name=list_name,
+                    other_list_collector_name=other_list_collector_name,
                 )
 
     def validate_single_repeating_blocks_list_collector(self):
