@@ -32,7 +32,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD,
+            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
             "list_name": "people",
             "block_id": "list-collector",
         }
@@ -51,7 +51,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
 
     expected_errors = [
         {
-            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD,
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK,
             "list_name": "people",
             "block_id": "list-collector",
             "other_list_collector_name": "visitor",
