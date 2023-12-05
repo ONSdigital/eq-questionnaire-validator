@@ -107,8 +107,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 other_list_collector["add_block"]["id"]
             )
             has_other_add_id_duplicates = any(
-                add_answer_id in other_add_ids
-                for add_answer_id in add_answer_ids
+                add_answer_id in other_add_ids for add_answer_id in add_answer_ids
             )
 
             if is_matching_list_collector:

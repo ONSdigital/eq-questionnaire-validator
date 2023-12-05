@@ -54,7 +54,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
             "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD,
             "list_name": "people",
             "block_id": "list-collector",
-            "other_list_collector_name": "visitor"
+            "other_list_collector_name": "visitor",
         }
     ]
 
