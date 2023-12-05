@@ -169,7 +169,7 @@ def test_min_if_not_set_as_integer():
 
     assert len(validator.errors) == 0
 
-def test_min_if_not_set_as_integer():
+def test_max_if_not_set_as_integer():
     answer = {
         "id": "set-maximum-answer",
         "description": "This is a description of the maximum value",
