@@ -111,8 +111,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 add_answer_id in other_add_ids for add_answer_id in add_answer_ids
             )
 
-            if is_other_list_collector_name_matching:
-                if add_answer_ids.symmetric_difference(other_add_ids):
+            if is_other_list_collector_name_matching and add_answer_ids.symmetric_difference(other_add_ids):
                     self.add_error(
                         self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
                         list_name=list_name,
