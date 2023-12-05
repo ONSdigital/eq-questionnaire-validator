@@ -124,6 +124,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                     self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK,
                     list_name=list_name,
                     other_list_collector_name=other_list_collector_name,
+                    other_list_collector_block_id=other_list_collector["id"],
                 )
 
     def validate_single_repeating_blocks_list_collector(self):

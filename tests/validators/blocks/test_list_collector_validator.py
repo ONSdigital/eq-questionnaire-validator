@@ -55,6 +55,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
             "list_name": "people",
             "block_id": "list-collector",
             "other_list_collector_name": "visitor",
+            "other_list_collector_block_id": "visitor-list-collector",
         }
     ]
 
