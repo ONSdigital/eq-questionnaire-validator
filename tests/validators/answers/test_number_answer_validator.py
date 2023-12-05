@@ -79,6 +79,7 @@ def test_are_decimal_places_valid():
         "answer_id": "total-percentage",
     }
 
+
 def test_maximum_set_as_string():
     answer = {
         "id": "total-percentage",
@@ -98,6 +99,7 @@ def test_maximum_set_as_string():
         "message": validator.MAX_MIN_IS_STRING,
         "answer_id": "total-percentage",
     }
+
 
 def test_minimum_set_as_string():
     answer = {
@@ -120,6 +122,7 @@ def test_minimum_set_as_string():
         "message": validator.MAX_MIN_IS_STRING,
         "answer_id": "total-percentage",
     }
+
 
 def test_min_and_max_set_as_string():
     answer = {
@@ -145,22 +148,18 @@ def test_min_and_max_set_as_string():
     }
     assert len(validator.errors) == 2
 
+
 def test_min_if_not_set_as_integer():
     answer = {
-            "id": "answerfdaf44e6-373d-4b4e-b5fa-13caf04d9b5efrom",
-            "type": "Date",
-            "mandatory": True,
-            "label": "From",
-            "q_code": "11",
-            "minimum": {
-                "value": {
-                    "source": "metadata",
-                    "identifier": "ref_p_start_date"
-                },
-                "offset_by": {
-                    "days": -19
-                }
-            }
+        "id": "answerfdaf44e6-373d-4b4e-b5fa-13caf04d9b5efrom",
+        "type": "Date",
+        "mandatory": True,
+        "label": "From",
+        "q_code": "11",
+        "minimum": {
+            "value": {"source": "metadata", "identifier": "ref_p_start_date"},
+            "offset_by": {"days": -19},
+        },
     }
 
     validator = NumberAnswerValidator(
@@ -168,6 +167,7 @@ def test_min_if_not_set_as_integer():
     )
 
     assert len(validator.errors) == 0
+
 
 def test_max_if_not_set_as_integer():
     answer = {
@@ -181,9 +181,9 @@ def test_max_if_not_set_as_integer():
         "maximum": {
             "value": {
                 "source": "calculated_summary",
-                "identifier": "currency-total-playback"
+                "identifier": "currency-total-playback",
             }
-        }
+        },
     }
 
     validator = NumberAnswerValidator(
@@ -191,6 +191,7 @@ def test_max_if_not_set_as_integer():
     )
 
     assert len(validator.errors) == 0
+
 
 def test_invalid_range():
     answer = {

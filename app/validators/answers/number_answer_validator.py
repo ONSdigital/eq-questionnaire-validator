@@ -21,9 +21,7 @@ class NumberAnswerValidator(AnswerValidator):
     GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
         "The referenced answer has a greater number of decimal places than answer"
     )
-    MAX_MIN_IS_STRING = (
-        "The minimum or maximum value is not a float or an integer"
-    )
+    MAX_MIN_IS_STRING = "The minimum or maximum value is not a float or an integer"
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
@@ -69,9 +67,7 @@ class NumberAnswerValidator(AnswerValidator):
         if min_value or max_value:  # Checks both min and max simultaneously
             for value in [min_value, max_value]:
                 if not isinstance(value, float) or not isinstance(value, int):
-                    self.add_error(
-                        self.MAX_MIN_IS_STRING
-                    )
+                    self.add_error(self.MAX_MIN_IS_STRING)
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
