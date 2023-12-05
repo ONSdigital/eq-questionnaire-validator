@@ -102,24 +102,24 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
 
         for other_list_collector in other_list_collectors:
             other_list_collector_name = other_list_collector["for_list"]
-            is_other_list_collector_name_matching = (
+            are_list_collector_names_matching = (
                 other_list_collector_name == list_name
             )
 
             other_add_ids = self.questionnaire_schema.get_all_answer_ids(
                 other_list_collector["add_block"]["id"]
             )
-            has_other_add_id_duplicates = any(
+            contains_duplicate_add_answer_ids = any(
                 add_answer_id in other_add_ids for add_answer_id in add_answer_ids
             )
 
-            if is_other_list_collector_name_matching:
-                if add_answer_ids.symmetric_difference(other_add_ids):
-                    self.add_error(
-                        self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
-                        list_name=list_name,
-                    )
-            elif has_other_add_id_duplicates:
+            if are_list_collector_names_matching and add_answer_ids.symmetric_difference(other_add_ids):
+                self.add_error(
+                    self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
+                    list_name=list_name,
+                )
+
+            if not are_list_collector_names_matching and contains_duplicate_add_answer_ids:
                 self.add_error(
                     self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK,
                     list_name=list_name,
