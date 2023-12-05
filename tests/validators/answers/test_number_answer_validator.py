@@ -108,7 +108,7 @@ def test_minimum_set_as_string():
         "mandatory": False,
         "q_code": "10002",
         "type": "Percentage",
-        "maximum": {"value": "0"},
+        "minimum": {"value": "0"},
     }
 
     validator = NumberAnswerValidator(
@@ -120,6 +120,77 @@ def test_minimum_set_as_string():
         "message": validator.MAX_MIN_IS_STRING,
         "answer_id": "total-percentage",
     }
+
+def test_min_and_max_set_as_string():
+    answer = {
+        "calculated": True,
+        "description": "The total percentages should be 100%",
+        "id": "total-percentage",
+        "label": "Total",
+        "mandatory": False,
+        "q_code": "10002",
+        "type": "Percentage",
+        "maximum": {"value": "100"},
+        "minimum": {"value": "0"},
+    }
+
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
+    validator.validate_min_max_is_number()
+
+    assert validator.errors[1] == {
+        "message": validator.MAX_MIN_IS_STRING,
+        "answer_id": "total-percentage",
+    }
+    assert len(validator.errors) == 2
+
+def test_min_if_not_set_as_integer():
+    answer = {
+            "id": "answerfdaf44e6-373d-4b4e-b5fa-13caf04d9b5efrom",
+            "type": "Date",
+            "mandatory": True,
+            "label": "From",
+            "q_code": "11",
+            "minimum": {
+                "value": {
+                    "source": "metadata",
+                    "identifier": "ref_p_start_date"
+                },
+                "offset_by": {
+                    "days": -19
+                }
+            }
+    }
+
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
+
+    assert len(validator.errors) == 0
+
+def test_min_if_not_set_as_integer():
+    answer = {
+        "id": "set-maximum-answer",
+        "description": "This is a description of the maximum value",
+        "label": "Set a value less than the total above",
+        "mandatory": True,
+        "type": "Currency",
+        "currency": "GBP",
+        "decimal_places": 2,
+        "maximum": {
+            "value": {
+                "source": "calculated_summary",
+                "identifier": "currency-total-playback"
+            }
+        }
+    }
+
+    validator = NumberAnswerValidator(
+        answer, get_mock_schema_with_data_version("0.0.3")
+    )
+
+    assert len(validator.errors) == 0
 
 def test_invalid_range():
     answer = {
