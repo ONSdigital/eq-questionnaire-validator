@@ -111,7 +111,6 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 add_answer_id in other_add_ids for add_answer_id in add_answer_ids
             )
 
-            # Check for duplicate answer IDs for the same list collector
             if (
                 are_list_collector_names_matching
                 and add_answer_ids.symmetric_difference(other_add_ids)
@@ -121,7 +120,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                     list_name=list_name,
                 )
 
-            # Check for duplicate answer IDs for a different list collector
+            # Check for duplicate answer IDs in a different list collector
             if (
                 not are_list_collector_names_matching
                 and contains_duplicate_add_answer_ids
