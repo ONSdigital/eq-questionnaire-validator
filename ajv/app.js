@@ -3,8 +3,20 @@ import fs from "fs";
 import { globSync } from "glob";
 import express from "express";
 import Debug from "debug";
+
 const debug = Debug("ajv-schema-validator");
 const app = express();
+
+app.use(
+  express.json({
+    limit: "2Mb",
+  })
+);
+
+app.listen(5002, () => {
+  debug("Server running on port 5002");
+});
+
 const ajValidator = new Ajv2020({
   allErrors: false,
   strict: true,
@@ -13,19 +25,7 @@ const ajValidator = new Ajv2020({
   strictSchema: false, // this has been included to avoid unknown keyword errors ad strict mode is true
   strictTuples: false, // this has been included due to https://github.com/ajv-validator/ajv/issues/1417
 });
-app.use(
-  express.json({
-    limit: "2Mb",
-  })
-);
-app.listen(5002, () => {
-  debug("Server running on port 5002");
-});
-// Export our app for testing purposes
-export default app;
-app.get("/status", (req, res, next) => {
-  return res.sendStatus(200);
-});
+
 const schemas = globSync("schemas/**/*.json");
 schemas.forEach((currentSchema) => {
   if (!(currentSchema.valueOf() === "schemas/questionnaire_v1.json")) {
@@ -34,8 +34,14 @@ schemas.forEach((currentSchema) => {
     ajValidator.addSchema(JSON.parse(data)).compile(true);
   }
 });
+
 const baseSchema = fs.readFileSync("schemas/questionnaire_v1.json");
 const validate = ajValidator.compile(JSON.parse(baseSchema));
+
+app.get("/status", (req, res, next) => {
+  return res.sendStatus(200);
+});
+
 app.post("/validate", (req, res, next) => {
   debug("Validating questionnaire: " + req.body.title);
   const valid = validate(req.body);
@@ -49,3 +55,6 @@ app.post("/validate", (req, res, next) => {
   }
   return res.json({});
 });
+
+// Export our app for testing purposes
+export default app;
