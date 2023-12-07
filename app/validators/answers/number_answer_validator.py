@@ -30,6 +30,12 @@ class NumberAnswerValidator(AnswerValidator):
     def validate(self):
         super().validate()
 
+        self.validate_min_max_is_number()
+
+        # Prevent other validation methods that requires calculations running into errors due to types
+        if len(self.errors) > 0:
+            return self.errors
+
         self.validate_decimal_places()
         self.validate_mandatory_has_no_default()
         self.validate_decimals()
@@ -51,7 +57,6 @@ class NumberAnswerValidator(AnswerValidator):
                 self.questionnaire_schema.numeric_answer_ranges
             )
 
-            self.validate_min_max_is_number()
             self.validate_value_in_limits()
 
         return self.errors
@@ -66,7 +71,7 @@ class NumberAnswerValidator(AnswerValidator):
 
         if min_value or max_value:  # Checks both min and max simultaneously
             for value in [min_value, max_value]:
-                if not isinstance(value, float) or not isinstance(value, int):
+                if isinstance(value, str):
                     self.add_error(self.MAX_MIN_IS_STRING)
 
     def validate_value_in_limits(self):
