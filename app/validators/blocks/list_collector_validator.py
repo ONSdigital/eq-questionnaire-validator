@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
@@ -24,7 +26,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
     NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK = "Multiple list collectors with same name populate a list using different answer_ids in add block"
-    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK = "Different list collectors populate a list using duplicate answer_ids in the add block"
+    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK = "Different list collectors populate a list using duplicate answer_ids in a list block"
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
     def validate(self):
@@ -91,46 +93,58 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
 
     def validate_other_list_collectors(self):
+        """
+        Checks other list collectors for:
+            - non-unique answer id in add block for any other same-named list collectors
+            - duplicate answer id in add, edit, or remove block for other different-named list collectors
+        """
+        list_blocks_to_validate = ["add_block", "edit_block", "remove_block"]
         list_name = self.block["for_list"]
-        add_answer_ids = self.questionnaire_schema.get_all_answer_ids(
-            self.block["add_block"]["id"]
-        )
+
+        list_block_answer_ids = {
+            list_block: self.questionnaire_schema.get_all_answer_ids(
+                self.block[list_block]["id"]
+            )
+            for list_block in list_blocks_to_validate
+        }
 
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
             self.block["id"], type="ListCollector"
         )
 
         for other_list_collector in other_list_collectors:
-            other_list_collector_name = other_list_collector["for_list"]
-            other_add_ids = self.questionnaire_schema.get_all_answer_ids(
-                other_list_collector["add_block"]["id"]
-            )
+            other_list_name = other_list_collector["for_list"]
+            are_list_names_matching = other_list_name == list_name
 
-            are_list_collector_names_matching = other_list_collector_name == list_name
-            contains_duplicate_add_answer_ids = any(
-                add_answer_id in other_add_ids for add_answer_id in add_answer_ids
-            )
+            other_list_block_answer_ids = {
+                list_block: self.questionnaire_schema.get_all_answer_ids(
+                    other_list_collector[list_block]["id"]
+                )
+                for list_block in list_blocks_to_validate
+            }
 
-            if (
-                are_list_collector_names_matching
-                and add_answer_ids.symmetric_difference(other_add_ids)
-            ):
+            if are_list_names_matching and list_block_answer_ids[
+                "add_block"
+            ].symmetric_difference(other_list_block_answer_ids["add_block"]):
                 self.add_error(
                     self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
                     list_name=list_name,
                 )
 
-            # Check for duplicate answer IDs in a different list collector
-            if (
-                not are_list_collector_names_matching
-                and contains_duplicate_add_answer_ids
-            ):
-                self.add_error(
-                    self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK,
-                    list_name=list_name,
-                    other_list_collector_name=other_list_collector_name,
-                    other_list_collector_block_id=other_list_collector["id"],
-                )
+            if not are_list_names_matching:
+                for list_block in list_blocks_to_validate:
+                    has_duplicate_answer_ids = any(
+                        answer_id in other_list_block_answer_ids[list_block]
+                        for answer_id in list_block_answer_ids[list_block]
+                    )
+                    if has_duplicate_answer_ids:
+                        self.add_error(
+                            self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
+                            list_name=list_name,
+                            list_block=list_block,
+                            other_list_name=other_list_name,
+                            other_list_block_id=other_list_collector["id"],
+                        )
 
     def validate_single_repeating_blocks_list_collector(self):
         if not self.block.get("repeating_blocks"):

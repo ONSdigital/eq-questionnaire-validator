@@ -51,11 +51,12 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
 
     expected_errors = [
         {
-            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_ADD_BLOCK,
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
             "list_name": "people",
+            "list_block": "add_block",
             "block_id": "list-collector",
-            "other_list_collector_name": "visitor",
-            "other_list_collector_block_id": "visitor-list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
         }
     ]
 
