@@ -149,22 +149,24 @@ def test_min_and_max_set_as_string():
     assert len(validator.errors) == 2
 
 
-def test_min_if_not_set_as_integer():
+def test_min_if_set_as_float():
     answer = {
-        "id": "answerfdaf44e6-373d-4b4e-b5fa-13caf04d9b5efrom",
-        "type": "Date",
+        "id": "answer-2",
         "mandatory": True,
-        "label": "From",
-        "q_code": "11",
+        "type": "Currency",
+        "label": "Money spent on vegetables",
+        "description": "Enter the full value",
         "minimum": {
-            "value": {"source": "metadata", "identifier": "ref_p_start_date"},
-            "offset_by": {"days": -19},
-        },
+            "value": 0.00,
+            "exclusive": True
+        }
     }
 
     validator = NumberAnswerValidator(
         answer, get_mock_schema_with_data_version("0.0.3")
     )
+
+    validator.validate_min_max_is_number()
 
     assert len(validator.errors) == 0
 
