@@ -1,5 +1,3 @@
-from typing import Sequence
-
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
