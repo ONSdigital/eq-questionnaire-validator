@@ -42,7 +42,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
 
 def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different_list_collector():
-    filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different_list_collector.json"
+    filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_answer_ids_for_different_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     block = questionnaire_schema.get_block("list-collector")
@@ -57,7 +57,23 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
             "block_id": "list-collector",
             "other_list_name": "visitor",
             "other_list_block_id": "visitor-list-collector",
-        }
+        },
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
+            "list_name": "people",
+            "list_block": "edit_block",
+            "block_id": "list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
+        },
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
+            "list_name": "people",
+            "list_block": "remove_block",
+            "block_id": "list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
+        },
     ]
 
     assert expected_errors == validator.errors

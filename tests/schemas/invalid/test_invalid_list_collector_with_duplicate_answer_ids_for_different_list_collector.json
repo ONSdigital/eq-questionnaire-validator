@@ -238,7 +238,7 @@
                   "title": "What is the name of the visitor?",
                   "answers": [
                     {
-                      "id": "visitor-first-name",
+                      "id": "first-name",
                       "label": "First name",
                       "mandatory": true,
                       "type": "TextField"
@@ -267,7 +267,7 @@
                   "title": "Are you sure you want to remove this visitor?",
                   "answers": [
                     {
-                      "id": "visitor-remove-confirmation",
+                      "id": "remove-confirmation",
                       "mandatory": true,
                       "type": "Radio",
                       "options": [
