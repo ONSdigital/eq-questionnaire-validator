@@ -133,7 +133,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             if not are_list_names_matching:
                 for list_block_to_validate in list_blocks_to_validate:
                     has_duplicate_answer_ids = any(
-                        answer_id in other_list_blocks_answer_ids[list_block_to_validate]
+                        answer_id
+                        in other_list_blocks_answer_ids[list_block_to_validate]
                         for answer_id in list_blocks_answer_ids[list_block_to_validate]
                     )
                     if has_duplicate_answer_ids:
