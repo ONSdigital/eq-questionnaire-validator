@@ -249,7 +249,7 @@
     "oneOf": [
       {
         "description": "A string or integer value",
-        "type": ["integer", "string"]
+        "type": ["string", "number"]
       },
       {
         "$ref": "value_sources.json#/answer_value_source"
