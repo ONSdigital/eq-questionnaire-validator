@@ -248,7 +248,7 @@
   "value_reference": {
     "oneOf": [
       {
-        "description": "A string or integer value",
+        "description": "A string or number value",
         "type": ["string", "number"]
       },
       {
