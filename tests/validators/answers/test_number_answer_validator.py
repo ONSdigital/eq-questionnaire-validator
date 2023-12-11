@@ -156,10 +156,7 @@ def test_min_if_set_as_float():
         "type": "Currency",
         "label": "Money spent on vegetables",
         "description": "Enter the full value",
-        "minimum": {
-            "value": 0.00,
-            "exclusive": True
-        }
+        "minimum": {"value": 0.00, "exclusive": True},
     }
 
     validator = NumberAnswerValidator(
