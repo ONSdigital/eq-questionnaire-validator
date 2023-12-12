@@ -32,7 +32,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
+            "message": validator.DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST,
             "list_name": "people",
             "block_id": "list-collector",
         }
@@ -53,7 +53,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
         {
             "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
             "list_name": "people",
-            "list_block": "add_block",
+            "child_block": "add_block",
             "block_id": "list-collector",
             "other_list_name": "visitor",
             "other_list_block_id": "visitor-list-collector",
@@ -61,7 +61,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
         {
             "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
             "list_name": "people",
-            "list_block": "edit_block",
+            "child_block": "edit_block",
             "block_id": "list-collector",
             "other_list_name": "visitor",
             "other_list_block_id": "visitor-list-collector",
@@ -69,7 +69,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
         {
             "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
             "list_name": "people",
-            "list_block": "remove_block",
+            "child_block": "remove_block",
             "block_id": "list-collector",
             "other_list_name": "visitor",
             "other_list_block_id": "visitor-list-collector",

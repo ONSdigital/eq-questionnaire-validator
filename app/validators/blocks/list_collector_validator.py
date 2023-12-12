@@ -23,7 +23,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     )
     LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
     LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
-    NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK = "Multiple list collectors with same name populate a list using different answer_ids in add block"
+    DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST = "Multiple list collectors with same name populate a list using different answer_ids in add block"
     DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK = "Different list collectors populate a list using duplicate answer_ids in a list block"
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
@@ -100,10 +100,10 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
 
         list_name = self.block["for_list"]
         list_blocks_answer_ids = {
-            list_block: self.questionnaire_schema.get_all_answer_ids(
-                self.block[list_block]["id"]
+            child_block: self.questionnaire_schema.get_all_answer_ids(
+                self.block[child_block]["id"]
             )
-            for list_block in list_blocks_to_validate
+            for child_block in list_blocks_to_validate
         }
 
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
@@ -111,38 +111,32 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         )
 
         for other_list_collector in other_list_collectors:
-            other_list_name = other_list_collector["for_list"]
-            are_list_names_matching = other_list_name == list_name
-
             other_list_blocks_answer_ids = {
-                other_list_block: self.questionnaire_schema.get_all_answer_ids(
-                    other_list_collector[other_list_block]["id"]
+                child_block: self.questionnaire_schema.get_all_answer_ids(
+                    other_list_collector[child_block]["id"]
                 )
-                for other_list_block in list_blocks_to_validate
+                for child_block in list_blocks_to_validate
             }
 
-            if are_list_names_matching and list_blocks_answer_ids[
-                "add_block"
-            ].symmetric_difference(other_list_blocks_answer_ids["add_block"]):
-                self.add_error(
-                    self.NON_UNIQUE_ANSWER_ID_FOR_SAME_LIST_COLLECTOR_ADD_BLOCK,
-                    list_name=list_name,
-                )
-
-            # Validate other different list collector
-            if not are_list_names_matching:
-                for list_block_to_validate in list_blocks_to_validate:
-                    has_duplicate_answer_ids = any(
-                        answer_id
-                        in other_list_blocks_answer_ids[list_block_to_validate]
-                        for answer_id in list_blocks_answer_ids[list_block_to_validate]
+            if list_name == other_list_collector["for_list"]:
+                if list_blocks_answer_ids["add_block"].symmetric_difference(
+                    other_list_blocks_answer_ids["add_block"]
+                ):
+                    self.add_error(
+                        self.DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST,
+                        list_name=list_name,
                     )
-                    if has_duplicate_answer_ids:
+            else:
+                for child_block in list_blocks_to_validate:
+                    if (
+                        other_list_blocks_answer_ids[child_block]
+                        & list_blocks_answer_ids[child_block]
+                    ):
                         self.add_error(
                             self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR_BLOCK,
                             list_name=list_name,
-                            list_block=list_block_to_validate,
-                            other_list_name=other_list_name,
+                            child_block=child_block,
+                            other_list_name=other_list_collector["for_list"],
                             other_list_block_id=other_list_collector["id"],
                         )
 
