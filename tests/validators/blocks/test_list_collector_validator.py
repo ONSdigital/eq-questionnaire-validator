@@ -65,6 +65,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
             "message": validator.DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST,
             "list_name": "people",
             "block_id": "list-collector",
+            "other_list_block_id": "another-list-collector",
         }
     ]
 

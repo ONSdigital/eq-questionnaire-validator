@@ -8,7 +8,6 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
     REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
-    LIST_CHILD_BLOCKS_TO_VALIDATE = ["add_block", "edit_block", "remove_block"]
 
     NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION = (
         f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
@@ -71,24 +70,21 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         - Enforce the same answer_ids on add and edit sub-blocks
         - Ensure that that child block answer_ids are not used elsewhere in the schema that's not another list collector
         """
-        list_block_answer_ids = {
-            child_block: self.questionnaire_schema.get_all_answer_ids(
-                self.block[child_block]["id"]
+        list_answer_ids = (
+            self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+                block["id"]
             )
-            for child_block in self.LIST_CHILD_BLOCKS_TO_VALIDATE
-        }
+        )
 
-        if list_block_answer_ids["add_block"].symmetric_difference(
-            list_block_answer_ids["edit_block"]
+        if list_answer_ids["add_block"].symmetric_difference(
+            list_answer_ids["edit_block"]
         ):
             self.add_error(
                 self.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH, block_id=block["id"]
             )
 
-        for child_block in self.LIST_CHILD_BLOCKS_TO_VALIDATE:
-            if list_block_answer_ids[child_block].intersection(
-                self.questionnaire_schema.ids
-            ):
+        for child_block in list_answer_ids:
+            if list_answer_ids[child_block].intersection(self.questionnaire_schema.ids):
                 self.add_error(
                     self.LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE,
                     block_id=block["id"],
@@ -111,43 +107,39 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             - non-unique answer id in add block for any other same-named list collectors
             - duplicate answer id in add, edit, or remove block for other different-named list collectors
         """
-        list_name = self.block["for_list"]
-        list_blocks_answer_ids = {
-            child_block: self.questionnaire_schema.get_all_answer_ids(
-                self.block[child_block]["id"]
+        list_answer_ids = (
+            self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+                self.block["id"]
             )
-            for child_block in self.LIST_CHILD_BLOCKS_TO_VALIDATE
-        }
-
+        )
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
             self.block["id"], type="ListCollector"
         )
 
         for other_list_collector in other_list_collectors:
-            other_list_blocks_answer_ids = {
-                child_block: self.questionnaire_schema.get_all_answer_ids(
-                    other_list_collector[child_block]["id"]
+            other_list_answer_ids = (
+                self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+                    other_list_collector["id"]
                 )
-                for child_block in self.LIST_CHILD_BLOCKS_TO_VALIDATE
-            }
+            )
 
-            if list_name == other_list_collector["for_list"]:
-                if list_blocks_answer_ids["add_block"].symmetric_difference(
-                    other_list_blocks_answer_ids["add_block"]
+            if self.block["for_list"] == other_list_collector["for_list"]:
+                if list_answer_ids["add_block"].symmetric_difference(
+                    other_list_answer_ids["add_block"]
                 ):
                     self.add_error(
                         self.DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST,
-                        list_name=list_name,
+                        list_name=self.block["for_list"],
+                        other_list_block_id=other_list_collector["id"],
                     )
             else:
-                for child_block in self.LIST_CHILD_BLOCKS_TO_VALIDATE:
-                    if (
-                        other_list_blocks_answer_ids[child_block]
-                        & list_blocks_answer_ids[child_block]
+                for child_block in other_list_answer_ids:
+                    if other_list_answer_ids[child_block].intersection(
+                        list_answer_ids[child_block]
                     ):
                         self.add_error(
                             self.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR,
-                            list_name=list_name,
+                            list_name=self.block["for_list"],
                             list_child_block_name=child_block,
                             other_list_name=other_list_collector["for_list"],
                             other_list_block_id=other_list_collector["id"],
