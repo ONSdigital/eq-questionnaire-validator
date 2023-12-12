@@ -224,10 +224,11 @@
               "question": {
                 "answers": [
                   {
-                    "id": "first-name",
-                    "label": "First name",
+                    "id": "date-of-birth-answer",
+                    "description": "Enter your date of birth",
+                    "label": "Date of Birth",
                     "mandatory": true,
-                    "type": "TextField"
+                    "type": "Date"
                   }
                 ],
                 "guidance": {
