@@ -93,24 +93,31 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         1) any grand calculated summary referencing a repeating calculated summary
         2) repeating grand calculated summary referencing a static calculated summary
         """
-        gcs_section = self.questionnaire_schema.get_parent_section_for_block(
-            self.block["id"]
+        grand_calculated_summary_section = (
+            self.questionnaire_schema.get_parent_section_for_block(self.block["id"])
         )
-        is_gcs_repeating = self.questionnaire_schema.is_repeating_section(
-            gcs_section["id"]
+        is_grand_calculated_summary_repeating = (
+            self.questionnaire_schema.is_repeating_section(
+                grand_calculated_summary_section["id"]
+            )
         )
         for calculated_summary_id in self.calculated_summaries_to_calculate:
-            if is_cs_repeating := self.questionnaire_schema.is_block_in_repeating_section(
+            if is_calculated_summary_repeating := self.questionnaire_schema.is_block_in_repeating_section(
                 calculated_summary_id
             ):
                 self._validate_repeating_calculated_summary_in_grand_calculated_summary(
                     calculated_summary_id=calculated_summary_id,
-                    is_gcs_repeating=is_gcs_repeating,
-                    grand_calculated_summary_section_id=gcs_section["id"],
+                    is_grand_calculated_summary_repeating=is_grand_calculated_summary_repeating,
+                    grand_calculated_summary_section_id=grand_calculated_summary_section[
+                        "id"
+                    ],
                 )
 
-            if is_gcs_repeating and not is_cs_repeating:
-                list_name = gcs_section["repeat"]["for_list"]
+            if (
+                is_grand_calculated_summary_repeating
+                and not is_calculated_summary_repeating
+            ):
+                list_name = grand_calculated_summary_section["repeat"]["for_list"]
                 self._validate_static_calculated_summary_in_repeating_grand_calculated_summary(
                     list_name=list_name, calculated_summary_id=calculated_summary_id
                 )
@@ -139,7 +146,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         self,
         *,
         calculated_summary_id: str,
-        is_gcs_repeating: bool,
+        is_grand_calculated_summary_repeating: bool,
         grand_calculated_summary_section_id: str,
     ):
         """
@@ -147,7 +154,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         1) the grand calculated summary is also repeating
         2) it is in the same repeating section as the repeating calculated summary it references
         """
-        if not is_gcs_repeating:
+        if not is_grand_calculated_summary_repeating:
             self.add_error(
                 self.REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT,
                 block_id=self.block["id"],
