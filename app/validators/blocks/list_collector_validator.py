@@ -83,8 +83,11 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 self.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH, block_id=block["id"]
             )
 
+        all_schema_ids_excluding_list_collectors = self.questionnaire_schema.ids
         for child_block in list_answer_ids:
-            if list_answer_ids[child_block].intersection(self.questionnaire_schema.ids):
+            if list_answer_ids[child_block].intersection(
+                all_schema_ids_excluding_list_collectors
+            ):
                 self.add_error(
                     self.LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE,
                     block_id=block["id"],
