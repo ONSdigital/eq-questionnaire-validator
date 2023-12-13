@@ -127,7 +127,7 @@ def test_invalid_non_repeating_grand_calculated_summary_referencing_repeating_ca
     assert errors == expected_error_messages
 
 
-def test_invalid_repeating_grand_calculated_summary_with_static_calculated_summary_with_repeating_answers_same_list():
+def test_invalid_repeating_grand_calculated_summary_with_repeating_answers_in_calculated_summary():
     """Asserts `invalid` when a repeating GCS references a static CS that has repeating answers for the same list
     You can't have a calculated summary of add/edit-block answers. So dynamic & repeating block covers all scenarios
     """
