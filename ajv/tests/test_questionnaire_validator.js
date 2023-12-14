@@ -1,7 +1,7 @@
 // Import the dependencies for testing
 import chai from "chai";
 import chaiHttp from "chai-http";
-import app from "../app";
+import app from "../app.js";
 import fs from "fs";
 // Configure chai
 chai.use(chaiHttp);
