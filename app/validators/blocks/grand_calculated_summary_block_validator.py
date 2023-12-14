@@ -102,7 +102,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
             )
         )
         for calculated_summary_id in self.calculated_summaries_to_calculate:
-            if is_calculated_summary_repeating := self.questionnaire_schema.is_block_in_repeating_section(
+            if self.questionnaire_schema.is_block_in_repeating_section(
                 calculated_summary_id
             ):
                 self._validate_repeating_calculated_summary_in_grand_calculated_summary(
@@ -112,11 +112,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                         "id"
                     ],
                 )
-
-            if (
-                is_grand_calculated_summary_repeating
-                and not is_calculated_summary_repeating
-            ):
+            elif is_grand_calculated_summary_repeating:
                 list_name = grand_calculated_summary_section["repeat"]["for_list"]
                 self._validate_static_calculated_summary_in_repeating_grand_calculated_summary(
                     list_name=list_name, calculated_summary_id=calculated_summary_id
