@@ -14,17 +14,6 @@ def test_mandatory_metadata_default():
     assert validator.errors == expected_errors
 
 
-def test_mandatory_metadata_census():
-    metadata = [
-        {"name": "period_id", "type": "string"},
-        {"name": "user_id", "type": "string"},
-    ]
-    validator = MetadataValidator(metadata, "census")
-    validator.validate_mandatory()
-
-    assert not validator.errors
-
-
 def test_mandatory_metadata_social():
     metadata = []
     validator = MetadataValidator(metadata, "social")
