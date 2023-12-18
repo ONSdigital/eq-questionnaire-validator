@@ -4,12 +4,12 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package.json ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 
 COPY ajv/app.js .
 COPY schemas ../schemas
 
-RUN yarn install --production=true
+RUN npm install --production=true
 
 EXPOSE 5002
 ENV DEBUG=ajv-schema-validator
