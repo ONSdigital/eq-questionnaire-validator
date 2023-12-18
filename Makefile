@@ -4,16 +4,16 @@ build:
 	poetry run ./scripts/build.sh
 
 stop-ajv:
-	yarn stop
+	npm run stop
 
 start-ajv:
-	yarn start
+	npm run start
 
 run: start-ajv
 	poetry run ./scripts/run_app.sh
 
 lint: lint-python
-	yarn lint
+	npm run lint
 
 lint-python:
 	poetry run ./scripts/run_lint_python.sh
@@ -21,13 +21,13 @@ lint-python:
 test-unit:
 	poetry run ./scripts/run_tests_unit.sh
 
-test-yarn:
-	yarn test
+test-ajv:
+	npm run test
 
-test: test-unit test-yarn
+test: test-unit test-ajv
 
 format: format-python
-	yarn format
+	npm run format
 
 format-python:
 	poetry run isort .
