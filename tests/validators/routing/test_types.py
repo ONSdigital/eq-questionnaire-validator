@@ -82,6 +82,22 @@ def test_resolve_calculated_summary_value_source_json_type():
     )
 
 
+def test_resolve_grand_calculated_summary_value_source_json_type():
+    filename = "schemas/valid/test_grand_calculated_summary_overlapping_answers.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    value_source = {
+        "source": "grand_calculated_summary",
+        "identifier": "grand-calculated-summary-shopping",
+    }
+
+    assert (
+        resolve_value_source_json_type(value_source, questionnaire_schema)
+        == TYPE_NUMBER
+    )
+
+
 @pytest.mark.parametrize(
     "source, selector, json_type",
     [
