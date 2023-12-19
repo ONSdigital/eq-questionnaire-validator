@@ -42,6 +42,11 @@ PYTHON_TYPE_TO_JSON_TYPE = {
     "NoneType": TYPE_NULL,
 }
 
+METADATA_TYPE_TO_JSON_TYPE = {
+    "string": TYPE_STRING,
+    "date": TYPE_STRING
+}
+
 
 def resolve_value_source_json_type(value_source, schema):
     source = value_source["source"]
@@ -64,6 +69,13 @@ def resolve_value_source_json_type(value_source, schema):
         block = schema.get_block(value_source["identifier"])
         first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
         return resolve_value_source_json_type(first_calculated_summary_source, schema)
+
+    if source == "metadata":
+        metadata_id = value_source["identifier"]
+        metadata = schema.schema.get("metadata")
+        for values in metadata:
+            if values.get("name") == metadata_id:
+                return METADATA_TYPE_TO_JSON_TYPE[values.get("type")]
 
     if source == "list":
         if selector := value_source.get("selector"):

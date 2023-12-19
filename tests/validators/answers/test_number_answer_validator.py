@@ -169,25 +169,16 @@ def test_min_if_set_as_float():
 
 
 def test_max_if_not_set_as_integer():
-    answer = {
-        "id": "set-maximum-answer",
-        "description": "This is a description of the maximum value",
-        "label": "Set a value less than the total above",
-        "mandatory": True,
-        "type": "Currency",
-        "currency": "GBP",
-        "decimal_places": 2,
-        "maximum": {
-            "value": {
-                "source": "calculated_summary",
-                "identifier": "currency-total-playback",
-            }
-        },
-    }
+    filename = "schemas/valid/test_calculated_summary.json"
+    schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    answer = schema.get_answer("set-maximum-answer")
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, schema
     )
+
+    validator.validate_min_max_is_number()
 
     assert len(validator.errors) == 0
 
