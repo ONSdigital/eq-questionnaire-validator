@@ -60,6 +60,11 @@ def resolve_value_source_json_type(value_source, schema):
         answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
         return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
+    if source == "grand_calculated_summary":
+        block = schema.get_block(value_source["identifier"])
+        first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
+        return resolve_value_source_json_type(first_calculated_summary_source, schema)
+
     if source == "list":
         if selector := value_source.get("selector"):
             return LIST_SELECTOR_TO_JSON_TYPE[selector]
