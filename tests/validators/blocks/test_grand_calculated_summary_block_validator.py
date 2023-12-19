@@ -125,3 +125,38 @@ def test_invalid_non_repeating_grand_calculated_summary_referencing_repeating_ca
     errors = validator.validate()
 
     assert errors == expected_error_messages
+
+
+def test_invalid_repeating_grand_calculated_summary_with_repeating_answers_in_calculated_summary():
+    """Asserts `invalid` when a repeating GCS references a static CS that has repeating answers for the same list
+    You can't have a calculated summary of add/edit-block answers. So dynamic & repeating block covers all scenarios
+    """
+    filename = "schemas/invalid/test_invalid_grand_calculated_summary_with_repeating_calculated_summary.json"
+    json_to_validate = _open_and_load_schema_file(filename)
+
+    expected_error_messages = [
+        {
+            "calculated_summary_id": "calculated-summary-permit-cost",
+            "block_id": "grand-calculated-summary-repeating-answer-cs",
+            "list_name": "vehicles",
+            "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_REPEATING_ANSWERS_FOR_SAME_LIST,
+        },
+        {
+            "calculated_summary_id": "calculated-summary-tax-cost",
+            "block_id": "grand-calculated-summary-dynamic-answer-cs",
+            "list_name": "vehicles",
+            "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_REPEATING_ANSWERS_FOR_SAME_LIST,
+        },
+    ]
+
+    questionnaire_schema = QuestionnaireSchema(json_to_validate)
+    errors = []
+    for block_id in [
+        "grand-calculated-summary-repeating-answer-cs",
+        "grand-calculated-summary-dynamic-answer-cs",
+    ]:
+        block = questionnaire_schema.get_block(block_id)
+        validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)
+        errors += validator.validate()
+
+    assert errors == expected_error_messages

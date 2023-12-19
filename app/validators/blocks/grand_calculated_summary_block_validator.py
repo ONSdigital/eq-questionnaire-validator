@@ -18,6 +18,10 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         "Cannot have a repeating grand calculated summary reference"
         " a repeating calculated summary in a different repeating section"
     )
+    CALCULATED_SUMMARY_WITH_REPEATING_ANSWERS_FOR_SAME_LIST = (
+        "Cannot have a repeating grand calculated summary reference a static calculated summary"
+        " that has repeating answers for the same list"
+    )
 
     def __init__(self, block: Mapping, questionnaire_schema: QuestionnaireSchema):
         super().__init__(block, questionnaire_schema)
@@ -50,7 +54,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
             )
 
         self.validate_answer_types(answers)
-        self.validate_repeating_calculated_summaries()
+        self.validate_calculated_summaries()
 
         return self.errors
 
@@ -83,39 +87,83 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                     calculated_summary_id=calculated_summary_id,
                 )
 
-    def validate_repeating_calculated_summaries(self):
+    def validate_calculated_summaries(self):
+        """
+        Run additional validation for the scenarios:
+        1) any grand calculated summary referencing a repeating calculated summary
+        2) repeating grand calculated summary referencing a static calculated summary
+        """
+        grand_calculated_summary_section = (
+            self.questionnaire_schema.get_parent_section_for_block(self.block["id"])
+        )
+        is_grand_calculated_summary_repeating = (
+            self.questionnaire_schema.is_repeating_section(
+                grand_calculated_summary_section["id"]
+            )
+        )
+        for calculated_summary_id in self.calculated_summaries_to_calculate:
+            if self.questionnaire_schema.is_block_in_repeating_section(
+                calculated_summary_id
+            ):
+                self._validate_repeating_calculated_summary_in_grand_calculated_summary(
+                    calculated_summary_id=calculated_summary_id,
+                    is_grand_calculated_summary_repeating=is_grand_calculated_summary_repeating,
+                    grand_calculated_summary_section_id=grand_calculated_summary_section[
+                        "id"
+                    ],
+                )
+            elif is_grand_calculated_summary_repeating:
+                list_name = grand_calculated_summary_section["repeat"]["for_list"]
+                self._validate_static_calculated_summary_in_repeating_grand_calculated_summary(
+                    list_name=list_name, calculated_summary_id=calculated_summary_id
+                )
+
+    def _validate_static_calculated_summary_in_repeating_grand_calculated_summary(
+        self, *, list_name: str, calculated_summary_id: str
+    ):
+        """
+        If the grand calculated summary is repeating, and references a static calculated summary with repeating answers,
+        this is only valid if the repeating answers are for a different list to the grand calculated summary.
+        """
+        for answer_id in self.calculated_summary_answers[calculated_summary_id]:
+            if (
+                answer_list := self.questionnaire_schema.get_list_name_for_answer_id(
+                    answer_id
+                )
+            ) and answer_list == list_name:
+                self.add_error(
+                    self.CALCULATED_SUMMARY_WITH_REPEATING_ANSWERS_FOR_SAME_LIST,
+                    block_id=self.block["id"],
+                    calculated_summary_id=calculated_summary_id,
+                    list_name=list_name,
+                )
+
+    def _validate_repeating_calculated_summary_in_grand_calculated_summary(
+        self,
+        *,
+        calculated_summary_id: str,
+        is_grand_calculated_summary_repeating: bool,
+        grand_calculated_summary_section_id: str,
+    ):
         """
         If the grand calculated summary references a repeating calculated summary, this is only valid if:
         1) the grand calculated summary is also repeating
         2) it is in the same repeating section as the repeating calculated summary it references
         """
-        gcs_section_id = self.questionnaire_schema.get_section_id_for_block_id(
-            self.block["id"]
-        )
-        is_gcs_repeating = self.questionnaire_schema.is_repeating_section(
-            gcs_section_id
-        )
-        for calculated_summary_id in self.calculated_summaries_to_calculate:
-            if not self.questionnaire_schema.is_block_in_repeating_section(
+        if not is_grand_calculated_summary_repeating:
+            self.add_error(
+                self.REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT,
+                block_id=self.block["id"],
+                calculated_summary_id=calculated_summary_id,
+            )
+        elif (
+            grand_calculated_summary_section_id
+            != self.questionnaire_schema.get_section_id_for_block_id(
                 calculated_summary_id
-            ):
-                # validation below only required for repeating calculated summaries
-                continue
-
-            if not is_gcs_repeating:
-                self.add_error(
-                    self.REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT,
-                    block_id=self.block["id"],
-                    calculated_summary_id=calculated_summary_id,
-                )
-            elif (
-                gcs_section_id
-                != self.questionnaire_schema.get_section_id_for_block_id(
-                    calculated_summary_id
-                )
-            ):
-                self.add_error(
-                    self.CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION,
-                    block_id=self.block["id"],
-                    calculated_summary_id=calculated_summary_id,
-                )
+            )
+        ):
+            self.add_error(
+                self.CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION,
+                block_id=self.block["id"],
+                calculated_summary_id=calculated_summary_id,
+            )
