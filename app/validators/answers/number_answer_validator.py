@@ -77,7 +77,7 @@ class NumberAnswerValidator(AnswerValidator):
                     ):
                         self.add_error(self.MAX_MIN_IS_STRING)
                 else:
-                    if not (isinstance(value, int | float)):
+                    if not isinstance(value, int | float):
                         self.add_error(self.MAX_MIN_IS_STRING)
 
     def validate_value_in_limits(self):
