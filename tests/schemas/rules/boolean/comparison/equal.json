@@ -34,5 +34,17 @@
         null
       ]
     }
+  },
+  {
+    "description": "Compare an answer to a boolean",
+    "rule": {
+      "==": [
+        {
+          "source": "answers",
+          "identifier": "test"
+        },
+        true
+      ]
+    }
   }
 ]
