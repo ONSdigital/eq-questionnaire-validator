@@ -397,6 +397,14 @@ class QuestionnaireSchema:
         return add_answer_ids | edit_answer_ids
 
     @lru_cache
+    def get_list_collector_answer_ids_by_child_block(self, block_id: str):
+        block = self.blocks_by_id[block_id]
+        return {
+            child_block: self.get_all_answer_ids(block[child_block]["id"])
+            for child_block in ["add_block", "edit_block", "remove_block"]
+        }
+
+    @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return {

@@ -744,7 +744,7 @@ def test_invalid_answer_codes_for_list_collector_remove_question():
         {"answer_id": "confirmation-checkbox-answer", "code": "3"},
         {"answer_id": "anyone-else", "code": "4"},
         {"answer_id": "householder-checkbox-answer", "code": "5"},
-        {"answer_id": "remove-confirmation", "code": "5a"},
+        {"answer_id": "remove-company-confirmation", "code": "5a"},
     ]
 
     validator = AnswerCodeValidator("0.0.3", answer_codes, questionnaire_schema)
@@ -754,7 +754,7 @@ def test_invalid_answer_codes_for_list_collector_remove_question():
     expected_errors = [
         {
             "message": validator.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR,
-            "answer_id": "remove-confirmation",
+            "answer_id": "remove-company-confirmation",
         },
         {
             "message": validator.MISSING_ANSWER_CODE,
