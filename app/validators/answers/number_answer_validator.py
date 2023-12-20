@@ -24,7 +24,9 @@ class NumberAnswerValidator(AnswerValidator):
     GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
         "The referenced answer has a greater number of decimal places than answer"
     )
-    MIN_OR_MAX_IS_NOT_NUMERIC = "The minimum or maximum value is not a float or an integer"
+    MIN_OR_MAX_IS_NOT_NUMERIC = (
+        "The minimum or maximum value is not a float or an integer"
+    )
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
