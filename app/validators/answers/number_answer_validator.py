@@ -1,5 +1,5 @@
 from app.validators.answers.answer_validator import AnswerValidator
-from app.validators.routing.types import resolve_value_source_json_type, TYPE_NUMBER
+from app.validators.routing.types import TYPE_NUMBER, resolve_value_source_json_type
 
 MAX_NUMBER = 999_999_999_999_999
 MIN_NUMBER = -999_999_999_999_999
@@ -71,10 +71,13 @@ class NumberAnswerValidator(AnswerValidator):
             value = self.answer.get(min_max, {}).get("value", 0)
             if value:
                 if isinstance(value, dict):
-                    if resolve_value_source_json_type(value, self.questionnaire_schema) != TYPE_NUMBER:
+                    if (
+                        resolve_value_source_json_type(value, self.questionnaire_schema)
+                        != TYPE_NUMBER
+                    ):
                         self.add_error(self.MAX_MIN_IS_STRING)
                 else:
-                    if isinstance(value, int | float):
+                    if not (isinstance(value, int | float)):
                         self.add_error(self.MAX_MIN_IS_STRING)
 
     def validate_value_in_limits(self):

@@ -174,9 +174,7 @@ def test_max_if_not_set_as_integer():
 
     answer = schema.get_answer("set-maximum-answer")
 
-    validator = NumberAnswerValidator(
-        answer, schema
-    )
+    validator = NumberAnswerValidator(answer, schema)
 
     validator.validate_min_max_is_number()
 
