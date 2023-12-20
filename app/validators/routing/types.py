@@ -42,7 +42,11 @@ PYTHON_TYPE_TO_JSON_TYPE = {
     "NoneType": TYPE_NULL,
 }
 
-METADATA_TYPE_TO_JSON_TYPE = {"string": TYPE_STRING, "date": TYPE_STRING, "boolean": TYPE_BOOLEAN}
+METADATA_TYPE_TO_JSON_TYPE = {
+    "string": TYPE_STRING,
+    "date": TYPE_STRING,
+    "boolean": TYPE_BOOLEAN,
+}
 
 
 def resolve_answer_source_json_type(value_source, schema):
