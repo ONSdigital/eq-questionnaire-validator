@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.routing.types import TYPE_NUMBER, resolve_value_source_json_type
 
@@ -22,7 +24,7 @@ class NumberAnswerValidator(AnswerValidator):
     GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
         "The referenced answer has a greater number of decimal places than answer"
     )
-    MAX_MIN_IS_STRING = "The minimum or maximum value is not a float or an integer"
+    MIN_OR_MAX_IS_NOT_NUMERIC = "The minimum or maximum value is not a float or an integer"
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
@@ -75,10 +77,10 @@ class NumberAnswerValidator(AnswerValidator):
                         resolve_value_source_json_type(value, self.questionnaire_schema)
                         != TYPE_NUMBER
                     ):
-                        self.add_error(self.MAX_MIN_IS_STRING)
+                        self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
                 else:
-                    if not isinstance(value, int | float):
-                        self.add_error(self.MAX_MIN_IS_STRING)
+                    if not isinstance(value, int | float | Decimal):
+                        self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)

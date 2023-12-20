@@ -96,7 +96,7 @@ def test_maximum_set_as_string():
     validator.validate_min_max_is_number()
 
     assert validator.errors[0] == {
-        "message": validator.MAX_MIN_IS_STRING,
+        "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
         "answer_id": "total-percentage",
     }
 
@@ -119,7 +119,7 @@ def test_minimum_set_as_string():
     validator.validate_min_max_is_number()
 
     assert validator.errors[0] == {
-        "message": validator.MAX_MIN_IS_STRING,
+        "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
         "answer_id": "total-percentage",
     }
 
@@ -143,7 +143,7 @@ def test_min_and_max_set_as_string():
     validator.validate_min_max_is_number()
 
     assert validator.errors[1] == {
-        "message": validator.MAX_MIN_IS_STRING,
+        "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
         "answer_id": "total-percentage",
     }
     assert len(validator.errors) == 2
