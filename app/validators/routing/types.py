@@ -79,9 +79,16 @@ def resolve_metadata_source_json_type(identifier, schema):
     return TYPE_STRING
 
 
+def resolve_list_source_json_type(selector):
+    if selector:
+        return LIST_SELECTOR_TO_JSON_TYPE[selector]
+    return TYPE_ARRAY
+
+
 def resolve_value_source_json_type(value_source, schema):
     source = value_source["source"]
     identifier = value_source.get("identifier")
+    selector = value_source.get("selector")
     if source == "answers":
         return resolve_answer_source_json_type(identifier, schema)
 
@@ -95,9 +102,7 @@ def resolve_value_source_json_type(value_source, schema):
         return resolve_metadata_source_json_type(identifier, schema)
 
     if source == "list":
-        if selector := value_source.get("selector"):
-            return LIST_SELECTOR_TO_JSON_TYPE[selector]
-        return TYPE_ARRAY
+        return resolve_list_source_json_type(selector)
 
     return TYPE_STRING
 
