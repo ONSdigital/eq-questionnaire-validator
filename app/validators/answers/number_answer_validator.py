@@ -38,7 +38,7 @@ class NumberAnswerValidator(AnswerValidator):
         self.validate_min_max_is_number()
 
         # Prevent other validation methods that requires calculations running into errors due to types
-        if len(self.errors) > 0:
+        if self.errors:
             return self.errors
 
         self.validate_decimal_places()
@@ -72,8 +72,7 @@ class NumberAnswerValidator(AnswerValidator):
 
     def validate_min_max_is_number(self):
         for min_max in ["minimum", "maximum"]:
-            value = self.answer.get(min_max, {}).get("value", 0)
-            if value:
+            if value := self.answer.get(min_max, {}).get("value", 0):
                 if isinstance(value, dict):
                     if (
                         resolve_value_source_json_type(value, self.questionnaire_schema)

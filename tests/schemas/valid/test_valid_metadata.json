@@ -30,6 +30,10 @@
     {
       "name": "flag_1",
       "type": "boolean"
+    },
+    {
+      "name": "ref_p_start_date",
+      "type": "date"
     }
   ],
   "questionnaire_flow": {

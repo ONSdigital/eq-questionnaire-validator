@@ -1,3 +1,5 @@
+import pytest
+
 from app.validators.answers import NumberAnswerValidator
 from app.validators.questionnaire_schema import (
     MAX_NUMBER,
@@ -80,14 +82,24 @@ def test_are_decimal_places_valid():
     }
 
 
-def test_maximum_set_as_string():
+@pytest.mark.parametrize(
+    "bounds, error_count",
+    [
+        ({"minimum": {"value": "100"}}, 1),
+        ({"maximum": {"value": "0"}}, 1),
+        ({"maximum": {"value": "100"}, "minimum": {"value": "0"}}, 2),
+    ],
+)
+def test_invalid_min_or_max_is_string(bounds, error_count):
     answer = {
+        "calculated": True,
+        "description": "The total percentages should be 100%",
         "id": "total-percentage",
         "label": "Total",
         "mandatory": False,
         "q_code": "10002",
         "type": "Percentage",
-        "maximum": {"value": "100"},
+        **bounds,
     }
 
     validator = NumberAnswerValidator(
@@ -99,57 +111,10 @@ def test_maximum_set_as_string():
         "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
         "answer_id": "total-percentage",
     }
+    assert len(validator.errors) == error_count
 
 
-def test_minimum_set_as_string():
-    answer = {
-        "calculated": True,
-        "description": "The total percentages should be 100%",
-        "id": "total-percentage",
-        "label": "Total",
-        "mandatory": False,
-        "q_code": "10002",
-        "type": "Percentage",
-        "minimum": {"value": "0"},
-    }
-
-    validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
-    )
-    validator.validate_min_max_is_number()
-
-    assert validator.errors[0] == {
-        "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
-        "answer_id": "total-percentage",
-    }
-
-
-def test_min_and_max_set_as_string():
-    answer = {
-        "calculated": True,
-        "description": "The total percentages should be 100%",
-        "id": "total-percentage",
-        "label": "Total",
-        "mandatory": False,
-        "q_code": "10002",
-        "type": "Percentage",
-        "maximum": {"value": "100"},
-        "minimum": {"value": "0"},
-    }
-
-    validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
-    )
-    validator.validate_min_max_is_number()
-
-    assert validator.errors[1] == {
-        "message": validator.MIN_OR_MAX_IS_NOT_NUMERIC,
-        "answer_id": "total-percentage",
-    }
-    assert len(validator.errors) == 2
-
-
-def test_min_if_set_as_float():
+def test_valid_minimum_value_is_float():
     answer = {
         "id": "answer-2",
         "mandatory": True,
@@ -168,7 +133,7 @@ def test_min_if_set_as_float():
     assert len(validator.errors) == 0
 
 
-def test_max_if_not_set_as_integer():
+def test_valid_max_if_numeric_value_source():
     filename = "schemas/valid/test_calculated_summary.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 

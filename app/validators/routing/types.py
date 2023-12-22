@@ -49,14 +49,13 @@ METADATA_TYPE_TO_JSON_TYPE = {
 }
 
 
-def resolve_answer_source_json_type(value_source, schema):
-    answer_id = value_source["identifier"]
+def resolve_answer_source_json_type(answer_id, schema):
     answer_type = schema.answers_with_context[answer_id]["answer"]["type"]
     return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
 
-def resolve_calculated_summary_source_json_type(value_source, schema):
-    block = schema.get_block(value_source["identifier"])
+def resolve_calculated_summary_source_json_type(block_id, schema):
+    block = schema.get_block(block_id)
     if block["calculation"].get("answers_to_calculate"):
         answer_id = block["calculation"]["answers_to_calculate"][0]
     else:
@@ -66,43 +65,39 @@ def resolve_calculated_summary_source_json_type(value_source, schema):
     return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
 
-def resolve_grand_calculated_summary_source_json_type(value_source, schema):
-    block = schema.get_block(value_source["identifier"])
+def resolve_grand_calculated_summary_source_json_type(block_id, schema):
+    block = schema.get_block(block_id)
     first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
     return resolve_value_source_json_type(first_calculated_summary_source, schema)
 
 
-def resolve_metadata_source_json_type(value_source, schema):
-    if metadata_id := value_source.get("identifier"):
-        if metadata := schema.schema.get("metadata"):
-            for values in metadata:
-                if values.get("name") == metadata_id:
-                    return METADATA_TYPE_TO_JSON_TYPE[values.get("type")]
+def resolve_metadata_source_json_type(identifier, schema):
+    if identifier:
+        for values in schema.schema.get("metadata", []):
+            if values.get("name") == identifier:
+                return METADATA_TYPE_TO_JSON_TYPE[values.get("type")]
     return TYPE_STRING
-
-
-def resolve_list_source_json_type(value_source):
-    if selector := value_source.get("selector"):
-        return LIST_SELECTOR_TO_JSON_TYPE[selector]
-    return TYPE_ARRAY
 
 
 def resolve_value_source_json_type(value_source, schema):
     source = value_source["source"]
+    identifier = value_source.get("identifier")
     if source == "answers":
-        return resolve_answer_source_json_type(value_source, schema)
+        return resolve_answer_source_json_type(identifier, schema)
 
     if source == "calculated_summary":
-        return resolve_calculated_summary_source_json_type(value_source, schema)
+        return resolve_calculated_summary_source_json_type(identifier, schema)
 
     if source == "grand_calculated_summary":
-        return resolve_grand_calculated_summary_source_json_type(value_source, schema)
+        return resolve_grand_calculated_summary_source_json_type(identifier, schema)
 
     if source == "metadata":
-        return resolve_metadata_source_json_type(value_source, schema)
+        return resolve_metadata_source_json_type(identifier, schema)
 
     if source == "list":
-        return resolve_list_source_json_type(value_source)
+        if selector := value_source.get("selector"):
+            return LIST_SELECTOR_TO_JSON_TYPE[selector]
+        return TYPE_ARRAY
 
     return TYPE_STRING
 
