@@ -34,6 +34,14 @@
     {
       "name": "ref_p_start_date",
       "type": "date"
+    },
+    {
+      "name": "case_id",
+      "type": "uuid"
+    },
+    {
+      "name": "test_url",
+      "type": "url"
     }
   ],
   "questionnaire_flow": {
