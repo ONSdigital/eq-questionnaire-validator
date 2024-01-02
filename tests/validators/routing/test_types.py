@@ -105,7 +105,7 @@ def test_resolve_grand_calculated_summary_value_source_json_type():
         ({"identifier": "flag_1", "source": "metadata"}, TYPE_BOOLEAN),
         ({"identifier": "ref_p_start_date", "source": "metadata"}, TYPE_STRING),
         ({"identifier": "case_id", "source": "metadata"}, TYPE_STRING),
-        ({"identifier": "test_url", "source": "metadata"}, TYPE_STRING)
+        ({"identifier": "test_url", "source": "metadata"}, TYPE_STRING),
     ],
 )
 def test_resolve_metadata_summary_value_source_json_type(

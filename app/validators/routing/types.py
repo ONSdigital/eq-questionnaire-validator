@@ -49,7 +49,7 @@ METADATA_TYPE_TO_JSON_TYPE = {
     "date": TYPE_STRING,
     "boolean": TYPE_BOOLEAN,
     "uuid": TYPE_STRING,
-    "url": TYPE_STRING
+    "url": TYPE_STRING,
 }
 
 
@@ -58,7 +58,9 @@ def resolve_answer_source_json_type(answer_id: str, schema: QuestionnaireSchema)
     return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
 
-def resolve_calculated_summary_source_json_type(block_id: str, schema: QuestionnaireSchema) -> str:
+def resolve_calculated_summary_source_json_type(
+    block_id: str, schema: QuestionnaireSchema
+) -> str:
     block = schema.get_block(block_id)
     if block["calculation"].get("answers_to_calculate"):
         answer_id = block["calculation"]["answers_to_calculate"][0]
@@ -69,13 +71,17 @@ def resolve_calculated_summary_source_json_type(block_id: str, schema: Questionn
     return ANSWER_TYPE_TO_JSON_TYPE[answer_type]
 
 
-def resolve_grand_calculated_summary_source_json_type(block_id: str, schema: QuestionnaireSchema) -> str:
+def resolve_grand_calculated_summary_source_json_type(
+    block_id: str, schema: QuestionnaireSchema
+) -> str:
     block = schema.get_block(block_id)
     first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
     return resolve_value_source_json_type(first_calculated_summary_source, schema)
 
 
-def resolve_metadata_source_json_type(identifier: str | None, schema: QuestionnaireSchema) -> str:
+def resolve_metadata_source_json_type(
+    identifier: str | None, schema: QuestionnaireSchema
+) -> str:
     if identifier:
         for values in schema.schema.get("metadata", []):
             if values.get("name") == identifier:
@@ -87,7 +93,9 @@ def resolve_list_source_json_type(selector: str | None) -> str:
     return LIST_SELECTOR_TO_JSON_TYPE[selector] if selector else TYPE_ARRAY
 
 
-def resolve_value_source_json_type(value_source: dict[str, str], schema: QuestionnaireSchema) -> str:
+def resolve_value_source_json_type(
+    value_source: dict[str, str], schema: QuestionnaireSchema
+) -> str:
     source = value_source["source"]
     identifier = value_source.get("identifier")
     selector = value_source.get("selector")
