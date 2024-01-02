@@ -79,9 +79,8 @@ class NumberAnswerValidator(AnswerValidator):
                         != TYPE_NUMBER
                     ):
                         self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
-                else:
-                    if not isinstance(value, int | float | Decimal):
-                        self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
+                elif not isinstance(value, int | float | Decimal):
+                    self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
