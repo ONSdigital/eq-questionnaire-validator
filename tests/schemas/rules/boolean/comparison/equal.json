@@ -36,11 +36,11 @@
     }
   },
   {
-    "description": "Compare an answer to a boolean",
+    "description": "Compare metadata to a boolean",
     "rule": {
       "==": [
         {
-          "source": "answers",
+          "source": "metadata",
           "identifier": "test"
         },
         true
