@@ -2,6 +2,7 @@ import pytest
 
 from app.validators.routing.types import (
     TYPE_ARRAY,
+    TYPE_BOOLEAN,
     TYPE_DATE,
     TYPE_NULL,
     TYPE_NUMBER,
@@ -152,7 +153,14 @@ def test_comparison_operator_invalid_argument_types(operator_name):
     validator.validate()
 
     if operator_name in ["==", "!="]:
-        valid_types = [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
+        valid_types = [
+            TYPE_DATE,
+            TYPE_NUMBER,
+            TYPE_STRING,
+            TYPE_NULL,
+            TYPE_ARRAY,
+            TYPE_BOOLEAN,
+        ]
     else:
         valid_types = [TYPE_DATE, TYPE_NUMBER]
 

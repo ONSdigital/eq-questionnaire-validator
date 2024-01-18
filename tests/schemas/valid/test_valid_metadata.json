@@ -26,6 +26,22 @@
     {
       "name": "test_metadata",
       "type": "string"
+    },
+    {
+      "name": "flag_1",
+      "type": "boolean"
+    },
+    {
+      "name": "ref_p_start_date",
+      "type": "date"
+    },
+    {
+      "name": "case_id",
+      "type": "uuid"
+    },
+    {
+      "name": "test_url",
+      "type": "url"
     }
   ],
   "questionnaire_flow": {
@@ -41,6 +57,17 @@
           "id": "group3",
           "blocks": [
             {
+              "skip_conditions": {
+                "when": {
+                  "==": [
+                    {
+                      "identifier": "flag_1",
+                      "source": "metadata"
+                    },
+                    true
+                  ]
+                }
+              },
               "id": "block4",
               "type": "Question",
               "question": {

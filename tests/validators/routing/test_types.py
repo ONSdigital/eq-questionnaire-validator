@@ -99,6 +99,28 @@ def test_resolve_grand_calculated_summary_value_source_json_type():
 
 
 @pytest.mark.parametrize(
+    "metadata_value_source, json_type",
+    [
+        ({"source": "metadata", "identifier": "ru_name"}, TYPE_STRING),
+        ({"identifier": "flag_1", "source": "metadata"}, TYPE_BOOLEAN),
+        ({"identifier": "ref_p_start_date", "source": "metadata"}, TYPE_STRING),
+        ({"identifier": "case_id", "source": "metadata"}, TYPE_STRING),
+        ({"identifier": "test_url", "source": "metadata"}, TYPE_STRING),
+    ],
+)
+def test_resolve_metadata_summary_value_source_json_type(
+    metadata_value_source, json_type
+):
+    filename = "schemas/valid/test_valid_metadata.json"
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    assert (
+        resolve_value_source_json_type(metadata_value_source, questionnaire_schema)
+        == json_type
+    )
+
+
+@pytest.mark.parametrize(
     "source, selector, json_type",
     [
         ("metadata", None, TYPE_STRING),

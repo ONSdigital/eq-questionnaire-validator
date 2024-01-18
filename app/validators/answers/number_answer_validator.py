@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from app.validators.answers.answer_validator import AnswerValidator
+from app.validators.routing.types import TYPE_NUMBER, resolve_value_source_json_type
 
 MAX_NUMBER = 999_999_999_999_999
 MIN_NUMBER = -999_999_999_999_999
@@ -21,6 +24,9 @@ class NumberAnswerValidator(AnswerValidator):
     GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
         "The referenced answer has a greater number of decimal places than answer"
     )
+    MIN_OR_MAX_IS_NOT_NUMERIC = (
+        "The minimum or maximum value is not a float or an integer"
+    )
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
@@ -28,6 +34,12 @@ class NumberAnswerValidator(AnswerValidator):
 
     def validate(self):
         super().validate()
+
+        self.validate_min_max_is_number()
+
+        # Prevent other validation methods that requires calculations running into errors due to types
+        if self.errors:
+            return self.errors
 
         self.validate_decimal_places()
         self.validate_mandatory_has_no_default()
@@ -57,6 +69,18 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_mandatory_has_no_default(self):
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
+
+    def validate_min_max_is_number(self):
+        for min_max in ["minimum", "maximum"]:
+            if value := self.answer.get(min_max, {}).get("value", 0):
+                if isinstance(value, dict):
+                    if (
+                        resolve_value_source_json_type(value, self.questionnaire_schema)
+                        != TYPE_NUMBER
+                    ):
+                        self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
+                elif not isinstance(value, int | float | Decimal):
+                    self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
         min_value = self.answer.get("minimum", {}).get("value", 0)
