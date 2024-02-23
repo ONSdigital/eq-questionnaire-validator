@@ -139,16 +139,34 @@ class QuestionnaireSchema:
         self.supplementary_lists = jp.match(
             "$..supplementary_data.lists[*]", self.schema
         )
-        self.list_collector_names = jp.match(
-            '$..blocks[?(@.type=="ListCollector")].for_list', self.schema
+        self.list_collectors = jp.match(
+            '$..blocks[?(@.type=="ListCollector")]', self.schema
         )
+        self.list_collector_names = [
+            list_collector["for_list"] for list_collector in self.list_collectors
+        ]
         self.list_names = self.list_collector_names + self.supplementary_lists
-
+        self.list_names_by_repeating_block_id = {
+            block["id"]: list_collector["for_list"]
+            for list_collector in self.list_collectors
+            for block in list_collector.get("repeating_blocks", [])
+        }
         self._answers_with_context = {}
 
     @lru_cache
     def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
         return [block["id"] for block in self.blocks if block["type"] == block_type]
+
+    @cached_property
+    def list_names_by_dynamic_answer_id(self) -> dict[str, str]:
+        answer_id_to_list: dict[str, str] = {}
+        for dynamic_answer in jp.match("$..dynamic_answers[*]", self.schema):
+            if dynamic_answer["values"]["source"] == "list":
+                list_name = dynamic_answer["values"]["identifier"]
+                answer_id_to_list.update(
+                    {answer["id"]: list_name for answer in dynamic_answer["answers"]}
+                )
+        return answer_id_to_list
 
     @cached_property
     def numeric_answer_ranges(self):
@@ -379,6 +397,14 @@ class QuestionnaireSchema:
         return add_answer_ids | edit_answer_ids
 
     @lru_cache
+    def get_list_collector_answer_ids_by_child_block(self, block_id: str):
+        block = self.blocks_by_id[block_id]
+        return {
+            child_block: self.get_all_answer_ids(block[child_block]["id"])
+            for child_block in ["add_block", "edit_block", "remove_block"]
+        }
+
+    @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return {
@@ -395,6 +421,22 @@ class QuestionnaireSchema:
             for question in questions
             for answer in question.get("dynamic_answers", {}).get("answers", [])
         }
+
+    def get_list_name_for_answer_id(self, answer_id: str) -> str | None:
+        """
+        If the answer is dynamic or in a repeating block or section, return the name of the list it repeats over
+        otherwise None
+        """
+        if list_name := self.list_names_by_dynamic_answer_id.get(answer_id):
+            return list_name
+        block = self.get_block_by_answer_id(answer_id)
+        if list_name := self.list_names_by_repeating_block_id.get(block["id"]):
+            return list_name
+        if block["type"] == "ListCollector":
+            return block["for_list"]
+        section = self.get_parent_section_for_block(block["id"])
+        if section.get("repeat"):
+            return section["repeat"]["for_list"]
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):

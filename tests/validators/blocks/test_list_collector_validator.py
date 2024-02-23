@@ -22,6 +22,36 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
     assert validator.errors == expected_errors
 
 
+def test_invalid_list_collector_with_answer_id_used_elsewhere():
+    filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_answer_id_used_elsewhere.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("list-collector")
+    validator = ListCollectorValidator(block, questionnaire_schema)
+
+    expected_errors = [
+        {
+            "message": validator.LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE,
+            "block_id": "list-collector",
+            "list_child_block_name": "add_block",
+        },
+        {
+            "message": validator.LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE,
+            "block_id": "list-collector",
+            "list_child_block_name": "edit_block",
+        },
+        {
+            "message": validator.LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE,
+            "block_id": "list-collector",
+            "list_child_block_name": "remove_block",
+        },
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors
+
+
 def test_invalid_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json"
 
@@ -32,10 +62,49 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     expected_errors = [
         {
-            "message": validator.NON_UNIQUE_ANSWER_ID_FOR_LIST_COLLECTOR_ADD,
+            "message": validator.DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST,
             "list_name": "people",
             "block_id": "list-collector",
+            "other_list_block_id": "another-list-collector",
         }
+    ]
+
+    assert expected_errors == validator.errors
+
+
+def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different_list_collector():
+    filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_answer_ids_for_different_list_collector.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+    block = questionnaire_schema.get_block("list-collector")
+    validator = ListCollectorValidator(block, questionnaire_schema)
+    validator.validate()
+
+    expected_errors = [
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR,
+            "list_name": "people",
+            "list_child_block_name": "add_block",
+            "block_id": "list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
+        },
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR,
+            "list_name": "people",
+            "list_child_block_name": "edit_block",
+            "block_id": "list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
+        },
+        {
+            "message": validator.DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR,
+            "list_name": "people",
+            "list_child_block_name": "remove_block",
+            "block_id": "list-collector",
+            "other_list_name": "visitor",
+            "other_list_block_id": "visitor-list-collector",
+        },
     ]
 
     assert expected_errors == validator.errors

@@ -111,7 +111,7 @@
     "description": "Any value",
     "oneOf": [
       {
-        "type": ["number", "string", "array", "null"]
+        "type": ["number", "string", "array", "null", "boolean"]
       },
       {
         "$ref": "../value_sources.json#/any_value_source"
@@ -122,7 +122,7 @@
     "description": "Any value",
     "oneOf": [
       {
-        "type": ["number", "string", "null"]
+        "type": ["number", "string", "null", "boolean"]
       },
       {
         "$ref": "../value_sources.json#/any_value_source"

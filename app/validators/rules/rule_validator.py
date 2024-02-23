@@ -346,7 +346,14 @@ class RulesValidator(Validator):
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
         if operator_name in [Operator.EQUAL, Operator.NOT_EQUAL]:
-            return [TYPE_DATE, TYPE_NUMBER, TYPE_STRING, TYPE_NULL, TYPE_ARRAY]
+            return [
+                TYPE_DATE,
+                TYPE_NUMBER,
+                TYPE_STRING,
+                TYPE_NULL,
+                TYPE_ARRAY,
+                TYPE_BOOLEAN,
+            ]
 
         if operator_name in [
             Operator.LESS_THAN,

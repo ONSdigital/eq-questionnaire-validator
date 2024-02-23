@@ -34,5 +34,17 @@
         null
       ]
     }
+  },
+  {
+    "description": "Compare metadata to a boolean",
+    "rule": {
+      "==": [
+        {
+          "source": "metadata",
+          "identifier": "test"
+        },
+        true
+      ]
+    }
   }
 ]

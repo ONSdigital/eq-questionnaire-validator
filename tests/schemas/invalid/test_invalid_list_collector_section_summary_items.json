@@ -380,7 +380,7 @@
                   "warning": "All of the information about this person will be deleted",
                   "answers": [
                     {
-                      "id": "remove-confirmation",
+                      "id": "remove-person-confirmation",
                       "mandatory": true,
                       "type": "Radio",
                       "options": [

@@ -248,8 +248,8 @@
   "value_reference": {
     "oneOf": [
       {
-        "description": "A string or integer value",
-        "type": ["integer", "string"]
+        "description": "A string or number value",
+        "type": ["string", "number"]
       },
       {
         "$ref": "value_sources.json#/answer_value_source"
