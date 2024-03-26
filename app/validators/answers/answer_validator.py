@@ -46,9 +46,11 @@ class AnswerValidator(Validator):
             has_q_code = get_object_containing_key(self.answer, key_name="q_code")
             if has_q_code:
                 self.add_error(
-                    self.CONFIRMATION_QUESTION_HAS_Q_CODE
-                    if is_confirmation_question
-                    else self.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT,
+                    (
+                        self.CONFIRMATION_QUESTION_HAS_Q_CODE
+                        if is_confirmation_question
+                        else self.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT
+                    ),
                     answer_id=self.answer["id"],
                 )
 
