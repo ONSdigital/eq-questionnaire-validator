@@ -97,7 +97,7 @@
                   {
                     "list": [
                       {
-                        "text": "Total currency values: <em>{total}</em>",
+                        "text": "Total currency values: <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -116,7 +116,7 @@
                         ]
                       },
                       {
-                        "text": "Grand total currency values: <em>{grand_total}</em>",
+                        "text": "Grand total currency values: <strong>{grand_total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "grand_total",

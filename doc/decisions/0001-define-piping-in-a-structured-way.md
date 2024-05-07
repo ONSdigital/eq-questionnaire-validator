@@ -24,7 +24,7 @@ Current:
 
 ```json
 {
-    "description": "What was the <em>total gross weekly pay</em> paid to employees in the last week of {{metadata['period_str']}}?"
+    "description": "What was the <strong>total gross weekly pay</strong> paid to employees in the last week of {{metadata['period_str']}}?"
 }
 ```
 
@@ -33,7 +33,7 @@ Proposed:
 ```json
 {
     "description": {
-        "text": "What was the <em>total gross weekly pay</em> paid to employees in the last week of {period}?",
+        "text": "What was the <strong>total gross weekly pay</strong> paid to employees in the last week of {period}?",
         "placeholders": [
             {
                 "placeholder": "period",
@@ -53,7 +53,7 @@ Current:
 
 ```json
 {
-    "description": "Of the <em>{{format_currency(answers['total-retail-turnover-answer'])}}</em> total retail turnover, what was the value of internet sales?"
+    "description": "Of the <strong>{{format_currency(answers['total-retail-turnover-answer'])}}</strong> total retail turnover, what was the value of internet sales?"
 }
 ```
 
@@ -62,7 +62,7 @@ Proposed:
 ```json
 {
     "description": {
-        "text": "Of the <em>{total_turnover}</em> total retail turnover, what was the value of internet sales?",
+        "text": "Of the <strong>{total_turnover}</strong> total retail turnover, what was the value of internet sales?",
         "placeholders": [
             {
                 "placeholder": "total_turnover",
@@ -125,7 +125,7 @@ Current:
 
 ```json
 {
-    "description": "What is <em>{{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name_possessive }}</em> date of birth?""
+    "description": "What is <strong>{{[answers['first-name'][group_instance], answers['last-name'][group_instance]] | format_household_name_possessive }}</strong> date of birth?""
 }
 ```
 
@@ -134,7 +134,7 @@ Proposed:
 ```json
 {
     "description": {
-        "text": "What is <em>{persons_name}</em> date of birth?",
+        "text": "What is <strong>{persons_name}</strong> date of birth?",
         "placeholders": [
             {
                 "placeholder": "persons_name",

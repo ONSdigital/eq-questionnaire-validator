@@ -177,7 +177,7 @@
                 "id": "relationship-question",
                 "type": "General",
                 "title": {
-                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+                  "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>...</strong>",
                   "placeholders": [
                     {
                       "placeholder": "first_person_name",
@@ -245,7 +245,7 @@
                     "mandatory": true,
                     "type": "Relationship",
                     "playback": {
-                      "text": "{second_person_name} is {first_person_name} <em>…</em>",
+                      "text": "{second_person_name} is {first_person_name} <strong>…</strong>",
                       "placeholders": [
                         {
                           "placeholder": "first_person_name",
@@ -312,7 +312,7 @@
                         "value": "Husband or Wife",
                         "label": "Husband or Wife",
                         "title": {
-                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>husband or wife</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -375,7 +375,7 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>husband or wife</em>",
+                          "text": "{second_person_name} is {first_person_name} <strong>husband or wife</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -442,7 +442,7 @@
                         "value": "Legally Registered Civil Partner",
                         "label": "Legally Registered Civil Partner",
                         "title": {
-                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>legally registered civil partner</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -505,7 +505,7 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "text": "{second_person_name} is {first_person_name} <strong>legally registered civil partner</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -575,7 +575,7 @@
                     "mandatory": true,
                     "type": "Relationship",
                     "playback": {
-                      "text": "{second_person_name} is {first_person_name} <em>…</em>",
+                      "text": "{second_person_name} is {first_person_name} <strong>…</strong>",
                       "placeholders": [
                         {
                           "placeholder": "first_person_name",
@@ -642,7 +642,7 @@
                         "value": "Husband or Wife",
                         "label": "Husband or Wife",
                         "title": {
-                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>husband or wife</em>",
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>husband or wife</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -705,7 +705,7 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>husband or wife</em>",
+                          "text": "{second_person_name} is {first_person_name} <strong>husband or wife</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -772,7 +772,7 @@
                         "value": "Legally Registered Civil Partner",
                         "label": "Legally Registered Civil Partner",
                         "title": {
-                          "text": "Thinking of {first_person_name}, {second_person_name} is their <em>legally registered civil partner</em>",
+                          "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>legally registered civil partner</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",
@@ -835,7 +835,7 @@
                           ]
                         },
                         "playback": {
-                          "text": "{second_person_name} is {first_person_name} <em>legally registered civil partner</em>",
+                          "text": "{second_person_name} is {first_person_name} <strong>legally registered civil partner</strong>",
                           "placeholders": [
                             {
                               "placeholder": "first_person_name",

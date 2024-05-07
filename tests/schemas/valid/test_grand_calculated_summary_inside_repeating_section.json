@@ -942,7 +942,7 @@
                   {
                     "list": [
                       {
-                        "text": "Monthly maintenance cost: <em>{total_maintenance}</em>",
+                        "text": "Monthly maintenance cost: <strong>{total_maintenance}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total_maintenance",
@@ -961,7 +961,7 @@
                         ]
                       },
                       {
-                        "text": "Monthly fuel cost: <em>{total_fuel}</em>",
+                        "text": "Monthly fuel cost: <strong>{total_fuel}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total_fuel",
@@ -980,7 +980,7 @@
                         ]
                       },
                       {
-                        "text": "Total base cost: <em>{total_base}</em>",
+                        "text": "Total base cost: <strong>{total_base}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total_base",
@@ -999,7 +999,7 @@
                         ]
                       },
                       {
-                        "text": "Total running cost: <em>{total_running}</em>",
+                        "text": "Total running cost: <strong>{total_running}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total_running",
@@ -1018,7 +1018,7 @@
                         ]
                       },
                       {
-                        "text": "Total owning and running cost: <em>{total}</em>",
+                        "text": "Total owning and running cost: <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -1037,7 +1037,7 @@
                         ]
                       },
                       {
-                        "text": "Paid by debit card: <em>{debit}</em>",
+                        "text": "Paid by debit card: <strong>{debit}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "debit",
@@ -1056,7 +1056,7 @@
                         ]
                       },
                       {
-                        "text": "Paid by credit card: <em>{credit}</em>",
+                        "text": "Paid by credit card: <strong>{credit}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "credit",
@@ -1075,7 +1075,7 @@
                         ]
                       },
                       {
-                        "text": "Paid by other means: <em>{other}</em>",
+                        "text": "Paid by other means: <strong>{other}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "other",

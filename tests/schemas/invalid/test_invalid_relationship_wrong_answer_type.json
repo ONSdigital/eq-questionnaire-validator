@@ -177,7 +177,7 @@
                 "id": "relationship-question",
                 "type": "General",
                 "title": {
-                  "text": "Thinking of {first_person_name}, {second_person_name} is their <em>...</em>",
+                  "text": "Thinking of {first_person_name}, {second_person_name} is their <strong>...</strong>",
                   "placeholders": [
                     {
                       "placeholder": "first_person_name",
