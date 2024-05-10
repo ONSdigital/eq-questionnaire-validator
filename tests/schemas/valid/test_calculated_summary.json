@@ -428,7 +428,7 @@
                   {
                     "list": [
                       {
-                        "text": "Total currency values (if Q4 not skipped): <em>{total}</em>",
+                        "text": "Total currency values (if Q4 not skipped): <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -447,7 +447,7 @@
                         ]
                       },
                       {
-                        "text": "Total currency values (if Q4 skipped)): <em>{total}</em>",
+                        "text": "Total currency values (if Q4 skipped)): <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -466,7 +466,7 @@
                         ]
                       },
                       {
-                        "text": "Total unit values: <em>{total}</em>",
+                        "text": "Total unit values: <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -485,7 +485,7 @@
                         ]
                       },
                       {
-                        "text": "Total percentage values: <em>{total}</em>",
+                        "text": "Total percentage values: <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",
@@ -504,7 +504,7 @@
                         ]
                       },
                       {
-                        "text": "Total number values: <em>{total}</em>",
+                        "text": "Total number values: <strong>{total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "total",

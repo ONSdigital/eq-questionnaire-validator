@@ -72,7 +72,7 @@
                 "contents": [
                   {
                     "description": {
-                      "text": "The percentage of the company budget you spend on training is <em>{answer_percentage}</em>",
+                      "text": "The percentage of the company budget you spend on training is <strong>{answer_percentage}</strong>",
                       "placeholders": [
                         {
                           "placeholder": "answer_percentage",
