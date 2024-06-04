@@ -5,7 +5,7 @@
   "data_version": "0.0.3",
   "survey_id": "144",
   "theme": "default",
-  "title": "Test introduction",
+  "title": "Test invalid html",
   "legal_basis": "Notice is given under section 999 of the Test Act 2000",
   "metadata": [
     {
@@ -49,13 +49,13 @@
               "primary_content": [
                 {
                   "id": "business-details",
-                  "title": "You are completing this for ESSENTIAL ENTERPRISE LTD.",
+                  "title": "Introduction with valid and invalid HTML",
                   "contents": [
                     {
                       "guidance": {
                         "contents": [
                           {
-                            "title": "Coronavirus (COVID-19) guidance",
+                            "title": "<invalid>Coronavirus (COVID-19) guidance</invalid>",
                             "description": "<strong>Explain your figures</strong> in the comment section to minimise us contacting you and to help us tell an industry story"
                           }
                         ]
@@ -67,12 +67,24 @@
             },
             {
               "type": "Interstitial",
-              "id": "general-business-information-completed",
+              "id": "intersitital-one",
               "content": {
-                "title": "Section complete",
+                "title": "Page with invalid html",
                 "contents": [
                   {
-                    "description": "You have successfully completed this section"
+                    "description": "<p>You have successfully completed this section<p>"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "intersitital-two",
+              "content": {
+                "title": "Page with link",
+                "contents": [
+                  {
+                    "description": "<a>Anchor</a>"
                   }
                 ]
               }

@@ -30,6 +30,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_html()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
@@ -106,6 +107,43 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
+    def validate_html(self):
+        html_strings = []
+        schema_object = SurveySchema(self.schema_element)
+
+        # pylint: disable=invalid-string-quote
+        html_regex = re.compile(r"<[^>]*>")
+
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for schema_text in values_to_check:
+                if schema_text and html_regex.search(schema_text):
+                    html_strings.append(
+                        {"pointer": translatable_item.pointer, "text": schema_text}
+                    )
+
+        if html_strings:
+            self.check_invalid_html_tags(html_strings)
+
+    def check_invalid_html_tags(self, html_strings):
+        strong = re.compile("<strong[^>]>*>|</strong>")
+        anchor = re.compile("<a[^>]>*>|</a>")
+        for html_string in html_strings:
+            if not strong.search(html_string["text"]) and not anchor.search(
+                html_string["text"]
+            ):
+                self.add_error(
+                    error_messages.HTML_FOUND,
+                    pointer=html_string["pointer"],
+                    text=html_string["text"],
+                )
 
     def validate_white_spaces(self):
         schema_object = SurveySchema(self.schema_element)
