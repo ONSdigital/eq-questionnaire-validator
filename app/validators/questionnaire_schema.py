@@ -617,3 +617,8 @@ class QuestionnaireSchema:
     def get_section_id_for_block_id(self, block_id: str) -> str | None:
         if block := self.get_block(block_id):
             return self.get_section_id_for_block(block)
+
+    def get_section_index_for_section_id(self, section_id: str) -> int:
+        for index, section in enumerate(self.sections):
+            if section["id"] == section_id:
+                return index

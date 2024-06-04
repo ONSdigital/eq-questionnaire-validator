@@ -6,7 +6,11 @@ from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplicates
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    find_duplicates,
+    get_object_containing_key,
+)
 from app.validators.sections.section_validator import SectionValidator
 from app.validators.validator import Validator
 
@@ -30,6 +34,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_list_references()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
@@ -134,3 +139,37 @@ class QuestionnaireValidator(Validator):
         )
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
+
+    def validate_list_references(self):
+        referenced_lists = {}
+        if supplementary_list := self.questionnaire_schema.supplementary_lists:
+            for list_id in supplementary_list:
+                referenced_lists[list_id] = 0
+        if blocks := self.questionnaire_schema.get_blocks(type="ListCollector"):
+            for block in blocks:
+                section_id = self.questionnaire_schema.get_section_id_for_block_id(
+                    block["id"]
+                )
+                section_index = (
+                    self.questionnaire_schema.get_section_index_for_section_id(
+                        section_id
+                    )
+                )
+                list_id = block["for_list"]
+                if list_id not in referenced_lists:
+                    referenced_lists[list_id] = section_index
+
+        for index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "identifier")
+            for _, identifier_reference, _ in identifier_references:
+                if (
+                    "source" in identifier_reference
+                    and identifier_reference["source"] == "list"
+                    and index < referenced_lists[identifier_reference["identifier"]]
+                ):
+                    self.add_error(
+                        error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
+                            list_name=identifier_reference["identifier"]
+                        ),
+                        section_name=section["id"],
+                    )
