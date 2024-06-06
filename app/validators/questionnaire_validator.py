@@ -143,12 +143,14 @@ class QuestionnaireValidator(Validator):
     def validate_list_references(self):
         referenced_lists = self.populated_referenced_lists()
 
+        # We need to keep track of section index for: common_definitions.json#/section_enabled
         for section_index, section in enumerate(self.questionnaire_schema.sections):
             identifier_references = get_object_containing_key(section, "source")
             for _, identifier_reference, parent_block in identifier_references:
                 if identifier_reference["source"] == "list":
                     list_identifier = identifier_reference["identifier"]
                     if parent_block:
+                        # Parent block might not always be top level "Block" so we need to resolve it below
                         parent_block_index = self.questionnaire_schema.resolve_parent_block_index_for_source(
                             parent_block["id"]
                         )
@@ -166,6 +168,8 @@ class QuestionnaireValidator(Validator):
                         section_index
                         < referenced_lists[list_identifier]["section_index"]
                     ):
+                        # Section level "enabled" rule that can use list source,
+                        # check: common_definitions.json#/section_enabled
                         self.add_error(
                             error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
                                 list_name=list_identifier
