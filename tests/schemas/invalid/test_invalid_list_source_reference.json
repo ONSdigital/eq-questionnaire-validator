@@ -28,7 +28,7 @@
   },
   "sections": [
     {
-      "title": "Individual Section",
+      "title": "Individuals Section",
       "summary": {
         "show_on_completion": true,
         "page_title": "Summary"
@@ -322,7 +322,7 @@
           "title": "Personal Details"
         }
       ],
-      "id": "individual-section",
+      "id": "individuals-section",
       "repeat": {
         "for_list": "household",
         "title": {
@@ -370,7 +370,7 @@
       }
     },
     {
-      "id": "list-collector-section",
+      "id": "household-section",
       "title": "Household",
       "summary": {
         "show_on_completion": true,
@@ -387,7 +387,7 @@
       },
       "groups": [
         {
-          "id": "group",
+          "id": "list-collector-group",
           "title": "List Collector",
           "blocks": [
             {
@@ -523,6 +523,261 @@
                           "transform": "concatenate_list"
                         }
                       ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "utility-bills-section",
+      "title": "Utility bills",
+      "summary": {
+        "show_on_completion": true,
+        "items": [
+          {
+            "type": "List",
+            "for_list": "utility-bills",
+            "title": "Utility bills",
+            "item_anchor_answer_id": "utility-bill-name",
+            "item_label": "Utility bill",
+            "add_link_text": "Add another utility bill",
+            "empty_list_text": "No utility bills added"
+          }
+        ],
+        "show_non_item_answers": true
+      },
+      "groups": [
+        {
+          "id": "utility-bills-group",
+          "title": "Utility bills",
+          "blocks": [
+            {
+              "type": "Question",
+              "id": "dynamic-answer",
+              "skip_conditions": {
+                "when": {
+                  "==": [
+                    {
+                      "count": [
+                        {
+                          "source": "list",
+                          "identifier": "utility-bills"
+                        }
+                      ]
+                    },
+                    0
+                  ]
+                }
+              },
+              "question": {
+                "dynamic_answers": {
+                  "values": {
+                    "source": "list",
+                    "identifier": "utility-bills"
+                  },
+                  "answers": [
+                    {
+                      "label": {
+                        "text": "Monthly expenditure on {utility_bill} bills",
+                        "placeholders": [
+                          {
+                            "placeholder": "utility_bill",
+                            "value": {
+                              "source": "answers",
+                              "identifier": "utility-bill-name"
+                            }
+                          }
+                        ]
+                      },
+                      "id": "utility-bill-monthly-cost",
+                      "type": "Currency",
+                      "mandatory": true,
+                      "currency": "GBP",
+                      "decimal_places": 2
+                    }
+                  ]
+                },
+                "id": "dynamic-answer-question",
+                "title": "Monthly expenditure on utility bills",
+                "type": "General"
+              }
+            },
+            {
+              "type": "ListCollectorDrivingQuestion",
+              "id": "any-utility-bills",
+              "for_list": "utility-bills",
+              "question": {
+                "type": "General",
+                "id": "any-utility-bills-question",
+                "title": "Do you have any monthly expenditure on Utility bills?",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "any-utility-bills-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock",
+                          "params": {
+                            "block_id": "add-utility-bill",
+                            "list_name": "utility-bills"
+                          }
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "any-utility-bills-answer"
+                      },
+                      "Yes"
+                    ]
+                  },
+                  "block": "any-other-utility-bills"
+                },
+                {
+                  "section": "End"
+                }
+              ]
+            },
+            {
+              "id": "any-other-utility-bills",
+              "type": "ListCollector",
+              "for_list": "utility-bills",
+              "question": {
+                "id": "any-other-utility-bills-question",
+                "type": "General",
+                "title": "Do you need to add any other Utility bills?",
+                "answers": [
+                  {
+                    "id": "any-other-utility-bills-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-utility-bill",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-utility-bill-question",
+                  "type": "General",
+                  "title": "What bill do you need to add expenditure for?",
+                  "answers": [
+                    {
+                      "id": "utility-bill-name",
+                      "label": "Utility bill",
+                      "mandatory": true,
+                      "type": "Dropdown",
+                      "options": [
+                        {
+                          "label": "Electricity",
+                          "value": "Electricity"
+                        },
+                        {
+                          "label": "Water",
+                          "value": "Water"
+                        },
+                        {
+                          "label": "Gas",
+                          "value": "Gas"
+                        },
+                        {
+                          "label": "Internet",
+                          "value": "Internet"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-utility-bill",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-utility-bill-question",
+                  "type": "General",
+                  "title": "What is the name of the game?",
+                  "answers": [
+                    {
+                      "id": "utility-bill-name",
+                      "label": "Name of Utility bill",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-utility-bill",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-utility-bill-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this Utility bill?",
+                  "answers": [
+                    {
+                      "id": "remove-utility-bill-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Utility bills",
+                "item_title": {
+                  "text": "{utility_bill}",
+                  "placeholders": [
+                    {
+                      "placeholder": "utility_bill",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "utility-bill-name"
+                      }
                     }
                   ]
                 }

@@ -417,32 +417,42 @@ def test_list_as_source_referenced_before_created():
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
         },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
         },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
         },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
         },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
         },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
-            "section_name": "individual-section",
+            "section_name": "individuals-section",
+        },
+        {
+            "message": "List 'utility-bills' referenced as source before it has been "
+            "created.",
+            "section_name": "utility-bills-section",
+        },
+        {
+            "message": "List 'utility-bills' referenced as source before it has been "
+            "created.",
+            "section_name": "utility-bills-section",
         },
     ]
 
