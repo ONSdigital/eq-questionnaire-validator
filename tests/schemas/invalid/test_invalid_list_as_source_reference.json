@@ -113,7 +113,25 @@
                     2
                   ]
                 }
-              }
+              },
+              "routing_rules": [
+                {
+                  "section": "End",
+                  "when": {
+                    "<": [
+                      {
+                        "source": "list",
+                        "identifier": "household",
+                        "selector": "count"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "block": "proxy"
+                }
+              ]
             },
             {
               "id": "proxy",
@@ -220,10 +238,25 @@
           "text": "{person_name}"
         },
         "page_title": "Person {list_item_position}"
+      },
+      "enabled": {
+        "when": {
+          ">": [
+            {
+              "count": [
+                {
+                  "source": "list",
+                  "identifier": "household"
+                }
+              ]
+            },
+            0
+          ]
+        }
       }
     },
     {
-      "id": "section",
+      "id": "list-collector-section",
       "title": "Household",
       "summary": {
         "show_on_completion": true,

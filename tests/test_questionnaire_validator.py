@@ -418,7 +418,17 @@ def test_list_as_source_referenced_before_created():
             "message": "List 'household' referenced as source before it has been "
             "created.",
             "section_name": "individual-section",
-        }
+        },
+        {
+            "message": "List 'household' referenced as source before it has been "
+            "created.",
+            "section_name": "individual-section",
+        },
+        {
+            "message": "List 'household' referenced as source before it has been "
+            "created.",
+            "section_name": "individual-section",
+        },
     ]
 
     validator.validate()
