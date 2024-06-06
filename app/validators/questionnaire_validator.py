@@ -6,7 +6,11 @@ from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplicates
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    find_duplicates,
+    get_object_containing_key,
+)
 from app.validators.sections.section_validator import SectionValidator
 from app.validators.validator import Validator
 
@@ -30,6 +34,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_answer_references()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
@@ -134,3 +139,45 @@ class QuestionnaireValidator(Validator):
         )
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
+
+    def validate_answer_references(self):
+
+        for index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "identifier")
+            for _, identifier_reference, parent_block in identifier_references:
+                if (
+                    "source" in identifier_reference
+                    and identifier_reference["source"] == "answers"
+                ):
+                    block_id = self.questionnaire_schema.get_block_id_by_answer_id(identifier_reference["identifier"])
+                    if section_id := self.questionnaire_schema.get_section_id_for_block_id(block_id):
+                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
+                            self.add_error(
+                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                    answer_id=identifier_reference["identifier"]
+                                ),
+                                section_name=section["id"],
+                            )
+
+                    elif list_collector_parent_block_id := self.questionnaire_schema.get_parent_list_collector_for_add_block(block_id):
+                        section_id = self.questionnaire_schema.get_section_id_for_block_id(list_collector_parent_block_id)
+                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
+                            self.add_error(
+                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                    answer_id=identifier_reference["identifier"]
+                                ),
+                                section_name=section["id"],
+                            )
+                    elif repeating_blocks_parent_block_id := self.questionnaire_schema.get_parent_list_collector_for_repeating_block(block_id):
+                        section_id = self.questionnaire_schema.get_section_id_for_block_id(repeating_blocks_parent_block_id)
+                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
+                            self.add_error(
+                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                    answer_id=identifier_reference["identifier"]
+                                ),
+                                section_name=section["id"],
+                            )
+                    else:
+                        self.add_error(
+                            "Unknown"
+                        )

@@ -584,6 +584,20 @@ class QuestionnaireSchema:
                 if block_id == block["id"]:
                     return self.sections_by_id[section_id]
 
+    def get_parent_list_collector_for_add_block(self, block_id) -> dict | None:
+        for section_id, blocks in self.blocks_by_section_id.items():
+            for block in blocks:
+                if block["type"] == "ListCollector" and block["add_block"]["id"] == block_id:
+                    return block["id"]
+
+    def get_parent_list_collector_for_repeating_block(self, block_id) -> dict | None:
+        for section_id, blocks in self.blocks_by_section_id.items():
+            for block in blocks:
+                if block["type"] in ["ListCollector", "ListCollectorContent"] and block.get("repeating_blocks"):
+                    for repeating_block in block["repeating_blocks"]:
+                        if repeating_block["id"] == block_id:
+                            return block["id"]
+
     def is_block_in_repeating_section(self, block_id: str) -> bool:
         parent_section = self.get_parent_section_for_block(block_id)
         return parent_section and self.is_repeating_section(parent_section["id"])
@@ -617,3 +631,8 @@ class QuestionnaireSchema:
     def get_section_id_for_block_id(self, block_id: str) -> str | None:
         if block := self.get_block(block_id):
             return self.get_section_id_for_block(block)
+
+    def get_section_index_for_section_id(self, section_id: str) -> int:
+        for index, section in enumerate(self.sections):
+            if section["id"] == section_id:
+                return index

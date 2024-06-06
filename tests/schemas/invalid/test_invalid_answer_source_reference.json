@@ -1,0 +1,140 @@
+{
+    "mime_type": "application/json/ons/eq",
+    "language": "en",
+    "schema_version": "0.0.1",
+    "survey_id": "139",
+    "theme": "default",
+    "title": "Confirmation Question Test",
+    "data_version": "0.0.3",
+    "description": "A questionnaire to test answers referenced as source before it has been added.",
+    "navigation": {
+        "visible": true
+    },
+    "metadata": [
+        {
+            "name": "user_id",
+            "type": "string"
+        },
+        {
+            "name": "period_id",
+            "type": "string"
+        },
+        {
+            "name": "ru_name",
+            "type": "string"
+        },
+        {
+            "name": "trad_as",
+            "type": "string",
+            "optional": true
+        }
+    ],
+    "questionnaire_flow": {
+        "type": "Linear",
+        "options": {
+            "summary": {
+                "collapsible": false
+            }
+        }
+    },
+    "sections": [
+        {
+            "id": "confirmation-section",
+            "title": "Questions",
+            "groups": [
+                {
+                    "id": "confirmation-block",
+                    "title": "Confirmation Question Group",
+                    "blocks": [
+                        {
+                            "id": "number-of-employees-split-block",
+                            "type": "Question",
+                            "question": {
+                                "answers": [
+                                    {
+                                        "id": "number-of-employees-more-30-hours",
+                                        "label": "Number of employees working more than 30 hours per week",
+                                        "mandatory": false,
+                                        "type": "Number",
+                                        "maximum": {
+                                            "value": 1000
+                                            }
+                                        }
+
+                                ],
+                                "id": "number-of-employees-split-question",
+                                "title": {
+                                    "text": "Of the <strong>{number_of_employees_total}</strong> total employees employed, how many male and female employees worked the following hours?",
+                                    "placeholders": [
+                                        {
+                                            "placeholder": "number_of_employees_total",
+                                            "value": {
+                                                "source": "answers",
+                                                "identifier": "number-of-employees-total"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "type": "General"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "employees-section",
+            "title": "Questions",
+            "groups": [
+                {
+                    "id": "employees-block",
+                    "title": "Employees Question Group",
+                    "blocks": [
+                        {
+                            "id": "number-of-employees-total-block",
+                            "question": {
+                                "answers": [
+                                    {
+                                        "id": "number-of-employees-total",
+                                        "label": "Total number of employees",
+                                        "mandatory": false,
+                                        "type": "Number",
+                                        "default": 0
+                                    }
+                                ],
+                                "id": "number-of-employees-total-question",
+                                "title": {
+                                    "text": "How many employees work at {company_name}?",
+                                    "placeholders": [
+                                        {
+                                            "placeholder": "company_name",
+                                            "transforms": [
+                                                {
+                                                    "transform": "first_non_empty_item",
+                                                    "arguments": {
+                                                        "items": [
+                                                            {
+                                                                "source": "metadata",
+                                                                "identifier": "trad_as"
+                                                            },
+                                                            {
+                                                                "source": "metadata",
+                                                                "identifier": "ru_name"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "type": "General"
+                            },
+                            "type": "Question"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
