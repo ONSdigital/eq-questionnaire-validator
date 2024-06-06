@@ -618,6 +618,43 @@ class QuestionnaireSchema:
         if block := self.get_block(block_id):
             return self.get_section_id_for_block(block)
 
+    def get_list_collector_block_id_for_add_block(self, block_id) -> dict | None:
+        for section_id, blocks in self.blocks_by_section_id.items():
+            for block in blocks:
+                if (
+                    block["type"] == "ListCollector"
+                    and block["add_block"]["id"] == block_id
+                ):
+                    return block["id"]
+
+    def get_list_collector_block_id_for_repeating_blocks(self, block_id) -> dict | None:
+        for section_id, blocks in self.blocks_by_section_id.items():
+            for block in blocks:
+                if block["type"] in [
+                    "ListCollector",
+                    "ListCollectorContent",
+                ] and block.get("repeating_blocks"):
+                    for repeating_block in block["repeating_blocks"]:
+                        if repeating_block["id"] == block_id:
+                            return block["id"]
+
+    def resolve_parent_block_index_for_source(self, parent_block_id: str) -> int:
+        if (
+            self.block_ids.index(parent_block_id)
+            or self.block_ids.index(parent_block_id) == 0
+        ):
+            return self.block_ids.index(parent_block_id)
+
+        elif list_collector_id := self.get_list_collector_block_id_for_add_block(
+            parent_block_id
+        ):
+            return self.block_ids.index(list_collector_id)
+
+        elif list_collector_with_repeating_blocks_id := self.get_list_collector_block_id_for_repeating_blocks(
+            parent_block_id
+        ):
+            return self.block_ids.index(list_collector_with_repeating_blocks_id)
+
     def get_section_index_for_section_id(self, section_id: str) -> int:
         for index, section in enumerate(self.sections):
             if section["id"] == section_id:

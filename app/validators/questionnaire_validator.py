@@ -144,32 +144,76 @@ class QuestionnaireValidator(Validator):
         referenced_lists = {}
         if supplementary_list := self.questionnaire_schema.supplementary_lists:
             for list_id in supplementary_list:
-                referenced_lists[list_id] = 0
+                referenced_lists[list_id] = {"section_index": 0, "block_index": 0}
+
         if blocks := self.questionnaire_schema.get_blocks(type="ListCollector"):
             for block in blocks:
-                section_id = self.questionnaire_schema.get_section_id_for_block_id(
-                    block["id"]
-                )
-                section_index = (
-                    self.questionnaire_schema.get_section_index_for_section_id(
-                        section_id
-                    )
-                )
                 list_id = block["for_list"]
                 if list_id not in referenced_lists:
-                    referenced_lists[list_id] = section_index
-
-        for index, section in enumerate(self.questionnaire_schema.sections):
-            identifier_references = get_object_containing_key(section, "identifier")
-            for _, identifier_reference, _ in identifier_references:
-                if (
-                    "source" in identifier_reference
-                    and identifier_reference["source"] == "list"
-                    and index < referenced_lists[identifier_reference["identifier"]]
-                ):
-                    self.add_error(
-                        error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
-                            list_name=identifier_reference["identifier"]
-                        ),
-                        section_name=section["id"],
+                    section_id = self.questionnaire_schema.get_section_id_for_block_id(
+                        block["id"]
                     )
+                    section_index = (
+                        self.questionnaire_schema.get_section_index_for_section_id(
+                            section_id
+                        )
+                    )
+                    referenced_lists[list_id] = {
+                        "section_index": section_index,
+                        "block_index": self.questionnaire_schema.block_ids.index(
+                            block["id"]
+                        ),
+                    }
+        if blocks := self.questionnaire_schema.get_blocks(
+            type="PrimaryPersonListCollector"
+        ):
+            for block in blocks:
+                list_id = block["for_list"]
+                if list_id not in referenced_lists or (
+                    self.questionnaire_schema.block_ids.index(block["id"])
+                    < referenced_lists[list_id]["block_index"]
+                ):
+                    section_id = self.questionnaire_schema.get_section_id_for_block_id(
+                        block["id"]
+                    )
+                    section_index = (
+                        self.questionnaire_schema.get_section_index_for_section_id(
+                            section_id
+                        )
+                    )
+                    referenced_lists[list_id] = {
+                        "section_index": section_index,
+                        "block_index": self.questionnaire_schema.block_ids.index(
+                            block["id"]
+                        ),
+                    }
+
+        for section_index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "source")
+            for _, identifier_reference, parent_block in identifier_references:
+                if identifier_reference["source"] == "list":
+                    list_identifier = identifier_reference["identifier"]
+                    if parent_block:
+                        parent_block_index = self.questionnaire_schema.resolve_parent_block_index_for_source(
+                            parent_block["id"]
+                        )
+                        if (
+                            parent_block_index
+                            < referenced_lists[list_identifier]["block_index"]
+                        ):
+                            self.add_error(
+                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
+                                    list_name=list_identifier
+                                ),
+                                section_name=section["id"],
+                            )
+                    elif (
+                        section_index
+                        < referenced_lists[list_identifier]["section_index"]
+                    ):
+                        self.add_error(
+                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
+                                list_name=list_identifier
+                            ),
+                            section_name=section["id"],
+                        )
