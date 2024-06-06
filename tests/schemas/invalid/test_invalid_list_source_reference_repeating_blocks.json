@@ -1,0 +1,380 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "data_version": "0.0.3",
+  "survey_id": "0",
+  "title": "Test List Referenced Before Created (Repeating Blocks)",
+  "theme": "default",
+  "description": "A questionnaire to test list referenced as source in repeating blocks before it has been created",
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "section-companies",
+      "title": "General insurance business",
+      "summary": {
+        "show_on_completion": false
+      },
+      "groups": [
+        {
+          "id": "group-companies",
+          "blocks": [
+            {
+              "id": "any-other-companies-or-branches",
+              "type": "ListCollector",
+              "for_list": "other-companies",
+              "question": {
+                "id": "any-other-companies-or-branches-question",
+                "type": "General",
+                "title": "Do you need to add any other UK companies or branches that undertake general insurance business?",
+                "answers": [
+                  {
+                    "id": "any-other-companies-or-branches-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-other-company",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question-other-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name-other",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "repeating_blocks": [
+                {
+                  "id": "companies-repeating-block-1",
+                  "type": "ListRepeatingQuestion",
+                  "question": {
+                    "id": "companies-repeating-block-1-question",
+                    "type": "General",
+                    "title": {
+                      "text": "Give details about {company_name}",
+                      "placeholders": [
+                        {
+                          "placeholder": "company_name",
+                          "value": {
+                            "source": "list",
+                            "identifier": "companies",
+                            "selector": "first"
+                          }
+                        }
+                      ]
+                    },
+                    "answers": [
+                      {
+                        "id": "registration-number",
+                        "label": "Registration number (Mandatory)",
+                        "mandatory": true,
+                        "type": "Number",
+                        "maximum": {
+                          "value": 999,
+                          "exclusive": false
+                        },
+                        "decimal_places": 0
+                      },
+                      {
+                        "id": "registration-date",
+                        "label": "Date of Registration (Mandatory)",
+                        "mandatory": true,
+                        "type": "Date",
+                        "maximum": {
+                          "value": "now"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "companies-repeating-block-2",
+                  "type": "ListRepeatingQuestion",
+                  "question": {
+                    "id": "companies-repeating-block-2-question",
+                    "type": "General",
+                    "title": {
+                      "text": "Give details about how {company_name} has been trading over the past {date_difference}.",
+                      "placeholders": [
+                        {
+                          "placeholder": "company_name",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "company-or-branch-name-other"
+                          }
+                        },
+                        {
+                          "placeholder": "date_difference",
+                          "transforms": [
+                            {
+                              "transform": "calculate_date_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "source": "answers",
+                                  "identifier": "registration-date"
+                                },
+                                "second_date": {
+                                  "value": "now"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "answers": [
+                      {
+                        "type": "Radio",
+                        "label": "Has this company been trading in the UK? (Mandatory)",
+                        "id": "authorised-trader-uk-radio",
+                        "mandatory": true,
+                        "options": [
+                          {
+                            "label": "Yes",
+                            "value": "Yes"
+                          },
+                          {
+                            "label": "No",
+                            "value": "No"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Radio",
+                        "label": "Has this company been trading in the EU? (Not mandatory)",
+                        "id": "authorised-trader-eu-radio",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Yes",
+                            "value": "Yes"
+                          },
+                          {
+                            "label": "No",
+                            "value": "No"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "edit_block": {
+                "id": "edit-other-company",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question-other-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name-other",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-other-company",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question-other-companies",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this company or UK branch?",
+                  "answers": [
+                    {
+                      "id": "remove-other-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Companies or UK branches",
+                "item_title": {
+                  "text": "{company_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "company-or-branch-name"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "companies-or-branches",
+              "type": "ListCollector",
+              "for_list": "companies",
+              "question": {
+                "id": "companies-or-branches-question",
+                "type": "General",
+                "title": "Do you need to add any other UK companies or branches that undertake general insurance business?",
+                "answers": [
+                  {
+                    "id": "companies-or-branches-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-company",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-company",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-company",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question-companies",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this company or UK branch?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Companies or UK branches",
+                "item_title": {
+                  "text": "{company_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "company-or-branch-name"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
