@@ -202,6 +202,120 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "Question",
+              "id": "favourite-drink",
+              "question": {
+                "answers": [
+                  {
+                    "id": "favourite-drink-answer",
+                    "label": "What is your favourite drink",
+                    "max_length": 20,
+                    "mandatory": false,
+                    "type": "TextField"
+                  }
+                ],
+                "id": "favourite-drink-question",
+                "title": "Title",
+                "type": "General"
+              }
+            },
+            {
+              "id": "list-status-2",
+              "question_variants": [
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "list-status-answer-2",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Tea",
+                            "value": "Tea"
+                          },
+                          {
+                            "label": "Coffee",
+                            "value": "Coffee"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "list-status-question-2",
+                    "title": "What is your second favourite drink?",
+                    "type": "General"
+                  },
+                  "when": {
+                    "==": [
+                      {
+                        "identifier": "household",
+                        "source": "list",
+                        "selector": "first"
+                      },
+                      {
+                        "source": "location",
+                        "identifier": "list_item_id"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "answers": [
+                      {
+                        "id": "list-status-answer-2",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": {
+                              "text": "{answer}",
+                              "placeholders": [
+                                {
+                                  "placeholder": "answer",
+                                  "value": {
+                                    "source": "answers",
+                                    "identifier": "favourite-drink-answer",
+                                    "list_item_selector": {
+                                      "source": "list",
+                                      "identifier": "household",
+                                      "selector": "first"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "value": "{answer}"
+                          },
+                          {
+                            "label": "Other",
+                            "value": "Other"
+                          }
+                        ],
+                        "type": "Radio"
+                      }
+                    ],
+                    "id": "list-status-question-2",
+                    "title": "What is your second favourite drink?",
+                    "type": "General"
+                  },
+                  "when": {
+                    "!=": [
+                      {
+                        "identifier": "household",
+                        "source": "list",
+                        "selector": "first"
+                      },
+                      {
+                        "source": "location",
+                        "identifier": "list_item_id"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": "Question"
             }
           ],
           "id": "personal-details-group",

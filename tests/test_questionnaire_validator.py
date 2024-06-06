@@ -410,10 +410,25 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
 
 def test_list_as_source_referenced_before_created():
     """Asserts `invalid` when a value source references an invalid calculated or grand calculated summary id"""
-    filename = "schemas/invalid/test_invalid_list_as_source_reference.json"
+    filename = "schemas/invalid/test_invalid_list_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
+        {
+            "message": "List 'household' referenced as source before it has been "
+            "created.",
+            "section_name": "individual-section",
+        },
+        {
+            "message": "List 'household' referenced as source before it has been "
+            "created.",
+            "section_name": "individual-section",
+        },
+        {
+            "message": "List 'household' referenced as source before it has been "
+            "created.",
+            "section_name": "individual-section",
+        },
         {
             "message": "List 'household' referenced as source before it has been "
             "created.",
