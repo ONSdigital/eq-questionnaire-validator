@@ -141,6 +141,39 @@ class QuestionnaireValidator(Validator):
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_list_references(self):
+        referenced_lists = self.populated_referenced_lists()
+
+        for section_index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "source")
+            for _, identifier_reference, parent_block in identifier_references:
+                if identifier_reference["source"] == "list":
+                    list_identifier = identifier_reference["identifier"]
+                    if parent_block:
+                        parent_block_index = self.questionnaire_schema.resolve_parent_block_index_for_source(
+                            parent_block["id"]
+                        )
+                        if (
+                            parent_block_index
+                            < referenced_lists[list_identifier]["block_index"]
+                        ):
+                            self.add_error(
+                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
+                                    list_name=list_identifier
+                                ),
+                                section_name=section["id"],
+                            )
+                    elif (
+                        section_index
+                        < referenced_lists[list_identifier]["section_index"]
+                    ):
+                        self.add_error(
+                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
+                                list_name=list_identifier
+                            ),
+                            section_name=section["id"],
+                        )
+
+    def populated_referenced_lists(self):
         referenced_lists = {}
         if supplementary_list := self.questionnaire_schema.supplementary_lists:
             for list_id in supplementary_list:
@@ -188,32 +221,4 @@ class QuestionnaireValidator(Validator):
                         ),
                     }
 
-        for section_index, section in enumerate(self.questionnaire_schema.sections):
-            identifier_references = get_object_containing_key(section, "source")
-            for _, identifier_reference, parent_block in identifier_references:
-                if identifier_reference["source"] == "list":
-                    list_identifier = identifier_reference["identifier"]
-                    if parent_block:
-                        parent_block_index = self.questionnaire_schema.resolve_parent_block_index_for_source(
-                            parent_block["id"]
-                        )
-                        if (
-                            parent_block_index
-                            < referenced_lists[list_identifier]["block_index"]
-                        ):
-                            self.add_error(
-                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
-                                    list_name=list_identifier
-                                ),
-                                section_name=section["id"],
-                            )
-                    elif (
-                        section_index
-                        < referenced_lists[list_identifier]["section_index"]
-                    ):
-                        self.add_error(
-                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
-                                list_name=list_identifier
-                            ),
-                            section_name=section["id"],
-                        )
+        return referenced_lists
