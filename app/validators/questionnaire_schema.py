@@ -152,7 +152,7 @@ class QuestionnaireSchema:
             for block in list_collector.get("repeating_blocks", [])
         }
         self._answers_with_context = {}
-        self._referenced_lists = {}
+        self._lists_with_context = {}
 
     @lru_cache
     def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
@@ -211,39 +211,42 @@ class QuestionnaireSchema:
         return self._answers_with_context
 
     @property
-    def referenced_lists(self):
-        if self._referenced_lists:
-            return self._referenced_lists
+    def lists_with_context(self):
+        if self._lists_with_context:
+            return self._lists_with_context
 
         if supplementary_list := self.supplementary_lists:
             for list_id in supplementary_list:
-                self._referenced_lists[list_id] = {"section_index": 0, "block_index": 0}
+                self._lists_with_context[list_id] = {
+                    "section_index": 0,
+                    "block_index": 0,
+                }
 
-        if blocks := self.get_blocks(type="ListCollector"):
+        if blocks := self.list_collectors:
             for block in blocks:
                 list_id = block["for_list"]
-                if list_id not in self._referenced_lists:
+                if list_id not in self._lists_with_context:
                     section_id = self.get_section_id_for_block_id(block["id"])
                     section_index = self.get_section_index_for_section_id(section_id)
-                    self._referenced_lists[list_id] = {
+                    self._lists_with_context[list_id] = {
                         "section_index": section_index,
                         "block_index": self.block_ids.index(block["id"]),
                     }
         if blocks := self.get_blocks(type="PrimaryPersonListCollector"):
             for block in blocks:
                 list_id = block["for_list"]
-                if list_id not in self._referenced_lists or (
+                if list_id not in self._lists_with_context or (
                     self.block_ids.index(block["id"])
-                    < self._referenced_lists[list_id]["block_index"]
+                    < self._lists_with_context[list_id]["block_index"]
                 ):
                     section_id = self.get_section_id_for_block_id(block["id"])
                     section_index = self.get_section_index_for_section_id(section_id)
-                    self._referenced_lists[list_id] = {
+                    self._lists_with_context[list_id] = {
                         "section_index": section_index,
                         "block_index": self.block_ids.index(block["id"]),
                     }
 
-        return self._referenced_lists
+        return self._lists_with_context
 
     @staticmethod
     def capture_answers(*, answers, answers_dict, context):

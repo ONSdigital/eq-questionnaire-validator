@@ -141,7 +141,7 @@ class QuestionnaireValidator(Validator):
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_list_references(self):
-        referenced_lists = self.questionnaire_schema.referenced_lists
+        lists_with_context = self.questionnaire_schema.lists_with_context
 
         # We need to keep track of section index for: common_definitions.json#/section_enabled
         for section_index, section in enumerate(self.questionnaire_schema.sections):
@@ -156,7 +156,7 @@ class QuestionnaireValidator(Validator):
                         )
                         if (
                             parent_block_index
-                            < referenced_lists[list_identifier]["block_index"]
+                            < lists_with_context[list_identifier]["block_index"]
                         ):
                             self.add_error(
                                 error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
@@ -166,7 +166,7 @@ class QuestionnaireValidator(Validator):
                             )
                     elif (
                         section_index
-                        < referenced_lists[list_identifier]["section_index"]
+                        < lists_with_context[list_identifier]["section_index"]
                     ):
                         # Section level "enabled" rule that can use list source,
                         # check: common_definitions.json#/section_enabled
