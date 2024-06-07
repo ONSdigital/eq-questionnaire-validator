@@ -141,7 +141,7 @@ class QuestionnaireValidator(Validator):
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_list_references(self):
-        referenced_lists = self.populated_referenced_lists()
+        referenced_lists = self.populate_referenced_lists()
 
         # We need to keep track of section index for: common_definitions.json#/section_enabled
         for section_index, section in enumerate(self.questionnaire_schema.sections):
@@ -177,7 +177,7 @@ class QuestionnaireValidator(Validator):
                             section_name=section["id"],
                         )
 
-    def populated_referenced_lists(self):
+    def populate_referenced_lists(self):
         referenced_lists = {}
         if supplementary_list := self.questionnaire_schema.supplementary_lists:
             for list_id in supplementary_list:
