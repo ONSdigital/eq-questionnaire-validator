@@ -587,13 +587,19 @@ class QuestionnaireSchema:
     def get_parent_list_collector_for_add_block(self, block_id) -> dict | None:
         for section_id, blocks in self.blocks_by_section_id.items():
             for block in blocks:
-                if block["type"] == "ListCollector" and block["add_block"]["id"] == block_id:
+                if (
+                    block["type"] == "ListCollector"
+                    and block["add_block"]["id"] == block_id
+                ):
                     return block["id"]
 
     def get_parent_list_collector_for_repeating_block(self, block_id) -> dict | None:
         for section_id, blocks in self.blocks_by_section_id.items():
             for block in blocks:
-                if block["type"] in ["ListCollector", "ListCollectorContent"] and block.get("repeating_blocks"):
+                if block["type"] in [
+                    "ListCollector",
+                    "ListCollectorContent",
+                ] and block.get("repeating_blocks"):
                     for repeating_block in block["repeating_blocks"]:
                         if repeating_block["id"] == block_id:
                             return block["id"]

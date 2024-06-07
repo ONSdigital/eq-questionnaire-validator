@@ -142,42 +142,101 @@ class QuestionnaireValidator(Validator):
 
     def validate_answer_references(self):
 
-        for index, section in enumerate(self.questionnaire_schema.sections):
-            identifier_references = get_object_containing_key(section, "identifier")
-            for _, identifier_reference, parent_block in identifier_references:
+        for group in self.questionnaire_schema.groups:
+            identifier_references = get_object_containing_key(group, "source")
+            for path, identifier_reference, parent_block in identifier_references:
                 if (
                     "source" in identifier_reference
                     and identifier_reference["source"] == "answers"
                 ):
-                    block_id = self.questionnaire_schema.get_block_id_by_answer_id(identifier_reference["identifier"])
-                    if section_id := self.questionnaire_schema.get_section_id_for_block_id(block_id):
-                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
-                            self.add_error(
-                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                                    answer_id=identifier_reference["identifier"]
-                                ),
-                                section_name=section["id"],
-                            )
 
-                    elif list_collector_parent_block_id := self.questionnaire_schema.get_parent_list_collector_for_add_block(block_id):
-                        section_id = self.questionnaire_schema.get_section_id_for_block_id(list_collector_parent_block_id)
-                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
-                            self.add_error(
-                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                                    answer_id=identifier_reference["identifier"]
-                                ),
-                                section_name=section["id"],
-                            )
-                    elif repeating_blocks_parent_block_id := self.questionnaire_schema.get_parent_list_collector_for_repeating_block(block_id):
-                        section_id = self.questionnaire_schema.get_section_id_for_block_id(repeating_blocks_parent_block_id)
-                        if index < self.questionnaire_schema.get_section_index_for_section_id(section_id):
-                            self.add_error(
-                                error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                                    answer_id=identifier_reference["identifier"]
-                                ),
-                                section_name=section["id"],
-                            )
+                    source_block = self.questionnaire_schema.get_block_by_answer_id(
+                        identifier_reference["identifier"]
+                    )
+                    if "blocks" in path:
+                        # Getting the global index of the current block parent block id
+                        in_group_parent_block_index = int(
+                            re.search(r"\d+", path).group()
+                        )
+                        parent_block_id = group["blocks"][in_group_parent_block_index][
+                            "id"
+                        ]
+                        parent_block_index = self.questionnaire_schema.block_ids.index(
+                            parent_block_id
+                        )
                     else:
+                        # Handling of group level skip conditions
+                        first_block_id_in_group = group["blocks"][0]["id"]
+                        parent_block_index = self.questionnaire_schema.block_ids.index(
+                            first_block_id_in_group
+                        )
+
+                    # Handling of source block nested (list collector's add-block)
+                    if source_block["type"] == "ListAddQuestion":
+                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_add_block(
+                            source_block["id"]
+                        )
+                        source_block_id = parent_list_collector_id
+                    # Handling of source block nested (list collector's repeating block)
+                    elif source_block["type"] == "ListRepeatingQuestion":
+                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
+                            source_block["id"]
+                        )
+                        source_block_id = parent_list_collector_id
+                    # Handling of standard source block
+                    else:
+                        source_block_id = source_block["id"]
+                    source_block_index = self.questionnaire_schema.block_ids.index(
+                        source_block_id
+                    )
+                    if source_block_index > parent_block_index:
                         self.add_error(
-                            "Unknown"
+                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                answer_id=identifier_reference["identifier"]
+                            ),
+                            group_name=group["id"],
+                        )
+        # Handling of "enabled" rule on section level
+        for section_index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "source")
+            for path, identifier_reference, parent_block in identifier_references:
+                if (
+                    "source" in identifier_reference
+                    and identifier_reference["source"] == "answers"
+                    and "enabled" in path
+                ):
+                    source_block = self.questionnaire_schema.get_block_by_answer_id(
+                        identifier_reference["identifier"]
+                    )
+                    # Handling of source block nested (list collector's add-block)
+                    if source_block["type"] == "ListAddQuestion":
+                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_add_block(
+                            source_block["id"]
+                        )
+                        source_block_id = parent_list_collector_id
+                    # Handling of source block nested (list collector's repeating block)
+                    elif source_block["type"] == "ListRepeatingQuestion":
+                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
+                            source_block["id"]
+                        )
+                        source_block_id = parent_list_collector_id
+                    # Handling of standard source block
+                    else:
+                        source_block_id = source_block["id"]
+                    source_block_section_id = (
+                        self.questionnaire_schema.get_section_id_for_block_id(
+                            source_block_id
+                        )
+                    )
+                    source_block_section_index = (
+                        self.questionnaire_schema.get_section_index_for_section_id(
+                            source_block_section_id
+                        )
+                    )
+                    if section_index < source_block_section_index:
+                        self.add_error(
+                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                answer_id=identifier_reference["identifier"]
+                            ),
+                            section_name=section["id"],
                         )
