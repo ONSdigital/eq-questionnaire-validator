@@ -97,6 +97,10 @@ def test_invalid_placeholder_answer_ids():
 
     expected_errors = [
         {
+            "identifier": "invalid-answer0",
+            "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+        },
+        {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer0",
             "json_path": "groups.[0].blocks.[0].question.answers.[1].description.placeholders.[0].value.identifier",

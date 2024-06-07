@@ -13,6 +13,7 @@ from app.validators.questionnaire_schema import (
 )
 from app.validators.sections.section_validator import SectionValidator
 from app.validators.validator import Validator
+from app.validators.value_source_validator import ValueSourceValidator
 
 
 class QuestionnaireValidator(Validator):
@@ -153,6 +154,12 @@ class QuestionnaireValidator(Validator):
                     source_block = self.questionnaire_schema.get_block_by_answer_id(
                         identifier_reference["identifier"]
                     )
+                    if not source_block:
+                        self.add_error(
+                            ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+                            identifier=identifier_reference["identifier"],
+                        )
+                        return False
                     if "blocks" in path:
                         # Getting the global index of the current block parent block id
                         in_group_parent_block_index = int(
@@ -171,21 +178,8 @@ class QuestionnaireValidator(Validator):
                             first_block_id_in_group
                         )
 
-                    # Handling of source block nested (list collector's add-block)
-                    if source_block["type"] == "ListAddQuestion":
-                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_add_block(
-                            source_block["id"]
-                        )
-                        source_block_id = parent_list_collector_id
-                    # Handling of source block nested (list collector's repeating block)
-                    elif source_block["type"] == "ListRepeatingQuestion":
-                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
-                            source_block["id"]
-                        )
-                        source_block_id = parent_list_collector_id
-                    # Handling of standard source block
-                    else:
-                        source_block_id = source_block["id"]
+                    source_block_id = self.resolve_source_block_id(source_block)
+
                     source_block_index = self.questionnaire_schema.block_ids.index(
                         source_block_id
                     )
@@ -208,21 +202,8 @@ class QuestionnaireValidator(Validator):
                     source_block = self.questionnaire_schema.get_block_by_answer_id(
                         identifier_reference["identifier"]
                     )
-                    # Handling of source block nested (list collector's add-block)
-                    if source_block["type"] == "ListAddQuestion":
-                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_add_block(
-                            source_block["id"]
-                        )
-                        source_block_id = parent_list_collector_id
-                    # Handling of source block nested (list collector's repeating block)
-                    elif source_block["type"] == "ListRepeatingQuestion":
-                        parent_list_collector_id = self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
-                            source_block["id"]
-                        )
-                        source_block_id = parent_list_collector_id
-                    # Handling of standard source block
-                    else:
-                        source_block_id = source_block["id"]
+                    source_block_id = self.resolve_source_block_id(source_block)
+
                     source_block_section_id = (
                         self.questionnaire_schema.get_section_id_for_block_id(
                             source_block_id
@@ -240,3 +221,20 @@ class QuestionnaireValidator(Validator):
                             ),
                             section_name=section["id"],
                         )
+
+    def resolve_source_block_id(self, source_block):
+        # Handling of source block nested (list collector's add-block)
+        if source_block["type"] == "ListAddQuestion":
+            return self.questionnaire_schema.get_parent_list_collector_for_add_block(
+                source_block["id"]
+            )
+
+        # Handling of source block nested (list collector's repeating block)
+        if source_block["type"] == "ListRepeatingQuestion":
+            return (
+                self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
+                    source_block["id"]
+                )
+            )
+        # Handling of standard source block
+        return source_block["id"]
