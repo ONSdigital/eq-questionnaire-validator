@@ -152,6 +152,7 @@ class QuestionnaireSchema:
             for block in list_collector.get("repeating_blocks", [])
         }
         self._answers_with_context = {}
+        self._referenced_lists = {}
 
     @lru_cache
     def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
@@ -208,6 +209,41 @@ class QuestionnaireSchema:
 
         self._answers_with_context = answers_dict
         return self._answers_with_context
+
+    @property
+    def referenced_lists(self):
+        if self._referenced_lists:
+            return self._referenced_lists
+
+        if supplementary_list := self.supplementary_lists:
+            for list_id in supplementary_list:
+                self._referenced_lists[list_id] = {"section_index": 0, "block_index": 0}
+
+        if blocks := self.get_blocks(type="ListCollector"):
+            for block in blocks:
+                list_id = block["for_list"]
+                if list_id not in self._referenced_lists:
+                    section_id = self.get_section_id_for_block_id(block["id"])
+                    section_index = self.get_section_index_for_section_id(section_id)
+                    self._referenced_lists[list_id] = {
+                        "section_index": section_index,
+                        "block_index": self.block_ids.index(block["id"]),
+                    }
+        if blocks := self.get_blocks(type="PrimaryPersonListCollector"):
+            for block in blocks:
+                list_id = block["for_list"]
+                if list_id not in self._referenced_lists or (
+                    self.block_ids.index(block["id"])
+                    < self._referenced_lists[list_id]["block_index"]
+                ):
+                    section_id = self.get_section_id_for_block_id(block["id"])
+                    section_index = self.get_section_index_for_section_id(section_id)
+                    self._referenced_lists[list_id] = {
+                        "section_index": section_index,
+                        "block_index": self.block_ids.index(block["id"]),
+                    }
+
+        return self._referenced_lists
 
     @staticmethod
     def capture_answers(*, answers, answers_dict, context):

@@ -141,7 +141,7 @@ class QuestionnaireValidator(Validator):
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_list_references(self):
-        referenced_lists = self.populate_referenced_lists()
+        referenced_lists = self.questionnaire_schema.referenced_lists
 
         # We need to keep track of section index for: common_definitions.json#/section_enabled
         for section_index, section in enumerate(self.questionnaire_schema.sections):
@@ -176,53 +176,3 @@ class QuestionnaireValidator(Validator):
                             ),
                             section_name=section["id"],
                         )
-
-    def populate_referenced_lists(self):
-        referenced_lists = {}
-        if supplementary_list := self.questionnaire_schema.supplementary_lists:
-            for list_id in supplementary_list:
-                referenced_lists[list_id] = {"section_index": 0, "block_index": 0}
-
-        if blocks := self.questionnaire_schema.get_blocks(type="ListCollector"):
-            for block in blocks:
-                list_id = block["for_list"]
-                if list_id not in referenced_lists:
-                    section_id = self.questionnaire_schema.get_section_id_for_block_id(
-                        block["id"]
-                    )
-                    section_index = (
-                        self.questionnaire_schema.get_section_index_for_section_id(
-                            section_id
-                        )
-                    )
-                    referenced_lists[list_id] = {
-                        "section_index": section_index,
-                        "block_index": self.questionnaire_schema.block_ids.index(
-                            block["id"]
-                        ),
-                    }
-        if blocks := self.questionnaire_schema.get_blocks(
-            type="PrimaryPersonListCollector"
-        ):
-            for block in blocks:
-                list_id = block["for_list"]
-                if list_id not in referenced_lists or (
-                    self.questionnaire_schema.block_ids.index(block["id"])
-                    < referenced_lists[list_id]["block_index"]
-                ):
-                    section_id = self.questionnaire_schema.get_section_id_for_block_id(
-                        block["id"]
-                    )
-                    section_index = (
-                        self.questionnaire_schema.get_section_index_for_section_id(
-                            section_id
-                        )
-                    )
-                    referenced_lists[list_id] = {
-                        "section_index": section_index,
-                        "block_index": self.questionnaire_schema.block_ids.index(
-                            block["id"]
-                        ),
-                    }
-
-        return referenced_lists
