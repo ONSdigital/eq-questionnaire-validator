@@ -150,12 +150,10 @@ class QuestionnaireValidator(Validator):
                 if identifier_reference["source"] == "list":
                     list_identifier = identifier_reference["identifier"]
                     if parent_block:
-                        # Parent block might not always be top level "Block" so we need to resolve it below
-                        parent_block_index = self.questionnaire_schema.resolve_parent_block_index_for_source(
-                            parent_block["id"]
-                        )
                         if (
-                            parent_block_index
+                            self.questionnaire_schema.block_ids.index(
+                                parent_block["id"]
+                            )
                             < lists_with_context[list_identifier]["block_index"]
                         ):
                             self.add_error(

@@ -675,23 +675,6 @@ class QuestionnaireSchema:
                     if repeating_block["id"] == block_id:
                         return block["id"]
 
-    def resolve_parent_block_index_for_source(self, parent_block_id: str) -> int:
-        if (
-            self.block_ids.index(parent_block_id)
-            or self.block_ids.index(parent_block_id) == 0
-        ):
-            return self.block_ids.index(parent_block_id)
-
-        if list_collector_id := self.get_list_collector_block_id_for_add_block(
-            parent_block_id
-        ):
-            return self.block_ids.index(list_collector_id)
-
-        list_collector_with_repeating_blocks_id = (
-            self.get_list_collector_block_id_for_repeating_blocks(parent_block_id)
-        )
-        return self.block_ids.index(list_collector_with_repeating_blocks_id)
-
     def get_section_index_for_section_id(self, section_id: str) -> int:
         for index, section in enumerate(self.sections):
             if section["id"] == section_id:
