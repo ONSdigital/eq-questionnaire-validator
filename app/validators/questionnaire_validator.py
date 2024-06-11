@@ -143,80 +143,88 @@ class QuestionnaireValidator(Validator):
 
     def validate_answer_references(self):
 
+        # Handling blocks in group
         for group in self.questionnaire_schema.groups:
-            identifier_references = get_object_containing_key(group, "source")
-            for path, identifier_reference, parent_block in identifier_references:
-                if (
-                    "source" in identifier_reference
-                    and identifier_reference["source"] == "answers"
-                ):
+            self.validate_answer_source_group(group)
 
-                    source_block = self.questionnaire_schema.get_block_by_answer_id(
-                        identifier_reference["identifier"]
+        # Handling section level "enabled" rule
+        for index, section in enumerate(self.questionnaire_schema.sections):
+            self.validate_answer_source_section(section, index)
+
+    def validate_answer_source_group(self, group):
+        identifier_references = get_object_containing_key(group, "source")
+        for path, identifier_reference, parent_block in identifier_references:
+            if (
+                "source" in identifier_reference
+                and identifier_reference["source"] == "answers"
+            ):
+
+                source_block = self.questionnaire_schema.get_block_by_answer_id(
+                    identifier_reference["identifier"]
+                )
+                # Handling non-existing blocks used as source
+                if not source_block:
+                    self.add_error(
+                        ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+                        identifier=identifier_reference["identifier"],
                     )
-                    # Handling non-existing blocks used as source
-                    if not source_block:
-                        self.add_error(
-                            ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
-                            identifier=identifier_reference["identifier"],
-                        )
-                        return False
-                    # Handling block level answer sources (skipping group level)
-                    if parent_block and "blocks" in path:
-                        parent_block_id = parent_block["id"]
-                        parent_block_index = self.questionnaire_schema.block_ids.index(
-                            parent_block_id
-                        )
-                    else:
-                        # Handling group level skip conditions
-                        first_block_id_in_group = group["blocks"][0]["id"]
-                        parent_block_index = self.questionnaire_schema.block_ids.index(
-                            first_block_id_in_group
-                        )
+                    return False
+                # Handling block level answer sources (skipping group level)
+                if parent_block and "blocks" in path:
+                    parent_block_id = parent_block["id"]
+                    parent_block_index = self.questionnaire_schema.block_ids.index(
+                        parent_block_id
+                    )
+                else:
+                    # Handling group level skip conditions
+                    first_block_id_in_group = group["blocks"][0]["id"]
+                    parent_block_index = self.questionnaire_schema.block_ids.index(
+                        first_block_id_in_group
+                    )
 
-                    source_block_id = self.resolve_source_block_id(source_block)
+                source_block_id = self.resolve_source_block_id(source_block)
 
-                    source_block_index = self.questionnaire_schema.block_ids.index(
+                source_block_index = self.questionnaire_schema.block_ids.index(
+                    source_block_id
+                )
+                if source_block_index > parent_block_index:
+                    self.add_error(
+                        error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                            answer_id=identifier_reference["identifier"]
+                        ),
+                        group_name=group["id"],
+                    )
+
+    def validate_answer_source_section(self, section, section_index):
+        identifier_references = get_object_containing_key(section, "source")
+        for path, identifier_reference, _ in identifier_references:
+            if (
+                "source" in identifier_reference
+                and identifier_reference["source"] == "answers"
+                and "enabled" in path
+            ):
+                source_block = self.questionnaire_schema.get_block_by_answer_id(
+                    identifier_reference["identifier"]
+                )
+                source_block_id = self.resolve_source_block_id(source_block)
+
+                source_block_section_id = (
+                    self.questionnaire_schema.get_section_id_for_block_id(
                         source_block_id
                     )
-                    if source_block_index > parent_block_index:
-                        self.add_error(
-                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                                answer_id=identifier_reference["identifier"]
-                            ),
-                            group_name=group["id"],
-                        )
-        # Handling section level "enabled" rule
-        for section_index, section in enumerate(self.questionnaire_schema.sections):
-            identifier_references = get_object_containing_key(section, "source")
-            for path, identifier_reference, parent_block in identifier_references:
-                if (
-                    "source" in identifier_reference
-                    and identifier_reference["source"] == "answers"
-                    and "enabled" in path
-                ):
-                    source_block = self.questionnaire_schema.get_block_by_answer_id(
-                        identifier_reference["identifier"]
+                )
+                source_block_section_index = (
+                    self.questionnaire_schema.get_section_index_for_section_id(
+                        source_block_section_id
                     )
-                    source_block_id = self.resolve_source_block_id(source_block)
-
-                    source_block_section_id = (
-                        self.questionnaire_schema.get_section_id_for_block_id(
-                            source_block_id
-                        )
+                )
+                if section_index < source_block_section_index:
+                    self.add_error(
+                        error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                            answer_id=identifier_reference["identifier"]
+                        ),
+                        section_name=section["id"],
                     )
-                    source_block_section_index = (
-                        self.questionnaire_schema.get_section_index_for_section_id(
-                            source_block_section_id
-                        )
-                    )
-                    if section_index < source_block_section_index:
-                        self.add_error(
-                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                                answer_id=identifier_reference["identifier"]
-                            ),
-                            section_name=section["id"],
-                        )
 
     def resolve_source_block_id(self, source_block):
         # Handling of source block nested (list collector's add-block)

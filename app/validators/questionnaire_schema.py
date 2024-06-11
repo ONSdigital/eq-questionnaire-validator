@@ -585,7 +585,7 @@ class QuestionnaireSchema:
                     return self.sections_by_id[section_id]
 
     def get_parent_list_collector_for_add_block(self, block_id) -> dict | None:
-        for section_id, blocks in self.blocks_by_section_id.items():
+        for _, blocks in self.blocks_by_section_id.items():
             for block in blocks:
                 if (
                     block["type"] == "ListCollector"
@@ -594,7 +594,7 @@ class QuestionnaireSchema:
                     return block["id"]
 
     def get_parent_list_collector_for_repeating_block(self, block_id) -> dict | None:
-        for section_id, blocks in self.blocks_by_section_id.items():
+        for _, blocks in self.blocks_by_section_id.items():
             for block in blocks:
                 if block["type"] in [
                     "ListCollector",
