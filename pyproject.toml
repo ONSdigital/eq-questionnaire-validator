@@ -2,10 +2,6 @@
 target_version = ['py38']
 
 [tool.poetry]
-name = "eq-questionnaire-validator"
-version = "0.1.0"
-description = "API for questionnaire schema validation"
-authors = ["ONSDigital"]
 package-mode = false
 
 [tool.poetry.dependencies]
