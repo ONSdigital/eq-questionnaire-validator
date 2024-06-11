@@ -349,7 +349,7 @@ tqdm = "*"
 type = "git"
 url = "https://github.com/ONSDigital/eq-translations.git"
 reference = "v4.9.2"
-resolved_reference = "a00c4e32423fb40a6edc01755160e29e11f25bd8"
+resolved_reference = "e8e433ce55afef4e87052f0a3018543148e949b7"
 
 [[package]]
 name = "execnet"
