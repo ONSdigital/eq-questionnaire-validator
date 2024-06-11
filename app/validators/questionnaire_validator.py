@@ -123,22 +123,26 @@ class QuestionnaireValidator(Validator):
             if isinstance(schema_text, dict):
                 values_to_check = schema_text.values()
 
-            for schema_text in values_to_check:
-                if schema_text and html_regex.search(schema_text):
-                    html_strings.append(
-                        {"pointer": translatable_item.pointer, "text": schema_text}
-                    )
-
+            html_strings.extend(
+                {"pointer": translatable_item.pointer, "text": schema_text}
+                for schema_text in values_to_check
+                if schema_text and html_regex.search(schema_text)
+            )
         if html_strings:
             self.check_invalid_html_tags(html_strings)
 
     def check_invalid_html_tags(self, html_strings):
-        strong = re.compile("<strong[^>]>*>|</strong>")
-        anchor = re.compile("<a[^>]>*>|</a>")
+        strong = re.compile(r"<strong>(?:(?!<\/strong>).)*</strong>")
+        anchor = re.compile("<a .*>.*</a>")
+        all_tags = re.compile(
+            "<([a-z0-9]+)(?=[\s>])(?:[^>=]|='[^']*'|=\"[^\"]*\"|=[^'\"\s]*)*\s?/?>"
+        )
+
         for html_string in html_strings:
-            if not strong.search(html_string["text"]) and not anchor.search(
-                html_string["text"]
-            ):
+            if len(strong.findall(html_string["text"])) + len(
+                anchor.findall(html_string["text"])
+            ) != len(all_tags.findall(html_string["text"])):
+
                 self.add_error(
                     error_messages.HTML_FOUND,
                     pointer=html_string["pointer"],

@@ -79,12 +79,36 @@
             },
             {
               "type": "Interstitial",
-              "id": "intersitital-two",
+              "id": "interstitial-two",
               "content": {
                 "title": "Page with link",
                 "contents": [
                   {
-                    "description": "<a>Anchor</a>"
+                    "description": "<a href='link'>Anchor</a>"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "interstitial-three",
+              "content": {
+                "title": "<strong>Page with mixed invalid tags<strong>",
+                "contents": [
+                  {
+                    "description": "<h1>Title</h1><em>Not valid tag</em>"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Interstitial",
+              "id": "interstitial-four",
+              "content": {
+                "title": "Valid double <strong>strong</strong> with another <strong>strong</strong>.",
+                "contents": [
+                  {
+                    "description": "<strong>Title</strong><em>Not valid tag</em>"
                   }
                 ]
               }

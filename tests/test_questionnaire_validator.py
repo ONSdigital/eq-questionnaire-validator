@@ -344,8 +344,23 @@ def test_invalid_html_in_schema():
     expected_error_messages = [
         {
             "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/3/content/title",
+            "text": "<strong>Page with mixed invalid tags<strong>",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
             "pointer": "/sections/0/groups/0/blocks/1/content/contents/0/description",
             "text": "<p>You have successfully completed this section<p>",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/3/content/contents/0/description",
+            "text": "<h1>Title</h1><em>Not valid tag</em>",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/4/content/contents/0/description",
+            "text": "<strong>Title</strong><em>Not valid tag</em>",
         },
         {
             "message": error_messages.HTML_FOUND,
