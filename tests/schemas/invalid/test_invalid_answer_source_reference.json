@@ -75,11 +75,100 @@
                   ]
                 },
                 "type": "General"
+              },
+              "routing_rules": [
+                {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "number-of-employees-total"
+                      },
+                      2
+                    ]
+                  },
+                  "section": "End"
+                },
+                {
+                  "block": "confirm-zero-employees-block"
+                }
+              ]
+            },
+            {
+              "type": "ConfirmationQuestion",
+              "id": "confirm-zero-employees-block",
+              "skip_conditions": {
+                "when": {
+                  ">": [
+                    {
+                      "source": "answers",
+                      "identifier": "number-of-employees-total"
+                    },
+                    0
+                  ]
+                }
+              },
+              "question": {
+                "type": "General",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "confirm-zero-employees-answer",
+                    "options": [
+                      {
+                        "label": "Yes this is correct",
+                        "value": "Yes this is correct"
+                      },
+                      {
+                        "label": "No I need to correct this",
+                        "value": "No I need to correct this"
+                      }
+                    ],
+                    "mandatory": true
+                  }
+                ],
+                "id": "confirm-zero-employees-question",
+                "title": {
+                  "text": "The current number of employees for {company_name} is <strong>0</strong>, is this correct?",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "transforms": [
+                        {
+                          "transform": "first_non_empty_item",
+                          "arguments": {
+                            "items": [
+                              {
+                                "source": "metadata",
+                                "identifier": "trad_as"
+                              },
+                              {
+                                "source": "metadata",
+                                "identifier": "ru_name"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
               }
             }
           ]
         }
-      ]
+      ],
+      "enabled": {
+        "when": {
+          "==": [
+            {
+              "identifier": "number-of-employees-total",
+              "source": "answers"
+            },
+            1
+          ]
+        }
+      }
     },
     {
       "id": "employees-section",

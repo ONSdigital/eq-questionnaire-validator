@@ -410,3 +410,35 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
     validator.validate()
 
     assert validator.errors == expected_errors
+
+
+def test_answer_as_source_referenced_before_created():
+    filename = "schemas/invalid/test_invalid_answer_source_reference.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "group_name": "confirmation-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "group_name": "confirmation-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "group_name": "confirmation-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+            "section_name": "confirmation-section",
+        },
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors
