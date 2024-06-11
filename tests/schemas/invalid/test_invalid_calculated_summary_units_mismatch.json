@@ -94,7 +94,7 @@
                   {
                     "list": [
                       {
-                        "text": "Total unit values: <em>{unit_total}</em>",
+                        "text": "Total unit values: <strong>{unit_total}</strong>",
                         "placeholders": [
                           {
                             "placeholder": "unit_total",

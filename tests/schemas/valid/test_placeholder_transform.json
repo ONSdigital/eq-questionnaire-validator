@@ -210,7 +210,7 @@
                       ]
                     }
                   ],
-                  "text": "Do you want to add <em>{item}</em> item?"
+                  "text": "Do you want to add <strong>{item}</strong> item?"
                 },
                 "type": "General"
               },
@@ -220,7 +220,7 @@
               "id": "interstitial",
               "content": {
                 "title": {
-                  "text": "Your answer to the add item question: <em>{answer}</em>",
+                  "text": "Your answer to the add item question: <strong>{answer}</strong>",
                   "placeholders": [
                     {
                       "placeholder": "answer",
@@ -350,7 +350,7 @@
                 "contents": [
                   {
                     "description": {
-                      "text": "The percentage of the company budget you spend on training is <em>{answer_percentage}</em>",
+                      "text": "The percentage of the company budget you spend on training is <strong>{answer_percentage}</strong>",
                       "placeholders": [
                         {
                           "placeholder": "answer_percentage",
@@ -407,7 +407,7 @@
                 "contents": [
                   {
                     "description": {
-                      "text": "The average commuting distance of an employee is <em>{answer_distance}</em>",
+                      "text": "The average commuting distance of an employee is <strong>{answer_distance}</strong>",
                       "placeholders": [
                         {
                           "placeholder": "answer_distance",

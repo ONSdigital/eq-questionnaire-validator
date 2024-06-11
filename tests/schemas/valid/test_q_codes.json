@@ -174,7 +174,7 @@
                   }
                 ],
                 "id": "confirmation-1-question",
-                "title": "The current number of employees for this Company is <em>0</em>, is this correct?"
+                "title": "The current number of employees for this Company is <strong>0</strong>, is this correct?"
               },
               "routing_rules": [
                 {
