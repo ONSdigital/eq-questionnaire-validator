@@ -154,25 +154,21 @@ class QuestionnaireValidator(Validator):
                     source_block = self.questionnaire_schema.get_block_by_answer_id(
                         identifier_reference["identifier"]
                     )
+                    # Handling non-existing blocks used as source
                     if not source_block:
                         self.add_error(
                             ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
                             identifier=identifier_reference["identifier"],
                         )
                         return False
-                    if "blocks" in path:
-                        # Getting the global index of the current block parent block id
-                        in_group_parent_block_index = int(
-                            re.search(r"\d+", path).group()
-                        )
-                        parent_block_id = group["blocks"][in_group_parent_block_index][
-                            "id"
-                        ]
+                    # Handling block level answer sources (skipping group level)
+                    if parent_block and "blocks" in path:
+                        parent_block_id = parent_block["id"]
                         parent_block_index = self.questionnaire_schema.block_ids.index(
                             parent_block_id
                         )
                     else:
-                        # Handling of group level skip conditions
+                        # Handling group level skip conditions
                         first_block_id_in_group = group["blocks"][0]["id"]
                         parent_block_index = self.questionnaire_schema.block_ids.index(
                             first_block_id_in_group
@@ -190,7 +186,7 @@ class QuestionnaireValidator(Validator):
                             ),
                             group_name=group["id"],
                         )
-        # Handling of "enabled" rule on section level
+        # Handling section level "enabled" rule
         for section_index, section in enumerate(self.questionnaire_schema.sections):
             identifier_references = get_object_containing_key(section, "source")
             for path, identifier_reference, parent_block in identifier_references:

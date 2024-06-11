@@ -437,6 +437,11 @@ def test_answer_as_source_referenced_before_created():
             "it has been added.",
             "section_name": "confirmation-section",
         },
+        {
+            "group_name": "confirmation-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
     ]
 
     validator.validate()
