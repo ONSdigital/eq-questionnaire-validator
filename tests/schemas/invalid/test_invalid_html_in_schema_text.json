@@ -112,6 +112,18 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "Interstitial",
+              "id": "interstitial-five",
+              "content": {
+                "title": "Valid double anchor.",
+                "contents": [
+                  {
+                    "description": "<a href='link'>Title</a> and <a href='link-2'>Not valid tag</a>"
+                  }
+                ]
+              }
             }
           ]
         }
