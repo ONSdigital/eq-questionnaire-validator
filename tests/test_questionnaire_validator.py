@@ -413,55 +413,53 @@ def test_list_as_source_referenced_before_created():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        [
-            {
-                "list_id": "household",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "individual-interstitial",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_id": "household",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "individual-interstitial",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_id": "household",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "list-status-2",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_id": "household",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "list-status-2",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_id": "household",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "list-status-2",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_name": "household",
-                "message": "List referenced as source before it has been created.",
-                "section_id": "individuals-section",
-            },
-            {
-                "list_id": "utility-bills",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "dynamic-answer",
-                "section_id": "utility-bills-section",
-            },
-            {
-                "list_id": "utility-bills",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "dynamic-answer",
-                "section_id": "utility-bills-section",
-            },
-        ]
+        {
+            "list_id": "household",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "individual-interstitial",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "individual-interstitial",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_name": "household",
+            "message": "List referenced as source before it has been created.",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "utility-bills",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "dynamic-answer",
+            "section_id": "utility-bills-section",
+        },
+        {
+            "list_id": "utility-bills",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "dynamic-answer",
+            "section_id": "utility-bills-section",
+        },
     ]
 
     validator.validate()
@@ -476,14 +474,12 @@ def test_list_as_source_referenced_before_created_repeating_blocks():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
-        [
-            {
-                "list_id": "companies",
-                "message": "List referenced as source before it has been created.",
-                "parent_block_id": "any-other-companies-or-branches",
-                "section_id": "section-companies",
-            }
-        ]
+        {
+            "list_id": "companies",
+            "message": "List referenced as source before it has been created.",
+            "parent_block_id": "any-other-companies-or-branches",
+            "section_id": "section-companies",
+        }
     ]
 
     validator.validate()
