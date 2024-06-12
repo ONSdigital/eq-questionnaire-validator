@@ -157,10 +157,10 @@ class QuestionnaireValidator(Validator):
                             < lists_with_context[list_identifier]["block_index"]
                         ):
                             self.add_error(
-                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
-                                    list_name=list_identifier
-                                ),
-                                section_name=section["id"],
+                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(),
+                                list_id=list_identifier,
+                                section_id=section["id"],
+                                parent_block_id=parent_block["id"],
                             )
                     elif (
                         section_index
@@ -169,8 +169,7 @@ class QuestionnaireValidator(Validator):
                         # Section level "enabled" rule that can use list source,
                         # check: common_definitions.json#/section_enabled
                         self.add_error(
-                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(
-                                list_name=list_identifier
-                            ),
-                            section_name=section["id"],
+                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(),
+                            list_name=list_identifier,
+                            section_id=section["id"],
                         )

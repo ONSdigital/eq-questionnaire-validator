@@ -227,7 +227,7 @@ class QuestionnaireSchema:
                 list_id = block["for_list"]
                 if list_id not in self._lists_with_context:
                     section_id = self.get_section_id_for_block_id(block["id"])
-                    section_index = self.get_section_index_for_section_id(section_id)
+                    section_index = self.section_ids.index(section_id)
                     self._lists_with_context[list_id] = {
                         "section_index": section_index,
                         "block_index": self.block_ids.index(block["id"]),
@@ -240,7 +240,7 @@ class QuestionnaireSchema:
                     < self._lists_with_context[list_id]["block_index"]
                 ):
                     section_id = self.get_section_id_for_block_id(block["id"])
-                    section_index = self.get_section_index_for_section_id(section_id)
+                    section_index = self.section_ids.index(section_id)
                     self._lists_with_context[list_id] = {
                         "section_index": section_index,
                         "block_index": self.block_ids.index(block["id"]),
@@ -656,26 +656,3 @@ class QuestionnaireSchema:
     def get_section_id_for_block_id(self, block_id: str) -> str | None:
         if block := self.get_block(block_id):
             return self.get_section_id_for_block(block)
-
-    def get_list_collector_block_id_for_add_block(self, block_id) -> dict | None:
-        for block in self.blocks:
-            if (
-                block["type"] == "ListCollector"
-                and block["add_block"]["id"] == block_id
-            ):
-                return block["id"]
-
-    def get_list_collector_block_id_for_repeating_blocks(self, block_id) -> dict | None:
-        for block in self.blocks:
-            if block["type"] in [
-                "ListCollector",
-                "ListCollectorContent",
-            ] and block.get("repeating_blocks"):
-                for repeating_block in block["repeating_blocks"]:
-                    if repeating_block["id"] == block_id:
-                        return block["id"]
-
-    def get_section_index_for_section_id(self, section_id: str) -> int:
-        for index, section in enumerate(self.sections):
-            if section["id"] == section_id:
-                return index

@@ -40,6 +40,4 @@ VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = (
     "Variants have more than one question type for block."
 )
 PREVIEW_WITHOUT_INTRODUCTION_BLOCK = "No introduction block found. Introduction block is mandatory when using the preview questions feature."
-LIST_REFERENCED_BEFORE_ADDED = (
-    "List '{list_name}' referenced as source before it has been created."
-)
+LIST_REFERENCED_BEFORE_ADDED = "List referenced as source before it has been created."
