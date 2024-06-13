@@ -415,49 +415,49 @@ def test_list_as_source_referenced_before_created():
     expected_errors = [
         {
             "list_id": "household",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "individual-interstitial",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "individual-interstitial",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "individual-interstitial",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "individual-interstitial",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "list-status-2",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "list-status-2",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "list-status-2",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_name": "household",
-            "message": "List referenced as source before it has been created.",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
             "section_id": "individuals-section",
         },
         {
             "list_id": "utility-bills",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "dynamic-answer",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "dynamic-answer",
             "section_id": "utility-bills-section",
         },
         {
             "list_id": "utility-bills",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "dynamic-answer",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "dynamic-answer",
             "section_id": "utility-bills-section",
         },
     ]
@@ -476,8 +476,8 @@ def test_list_as_source_referenced_before_created_repeating_blocks():
     expected_errors = [
         {
             "list_id": "companies",
-            "message": "List referenced as source before it has been created.",
-            "parent_block_id": "any-other-companies-or-branches",
+            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "block_id": "any-other-companies-or-branches",
             "section_id": "section-companies",
         }
     ]

@@ -160,7 +160,7 @@ class QuestionnaireValidator(Validator):
                                 error_messages.LIST_REFERENCED_BEFORE_ADDED.format(),
                                 list_id=list_identifier,
                                 section_id=section["id"],
-                                parent_block_id=parent_block["id"],
+                                block_id=parent_block["id"],
                             )
                     elif (
                         section_index
