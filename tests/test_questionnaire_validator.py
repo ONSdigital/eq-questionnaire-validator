@@ -415,48 +415,48 @@ def test_list_as_source_referenced_before_created():
     expected_errors = [
         {
             "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "individual-interstitial",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "individual-interstitial",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "list-status-2",
             "section_id": "individuals-section",
         },
         {
             "list_name": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "section_id": "individuals-section",
         },
         {
             "list_id": "utility-bills",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "dynamic-answer",
             "section_id": "utility-bills-section",
         },
         {
             "list_id": "utility-bills",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "dynamic-answer",
             "section_id": "utility-bills-section",
         },
@@ -476,7 +476,7 @@ def test_list_as_source_referenced_before_created_repeating_blocks():
     expected_errors = [
         {
             "list_id": "companies",
-            "message": error_messages.LIST_REFERENCED_BEFORE_ADDED,
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "block_id": "any-other-companies-or-branches",
             "section_id": "section-companies",
         }

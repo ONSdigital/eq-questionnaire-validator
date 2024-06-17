@@ -157,7 +157,7 @@ class QuestionnaireValidator(Validator):
                             < lists_with_context[list_identifier]["block_index"]
                         ):
                             self.add_error(
-                                error_messages.LIST_REFERENCED_BEFORE_ADDED.format(),
+                                error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
                                 list_id=list_identifier,
                                 section_id=section["id"],
                                 block_id=parent_block["id"],
@@ -169,7 +169,7 @@ class QuestionnaireValidator(Validator):
                         # Section level "enabled" rule that can use list source,
                         # check: common_definitions.json#/section_enabled
                         self.add_error(
-                            error_messages.LIST_REFERENCED_BEFORE_ADDED.format(),
+                            error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
                             list_name=list_identifier,
                             section_id=section["id"],
                         )

@@ -212,9 +212,6 @@ class QuestionnaireSchema:
 
     @property
     def lists_with_context(self):
-        if self._lists_with_context:
-            return self._lists_with_context
-
         if supplementary_list := self.supplementary_lists:
             for list_id in supplementary_list:
                 self._lists_with_context[list_id] = {
