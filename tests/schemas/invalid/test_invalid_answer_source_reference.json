@@ -43,7 +43,7 @@
       "title": "Questions",
       "groups": [
         {
-          "id": "confirmation-block",
+          "id": "confirmation-group",
           "title": "Confirmation Question Group",
           "skip_conditions": {
             "when": {

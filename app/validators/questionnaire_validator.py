@@ -154,6 +154,8 @@ class QuestionnaireValidator(Validator):
     def validate_answer_source_group(self, group):
         identifier_references = get_object_containing_key(group, "source")
         for path, identifier_reference, parent_block in identifier_references:
+            # set up default parent_block_id for later check (group or block level)
+            parent_block_id = None
             if (
                 "source" in identifier_reference
                 and identifier_reference["source"] == "answers"
@@ -188,12 +190,20 @@ class QuestionnaireValidator(Validator):
                     source_block_id
                 )
                 if source_block_index > parent_block_index:
-                    self.add_error(
-                        error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
-                            answer_id=identifier_reference["identifier"]
-                        ),
-                        group_name=group["id"],
-                    )
+                    if parent_block_id:
+                        self.add_error(
+                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                answer_id=identifier_reference["identifier"]
+                            ),
+                            block=parent_block_id,
+                        )
+                    else:
+                        self.add_error(
+                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                                answer_id=identifier_reference["identifier"]
+                            ),
+                            group=group["id"],
+                        )
 
     def validate_answer_source_section(self, section, section_index):
         identifier_references = get_object_containing_key(section, "source")
@@ -223,7 +233,7 @@ class QuestionnaireValidator(Validator):
                         error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
                             answer_id=identifier_reference["identifier"]
                         ),
-                        section_name=section["id"],
+                        section=section["id"],
                     )
 
     def resolve_source_block_id(self, source_block):

@@ -418,29 +418,29 @@ def test_answer_as_source_referenced_before_created():
 
     expected_errors = [
         {
-            "group_name": "confirmation-block",
+            "group": "confirmation-group",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "group_name": "confirmation-block",
+            "block": "number-of-employees-split-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "group_name": "confirmation-block",
+            "block": "number-of-employees-split-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "group_name": "confirmation-block",
+            "block": "confirm-zero-employees-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
-            "section_name": "confirmation-section",
+            "section": "confirmation-section",
         },
     ]
 
