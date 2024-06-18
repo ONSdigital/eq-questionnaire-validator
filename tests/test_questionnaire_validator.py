@@ -418,6 +418,26 @@ def test_answer_as_source_referenced_before_created():
 
     expected_errors = [
         {
+            "block": "confirm-dob",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
+            "been added.",
+        },
+        {
+            "block": "confirm-dob",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
+            "been added.",
+        },
+        {
+            "block": "confirm-dob",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
+            "been added.",
+        },
+        {
+            "block": "confirm-dob",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
+            "been added.",
+        },
+        {
             "group": "confirmation-group",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",

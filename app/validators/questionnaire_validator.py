@@ -192,14 +192,14 @@ class QuestionnaireValidator(Validator):
                 if source_block_index > parent_block_index:
                     if parent_block_id:
                         self.add_error(
-                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                            error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                                 answer_id=identifier_reference["identifier"]
                             ),
                             block=parent_block_id,
                         )
                     else:
                         self.add_error(
-                            error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                            error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                                 answer_id=identifier_reference["identifier"]
                             ),
                             group=group["id"],
@@ -230,7 +230,7 @@ class QuestionnaireValidator(Validator):
                 )
                 if section_index < source_block_section_index:
                     self.add_error(
-                        error_messages.ANSWER_REFERENCED_BEFORE_ADDED.format(
+                        error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                             answer_id=identifier_reference["identifier"]
                         ),
                         section=section["id"],
