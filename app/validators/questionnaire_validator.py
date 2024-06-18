@@ -133,7 +133,7 @@ class QuestionnaireValidator(Validator):
 
     def check_invalid_html_tags(self, html_strings):
         strong = re.compile(r"<strong>(?:(?!</strong>).)*</strong>")
-        anchor = re.compile(r"<a href[^>]*>.*?</a>")
+        anchor = re.compile(r"<a [^>]*>.*?</a>")
         all_tags = re.compile(
             r"<([a-z0-9]+)(?=[\s>])(?:[^>=]|='[^']*'|=\"[^\"]*\"|=[^'\"\s]*)*\s?/?>"
         )
