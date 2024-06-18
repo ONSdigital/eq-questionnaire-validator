@@ -458,6 +458,11 @@ def test_answer_as_source_referenced_before_created():
             "it has been added.",
         },
         {
+            "block": "any-other-companies-or-branches",
+            "message": "Answer 'any-companies-or-branches-answer' referenced as source "
+            "before it has been added.",
+        },
+        {
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
             "section": "confirmation-section",
