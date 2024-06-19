@@ -418,54 +418,54 @@ def test_answer_as_source_referenced_before_created():
 
     expected_errors = [
         {
-            "block": "confirm-dob",
+            "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
         },
         {
-            "block": "confirm-dob",
+            "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
         },
         {
-            "block": "confirm-dob",
+            "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
         },
         {
-            "block": "confirm-dob",
+            "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
         },
         {
-            "group": "confirmation-group",
+            "group_d": "confirmation-group",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "block": "number-of-employees-split-block",
+            "block_id": "number-of-employees-split-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "block": "number-of-employees-split-block",
+            "block_id": "number-of-employees-split-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "block": "confirm-zero-employees-block",
+            "block_id": "confirm-zero-employees-block",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },
         {
-            "block": "any-other-companies-or-branches",
+            "block_id": "any-other-companies-or-branches",
             "message": "Answer 'any-companies-or-branches-answer' referenced as source "
             "before it has been added.",
         },
         {
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
-            "section": "confirmation-section",
+            "section_id": "confirmation-section",
         },
     ]
 

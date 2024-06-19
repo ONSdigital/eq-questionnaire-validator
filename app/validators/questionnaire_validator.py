@@ -195,14 +195,14 @@ class QuestionnaireValidator(Validator):
                             error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                                 answer_id=identifier_reference["identifier"]
                             ),
-                            block=parent_block_id,
+                            block_id=parent_block_id,
                         )
                     else:
                         self.add_error(
                             error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                                 answer_id=identifier_reference["identifier"]
                             ),
-                            group=group["id"],
+                            group_d=group["id"],
                         )
 
     def validate_answer_source_section(self, section, section_index):
@@ -233,7 +233,7 @@ class QuestionnaireValidator(Validator):
                         error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                             answer_id=identifier_reference["identifier"]
                         ),
-                        section=section["id"],
+                        section_id=section["id"],
                     )
 
     def resolve_source_block_id(self, source_block):
