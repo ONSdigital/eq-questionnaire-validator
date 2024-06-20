@@ -141,7 +141,7 @@ class QuestionnaireValidator(Validator):
         )
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
- 
+
     def validate_answer_references(self):
 
         # Handling blocks in group

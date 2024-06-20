@@ -418,7 +418,6 @@ def test_answer_as_source_referenced_before_created():
 
     expected_errors = [
         {
-
             "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
@@ -468,8 +467,12 @@ def test_answer_as_source_referenced_before_created():
             "it has been added.",
             "section_id": "confirmation-section",
         },
+    ]
+    validator.validate()
+    assert validator.errors == expected_errors
 
- def test_list_as_source_referenced_before_created():
+
+def test_list_as_source_referenced_before_created():
     filename = "schemas/invalid/test_invalid_list_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -528,7 +531,7 @@ def test_answer_as_source_referenced_before_created():
     assert validator.errors == expected_errors
 
 
-def test_list_as_source_referenced_before_created_repeating_blocks():
+def test_list_and_answer_source_referenced_before_created_repeating_blocks():
     filename = (
         "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
     )
@@ -536,11 +539,16 @@ def test_list_as_source_referenced_before_created_repeating_blocks():
 
     expected_errors = [
         {
+            "block_id": "any-other-companies-or-branches",
+            "message": "Answer 'company-or-branch-name' referenced as source before it "
+            "has been added.",
+        },
+        {
+            "block_id": "any-other-companies-or-branches",
             "list_id": "companies",
             "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "any-other-companies-or-branches",
             "section_id": "section-companies",
-        }
+        },
     ]
 
     validator.validate()
