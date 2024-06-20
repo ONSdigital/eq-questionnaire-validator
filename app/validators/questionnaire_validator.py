@@ -6,7 +6,11 @@ from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema, find_duplicates
+from app.validators.questionnaire_schema import (
+    QuestionnaireSchema,
+    find_duplicates,
+    get_object_containing_key,
+)
 from app.validators.sections.section_validator import SectionValidator
 from app.validators.validator import Validator
 
@@ -30,6 +34,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_list_references()
 
         for section in self.questionnaire_schema.sections:
             section_validator = SectionValidator(section, self.questionnaire_schema)
@@ -134,3 +139,37 @@ class QuestionnaireValidator(Validator):
         )
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
+
+    def validate_list_references(self):
+        lists_with_context = self.questionnaire_schema.lists_with_context
+
+        # We need to keep track of section index for: common_definitions.json#/section_enabled
+        for section_index, section in enumerate(self.questionnaire_schema.sections):
+            identifier_references = get_object_containing_key(section, "source")
+            for _, identifier_reference, parent_block in identifier_references:
+                if identifier_reference["source"] == "list":
+                    list_identifier = identifier_reference["identifier"]
+                    if parent_block:
+                        if (
+                            self.questionnaire_schema.block_ids.index(
+                                parent_block["id"]
+                            )
+                            < lists_with_context[list_identifier]["block_index"]
+                        ):
+                            self.add_error(
+                                error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
+                                list_id=list_identifier,
+                                section_id=section["id"],
+                                block_id=parent_block["id"],
+                            )
+                    elif (
+                        section_index
+                        < lists_with_context[list_identifier]["section_index"]
+                    ):
+                        # Section level "enabled" rule that can use list source,
+                        # check: common_definitions.json#/section_enabled
+                        self.add_error(
+                            error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
+                            list_name=list_identifier,
+                            section_id=section["id"],
+                        )
