@@ -418,6 +418,7 @@ def test_answer_as_source_referenced_before_created():
 
     expected_errors = [
         {
+
             "block_id": "confirm-dob",
             "message": "Answer 'date-of-birth-answer' referenced as source before it has "
             "been added.",
@@ -467,6 +468,79 @@ def test_answer_as_source_referenced_before_created():
             "it has been added.",
             "section_id": "confirmation-section",
         },
+
+ def test_list_as_source_referenced_before_created():
+    filename = "schemas/invalid/test_invalid_list_source_reference.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "list_id": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "individual-interstitial",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "individual-interstitial",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "list-status-2",
+            "section_id": "individuals-section",
+        },
+        {
+            "list_name": "household",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "section_id": "individuals-section",
+        },
+        {
+            "list_id": "utility-bills",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "dynamic-answer",
+            "section_id": "utility-bills-section",
+        },
+        {
+            "list_id": "utility-bills",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "dynamic-answer",
+            "section_id": "utility-bills-section",
+        },
+    ]
+
+    validator.validate()
+
+    assert validator.errors == expected_errors
+
+
+def test_list_as_source_referenced_before_created_repeating_blocks():
+    filename = (
+        "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
+    )
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "list_id": "companies",
+            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+            "block_id": "any-other-companies-or-branches",
+            "section_id": "section-companies",
+        }
     ]
 
     validator.validate()

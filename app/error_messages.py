@@ -43,3 +43,4 @@ PREVIEW_WITHOUT_INTRODUCTION_BLOCK = "No introduction block found. Introduction 
 ANSWER_REFERENCED_BEFORE_EXISTS = (
     "Answer '{answer_id}' referenced as source before it has been added."
 )
+LIST_REFERENCED_BEFORE_CREATED = "List referenced as source before it has been created."
