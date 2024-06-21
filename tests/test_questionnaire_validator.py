@@ -438,7 +438,7 @@ def test_answer_as_source_referenced_before_created():
             "been added.",
         },
         {
-            "group_d": "confirmation-group",
+            "group_id": "confirmation-group",
             "message": "Answer 'number-of-employees-total' referenced as source before "
             "it has been added.",
         },

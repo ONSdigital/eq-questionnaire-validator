@@ -203,7 +203,7 @@ class QuestionnaireValidator(Validator):
                             error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
                                 answer_id=identifier_reference["identifier"]
                             ),
-                            group_d=group["id"],
+                            group_id=group["id"],
                         )
 
     def validate_answer_source_section(self, section, section_index):
