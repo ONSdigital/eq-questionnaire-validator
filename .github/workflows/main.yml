@@ -9,7 +9,7 @@ jobs:
   docker-push:
       runs-on: ubuntu-22.04
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v4
         - name: Build
           run: |
             docker build -t onsdigital/eq-questionnaire-validator:latest .
