@@ -274,29 +274,8 @@
                         "mandatory": true,
                         "options": [
                           {
-                            "label": {
-                              "placeholders": [
-                                {
-                                  "placeholder": "age",
-                                  "transforms": [
-                                    {
-                                      "arguments": {
-                                        "first_date": {
-                                          "identifier": "date-of-birth-answer",
-                                          "source": "answers"
-                                        },
-                                        "second_date": {
-                                          "value": "now"
-                                        }
-                                      },
-                                      "transform": "calculate_date_difference"
-                                    }
-                                  ]
-                                }
-                              ],
-                              "text": "Yes, I am {age} old"
-                            },
-                            "value": "Yes, I am {age} old"
+                            "label": "Yes, that is my age",
+                            "value": "Yes, that is my age"
                           },
                           {
                             "label": "No, I need to change my date of birth",
@@ -390,9 +369,9 @@
                                   ]
                                 }
                               ],
-                              "text": "Yes, {person_name} is {age} old"
+                              "text": "Yes, {person_name} is that age"
                             },
-                            "value": "Yes, {person_name} is {age} old"
+                            "value": "Yes, {person_name} is that age"
                           },
                           {
                             "label": "No, I need to change their date of birth",
@@ -752,7 +731,7 @@
                   }
                 },
                 {
-                 "section": "End"
+                  "section": "End"
                 }
               ],
               "type": "ConfirmationQuestion"

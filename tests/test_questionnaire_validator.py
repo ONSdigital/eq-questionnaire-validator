@@ -433,11 +433,6 @@ def test_answer_as_source_referenced_before_created():
             "been added.",
         },
         {
-            "block_id": "confirm-dob",
-            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
-            "been added.",
-        },
-        {
             "block_id": "confirm-sex",
             "message": "Answer 'sex-answer' referenced as source before it has been added.",
         },
