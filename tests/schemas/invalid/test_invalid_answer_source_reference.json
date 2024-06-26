@@ -350,23 +350,6 @@
                                       "transform": "concatenate_list"
                                     }
                                   ]
-                                },
-                                {
-                                  "placeholder": "age",
-                                  "transforms": [
-                                    {
-                                      "arguments": {
-                                        "first_date": {
-                                          "identifier": "date-of-birth-answer",
-                                          "source": "answers"
-                                        },
-                                        "second_date": {
-                                          "value": "now"
-                                        }
-                                      },
-                                      "transform": "calculate_date_difference"
-                                    }
-                                  ]
                                 }
                               ],
                               "text": "Yes, {person_name} is that age"
