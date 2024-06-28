@@ -414,8 +414,8 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
 
 def test_answer_as_source_referenced_before_created():
     """
-    The schema being validated contains blocks with question variants,
-    resulting in duplicated expected errors due to the same answer source being referenced multiple times within that block.
+    The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block,
+    resulting in duplicated expected errors.
     """
     filename = "schemas/invalid/test_invalid_answer_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
