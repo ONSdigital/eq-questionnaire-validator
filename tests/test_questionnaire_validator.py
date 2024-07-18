@@ -97,6 +97,10 @@ def test_invalid_placeholder_answer_ids():
 
     expected_errors = [
         {
+            "identifier": "invalid-answer0",
+            "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+        },
+        {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer0",
             "json_path": "groups.[0].blocks.[0].question.answers.[1].description.placeholders.[0].value.identifier",
@@ -408,6 +412,60 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
     assert validator.errors == expected_errors
 
 
+def test_answer_as_source_referenced_before_created():
+    """
+    The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block,
+    resulting in duplicated expected errors.
+    """
+    filename = "schemas/invalid/test_invalid_answer_source_reference.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_errors = [
+        {
+            "block_id": "confirm-dob",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
+            "been added.",
+        },
+        {
+            "block_id": "confirm-sex",
+            "message": "Answer 'sex-answer' referenced as source before it has been "
+            "added.",
+        },
+        {
+            "group_id": "confirmation-group",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "block_id": "number-of-employees-split-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "block_id": "number-of-employees-split-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "block_id": "confirm-zero-employees-block",
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+        },
+        {
+            "block_id": "any-other-companies-or-branches",
+            "message": "Answer 'any-companies-or-branches-answer' referenced as source "
+            "before it has been added.",
+        },
+        {
+            "message": "Answer 'number-of-employees-total' referenced as source before "
+            "it has been added.",
+            "section_id": "confirmation-section",
+        },
+    ]
+    validator.validate()
+    assert validator.errors == expected_errors
+
+
 def test_list_as_source_referenced_before_created():
     filename = "schemas/invalid/test_invalid_list_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -463,11 +521,10 @@ def test_list_as_source_referenced_before_created():
     ]
 
     validator.validate()
-
     assert validator.errors == expected_errors
 
 
-def test_list_as_source_referenced_before_created_repeating_blocks():
+def test_list_and_answer_source_referenced_before_created_repeating_blocks():
     filename = (
         "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
     )
@@ -475,13 +532,17 @@ def test_list_as_source_referenced_before_created_repeating_blocks():
 
     expected_errors = [
         {
+            "block_id": "any-other-companies-or-branches",
+            "message": "Answer 'company-or-branch-name' referenced as source before it "
+            "has been added.",
+        },
+        {
+            "block_id": "any-other-companies-or-branches",
             "list_id": "companies",
             "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "any-other-companies-or-branches",
             "section_id": "section-companies",
-        }
+        },
     ]
 
     validator.validate()
-
     assert validator.errors == expected_errors
