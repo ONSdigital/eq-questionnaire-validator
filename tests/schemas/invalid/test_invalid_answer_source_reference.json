@@ -1,0 +1,1086 @@
+{
+  "mime_type": "application/json/ons/eq",
+  "language": "en",
+  "schema_version": "0.0.1",
+  "survey_id": "139",
+  "theme": "default",
+  "title": "Confirmation Question Test",
+  "data_version": "0.0.3",
+  "description": "A questionnaire to test answers referenced as source before it has been added.",
+  "navigation": {
+    "visible": true
+  },
+  "metadata": [
+    {
+      "name": "user_id",
+      "type": "string"
+    },
+    {
+      "name": "period_id",
+      "type": "string"
+    },
+    {
+      "name": "ru_name",
+      "type": "string"
+    },
+    {
+      "name": "trad_as",
+      "type": "string",
+      "optional": true
+    }
+  ],
+  "questionnaire_flow": {
+    "type": "Linear",
+    "options": {
+      "summary": {
+        "collapsible": false
+      }
+    }
+  },
+  "sections": [
+    {
+      "summary": {
+        "show_on_completion": true,
+        "items": [
+          {
+            "type": "List",
+            "for_list": "people",
+            "title": "Household members",
+            "add_link_text": "Add someone to this household",
+            "empty_list_text": "There are no householders"
+          }
+        ]
+      },
+      "id": "household-section",
+      "title": "Household",
+      "groups": [
+        {
+          "id": "household-group",
+          "title": "List",
+          "blocks": [
+            {
+              "id": "list-collector",
+              "type": "ListCollector",
+              "for_list": "people",
+              "question": {
+                "id": "confirmation-question",
+                "type": "General",
+                "title": "Does anyone else live here?",
+                "answers": [
+                  {
+                    "id": "anyone-else",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-person",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "edit_block": {
+                "id": "edit-person",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question",
+                  "type": "General",
+                  "title": "What is the name of the person?",
+                  "answers": [
+                    {
+                      "id": "first-name",
+                      "label": "First name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    },
+                    {
+                      "id": "last-name",
+                      "label": "Last name",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-person",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this person?",
+                  "answers": [
+                    {
+                      "id": "remove-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Household members",
+                "item_title": {
+                  "text": "{person_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "personal-details-section",
+      "title": "Personal Details",
+      "summary": {
+        "show_on_completion": true
+      },
+      "repeat": {
+        "for_list": "people",
+        "title": {
+          "text": "{person_name}",
+          "placeholders": [
+            {
+              "placeholder": "person_name",
+              "transforms": [
+                {
+                  "transform": "concatenate_list",
+                  "arguments": {
+                    "list_to_concatenate": [
+                      {
+                        "source": "answers",
+                        "identifier": "first-name"
+                      },
+                      {
+                        "source": "answers",
+                        "identifier": "last-name"
+                      }
+                    ],
+                    "delimiter": " "
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "groups": [
+        {
+          "id": "personal-details-group",
+          "title": "Personal Details",
+          "blocks": [
+            {
+              "id": "proxy",
+              "question": {
+                "answers": [
+                  {
+                    "default": "Yes",
+                    "id": "proxy-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "No, I’m answering for myself",
+                        "value": "No, I’m answering for myself"
+                      },
+                      {
+                        "label": "Yes",
+                        "value": "Yes"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "proxy-question",
+                "title": "Are you answering the questions on behalf of someone else?",
+                "type": "General"
+              },
+              "type": "Question"
+            },
+            {
+              "id": "confirm-dob",
+              "question": {
+                "answers": [
+                  {
+                    "id": "confirm-date-of-birth-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes, it is my age",
+                        "value": "Yes, it is my age"
+                      },
+                      {
+                        "label": "No, I need to change my date of birth",
+                        "value": "No, I need to change my date of birth"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "confirm-date-of-birth",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        }
+                      ]
+                    },
+                    {
+                      "placeholder": "age",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "first_date": {
+                              "identifier": "date-of-birth-answer",
+                              "source": "answers"
+                            },
+                            "second_date": {
+                              "value": "now"
+                            }
+                          },
+                          "transform": "calculate_date_difference"
+                        }
+                      ]
+                    }
+                  ],
+                  "text": "{person_name} is {age} old. Is this correct?"
+                },
+                "type": "General"
+              },
+              "routing_rules": [
+                {
+                  "block": "date-of-birth",
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "confirm-date-of-birth-answer"
+                      },
+                      "No, I need to change my date of birth"
+                    ]
+                  }
+                },
+                {
+                  "block": "date-of-birth",
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "confirm-date-of-birth-answer"
+                      },
+                      "No, I need to change my date of birth"
+                    ]
+                  }
+                },
+                {
+                  "block": "sex"
+                }
+              ],
+              "type": "ConfirmationQuestion"
+            },
+            {
+              "id": "date-of-birth",
+              "question": {
+                "answers": [
+                  {
+                    "id": "date-of-birth-answer",
+                    "mandatory": true,
+                    "maximum": {
+                      "value": "now"
+                    },
+                    "minimum": {
+                      "offset_by": {
+                        "years": -115
+                      },
+                      "value": "2019-10-13"
+                    },
+                    "type": "Date"
+                  }
+                ],
+                "guidance": {
+                  "contents": [
+                    {
+                      "description": "For example 31 12 1970"
+                    }
+                  ]
+                },
+                "id": "date-of-birth-question",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name_possessive",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        },
+                        {
+                          "arguments": {
+                            "string_to_format": {
+                              "source": "previous_transform"
+                            }
+                          },
+                          "transform": "format_possessive"
+                        }
+                      ]
+                    }
+                  ],
+                  "text": "What is <strong>{person_name_possessive}</strong> date of birth?"
+                },
+                "type": "General"
+              },
+              "type": "Question"
+            },
+            {
+              "id": "confirm-sex",
+              "question": {
+                "answers": [
+                  {
+                    "id": "confirm-sex-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes, that is correct",
+                        "value": "Yes, that is correct"
+                      },
+                      {
+                        "label": "No, that is not my sex",
+                        "value": "No, that is not my sex"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "id": "confirm-sex-question",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name_possessive",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        },
+                        {
+                          "arguments": {
+                            "string_to_format": {
+                              "source": "previous_transform"
+                            }
+                          },
+                          "transform": "format_possessive"
+                        }
+                      ]
+                    },
+                    {
+                      "placeholder": "sex-answer",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "sex-answer"
+                      }
+                    }
+                  ],
+                  "text": "Is <strong>{person_name_possessive}</strong> sex - {sex-answer}?"
+                },
+                "type": "General"
+              },
+              "routing_rules": [
+                {
+                  "block": "sex",
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "confirm-sex-answer"
+                      },
+                      "No, that is not my sex"
+                    ]
+                  }
+                },
+                {
+                  "section": "End"
+                }
+              ],
+              "type": "ConfirmationQuestion"
+            },
+            {
+              "id": "sex",
+              "question": {
+                "answers": [
+                  {
+                    "id": "sex-answer",
+                    "mandatory": false,
+                    "options": [
+                      {
+                        "label": "Female",
+                        "value": "Female"
+                      },
+                      {
+                        "label": "Male",
+                        "value": "Male"
+                      }
+                    ],
+                    "type": "Radio"
+                  }
+                ],
+                "guidance": {
+                  "contents": [
+                    {
+                      "description": "A question about gender will follow"
+                    }
+                  ]
+                },
+                "id": "sex-question",
+                "title": {
+                  "placeholders": [
+                    {
+                      "placeholder": "person_name_possessive",
+                      "transforms": [
+                        {
+                          "arguments": {
+                            "delimiter": " ",
+                            "list_to_concatenate": [
+                              {
+                                "source": "answers",
+                                "identifier": "first-name"
+                              },
+                              {
+                                "source": "answers",
+                                "identifier": "last-name"
+                              }
+                            ]
+                          },
+                          "transform": "concatenate_list"
+                        },
+                        {
+                          "arguments": {
+                            "string_to_format": {
+                              "source": "previous_transform"
+                            }
+                          },
+                          "transform": "format_possessive"
+                        }
+                      ]
+                    }
+                  ],
+                  "text": "What is <strong>{person_name_possessive}</strong> sex?"
+                },
+                "type": "General"
+              },
+              "type": "Question"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "confirmation-section",
+      "title": "Questions",
+      "groups": [
+        {
+          "id": "confirmation-group",
+          "title": "Confirmation Question Group",
+          "skip_conditions": {
+            "when": {
+              ">": [
+                {
+                  "source": "answers",
+                  "identifier": "number-of-employees-total"
+                },
+                3
+              ]
+            }
+          },
+          "blocks": [
+            {
+              "id": "number-of-employees-split-block",
+              "type": "Question",
+              "question": {
+                "answers": [
+                  {
+                    "id": "number-of-employees-more-30-hours",
+                    "label": "Number of employees working more than 30 hours per week",
+                    "mandatory": false,
+                    "type": "Number",
+                    "maximum": {
+                      "value": 1000
+                    }
+                  }
+                ],
+                "id": "number-of-employees-split-question",
+                "title": {
+                  "text": "Of the <strong>{number_of_employees_total}</strong> total employees employed, how many male and female employees worked the following hours?",
+                  "placeholders": [
+                    {
+                      "placeholder": "number_of_employees_total",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "number-of-employees-total"
+                      }
+                    }
+                  ]
+                },
+                "type": "General"
+              },
+              "routing_rules": [
+                {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "number-of-employees-total"
+                      },
+                      2
+                    ]
+                  },
+                  "section": "End"
+                },
+                {
+                  "block": "confirm-zero-employees-block"
+                }
+              ]
+            },
+            {
+              "type": "ConfirmationQuestion",
+              "id": "confirm-zero-employees-block",
+              "skip_conditions": {
+                "when": {
+                  ">": [
+                    {
+                      "source": "answers",
+                      "identifier": "number-of-employees-total"
+                    },
+                    0
+                  ]
+                }
+              },
+              "question": {
+                "type": "General",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "confirm-zero-employees-answer",
+                    "options": [
+                      {
+                        "label": "Yes this is correct",
+                        "value": "Yes this is correct"
+                      },
+                      {
+                        "label": "No I need to correct this",
+                        "value": "No I need to correct this"
+                      }
+                    ],
+                    "mandatory": true
+                  }
+                ],
+                "id": "confirm-zero-employees-question",
+                "title": {
+                  "text": "The current number of employees for {company_name} is <strong>0</strong>, is this correct?",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "transforms": [
+                        {
+                          "transform": "first_non_empty_item",
+                          "arguments": {
+                            "items": [
+                              {
+                                "source": "metadata",
+                                "identifier": "trad_as"
+                              },
+                              {
+                                "source": "metadata",
+                                "identifier": "ru_name"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "enabled": {
+        "when": {
+          "==": [
+            {
+              "identifier": "number-of-employees-total",
+              "source": "answers"
+            },
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "employees-section",
+      "title": "Questions",
+      "groups": [
+        {
+          "id": "employees-block",
+          "title": "Employees Question Group",
+          "blocks": [
+            {
+              "id": "number-of-employees-total-block",
+              "question": {
+                "answers": [
+                  {
+                    "id": "number-of-employees-total",
+                    "label": "Total number of employees",
+                    "mandatory": false,
+                    "type": "Number",
+                    "default": 0
+                  }
+                ],
+                "id": "number-of-employees-total-question",
+                "title": {
+                  "text": "How many employees work at {company_name}?",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "transforms": [
+                        {
+                          "transform": "first_non_empty_item",
+                          "arguments": {
+                            "items": [
+                              {
+                                "source": "metadata",
+                                "identifier": "trad_as"
+                              },
+                              {
+                                "source": "metadata",
+                                "identifier": "ru_name"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "type": "General"
+              },
+              "type": "Question"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "companies-section",
+      "title": "General insurance business",
+      "summary": {
+        "show_on_completion": true,
+        "items": [
+          {
+            "type": "List",
+            "for_list": "companies",
+            "title": "Companies or UK branches",
+            "item_anchor_answer_id": "company-or-branch-name",
+            "item_label": "Name of UK company or branch",
+            "add_link_text": "Add another UK company or branch",
+            "empty_list_text": "No UK company or branch added"
+          }
+        ],
+        "show_non_item_answers": true
+      },
+      "groups": [
+        {
+          "id": "group-companies",
+          "blocks": [
+            {
+              "id": "any-other-companies-or-branches",
+              "type": "ListCollector",
+              "for_list": "companies",
+              "question": {
+                "id": "any-other-companies-or-branches-question",
+                "type": "General",
+                "title": "Do you need to add any other UK companies or branches that undertake general insurance business?",
+                "answers": [
+                  {
+                    "id": "any-other-companies-or-branches-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock"
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "add_block": {
+                "id": "add-company",
+                "type": "ListAddQuestion",
+                "question": {
+                  "id": "add-question-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "repeating_blocks": [
+                {
+                  "id": "companies-repeating-block-1",
+                  "type": "ListRepeatingQuestion",
+                  "question": {
+                    "id": "companies-repeating-block-1-question",
+                    "type": "General",
+                    "title": {
+                      "text": "You answered {any_other} about adding companies. Give details about {company_name}",
+                      "placeholders": [
+                        {
+                          "placeholder": "any_other",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "any-companies-or-branches-answer"
+                          }
+                        },
+                        {
+                          "placeholder": "company_name",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "company-or-branch-name"
+                          }
+                        }
+                      ]
+                    },
+                    "answers": [
+                      {
+                        "id": "registration-number",
+                        "label": "Registration number (Mandatory)",
+                        "mandatory": true,
+                        "type": "Number",
+                        "maximum": {
+                          "value": 999,
+                          "exclusive": false
+                        },
+                        "decimal_places": 0
+                      },
+                      {
+                        "id": "registration-date",
+                        "label": "Date of Registration (Mandatory)",
+                        "mandatory": true,
+                        "type": "Date",
+                        "maximum": {
+                          "value": "now"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "companies-repeating-block-2",
+                  "type": "ListRepeatingQuestion",
+                  "question": {
+                    "id": "companies-repeating-block-2-question",
+                    "type": "General",
+                    "title": {
+                      "text": "Give details about how {company_name} has been trading over the past {date_difference}.",
+                      "placeholders": [
+                        {
+                          "placeholder": "company_name",
+                          "value": {
+                            "source": "answers",
+                            "identifier": "company-or-branch-name"
+                          }
+                        },
+                        {
+                          "placeholder": "date_difference",
+                          "transforms": [
+                            {
+                              "transform": "calculate_date_difference",
+                              "arguments": {
+                                "first_date": {
+                                  "source": "answers",
+                                  "identifier": "registration-date"
+                                },
+                                "second_date": {
+                                  "value": "now"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "answers": [
+                      {
+                        "type": "Radio",
+                        "label": "Has this company been trading in the UK? (Mandatory)",
+                        "id": "authorised-trader-uk-radio",
+                        "mandatory": true,
+                        "options": [
+                          {
+                            "label": "Yes",
+                            "value": "Yes"
+                          },
+                          {
+                            "label": "No",
+                            "value": "No"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Radio",
+                        "label": "Has this company been trading in the EU? (Not mandatory)",
+                        "id": "authorised-trader-eu-radio",
+                        "mandatory": false,
+                        "options": [
+                          {
+                            "label": "Yes",
+                            "value": "Yes"
+                          },
+                          {
+                            "label": "No",
+                            "value": "No"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "edit_block": {
+                "id": "edit-company",
+                "type": "ListEditQuestion",
+                "question": {
+                  "id": "edit-question-companies",
+                  "type": "General",
+                  "title": "What is the name and registration number of the company?",
+                  "answers": [
+                    {
+                      "id": "company-or-branch-name",
+                      "label": "Name of UK company or branch (Mandatory)",
+                      "mandatory": true,
+                      "type": "TextField"
+                    }
+                  ]
+                }
+              },
+              "remove_block": {
+                "id": "remove-company",
+                "type": "ListRemoveQuestion",
+                "question": {
+                  "id": "remove-question-companies",
+                  "type": "General",
+                  "title": "Are you sure you want to remove this company or UK branch?",
+                  "answers": [
+                    {
+                      "id": "remove-company-confirmation",
+                      "mandatory": true,
+                      "type": "Radio",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "Yes",
+                          "action": {
+                            "type": "RemoveListItemAndAnswers"
+                          }
+                        },
+                        {
+                          "label": "No",
+                          "value": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "summary": {
+                "title": "Companies or UK branches",
+                "item_title": {
+                  "text": "{company_name}",
+                  "placeholders": [
+                    {
+                      "placeholder": "company_name",
+                      "value": {
+                        "source": "answers",
+                        "identifier": "company-or-branch-name"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "ListCollectorDrivingQuestion",
+              "id": "any-companies-or-branches",
+              "for_list": "companies",
+              "question": {
+                "type": "General",
+                "id": "any-companies-or-branches-question",
+                "title": "Do any companies or branches within your United Kingdom group undertake general insurance business?",
+                "answers": [
+                  {
+                    "type": "Radio",
+                    "id": "any-companies-or-branches-answer",
+                    "mandatory": true,
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "Yes",
+                        "action": {
+                          "type": "RedirectToListAddBlock",
+                          "params": {
+                            "block_id": "add-company",
+                            "list_name": "companies"
+                          }
+                        }
+                      },
+                      {
+                        "label": "No",
+                        "value": "No"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "routing_rules": [
+                {
+                  "when": {
+                    "==": [
+                      {
+                        "source": "answers",
+                        "identifier": "any-companies-or-branches-answer"
+                      },
+                      "Yes"
+                    ]
+                  },
+                  "block": "any-other-companies-or-branches"
+                },
+                {
+                  "section": "End"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
