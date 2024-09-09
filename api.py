@@ -15,7 +15,7 @@ app = FastAPI()
 
 
 @app.get("/status")
-async def validate_schema():
+async def status():
     return Response(status_code=200)
 
 
@@ -37,8 +37,8 @@ async def validate_schema_from_url(url: str = ""):
     if url:
         logger.info("Validating schema from URL", url=url)
         try:
-            with urllib.request.urlopen(url) as url:
-                return await validate_schema(data=url.read().decode())
+            with urllib.request.urlopen(url) as opened_url:
+                return await validate_schema(data=opened_url.read().decode())
         except urllib.error.URLError:
             return (
                 Response(
@@ -74,7 +74,7 @@ async def validate_schema(data):
 
     except RequestException:
         logger.info("AJV Schema validator service unavailable")
-        return json.dumps(error="AJV Schema validator service unavailable")
+        return json.dumps(obj={}, error="AJV Schema validator service unavailable")
 
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate()
