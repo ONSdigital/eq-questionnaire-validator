@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y git \
  && rm -rf /var/lib/apt/lists/*
 
 RUN pip install "poetry==1.3.2"
+RUN pip install "fastapi[standard]"
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /usr/src/
@@ -17,7 +18,7 @@ RUN poetry install --no-dev
 
 EXPOSE 5000
 
-ENV FLASK_APP=api.py
+#ENV FLASK_APP=api.py
 
-ENTRYPOINT flask run --host 0.0.0.0
-
+#ENTRYPOINT ["fastapi", "run", "api.py", "--host", "0.0.0.0"]
+CMD ["gunicorn", "api:app", "-b", "0.0.0.0:5000", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "0"]

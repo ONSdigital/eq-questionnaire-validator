@@ -19,6 +19,7 @@ jsonpath-rw-ext = "^1.2.2"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.9.2"}
 fastapi = "^0.113.0"
 uvicorn = "^0.30.6"
+gunicorn = "^22.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.2"
