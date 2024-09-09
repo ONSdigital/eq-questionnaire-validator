@@ -1,8 +1,2 @@
-from flask import Blueprint, Response
+from fastapi import FastAPI, Response
 
-status_blueprint = Blueprint("status", __name__)
-
-
-@status_blueprint.route("/status", methods=["GET"])
-def validate_schema():
-    return Response(status=200)
