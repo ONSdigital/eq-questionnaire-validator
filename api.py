@@ -20,8 +20,8 @@ app = FastAPI()
 
 
 @app.get("/status")
-def validate_schema():
-    return Response(200)
+async def validate_schema():
+    return Response(status_code=200)
 
 
 
