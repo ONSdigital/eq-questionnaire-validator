@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y git \
  && rm -rf /var/lib/apt/lists/*
 
 RUN pip install "poetry==1.3.2"
-RUN pip install "fastapi[standard]"
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /usr/src/
