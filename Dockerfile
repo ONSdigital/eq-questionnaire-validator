@@ -17,5 +17,4 @@ RUN poetry install --no-dev
 
 EXPOSE 5000
 
-#ENTRYPOINT ["fastapi", "run", "api.py", "--host", "0.0.0.0"]
 CMD ["gunicorn", "api:app", "-b", "0.0.0.0:5000", "--workers", "20", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "0"]
