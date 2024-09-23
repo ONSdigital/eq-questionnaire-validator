@@ -17,4 +17,4 @@ RUN poetry install --no-dev
 
 EXPOSE 5000
 
-CMD ["gunicorn", "api:app", "-b", "0.0.0.0:5000", "--workers", "20", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "0"]
+CMD ["gunicorn", "api:app", "-b", "0.0.0.0:5000", "--workers", "5", "--threads", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "0"]
