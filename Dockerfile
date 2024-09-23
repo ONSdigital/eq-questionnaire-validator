@@ -15,7 +15,7 @@ WORKDIR /usr/src/
 COPY app /usr/src/app
 COPY api.py poetry.lock pyproject.toml /usr/src/
 
-RUN poetry install --no-dev
+RUN poetry install --only main
 
 EXPOSE 5000
 
