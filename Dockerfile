@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y git \
 
 RUN pip install \
     setuptools \
-    "poetry==1.3.2"
+    "poetry==1.8.3"
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /usr/src/
