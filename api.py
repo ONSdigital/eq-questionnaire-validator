@@ -94,4 +94,4 @@ async def validate_schema(data):
 
 
 if __name__ == "__main__":
-    uvicorn.run("api:app", workers=20, port=5001)
+    uvicorn.run("api:app", workers=20, port=5001, reload=True)
