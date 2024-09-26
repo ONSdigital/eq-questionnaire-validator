@@ -1,7 +1,7 @@
 import json
 import os
-import urllib
 from json import JSONDecodeError
+from urllib import error, request
 
 import requests
 import uvicorn
@@ -33,13 +33,13 @@ async def validate_schema_request_body(payload=Body(None)):
 
 
 @app.get("/validate")
-async def validate_schema_from_url(url=""):
+async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         try:
-            with urllib.request.urlopen(url) as opened_url:
+            with request.urlopen(url) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
-        except urllib.error.URLError:
+        except error.URLError:
             return Response(
                 status_code=404, content=f"Could not load schema at URL [{url}]"
             )
