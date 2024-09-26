@@ -33,18 +33,15 @@ async def validate_schema_request_body(payload=Body(None)):
 
 
 @app.get("/validate")
-async def validate_schema_from_url(url: str = ""):
+async def validate_schema_from_url(url=""):
     if url:
         logger.info("Validating schema from URL", url=url)
         try:
             with urllib.request.urlopen(url) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
         except urllib.error.URLError:
-            return (
-                Response(
-                    status_code=404,
-                    content=f"Could not load schema at URL [{url}]",
-                ),
+            return Response(
+                status_code=404, content=f"Could not load schema at URL [{url}]"
             )
 
 
@@ -65,9 +62,7 @@ async def validate_schema(data):
         ajv_response = requests.post(
             AJV_VALIDATOR_URL, json=json_to_validate, timeout=10
         )
-        ajv_response_dict = ajv_response.json()
-
-        if ajv_response_dict:
+        if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]
             logger.info("Schema validator returned errors", status=400)
             return response, 400
@@ -79,7 +74,7 @@ async def validate_schema(data):
     validator = QuestionnaireValidator(json_to_validate)
     validator.validate()
 
-    if len(validator.errors) > 0:
+    if validator.errors:
         response["errors"] = validator.errors
         logger.info("Questionnaire validator returned errors", status=400)
         response = Response(content=json.dumps(response), status_code=400)
@@ -94,4 +89,4 @@ async def validate_schema(data):
 
 
 if __name__ == "__main__":
-    uvicorn.run("api:app", workers=20, port=5001, reload=True)
+    uvicorn.run("api:app", port=5001, reload=True)
