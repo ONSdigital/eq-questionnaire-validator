@@ -32,13 +32,13 @@ tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
 name = "babel"
-version = "2.16.0"
+version = "2.14.0"
 description = "Internationalization utilities"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7"
 files = [
-    {file = "babel-2.16.0-py3-none-any.whl", hash = "sha256:368b5b98b37c06b7daf6696391c3240c938b37767d4584413e8438c5c435fa8b"},
-    {file = "babel-2.16.0.tar.gz", hash = "sha256:d1f3554ca26605fe173f3de0c65f750f5a42f924499bf134de6423582298e316"},
+    {file = "Babel-2.14.0-py3-none-any.whl", hash = "sha256:efb1a25b7118e67ce3a259bed20545c29cb68be8ad2c784c83689981b7a57287"},
+    {file = "Babel-2.14.0.tar.gz", hash = "sha256:6919867db036398ba21eb5c7a0f6b28ab8cbc3ae7a73a44ebe34ae74a4e7d363"},
 ]
 
 [package.extras]
@@ -345,16 +345,16 @@ graph = ["objgraph (>=1.7.2)"]
 profile = ["gprof2dot (>=2022.7.29)"]
 
 [[package]]
-name = "eq_translations"
-version = "4.9.2"
-description = "Translations infrastructure for EQ Questionnaire Runner"
+name = "eq-translations"
+version = "1.0.0"
+description = "ONS Digital eQ Translations App"
 optional = false
-python-versions = "*"
+python-versions = "^3.12"
 files = []
 develop = false
 
 [package.dependencies]
-babel = "*"
+babel = "==2.14.0"
 jsonpath-rw = "*"
 jsonpointer = "*"
 requests = "*"
@@ -364,8 +364,8 @@ tqdm = "*"
 [package.source]
 type = "git"
 url = "https://github.com/ONSDigital/eq-translations.git"
-reference = "v4.9.2"
-resolved_reference = "e8e433ce55afef4e87052f0a3018543148e949b7"
+reference = "v4.10.0"
+resolved_reference = "6da859996a85b675e32c673d3cc28ccca1dac41c"
 
 [[package]]
 name = "execnet"
@@ -1055,4 +1055,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0167b1643e451a0abd8e4106afc5caf9a8d3c049841e989aa621975e950e8ffc"
+content-hash = "41eae2b596a26b6e0be3022be141141d0015ef42097d50157b1c8407efa68cf1"
