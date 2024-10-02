@@ -96,7 +96,6 @@ class QuestionnaireValidator(Validator):
     def validate_smart_quotes(self):
         schema_object = SurveySchema(self.schema_element)
 
-        # pylint: disable=invalid-string-quote
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
 
         for translatable_item in schema_object.translatable_items:
