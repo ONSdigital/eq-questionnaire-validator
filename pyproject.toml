@@ -9,19 +9,21 @@ authors = ["ONSDigital"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-Flask = "^3.0.3"
+fastapi = "^0.113.0"
 jsonpointer = "^3.0.0"
 structlog = "^24.4.0"
 python-dateutil = "^2.9.0.post0"
 jsonschema = "4.4.0"
 jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
+uvicorn = "^0.30.6"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.0"}
+gunicorn = "^22.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.3"
 flake8 = "^7.1.1"
-pylint = "^3.2.7"
+pylint = "^3.3.1"
 pytest-cov = "^5.0.0"
 pytest-xdist = "^3.6.1"
 pytest-sugar = "^1.0.0"

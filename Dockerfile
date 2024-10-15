@@ -19,7 +19,8 @@ RUN poetry install --only main
 
 EXPOSE 5000
 
-ENV FLASK_APP=api.py
-
-ENTRYPOINT flask run --host 0.0.0.0
-
+CMD ["gunicorn", "api:app", \
+     "--bind", "0.0.0.0:5000", \
+     "--workers", "20", \
+     "--worker-class", "uvicorn.workers.UvicornWorker", \
+     "--timeout", "0"]
