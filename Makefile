@@ -10,7 +10,7 @@ start-ajv:
 	npm run start
 
 run: start-ajv
-	poetry run ./scripts/run_app.sh
+	poetry run python api.py
 
 lint: lint-python
 	npm run lint

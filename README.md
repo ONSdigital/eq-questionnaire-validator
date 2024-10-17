@@ -19,6 +19,14 @@ To run the app:
 ```
 make run
 ```
+If you want to run the app locally using multiple server workers set reload to "False" in the Uvicorn settings in api.py:
+```python
+uvicorn.run("api:app", workers=20, port=5001, reload=False)
+```
+The validator can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json):
+```
+http://localhost:5001/validate?url=...
+```
 
 ## Testing
 
