@@ -224,9 +224,6 @@
       "additionalProperties": false,
       "minProperties": 1
     },
-    "individual_response": {
-      "$ref": "individual_response/definitions.json#/individual_response"
-    },
     "sections": {
       "type": "array",
       "minItems": 1,
