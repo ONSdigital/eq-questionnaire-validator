@@ -45,6 +45,9 @@
     "description": {
       "$ref": "common_definitions.json#/non_empty_string"
     },
+    "sds_schema_version": {
+      "type": "string"
+    },
     "supplementary_data": {
       "type": "object",
       "description": "A object containing the lists which come from supplementary data",
