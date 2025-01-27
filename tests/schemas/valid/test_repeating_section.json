@@ -25,10 +25,6 @@
     "type": "Hub",
     "options": {}
   },
-  "individual_response": {
-    "for_list": "household",
-    "individual_section_id": "individual-section"
-  },
   "sections": [
     {
       "id": "section",
