@@ -2,6 +2,7 @@ import json
 import os
 from json import JSONDecodeError
 from urllib import error, request
+from urllib.parse import urlparse
 
 import requests
 import uvicorn
@@ -36,6 +37,20 @@ async def validate_schema_request_body(payload=Body(None)):
 async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
+        allowed_domains = ["github.com", "gist.github.com"]
+        parsed_url = request.urlparse(url)
+        if parsed_url.hostname not in allowed_domains:
+            return Response(
+                status_code=400,
+                content=f"URL domain [{parsed_url.hostname}] is not allowed",
+            )
+        if parsed_url.hostname == "github.com" and not parsed_url.path.startswith(
+            "/ONSdigital/"
+        ):
+            return Response(
+                status_code=400,
+                content="GitHub URLs must be from an ONSDigital repository",
+            )
         try:
             with request.urlopen(url) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
