@@ -38,7 +38,7 @@ async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         allowed_domains = ["github.com", "gist.github.com"]
-        parsed_url = request.urlparse(url)
+        parsed_url = urlparse(url)
         if parsed_url.hostname not in allowed_domains:
             return Response(
                 status_code=400,
