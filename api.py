@@ -37,7 +37,7 @@ async def validate_schema_request_body(payload=Body(None)):
 async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
-        allowed_domains = ["github.com", "gist.github.com"]
+        allowed_domains = ["github.com", "gist.github.com", "raw.githubusercontent.com"]
         parsed_url = urlparse(url)
         if parsed_url.hostname not in allowed_domains:
             return Response(
