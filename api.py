@@ -41,6 +41,7 @@ async def validate_schema_from_url(url=None):
             "github.com",
             "gist.githubusercontent.com",
             "raw.githubusercontent.com",
+            "onsdigital.uk,",
         ]
         parsed_url = urlparse(url)
         if parsed_url.hostname not in allowed_domains:
