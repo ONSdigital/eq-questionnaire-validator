@@ -38,7 +38,7 @@ async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         parsed_url = urlparse(url)
-        if not is_allowed_domain(parsed_url.hostname):
+        if not is_hostname_allowed(parsed_url.hostname):
             return Response(
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
@@ -102,7 +102,7 @@ async def validate_schema(data):
     return response
 
 
-def is_allowed_domain(hostname):
+def is_hostname_allowed(hostname):
     allowed_full_domains = [
         "github.com",
         "gist.githubusercontent.com",
