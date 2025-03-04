@@ -43,13 +43,7 @@ async def validate_schema_from_url(url=None):
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
             )
-        if parsed_url.hostname == "github.com" and not parsed_url.path.startswith(
-            "/ONSdigital/"
-        ):
-            return Response(
-                status_code=400,
-                content="GitHub URLs must be from an ONSDigital repository",
-            )
+
         try:
             with request.urlopen(url) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
@@ -103,15 +97,16 @@ async def validate_schema(data):
 
 
 def is_hostname_allowed(hostname):
-    allowed_full_domains = [
-        "github.com",
+    allowed_full_domains = {
         "gist.githubusercontent.com",
         "raw.githubusercontent.com",
-    ]
-    allowed_base_domains = ["onsdigital.uk"]
-    return hostname in allowed_full_domains or hostname.endswith(
-        f".{allowed_base_domains}"
-    )
+    }
+    allowed_base_domains = {"onsdigital.uk"}
+
+    if hostname in allowed_full_domains:
+        return True
+
+    return any(hostname.endswith(f".{base}") for base in allowed_base_domains)
 
 
 if __name__ == "__main__":
