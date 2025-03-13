@@ -103,10 +103,9 @@ def is_hostname_allowed(hostname):
     }
     allowed_base_domains = {"onsdigital.uk"}
 
-    if hostname in allowed_full_domains:
-        return True
-
-    return any(hostname.endswith(f".{base}") for base in allowed_base_domains)
+    return hostname in allowed_full_domains or any(
+        hostname.endswith(f".{base}") for base in allowed_base_domains
+    )
 
 
 if __name__ == "__main__":
