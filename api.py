@@ -2,6 +2,7 @@ import json
 import os
 from json import JSONDecodeError
 from urllib import error, request
+from urllib.parse import urlparse
 
 import requests
 import uvicorn
@@ -36,6 +37,13 @@ async def validate_schema_request_body(payload=Body(None)):
 async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
+        parsed_url = urlparse(url)
+        if not is_hostname_allowed(parsed_url.hostname):
+            return Response(
+                status_code=400,
+                content=f"URL domain [{parsed_url.hostname}] is not allowed",
+            )
+
         try:
             with request.urlopen(url) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
@@ -86,6 +94,18 @@ async def validate_schema(data):
     response = Response(content=json.dumps(response), status_code=200)
 
     return response
+
+
+def is_hostname_allowed(hostname):
+    allowed_full_domains = {
+        "gist.githubusercontent.com",
+        "raw.githubusercontent.com",
+    }
+    allowed_base_domains = {"onsdigital.uk"}
+
+    return hostname in allowed_full_domains or any(
+        hostname.endswith(f".{base}") for base in allowed_base_domains
+    )
 
 
 if __name__ == "__main__":

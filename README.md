@@ -23,7 +23,7 @@ If you want to run the app locally using multiple server workers set reload to "
 ```python
 uvicorn.run("api:app", workers=20, port=5001, reload=False)
 ```
-The validator can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json):
+The validator can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json). Only URLs from the ONSDigital organization are accepted.
 ```
 http://localhost:5001/validate?url=...
 ```
