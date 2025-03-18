@@ -98,8 +98,8 @@ async def validate_schema(data):
 
 def is_hostname_allowed(hostname):
     allowed_full_domains = {
-        "gist.githubusercontent.com",
-        "raw.githubusercontent.com",
+        "https://gist.githubusercontent.com/",
+        "https://raw.githubusercontent.com/",
     }
     allowed_base_domains = {"onsdigital.uk"}
 
