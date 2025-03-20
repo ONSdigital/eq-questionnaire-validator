@@ -12,7 +12,10 @@ curl -sSL https://install.python-poetry.org | python3 -
 poetry install
 ```
 
-## Running
+## Running 
+
+The AJV_VALIDATOR_URL is defaulted to  http://localhost:5002/validate". 
+You can configure the AJV_VALIDATOR_URL by passing it in as an environment variable. 
 
 To run the app:
 
@@ -27,6 +30,7 @@ The validator can be called directly in the browser using the "/validate" endpoi
 ```
 http://localhost:5001/validate?url=...
 ```
+
 
 ## Testing
 
