@@ -14,6 +14,15 @@ from app.validators.questionnaire_validator import QuestionnaireValidator
 
 app = FastAPI()
 
+ALLOWED_FULL_DOMAINS = {
+    "https://gist.githubusercontent.com/",
+    "https://raw.githubusercontent.com/",
+}
+
+ALLOWED_BASE_DOMAINS = {"onsdigital.uk"}
+
+ALLOWED_REPO_OWNERS = {"ONSdigital"}
+
 
 @app.get("/status")
 async def status():
@@ -38,7 +47,7 @@ async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         parsed_url = urlparse(url)
-        if not is_hostname_allowed(parsed_url.hostname):
+        if not is_hostname_allowed(parsed_url):
             return Response(
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
@@ -96,16 +105,23 @@ async def validate_schema(data):
     return response
 
 
-def is_hostname_allowed(hostname):
-    allowed_full_domains = {
-        "https://gist.githubusercontent.com/",
-        "https://raw.githubusercontent.com/",
-    }
-    allowed_base_domains = {"onsdigital.uk"}
-
-    return hostname in allowed_full_domains or any(
-        hostname.endswith(f".{base}") for base in allowed_base_domains
+def is_hostname_allowed(parsed_url):
+    base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
+    repo_owner = parsed_url.path.split("/")[1]
+    domain = parsed_url.netloc
+    logger.info(
+        f"Checking if hostname is allowed",
+        base_url=base_url,
+        repo_owner=repo_owner,
+        domain=domain,
     )
+    if base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS:
+        return True
+
+    if domain in ALLOWED_BASE_DOMAINS:
+        return True
+
+    return False
 
 
 if __name__ == "__main__":
