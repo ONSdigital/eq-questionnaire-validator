@@ -54,7 +54,7 @@ async def validate_schema_from_url(url=None):
             )
 
         try:
-            with request.urlopen(url) as opened_url:
+            with request.urlopen(parsed_url.geturl()) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             return Response(
@@ -107,7 +107,9 @@ async def validate_schema(data):
 
 def is_hostname_allowed(parsed_url):
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
-    repo_owner = parsed_url.path.split("/")[1]
+    repo_owner = (
+        parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
+    )
     domain = parsed_url.netloc
     logger.info(
         f"Checking if hostname is allowed",
