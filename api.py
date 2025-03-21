@@ -47,7 +47,7 @@ async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         parsed_url = urlparse(url)
-        if not is_hostname_allowed(parsed_url):
+        if not is_domain_allowed(parsed_url):
             return Response(
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
@@ -105,7 +105,7 @@ async def validate_schema(data):
     return response
 
 
-def is_hostname_allowed(parsed_url):
+def is_domain_allowed(parsed_url):
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
     repo_owner = (
         parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
