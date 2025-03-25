@@ -23,7 +23,10 @@ async def status():
 logger = get_logger()
 
 AJV_VALIDATOR_URL = os.getenv("AJV_VALIDATOR_URL", "http://localhost:5002/validate")
+parsed_url = urlparse(AJV_VALIDATOR_URL)
 
+if parsed_url.port != 5002:
+    raise ValueError(f"Invalid port in AJV_VALIDATOR_URL: expected 5002, got {parsed_url.port}")
 
 @app.post("/validate")
 async def validate_schema_request_body(payload=Body(None)):
