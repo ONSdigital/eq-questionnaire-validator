@@ -71,11 +71,6 @@ async def validate_schema(data):
         ajv_response = requests.post(
             AJV_VALIDATOR_URL, json=json_to_validate, timeout=10
         )
-        parsed_url = urlparse(AJV_VALIDATOR_URL)
-        if parsed_url.port != 5002:
-            raise ValueError(
-                f"Invalid port in AJV_VALIDATOR_URL: expected 5002, got {parsed_url.port}"
-            )
         if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]
             logger.info("Schema validator returned errors", status=400)
