@@ -14,8 +14,8 @@ poetry install
 
 ## Running 
 
-The `AJV_VALIDATOR_URL` is defaulted to  `http://localhost:5002/validate`. 
-You can configure the `AJV_VALIDATOR_URL` by passing it in as an environment variable. 
+The `AJV_VALIDATOR_URL` defaults to `http://localhost:5002/validate`.
+You can override this by setting the `AJV_VALIDATOR_SCHEME` and `AJV_VALIDATOR_HOST` environment variables.
 
 To run the app:
 
