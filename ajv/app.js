@@ -6,7 +6,7 @@ import Debug from "debug";
 
 const debug = Debug("ajv-schema-validator");
 const app = express();
-const AJV_VALIDATOR_PORT = process.env.AJV_VALIDATOR_PORT|| 5002
+const AJV_VALIDATOR_PORT = process.env.AJV_VALIDATOR_PORT || 5002;
 
 app.use(
   express.json({
