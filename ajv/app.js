@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-app.listen(PORT, () => {
+app.listen(AJV_VALIDATOR_PORT, () => {
   debug(`Server running on port  ${AJV_VALIDATOR_PORT}`);
 });
 
