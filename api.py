@@ -25,13 +25,14 @@ logger = get_logger()
 AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME", "http")
 AJV_VALIDATOR_HOST = os.getenv("AJV_VALIDATOR_HOST", "localhost")
 AJV_VALIDATOR_PORT = os.getenv("AJV_VALIDATOR_PORT", "5002")
+AJV_VALIDATOR_URL = os.getenv("AJV_VALIDATOR_URL", "")
 
-if AJV_VALIDATOR_HOST == "localhost":
+if AJV_VALIDATOR_URL == "":
     AJV_VALIDATOR_URL = (
         f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate"
     )
 else:
-    AJV_VALIDATOR_URL = f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}/validate"
+    AJV_VALIDATOR_URL = f"{AJV_VALIDATOR_URL}/validate"
 
 
 @app.post("/validate")
