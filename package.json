@@ -11,8 +11,8 @@
   "scripts": {
     "test": "mocha --require @babel/register ajv/tests/*.js --exit",
     "lint": "npm run lint:schemas && npm run lint:test-schemas && npm run lint:ajv",
-    "start": "DEBUG=ajv-schema-validator node ajv/app.js &",
-    "stop": "kill -9 $(lsof -ti:5002)",
+    "start": "source .env && DEBUG=ajv-schema-validator node ajv/app.js &",
+    "stop": "kill -9 $(lsof -ti:$(grep AJV_VALIDATOR_PORT .env | cut -d '=' -f2 || echo 5002))",
     "lint:schemas": "prettier --check \"schemas/**/*.json\" && eslint \"schemas/**/*.json\"",
     "lint:test-schemas": "prettier --check \"tests/schemas/**/*.json\" && eslint \"tests/schemas/**/*.json\"",
     "lint:ajv": "prettier --check \"ajv/**/*.js\" && eslint \"ajv/**/*.js\"",
