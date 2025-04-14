@@ -1,10 +1,11 @@
 .PHONY: build run lint test
+PORT ?= 5002
 
 build:
 	poetry run ./scripts/build.sh
 
 stop-ajv:
-	npm run stop
+	@PORT=$(PORT) npm run stop
 
 start-ajv:
 	npm run start
