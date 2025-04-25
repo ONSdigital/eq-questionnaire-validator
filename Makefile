@@ -1,5 +1,4 @@
 .PHONY: build run lint test
-PORT ?= 5002
 
 build:
 	poetry run ./scripts/build.sh

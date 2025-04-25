@@ -103,10 +103,10 @@ Run the ajv (server) based version of validator.
 ```
 make start-ajv
 ```
-To stop the ajv (server) based version of validator. `PORT` is defaulted to 5002.
+To stop the ajv (server) based version of validator.
 
 ```
-make stop-ajv [PORT=<port-number>]
+make stop-ajv PORT=<port-number>
 ```
 
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
