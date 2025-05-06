@@ -1,10 +1,15 @@
 .PHONY: build run lint test
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 
 build:
 	poetry run ./scripts/build.sh
 
 stop-ajv:
-	@PORT=$(PORT) npm run stop
+	@PORT=$(AJV_VALIDATOR_PORT) npm run stop
 
 start-ajv:
 	npm run start
