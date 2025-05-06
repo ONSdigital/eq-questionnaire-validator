@@ -103,10 +103,10 @@ Run the ajv (server) based version of validator.
 ```
 make start-ajv
 ```
-To stop the ajv (server) based version of validator.
+To stop the ajv (server) based version of validator. You will need to add the AJV_VALIDATOR_PORT number to your .env file.
 
 ```
-make stop-ajv PORT=<port-number>
+make stop-ajv
 ```
 
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
