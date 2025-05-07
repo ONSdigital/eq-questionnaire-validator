@@ -9,7 +9,7 @@ build:
 	poetry run ./scripts/build.sh
 
 stop-ajv:
-	@PORT=$(AJV_VALIDATOR_PORT) npm run stop
+	@AJV_VALIDATOR_PORT=$(AJV_VALIDATOR_PORT) npm run stop
 
 start-ajv:
 	npm run start

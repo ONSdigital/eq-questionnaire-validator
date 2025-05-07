@@ -12,7 +12,7 @@
     "test": "mocha --require @babel/register ajv/tests/*.js --exit",
     "lint": "npm run lint:schemas && npm run lint:test-schemas && npm run lint:ajv",
     "start": "DEBUG=ajv-schema-validator node ajv/app.js &",
-    "stop": "kill -9 $(lsof -ti:$PORT)",
+    "stop": "kill -9 $(lsof -ti:$AJV_VALIDATOR_PORT)",
     "lint:schemas": "prettier --check \"schemas/**/*.json\" && eslint \"schemas/**/*.json\"",
     "lint:test-schemas": "prettier --check \"tests/schemas/**/*.json\" && eslint \"tests/schemas/**/*.json\"",
     "lint:ajv": "prettier --check \"ajv/**/*.js\" && eslint \"ajv/**/*.js\"",
