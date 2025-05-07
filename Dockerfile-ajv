@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:24
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -11,7 +11,7 @@ COPY schemas ../schemas
 
 RUN npm install --production=true
 
-ENV PORT=5002
+ENV AJV_VALIDATOR_PORT=5002
 ENV DEBUG=ajv-schema-validator
 
 WORKDIR /usr/src
