@@ -6,6 +6,7 @@ name = "eq-questionnaire-validator"
 version = "0.1.0"
 description = "API for questionnaire schema validation"
 authors = ["ONSDigital"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -20,7 +21,7 @@ uvicorn = "^0.30.6"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.0"}
 gunicorn = "^23.0.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 flake8 = "^7.1.1"
 pylint = "^3.3.1"
