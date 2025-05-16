@@ -18,7 +18,7 @@ jsonschema = "4.4.0"
 jsonpath-rw = "^1.4.0"
 jsonpath-rw-ext = "^1.2.2"
 uvicorn = "^0.30.6"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.1"}
+eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.2"}
 gunicorn = "^23.0.0"
 
 [tool.poetry.group.dev.dependencies]

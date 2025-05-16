@@ -393,8 +393,8 @@ tqdm = "*"
 [package.source]
 type = "git"
 url = "https://github.com/ONSDigital/eq-translations.git"
-reference = "v4.10.1"
-resolved_reference = "30f971b37ed5f4070fb3aa95895c683730a711ac"
+reference = "v4.10.2"
+resolved_reference = "37fa24c87da1200405124ed2029651f3a68e3d97"
 
 [[package]]
 name = "execnet"
@@ -1253,4 +1253,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.5.0)
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "6e4458f4ff07ce2b8c0f01663b24b6248741aa3f446a5b8ef8b20a8c9024fce7"
+content-hash = "59de68e9fcc014274d23f767f49db40968c763d3febbe8443e89d41f7d288363"
