@@ -6,6 +6,7 @@ import Debug from "debug";
 
 const debug = Debug("ajv-schema-validator");
 const app = express();
+const AJV_VALIDATOR_PORT = process.env.AJV_VALIDATOR_PORT || 5002;
 
 app.use(
   express.json({
@@ -13,8 +14,8 @@ app.use(
   })
 );
 
-app.listen(5002, () => {
-  debug("Server running on port 5002");
+app.listen(AJV_VALIDATOR_PORT, () => {
+  debug(`Server running on port  ${AJV_VALIDATOR_PORT}`);
 });
 
 const ajValidator = new Ajv2020({
