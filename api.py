@@ -31,9 +31,13 @@ async def status():
 
 logger = get_logger()
 
-AJV_HOST = os.getenv("AJV_HOST", "localhost")
-
-AJV_VALIDATOR_URL = f"http://{AJV_HOST}:5002/validate"
+AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME", "http")
+AJV_VALIDATOR_HOST = os.getenv("AJV_VALIDATOR_HOST", "localhost")
+AJV_VALIDATOR_PORT = os.getenv("AJV_VALIDATOR_PORT", "5002")
+AJV_VALIDATOR_URL = os.getenv(
+    "AJV_VALIDATOR_URL",
+    f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
+)
 
 
 @app.post("/validate")

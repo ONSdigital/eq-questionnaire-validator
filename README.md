@@ -8,11 +8,18 @@ It is recommended that you use [Pyenv](https://github.com/pyenv/pyenv) to manage
 
 ### Install Poetry
 ```
-curl -sSL https://install.python-poetry.org | python3 - 
+curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
 poetry install
 ```
 
-## Running
+## Running 
+
+The `AJV_VALIDATOR_URL` defaults to `http://localhost:5002/validate`.
+
+You can override this by setting the `AJV_VALIDATOR_SCHEME` , `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
+
+Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
+
 
 To run the app:
 
@@ -27,6 +34,7 @@ The validator can be called directly in the browser using the "/validate" endpoi
 ```
 http://localhost:5001/validate?url=...
 ```
+
 
 ## Testing
 
@@ -95,7 +103,7 @@ Run the ajv (server) based version of validator.
 ```
 make start-ajv
 ```
-To stop the ajv (server) based version of validator.
+To stop the ajv (server) based version of validator. You will need to add the AJV_VALIDATOR_PORT number to your .env file.
 
 ```
 make stop-ajv
