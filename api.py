@@ -115,7 +115,9 @@ def is_domain_allowed(parsed_url, domain):
     repo_owner = (
         parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
     )
-    return (base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS) or domain in ALLOWED_BASE_DOMAINS
+    return (
+        base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
+    ) or domain in ALLOWED_BASE_DOMAINS
 
 
 if __name__ == "__main__":
