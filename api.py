@@ -12,8 +12,6 @@ from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
 
-app = FastAPI()
-
 ALLOWED_FULL_DOMAINS = {
     "https://gist.githubusercontent.com/",
     "https://raw.githubusercontent.com/",
@@ -23,14 +21,6 @@ ALLOWED_BASE_DOMAINS = {"onsdigital.uk"}
 
 ALLOWED_REPO_OWNERS = {"ONSdigital"}
 
-
-@app.get("/status")
-async def status():
-    return Response(status_code=200)
-
-
-logger = get_logger()
-
 AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME", "http")
 AJV_VALIDATOR_HOST = os.getenv("AJV_VALIDATOR_HOST", "localhost")
 AJV_VALIDATOR_PORT = os.getenv("AJV_VALIDATOR_PORT", "5002")
@@ -38,6 +28,16 @@ AJV_VALIDATOR_URL = os.getenv(
     "AJV_VALIDATOR_URL",
     f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
 )
+
+app = FastAPI()
+
+
+@app.get("/status")
+async def status():
+    return Response(status_code=200)
+
+
+logger = get_logger()
 
 
 @app.post("/validate")
