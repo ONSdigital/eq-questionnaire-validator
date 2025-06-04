@@ -12,23 +12,34 @@ from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
 
+ALLOWED_FULL_DOMAINS = {
+    "https://gist.githubusercontent.com/",
+    "https://raw.githubusercontent.com/",
+}
+
+ALLOWED_BASE_DOMAINS = {"onsdigital.uk"}
+
+ALLOWED_REPO_OWNERS = {"ONSdigital"}
+
+AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME", "http")
+
+AJV_VALIDATOR_HOST = os.getenv("AJV_VALIDATOR_HOST", "localhost")
+
+AJV_VALIDATOR_PORT = os.getenv("AJV_VALIDATOR_PORT", "5002")
+
+AJV_VALIDATOR_URL = os.getenv(
+    "AJV_VALIDATOR_URL",
+    f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
+)
+
 app = FastAPI()
+
+logger = get_logger()
 
 
 @app.get("/status")
 async def status():
     return Response(status_code=200)
-
-
-logger = get_logger()
-
-AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME", "http")
-AJV_VALIDATOR_HOST = os.getenv("AJV_VALIDATOR_HOST", "localhost")
-AJV_VALIDATOR_PORT = os.getenv("AJV_VALIDATOR_PORT", "5002")
-AJV_VALIDATOR_URL = os.getenv(
-    "AJV_VALIDATOR_URL",
-    f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
-)
 
 
 @app.post("/validate")
@@ -42,14 +53,15 @@ async def validate_schema_from_url(url=None):
     if url:
         logger.info("Validating schema from URL", url=url)
         parsed_url = urlparse(url)
-        if not is_hostname_allowed(parsed_url.hostname):
+        domain = parsed_url.netloc
+        if not is_domain_allowed(parsed_url, domain):
             return Response(
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
             )
 
         try:
-            with request.urlopen(url) as opened_url:
+            with request.urlopen(parsed_url.geturl()) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             return Response(
@@ -100,16 +112,14 @@ async def validate_schema(data):
     return response
 
 
-def is_hostname_allowed(hostname):
-    allowed_full_domains = {
-        "gist.githubusercontent.com",
-        "raw.githubusercontent.com",
-    }
-    allowed_base_domains = {"onsdigital.uk"}
-
-    return hostname in allowed_full_domains or any(
-        hostname.endswith(f".{base}") for base in allowed_base_domains
+def is_domain_allowed(parsed_url, domain):
+    base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
+    repo_owner = (
+        parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
     )
+    return (
+        base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
+    ) or domain in ALLOWED_BASE_DOMAINS
 
 
 if __name__ == "__main__":
