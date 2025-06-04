@@ -36,9 +36,11 @@ app = FastAPI()
 
 logger = get_logger()
 
+
 @app.get("/status")
 async def status():
     return Response(status_code=200)
+
 
 @app.post("/validate")
 async def validate_schema_request_body(payload=Body(None)):
