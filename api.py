@@ -17,7 +17,7 @@ ALLOWED_FULL_DOMAINS = {
     "https://raw.githubusercontent.com/",
 }
 
-ALLOWED_BASE_DOMAINS = {"onsdigital.uk"}
+ALLOWED_BASE_DOMAINS = {"onsdigital.uk", "localhost"}
 
 ALLOWED_REPO_OWNERS = {"ONSdigital"}
 
