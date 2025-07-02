@@ -17,8 +17,13 @@ start-ajv:
 run: start-ajv
 	poetry run python api.py
 
+.PHONY: clean
+clean: ## Clean the temporary files.
+	rm -rf .ruff_cache
+
 lint: lint-python
 	npm run lint
+	poetry run ruff check .
 
 lint-python:
 	poetry run ./scripts/run_lint_python.sh
