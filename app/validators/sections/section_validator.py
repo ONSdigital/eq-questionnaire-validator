@@ -18,6 +18,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 class SectionValidator(Validator):
     """Validates a section schema element."""
+
     def __init__(self, schema_element, questionnaire_schema):
         """Initializes the SectionValidator."""
         super().__init__(schema_element)
@@ -67,7 +68,9 @@ class SectionValidator(Validator):
 
         when = section_enabled["when"]
         when_validator = RulesValidator(
-            when, self.section["id"], self.questionnaire_schema,
+            when,
+            self.section["id"],
+            self.questionnaire_schema,
         )
         self.errors += when_validator.validate()
 
@@ -79,7 +82,9 @@ class SectionValidator(Validator):
     def validate_skip_conditions(self, skip_condition, origin_id):
         """Validates the skip conditions for a schema element."""
         when_validator = RulesValidator(
-            skip_condition["when"], origin_id, self.questionnaire_schema,
+            skip_condition["when"],
+            origin_id,
+            self.questionnaire_schema,
         )
         self.errors += when_validator.validate()
 
@@ -136,7 +141,8 @@ class SectionValidator(Validator):
 
         if question:
             question_validator = get_question_validator(
-                question, self.questionnaire_schema,
+                question,
+                self.questionnaire_schema,
             )
 
             self.errors += question_validator.validate()
@@ -156,13 +162,16 @@ class SectionValidator(Validator):
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
             self.add_error(
-                error_messages.VARIANTS_HAS_ONE_VARIANT, block_id=block["id"],
+                error_messages.VARIANTS_HAS_ONE_VARIANT,
+                block_id=block["id"],
             )
 
         for variant in all_variants:
             if when_clause := variant.get("when"):
                 when_validator = RulesValidator(
-                    when_clause, self.section["id"], self.questionnaire_schema,
+                    when_clause,
+                    self.section["id"],
+                    self.questionnaire_schema,
                 )
                 self.errors += when_validator.validate()
 
@@ -231,7 +240,8 @@ class SectionValidator(Validator):
         # as the latter cannot do standard block validation
         for repeating_block in block.get("repeating_blocks", []):
             block_validator = get_block_validator(
-                repeating_block, self.questionnaire_schema,
+                repeating_block,
+                self.questionnaire_schema,
             )
             self.errors += block_validator.validate()
 
@@ -337,12 +347,15 @@ class SectionValidator(Validator):
 
             for answer_source in item.get("related_answers", []):
                 self._validate_related_answer_belong_to_list_collector(
-                    answer_source, list_collector_answer_ids_for_list,
+                    answer_source,
+                    list_collector_answer_ids_for_list,
                 )
                 self._validate_related_answer_has_label(answer_source)
 
     def _validate_related_answer_belong_to_list_collector(
-        self, answer_source, list_collector_answer_ids,
+        self,
+        answer_source,
+        list_collector_answer_ids,
     ):
         if answer_source["identifier"] not in list_collector_answer_ids:
             self.add_error(
@@ -351,12 +364,16 @@ class SectionValidator(Validator):
             )
 
     def _validate_item_anchor_answer_id_belongs_to_list_collector(
-        self, anchor_answer_id, list_collector_answer_ids, list_name,
+        self,
+        anchor_answer_id,
+        list_collector_answer_ids,
+        list_name,
     ):
         if anchor_answer_id not in list_collector_answer_ids:
             self.add_error(
                 error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR.format(
-                    answer_id=anchor_answer_id, list_name=list_name,
+                    answer_id=anchor_answer_id,
+                    list_name=list_name,
                 ),
                 id=anchor_answer_id,
             )

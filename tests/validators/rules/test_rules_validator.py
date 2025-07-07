@@ -83,7 +83,9 @@ def test_validate_options(operator_name, first_argument, second_argument):
     ],
 )
 def test_validate_options_null_value_is_valid(
-    operator_name, first_argument, second_argument,
+    operator_name,
+    first_argument,
+    second_argument,
 ):
     """Tests that the SectionValidator validates null values as valid."""
     rule = {operator_name: [first_argument, second_argument]}
@@ -145,7 +147,8 @@ def test_validate_date_operator_non_date_answer():
     date_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context,
+        date_operator,
+        answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -165,7 +168,8 @@ def test_validate_date_operator_with_offset():
     }
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context,
+        date_operator,
+        answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -360,7 +364,8 @@ def test_map_operator_without_self_reference():
     ],
 )
 def test_self_reference_outside_map_operator_without_allow_self_reference(
-    operator_name, operands,
+    operator_name,
+    operands,
 ):
     """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     rule = {operator_name: operands}
@@ -392,7 +397,8 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     ],
 )
 def test_self_reference_outside_map_operator_with_allow_self_reference(
-    operator_name, operands,
+    operator_name,
+    operands,
 ):
     """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     rule = {operator_name: operands}

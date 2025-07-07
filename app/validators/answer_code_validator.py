@@ -6,6 +6,7 @@ from app.validators.validator import Validator
 
 class AnswerCodeValidator(Validator):
     """Validates answer codes in a questionnaire schema."""
+
     INCORRECT_DATA_VERSION_FOR_ANSWER_CODES = (
         "Answer codes are only supported in data version 0.0.3"
     )
@@ -87,7 +88,8 @@ class AnswerCodeValidator(Validator):
             if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
                 if answer_id in self.answer_codes_answer_ids:
                     self.add_error(
-                        self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR, answer_id=answer_id,
+                        self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR,
+                        answer_id=answer_id,
                     )
                 continue
 
@@ -143,7 +145,8 @@ class AnswerCodeValidator(Validator):
                     values=values,
                 )
                 self.validate_incorrect_values_in_answer_options(
-                    answer_codes_for_options=answer_codes_for_options, values=values,
+                    answer_codes_for_options=answer_codes_for_options,
+                    values=values,
                 )
 
             else:
@@ -158,7 +161,11 @@ class AnswerCodeValidator(Validator):
                         )
 
     def validate_missing_answer_codes_for_answer_options(
-        self, answer, answer_id, answer_codes_for_options, values,
+        self,
+        answer,
+        answer_id,
+        answer_codes_for_options,
+        values,
     ):
         """Validates that answer codes are set for each answer option."""
         if len(values) != len(answer_codes_for_options) and all(
@@ -194,7 +201,9 @@ class AnswerCodeValidator(Validator):
                 )
 
     def validate_incorrect_values_in_answer_options(
-        self, answer_codes_for_options, values,
+        self,
+        answer_codes_for_options,
+        values,
     ):
         """Validates that the values in answer codes match the values in answer options."""
         answer_values = set()

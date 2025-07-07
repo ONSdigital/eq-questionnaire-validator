@@ -6,6 +6,7 @@ from app.validators.questions.question_validator import QuestionValidator
 
 class MutuallyExclusiveQuestionValidator(QuestionValidator):
     """Validator for mutually exclusive questions in a questionnaire schema."""
+
     question = {}
     MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = (
         "MutuallyExclusive question type cannot contain mandatory answers."
@@ -29,7 +30,8 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
             AnswerType.RADIO,
         }:
             self.add_error(
-                self.INVALID_EXCLUSIVE_ANSWER, answer_id=self.answers[-1]["id"],
+                self.INVALID_EXCLUSIVE_ANSWER,
+                answer_id=self.answers[-1]["id"],
             )
 
         if any(

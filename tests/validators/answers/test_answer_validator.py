@@ -21,7 +21,8 @@ def test_number_of_decimals():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_decimals()
@@ -46,7 +47,8 @@ def test_invalid_single_date_period():
     }
 
     answer_validator = DateAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     assert not answer_validator.is_offset_date_valid()

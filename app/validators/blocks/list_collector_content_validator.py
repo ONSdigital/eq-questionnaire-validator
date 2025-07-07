@@ -6,6 +6,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 class ListCollectorContentValidator(BlockValidator):
     """ListCollectorContentValidator validates the content of list collector blocks in a questionnaire schema."""
+
     def validate(self):
         """Validates the list collector content block."""
         super().validate()

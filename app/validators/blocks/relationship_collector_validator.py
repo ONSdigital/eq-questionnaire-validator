@@ -7,6 +7,7 @@ from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValida
 
 class RelationshipCollectorValidator(BlockValidator):
     """RelationshipCollectorValidator validates relationship collector blocks in a questionnaire schema."""
+
     RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE = (
         "Only answers of type Relationship are valid in RelationshipCollector blocks."
     )
@@ -53,6 +54,7 @@ class RelationshipCollectorValidator(BlockValidator):
         """Validate the unrelated block."""
         if "unrelated_block" in self.block:
             block_validator = UnrelatedBlockValidator(
-                self.block["unrelated_block"], self.questionnaire_schema,
+                self.block["unrelated_block"],
+                self.questionnaire_schema,
             )
             self.errors += block_validator.validate()

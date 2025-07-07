@@ -30,7 +30,9 @@ def test_invalid_source_reference(value_source):
     }
 
     validator = ValueSourceValidator(
-        value_source, "some.json.path", questionnaire_schema,
+        value_source,
+        "some.json.path",
+        questionnaire_schema,
     )
     validator.validate()
 

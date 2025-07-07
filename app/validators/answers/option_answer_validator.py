@@ -15,6 +15,7 @@ MIN_OPTIONS_BY_ANSWER_TYPE = {
 
 class OptionAnswerValidator(AnswerValidator):
     """Validates an option answer."""
+
     DUPLICATE_LABEL = "Duplicate label found"
     DUPLICATE_VALUE = "Duplicate value found"
     LIST_NAME_MISSING = "List name defined in action params does not exist"

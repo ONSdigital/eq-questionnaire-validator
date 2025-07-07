@@ -62,7 +62,8 @@ def resolve_answer_source_json_type(answer_id: str, schema: QuestionnaireSchema)
 
 
 def resolve_calculated_summary_source_json_type(
-    block_id: str, schema: QuestionnaireSchema,
+    block_id: str,
+    schema: QuestionnaireSchema,
 ) -> str:
     """Resolves the JSON type for a calculated summary source."""
     block = schema.get_block(block_id)
@@ -76,7 +77,8 @@ def resolve_calculated_summary_source_json_type(
 
 
 def resolve_grand_calculated_summary_source_json_type(
-    block_id: str, schema: QuestionnaireSchema,
+    block_id: str,
+    schema: QuestionnaireSchema,
 ) -> str:
     """Resolves the JSON type for a grand calculated summary source."""
     block = schema.get_block(block_id)
@@ -85,7 +87,8 @@ def resolve_grand_calculated_summary_source_json_type(
 
 
 def resolve_metadata_source_json_type(
-    identifier: str | None, schema: QuestionnaireSchema,
+    identifier: str | None,
+    schema: QuestionnaireSchema,
 ) -> str:
     """Resolves the JSON type for a metadata source."""
     if identifier:
@@ -101,7 +104,8 @@ def resolve_list_source_json_type(selector: str | None) -> str:
 
 
 def resolve_value_source_json_type(
-    value_source: dict[str, str], schema: QuestionnaireSchema,
+    value_source: dict[str, str],
+    schema: QuestionnaireSchema,
 ) -> str:
     """Resolves the JSON type for a value source."""
     source = value_source["source"]

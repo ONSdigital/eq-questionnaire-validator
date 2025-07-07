@@ -24,7 +24,9 @@ default_answer_with_context = {
 def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None):
     """Returns a RulesValidator instance."""
     return RulesValidator(
-        rule, ORIGIN_ID, get_mock_schema(questionnaire_schema, answers_with_context),
+        rule,
+        ORIGIN_ID,
+        get_mock_schema(questionnaire_schema, answers_with_context),
     )
 
 
@@ -47,7 +49,10 @@ def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None)
 )
 @pytest.mark.parametrize("operator_name", ["<", "<=", ">", ">="])
 def test_operator_argument_type_mismatch(
-    first_argument, second_argument, types, operator_name,
+    first_argument,
+    second_argument,
+    types,
+    operator_name,
 ):
     """Tests that comparison operators do not allow invalid argument types."""
     rule = {operator_name: [first_argument, second_argument]}
@@ -84,7 +89,10 @@ def test_operator_argument_type_mismatch(
 )
 @pytest.mark.parametrize("operator_name", ["!=", "=="])
 def test_equality_operator_argument_type_mismatch(
-    first_argument, second_argument, types, operator_name,
+    first_argument,
+    second_argument,
+    types,
+    operator_name,
 ):
     """Tests that equality operators do not allow invalid argument types."""
     rule = {operator_name: [first_argument, second_argument]}
@@ -109,7 +117,9 @@ def test_equality_operator_argument_type_mismatch(
 @pytest.mark.parametrize("first_argument, second_argument", [(1, None), (None, 1)])
 @pytest.mark.parametrize("operator_name", ["!=", "=="])
 def test_equality_operator_allows_null_mismatch(
-    first_argument, second_argument, operator_name,
+    first_argument,
+    second_argument,
+    operator_name,
 ):
     """Tests that equality operators allow null mismatches."""
     rule = {operator_name: [first_argument, second_argument]}

@@ -21,7 +21,8 @@ configure(logger_factory=LoggerFactory())
 
 
 @pytest.mark.parametrize(
-    "valid_schema_filename", find_all_json_files("tests/schemas/valid"),
+    "valid_schema_filename",
+    find_all_json_files("tests/schemas/valid"),
 )
 def test_param_valid_schemas(valid_schema_filename):
     """Uses py.test generated tests to validate all schemas contained in the 'valid' folder."""
@@ -151,9 +152,7 @@ def test_duplicate_answer_ids():
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-and-question"},
     ]
 
-    assert all(
-        expected_error in validator.errors for expected_error in expected_errors
-    )
+    assert all(expected_error in validator.errors for expected_error in expected_errors)
 
 
 def test_inconsistent_ids_in_variants():
@@ -220,9 +219,7 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "edit-person"},
     ]
 
-    assert all(
-        expected_error in validator.errors for expected_error in expected_errors
-    )
+    assert all(expected_error in validator.errors for expected_error in expected_errors)
 
 
 def test_inconsistent_types_in_variants():

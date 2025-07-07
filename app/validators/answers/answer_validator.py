@@ -7,6 +7,7 @@ from app.validators.validator import Validator
 
 class AnswerValidator(Validator):
     """Validates an answer in a questionnaire schema."""
+
     OPTION_MISSING_Q_CODE = "Option q_code must be provided"
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"
@@ -82,12 +83,14 @@ class AnswerValidator(Validator):
                     any_option_missing_q_code = True
             elif option_has_q_code:
                 self.add_error(
-                    self.NON_CHECKBOX_OPTION_HAS_Q_CODE, answer_id=self.answer["id"],
+                    self.NON_CHECKBOX_OPTION_HAS_Q_CODE,
+                    answer_id=self.answer["id"],
                 )
 
             if self._validate_detail_answer_q_code(option):
                 self.add_error(
-                    self.DETAIL_ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"],
+                    self.DETAIL_ANSWER_MISSING_Q_CODE,
+                    answer_id=self.answer["id"],
                 )
 
         return any_option_missing_q_code
@@ -104,7 +107,8 @@ class AnswerValidator(Validator):
                     )
             elif not has_q_code:
                 self.add_error(
-                    self.DETAIL_ANSWER_MISSING_Q_CODE, answer_id=self.answer["id"],
+                    self.DETAIL_ANSWER_MISSING_Q_CODE,
+                    answer_id=self.answer["id"],
                 )
 
     def _validate_checkbox_q_code(self):

@@ -8,6 +8,7 @@ from app.validators.validator import Validator
 
 class MetadataValidator(Validator):
     """MetadataValidator validates metadata fields in a questionnaire schema."""
+
     MISSING_METADATA = "Metadata not specified in metadata field"
     DUPLICATE_METADATA = "Metadata contains duplicates"
 

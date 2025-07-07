@@ -50,6 +50,7 @@ class CalculationBlockValidator(BlockValidator):
         if answer_type == "Unit" and not is_value_for_key_unique(answers, "unit"):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_UNIT)
         elif answer_type == "Currency" and not is_value_for_key_unique(
-            answers, "currency",
+            answers,
+            "currency",
         ):
             self.add_error(self.ANSWERS_MUST_HAVE_SAME_CURRENCY)

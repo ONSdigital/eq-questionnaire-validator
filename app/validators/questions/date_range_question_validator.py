@@ -6,6 +6,7 @@ from app.validators.questions.question_validator import QuestionValidator
 
 class DateRangeQuestionValidator(QuestionValidator):
     """Validator for date range questions in a questionnaire schema."""
+
     MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
     CANNOT_USE_DAYS = "Days can not be used in period_limit for yyyy-mm date range"
     CANNOT_USE_DAYS_MONTHS = (
@@ -22,7 +23,8 @@ class DateRangeQuestionValidator(QuestionValidator):
         """Validate the date range question.
 
         If period_limits object is present in the DateRange question validates that a date range
-        does not have a negative period and days can not be used to define limits for yyyy-mm date ranges."""
+        does not have a negative period and days can not be used to define limits for yyyy-mm date ranges.
+        """
         super().validate()
         self.validate_range()
         self.validate_period_limits()
@@ -35,10 +37,12 @@ class DateRangeQuestionValidator(QuestionValidator):
 
             # Get minimum and maximum possible dates
             minimum_date = DateAnswerValidator.get_relative_date(
-                example_date, self.period_limits["minimum"],
+                example_date,
+                self.period_limits["minimum"],
             )
             maximum_date = DateAnswerValidator.get_relative_date(
-                example_date, self.period_limits["maximum"],
+                example_date,
+                self.period_limits["maximum"],
             )
 
             if minimum_date > maximum_date:
@@ -49,10 +53,12 @@ class DateRangeQuestionValidator(QuestionValidator):
         first_answer_type = self.answers[0]["type"]
 
         has_days_limit = "days" in self.period_limits.get(
-            "minimum", [],
+            "minimum",
+            [],
         ) or "days" in self.period_limits.get("maximum", [])
         has_months_limit = "months" in self.period_limits.get(
-            "minimum", [],
+            "minimum",
+            [],
         ) or "months" in self.period_limits.get("maximum", [])
 
         if first_answer_type == "MonthYearDate" and has_days_limit:

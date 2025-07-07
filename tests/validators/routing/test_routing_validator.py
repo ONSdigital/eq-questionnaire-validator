@@ -65,7 +65,8 @@ def test_invalid_destination_block_id():
 
     validator = get_validator(routing_rules=routing_rules, origin_id="block-id")
     validator.validate_routing_rule_block_target(
-        rule=routing_rules[0], block_ids=["mock-block-id"],
+        rule=routing_rules[0],
+        block_ids=["mock-block-id"],
     )
 
     expected_error = {
@@ -93,7 +94,8 @@ def test_invalid_destination_group_id():
 
     validator = get_validator(routing_rules=routing_rules, origin_id="group-id")
     validator.validate_routing_rule_group_target(
-        rule=routing_rules[0], group_ids=["mock-group-id"],
+        rule=routing_rules[0],
+        group_ids=["mock-group-id"],
     )
 
     expected_error = {

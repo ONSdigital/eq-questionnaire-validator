@@ -11,6 +11,7 @@ from app.validators.validator import Validator
 
 class BlockValidator(Validator):
     """BlockValidator validates blocks in a questionnaire schema."""
+
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
     ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of id relationships, can only be used with RelationshipCollector block type"
@@ -19,7 +20,9 @@ class BlockValidator(Validator):
     )
 
     def __init__(
-        self, block_element: Mapping, questionnaire_schema: QuestionnaireSchema,
+        self,
+        block_element: Mapping,
+        questionnaire_schema: QuestionnaireSchema,
     ):
         """Initializes the BlockValidator."""
         super().__init__(block_element)
@@ -64,12 +67,14 @@ class BlockValidator(Validator):
 
                         if is_list_collector and params:
                             self.add_error(
-                                self.ACTION_PARAMS_SHOULDNT_EXIST, block_id=self.block,
+                                self.ACTION_PARAMS_SHOULDNT_EXIST,
+                                block_id=self.block,
                             )
 
                         elif not is_list_collector and not params:
                             self.add_error(
-                                self.ACTION_PARAMS_MISSING, block_id=self.block,
+                                self.ACTION_PARAMS_MISSING,
+                                block_id=self.block,
                             )
 
     def validate_placeholder_answer_self_references(self):

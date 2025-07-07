@@ -12,6 +12,7 @@ MAX_DECIMAL_PLACES = 6
 
 class NumberAnswerValidator(AnswerValidator):
     """Validates a number answer."""
+
     DEFAULT_ON_MANDATORY = "Default answer is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
@@ -96,13 +97,16 @@ class NumberAnswerValidator(AnswerValidator):
 
         if isinstance(min_value, int) and min_value < MIN_NUMBER:
             self.add_error(
-                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=MIN_NUMBER,
+                self.MINIMUM_LESS_THAN_LIMIT,
+                value=min_value,
+                limit=MIN_NUMBER,
             )
         elif isinstance(min_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=min_value, answer_ranges=answer_ranges,
+                    value_source=min_value,
+                    answer_ranges=answer_ranges,
                 )
             )
             if referred_answer["min"] < MIN_NUMBER:
@@ -114,13 +118,16 @@ class NumberAnswerValidator(AnswerValidator):
 
         if isinstance(max_value, int) and max_value > MAX_NUMBER:
             self.add_error(
-                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER,
+                self.MAXIMUM_GREATER_THAN_LIMIT,
+                value=max_value,
+                limit=MAX_NUMBER,
             )
         elif isinstance(max_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=max_value, answer_ranges=answer_ranges,
+                    value_source=max_value,
+                    answer_ranges=answer_ranges,
                 )
             )
             if referred_answer["max"] > MAX_NUMBER:

@@ -5,6 +5,7 @@ from app.validators.blocks.calculation_block_validator import CalculationBlockVa
 
 class CalculatedSummaryBlockValidator(CalculationBlockValidator):
     """CalculatedSummaryBlockValidator validates calculated summary blocks in a questionnaire schema."""
+
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )
@@ -15,7 +16,8 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         """Initializes the CalculatedSummaryBlockValidator."""
         super().__init__(block, questionnaire_schema)
         self.answers_to_calculate = self.questionnaire_schema.get_calculation_block_ids(
-            block=self.block, source_type="answers",
+            block=self.block,
+            source_type="answers",
         )
 
     def validate(self):
@@ -68,7 +70,8 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
                 answer_id_block,
             ) > self.questionnaire_schema.block_ids.index(self.block["id"]):
                 self.add_error(
-                    self.ANSWER_SET_AFTER_CALCULATED_SUMMARY, block=self.block,
+                    self.ANSWER_SET_AFTER_CALCULATED_SUMMARY,
+                    block=self.block,
                 )
 
     def validate_answer_id_for_calculated_summary_not_in_different_section(self):

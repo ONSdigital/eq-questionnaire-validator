@@ -7,6 +7,7 @@ from app.validators.validator import Validator
 
 class ValueSourceValidator(Validator):
     """The ValueSourceValidator validates the value source of a block."""
+
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
@@ -155,7 +156,9 @@ class ValueSourceValidator(Validator):
             self.questionnaire_schema.section_ids.index(parent_section_id)
         )
         ids = set(
-            self.questionnaire_schema.section_ids[:parent_section_index_in_section_list],
+            self.questionnaire_schema.section_ids[
+                :parent_section_index_in_section_list
+            ],
         )
 
         return ids
@@ -184,7 +187,9 @@ class ValueSourceValidator(Validator):
 
         for identifier in identifiers:
             self._validate_source_identifier(
-                source, identifier=identifier, valid_identifiers=valid_identifiers,
+                source,
+                identifier=identifier,
+                valid_identifiers=valid_identifiers,
             )
 
     def _validate_progress_source_reference(self, identifiers):
@@ -207,7 +212,11 @@ class ValueSourceValidator(Validator):
             )
 
     def _validate_source_identifier_progress_source(
-        self, *, selector, identifier, valid_identifiers,
+        self,
+        *,
+        selector,
+        identifier,
+        valid_identifiers,
     ):
         """Detects & adds errors for invalid progress source references.
 
@@ -241,7 +250,8 @@ class ValueSourceValidator(Validator):
             for error_identifiers, error_message in error_mapping[selector].items():
                 if identifier in error_identifiers:
                     self.add_error(
-                        error_message.format("progress"), identifier=identifier,
+                        error_message.format("progress"),
+                        identifier=identifier,
                     )
                     return
 

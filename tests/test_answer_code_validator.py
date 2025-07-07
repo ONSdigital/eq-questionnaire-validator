@@ -12,7 +12,9 @@ def test_answer_code_validation_incorrect_data_version():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.1", questionnaire_schema.schema["answer_codes"], questionnaire_schema,
+        "0.0.1",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()
@@ -230,7 +232,9 @@ def test_answer_code_not_set_for_answer_found_in_schema():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.3", questionnaire_schema.schema["answer_codes"], questionnaire_schema,
+        "0.0.3",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()
@@ -655,7 +659,9 @@ def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.3", questionnaire_schema.schema["answer_codes"], questionnaire_schema,
+        "0.0.3",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()

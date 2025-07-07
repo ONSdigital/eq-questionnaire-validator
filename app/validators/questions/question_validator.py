@@ -6,6 +6,7 @@ from app.validators.validator import Validator
 
 class QuestionValidator(Validator):
     """Validator for questions in a questionnaire schema."""
+
     ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = (
         "Answer label must be provided for questions with multiple answers"
     )
@@ -37,5 +38,6 @@ class QuestionValidator(Validator):
         for answer in self.answers:
             if not answer.get("label"):
                 self.add_error(
-                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"],
+                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS,
+                    answer_id=answer["id"],
                 )

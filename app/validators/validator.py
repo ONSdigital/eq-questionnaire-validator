@@ -6,6 +6,7 @@ from typing import Mapping
 
 class Validator(ABC):
     """Base class for all validators."""
+
     def __init__(self, schema_element: Mapping | None = None):
         """Initializes the validator with an optional schema element."""
         self.errors = []

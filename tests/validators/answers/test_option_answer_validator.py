@@ -21,7 +21,8 @@ def test_unique_answer_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_duplicate_options()
 
@@ -53,7 +54,8 @@ def test_validate_default_exists_in_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     expected_errors = [
@@ -75,14 +77,17 @@ def test_min_answer_options_without_dynamic_options():
     answer = {"id": "answer", "label": "Label", "type": answer_type, "options": []}
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_options()
 
     assert validator.errors == [
         {
             "message": validator.NOT_ENOUGH_ANSWER_OPTIONS.format(
-                answer_type=answer_type, required_num_options=1, actual_num_options=0,
+                answer_type=answer_type,
+                required_num_options=1,
+                actual_num_options=0,
             ),
             "answer_id": "answer",
         },
@@ -101,7 +106,8 @@ def test_min_answer_options_with_dynamic_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_options()
 

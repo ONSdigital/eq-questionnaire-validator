@@ -5,6 +5,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 class ListCollectorDrivingQuestionValidator(BlockValidator):
     """ListCollectorDrivingQuestionValidator validates driving questions for list collector blocks in a questionnaire schema."""
+
     MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
         "The block_id should be the only ListCollectorDrivingQuestion for list"
     )

@@ -6,6 +6,7 @@ from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
 class CalculatedQuestionValidator(QuestionValidator):
     """Validator for calculated questions in a questionnaire schema."""
+
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
     ANSWER_TYPES_FOR_CALCULATION_MISMATCH = "Expected the answer types for calculation to be same type but got {answer_types}'"
@@ -22,7 +23,9 @@ class CalculatedQuestionValidator(QuestionValidator):
         return self.errors
 
     def _get_answer_types(
-        self, answer_id: str | None, answers_to_calculate: list[str],
+        self,
+        answer_id: str | None,
+        answers_to_calculate: list[str],
     ) -> dict[str, str]:
         return {
             answer: self.schema.get_answer_type(answer).value
@@ -69,7 +72,8 @@ class CalculatedQuestionValidator(QuestionValidator):
                     answer_id = value.get("identifier")
 
             answer_types = self._get_answer_types(
-                answer_id, calculation.get("answers_to_calculate"),
+                answer_id,
+                calculation.get("answers_to_calculate"),
             )
             self._validate_answers_are_numeric(answer_types)
             self._validate_answers_are_same_numeric_type(answer_types)

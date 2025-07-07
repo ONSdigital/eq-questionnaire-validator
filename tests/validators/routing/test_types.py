@@ -62,7 +62,10 @@ def test_resolve_answer_value_source_json_type(answer_type, json_type):
 
     questionnaire_schema = Mock()
     questionnaire_schema.answers_with_context = {
-        "answer-1": {"answer": {"id": "answer-1", "type": answer_type}, "block": "name"},
+        "answer-1": {
+            "answer": {"id": "answer-1", "type": answer_type},
+            "block": "name",
+        },
     }
 
     assert (
@@ -115,7 +118,8 @@ def test_resolve_grand_calculated_summary_value_source_json_type():
     ],
 )
 def test_resolve_metadata_summary_value_source_json_type(
-    metadata_value_source, json_type,
+    metadata_value_source,
+    json_type,
 ):
     """Tests that metadata value sources resolve to the correct JSON type."""
     filename = "schemas/valid/test_valid_metadata.json"

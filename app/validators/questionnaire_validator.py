@@ -20,6 +20,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 class QuestionnaireValidator(Validator):
     """Validator for the questionnaire schema."""
+
     def __init__(self, schema_element=None):
         """Initialize the QuestionnaireValidator."""
         super().__init__(schema_element)
@@ -52,7 +53,8 @@ class QuestionnaireValidator(Validator):
         ].get("required_completed_sections", [])
 
         self.validate_required_section_ids(
-            self.questionnaire_schema.section_ids, required_hub_section_ids,
+            self.questionnaire_schema.section_ids,
+            required_hub_section_ids,
         )
 
         if self.schema_element.get("preview_questions"):
@@ -171,7 +173,6 @@ class QuestionnaireValidator(Validator):
                 "source" in identifier_reference
                 and identifier_reference["source"] == "answers"
             ):
-
                 source_block = self.questionnaire_schema.get_block_by_answer_id(
                     identifier_reference["identifier"],
                 )

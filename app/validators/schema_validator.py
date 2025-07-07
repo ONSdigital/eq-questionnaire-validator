@@ -12,6 +12,7 @@ from app.validators.validator import Validator
 
 class SchemaValidator(Validator):
     """Validates a schema element against a JSON schema."""
+
     def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
         """Initializes the SchemaValidator with a schema element and a JSON schema."""
         super().__init__(schema_element)

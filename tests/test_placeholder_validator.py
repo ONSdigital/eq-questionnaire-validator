@@ -155,14 +155,20 @@ def test_validation_option_label_from_value(answer_id, expected_error):
     ],
 )
 def test_validation_answer_type_for_transform(
-    argument, argument_name, transform_type, schema, expected_error,
+    argument,
+    argument_name,
+    transform_type,
+    schema,
+    expected_error,
 ):
     """Test that an error is raised when a placeholder answer type does not match the definitions for a transform."""
     filename = schema
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
     validator.validate_answer_type_for_transform(
-        argument, argument_name, transform_type,
+        argument,
+        argument_name,
+        transform_type,
     )
     assert validator.errors == expected_error
 
@@ -179,7 +185,8 @@ def test_validation_answer_type_for_transform(
             [
                 {
                     "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                        answer_unit="length-mile", transform_unit="meter",
+                        answer_unit="length-mile",
+                        transform_unit="meter",
                     ),
                     "identifier": "average-distance",
                 },
@@ -188,7 +195,9 @@ def test_validation_answer_type_for_transform(
     ],
 )
 def test_validation_answer_and_transform_unit_match(
-    arguments, transform_type, expected_error,
+    arguments,
+    transform_type,
+    expected_error,
 ):
     """Test that an error is raised when a placeholder answer and transform unit do not match the definitions."""
     filename = (
@@ -197,7 +206,8 @@ def test_validation_answer_and_transform_unit_match(
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
     validator.validate_answer_and_transform_unit_match(
-        arguments=arguments, transform_type=transform_type,
+        arguments=arguments,
+        transform_type=transform_type,
     )
     assert validator.errors == expected_error
 
@@ -211,7 +221,8 @@ def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
     assert validator.errors == [
         {
             "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit="length-centimeter", transform_unit="length-meter",
+                answer_unit="length-centimeter",
+                transform_unit="length-meter",
             ),
             "identifier": "unit-total-playback",
         },
@@ -235,7 +246,8 @@ def test_validation_answer_and_transform_unit_single_source_answer_mismatch(answ
     assert validator.errors == [
         {
             "message": error_messages.ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH.format(
-                answer_unit="length-centimeter", transform_unit="length-meter",
+                answer_unit="length-centimeter",
+                transform_unit="length-meter",
             ),
             "identifier": "unit-total-playback",
         },

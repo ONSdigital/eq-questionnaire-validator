@@ -18,6 +18,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 class Operator:
     """Defines the operators used in the rules."""
+
     NOT = "not"
     AND = "and"
     OR = "or"
@@ -83,6 +84,7 @@ SELF_REFERENCE_KEY = "self"
 
 class RulesValidator(Validator):
     """Validates the rules for a questionnaire."""
+
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
         "Date operator references non Date, MonthYearDate, or YearDate answer"
@@ -101,7 +103,12 @@ class RulesValidator(Validator):
     INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
 
     def __init__(
-        self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False,
+        self,
+        rules,
+        origin_id,
+        questionnaire_schema,
+        *,
+        allow_self_reference=False,
     ):
         """Validates the rules for a questionnaire."""
         super().__init__(rules)
@@ -138,7 +145,9 @@ class RulesValidator(Validator):
 
         if operator_name in [Operator.FORMAT_DATE, Operator.DATE]:
             self._validate_self_references(
-                rules, operator_name, allow_self_reference=allow_self_reference,
+                rules,
+                operator_name,
+                allow_self_reference=allow_self_reference,
             )
 
         self._validate_options(rules, operator_name)
@@ -171,7 +180,8 @@ class RulesValidator(Validator):
 
         if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
             self.add_error(
-                self.MAP_OPERATOR_WITHOUT_SELF_REFERENCE, rule=operator["map"][0],
+                self.MAP_OPERATOR_WITHOUT_SELF_REFERENCE,
+                rule=operator["map"][0],
             )
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
@@ -269,7 +279,9 @@ class RulesValidator(Validator):
 
         if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS + NUMERIC_OPERATORS:
             self._validate_comparison_operator_argument_types(
-                rule, operator_name, argument_types,
+                rule,
+                operator_name,
+                argument_types,
             )
 
         if (
@@ -295,7 +307,8 @@ class RulesValidator(Validator):
                 argument_type = self._validate_operator_arguments(argument)
             elif isinstance(argument, dict) and "source" in argument:
                 argument_type = resolve_value_source_json_type(
-                    argument, self.questionnaire_schema,
+                    argument,
+                    self.questionnaire_schema,
                 )
             else:
                 argument_type = python_type_to_json_type(type(argument).__name__)
@@ -314,12 +327,16 @@ class RulesValidator(Validator):
             )
 
     def _validate_comparison_operator_argument_types(
-        self, rule, operator_name, argument_types,
+        self,
+        rule,
+        operator_name,
+        argument_types,
     ):
         """Validates that all arguments are of the correct type for the operator."""
         for argument_position, _ in enumerate(rule[operator_name]):
             valid_types = self._get_valid_types_for_operator(
-                operator_name, argument_position=argument_position,
+                operator_name,
+                argument_position=argument_position,
             )
             if argument_types[argument_position] not in valid_types:
                 self.add_error(

@@ -106,6 +106,7 @@ def get_context_from_match(match):
 
 class QuestionnaireSchema:
     """Initialize the QuestionnaireSchema with a JSON schema."""
+
     def __init__(self, schema):
         """Initialize the QuestionnaireSchema with a JSON schema."""
         self.schema = schema
@@ -143,10 +144,12 @@ class QuestionnaireSchema:
         self.group_ids = list(self.groups_by_id.keys())
 
         self.supplementary_lists = jp.match(
-            "$..supplementary_data.lists[*]", self.schema,
+            "$..supplementary_data.lists[*]",
+            self.schema,
         )
         self.list_collectors = jp.match(
-            '$..blocks[?(@.type=="ListCollector")]', self.schema,
+            '$..blocks[?(@.type=="ListCollector")]',
+            self.schema,
         )
         self.list_collector_names = [
             list_collector["for_list"] for list_collector in self.list_collectors
@@ -184,7 +187,8 @@ class QuestionnaireSchema:
 
         for answer in jp.match("$..answers[*]", self.schema):
             numeric_answer_ranges[answer["id"]] = self._get_numeric_range_values(
-                answer, numeric_answer_ranges,
+                answer,
+                numeric_answer_ranges,
             )
 
         return numeric_answer_ranges
@@ -426,7 +430,9 @@ class QuestionnaireSchema:
         """Check if there is a single driving question for the list."""
         return (
             len(
-                self.get_blocks(type="ListCollectorDrivingQuestion", for_list=list_name),
+                self.get_blocks(
+                    type="ListCollectorDrivingQuestion", for_list=list_name
+                ),
             )
             == 1
         )
@@ -533,7 +539,7 @@ class QuestionnaireSchema:
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):
-        """"Get the block associated with a specific answer ID."""
+        """ "Get the block associated with a specific answer ID."""
         block_id = self.get_block_id_by_answer_id(answer_id)
 
         return self.get_block(block_id)
@@ -553,10 +559,16 @@ class QuestionnaireSchema:
 
         return {
             "min": self._get_answer_minimum(
-                min_value, decimal_places, exclusive, answer_ranges,
+                min_value,
+                decimal_places,
+                exclusive,
+                answer_ranges,
             ),
             "max": self._get_answer_maximum(
-                max_value, decimal_places, exclusive, answer_ranges,
+                max_value,
+                decimal_places,
+                exclusive,
+                answer_ranges,
             ),
             "decimal_places": decimal_places,
             "min_referred": min_referred,
@@ -565,7 +577,11 @@ class QuestionnaireSchema:
         }
 
     def _get_answer_minimum(
-        self, defined_minimum, decimal_places, exclusive, answer_ranges,
+        self,
+        defined_minimum,
+        decimal_places,
+        exclusive,
+        answer_ranges,
     ):
         minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
@@ -573,10 +589,16 @@ class QuestionnaireSchema:
         return minimum_value
 
     def _get_answer_maximum(
-        self, defined_maximum, decimal_places, exclusive, answer_ranges,
+        self,
+        defined_maximum,
+        decimal_places,
+        exclusive,
+        answer_ranges,
     ):
         maximum_value = self._get_numeric_value(
-            defined_maximum, MAX_NUMBER, answer_ranges,
+            defined_maximum,
+            MAX_NUMBER,
+            answer_ranges,
         )
         if exclusive:
             return maximum_value - (1 / 10**decimal_places)
@@ -605,7 +627,8 @@ class QuestionnaireSchema:
             return block["calculation"]["answers_to_calculate"]
 
         value_sources = get_object_containing_key(
-            block["calculation"]["operation"], "source",
+            block["calculation"]["operation"],
+            "source",
         )
 
         return [
@@ -615,7 +638,8 @@ class QuestionnaireSchema:
         ]
 
     def get_answer_ids_for_value_source(
-        self, value_source: Mapping[str, str],
+        self,
+        value_source: Mapping[str, str],
     ) -> list[str]:
         """Gets the list of answer_ids relating to the provided value source.
 
@@ -626,16 +650,19 @@ class QuestionnaireSchema:
 
         if source == "calculated_summary":
             return self.get_calculation_block_ids(
-                block=self.get_block(identifier), source_type="answers",
+                block=self.get_block(identifier),
+                source_type="answers",
             )
         if source == "grand_calculated_summary":
             return [
                 answer_id
                 for calculated_summary_id in self.get_calculation_block_ids(
-                    block=self.get_block(identifier), source_type="calculated_summary",
+                    block=self.get_block(identifier),
+                    source_type="calculated_summary",
                 )
                 for answer_id in self.get_calculation_block_ids(
-                    block=self.get_block(calculated_summary_id), source_type="answers",
+                    block=self.get_block(calculated_summary_id),
+                    source_type="answers",
                 )
             ]
         return [identifier]
@@ -680,7 +707,10 @@ class QuestionnaireSchema:
         return parent_section and self.is_repeating_section(parent_section["id"])
 
     def get_numeric_value_for_value_source(
-        self, *, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping],
+        self,
+        *,
+        value_source: Mapping[str, str],
+        answer_ranges: Mapping[str, Mapping],
     ) -> Mapping | None:
         """Get the numeric value for a value source, which can be an answer or a calculated summary."""
         referred_answer = None

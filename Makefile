@@ -25,6 +25,14 @@ lint: lint-python
 	npm run lint
 	poetry run ruff check .
 
+.PHONY: ruff
+ruff: ## Run ruff linter.
+	poetry run ruff check .
+
+.PHONY: black
+black: ## Run black code formatter.
+	poetry run black --check .
+
 lint-python:
 	poetry run ./scripts/run_lint_python.sh
 

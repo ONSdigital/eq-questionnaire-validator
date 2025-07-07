@@ -8,6 +8,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 class TextFieldAnswerValidator(AnswerValidator):
     """Validates a text field answer."""
+
     INVALID_SUGGESTION_URL = "Suggestions url is invalid"
 
     def validate(self):

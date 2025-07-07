@@ -14,6 +14,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 class PlaceholderValidator(Validator):
     """PlaceholderValidator validates placeholders in a questionnaire schema."""
+
     PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
     FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = (
         "Can't reference `previous_transform` in a first transform"
@@ -30,7 +31,8 @@ class PlaceholderValidator(Validator):
     def validate(self):
         """Validate placeholders in the questionnaire schema."""
         strings_with_placeholders = get_object_containing_key(
-            self.schema_element, "placeholders",
+            self.schema_element,
+            "placeholders",
         )
         for _, placeholder_object, __ in strings_with_placeholders:
             self.validate_placeholder_object(placeholder_object)
@@ -113,7 +115,10 @@ class PlaceholderValidator(Validator):
             )
 
     def validate_answer_type_for_transform(
-        self, argument, argument_name, transform_type,
+        self,
+        argument,
+        argument_name,
+        transform_type,
     ):
         """Validate answer type for transform."""
         if not (
@@ -207,7 +212,9 @@ class PlaceholderValidator(Validator):
                     self.validate_option_label_from_value_placeholder(argument)
 
                 self.validate_answer_type_for_transform(
-                    transform.get("arguments"), argument_name, transform["transform"],
+                    transform.get("arguments"),
+                    argument_name,
+                    transform["transform"],
                 )
 
             self.validate_answer_and_transform_unit_match(

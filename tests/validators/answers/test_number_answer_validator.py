@@ -53,7 +53,8 @@ def test_invalid_answer_default():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_mandatory_has_no_default()
 
@@ -77,7 +78,8 @@ def test_are_decimal_places_valid():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_decimal_places()
 
@@ -109,7 +111,8 @@ def test_invalid_min_or_max_is_string(bounds, error_count):
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_max_is_number()
 
@@ -132,7 +135,8 @@ def test_valid_minimum_value_is_float():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_min_max_is_number()
@@ -166,7 +170,8 @@ def test_invalid_range():
     }
     answers = {"answers": [answer]}
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     questionnaire_schema = QuestionnaireSchema(answers)
@@ -199,7 +204,8 @@ def test_invalid_range_calculated_summary_source():
     answer = schema.get_answer("set-minimum-answer")
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3"),
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_referred_numeric_answer(schema.numeric_answer_ranges)

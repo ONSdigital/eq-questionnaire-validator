@@ -8,6 +8,7 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
     """ListCollectorValidator validates list collector blocks in a questionnaire schema."""
+
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
     REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
@@ -85,7 +86,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             list_answer_ids["edit_block"],
         ):
             self.add_error(
-                self.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH, block_id=block["id"],
+                self.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
+                block_id=block["id"],
             )
 
         all_schema_ids_excluding_list_collectors = self.questionnaire_schema.ids
@@ -119,7 +121,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
         )
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
-            self.block["id"], type="ListCollector",
+            self.block["id"],
+            type="ListCollector",
         )
 
         for other_list_collector in other_list_collectors:
@@ -157,7 +160,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             return
         list_name = self.block["for_list"]
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
-            self.block["id"], for_list=list_name, type="ListCollector",
+            self.block["id"],
+            for_list=list_name,
+            type="ListCollector",
         )
         if other_list_collectors:
             self.add_error(

@@ -7,9 +7,11 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 
 class PrimaryPersonListCollectorValidator(
-    BlockValidator, ValidateListCollectorQuestionsMixin,
+    BlockValidator,
+    ValidateListCollectorQuestionsMixin,
 ):
     """PrimaryPersonListCollectorValidator validates primary person list collector blocks in a questionnaire schema."""
+
     REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
@@ -53,7 +55,9 @@ class PrimaryPersonListCollectorValidator(
         )
 
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
-            self.block["id"], for_list=list_name, type="PrimaryPersonListCollector",
+            self.block["id"],
+            for_list=list_name,
+            type="PrimaryPersonListCollector",
         )
 
         for other_list_collector in other_list_collectors:

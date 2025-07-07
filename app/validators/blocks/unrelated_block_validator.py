@@ -5,6 +5,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 class UnrelatedBlockValidator(BlockValidator):
     """UnrelatedBlockValidator validates unrelated blocks in a questionnaire schema."""
+
     ACTION_PARAMS_MISSING = "RemoveUnrelatedRelationships and AddUnrelatedRelationships actions must be present"
 
     def validate(self):

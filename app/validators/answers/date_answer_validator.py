@@ -10,6 +10,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 class DateAnswerValidator(AnswerValidator):
     """Validates date answers in a questionnaire."""
+
     INVALID_OFFSET_DATE = (
         "The minimum offset date is greater than the maximum offset date"
     )

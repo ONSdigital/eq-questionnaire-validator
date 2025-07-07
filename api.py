@@ -70,7 +70,8 @@ async def validate_schema_from_url(url=None):
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             return Response(
-                status_code=404, content=f"Could not load schema at URL [{url}]",
+                status_code=404,
+                content=f"Could not load schema at URL [{url}]",
             )
 
 
@@ -90,7 +91,9 @@ async def validate_schema(data):
     response = {}
     try:
         ajv_response = requests.post(
-            AJV_VALIDATOR_URL, json=json_to_validate, timeout=10,
+            AJV_VALIDATOR_URL,
+            json=json_to_validate,
+            timeout=10,
         )
         if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]

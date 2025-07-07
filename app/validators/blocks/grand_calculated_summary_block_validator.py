@@ -11,6 +11,7 @@ from app.validators.questionnaire_schema import (
 
 class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
     """GrandCalculatedSummaryBlockValidator validates grand calculated summary blocks in a questionnaire schema."""
+
     CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = "Cannot have multiple calculated summaries referencing exactly the same answers in a grand calculated summary"
     CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY = "Cannot have a grand calculated summary before a calculated summary that it depends on"
     CALCULATED_SUMMARY_HAS_INVALID_ID = (
@@ -34,7 +35,8 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         self.calculated_summary_answers: dict[str, tuple[str, ...]] = {}
         self.calculated_summaries_to_calculate = (
             self.questionnaire_schema.get_calculation_block_ids(
-                block=self.block, source_type="calculated_summary",
+                block=self.block,
+                source_type="calculated_summary",
             )
         )
 
@@ -75,7 +77,8 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 self.add_error(self.CALCULATED_SUMMARY_HAS_INVALID_ID)
                 return self.errors
             answers = self.questionnaire_schema.get_calculation_block_ids(
-                block=calculated_summary_block, source_type="answers",
+                block=calculated_summary_block,
+                source_type="answers",
             )
             self.answers_to_calculate.extend(answers)
             self.calculated_summary_answers[calculated_summary_id] = tuple(answers)
@@ -123,11 +126,15 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
             elif is_grand_calculated_summary_repeating:
                 list_name = grand_calculated_summary_section["repeat"]["for_list"]
                 self._validate_static_calculated_summary_in_repeating_grand_calculated_summary(
-                    list_name=list_name, calculated_summary_id=calculated_summary_id,
+                    list_name=list_name,
+                    calculated_summary_id=calculated_summary_id,
                 )
 
     def _validate_static_calculated_summary_in_repeating_grand_calculated_summary(
-        self, *, list_name: str, calculated_summary_id: str,
+        self,
+        *,
+        list_name: str,
+        calculated_summary_id: str,
     ):
         """Validates that the grand calculated summary is correctly referencing a static calculated summary.
 

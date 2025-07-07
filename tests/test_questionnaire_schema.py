@@ -16,7 +16,8 @@ def test_get_blocks():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     driving_question_blocks = questionnaire_schema.get_blocks(
-        type="ListCollectorDrivingQuestion", for_list="people",
+        type="ListCollectorDrivingQuestion",
+        for_list="people",
     )
 
     assert len(driving_question_blocks) == 1
@@ -30,7 +31,9 @@ def test_get_other_blocks():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     other_list_collectors = questionnaire_schema.get_other_blocks(
-        block_id_to_filter="list-collector", type="ListCollector", for_list="people",
+        block_id_to_filter="list-collector",
+        type="ListCollector",
+        for_list="people",
     )
 
     assert len(other_list_collectors) == 1
