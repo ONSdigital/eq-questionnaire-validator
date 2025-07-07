@@ -129,6 +129,10 @@ ignore = [
     "S310",
     # Hide 'B008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable' - to be reviewed
     "B008",
+    # Hide 'C409 Unnecessary list literal passed to `tuple()` (rewrite as a tuple literal)' - to be revisited
+    "C409",
+    # Hide 'C405 Unnecessary list literal (rewrite as a set literal)' - to be revisited
+    "C405",
 
 ]
 

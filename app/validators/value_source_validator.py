@@ -63,14 +63,14 @@ class ValueSourceValidator(Validator):
     def _get_valid_progress_value_source_block_identifiers(self):
         return (
             self.past_block_ids
-            - set(self.current_block_id)
+            - set([self.current_block_id])
             - self.block_ids_in_past_repeating_sections
         )
 
     def _get_valid_progress_value_source_section_identifiers(self):
         return (
             self.past_section_ids
-            - set(self.current_section_id)
+            - set([self.current_section_id])
             - self.past_repeating_section_ids
         )
 
@@ -104,7 +104,7 @@ class ValueSourceValidator(Validator):
         return (
             set(self.questionnaire_schema.block_ids_without_sub_blocks)
             - self.past_block_ids
-            - set(self.current_block_id)
+            - set([self.current_block_id])
         )
 
     @cached_property
@@ -139,7 +139,7 @@ class ValueSourceValidator(Validator):
         return (
             set(self.questionnaire_schema.section_ids)
             - self.past_section_ids
-            - set(self.current_section_id)
+            - set([self.current_section_id])
         )
 
     @cached_property
@@ -229,7 +229,7 @@ class ValueSourceValidator(Validator):
         if identifier not in valid_identifiers:
             error_mapping = {
                 "block": {
-                    tuple(self.current_block_id): self.SOURCE_REFERENCE_CURRENT_BLOCK,
+                    tuple([self.current_block_id]): self.SOURCE_REFERENCE_CURRENT_BLOCK,
                     tuple(self.future_block_ids): self.SOURCE_REFERENCE_FUTURE_BLOCK,
                     tuple(
                         self.block_ids_in_past_repeating_sections,
@@ -237,7 +237,7 @@ class ValueSourceValidator(Validator):
                 },
                 "section": {
                     tuple(
-                        self.current_section_id,
+                        [self.current_section_id],
                     ): self.SOURCE_REFERENCE_CURRENT_SECTION,
                     tuple(
                         self.future_section_ids,

@@ -431,7 +431,8 @@ class QuestionnaireSchema:
         return (
             len(
                 self.get_blocks(
-                    type="ListCollectorDrivingQuestion", for_list=list_name
+                    type="ListCollectorDrivingQuestion",
+                    for_list=list_name,
                 ),
             )
             == 1
@@ -539,7 +540,7 @@ class QuestionnaireSchema:
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):
-        """ "Get the block associated with a specific answer ID."""
+        """Get the block associated with a specific answer ID."""
         block_id = self.get_block_id_by_answer_id(answer_id)
 
         return self.get_block(block_id)
