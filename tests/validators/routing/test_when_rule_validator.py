@@ -14,6 +14,8 @@ from app.validators.routing.types import (
 from app.validators.rules.rule_validator import RulesValidator
 from tests.conftest import get_mock_schema
 
+# pylint: disable=duplicate-code
+
 ORIGIN_ID = "block-id"
 
 default_answer_with_context = {
@@ -28,6 +30,9 @@ def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None)
         ORIGIN_ID,
         get_mock_schema(questionnaire_schema, answers_with_context),
     )
+
+
+# pylint: enable=duplicate-code
 
 
 @pytest.mark.parametrize(
