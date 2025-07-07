@@ -1,3 +1,5 @@
+"""Test for ListCollectorDrivingQuestionValidator to ensure it correctly identifies invalid configurations of driving questions in list collectors."""
+
 from app.validators.blocks.list_collector_driving_question_validator import (
     ListCollectorDrivingQuestionValidator,
 )
@@ -6,6 +8,7 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_driving_question_multiple_driving_questions():
+    """Test that a list collector with multiple driving questions raises the correct error."""
     filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_driving_questions.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -17,7 +20,7 @@ def test_invalid_driving_question_multiple_driving_questions():
             "message": validator.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
             "block_id": "anyone-usually-live-at",
             "for_list": "people",
-        }
+        },
     ]
 
     assert expected_error_messages == validator.validate()

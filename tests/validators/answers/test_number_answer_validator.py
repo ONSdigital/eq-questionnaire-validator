@@ -1,3 +1,5 @@
+"""Tests for NumberAnswerValidator class."""
+
 import pytest
 
 from app.validators.answers import NumberAnswerValidator
@@ -11,6 +13,7 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_minimum_value():
+    """Test that minimum value is validated correctly."""
     answer = {
         "id": "answer-4",
         "label": "Max/Min out of system limits",
@@ -40,6 +43,7 @@ def test_minimum_value():
 
 
 def test_invalid_answer_default():
+    """Test that invalid answer default is identified correctly."""
     answer = {
         "default": 0,
         "id": "answer-7",
@@ -49,7 +53,7 @@ def test_invalid_answer_default():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_mandatory_has_no_default()
 
@@ -60,6 +64,7 @@ def test_invalid_answer_default():
 
 
 def test_are_decimal_places_valid():
+    """Test that decimal places are validated correctly."""
     answer = {
         "calculated": True,
         "description": "The total percentages should be 100%",
@@ -72,7 +77,7 @@ def test_are_decimal_places_valid():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_decimal_places()
 
@@ -91,6 +96,7 @@ def test_are_decimal_places_valid():
     ],
 )
 def test_invalid_min_or_max_is_string(bounds, error_count):
+    """Test that minimum and maximum values are validated correctly."""
     answer = {
         "calculated": True,
         "description": "The total percentages should be 100%",
@@ -103,7 +109,7 @@ def test_invalid_min_or_max_is_string(bounds, error_count):
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_max_is_number()
 
@@ -115,6 +121,7 @@ def test_invalid_min_or_max_is_string(bounds, error_count):
 
 
 def test_valid_minimum_value_is_float():
+    """Test that minimum value is validated correctly as a float."""
     answer = {
         "id": "answer-2",
         "mandatory": True,
@@ -125,7 +132,7 @@ def test_valid_minimum_value_is_float():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_min_max_is_number()
@@ -134,6 +141,7 @@ def test_valid_minimum_value_is_float():
 
 
 def test_valid_max_if_numeric_value_source():
+    """Test that maximum value is validated correctly if it is a numeric value source."""
     filename = "schemas/valid/test_calculated_summary.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -147,6 +155,7 @@ def test_valid_max_if_numeric_value_source():
 
 
 def test_invalid_range():
+    """Test that invalid ranges are identified correctly."""
     answer = {
         "id": "answer-3",
         "label": "Invalid References",
@@ -157,13 +166,13 @@ def test_invalid_range():
     }
     answers = {"answers": [answer]}
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     questionnaire_schema = QuestionnaireSchema(answers)
 
     validator.validate_referred_numeric_answer(
-        questionnaire_schema.numeric_answer_ranges
+        questionnaire_schema.numeric_answer_ranges,
     )
 
     expected_errors = [
@@ -183,13 +192,14 @@ def test_invalid_range():
 
 
 def test_invalid_range_calculated_summary_source():
+    """Test that invalid ranges are identified correctly in calculated summary source."""
     filename = "schemas/invalid/test_invalid_calculated_summary_answer_ranges.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     answer = schema.get_answer("set-minimum-answer")
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_referred_numeric_answer(schema.numeric_answer_ranges)
@@ -211,6 +221,7 @@ def test_invalid_range_calculated_summary_source():
 
 
 def test_invalid_numeric_answers():
+    """Test that invalid numeric answers are identified correctly."""
     validator = NumberAnswerValidator(
         {
             "decimal_places": 2,
@@ -229,7 +240,7 @@ def test_invalid_numeric_answers():
                 "decimal_places": 2,
             },
             "answer-2": {"decimal_places": 3},
-        }
+        },
     )
 
     expected_errors = [
@@ -237,13 +248,14 @@ def test_invalid_numeric_answers():
             "message": validator.GREATER_DECIMALS_ON_ANSWER_REFERENCE,
             "referenced_id": "answer-2",
             "answer_id": "answer-1",
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
 
 
 def test_invalid_maximum_minimum_value_from_answer_source():
+    """Test that invalid maximum and minimum values from answer source are identified correctly."""
     answer = {
         "id": "min-max-range",
         "mandatory": False,
@@ -265,7 +277,7 @@ def test_invalid_maximum_minimum_value_from_answer_source():
                 "type": "Number",
                 "maximum": {"value": 9_999_999_999_999_999},
             },
-        ]
+        ],
     }
 
     questionnaire_schema = QuestionnaireSchema(answers)

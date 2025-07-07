@@ -1,3 +1,5 @@
+"""Unit tests for the CalculatedSummaryBlockValidator."""
+
 from app.validators.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
@@ -6,7 +8,7 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_calculated_summary():
-    """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
+    """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary."""
     filename = "schemas/invalid/test_invalid_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -46,7 +48,7 @@ def test_invalid_calculated_summary():
 
 
 def test_invalid_new_calculated_summary():
-    """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary"""
+    """Asserts invalid `when` types, currencies or units are not of the same type for CalculatedSummary."""
     filename = "schemas/invalid/test_invalid_new_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -92,7 +94,7 @@ def test_invalid_new_calculated_summary():
 
 
 def test_invalid_calculated_summary_answer_after_calculated_summary_block():
-    """Asserts invalid `when` answer id referenced in calculated summary comes after calculated summary block"""
+    """Asserts invalid `when` answer id referenced in calculated summary comes after calculated summary block."""
     filename = "schemas/invalid/test_invalid_new_calculated_summary_answer_after_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -109,7 +111,7 @@ def test_invalid_calculated_summary_answer_after_calculated_summary_block():
                                 "source": "answers",
                             },
                             {"identifier": "third-number-answer", "source": "answers"},
-                        ]
+                        ],
                     },
                     "title": "Grand total of previous values",
                 },
@@ -120,7 +122,7 @@ def test_invalid_calculated_summary_answer_after_calculated_summary_block():
             },
             "block_id": "currency-total-playback",
             "message": CalculatedSummaryBlockValidator.ANSWER_SET_AFTER_CALCULATED_SUMMARY,
-        }
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -134,7 +136,7 @@ def test_invalid_calculated_summary_answer_after_calculated_summary_block():
 
 
 def test_invalid_calculated_summary_answer_in_different_section():
-    """Asserts invalid `when` answer id referenced is in a different section to the calculated summary block"""
+    """Asserts invalid `when` answer id referenced is in a different section to the calculated summary block."""
     filename = "schemas/invalid/test_invalid_new_calculated_summary_answer_in_different_section.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -143,7 +145,7 @@ def test_invalid_calculated_summary_answer_in_different_section():
             "block_id": "currency-total-playback",
             "section_ids": {"section-1", "section-2"},
             "message": CalculatedSummaryBlockValidator.ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY,
-        }
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -157,9 +159,12 @@ def test_invalid_calculated_summary_answer_in_different_section():
 
 
 def test_invalid_calculated_summary_with_single_static_answer():
-    """Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer
+    """Tests for invalid calculated summary with single static answer.
+
+    Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer
     this particular test is for the edge case where the question has both dynamic and static answers
-    and the calculated summary is referring to a static one."""
+    and the calculated summary is referring to a static one.
+    """
     filename = (
         "schemas/invalid/test_invalid_new_calculated_summary_with_dynamic_answers.json"
     )
@@ -170,14 +175,14 @@ def test_invalid_calculated_summary_with_single_static_answer():
             "block_id": "invalid-calculated-summary-with-single-static-answer",
             "answer_id": "cost-of-season-ticket",
             "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
-        }
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
     block = questionnaire_schema.get_block(
-        "invalid-calculated-summary-with-single-static-answer"
+        "invalid-calculated-summary-with-single-static-answer",
     )
     validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
     errors += validator.validate()

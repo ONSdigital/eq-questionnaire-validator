@@ -1,3 +1,5 @@
+"""Tests for answer validators in the EQ Questionnaire Validator."""
+
 from app.validators.answers import get_answer_validator
 from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
@@ -9,6 +11,7 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_number_of_decimals():
+    """Test that the number of decimal places is validated correctly."""
     answer = {
         "decimal_places": 10,
         "id": "answer-5",
@@ -18,7 +21,7 @@ def test_number_of_decimals():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_decimals()
@@ -32,6 +35,7 @@ def test_number_of_decimals():
 
 
 def test_invalid_single_date_period():
+    """Test that an invalid single date period is identified correctly."""
     answer = {
         "id": "date-range-from",
         "label": "Period from",
@@ -42,13 +46,14 @@ def test_invalid_single_date_period():
     }
 
     answer_validator = DateAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     assert not answer_validator.is_offset_date_valid()
 
 
 def test_confirmation_question_q_code():
+    """Test that a confirmation question with a q_code is validated correctly."""
     filename = "schemas/valid/test_q_codes.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     answer = schema.get_answer("confirmation-1-answer")
@@ -61,13 +66,14 @@ def test_confirmation_question_q_code():
         {
             "answer_id": "confirmation-1-answer",
             "message": validator.CONFIRMATION_QUESTION_HAS_Q_CODE,
-        }
+        },
     ]
 
     assert expected_error_messages == validator.errors
 
 
 def test_data_version_0_0_3_q_code():
+    """Test that a data version 0.0.3 schema with a q_code is validated correctly."""
     # valid schema for test purposes, q_code is injected
     filename = "schemas/valid/test_interstitial_instruction.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -81,13 +87,14 @@ def test_data_version_0_0_3_q_code():
         {
             "answer_id": "favourite-lunch",
             "message": validator.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT,
-        }
+        },
     ]
 
     assert expected_error_messages == validator.errors
 
 
 def test_invalid_q_codes():
+    """Test that invalid q_codes in answers are validated correctly."""
     filename = "schemas/invalid/test_invalid_q_code.json"
     json_to_validate = _open_and_load_schema_file(filename)
     questionnaire_validator = QuestionnaireValidator(json_to_validate)

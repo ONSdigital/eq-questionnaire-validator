@@ -1,14 +1,18 @@
+"""Validator for calculated questions in a questionnaire schema."""
+
 from app.validators.questions.question_validator import QuestionValidator
 from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
 
 class CalculatedQuestionValidator(QuestionValidator):
+    """Validator for calculated questions in a questionnaire schema."""
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
     ANSWER_TYPES_FOR_CALCULATION_MISMATCH = "Expected the answer types for calculation to be same type but got {answer_types}'"
     ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
+        """Validates the calculated question."""
         super().validate()
         self.validate_calculations()
         if self.errors:
@@ -18,7 +22,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         return self.errors
 
     def _get_answer_types(
-        self, answer_id: str | None, answers_to_calculate: list[str]
+        self, answer_id: str | None, answers_to_calculate: list[str],
     ) -> dict[str, str]:
         return {
             answer: self.schema.get_answer_type(answer).value
@@ -27,22 +31,19 @@ class CalculatedQuestionValidator(QuestionValidator):
         }
 
     def validate_calculations(self):
-        """
-        Validates that any answer ids within the 'answer_to_group'
-        list are existing answers within the question
-        """
+        """Validates that any answer ids within the 'answer_to_group' list are existing answers within the question."""
         answer_ids = [answer["id"] for answer in self.answers]
         for calculation in self.question.get("calculations"):
             answer_ids_list = calculation["answers_to_calculate"]
             if len(answer_ids_list) == 1 and answer_ids_list[
                 0
             ] not in self.schema.get_all_dynamic_answer_ids(
-                self.schema.get_block_by_answer_id(answer_ids_list[0])["id"]
+                self.schema.get_block_by_answer_id(answer_ids_list[0])["id"],
             ):
                 self.add_error(
                     self.ANSWERS_TO_CALCULATE_TOO_SHORT.format(
                         list=answer_ids_list,
-                    )
+                    ),
                 )
             for answer_id in answer_ids_list:
                 if answer_id not in answer_ids:
@@ -59,9 +60,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 )
 
     def validate_calculations_numeric_matching_answer_types(self):
-        """
-        Validates that source answer is of number type, and that the answers_to_calculate match that type
-        """
+        """Validates that source answer is of number type, and that the answers_to_calculate match that type."""
         for calculation in self.question.get("calculations"):
             if not (answer_id := calculation.get("answer_id")):
                 value = calculation.get("value")
@@ -70,15 +69,13 @@ class CalculatedQuestionValidator(QuestionValidator):
                     answer_id = value.get("identifier")
 
             answer_types = self._get_answer_types(
-                answer_id, calculation.get("answers_to_calculate")
+                answer_id, calculation.get("answers_to_calculate"),
             )
             self._validate_answers_are_numeric(answer_types)
             self._validate_answers_are_same_numeric_type(answer_types)
 
     def _validate_answers_are_same_numeric_type(self, answer_types: dict[str, str]):
-        """
-        Checks that the answers to calculate and any answer_id are all the same type
-        """
+        """Checks that the answers to calculate and any answer_id are all the same type."""
         distinct_types = set(answer_types.values())
         if len(distinct_types) > 1:
             self.add_error(

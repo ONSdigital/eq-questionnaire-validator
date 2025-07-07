@@ -1,14 +1,18 @@
+"""Validator for questions in a questionnaire schema."""
+
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.validator import Validator
 
 
 class QuestionValidator(Validator):
+    """Validator for questions in a questionnaire schema."""
     ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = (
         "Answer label must be provided for questions with multiple answers"
     )
     question = {}
 
     def __init__(self, schema_element, schema=None):
+        """Initialize the QuestionValidator."""
         super().__init__(schema_element)
         self.question = schema_element
         self.answers = QuestionnaireSchema.get_answers_from_question(self.question)
@@ -16,6 +20,7 @@ class QuestionValidator(Validator):
         self.schema = schema
 
     def validate(self):
+        """Validate the question."""
         if self.question["type"] != "MutuallyExclusive":
             self._validate_answer_labels()
 
@@ -27,10 +32,10 @@ class QuestionValidator(Validator):
             and self.answers[-1]["type"] == "Checkbox"
             and len(self.answers[-1]["options"]) == 1
         ):
-            return None
+            return
 
         for answer in self.answers:
             if not answer.get("label"):
                 self.add_error(
-                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"]
+                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"],
                 )

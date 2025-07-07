@@ -1,3 +1,5 @@
+"""This module provides a validator for option answers in questionnaires."""
+
 from functools import cached_property
 
 from app.answer_type import AnswerType
@@ -12,6 +14,7 @@ MIN_OPTIONS_BY_ANSWER_TYPE = {
 
 
 class OptionAnswerValidator(AnswerValidator):
+    """Validates an option answer."""
     DUPLICATE_LABEL = "Duplicate label found"
     DUPLICATE_VALUE = "Duplicate value found"
     LIST_NAME_MISSING = "List name defined in action params does not exist"
@@ -31,6 +34,7 @@ class OptionAnswerValidator(AnswerValidator):
     )
 
     def __init__(self, schema_element, questionnaire_schema):
+        """Initializes the option answer validator."""
         super().__init__(schema_element, questionnaire_schema)
 
         self.questionnaire_schema = questionnaire_schema
@@ -38,6 +42,7 @@ class OptionAnswerValidator(AnswerValidator):
         self.block_ids = self.questionnaire_schema.block_ids
 
     def validate(self):
+        """Validates the answer."""
         super().validate()
         self.validate_min_options()
         self.validate_duplicate_options()
@@ -47,13 +52,16 @@ class OptionAnswerValidator(AnswerValidator):
 
     @cached_property
     def options(self):
+        """Returns the options for the answer."""
         return self.answer.get("options", [])
 
     @cached_property
     def dynamic_options(self):
+        """Returns the dynamic options for the answer."""
         return self.answer.get("dynamic_options", {})
 
     def validate_min_options(self):
+        """Validates the minimum number of options."""
         options_len = len(self.options)
         min_options = MIN_OPTIONS_BY_ANSWER_TYPE[self.answer_type]
 
@@ -66,10 +74,11 @@ class OptionAnswerValidator(AnswerValidator):
                     answer_type=self.answer_type.value,
                     required_num_options=min_options,
                     actual_num_options=options_len,
-                )
+                ),
             )
 
     def validate_duplicate_options(self):
+        """Validates that there are no duplicate options."""
         labels = set()
         values = set()
 
@@ -88,6 +97,7 @@ class OptionAnswerValidator(AnswerValidator):
             values.add(option["value"])
 
     def validate_default_exists_in_options(self):
+        """Validates that the default value exists in the options."""
         default_value = self.answer.get("default")
         if default_value and default_value not in [
             option["value"] for option in self.options
@@ -95,8 +105,9 @@ class OptionAnswerValidator(AnswerValidator):
             self.add_error(self.ANSWER_DEFAULT_MISSING, default_value=default_value)
 
     def validate_dynamic_options(self):
+        """Validates the dynamic options for the answer."""
         if not self.dynamic_options:
-            return None
+            return
 
         self._validate_dynamic_options_answer_source()
         self._validate_dynamic_options_value_rules()
@@ -116,7 +127,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def _validate_dynamic_options_answer_source(self):
         if "source" not in self.dynamic_options["values"]:
-            return None
+            return
 
         value_source = self.dynamic_options["values"]
         transform = self.dynamic_options["transform"]

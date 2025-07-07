@@ -1,3 +1,5 @@
+"""Tests for the RulesValidator class in the EQ Questionnaire Validator."""
+
 import pytest
 
 from app import error_messages
@@ -9,7 +11,7 @@ from tests.conftest import get_mock_schema
 ORIGIN_ID = "block-id"
 
 default_answer_with_context = {
-    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
+    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}},
 }
 
 
@@ -20,6 +22,7 @@ def get_validator(
     answers_with_context=None,
     allow_self_reference=False,
 ):
+    """Creates a RulesValidator instance."""
     return RulesValidator(
         rule,
         ORIGIN_ID,
@@ -44,6 +47,7 @@ def get_validator(
     ],
 )
 def test_validate_options(operator_name, first_argument, second_argument):
+    """Tests that the SectionValidator validates options correctly."""
     rule = {operator_name: [first_argument, second_argument]}
 
     questionnaire_schema = QuestionnaireSchema({})
@@ -79,8 +83,9 @@ def test_validate_options(operator_name, first_argument, second_argument):
     ],
 )
 def test_validate_options_null_value_is_valid(
-    operator_name, first_argument, second_argument
+    operator_name, first_argument, second_argument,
 ):
+    """Tests that the SectionValidator validates null values as valid."""
     rule = {operator_name: [first_argument, second_argument]}
 
     questionnaire_schema = QuestionnaireSchema({})
@@ -99,19 +104,20 @@ def test_validate_options_null_value_is_valid(
 
 
 def test_validate_options_multiple_errors():
+    """Tests that the SectionValidator validates multiple errors in a single rule."""
     rule = {
         "in": [
             {"source": "answers", "identifier": "string-answer"},
             ["Maybe", "Not sure"],
-        ]
+        ],
     }
 
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}}
+        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
     }
     questionnaire_schema.answer_id_to_option_values_map = {
-        "string-answer": ["Yes", "No"]
+        "string-answer": ["Yes", "No"],
     }
     validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
     validator.validate()
@@ -135,10 +141,11 @@ def test_validate_options_multiple_errors():
 
 
 def test_validate_date_operator_non_date_answer():
+    """Tests that the SectionValidator validates a date operator with a non-date answer."""
     date_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context
+        date_operator, answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -152,12 +159,13 @@ def test_validate_date_operator_non_date_answer():
 
 
 def test_validate_date_operator_with_offset():
+    """Tests that the SectionValidator validates a date operator with an offset."""
     date_operator = {
-        "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}]
+        "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}],
     }
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context
+        date_operator, answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -171,16 +179,17 @@ def test_validate_date_operator_with_offset():
 
 
 def test_validate_nested_date_operator_non_date_answer():
+    """Tests that the SectionValidator validates a nested date operator with a non-date answer."""
     rule = {
         "and": [
             {
                 "==": [
                     {"date": [{"source": "answers", "identifier": "string-answer"}]},
                     {"date": ["2021-01-01"]},
-                ]
+                ],
             },
             {"==": [{"source": "answers", "identifier": "string-answer"}, "Yes"]},
-        ]
+        ],
     }
 
     validator = get_validator(rule, answers_with_context=default_answer_with_context)
@@ -196,12 +205,13 @@ def test_validate_nested_date_operator_non_date_answer():
 
 
 def test_validate_count_operator_non_checkbox_answer():
+    """Tests that the SectionValidator validates a count operator with a non-checkbox answer."""
     count_operator = {"count": [{"source": "answers", "identifier": "array-answer"}]}
 
     validator = get_validator(
         count_operator,
         answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
     )
     validator.validate()
@@ -219,12 +229,13 @@ def test_validate_count_operator_non_checkbox_answer():
 
 
 def test_validate_sum_operator():
+    """Tests that the SectionValidator validates a sum operator."""
     sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}, 10]}
 
     validator = get_validator(
         sum_operator,
         answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
     )
     validator.validate()
@@ -242,16 +253,17 @@ def test_validate_sum_operator():
 
 
 def test_validate_nested_sum_operator():
+    """Tests that the SectionValidator validates a nested sum operator."""
     sum_operator = {
         "+": [
             {
                 "+": [
                     {"source": "answers", "identifier": "array-answer"},
                     {"source": "answers", "identifier": "checkbox-answer"},
-                ]
+                ],
             },
             {"source": "answers", "identifier": "number-answer"},
-        ]
+        ],
     }
 
     validator = get_validator(
@@ -259,7 +271,7 @@ def test_validate_nested_sum_operator():
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
             "checkbox-answer": {
-                "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                "answer": {"id": "checkbox-answer", "type": "Checkbox"},
             },
             "number-answer": {"answer": {"id": "array-answer", "type": "Number"}},
         },
@@ -273,7 +285,7 @@ def test_validate_nested_sum_operator():
                 "+": [
                     {"identifier": "array-answer", "source": "answers"},
                     {"identifier": "checkbox-answer", "source": "answers"},
-                ]
+                ],
             },
             "message": "Invalid argument type for operator",
             "operator": "+",
@@ -286,6 +298,7 @@ def test_validate_nested_sum_operator():
 
 
 def test_map_operator_with_self_reference():
+    """Tests that the SectionValidator validates a custom summary with a self-reference."""
     operator = {
         "map": [
             {"format-date": [{"date": ["self"]}, "yyyy-MM-dd"]},
@@ -293,13 +306,13 @@ def test_map_operator_with_self_reference():
                 "date-range": [
                     {
                         "date": [
-                            {"source": "response_metadata", "identifier": "started_at"}
-                        ]
+                            {"source": "response_metadata", "identifier": "started_at"},
+                        ],
                     },
                     7,
-                ]
+                ],
             },
-        ]
+        ],
     }
 
     validator = get_validator(operator)
@@ -309,6 +322,7 @@ def test_map_operator_with_self_reference():
 
 
 def test_map_operator_without_self_reference():
+    """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     operator = {
         "map": [
             {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
@@ -316,13 +330,13 @@ def test_map_operator_without_self_reference():
                 "date-range": [
                     {
                         "date": [
-                            {"source": "response_metadata", "identifier": "started_at"}
-                        ]
+                            {"source": "response_metadata", "identifier": "started_at"},
+                        ],
                     },
                     7,
-                ]
+                ],
             },
-        ]
+        ],
     }
 
     validator = get_validator(operator)
@@ -346,14 +360,15 @@ def test_map_operator_without_self_reference():
     ],
 )
 def test_self_reference_outside_map_operator_without_allow_self_reference(
-    operator_name, operands
+    operator_name, operands,
 ):
+    """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     rule = {operator_name: operands}
 
     validator = get_validator(
         rule,
         answers_with_context={
-            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
+            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}},
         },
         allow_self_reference=False,
     )
@@ -377,8 +392,9 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     ],
 )
 def test_self_reference_outside_map_operator_with_allow_self_reference(
-    operator_name, operands
+    operator_name, operands,
 ):
+    """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     rule = {operator_name: operands}
 
     validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
@@ -388,6 +404,7 @@ def test_self_reference_outside_map_operator_with_allow_self_reference(
 
 
 def test_non_existing_answer_id_in_option_label_for_value_operator():
+    """Tests that the option-label-from-value operator handles non-existing answer IDs."""
     rule = {"option-label-from-value": ["self", "non-existing-answer"]}
 
     validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
@@ -403,6 +420,7 @@ def test_non_existing_answer_id_in_option_label_for_value_operator():
 
 
 def test_answer_type_invalid_for_option_label_from_value():
+    """Tests that the answer type is invalid for option-label-from-value."""
     rule = {"option-label-from-value": ["self", "string-answer"]}
     validator = get_validator(
         rule,

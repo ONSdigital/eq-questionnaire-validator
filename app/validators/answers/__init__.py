@@ -6,6 +6,7 @@ from app.validators.answers.text_field_answer_validator import TextFieldAnswerVa
 
 
 def get_answer_validator(answer, questionnaire_schema):
+    """Returns the appropriate answer validator based on the answer type."""
     validators = {
         "TextField": TextFieldAnswerValidator,
         "Date": DateAnswerValidator,

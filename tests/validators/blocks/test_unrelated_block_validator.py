@@ -1,9 +1,12 @@
+"""Tests for UnrelatedBlockValidator."""
+
 from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_actions():
+    """Test that the UnrelatedBlockValidator raises an error when action parameters are missing."""
     filename = "schemas/invalid/test_invalid_relationships_unrelated.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -14,7 +17,7 @@ def test_invalid_actions():
         {
             "message": validator.ACTION_PARAMS_MISSING,
             "block_id": "related-to-anyone-else",
-        }
+        },
     ]
 
     validator.validate()

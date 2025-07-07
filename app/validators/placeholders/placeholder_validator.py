@@ -1,3 +1,5 @@
+"""PlaceholderValidator class to validate placeholders in a questionnaire schema."""
+
 import re
 
 from app import error_messages
@@ -11,6 +13,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class PlaceholderValidator(Validator):
+    """PlaceholderValidator validates placeholders in a questionnaire schema."""
     PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
     FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = (
         "Can't reference `previous_transform` in a first transform"
@@ -20,12 +23,14 @@ class PlaceholderValidator(Validator):
     )
 
     def __init__(self, element):
+        """Initialize PlaceholderValidator."""
         super().__init__(element)
         self.questionnaire_schema = QuestionnaireSchema(element)
 
     def validate(self):
+        """Validate placeholders in the questionnaire schema."""
         strings_with_placeholders = get_object_containing_key(
-            self.schema_element, "placeholders"
+            self.schema_element, "placeholders",
         )
         for _, placeholder_object, __ in strings_with_placeholders:
             self.validate_placeholder_object(placeholder_object)
@@ -33,12 +38,13 @@ class PlaceholderValidator(Validator):
         return self.errors
 
     def validate_placeholder_object(self, placeholder_object):
+        """Validate placeholder object."""
         placeholders_in_string = set()
         placeholder_regex = re.compile("{(.*?)}")
 
         if "text" in placeholder_object:
             placeholders_in_string.update(
-                placeholder_regex.findall(placeholder_object.get("text"))
+                placeholder_regex.findall(placeholder_object.get("text")),
             )
         elif "text_plural" in placeholder_object:
             for text in placeholder_object["text_plural"]["forms"].values():
@@ -68,15 +74,14 @@ class PlaceholderValidator(Validator):
             )
 
     def validate_placeholder_answer_id(self, answer_id):
-        """
-        Validate answer_id exists in Answer Context
+        """Validate answer_id exists in Answer Context.
+
         Args:
-          answer_id: Answer id of placeholder
+            answer_id: Answer id of placeholder
         Returns:
             True  : if exists
             False : if not exists
         """
-
         answers = self.questionnaire_schema.answers_with_context
         if answer_id not in answers:
             self.add_error(
@@ -87,18 +92,17 @@ class PlaceholderValidator(Validator):
         return True
 
     def validate_option_label_from_value_placeholder(self, answer_id):
-        """
-        validate answer_id exists and answer_id for option label from value is of type ['Radio','Checkbox','Dropdown']
-        Args:
-         answer_id: answer_id passed to transform
+        """Validate answer_id exists and answer_id for option label from value is of type ['Radio','Checkbox','Dropdown'].
 
+        Args:
+            answer_id: answer_id passed to transform
         """
         answers = self.questionnaire_schema.answers_with_context
         answer_id_exists = self.validate_placeholder_answer_id(answer_id)
 
         # if answer id doesn't exist, no further validation is done
         if not answer_id_exists:
-            return None
+            return
 
         if not any(
             x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
@@ -109,14 +113,15 @@ class PlaceholderValidator(Validator):
             )
 
     def validate_answer_type_for_transform(
-        self, argument, argument_name, transform_type
+        self, argument, argument_name, transform_type,
     ):
+        """Validate answer type for transform."""
         if not (
             transform_type in ["format_unit", "format_percentage"]
             and argument_name == "value"
             and argument.get("value", {}).get("source") == "answers"
         ):
-            return None
+            return
 
         answer_id = argument["value"]["identifier"]
         answer_type = self.questionnaire_schema.answers_with_context[answer_id][
@@ -124,7 +129,7 @@ class PlaceholderValidator(Validator):
         ]["type"]
 
         if answer_type.lower() in transform_type:
-            return None
+            return
 
         expected_type = transform_type.split("_")[1].title()
         self.add_error(
@@ -137,14 +142,15 @@ class PlaceholderValidator(Validator):
         )
 
     def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
+        """Validate answer and transform unit match."""
         if transform_type != "format_unit":
-            return None
+            return
 
         value_source = arguments["value"]
         unit = arguments["unit"]
 
         source_answer_ids = self.questionnaire_schema.get_answer_ids_for_value_source(
-            value_source
+            value_source,
         )
 
         for source_answer_id in source_answer_ids:
@@ -188,6 +194,7 @@ class PlaceholderValidator(Validator):
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
 
     def validate_placeholder_transforms(self, transforms):
+        """Validate placeholder transforms."""
         self._validate_placeholder_previous_transforms(transforms)
 
         for transform in transforms:
@@ -200,7 +207,7 @@ class PlaceholderValidator(Validator):
                     self.validate_option_label_from_value_placeholder(argument)
 
                 self.validate_answer_type_for_transform(
-                    transform.get("arguments"), argument_name, transform["transform"]
+                    transform.get("arguments"), argument_name, transform["transform"],
                 )
 
             self.validate_answer_and_transform_unit_match(

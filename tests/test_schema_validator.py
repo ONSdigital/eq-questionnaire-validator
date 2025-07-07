@@ -1,3 +1,5 @@
+"""Tests for the Schema Validator."""
+
 import json
 
 from jsonschema import RefResolver, validators
@@ -7,8 +9,8 @@ from tests.utils import _open_and_load_schema_file
 
 
 def create_schema_with_answer_id(answer_id):
-    """
-    Utility method that loads a JSON schema file and swaps out an answer Id.
+    """Utility method that loads a JSON schema file and swaps out an answer Id.
+
     :param answer_id: The Id to use for the answer.
     :return: The JSON file with the Id swapped for schema_id
     """
@@ -24,6 +26,7 @@ def create_schema_with_answer_id(answer_id):
 
 
 def test_valid_answer_ids():
+    """Test that valid answer IDs are accepted."""
     answer_ids = ["star-wars", "name-with-hyphens", "this-is-a-valid-id-0", "answer"]
 
     for answer_id in answer_ids:
@@ -35,6 +38,7 @@ def test_valid_answer_ids():
 
 
 def test_invalid_answer_ids():
+    """Test that invalid answer IDs are rejected."""
     answer_ids = [
         "!n0t-@-valid-id",
         "NOT-A-VALID-ID",
@@ -53,6 +57,7 @@ def test_invalid_answer_ids():
 
 
 def test_schema():
+    """Test that the schema is valid."""
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
         resolver = RefResolver(
@@ -67,6 +72,7 @@ def test_schema():
 
 
 def test_single_variant_invalid():
+    """Test that a single variant schema without 'when' is invalid."""
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
@@ -78,6 +84,7 @@ def test_single_variant_invalid():
 
 
 def test_invalid_survey_id_whitespace():
+    """Test that invalid survey IDs with whitespace are rejected."""
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
@@ -89,6 +96,7 @@ def test_invalid_survey_id_whitespace():
 
 
 def test_returns_pointer():
+    """Test that the pointer is returned for invalid survey IDs."""
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
@@ -100,6 +108,7 @@ def test_returns_pointer():
 
 
 def test_invalid_q_code_regex_pattern():
+    """Test that invalid q_code regex patterns are rejected."""
     file = "schemas/invalid/test_invalid_q_code_regex_pattern.json"
     json_to_validate = _open_and_load_schema_file(file)
 

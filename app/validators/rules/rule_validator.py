@@ -1,3 +1,5 @@
+"""RuleValidator module for validating rules in a questionnaire schema."""
+
 from app import error_messages
 from app.answer_type import AnswerOptionType, AnswerType
 from app.validators.routing.types import (
@@ -15,6 +17,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class Operator:
+    """Defines the operators used in the rules."""
     NOT = "not"
     AND = "and"
     OR = "or"
@@ -79,6 +82,7 @@ SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
+    """Validates the rules for a questionnaire."""
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
         "Date operator references non Date, MonthYearDate, or YearDate answer"
@@ -97,8 +101,9 @@ class RulesValidator(Validator):
     INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
 
     def __init__(
-        self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False
+        self, rules, origin_id, questionnaire_schema, *, allow_self_reference=False,
     ):
+        """Validates the rules for a questionnaire."""
         super().__init__(rules)
         self.rules = rules
         self.questionnaire_schema = questionnaire_schema
@@ -106,9 +111,7 @@ class RulesValidator(Validator):
         self.allow_self_reference = allow_self_reference
 
     def validate(self):
-        """
-        Validate that the top level rules are valid
-        """
+        """Validate that the top level rules are valid."""
         self._validate_rule(self.rules, allow_self_reference=self.allow_self_reference)
         self._validate_operator_arguments(self.rules)
         return self.errors
@@ -135,15 +138,13 @@ class RulesValidator(Validator):
 
         if operator_name in [Operator.FORMAT_DATE, Operator.DATE]:
             self._validate_self_references(
-                rules, operator_name, allow_self_reference=allow_self_reference
+                rules, operator_name, allow_self_reference=allow_self_reference,
             )
 
         self._validate_options(rules, operator_name)
 
     def _validate_self_references(self, rules, operator_name, *, allow_self_reference):
-        """
-        Validate references to `self` are within the context of the `map` operator
-        """
+        """Validate references to `self` are within the context of the `map` operator."""
         arguments_for_non_map_operators = (
             self._get_flattened_arguments_for_non_map_operators(rules[operator_name])
         )
@@ -154,28 +155,27 @@ class RulesValidator(Validator):
             self.add_error(self.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR, rule=rules)
 
     def _validate_map_operator(self, operator):
-        """
-        Validates that the first argument to the map operator has a reference to `self`
+        """Validates that the first argument to the map operator has a reference to `self`.
+
         The second argument is currently not validated here as it can currently only be `date-range`
         """
         function_to_map_over_arguments = list(operator["map"][0].values())[0]
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
-            return None
+            return
 
         arguments_for_non_map_operators = (
             self._get_flattened_arguments_for_non_map_operators(
-                function_to_map_over_arguments
+                function_to_map_over_arguments,
             )
         )
 
         if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
             self.add_error(
-                self.MAP_OPERATOR_WITHOUT_SELF_REFERENCE, rule=operator["map"][0]
+                self.MAP_OPERATOR_WITHOUT_SELF_REFERENCE, rule=operator["map"][0],
             )
 
     def _get_flattened_arguments_for_non_map_operators(self, arguments):
-        """
-        Recursively fetch all the arguments for all non `map` operators as a flattened list.
+        """Recursively fetch all the arguments for all non `map` operators as a flattened list.
 
         The `map` operator is checked explicitly.
         """
@@ -183,17 +183,15 @@ class RulesValidator(Validator):
             non_operator_argument
             for argument in arguments
             for non_operator_argument in self._get_non_map_arguments_from_argument(
-                argument
+                argument,
             )
         ]
 
     def _get_non_map_arguments_from_argument(self, argument):
-        """
-        For the given argument, recursively fetch all the arguments for all non `map` operators as a flattened list.
+        """For the given argument, recursively fetch all the arguments for all non `map` operators as a flattened list.
 
         The `map` operator is checked explicitly.
         """
-
         non_operator_arguments = []
         if isinstance(argument, dict) and any(
             operator in argument
@@ -210,10 +208,7 @@ class RulesValidator(Validator):
         return non_operator_arguments
 
     def _validate_option_label_from_value_operator(self, operator):
-        """
-        Validate the referenced answer id in `option-label-from-value` exists
-        and is of type ['Radio','Checkbox','Dropdown']
-        """
+        """Validate the referenced answer id in `option-label-from-value` exists and is of type ['Radio','Checkbox','Dropdown']."""
         answer_id = operator[next(iter(operator))][1]
         answers = self.questionnaire_schema.answers_with_context
         if answer_id not in answers:
@@ -231,9 +226,7 @@ class RulesValidator(Validator):
             )
 
     def _validate_date_operator(self, operator):
-        """
-        Validates that when an answer value source is used, it is a date
-        """
+        """Validates that when an answer value source is used, it is a date."""
         first_argument = operator["date"][0]
         if (
             isinstance(first_argument, dict)
@@ -247,16 +240,14 @@ class RulesValidator(Validator):
             )
 
     def _validate_options(self, rules, operator_name):
-        """
-        Validates that answer options referenced in a rule exist
-        """
+        """Validates that answer options referenced in a rule exist."""
         values = []
         option_values = []
         for argument in rules[operator_name]:
             if isinstance(argument, dict) and argument.get("source") == "answers":
                 option_values = (
                     self.questionnaire_schema.answer_id_to_option_values_map.get(
-                        argument["identifier"]
+                        argument["identifier"],
                     )
                 )
             else:
@@ -278,7 +269,7 @@ class RulesValidator(Validator):
 
         if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS + NUMERIC_OPERATORS:
             self._validate_comparison_operator_argument_types(
-                rule, operator_name, argument_types
+                rule, operator_name, argument_types,
             )
 
         if (
@@ -304,7 +295,7 @@ class RulesValidator(Validator):
                 argument_type = self._validate_operator_arguments(argument)
             elif isinstance(argument, dict) and "source" in argument:
                 argument_type = resolve_value_source_json_type(
-                    argument, self.questionnaire_schema
+                    argument, self.questionnaire_schema,
                 )
             else:
                 argument_type = python_type_to_json_type(type(argument).__name__)
@@ -314,9 +305,7 @@ class RulesValidator(Validator):
         return argument_types
 
     def _validate_argument_types_match(self, rule, argument_types):
-        """
-        Validates that all arguments are of the same type
-        """
+        """Validates that all arguments are of the same type."""
         if len(set(argument_types)) > 1:
             self.add_error(
                 self.OPERATOR_ARGUMENT_TYPE_MISMATCH,
@@ -325,14 +314,12 @@ class RulesValidator(Validator):
             )
 
     def _validate_comparison_operator_argument_types(
-        self, rule, operator_name, argument_types
+        self, rule, operator_name, argument_types,
     ):
-        """
-        Validates that all arguments are of the correct type for the operator
-        """
+        """Validates that all arguments are of the correct type for the operator."""
         for argument_position, _ in enumerate(rule[operator_name]):
             valid_types = self._get_valid_types_for_operator(
-                operator_name, argument_position=argument_position
+                operator_name, argument_position=argument_position,
             )
             if argument_types[argument_position] not in valid_types:
                 self.add_error(

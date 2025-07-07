@@ -21,6 +21,7 @@ from app.validators.blocks.relationship_collector_validator import (
 
 
 def get_block_validator(block, questionnaire_schema):
+    """Returns the appropriate block validator for the given block and questionnaire schema."""
     validators = {
         "CalculatedSummary": CalculatedSummaryBlockValidator,
         "GrandCalculatedSummary": GrandCalculatedSummaryBlockValidator,

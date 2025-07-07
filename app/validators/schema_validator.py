@@ -1,3 +1,5 @@
+"""This code defines a SchemaValidator class that validates a schema element against a JSON schema."""
+
 import glob
 from json import load
 
@@ -9,7 +11,9 @@ from app.validators.validator import Validator
 
 
 class SchemaValidator(Validator):
+    """Validates a schema element against a JSON schema."""
     def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
+        """Initializes the SchemaValidator with a schema element and a JSON schema."""
         super().__init__(schema_element)
 
         with open(schema, encoding="utf8") as schema_data:
@@ -24,6 +28,7 @@ class SchemaValidator(Validator):
 
     @staticmethod
     def lookup_ref_store():
+        """Looks up the reference store for JSON schema."""
         store = {}
         for glob_path in [
             "schemas/**/**/**/*.json",
@@ -38,6 +43,7 @@ class SchemaValidator(Validator):
         return store
 
     def validate(self):
+        """Validates the schema element against the JSON schema."""
         try:
             self.schema_validator.validate(self.schema_element)
             return {}

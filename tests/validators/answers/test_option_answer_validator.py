@@ -1,3 +1,5 @@
+"""Tests for OptionAnswerValidator."""
+
 from app.validators.answers import OptionAnswerValidator
 from app.validators.rules.rule_validator import RulesValidator
 from app.validators.value_source_validator import ValueSourceValidator
@@ -5,6 +7,7 @@ from tests.conftest import get_mock_schema, get_mock_schema_with_data_version
 
 
 def test_unique_answer_options():
+    """Test that OptionAnswerValidator correctly identifies duplicate answer options."""
     answer = {
         "id": "duplicate-country-answer",
         "label": "Label",
@@ -18,7 +21,7 @@ def test_unique_answer_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_duplicate_options()
 
@@ -37,6 +40,7 @@ def test_unique_answer_options():
 
 
 def test_validate_default_exists_in_options():
+    """Test that OptionAnswerValidator correctly identifies when the default answer is not in the options."""
     answer = {
         "type": "Radio",
         "id": "correct-answer",
@@ -49,7 +53,7 @@ def test_validate_default_exists_in_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
 
     expected_errors = [
@@ -57,7 +61,7 @@ def test_validate_default_exists_in_options():
             "message": validator.ANSWER_DEFAULT_MISSING,
             "default_value": "Yes",
             "answer_id": "correct-answer",
-        }
+        },
     ]
 
     validator.validate_default_exists_in_options()
@@ -66,25 +70,27 @@ def test_validate_default_exists_in_options():
 
 
 def test_min_answer_options_without_dynamic_options():
+    """Test that OptionAnswerValidator correctly identifies when the minimum number of options is not met."""
     answer_type = "Checkbox"
     answer = {"id": "answer", "label": "Label", "type": answer_type, "options": []}
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_options()
 
     assert validator.errors == [
         {
             "message": validator.NOT_ENOUGH_ANSWER_OPTIONS.format(
-                answer_type=answer_type, required_num_options=1, actual_num_options=0
+                answer_type=answer_type, required_num_options=1, actual_num_options=0,
             ),
             "answer_id": "answer",
-        }
+        },
     ]
 
 
 def test_min_answer_options_with_dynamic_options():
+    """Test that OptionAnswerValidator correctly identifies when the minimum number of options is not met with dynamic options."""
     answer_type = "Checkbox"
     answer = {
         "id": "answer",
@@ -95,16 +101,17 @@ def test_min_answer_options_with_dynamic_options():
     }
 
     validator = OptionAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer, get_mock_schema_with_data_version("0.0.3"),
     )
     validator.validate_min_options()
 
     assert validator.errors == [
-        {"message": validator.OPTIONS_DEFINED_BUT_EMPTY, "answer_id": "answer"}
+        {"message": validator.OPTIONS_DEFINED_BUT_EMPTY, "answer_id": "answer"},
     ]
 
 
 def test_dynamic_options_transform_allows_non_map_self_reference():
+    """Test that OptionAnswerValidator allows non-map self-references in dynamic options transform."""
     answer = {
         "id": "answer",
         "label": "Label",
@@ -120,9 +127,9 @@ def test_dynamic_options_transform_allows_non_map_self_reference():
         questionnaire_schema=get_mock_schema(
             answers_with_context={
                 "checkbox-answer": {
-                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
-                }
-            }
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"},
+                },
+            },
         ),
     )
     validator.validate_dynamic_options()
@@ -131,6 +138,7 @@ def test_dynamic_options_transform_allows_non_map_self_reference():
 
 
 def test_dynamic_options_values_with_invalid_value_rule():
+    """Test that OptionAnswerValidator raises an error for invalid value rules in dynamic options."""
     answer = {
         "id": "answer",
         "label": "Label",
@@ -146,13 +154,13 @@ def test_dynamic_options_values_with_invalid_value_rule():
                                     {
                                         "source": "response_metadata",
                                         "identifier": "started_at",
-                                    }
-                                ]
+                                    },
+                                ],
                             },
                             7,
-                        ]
+                        ],
                     },
-                ]
+                ],
             },
             "transform": {"format-date": [{"date": ["self"]}, "EEEE d MMMM yyyy"]},
         },
@@ -163,9 +171,9 @@ def test_dynamic_options_values_with_invalid_value_rule():
         questionnaire_schema=get_mock_schema(
             answers_with_context={
                 "checkbox-answer": {
-                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
-                }
-            }
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"},
+                },
+            },
         ),
     )
     validator.validate_dynamic_options()
@@ -180,6 +188,7 @@ def test_dynamic_options_values_with_invalid_value_rule():
 
 
 def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch():
+    """Test that OptionAnswerValidator correctly identifies when the source identifier and option label from value mismatch."""
     answer = {
         "id": "answer",
         "label": "Label",
@@ -187,7 +196,7 @@ def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch(
         "dynamic_options": {
             "values": {"source": "answers", "identifier": "checkbox-answer"},
             "transform": {
-                "option-label-from-value": ["self", "mismatch-checkbox-answer"]
+                "option-label-from-value": ["self", "mismatch-checkbox-answer"],
             },
         },
     }
@@ -197,12 +206,12 @@ def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch(
         questionnaire_schema=get_mock_schema(
             answers_with_context={
                 "checkbox-answer": {
-                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"},
                 },
                 "mismatch-checkbox-answer": {
-                    "answer": {"id": "mismatch-checkbox-answer", "type": "Checkbox"}
+                    "answer": {"id": "mismatch-checkbox-answer", "type": "Checkbox"},
                 },
-            }
+            },
         ),
     )
     validator.validate_dynamic_options()
@@ -218,6 +227,7 @@ def test_dynamic_options_source_identifier_and_option_label_from_value_mismatch(
 
 
 def test_dynamic_options_transform_with_invalid_answer_id_reference():
+    """Test that OptionAnswerValidator raises an error for invalid answer ID references in dynamic options transform."""
     answer = {
         "id": "answer",
         "label": "Label",
@@ -233,9 +243,9 @@ def test_dynamic_options_transform_with_invalid_answer_id_reference():
         questionnaire_schema=get_mock_schema(
             answers_with_context={
                 "checkbox-answer": {
-                    "answer": {"id": "checkbox-answer", "type": "Checkbox"}
-                }
-            }
+                    "answer": {"id": "checkbox-answer", "type": "Checkbox"},
+                },
+            },
         ),
     )
     validator.validate_dynamic_options()
@@ -260,6 +270,7 @@ def test_dynamic_options_transform_with_invalid_answer_id_reference():
 
 
 def test_dynamic_options_values_with_non_checkbox_answer_source():
+    """Test that OptionAnswerValidator correctly identifies when the dynamic options values source is not a checkbox answer."""
     answer = {
         "id": "answer",
         "label": "Label",
@@ -275,9 +286,9 @@ def test_dynamic_options_values_with_non_checkbox_answer_source():
         questionnaire_schema=get_mock_schema(
             answers_with_context={
                 "non-checkbox-answer": {
-                    "answer": {"id": "non-checkbox-answer", "type": "Radio"}
-                }
-            }
+                    "answer": {"id": "non-checkbox-answer", "type": "Radio"},
+                },
+            },
         ),
     )
     validator.validate_dynamic_options()

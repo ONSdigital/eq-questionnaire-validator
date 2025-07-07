@@ -1,3 +1,5 @@
+"""Tests for the Value Source Validator."""
+
 import pytest
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
@@ -15,45 +17,47 @@ from app.validators.value_source_validator import ValueSourceValidator
     ],
 )
 def test_invalid_source_reference(value_source):
+    """Test that invalid source references are identified correctly."""
     questionnaire_schema = QuestionnaireSchema(
-        {"metadata": [{"name": "metatata-1", "type": "string"}]}
+        {"metadata": [{"name": "metatata-1", "type": "string"}]},
     )
     questionnaire_schema.list_names = ["list-1"]
     questionnaire_schema.calculated_summary_block_ids = ["block-1"]
     questionnaire_schema.block_ids = ["block-2"]
     questionnaire_schema.section_ids = ["section-1"]
     questionnaire_schema.answers_with_context = {
-        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
+        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}},
     }
 
     validator = ValueSourceValidator(
-        value_source, "some.json.path", questionnaire_schema
+        value_source, "some.json.path", questionnaire_schema,
     )
     validator.validate()
 
     error = validator.errors[0]
     assert error["message"] == ValueSourceValidator.SOURCE_REFERENCE_INVALID.format(
-        value_source["source"]
+        value_source["source"],
     )
     assert error["identifier"] == value_source["identifier"]
     assert error["json_path"] == "some.json.path"
 
 
 def test_invalid_progress_source_reference():
+    """Test that invalid progress source references are identified correctly."""
     invalid_value_source = {
         "source": "progress",
         "selector": "block",
         "identifier": "people",
     }
     questionnaire_schema = QuestionnaireSchema(
-        {"metadata": [{"name": "metatata-1", "type": "string"}]}
+        {"metadata": [{"name": "metatata-1", "type": "string"}]},
     )
     questionnaire_schema.block_ids = ["blocktest"]
     questionnaire_schema.block_ids_without_sub_blocks = ["blocktest"]
     questionnaire_schema.section_ids = ["sectiontest"]
 
     questionnaire_schema.answers_with_context = {
-        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
+        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}},
     }
 
     mock_block = {
@@ -73,18 +77,19 @@ def test_invalid_progress_source_reference():
 
     error = validator.errors[0]
     assert error["message"] == ValueSourceValidator.SOURCE_REFERENCE_INVALID.format(
-        invalid_value_source["source"]
+        invalid_value_source["source"],
     )
     assert error["identifier"] == invalid_value_source["identifier"]
     assert error["json_path"] == "some.json.path"
 
 
 def test_invalid_reference():
+    """Test that invalid references are identified correctly."""
     value_source = {"source": "answers", "identifier": "answer-2"}
 
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}}
+        "answer-1": {"answer": {"id": "answer-1", "type": "TextField"}},
     }
     validator = ValueSourceValidator(value_source, "", questionnaire_schema)
     validator.validate()
@@ -95,6 +100,7 @@ def test_invalid_reference():
 
 
 def test_invalid_composite_answer_in_selector():
+    """Test that invalid composite answers in selectors are identified correctly."""
     value_source = {
         "identifier": "name-answer",
         "source": "answers",
@@ -106,7 +112,7 @@ def test_invalid_composite_answer_in_selector():
         "name-answer": {
             "answer": {"id": "name-answer", "type": "TextField"},
             "block": "name",
-        }
+        },
     }
     validator = ValueSourceValidator(value_source, "", questionnaire_schema)
     validator.validate()
@@ -117,6 +123,7 @@ def test_invalid_composite_answer_in_selector():
 
 
 def test_invalid_composite_answer_field_in_selector():
+    """Test that invalid composite answer fields in selectors are identified correctly."""
     value_source = {
         "identifier": "address-answer",
         "source": "answers",
@@ -128,7 +135,7 @@ def test_invalid_composite_answer_field_in_selector():
         "address-answer": {
             "answer": {"id": "address-answer", "type": "Address"},
             "block": "name",
-        }
+        },
     }
     validator = ValueSourceValidator(value_source, "", questionnaire_schema)
     validator.validate()
