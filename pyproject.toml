@@ -10,7 +10,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "^0.115.0"
+fastapi = "^0.116.0"
 jsonpointer = "^3.0.0"
 structlog = "^25.0.0"
 python-dateutil = "^2.9.0.post0"
