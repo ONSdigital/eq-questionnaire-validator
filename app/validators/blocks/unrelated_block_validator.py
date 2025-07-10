@@ -1,4 +1,4 @@
-""""UnrelatedBlockValidator class to validate unrelated blocks in a questionnaire schema."""
+"""UnrelatedBlockValidator class to validate unrelated blocks in a questionnaire schema."""
 
 from app.validators.blocks.block_validator import BlockValidator
 
