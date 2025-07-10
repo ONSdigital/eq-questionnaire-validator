@@ -1,4 +1,4 @@
-"""DateAnswerValidator."""
+"""Validates date answers in a questionnaire schema."""
 
 import re
 from datetime import datetime

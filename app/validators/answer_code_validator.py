@@ -1,4 +1,4 @@
-"""AnswerCodeValidator."""
+"""Validates answer codes in a questionnaire schema."""
 
 from app.validators.questionnaire_schema import find_duplicates
 from app.validators.validator import Validator

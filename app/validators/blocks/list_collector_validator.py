@@ -102,7 +102,11 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 )
 
     def validate_not_for_supplementary_list(self):
-        """Standard list collectors cannot be used for a supplementary list, as these may not be edited."""
+        """Validate that the list collector is not for a supplementary list.
+
+        Standard list collectors cannot be used for a supplementary list, as these may not be edited.
+        If the list collector is for a supplementary list, an error is added.
+        """
         if self.block["for_list"] in self.questionnaire_schema.supplementary_lists:
             self.add_error(
                 self.LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID,
@@ -110,8 +114,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
 
     def validate_other_list_collectors(self):
-        """Checks other list collectors for.
+        """Validate other list collectors in the schema.
 
+        Checks other list collectors for:
         - non-unique answer id in add block for any other same-named list collectors
         - duplicate answer id in add, edit, or remove block for other different-named list collectors
         """

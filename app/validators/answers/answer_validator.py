@@ -1,4 +1,4 @@
-"""AnswerValidator."""
+"""Validates answers in a questionnaire schema."""
 
 from app.answer_type import AnswerType
 from app.validators.questionnaire_schema import get_object_containing_key
