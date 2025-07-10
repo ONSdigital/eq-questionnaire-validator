@@ -1,7 +1,11 @@
+"""AnswerType and AnswerOptionType Enums."""
+
 from enum import Enum
 
 
 class AnswerType(Enum):
+    """Defines the types of answers that can be provided in a questionnaire."""
+
     ADDRESS = "Address"
     CHECKBOX = "Checkbox"
     CURRENCY = "Currency"
@@ -21,6 +25,8 @@ class AnswerType(Enum):
 
 
 class AnswerOptionType(Enum):
+    """Defines the types of answer options."""
+
     DROPDOWN = "Dropdown"
     CHECKBOX = "Checkbox"
     RADIO = "Radio"

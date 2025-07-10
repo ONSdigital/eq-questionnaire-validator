@@ -1,3 +1,5 @@
+"""Tests for GrandCalculatedSummaryBlockValidator."""
+
 from app.validators.blocks.grand_calculated_summary_block_validator import (
     GrandCalculatedSummaryBlockValidator,
 )
@@ -6,12 +8,15 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_grand_calculated_summary():
-    """Asserts invalid `when`:
+    """Tests for GrandCalculatedSummaryBlockValidator.
+
+    Asserts invalid `when`:
     types, currencies or units are not of the same type for GrandCalculatedSummary
     or when there are duplicate calculated summaries in the calculation,
     or when there are two calculated summaries with a duplicate answer set
     or when a source in the calculation is not a calculated summary
-    or when a calculated summary block id is invalid"""
+    or when a calculated summary block id is invalid
+    """
     filename = "schemas/invalid/test_invalid_grand_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -56,7 +61,7 @@ def test_invalid_grand_calculated_summary():
 
 
 def test_invalid_grand_calculated_summary_before_calculated_summary():
-    """Asserts invalid `when` a grand calculated summary comes after a calculated summary it references"""
+    """Asserts invalid `when` a grand calculated summary comes after a calculated summary it references."""
     filename = "schemas/invalid/test_invalid_grand_calculated_summary_before_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -65,14 +70,14 @@ def test_invalid_grand_calculated_summary_before_calculated_summary():
             "calculated_summary_id": "calculated-currency-2",
             "block_id": "grand-calculated-summary-before-calculated-summary-error",
             "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY,
-        }
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
     block = questionnaire_schema.get_block(
-        "grand-calculated-summary-before-calculated-summary-error"
+        "grand-calculated-summary-before-calculated-summary-error",
     )
     validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)
     errors += validator.validate()
@@ -81,7 +86,7 @@ def test_invalid_grand_calculated_summary_before_calculated_summary():
 
 
 def test_invalid_repeating_grand_calculated_summary_referencing_repeating_calculated_summary():
-    """Asserts `invalid` when a repeating GCS references a repeating CS from a different repeating section"""
+    """Asserts `invalid` when a repeating GCS references a repeating CS from a different repeating section."""
     filename = "schemas/invalid/test_invalid_grand_calculated_summary_inside_repeating_section.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -90,7 +95,7 @@ def test_invalid_repeating_grand_calculated_summary_referencing_repeating_calcul
             "calculated_summary_id": "calculated-summary-base-cost",
             "block_id": "grand-calculated-summary-vehicle",
             "message": GrandCalculatedSummaryBlockValidator.CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION,
-        }
+        },
     ]
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
@@ -102,7 +107,7 @@ def test_invalid_repeating_grand_calculated_summary_referencing_repeating_calcul
 
 
 def test_invalid_non_repeating_grand_calculated_summary_referencing_repeating_calculated_summary():
-    """Asserts `invalid` when a non-repeating GCS references a repeating CS"""
+    """Asserts `invalid` when a non-repeating GCS references a repeating CS."""
     filename = "schemas/invalid/test_invalid_grand_calculated_summary_inside_repeating_section.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
@@ -128,7 +133,8 @@ def test_invalid_non_repeating_grand_calculated_summary_referencing_repeating_ca
 
 
 def test_invalid_repeating_grand_calculated_summary_with_repeating_answers_in_calculated_summary():
-    """Asserts `invalid` when a repeating GCS references a static CS that has repeating answers for the same list
+    """Asserts `invalid` when a repeating GCS references a static CS that has repeating answers for the same list.
+
     You can't have a calculated summary of add/edit-block answers. So dynamic & repeating block covers all scenarios
     """
     filename = "schemas/invalid/test_invalid_grand_calculated_summary_with_repeating_calculated_summary.json"

@@ -1,3 +1,5 @@
+"""Tests for progress value source validation in questionnaires."""
+
 from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
@@ -10,13 +12,10 @@ configure(logger_factory=LoggerFactory())
 
 
 def test_invalid_non_linear_progress_references():
-    """
-    Tests a progress value source cannot refer to a section or block
-    located later in the questionnaire
-    """
+    """Tests a progress value source cannot refer to a section or block located later in the questionnaire."""
     schema_path = "schemas/invalid/test_invalid_progress_value_source_non_linear.json"
     questionnaire_validator = QuestionnaireValidator(
-        _open_and_load_schema_file(schema_path)
+        _open_and_load_schema_file(schema_path),
     )
     questionnaire_validator.validate()
 
@@ -45,14 +44,12 @@ def test_invalid_non_linear_progress_references():
 
 
 def test_invalid_current_location_progress():
-    """
-    Tests a progress value source cannot refer to the current section or the current block
-    """
+    """Tests a progress value source cannot refer to the current section or the current block."""
     schema_path = (
         "schemas/invalid/test_invalid_progress_value_source_current_location.json"
     )
     questionnaire_validator = QuestionnaireValidator(
-        _open_and_load_schema_file(schema_path)
+        _open_and_load_schema_file(schema_path),
     )
     questionnaire_validator.validate()
 
@@ -77,14 +74,13 @@ def test_invalid_current_location_progress():
 
 
 def test_invalid_block_in_repeating_section():
-    """
-    Tests a progress value source cannot refer to a block in a repeating section
-    except if it is the parent seciont of the value source
-    Nor to a repeating section
+    """Tests a progress value source cannot refer to a block in a repeating section except if it is the parent section of the value source.
+
+    Nor to a repeating section.
     """
     schema_path = "schemas/invalid/test_invalid_progress_value_source_block_in_past_repeating_section.json"
     questionnaire_validator = QuestionnaireValidator(
-        _open_and_load_schema_file(schema_path)
+        _open_and_load_schema_file(schema_path),
     )
     questionnaire_validator.validate()
 
