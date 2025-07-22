@@ -44,6 +44,7 @@ class DateAnswerValidator(AnswerValidator):
 
     @classmethod
     def get_relative_date(cls, date_string, offset_object):
+        # Returns a relative date given an offset or period object
         return cls._convert_to_datetime(date_string) + relativedelta(
             years=offset_object.get("years", 0),
             months=offset_object.get("months", 0),
