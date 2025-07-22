@@ -1,5 +1,3 @@
-"""API for validating questionnaire schemas against AJV and custom validators."""
-
 import json
 import os
 from json import JSONDecodeError
@@ -41,20 +39,17 @@ logger = get_logger()
 
 @app.get("/status")
 async def status():
-    """Health check endpoint."""
     return Response(status_code=200)
 
 
 @app.post("/validate")
 async def validate_schema_request_body(payload=Body(None)):
-    """Validate schema from request body."""
     logger.info("Validating schema")
     return await validate_schema(payload)
 
 
 @app.get("/validate")
 async def validate_schema_from_url(url=None):
-    """Validate schema from a URL."""
     if url:
         logger.info("Validating schema from URL", url=url)
         parsed_url = urlparse(url)
@@ -76,7 +71,6 @@ async def validate_schema_from_url(url=None):
 
 
 async def validate_schema(data):
-    """Validate the schema against the AJV validator and the QuestionnaireValidator."""
     json_to_validate = None
     if data:
         if isinstance(data, str):
@@ -122,7 +116,6 @@ async def validate_schema(data):
 
 
 def is_domain_allowed(parsed_url, domain):
-    """Check if the domain of the URL is allowed."""
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
     repo_owner = (
         parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""

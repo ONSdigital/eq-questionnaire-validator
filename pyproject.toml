@@ -137,6 +137,12 @@ ignore = [
     "D100",
     # Hide 'D101 Missing docstring in public class' - to be revisited
     "D101",
+    # Hide 'D102 Missing docstring in public method' - to be revisited
+    "D102",
+    # Hide 'D103 Missing docstring in public function' - to be revisited
+    "D103",
+    # Hide 'D107 Missing docstring in `__init__`' - to be revisited
+    "D107",
 
 ]
 

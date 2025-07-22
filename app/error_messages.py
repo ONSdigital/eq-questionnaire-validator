@@ -1,5 +1,3 @@
-"""Error messages for the questionnaire validator."""
-
 DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 INVALID_WHITESPACE_FOUND = "Found invalid white space(s) in schema text"
 DUPLICATE_ID_FOUND = "Duplicate id found"

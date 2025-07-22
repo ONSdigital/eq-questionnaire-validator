@@ -1,5 +1,3 @@
-"""Validates a number answer in a questionnaire schema."""
-
 from decimal import Decimal
 
 from app.validators.answers.answer_validator import AnswerValidator
@@ -11,8 +9,6 @@ MAX_DECIMAL_PLACES = 6
 
 
 class NumberAnswerValidator(AnswerValidator):
-    """Validates a number answer."""
-
     DEFAULT_ON_MANDATORY = "Default answer is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
@@ -33,12 +29,10 @@ class NumberAnswerValidator(AnswerValidator):
     )
 
     def __init__(self, schema_element, questionnaire_schema):
-        """Initializes the number answer validator."""
         super().__init__(schema_element, questionnaire_schema)
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        """Validates the number answer."""
         super().validate()
 
         self.validate_min_max_is_number()
@@ -73,12 +67,10 @@ class NumberAnswerValidator(AnswerValidator):
         return self.errors
 
     def validate_mandatory_has_no_default(self):
-        """Validates that a mandatory answer does not have a default value."""
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
 
     def validate_min_max_is_number(self):
-        """Validates that the minimum and maximum values are numbers."""
         for min_max in ["minimum", "maximum"]:
             if value := self.answer.get(min_max, {}).get("value", 0):
                 if isinstance(value, dict):
@@ -91,7 +83,6 @@ class NumberAnswerValidator(AnswerValidator):
                     self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
-        """Validates that the numeric answer's minimum and maximum values are within system limits."""
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
@@ -138,18 +129,15 @@ class NumberAnswerValidator(AnswerValidator):
                 )
 
     def are_decimal_places_valid(self):
-        """Validates the decimal places of the numeric answer."""
         if "calculated" in self.answer:
             return self.answer.get("decimal_places") == 2
         return True
 
     def validate_decimal_places(self):
-        """Validates the decimal places of the numeric answer."""
         if not self.are_decimal_places_valid():
             self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_decimals(self):
-        """Validates the decimal places of the numeric answer."""
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > MAX_DECIMAL_PLACES:
             self.add_error(
@@ -159,9 +147,8 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
     def validate_referred_numeric_answer(self, answer_ranges):
-        """Validates the referred numeric answer.
+        """Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema.
 
-        Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
         errors_found = False
@@ -180,7 +167,6 @@ class NumberAnswerValidator(AnswerValidator):
         return errors_found
 
     def validate_numeric_range(self, answer_ranges):
-        """Validates that the numeric answer has a positive range of possible responses."""
         max_value = answer_ranges[self.answer.get("id")]["max"]
         min_value = answer_ranges[self.answer.get("id")]["min"]
 
@@ -193,7 +179,6 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
     def validate_referred_numeric_answer_decimals(self, answer_ranges):
-        """Validates the decimal places of referred numeric answers."""
         answer_values = answer_ranges[self.answer["id"]]
 
         if (

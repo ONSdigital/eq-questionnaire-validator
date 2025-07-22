@@ -1,13 +1,9 @@
-"""Validates answers in a questionnaire schema."""
-
 from app.answer_type import AnswerType
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
 
 
 class AnswerValidator(Validator):
-    """Validates an answer in a questionnaire schema."""
-
     OPTION_MISSING_Q_CODE = "Option q_code must be provided"
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"
@@ -25,7 +21,6 @@ class AnswerValidator(Validator):
     )
 
     def __init__(self, schema_element, questionnaire_schema):
-        """Initializes the answer validator."""
         super().__init__(schema_element)
         self.answer = schema_element
         self.answer_id = self.answer["id"]
@@ -34,7 +29,6 @@ class AnswerValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        """Validates the answer by checking if it has a q_code."""
         self._validate_q_codes()
 
         return self.errors
