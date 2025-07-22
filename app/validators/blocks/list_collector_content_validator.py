@@ -1,14 +1,9 @@
-"""ListCollectorContentValidator validates the content of list collector blocks in a questionnaire schema."""
-
 from app.error_messages import FOR_LIST_NEVER_POPULATED
 from app.validators.blocks.block_validator import BlockValidator
 
 
 class ListCollectorContentValidator(BlockValidator):
-    """ListCollectorContentValidator validates the content of list collector blocks in a questionnaire schema."""
-
     def validate(self):
-        """Validates the list collector content block."""
         super().validate()
         self.validate_for_list_is_valid()
         return self.errors

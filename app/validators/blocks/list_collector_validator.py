@@ -1,5 +1,3 @@
-"""ListCollectorValidator class to validate list collector blocks in a questionnaire schema."""
-
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
@@ -7,8 +5,6 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
-    """ListCollectorValidator validates list collector blocks in a questionnaire schema."""
-
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
     REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
@@ -33,7 +29,6 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
 
     def validate(self):
-        """Validate the list collector block."""
         super().validate()
         try:
             collector_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -102,11 +97,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 )
 
     def validate_not_for_supplementary_list(self):
-        """Validate that the list collector is not for a supplementary list.
-
-        Standard list collectors cannot be used for a supplementary list, as these may not be edited.
-        If the list collector is for a supplementary list, an error is added.
-        """
+        """Standard list collectors cannot be used for a supplementary list, as these may not be edited."""
         if self.block["for_list"] in self.questionnaire_schema.supplementary_lists:
             self.add_error(
                 self.LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID,
@@ -160,7 +151,6 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                         )
 
     def validate_single_repeating_blocks_list_collector(self):
-        """Validate that only one repeating block is present for the list collector."""
         if not self.block.get("repeating_blocks"):
             return
         list_name = self.block["for_list"]

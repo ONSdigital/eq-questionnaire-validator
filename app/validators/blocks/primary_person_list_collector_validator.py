@@ -1,5 +1,3 @@
-"""PrimaryPersonListCollectorValidator class to validate primary person list collector blocks in a questionnaire schema."""
-
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
@@ -10,8 +8,6 @@ class PrimaryPersonListCollectorValidator(
     BlockValidator,
     ValidateListCollectorQuestionsMixin,
 ):
-    """PrimaryPersonListCollectorValidator validates primary person list collector blocks in a questionnaire schema."""
-
     REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
@@ -23,7 +19,6 @@ class PrimaryPersonListCollectorValidator(
     )
 
     def validate(self):
-        """Validate the primary person list collector block."""
         super().validate()
 
         collector_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -44,10 +39,7 @@ class PrimaryPersonListCollectorValidator(
         return self.errors
 
     def validate_primary_person_list_collector_answer_ids(self, block):
-        """Validate that answer_ids on add blocks match between all blocks that populate a single list.
-
-        Ensure that answer_ids on add blocks match between all blocks that populate a single list.
-        """
+        """Ensure that answer_ids on add blocks match between all blocks that populate a single list."""
         list_name = block["for_list"]
 
         add_or_edit_answer_ids = self.questionnaire_schema.get_all_answer_ids(
