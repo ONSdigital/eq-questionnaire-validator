@@ -1,5 +1,3 @@
-"""Tests for the routing types module."""
-
 from unittest.mock import Mock
 
 import pytest
@@ -31,7 +29,6 @@ from tests.utils import _open_and_load_schema_file
     ],
 )
 def test_get_answer_value_json_type(python_type, json_type):
-    """Tests that Python types are correctly mapped to JSON types."""
     assert python_type_to_json_type(python_type) == json_type
 
 
@@ -57,7 +54,6 @@ def test_get_answer_value_json_type(python_type, json_type):
     ],
 )
 def test_resolve_answer_value_source_json_type(answer_type, json_type):
-    """Tests that answer value sources resolve to the correct JSON type."""
     value_source = {"source": "answers", "identifier": "answer-1"}
 
     questionnaire_schema = Mock()
@@ -74,7 +70,6 @@ def test_resolve_answer_value_source_json_type(answer_type, json_type):
 
 
 def test_resolve_calculated_summary_value_source_json_type():
-    """Tests that calculated summary value sources resolve to the correct JSON type."""
     filename = "schemas/valid/test_routing_calculated_summary_dependencies.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -91,7 +86,6 @@ def test_resolve_calculated_summary_value_source_json_type():
 
 
 def test_resolve_grand_calculated_summary_value_source_json_type():
-    """Tests that grand calculated summary value sources resolve to the correct JSON type."""
     filename = "schemas/valid/test_grand_calculated_summary_overlapping_answers.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -121,7 +115,6 @@ def test_resolve_metadata_summary_value_source_json_type(
     metadata_value_source,
     json_type,
 ):
-    """Tests that metadata value sources resolve to the correct JSON type."""
     filename = "schemas/valid/test_valid_metadata.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -144,7 +137,6 @@ def test_resolve_metadata_summary_value_source_json_type(
     ],
 )
 def test_resolve_non_answer_value_source_json_type(source, selector, json_type):
-    """Tests that non-answer value sources resolve to the correct JSON type."""
     value_source = {"source": source}
     if selector:
         value_source["selector"] = selector

@@ -1,5 +1,3 @@
-"""Tests for the RulesValidator class."""
-
 import pytest
 
 from app.validators.routing.types import (
@@ -24,7 +22,6 @@ default_answer_with_context = {
 
 
 def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None):
-    """Returns a RulesValidator instance."""
     return RulesValidator(
         rule,
         ORIGIN_ID,
@@ -59,7 +56,6 @@ def test_operator_argument_type_mismatch(
     types,
     operator_name,
 ):
-    """Tests that comparison operators do not allow invalid argument types."""
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(
@@ -99,7 +95,6 @@ def test_equality_operator_argument_type_mismatch(
     types,
     operator_name,
 ):
-    """Tests that equality operators do not allow invalid argument types."""
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(
@@ -126,7 +121,6 @@ def test_equality_operator_allows_null_mismatch(
     second_argument,
     operator_name,
 ):
-    """Tests that equality operators allow null mismatches."""
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(rule)
@@ -143,7 +137,6 @@ def test_equality_operator_allows_null_mismatch(
     ],
 )
 def test_operator_argument_type_mismatch_nested(rule):
-    """Tests that nested operators do not allow invalid argument types."""
     validator = get_validator(rule)
     validator.validate()
 
@@ -159,7 +152,6 @@ def test_operator_argument_type_mismatch_nested(rule):
 
 @pytest.mark.parametrize("operator_name", ["==", "!=", "<", "<=", ">", ">="])
 def test_comparison_operator_invalid_argument_types(operator_name):
-    """Tests that comparison operators do not allow invalid argument types."""
     rule = {
         operator_name: [
             {"source": "answers", "identifier": "object-answer"},
@@ -210,7 +202,6 @@ def test_comparison_operator_invalid_argument_types(operator_name):
 
 
 def test_in_operator_first_argument_is_not_array():
-    """Tests that the 'in' operator's first argument must be an array."""
     rule = {"in": [{"source": "answers", "identifier": "array-answer"}, ["test"]]}
 
     validator = get_validator(
@@ -234,7 +225,6 @@ def test_in_operator_first_argument_is_not_array():
 
 
 def test_in_operator_second_argument_is_array():
-    """Tests that the 'in' operator's second argument can be an array."""
     rule = {"in": ["test", {"source": "answers", "identifier": "string-answer"}]}
 
     validator = get_validator(rule, answers_with_context=default_answer_with_context)
@@ -254,7 +244,6 @@ def test_in_operator_second_argument_is_array():
 
 @pytest.mark.parametrize("operator_name", ["any-in", "all-in"])
 def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
-    """Tests that 'any-in' and 'all-in' operators require array arguments."""
     rule = {
         operator_name: [
             {"source": "answers", "identifier": "string-answer-1"},
@@ -333,7 +322,6 @@ def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
     ],
 )
 def test_validate_value_sources(operator_name, first_argument, second_argument):
-    """Tests the validation of value sources for different operators."""
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(rule, answers_with_context=default_answer_with_context)

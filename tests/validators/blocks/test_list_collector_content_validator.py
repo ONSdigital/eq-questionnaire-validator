@@ -1,5 +1,3 @@
-"""Tests for the ListCollectorContentValidator."""
-
 from app.error_messages import FOR_LIST_NEVER_POPULATED
 from app.validators.blocks import ListCollectorContentValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema

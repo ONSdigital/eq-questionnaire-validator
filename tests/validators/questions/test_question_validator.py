@@ -1,11 +1,8 @@
-"""Tests for the question validator regarding missing answer labels."""
-
 from app.validators.questions import get_question_validator
 from tests.conftest import get_mock_schema
 
 
 def test_no_answer_label_single_answer():
-    """Test that a question with a single answer without a label does not raise an error."""
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -20,7 +17,6 @@ def test_no_answer_label_single_answer():
 
 
 def test_no_answer_label_multiple_answers():
-    """Test that a question with multiple answers without labels raises an error."""
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -51,7 +47,6 @@ def test_no_answer_label_multiple_answers():
 
 
 def test_no_answer_label_mutually_exclusive():
-    """Test that a question with mutually exclusive answers without labels raises an error."""
     question = {
         "id": "some-question",
         "title": "Some title",
@@ -87,7 +82,6 @@ def test_no_answer_label_mutually_exclusive():
 
 
 def test_no_answer_label_two_answers_last_answer_single_checkbox():
-    """Test that a question with two answers, where the last answer is a single checkbox without a label, raises an error."""
     question = {
         "id": "some-question",
         "title": "Some title",

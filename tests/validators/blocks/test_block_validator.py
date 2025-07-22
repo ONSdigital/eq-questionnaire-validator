@@ -1,12 +1,9 @@
-"""Tests for BlockValidator to ensure it correctly identifies invalid configurations."""
-
 from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_answer_action_redirect_to_list_add_block_no_params():
-    """Test that an error is raised when an answer action redirect to list add block has no parameters."""
     filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_no_params.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
@@ -27,7 +24,6 @@ def test_invalid_answer_action_redirect_to_list_add_block_no_params():
 
 
 def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
-    """Test that an error is raised when an answer action redirect to list add block has unexpected parameters."""
     filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_unexpected_params.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
@@ -48,7 +44,6 @@ def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
 
 
 def test_invalid_use_of_id_relationships_with_type():
-    """Test that an error is raised when 'id_relationships' is used with a block of type 'relationship-collector'."""
     filename = "schemas/invalid/test_invalid_use_of_block_id_relationships.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
@@ -69,7 +64,6 @@ def test_invalid_use_of_id_relationships_with_type():
 
 
 def test_invalid_self_reference():
-    """Test that an error is raised when a placeholder references its own answer."""
     block = {
         "id": "block-1",
         "title": {

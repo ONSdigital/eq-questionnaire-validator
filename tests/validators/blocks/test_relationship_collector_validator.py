@@ -1,12 +1,9 @@
-"""Tests for RelationshipCollectorValidator."""
-
 from app.validators.blocks import RelationshipCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_relationship_multiple_answers():
-    """Test that a relationship collector with multiple answers raises the correct error."""
     filename = "schemas/invalid/test_invalid_relationship_multiple_answers.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -26,7 +23,6 @@ def test_invalid_relationship_multiple_answers():
 
 
 def test_invalid_relationship_wrong_answer_type():
-    """Test that a relationship collector with the wrong answer type raises the correct error."""
     filename = "schemas/invalid/test_invalid_relationship_wrong_answer_type.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))

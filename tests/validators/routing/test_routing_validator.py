@@ -1,11 +1,8 @@
-"""Tests for the RoutingValidator class."""
-
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.routing_validator import RoutingValidator
 
 
 def get_validator(routing_rules, origin_id):
-    """Creates a RoutingValidator instance with the given routing rules and origin ID."""
     return RoutingValidator(
         routing_rules=routing_rules,
         group={},
@@ -15,7 +12,6 @@ def get_validator(routing_rules, origin_id):
 
 
 def test_route_must_contain_default():
-    """Tests that a routing rule without a default case raises an error."""
     routing_rules = [
         {
             "block": "response-yes",
@@ -35,7 +31,6 @@ def test_route_must_contain_default():
 
 
 def test_route_has_too_many_defaults():
-    """Tests that a routing rule with too many default cases raises an error."""
     routing_rules = [{"block": "response-yes"}, {"block": "response-no"}]
 
     validator = get_validator(routing_rules=routing_rules, origin_id="block-id")
@@ -50,7 +45,6 @@ def test_route_has_too_many_defaults():
 
 
 def test_invalid_destination_block_id():
-    """Tests that a routing rule with an invalid block ID raises an error."""
     routing_rules = [
         {
             "block": "non-existent-block-id",
@@ -79,7 +73,6 @@ def test_invalid_destination_block_id():
 
 
 def test_invalid_destination_group_id():
-    """Tests that a routing rule with an invalid group ID raises an error."""
     routing_rules = [
         {
             "group": "non-existent-group-id",

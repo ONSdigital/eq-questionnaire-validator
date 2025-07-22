@@ -1,5 +1,3 @@
-"""Tests for progress value source validation in questionnaires."""
-
 from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 

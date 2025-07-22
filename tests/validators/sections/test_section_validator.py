@@ -1,5 +1,3 @@
-"""Tests for the SectionValidator class in the EQ Questionnaire Validator."""
-
 from app import error_messages
 from app.validators.blocks import BlockValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
@@ -8,7 +6,6 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_list_reference_in_custom_summary():
-    """Tests that the SectionValidator validates a custom summary with an invalid list reference."""
     filename = "schemas/invalid/test_invalid_custom_list_summary.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     section = questionnaire_schema.get_section("section")
@@ -28,7 +25,6 @@ def test_invalid_list_reference_in_custom_summary():
 
 
 def test_invalid_section_summary_items():
-    """Tests that the SectionValidator validates summary items in a section."""
     filename = "schemas/invalid/test_invalid_list_collector_section_summary_items.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     section = questionnaire_schema.get_section("section-companies")
@@ -65,7 +61,6 @@ def test_invalid_section_summary_items():
 
 
 def test_invalid_list_collector_repeating_blocks_validated_from_section_validator():
-    """Tests that the SectionValidator validates repeating blocks in a list collector."""
     filename = "schemas/invalid/test_invalid_list_collector_repeating_blocks_placeholder_references_same_block.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -85,7 +80,6 @@ def test_invalid_list_collector_repeating_blocks_validated_from_section_validato
 
 
 def test_invalid_multiple_list_collectors_when_summary_with_items_enabled():
-    """Tests that you cannot have multiple list collectors when summary with items is enabled."""
     filename = (
         "schemas/invalid/test_invalid_multiple_list_collectors_with_summary_items.json"
     )

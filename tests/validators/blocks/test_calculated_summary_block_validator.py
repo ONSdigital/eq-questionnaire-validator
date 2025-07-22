@@ -1,5 +1,3 @@
-"""Unit tests for the CalculatedSummaryBlockValidator."""
-
 from app.validators.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
@@ -159,10 +157,9 @@ def test_invalid_calculated_summary_answer_in_different_section():
 
 
 def test_invalid_calculated_summary_with_single_static_answer():
-    """Tests for invalid calculated summary with single static answer.
+    """Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer.
 
-    Asserts invalid `when` a calculated summary consists of a single answer which is not a dynamic answer
-    this particular test is for the edge case where the question has both dynamic and static answers
+    This particular test is for the edge case where the question has both dynamic and static answers
     and the calculated summary is referring to a static one.
     """
     filename = (

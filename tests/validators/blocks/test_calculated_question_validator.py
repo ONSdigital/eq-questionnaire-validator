@@ -1,12 +1,9 @@
-"""Tests for the validation of answers to calculate in calculated questions."""
-
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.questions import get_question_validator
 from tests.utils import _open_and_load_schema_file
 
 
 def test_missing_id_in_answers_to_calculate():
-    """Check that answers_to_calculate contains an answer_id that exists in the question."""
     filename = "schemas/invalid/test_invalid_calculations_value_source.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     question = schema.blocks_by_id["breakdown-block"]["question"]
@@ -96,7 +93,6 @@ def test_invalid_answer_type_in_answers_to_calculate_against_numeric_value():
 
 
 def test_answers_to_calculate_too_short():
-    """Check that answers_to_calculate is not too short."""
     filename = (
         "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
     )

@@ -1,12 +1,9 @@
-"""Tests for PrimaryPersonListCollectorValidator."""
-
 from app.validators.blocks import PrimaryPersonListCollectorValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_primary_person_list_collector_with_different_add_block_answer_ids():
-    """Test that a primary person list collector with different answer IDs for add/edit actions raises the correct error."""
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -26,7 +23,6 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
 
 
 def test_primary_person_invalid_list_collector_non_radio():
-    """Test that a primary person list collector with no radio answer raises the correct error."""
     filename = (
         "schemas/invalid/test_invalid_primary_person_list_collector_no_radio.json"
     )
@@ -47,7 +43,6 @@ def test_primary_person_invalid_list_collector_non_radio():
 
 
 def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action():
-    """Test that a primary person list collector with no add or edit action raises the correct error."""
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_add_edit_action.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     block = questionnaire_schema.get_block("primary-person-list-collector")
@@ -65,7 +60,6 @@ def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action
 
 
 def test_invalid_primary_person_list_collector_same_name_answer_id_reference():
-    """Test that a primary person list collector with the same name answer ID reference raises the correct error."""
     filename = "schemas/invalid/test_invalid_list_collector_same_name_answer_ids.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
