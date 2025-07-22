@@ -1,5 +1,3 @@
-"""RuleValidator module for validating rules in a questionnaire schema."""
-
 from app import error_messages
 from app.answer_type import AnswerOptionType, AnswerType
 from app.validators.routing.types import (
@@ -17,8 +15,6 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class Operator:
-    """Defines the operators used in the rules."""
-
     NOT = "not"
     AND = "and"
     OR = "or"
@@ -83,8 +79,6 @@ SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
-    """Validates the rules for a questionnaire."""
-
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
         "Date operator references non Date, MonthYearDate, or YearDate answer"
@@ -110,7 +104,6 @@ class RulesValidator(Validator):
         *,
         allow_self_reference=False,
     ):
-        """Validates the rules for a questionnaire."""
         super().__init__(rules)
         self.rules = rules
         self.questionnaire_schema = questionnaire_schema

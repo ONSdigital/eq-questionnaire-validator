@@ -89,8 +89,6 @@ extend-select = [
 ]
 
 ignore = [
-    # Allow missing docstring, remove to enforce docstrings across the board
-    "D104",
     # Remove E501 when ruff supports all black rules
     "E501",
     # Allow TODO comments without a listed author
@@ -141,6 +139,8 @@ ignore = [
     "D102",
     # Hide 'D103 Missing docstring in public function' - to be revisited
     "D103",
+    # Hide 'D104 Missing docstring in public package' - to be revisited
+    "D104",
     # Hide 'D107 Missing docstring in `__init__`' - to be revisited
     "D107",
 

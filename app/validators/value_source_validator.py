@@ -1,13 +1,9 @@
-"""The ValueSourceValidator validates the value source of a block."""
-
 from functools import cached_property
 
 from app.validators.validator import Validator
 
 
 class ValueSourceValidator(Validator):
-    """The ValueSourceValidator validates the value source of a block."""
-
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
@@ -37,7 +33,6 @@ class ValueSourceValidator(Validator):
         parent_section=None,
         parent_block=None,
     ):
-        """The ValueSourceValidator validates the value source of a block."""
         super().__init__(value_source)
         self.value_source = value_source
         self.questionnaire_schema = questionnaire_schema
@@ -94,13 +89,11 @@ class ValueSourceValidator(Validator):
 
     @property
     def current_block_id(self) -> str | None:
-        """Returns the ID of the current parent block if it exists."""
         if self.parent_block:
             return self.parent_block.get("id")
 
     @cached_property
     def future_block_ids(self) -> set[str]:
-        """Returns a list of block IDs that are after the current parent block."""
         return (
             set(self.questionnaire_schema.block_ids_without_sub_blocks)
             - self.past_block_ids
@@ -109,7 +102,6 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def past_block_ids(self) -> set[str]:
-        """Returns a list of block IDs that are before the current parent block."""
         if self.parent_block is None:
             # Progress value source is at section level.
             # Return all blocks in the previous sections, that aren't in a repeating section
@@ -135,7 +127,6 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def future_section_ids(self) -> set[str]:
-        """Returns a list of section IDs that are after the current parent section."""
         return (
             set(self.questionnaire_schema.section_ids)
             - self.past_section_ids
@@ -144,7 +135,6 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def current_section_id(self) -> str | None:
-        """Returns the ID of the current parent section if it exists."""
         if self.parent_section:
             return self.parent_section.get("id")
 
@@ -164,12 +154,10 @@ class ValueSourceValidator(Validator):
         return ids
 
     def validate(self):
-        """Validates the value source."""
         self.validate_source_reference()
         return self.errors
 
     def validate_source_reference(self):
-        """Validates the value source reference."""
         source = self.value_source["source"]
         identifiers = self.value_source["identifier"]
         if isinstance(identifiers, str):
