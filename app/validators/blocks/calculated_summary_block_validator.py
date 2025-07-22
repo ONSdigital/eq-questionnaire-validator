@@ -2,7 +2,6 @@ from app.validators.blocks.calculation_block_validator import CalculationBlockVa
 
 
 class CalculatedSummaryBlockValidator(CalculationBlockValidator):
-
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )

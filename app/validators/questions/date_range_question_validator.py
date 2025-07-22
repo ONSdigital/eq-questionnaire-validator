@@ -1,12 +1,8 @@
-"""Validator for date range questions in a questionnaire schema."""
-
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.questions.question_validator import QuestionValidator
 
 
 class DateRangeQuestionValidator(QuestionValidator):
-    """Validator for date range questions in a questionnaire schema."""
-
     MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
     CANNOT_USE_DAYS = "Days can not be used in period_limit for yyyy-mm date range"
     CANNOT_USE_DAYS_MONTHS = (
@@ -14,7 +10,6 @@ class DateRangeQuestionValidator(QuestionValidator):
     )
 
     def __init__(self, question):
-        """Initialize the DateRangeQuestionValidator."""
         super().__init__(question)
 
         self.period_limits = self.question.get("period_limits", {})
@@ -31,7 +26,6 @@ class DateRangeQuestionValidator(QuestionValidator):
         return self.errors
 
     def validate_range(self):
-        """Validate the date range for the question."""
         if "minimum" in self.period_limits and "maximum" in self.period_limits:
             example_date = "2016-05-10"
 
@@ -49,7 +43,6 @@ class DateRangeQuestionValidator(QuestionValidator):
                 self.add_error(self.MIN_GREATER_THAN_MAX)
 
     def validate_period_limits(self):
-        """Validate the period limits for the date range question."""
         first_answer_type = self.answers[0]["type"]
 
         has_days_limit = "days" in self.period_limits.get(

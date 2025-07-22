@@ -1,5 +1,3 @@
-"""Validator for the questionnaire schema."""
-
 import re
 
 from eq_translations.survey_schema import SurveySchema
@@ -19,16 +17,12 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class QuestionnaireValidator(Validator):
-    """Validator for the questionnaire schema."""
-
     def __init__(self, schema_element=None):
-        """Initialize the QuestionnaireValidator."""
         super().__init__(schema_element)
 
         self.questionnaire_schema = QuestionnaireSchema(schema_element)
 
     def validate(self):
-        """Validate the questionnaire schema."""
         metadata_validator = MetadataValidator(
             self.schema_element["metadata"],
             self.schema_element["theme"],
@@ -71,7 +65,6 @@ class QuestionnaireValidator(Validator):
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
-        """Validate that all required section IDs are defined in the questionnaire schema."""
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
                 self.add_error(
@@ -80,7 +73,6 @@ class QuestionnaireValidator(Validator):
                 )
 
     def validate_duplicates(self):
-        """Validate that there are no duplicate IDs in the questionnaire schema."""
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error(error_messages.DUPLICATE_ID_FOUND, id=duplicate)
 
@@ -103,7 +95,6 @@ class QuestionnaireValidator(Validator):
             )
 
     def validate_smart_quotes(self):
-        """Validate that there are no smart quotes in translatable items."""
         schema_object = SurveySchema(self.schema_element)
 
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
@@ -124,7 +115,6 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_white_spaces(self):
-        """Validate that there are no leading or trailing white spaces in translatable items."""
         schema_object = SurveySchema(self.schema_element)
 
         for translatable_item in schema_object.translatable_items:
@@ -145,7 +135,6 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_introduction_block(self):
-        """Validate that there is at least one introduction block in the questionnaire."""
         blocks = self.questionnaire_schema.get_blocks()
         has_introduction_blocks = any(
             block["type"] == "Introduction" for block in blocks
@@ -154,7 +143,6 @@ class QuestionnaireValidator(Validator):
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_answer_references(self):
-        """Validate that answers are not referenced before they are created."""
         # Handling blocks in group
         for group in self.questionnaire_schema.groups:
             self.validate_answer_source_group(group)
@@ -164,7 +152,6 @@ class QuestionnaireValidator(Validator):
             self.validate_answer_source_section(section, index)
 
     def validate_answer_source_group(self, group):
-        """Validate that answers are not referenced before they are created in a group."""
         identifier_references = get_object_containing_key(group, "source")
         for path, identifier_reference, parent_block in identifier_references:
             # set up default parent_block_id for later check (group or block level)
@@ -218,7 +205,6 @@ class QuestionnaireValidator(Validator):
                         )
 
     def validate_answer_source_section(self, section, section_index):
-        """Validate that answers are not referenced before they are created in a section."""
         identifier_references = get_object_containing_key(section, "source")
         for path, identifier_reference, _ in identifier_references:
             if (
@@ -250,7 +236,6 @@ class QuestionnaireValidator(Validator):
                     )
 
     def resolve_source_block_id(self, source_block):
-        """Resolve the source block ID based on its type."""
         # Handling of source block nested (list collector's add-block)
         if source_block["type"] == "ListAddQuestion":
             return self.questionnaire_schema.get_parent_list_collector_for_add_block(
@@ -268,7 +253,6 @@ class QuestionnaireValidator(Validator):
         return source_block["id"]
 
     def validate_list_references(self):
-        """Validate that lists are not referenced before they are created."""
         lists_with_context = self.questionnaire_schema.lists_with_context
 
         # We need to keep track of section index for: common_definitions.json#/section_enabled

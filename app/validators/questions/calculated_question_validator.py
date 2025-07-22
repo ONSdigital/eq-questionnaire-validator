@@ -1,19 +1,14 @@
-"""Validator for calculated questions in a questionnaire schema."""
-
 from app.validators.questions.question_validator import QuestionValidator
 from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
 
 class CalculatedQuestionValidator(QuestionValidator):
-    """Validator for calculated questions in a questionnaire schema."""
-
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
     ANSWER_TYPES_FOR_CALCULATION_MISMATCH = "Expected the answer types for calculation to be same type but got {answer_types}'"
     ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
-        """Validates the calculated question."""
         super().validate()
         self.validate_calculations()
         if self.errors:
