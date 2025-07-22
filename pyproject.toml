@@ -133,6 +133,10 @@ ignore = [
     "C409",
     # Hide 'C405 Unnecessary list literal (rewrite as a set literal)' - to be revisited
     "C405",
+    # Hide 'D100 Missing docstring in public module' - to be revisited
+    "D100",
+    # Hide 'D101 Missing docstring in public class' - to be revisited
+    "D101",
 
 ]
 
