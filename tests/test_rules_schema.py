@@ -1,5 +1,3 @@
-"""Tests for the rules schema validator."""
-
 from json import load
 
 import pytest
@@ -15,7 +13,6 @@ configure(logger_factory=LoggerFactory())
 
 
 def _assert_schema_is_valid(valid_schema_filename, *, json_schema_definition_filepath):
-    """Validates the schema contained in the given JSON file against the specified schema definition."""
     with open(valid_schema_filename, encoding="utf8") as json_file:
         for json_fixture in load(json_file):
             schema_validator = SchemaValidator(

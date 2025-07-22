@@ -1,5 +1,3 @@
-"""Tests for PlaceholderValidator."""
-
 import pytest
 
 from app import error_messages
@@ -10,7 +8,6 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_repeating_section_title_placeholders():
-    """Test that an error is raised when a repeating section title contains placeholders that do not match the definitions."""
     placeholder_container = {
         "text": "{person}",
         "placeholders": [
@@ -47,7 +44,6 @@ def test_invalid_repeating_section_title_placeholders():
 
 
 def test_placeholder_plurals():
-    """Test that an error is raised when a placeholder plural does not match the definitions."""
     placeholder_container = {
         "text_plural": {
             "forms": {
@@ -109,7 +105,6 @@ def test_placeholder_plurals():
     ],
 )
 def test_validation_option_label_from_value(answer_id, expected_error):
-    """Test that an error is raised when a placeholder option label from value does not match the definitions."""
     filename = "schemas/invalid/test_invalid_placeholder_option_label_from_value.json"
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
@@ -161,7 +156,6 @@ def test_validation_answer_type_for_transform(
     schema,
     expected_error,
 ):
-    """Test that an error is raised when a placeholder answer type does not match the definitions for a transform."""
     filename = schema
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
@@ -199,7 +193,6 @@ def test_validation_answer_and_transform_unit_match(
     transform_type,
     expected_error,
 ):
-    """Test that an error is raised when a placeholder answer and transform unit do not match the definitions."""
     filename = (
         "schemas/invalid/test_invalid_placeholder_answer_and_transform_unit_match.json"
     )
@@ -213,7 +206,6 @@ def test_validation_answer_and_transform_unit_match(
 
 
 def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
-    """Test that an error is raised when a placeholder answer and transform unit do not match the definitions for two source answers."""
     filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
     schema_file = _open_and_load_schema_file(filename)
     validator = PlaceholderValidator(schema_file)
@@ -234,7 +226,6 @@ def test_validation_answer_and_transform_unit_two_source_answers_mismatch():
     ["first-number-answer-unit-total", "second-number-answer-unit-total"],
 )
 def test_validation_answer_and_transform_unit_single_source_answer_mismatch(answer_id):
-    """Test that an error is raised when a placeholder answer and transform unit do not match the definitions for a single source answer."""
     filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
     schema_file = _open_and_load_schema_file(filename)
     schema = QuestionnaireSchema(schema_file)

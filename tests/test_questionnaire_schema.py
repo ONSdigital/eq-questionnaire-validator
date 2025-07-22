@@ -1,5 +1,3 @@
-"""Tests for the QuestionnaireSchema class and its methods."""
-
 from jsonpath_rw import parse
 
 from app.validators.questionnaire_schema import (
@@ -10,7 +8,6 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_get_blocks():
-    """Test getting blocks by type and list name."""
     filename = "schemas/valid/test_list_collector_driving_question.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -25,7 +22,6 @@ def test_get_blocks():
 
 
 def test_get_other_blocks():
-    """Test getting other blocks by type and list name."""
     filename = "schemas/valid/test_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -41,7 +37,6 @@ def test_get_other_blocks():
 
 
 def test_get_context_from_match():
-    """Test getting context from a JSONPath match."""
     filename = "schemas/valid/test_question_variants.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -52,7 +47,6 @@ def test_get_context_from_match():
 
 
 def test_questions_with_context():
-    """Test getting questions with context."""
     filename = "schemas/valid/test_question_variants.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -118,7 +112,6 @@ def test_questions_with_context():
 
 
 def test_get_sub_block_context():
-    """Test getting sub-block context."""
     filename = "schemas/valid/test_list_collector_driving_question.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -154,7 +147,6 @@ def test_get_sub_block_context():
 
 
 def test_id_paths():
-    """Test getting ID paths from the questionnaire schema."""
     filename = "schemas/valid/test_list_collector_variants.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -217,7 +209,6 @@ def test_id_paths():
 
 
 def test_get_block_id_by_answer_id():
-    """Test getting block ID by answer ID."""
     filename = "schemas/valid/test_q_codes.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -230,7 +221,6 @@ def test_get_block_id_by_answer_id():
 
 
 def test_answers_with_context():
-    """Test getting answers with context from the questionnaire schema."""
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -375,7 +365,6 @@ def test_answers_with_context():
 
 
 def test_answers_method():
-    """Test getting answers from the questionnaire schema."""
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -504,7 +493,6 @@ def test_answers_method():
 
 
 def test_get_all_answer_ids_dynamic_answers():
-    """Test getting all answer IDs for a dynamic answer block."""
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -516,7 +504,6 @@ def test_get_all_answer_ids_dynamic_answers():
 
 
 def test_get_first_answer_in_block_dynamic_answers():
-    """Test getting the first answer in a dynamic answer block."""
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -540,7 +527,6 @@ def test_get_first_answer_in_block_dynamic_answers():
 
 
 def test_get_block_id_by_answer_id_dynamic_answers():
-    """Test getting block ID by answer ID for dynamic answers."""
     filename = "schemas/valid/test_dynamic_answers_list_source.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))

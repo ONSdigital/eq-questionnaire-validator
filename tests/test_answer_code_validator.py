@@ -1,12 +1,9 @@
-"""Tests for AnswerCodeValidator."""
-
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
 def test_answer_code_validation_incorrect_data_version():
-    """Test that the validator raises an error when the data version is incorrect."""
     filename = "schemas/valid/test_answer_codes.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -25,7 +22,6 @@ def test_answer_code_validation_incorrect_data_version():
 
 
 def test_duplicate_answer_codes():
-    """Test that the validator detects duplicate answer codes."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -75,7 +71,6 @@ def test_duplicate_answer_codes():
 
 
 def test_duplicate_answer_id_for_answer_code():
-    """Test that the validator detects duplicate answer IDs."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -124,7 +119,6 @@ def test_duplicate_answer_id_for_answer_code():
 
 
 def test_answer_id_set_in_answer_codes_not_in_schema():
-    """Test that the validator detects answer IDs set in answer codes that are not in the schema."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -173,7 +167,6 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
 
 
 def test_answer_value_set_for_answer_without_answer_options():
-    """Test that the validator detects answer values set for answers without options."""
     filename = "schemas/valid/test_answer_codes.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -226,7 +219,6 @@ def test_answer_value_set_for_answer_without_answer_options():
 
 
 def test_answer_code_not_set_for_answer_found_in_schema():
-    """Test that the validator detects missing answer codes for answers found in the schema."""
     filename = "schemas/invalid/test_invalid_answer_codes_answer_id_with_no_code.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -247,7 +239,6 @@ def test_answer_code_not_set_for_answer_found_in_schema():
 
 
 def test_answer_code_missing_for_answer_options():
-    """Test that the validator detects missing answer codes for answer options."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -355,7 +346,6 @@ def test_answer_code_missing_for_answer_options():
 
 
 def test_answer_code_missing_for_answer_options_only_one_value_set():
-    """Test that the validator detects missing answer codes for answer options when only one value is set."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -422,7 +412,6 @@ def test_answer_code_missing_for_answer_options_only_one_value_set():
 
 
 def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
-    """Test that the validator detects more than one answer code for answer options when no value is set."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -479,7 +468,6 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
 
 
 def test_answer_code_with_duplicate_option_answer_values():
-    """Test that the validator detects duplicate option answer values."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -554,7 +542,6 @@ def test_answer_code_with_duplicate_option_answer_values():
 
 
 def test_incorrect_answer_value_set_in_answer_code():
-    """Test that the validator detects incorrect answer values set in answer codes."""
     filename = "schemas/valid/test_answer_codes.json"
 
     answer_codes = [
@@ -607,7 +594,6 @@ def test_incorrect_answer_value_set_in_answer_code():
 
 
 def test_answer_codes_must_be_set_at_parent_level_for_dynamic_options():
-    """Test that the validator detects that answer codes must be set at the parent level for dynamic options."""
     filename = "schemas/valid/test_dynamic_answer_options_dynamic_date_driven.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -653,7 +639,6 @@ def test_answer_codes_must_be_set_at_parent_level_for_dynamic_options():
 
 
 def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
-    """Test that the validator allows answer codes to be set at both parent and value level for dynamic options."""
     filename = "schemas/valid/test_dynamic_answer_options_dynamic_date_driven.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -670,7 +655,6 @@ def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
 
 
 def test_invalid_value_in_answer_code_for_dynamic_options():
-    """Test that the validator detects invalid values in answer codes for dynamic options."""
     filename = "schemas/valid/test_dynamic_answer_options_dynamic_date_driven.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -716,7 +700,6 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
 
 
 def test_missing_answer_codes_for_list_add_questions():
-    """Test that the validator detects missing answer codes for list add questions."""
     filename = "schemas/valid/test_answer_codes_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -754,7 +737,6 @@ def test_missing_answer_codes_for_list_add_questions():
 
 
 def test_invalid_answer_codes_for_list_collector_remove_question():
-    """Test that the validator detects invalid answer codes for list collector remove questions."""
     filename = "schemas/valid/test_answer_codes_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))

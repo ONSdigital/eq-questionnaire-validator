@@ -1,10 +1,7 @@
-"""Tests for MetadataValidator."""
-
 from app.validators.metadata_validator import MetadataValidator
 
 
 def test_mandatory_metadata_default():
-    """Test that mandatory metadata is validated correctly for default theme."""
     metadata = [
         {"name": "period_id", "type": "string"},
         {"name": "user_id", "type": "string"},
@@ -18,7 +15,6 @@ def test_mandatory_metadata_default():
 
 
 def test_mandatory_metadata_social():
-    """Test that mandatory metadata is validated correctly for social theme."""
     metadata = []
     validator = MetadataValidator(metadata, "social")
     validator.validate_mandatory()
@@ -27,7 +23,6 @@ def test_mandatory_metadata_social():
 
 
 def test_mandatory_metadata_non_default_theme():
-    """Test that mandatory metadata is validated correctly for non-default themes."""
     metadata = [
         {"name": "period_id", "type": "string"},
         {"name": "user_id", "type": "string"},
@@ -39,7 +34,6 @@ def test_mandatory_metadata_non_default_theme():
 
 
 def test_duplicate_metadata():
-    """Test that duplicate metadata is detected correctly."""
     metadata = [
         {"name": "period_id", "type": "string"},
         {"name": "user_id", "type": "string"},

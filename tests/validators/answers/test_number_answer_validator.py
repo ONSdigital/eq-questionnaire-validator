@@ -1,5 +1,3 @@
-"""Tests for NumberAnswerValidator class."""
-
 import pytest
 
 from app.validators.answers import NumberAnswerValidator
@@ -13,7 +11,6 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_minimum_value():
-    """Test that minimum value is validated correctly."""
     answer = {
         "id": "answer-4",
         "label": "Max/Min out of system limits",
@@ -43,7 +40,6 @@ def test_minimum_value():
 
 
 def test_invalid_answer_default():
-    """Test that invalid answer default is identified correctly."""
     answer = {
         "default": 0,
         "id": "answer-7",
@@ -65,7 +61,6 @@ def test_invalid_answer_default():
 
 
 def test_are_decimal_places_valid():
-    """Test that decimal places are validated correctly."""
     answer = {
         "calculated": True,
         "description": "The total percentages should be 100%",
@@ -98,7 +93,6 @@ def test_are_decimal_places_valid():
     ],
 )
 def test_invalid_min_or_max_is_string(bounds, error_count):
-    """Test that minimum and maximum values are validated correctly."""
     answer = {
         "calculated": True,
         "description": "The total percentages should be 100%",
@@ -124,7 +118,6 @@ def test_invalid_min_or_max_is_string(bounds, error_count):
 
 
 def test_valid_minimum_value_is_float():
-    """Test that minimum value is validated correctly as a float."""
     answer = {
         "id": "answer-2",
         "mandatory": True,
@@ -145,7 +138,6 @@ def test_valid_minimum_value_is_float():
 
 
 def test_valid_max_if_numeric_value_source():
-    """Test that maximum value is validated correctly if it is a numeric value source."""
     filename = "schemas/valid/test_calculated_summary.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -159,7 +151,6 @@ def test_valid_max_if_numeric_value_source():
 
 
 def test_invalid_range():
-    """Test that invalid ranges are identified correctly."""
     answer = {
         "id": "answer-3",
         "label": "Invalid References",
@@ -197,7 +188,6 @@ def test_invalid_range():
 
 
 def test_invalid_range_calculated_summary_source():
-    """Test that invalid ranges are identified correctly in calculated summary source."""
     filename = "schemas/invalid/test_invalid_calculated_summary_answer_ranges.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -227,7 +217,6 @@ def test_invalid_range_calculated_summary_source():
 
 
 def test_invalid_numeric_answers():
-    """Test that invalid numeric answers are identified correctly."""
     validator = NumberAnswerValidator(
         {
             "decimal_places": 2,
@@ -261,7 +250,6 @@ def test_invalid_numeric_answers():
 
 
 def test_invalid_maximum_minimum_value_from_answer_source():
-    """Test that invalid maximum and minimum values from answer source are identified correctly."""
     answer = {
         "id": "min-max-range",
         "mandatory": False,

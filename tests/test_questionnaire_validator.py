@@ -1,5 +1,3 @@
-"""Tests for the questionnaire validator."""
-
 from json import load
 
 import pytest
@@ -40,7 +38,6 @@ def test_param_valid_schemas(valid_schema_filename):
 
 
 def test_invalid_mutually_exclusive_conditions():
-    """Test that invalid mutually exclusive conditions are caught."""
     filename = "schemas/invalid/test_invalid_mutually_exclusive_conditions.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -66,7 +63,6 @@ def test_invalid_mutually_exclusive_conditions():
 
 
 def test_invalid_string_transforms():
-    """Test that invalid string transforms are caught."""
     filename = "schemas/invalid/test_invalid_string_transforms.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -93,7 +89,6 @@ def test_invalid_string_transforms():
 
 
 def test_invalid_placeholder_answer_ids():
-    """Test that invalid placeholder answer IDs are caught."""
     filename = "schemas/invalid/test_invalid_placeholder_source_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -124,7 +119,6 @@ def test_invalid_placeholder_answer_ids():
 
 
 def test_single_variant_invalid():
-    """Test that invalid single variants are caught."""
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(file_name))
@@ -138,7 +132,6 @@ def test_single_variant_invalid():
 
 
 def test_duplicate_answer_ids():
-    """Test that invalid duplicate answer IDs are caught."""
     filename = "schemas/invalid/test_invalid_duplicate_ids.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -156,7 +149,6 @@ def test_duplicate_answer_ids():
 
 
 def test_inconsistent_ids_in_variants():
-    """Test that invalid inconsistent IDs in variants are caught."""
     file_name = "schemas/invalid/test_invalid_inconsistent_ids_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
@@ -187,7 +179,6 @@ def test_inconsistent_ids_in_variants():
 
 
 def test_inconsistent_default_answers_in_variants():
-    """Test that invalid inconsistent default answers in variants are caught."""
     file_name = (
         "schemas/invalid/test_invalid_inconsistent_default_answers_in_variants.json"
     )
@@ -207,7 +198,6 @@ def test_inconsistent_default_answers_in_variants():
 
 
 def test_invalid_list_collector_duplicate_ids_between_list_collectors():
-    """Test that invalid list collector duplicate IDs between list collectors are caught."""
     filename = "schemas/invalid/test_invalid_list_collector_duplicate_ids_multiple_collectors.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -223,7 +213,6 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
 
 
 def test_inconsistent_types_in_variants():
-    """Test that invalid inconsistent types in variants are caught."""
     file_name = "schemas/invalid/test_invalid_inconsistent_types_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
@@ -250,7 +239,6 @@ def test_inconsistent_types_in_variants():
 
 
 def test_non_existent_list_name_in_relationship():
-    """Test that invalid list names in relationships are caught."""
     filename = "schemas/invalid/test_invalid_relationship_list_doesnt_exist.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -266,7 +254,6 @@ def test_non_existent_list_name_in_relationship():
 
 
 def test_invalid_repeating_section_list_name():
-    """Test that invalid repeating section list names are caught."""
     filename = "schemas/invalid/test_invalid_repeating_section_list_name.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -284,7 +271,6 @@ def test_invalid_repeating_section_list_name():
 
 
 def test_invalid_hub_section_non_existent():
-    """Test that an invalid hub section ID is caught."""
     validator = QuestionnaireValidator()
     section_ids = ["employment-section", "accommodation-section"]
     required_section_ids = ["invalid-section-id"]
@@ -299,7 +285,6 @@ def test_invalid_hub_section_non_existent():
 
 
 def test_invalid_quotes_in_schema():
-    """Test that invalid quotes in the schema are caught."""
     filename = "schemas/invalid/test_invalid_quotes_in_schema_text.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -319,7 +304,6 @@ def test_invalid_quotes_in_schema():
 
 
 def test_invalid_whitespaces_in_schema():
-    """Test that invalid whitespaces in the schema are caught."""
     filename = "schemas/invalid/test_invalid_whitespaces_in_schema_text.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -352,7 +336,6 @@ def test_invalid_whitespaces_in_schema():
 
 
 def test_invalid_answer_type_for_question_summary_concatenation():
-    """Test that invalid answer types for question summary concatenation are caught."""
     filename = "schemas/invalid/test_invalid_answer_type_for_question_summary.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -371,7 +354,6 @@ def test_invalid_answer_type_for_question_summary_concatenation():
 
 
 def test_multiple_list_collectors_and_lists_in_single_section():
-    """Test that multiple list collectors and lists in a single section are caught."""
     filename = "schemas/invalid/test_invalid_multiple_list_collectors_and_lists.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -388,7 +370,6 @@ def test_multiple_list_collectors_and_lists_in_single_section():
 
 
 def test_introduction_block_not_in_schema():
-    """Test that an introduction block not in the schema is caught."""
     filename = "schemas/invalid/test_invalid_introduction_block.json"
 
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
@@ -427,11 +408,7 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
 
 
 def test_answer_as_source_referenced_before_created():
-    """Test that invalid answer sources being referenced before they are created are caught.
-
-    The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block,
-    resulting in duplicated expected errors.
-    """
+    """The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block, resulting in duplicated expected errors."""
     filename = "schemas/invalid/test_invalid_answer_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -482,7 +459,6 @@ def test_answer_as_source_referenced_before_created():
 
 
 def test_list_as_source_referenced_before_created():
-    """Test that invalid list sources being referenced before they are created are caught."""
     filename = "schemas/invalid/test_invalid_list_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -541,7 +517,6 @@ def test_list_as_source_referenced_before_created():
 
 
 def test_list_and_answer_source_referenced_before_created_repeating_blocks():
-    """Test that invalid list and answer sources being referenced before they are created in repeating blocks are caught."""
     filename = (
         "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
     )

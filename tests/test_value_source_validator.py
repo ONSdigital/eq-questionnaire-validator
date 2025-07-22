@@ -1,5 +1,3 @@
-"""Tests for the Value Source Validator."""
-
 import pytest
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
@@ -17,7 +15,6 @@ from app.validators.value_source_validator import ValueSourceValidator
     ],
 )
 def test_invalid_source_reference(value_source):
-    """Test that invalid source references are identified correctly."""
     questionnaire_schema = QuestionnaireSchema(
         {"metadata": [{"name": "metatata-1", "type": "string"}]},
     )
@@ -45,7 +42,6 @@ def test_invalid_source_reference(value_source):
 
 
 def test_invalid_progress_source_reference():
-    """Test that invalid progress source references are identified correctly."""
     invalid_value_source = {
         "source": "progress",
         "selector": "block",
@@ -86,7 +82,6 @@ def test_invalid_progress_source_reference():
 
 
 def test_invalid_reference():
-    """Test that invalid references are identified correctly."""
     value_source = {"source": "answers", "identifier": "answer-2"}
 
     questionnaire_schema = QuestionnaireSchema({})
@@ -102,7 +97,6 @@ def test_invalid_reference():
 
 
 def test_invalid_composite_answer_in_selector():
-    """Test that invalid composite answers in selectors are identified correctly."""
     value_source = {
         "identifier": "name-answer",
         "source": "answers",
@@ -125,7 +119,6 @@ def test_invalid_composite_answer_in_selector():
 
 
 def test_invalid_composite_answer_field_in_selector():
-    """Test that invalid composite answer fields in selectors are identified correctly."""
     value_source = {
         "identifier": "address-answer",
         "source": "answers",

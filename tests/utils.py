@@ -1,5 +1,3 @@
-"""Utility functions for testing purposes."""
-
 import os
 from json import load
 
