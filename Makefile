@@ -23,7 +23,6 @@ clean: ## Clean the temporary files.
 
 lint: lint-python
 	npm run lint
-	poetry run ruff check .
 
 .PHONY: ruff
 ruff: ## Run ruff linter.

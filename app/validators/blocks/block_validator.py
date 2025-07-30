@@ -26,6 +26,7 @@ class BlockValidator(Validator):
         self.context["block_id"] = self.block["id"]
 
     def validate(self):
+        """Validation called for every block type."""
         self.validate_id_relationships_used_with_relationship_collector()
         self.validate_redirect_to_list_add_block_params()
         self.validate_placeholder_answer_self_references()

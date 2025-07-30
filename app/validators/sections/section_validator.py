@@ -40,9 +40,9 @@ class SectionValidator(Validator):
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        """We validate here.
+        """Summary validation.
 
-        If there is a summary without items or there is no summary or there is a list summary
+        Validates if there is a summary without items or there is no summary or there is a list summary
         within a section then we allow multiple list collectors otherwise we disallow them.
         """
         if not (section_summary := self.section.get("summary")):
