@@ -87,3 +87,44 @@ jobs:
         run: poetry install
       - name: Running unit tests
         run: make test-unit
+
+  docker-push:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@71f986410dfbc7added4569d411d040a91dc6935 # v2.1.8
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Tag
+        run: |
+          CLEAN_TAG=$(echo "${{ github.event.pull_request.head.ref  }}"  | tr / -)
+          echo "TAG=$CLEAN_TAG" >> $GITHUB_ENV
+
+      - name: Authenticate Docker with GAR
+        run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}
+
+      - name: Build Python Validator Image
+        run: docker build -t ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG -f Dockerfile .
+
+      - name: Push Python Validator Image
+        run: |
+          echo "Pushing to GAR with tag $TAG"
+          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG
+
+      - name: Build AJV Validator Image
+        run: |
+          docker build -t ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv -f Dockerfile-ajv .
+
+      - name: Push AJV Validator Image
+        run: |
+          echo "Pushing to GAR with tag $TAG-ajv"
+          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
