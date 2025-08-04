@@ -2,24 +2,25 @@
 
 An API for validating survey schemas.
 
+
 ## Setup
 
 It is recommended that you use [Pyenv](https://github.com/pyenv/pyenv) to manage your Python installations.
 
 ### Install Poetry
 ```
-curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
+curl -sSL https://install.python-poetry.org | python3 - --version 3.12.6
 poetry install
 ```
 
-## Running 
+
+## Running
 
 The `AJV_VALIDATOR_URL` defaults to `http://localhost:5002/validate`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME` , `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
 
 Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
-
 
 To run the app:
 
@@ -36,7 +37,33 @@ http://localhost:5001/validate?url=...
 ```
 
 
+## Validating with ajv
+
+Also included is a node based version of the json schema validation which may be used during development to assist with
+debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our
+blocks.
+
+Run the ajv (server) based version of validator:
+
+```
+make start-ajv
+```
+
+To stop the ajv (server) based version of validator:
+
+```
+make stop-ajv
+```
+You will need to add the `AJV_VALIDATOR_PORT` number to your .env file.
+
+This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
+The errors are ordered by their path length and with first error message being the deepest path into the schema and
+should represent the best match for the questionnaire which has been posted.
+
+
 ## Testing
+
+### Unit tests
 
 By default, all schemas in the `tests/schemas/valid` directory will be evaluated as part of the unit tests.
 Any errors in these schemas will cause a failure.
@@ -63,7 +90,7 @@ Then, in another terminal window/tab, navigate to a checked out copy of eq-surve
 make test
 ```
 
-# Installing node dependencies
+### AJV tests
 
 In the eq-schema-validator directory, install node version manager (nvm) and node using the following commands:
 
@@ -84,31 +111,11 @@ To run the ajv validator tests:
 make test-ajv
 ```
 
+
 ## Formatting json
 
 Run the following to format all json files in the schemas directory:
 
 ```
 make format
-````
-
-## Validating with ajv
-
-Also included is a node based version of the json schema validation which may be used during development to assist with
-debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our
-blocks.
-
-Run the ajv (server) based version of validator.
-
 ```
-make start-ajv
-```
-To stop the ajv (server) based version of validator. You will need to add the AJV_VALIDATOR_PORT number to your .env file.
-
-```
-make stop-ajv
-```
-
-This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
-The errors are ordered by their path length and with first error message being the deepest path into the schema and
-should represent the best match for the questionnaire which has been posted.
