@@ -15,7 +15,7 @@ git clone git@github.com:ONSdigital/eq-questionnaire-validator.git
 
 In order to run locally you'll need Node.js, poetry and pyenv installed.
 
-#### Install npm pyenv
+#### Install npm and pyenv
 ``` shell
 brew install npm pyenv
 ```
