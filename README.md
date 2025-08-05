@@ -11,16 +11,30 @@ An API for validating survey schemas.
 git clone git@github.com:ONSdigital/eq-questionnaire-validator.git
 ```
 
-### Pre-Requisites
+### Setup
 
 In order to run locally you'll need Node.js, poetry and pyenv installed.
 
-#### Install npm and pyenv
+#### Install NVM and pyenv
+
+NVM and pyenv will manage your versions of Node and Python.
 ``` shell
-brew install npm pyenv
+brew install nvm pyenv
+nvm use
 ```
 
-#### Install Poetry
+If you get a message in the command line after running `nvm use` that the version of node specified in the `.nvmrc` file isn't installed, just follow the commands to install it.
+
+``` shell
+nvm install v22.15.0
+```
+
+#### Install ajv and other JS dependencies
+``` shell
+npm install
+```
+
+#### Install Poetry and Python dependencies
 ``` shell
 curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
 poetry install
@@ -49,6 +63,8 @@ The validator can be called directly in the browser using the "/validate" endpoi
 http://localhost:5001/validate?url=...
 ```
 
+Once you have validator running it can be used to run against eQ runner (https://github.com/ONSdigital/eq-questionnaire-runner). If you have runner spun up you can run `make validate-test-schemas` which will run your local validator on the test runner schemas.
+
 
 ## Validating with ajv
 
@@ -74,14 +90,18 @@ should represent the best match for the questionnaire which has been posted.
 
 ## Testing
 
-### Unit tests
-
 By default, all schemas in the `tests/schemas/valid` directory will be evaluated as part of the unit tests.
 Any errors in these schemas will cause a failure.
 
 To run the app's unit tests:
 ``` shell
 make test-unit
+```
+
+To run the ajv validator tests:
+
+``` shell
+make test-ajv
 ```
 
 To run the app's unit tests and ajv validator tests:
@@ -94,29 +114,9 @@ To test the apps functionality:
 make run
 ```
 
-Then, in another terminal window/tab, navigate to a checked out copy of eq-survey-runner:
+Then, in another terminal window/tab, navigate to a checked out copy of `eq-survey-runner`:
 ``` shell
 make test
-```
-
-### AJV tests
-
-In the eq-schema-validator directory, install node version manager (nvm) and node using the following commands:
-``` shell
-brew install nvm
-nvm install
-```
-
-Install node dependencies:
-
-``` shell
-npm install
-```
-
-To run the ajv validator tests:
-
-``` shell
-make test-ajv
 ```
 
 
