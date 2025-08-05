@@ -3,7 +3,7 @@
 An API for validating survey schemas.
 
 
-## Run locally
+## Setup
 
 ### Clone the repository
 
@@ -11,11 +11,9 @@ An API for validating survey schemas.
 git clone git@github.com:ONSdigital/eq-questionnaire-validator.git
 ```
 
-### Setup
-
 In order to run locally you'll need Node.js, poetry and pyenv installed.
 
-#### Install NVM and pyenv
+### Install NVM and pyenv
 
 NVM and pyenv will manage your versions of Node and Python.
 ``` shell
@@ -29,18 +27,18 @@ If you get a message in the command line after running `nvm use` that the versio
 nvm install v22.15.0
 ```
 
-#### Install Ajv and other JS dependencies
+### Install Ajv and other JS dependencies
 ``` shell
 npm install
 ```
 
-#### Install Poetry and Python dependencies
+### Install Poetry and Python dependencies
 ``` shell
 curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
 poetry install
 ```
 
-### Running
+## Running locally
 
 The `AJV_VALIDATOR_URL` defaults to `http://localhost:5002/validate`.
 
@@ -57,6 +55,8 @@ If you want to run the app locally using multiple server workers set reload to "
 ``` python
 uvicorn.run("api:app", workers=20, port=5001, reload=False)
 ```
+
+### Running against a URL
 
 The validator can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json). Only URLs from the ONSDigital organization are accepted.
 ```
