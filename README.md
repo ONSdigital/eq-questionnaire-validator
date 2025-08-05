@@ -29,7 +29,7 @@ If you get a message in the command line after running `nvm use` that the versio
 nvm install v22.15.0
 ```
 
-#### Install ajv and other JS dependencies
+#### Install Ajv and other JS dependencies
 ``` shell
 npm install
 ```
@@ -66,18 +66,18 @@ http://localhost:5001/validate?url=...
 Once you have validator running it can be used to run against eQ runner (https://github.com/ONSdigital/eq-questionnaire-runner). If you have runner spun up you can run `make validate-test-schemas` which will run your local validator on the test runner schemas.
 
 
-## Validating with ajv
+## Validating with Ajv
 
 Also included is a node based version of the json schema validation which may be used during development to assist with
 debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our
 blocks.
 
-Run the ajv (server) based version of validator:
+Run the Ajv (server) based version of validator:
 ``` shell
 make start-ajv
 ```
 
-To stop the ajv (server) based version of validator:
+To stop the Ajv (server) based version of validator:
 ``` shell
 make stop-ajv
 ```
@@ -98,13 +98,13 @@ To run the app's unit tests:
 make test-unit
 ```
 
-To run the ajv validator tests:
+To run the Ajv validator tests:
 
 ``` shell
 make test-ajv
 ```
 
-To run the app's unit tests and ajv validator tests:
+To run the app's unit tests and Ajv validator tests:
 ``` shell
 make test
 ```
