@@ -5,6 +5,9 @@ from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import RefResolver, ValidationError
 from jsonschema.exceptions import SchemaError, best_match
 
+from referencing import Registry, Resource
+from referencing.jsonschema import DRAFT202012
+
 from app.validators.validator import Validator
 
 
@@ -15,12 +18,17 @@ class SchemaValidator(Validator):
         with open(schema, encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
-        resolver = RefResolver(
-            base_uri="",
-            referrer=self.schema,
-            store=self.lookup_ref_store(),
-        )
-        self.schema_validator = DraftValidator(self.schema, resolver=resolver)
+        # resolver = RefResolver(
+        #     base_uri="",
+        #     referrer=self.schema,
+        #     store=self.lookup_ref_store(),
+        # )
+        registry = Registry()
+
+        for uri, resource in self.lookup_ref_store().items():
+            registry = registry.with_resource(uri=uri, resource=resource)
+
+        self.schema_validator = DraftValidator(self.schema, registry=registry)
 
     @staticmethod
     def lookup_ref_store():
@@ -34,7 +42,7 @@ class SchemaValidator(Validator):
             for filename in glob.glob(glob_path):
                 with open(filename, encoding="utf8") as schema_file:
                     json_data = load(schema_file)
-                    store[json_data["$id"]] = json_data
+                    store[json_data["$id"]] = Resource.from_contents(json_data)
         return store
 
     def validate(self):
