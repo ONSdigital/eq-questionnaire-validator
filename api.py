@@ -55,7 +55,10 @@ async def validate_schema_from_url(url=None):
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
         if not is_domain_allowed(parsed_url, domain):
-            logger.warning("Schema validation request rejected - URL not allowed (this could be related to domain, base_url or repo_owner - see debug logs for values)", url=url)
+            logger.warning(
+                "Schema validation request rejected - URL not allowed (this could be related to domain, base_url or repo_owner - see debug logs for values)",
+                url=url,
+            )
             return Response(
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
@@ -70,7 +73,8 @@ async def validate_schema_from_url(url=None):
                 "Could not load schema from allowed domain - URL not found", url=url
             )
             return Response(
-                status_code=404, content=f"Could not load schema at allowed domain - URL not found [{url}]"
+                status_code=404,
+                content=f"Could not load schema from allowed domain - URL not found [{url}]",
             )
 
 
@@ -86,7 +90,9 @@ async def validate_schema(data):
                 logger.info("JSON data decoded as UTF-8 successfully")
             except UnicodeDecodeError:
                 logger.error("Failed to decode JSON data as UTF-8", status=400)
-                return Response(status_code=400, content="Failed to decode JSON data as UTF-8")            
+                return Response(
+                    status_code=400, content="Failed to decode JSON data as UTF-8"
+                )
         if isinstance(data, str):
             logger.info("JSON data received as string - parsing required")
             logger.debug("Attempting to parse JSON data...")
@@ -102,13 +108,20 @@ async def validate_schema(data):
 
     response = {}
     try:
-        logger.debug("Sending JSON data to AJV Schema Validator service...", url=AJV_VALIDATOR_URL)
+        logger.debug(
+            "Sending JSON data to AJV Schema Validator service...",
+            url=AJV_VALIDATOR_URL,
+        )
         ajv_response = requests.post(
             AJV_VALIDATOR_URL, json=json_to_validate, timeout=10
         )
         if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]
-            logger.warning("AJV Schema Validator service returned errors", status=400, errors=response["errors"])
+            logger.warning(
+                "AJV Schema Validator service returned errors",
+                status=400,
+                errors=response["errors"],
+            )
             return response, 400
 
     except RequestException:
@@ -118,12 +131,19 @@ async def validate_schema(data):
     logger.info("AJV Schema Validator service returned no errors", status=200)
 
     validator = QuestionnaireValidator(json_to_validate)
-    logger.debug("Attempting to validate questionnaire schema contents with Questionnaire Validator...", questionnaire_title=json_to_validate.get("title"))
+    logger.debug(
+        "Attempting to validate questionnaire schema contents with Questionnaire Validator...",
+        questionnaire_title=json_to_validate.get("title"),
+    )
     validator.validate()
 
     if validator.errors:
         response["errors"] = validator.errors
-        logger.warning("Questionnaire Validator returned errors", status=400, errors=response["errors"])
+        logger.warning(
+            "Questionnaire Validator returned errors",
+            status=400,
+            errors=response["errors"],
+        )
         response = Response(content=json.dumps(response), status_code=400)
 
         return response
