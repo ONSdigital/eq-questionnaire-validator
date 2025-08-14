@@ -2,7 +2,7 @@ import glob
 from json import load
 
 from jsonschema import Draft202012Validator as DraftValidator
-from jsonschema import RefResolver, ValidationError
+from jsonschema import ValidationError
 from jsonschema.exceptions import SchemaError, best_match
 
 from referencing import Registry, Resource
@@ -18,11 +18,6 @@ class SchemaValidator(Validator):
         with open(schema, encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
-        # resolver = RefResolver(
-        #     base_uri="",
-        #     referrer=self.schema,
-        #     store=self.lookup_ref_store(),
-        # )
         registry = Registry()
 
         for uri, resource in self.lookup_ref_store().items():
@@ -44,7 +39,7 @@ class SchemaValidator(Validator):
                     json_data = load(schema_file)
                     store[json_data["$id"]] = Resource.from_contents(json_data)
         return store
-
+    
     def validate(self):
         try:
             self.schema_validator.validate(self.schema_element)
