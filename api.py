@@ -65,6 +65,7 @@ async def validate_schema_from_url(url=None):
             )
         logger.info("Schema validation request accepted - URL allowed", url=url)
         try:
+            # Opens the URL and validates the schema
             with request.urlopen(parsed_url.geturl()) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
             logger.info("Schema successfully validated from URL", url=url)
@@ -98,9 +99,11 @@ async def validate_schema(data):
             "Sending JSON data to AJV Schema Validator service...",
             url=AJV_VALIDATOR_URL,
         )
+        # Posts JSON data to AJV Validator service and returns a response containing any errors
         ajv_response = requests.post(
             AJV_VALIDATOR_URL, json=json_to_validate, timeout=10
         )
+        # Returns errors in the response if AJV Validator service returned any errors
         if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]
             logger.warning(
@@ -121,8 +124,10 @@ async def validate_schema(data):
         "Attempting to validate questionnaire schema contents with Questionnaire Validator...",
         questionnaire_title=json_to_validate.get("title"),
     )
+    # Validates questionnaire schema contents using the QuestionnaireValidator
     validator.validate()
 
+    # Adds errors from validation to the response if there are any
     if validator.errors:
         response["errors"] = validator.errors
         logger.warning(
