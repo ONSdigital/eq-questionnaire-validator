@@ -105,6 +105,9 @@ async def validate_schema(data):
         elif isinstance(data, dict):
             logger.info("JSON data received as dictionary - parsing not required")
             json_to_validate = data
+    else:
+        logger.error("No JSON data provided for validation", status=400)
+        return Response(status_code=400, content="No JSON data provided for validation")
 
     response = {}
     try:
