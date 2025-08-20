@@ -68,7 +68,6 @@ async def validate_schema_from_url(url=None):
             # Opens the URL and validates the schema
             with request.urlopen(parsed_url.geturl()) as opened_url:
                 return await validate_schema(data=opened_url.read().decode())
-            logger.info("Schema successfully validated from URL", url=url)
         except error.URLError:
             logger.warning(
                 "Could not load schema from allowed domain - URL not found", url=url
