@@ -496,13 +496,6 @@ class QuestionnaireSchema:
         return self.get_answers_from_question(questions[0])[0]
 
     @lru_cache
-    def _get_path_id(self, path):
-        return next(
-            (match.value for match in ext_parse(f"{path}.id").find(self.schema)),
-            None,
-        )
-
-    @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
         for question, context in self.questions_with_context:
             if block_id := self.get_block_id_for_answer(
