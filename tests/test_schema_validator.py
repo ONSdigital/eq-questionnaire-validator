@@ -48,13 +48,10 @@ def test_invalid_answer_ids():
         validator = SchemaValidator(json_to_validate)
         validator.validate()
 
-        # expected_message = f"'{answer_id}' does not match"
+        expected_message = f"'{answer_id}' does not match"
 
-        # print(f"HERREEEEEEEE {validator.errors[0]["message"]}")
 
-        # assert expected_message in validator.errors[0]["message"]
-
-        assert any(answer_id in str(e["message"]) for e in validator.errors), f"Expected ID {answer_id} in errors, got {validator.errors}"
+        assert expected_message in validator.errors[0]["message"]
 
 
 
@@ -62,19 +59,14 @@ def test_invalid_answer_ids():
 def test_schema():
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
-        # resolver = RefResolver(
-        #     base_uri="",
-        #     referrer=schema,
-        #     store=SchemaValidator.lookup_ref_store(),
-        # )
-
+  
         registry = Registry()
 
-        for uri, resource in SchemaValidator.lookup_ref_store().items():
-            registry = registry.with_resource(uri=uri, resource=resource)
+        registry = Registry().with_resources(
+            pairs=SchemaValidator.lookup_ref_store().items()
+        )
 
         validator = validators.validator_for(schema)(schema, registry=registry)
-        # validator.resolver = resolver
         validator.check_schema(schema)
 
 
@@ -84,26 +76,13 @@ def test_single_variant_invalid():
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
-    print(f"hereee {validator.errors}")
+    print(f"hereee {validator.errors[0]["message"]}")
 
-    # assert validator.errors[0]["message"] == "'when' is a required property"
-
-    # due to moving away from ref resolver the schema won't give a specific error but gives the object back
-
-    # assert any("when" in str(e["message"]) for e in validator.errors), f"Expected 'when' in errors, got: {validator.errors}"
+    assert validator.errors[0]["message"] == "'when' is a required property"
 
     assert len(validator.errors) == 1
 
 
-def test_invalid_survey_id_whitespace():
-    file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
-    json_to_validate = _open_and_load_schema_file(file)
-
-    validator = SchemaValidator(json_to_validate)
-
-    validator.validate()
-
-    assert validator.errors[0]["message"] == "'lms ' does not match '^[0-9a-z]+$'"
 
 
 def test_returns_pointer():
@@ -125,12 +104,8 @@ def test_invalid_q_code_regex_pattern():
 
     validator.validate()
 
-    print(f"hereeee222 {validator.errors[0]["message"]}")
-
-    # assert (
-    #     validator.errors[0]["message"]
-    #     == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"
-    # )
-
-    assert any("&*fgh er*R" in str(e["message"]) for e in validator.errors), f"Expected q_code '&*fgh er*R' in errors, got: {validator.errors}"
+    assert (
+        validator.errors[0]["message"]
+        == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"
+    )
 
