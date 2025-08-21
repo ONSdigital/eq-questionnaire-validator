@@ -1,5 +1,7 @@
 import glob
+import os
 from json import load
+from urllib.parse import urljoin
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
@@ -20,8 +22,9 @@ class SchemaValidator(Validator):
 
         registry = Registry()
 
-        for uri, resource in self.lookup_ref_store().items():
-            registry = registry.with_resource(uri=uri, resource=resource)
+        registry = registry.with_resources(pairs=self.lookup_ref_store().items())
+
+        # registry = registry.crawl()
 
         self.schema_validator = DraftValidator(self.schema, registry=registry)
 
@@ -39,7 +42,7 @@ class SchemaValidator(Validator):
                     json_data = load(schema_file)
                     store[json_data["$id"]] = Resource.from_contents(json_data)
         return store
-    
+
     def validate(self):
         try:
             self.schema_validator.validate(self.schema_element)
