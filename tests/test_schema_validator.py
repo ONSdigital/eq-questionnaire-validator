@@ -76,8 +76,6 @@ def test_single_variant_invalid():
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
-    print(f"hereee {validator.errors[0]["message"]}")
-
     assert validator.errors[0]["message"] == "'when' is a required property"
 
     assert len(validator.errors) == 1
