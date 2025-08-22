@@ -1,14 +1,11 @@
 import glob
-import os
 from json import load
-from urllib.parse import urljoin
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
 from jsonschema.exceptions import SchemaError, best_match
 
 from referencing import Registry, Resource
-from referencing.jsonschema import DRAFT202012
 
 from app.validators.validator import Validator
 
@@ -23,8 +20,7 @@ class SchemaValidator(Validator):
         registry = Registry()
 
         registry = registry.with_resources(pairs=self.lookup_ref_store().items())
-
-        # registry = registry.crawl()
+        registry = registry.crawl()
 
         self.schema_validator = DraftValidator(self.schema, registry=registry)
 
