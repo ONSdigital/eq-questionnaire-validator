@@ -86,8 +86,14 @@ async def validate_schema(data):
             json_to_validate = parse_json(data)
         # Returns an error response if the data received is not a string or dictionary
         else:
-            logger.error("Invalid data type received for validation (expected string or dictionary)", data_type=type(data), status=400)
-            return Response(status_code=400, content="Invalid data type received for validation")
+            logger.error(
+                "Invalid data type received for validation (expected string or dictionary)",
+                data_type=type(data),
+                status=400,
+            )
+            return Response(
+                status_code=400, content="Invalid data type received for validation"
+            )
     else:
         logger.error("No JSON data provided for validation", status=400)
         return Response(status_code=400, content="No JSON data provided for validation")
@@ -152,26 +158,41 @@ def is_url_allowed(parsed_url, domain):
         parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
     )
     logger.debug("Parsed URL components", base_url=base_url, repo_owner=repo_owner)
-    
+
     # Allows URLs from verified full domains with trusted repo owners
-    full_url_allowed = base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
+    full_url_allowed = (
+        base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
+    )
     # Allows URLs from trusted base domains
     base_domain_allowed = domain in ALLOWED_BASE_DOMAINS
-    
-    logger.debug("URL allowance checks", full_url_allowed=full_url_allowed, base_domain_allowed=base_domain_allowed)
-    
+
+    logger.debug(
+        "URL allowance checks",
+        full_url_allowed=full_url_allowed,
+        base_domain_allowed=base_domain_allowed,
+    )
+
     url_allowed = full_url_allowed or base_domain_allowed
-    
+
     # If the URL is not allowed, outputs warnings reflecting which parts of the URL are not allowed
     if not url_allowed:
         logger.warning("URL is not allowed", url=parsed_url.geturl())
         if base_url not in ALLOWED_FULL_DOMAINS:
-            logger.warning("Base URL is not in ALLOWED_FULL_DOMAINS (resolve by using allowed base URL or domain)", base_url=base_url)
+            logger.warning(
+                "Base URL is not in ALLOWED_FULL_DOMAINS (resolve by using allowed base URL or domain)",
+                base_url=base_url,
+            )
         if repo_owner not in ALLOWED_REPO_OWNERS:
-            logger.warning("Repo owner is not in ALLOWED_REPO_OWNERS (resolve by using allowed repo owner or domain)", repo_owner=repo_owner)
+            logger.warning(
+                "Repo owner is not in ALLOWED_REPO_OWNERS (resolve by using allowed repo owner or domain)",
+                repo_owner=repo_owner,
+            )
         if not base_domain_allowed:
-            logger.warning("Domain is not in ALLOWED_BASE_DOMAINS (resolve by using allowed domain or full URL)", domain=domain)
-        
+            logger.warning(
+                "Domain is not in ALLOWED_BASE_DOMAINS (resolve by using allowed domain or full URL)",
+                domain=domain,
+            )
+
     return url_allowed
 
 
