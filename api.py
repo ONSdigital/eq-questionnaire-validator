@@ -81,10 +81,13 @@ async def validate_schema(data):
         if isinstance(data, dict):
             logger.info("JSON data received as dictionary - parsing not required")
             json_to_validate = data
-        # Sets `json_to_validate` to the decoded and parsed data if it is not in dictionary format
-        # TODO: Replace this `else` with an elif that checks if `data` is a string, and after that add an `else` block which returns an error response saying data isn't a valid format
-        else:
+        # Sets `json_to_validate` to the parsed data if it is a string
+        elif isinstance(data, str):
             json_to_validate = parse_json(data)
+        # Returns an error response if the data received is not a string or dictionary
+        else:
+            logger.error("Invalid data type received for validation (expected string or dictionary)", data_type=type(data), status=400)
+            return Response(status_code=400, content="Invalid data type received for validation")
     else:
         logger.error("No JSON data provided for validation", status=400)
         return Response(status_code=400, content="No JSON data provided for validation")
