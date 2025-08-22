@@ -81,13 +81,13 @@ async def validate_schema_from_url(url=None):
 async def validate_schema(data):
     logger.debug("Attempting to validate schema from JSON data...")
     if data:
-        # Sets `json_to_validate` to the data received if it is a dictionary as data does not require processing
+        # Sets `json_to_validate` to the data received if it is a dictionary as data does not require parsing
         if isinstance(data, dict):
-            logger.info("JSON data received as dictionary - processing not required")
+            logger.info("JSON data received as dictionary - parsing not required")
             json_to_validate = data
         # Sets `json_to_validate` to the decoded and parsed data if it is not in dictionary format
         else:
-            json_to_validate = decode_and_parse_json(data)
+            json_to_validate = parse_json(data)
     else:
         logger.error("No JSON data provided for validation", status=400)
         return Response(status_code=400, content="No JSON data provided for validation")
@@ -157,20 +157,8 @@ def is_domain_allowed(parsed_url, domain):
     ) or domain in ALLOWED_BASE_DOMAINS
 
 
-def decode_and_parse_json(data):
+def parse_json(data):
     processed_data = data
-    # Decodes `data` to string if it is in bytes format
-    if isinstance(data, bytes):
-        logger.info("JSON data received as bytes - decoding required")
-        logger.debug("Attempting to decode JSON data...")
-        try:
-            data = data.decode("utf-8")
-            logger.info("JSON data decoded as UTF-8 successfully")
-        except UnicodeDecodeError:
-            logger.error("Failed to decode JSON data as UTF-8", status=400)
-            return Response(
-                status_code=400, content="Failed to decode JSON data as UTF-8"
-            )
     # Parses `data` if it is in string format
     if isinstance(data, str):
         logger.info("JSON data received as string - parsing required")
