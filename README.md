@@ -2,7 +2,6 @@
 
 An API for validating survey schemas.
 
-
 ## Setup
 
 ### Clone the repository
@@ -63,8 +62,9 @@ The validator can be called directly in the browser using the "/validate" endpoi
 http://localhost:5001/validate?url=...
 ```
 
-Once you have validator running it can be used to run against eQ runner (https://github.com/ONSdigital/eq-questionnaire-runner). If you have runner spun up you can run `make validate-test-schemas` which will run your local validator on the test runner schemas.
+### Running against a Runner
 
+Once you have validator running it can be used to run against eQ runner (https://github.com/ONSdigital/eq-questionnaire-runner). If you have runner spun up you can run `make validate-test-schemas` from within the root of runner which will use your local validator on the test runner schemas.
 
 ## Validating with Ajv
 
@@ -86,7 +86,6 @@ You will need to add the `AJV_VALIDATOR_PORT` number to your .env file.
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
 The errors are ordered by their path length and with first error message being the deepest path into the schema and
 should represent the best match for the questionnaire which has been posted.
-
 
 ## Testing
 
@@ -118,7 +117,6 @@ Then, in another terminal window/tab, navigate to a checked out copy of `eq-surv
 ``` shell
 make test
 ```
-
 
 ## Formatting json
 
