@@ -5,8 +5,8 @@ from collections import defaultdict
 from functools import cached_property, lru_cache
 from typing import Iterable, Mapping, TypeVar
 
-import jsonpath_rw_ext as jp
-from jsonpath_rw import parse
+from jsonpath_ng import parse
+from jsonpath_ng.ext import parse as ext_parse
 
 from app.answer_type import AnswerType
 
@@ -122,7 +122,9 @@ class QuestionnaireSchema:
         self.grand_calculated_summary_block_ids = self.get_block_ids_for_block_type(
             "GrandCalculatedSummary"
         )
-        self.sections = jp.match("$.sections[*]", self.schema)
+        self.sections = [
+            match.value for match in ext_parse("$.sections[*]").find(self.schema)
+        ]
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
         self.blocks_by_section_id = {
@@ -132,16 +134,22 @@ class QuestionnaireSchema:
             for section in self.sections
         }
 
-        self.groups = jp.match("$..groups[*]", self.schema)
+        self.groups = [
+            match.value for match in ext_parse("$..groups[*]").find(self.schema)
+        ]
         self.groups_by_id = {group["id"]: group for group in self.groups}
         self.group_ids = list(self.groups_by_id.keys())
 
-        self.supplementary_lists = jp.match(
-            "$..supplementary_data.lists[*]", self.schema
-        )
-        self.list_collectors = jp.match(
-            '$..blocks[?(@.type=="ListCollector")]', self.schema
-        )
+        self.supplementary_lists = [
+            match.value
+            for match in ext_parse("$..supplementary_data.lists[*]").find(self.schema)
+        ]
+        self.list_collectors = [
+            match.value
+            for match in ext_parse('$..blocks[?(@.type=="ListCollector")]').find(
+                self.schema
+            )
+        ]
         self.list_collector_names = [
             list_collector["for_list"] for list_collector in self.list_collectors
         ]
@@ -161,7 +169,8 @@ class QuestionnaireSchema:
     @cached_property
     def list_names_by_dynamic_answer_id(self) -> dict[str, str]:
         answer_id_to_list: dict[str, str] = {}
-        for dynamic_answer in jp.match("$..dynamic_answers[*]", self.schema):
+        for dynamic_answer in ext_parse("$..dynamic_answers[*]").find(self.schema):
+            dynamic_answer = dynamic_answer.value
             if dynamic_answer["values"]["source"] == "list":
                 list_name = dynamic_answer["values"]["identifier"]
                 answer_id_to_list.update(
@@ -173,9 +182,9 @@ class QuestionnaireSchema:
     def numeric_answer_ranges(self):
         numeric_answer_ranges = {}
 
-        for answer in jp.match("$..answers[*]", self.schema):
-            numeric_answer_ranges[answer["id"]] = self._get_numeric_range_values(
-                answer, numeric_answer_ranges
+        for answer in ext_parse("$..answers[*]").find(self.schema):
+            numeric_answer_ranges[answer.value["id"]] = self._get_numeric_range_values(
+                answer.value, numeric_answer_ranges
             )
 
         return numeric_answer_ranges
@@ -381,7 +390,12 @@ class QuestionnaireSchema:
 
         if conditions:
             final_condition = " & ".join(conditions)
-            return jp.match(f"$..blocks[?({final_condition})]", self.schema)
+            return [
+                match.value
+                for match in ext_parse(f"$..blocks[?({final_condition})]").find(
+                    self.schema
+                )
+            ]
         return self.blocks
 
     @lru_cache
@@ -392,10 +406,12 @@ class QuestionnaireSchema:
 
         if conditions:
             final_condition = " & ".join(conditions)
-            return jp.match(
-                f'$..blocks[?(@.id!="{block_id_to_filter}" & {final_condition})]',
-                self.schema,
-            )
+            return [
+                match.value
+                for match in ext_parse(
+                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]'
+                ).find(self.schema)
+            ]
         return self.blocks
 
     @lru_cache
@@ -478,10 +494,6 @@ class QuestionnaireSchema:
     def get_first_answer_in_block(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return self.get_answers_from_question(questions[0])[0]
-
-    @lru_cache
-    def _get_path_id(self, path):
-        return jp.match1(path + ".id", self.schema)
 
     @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
