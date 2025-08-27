@@ -58,11 +58,12 @@ uvicorn.run("api:app", workers=20, port=5001, reload=False)
 ### Running against a URL
 
 The validator can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json). Only URLs from the ONSDigital organization are accepted.
+e.g.
 ```
-http://localhost:5001/validate?url=...
+http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-runner/refs/heads/main/schemas/test/en/test_address.json
 ```
 
-### Running against a Runner
+### Running against eQ Runner
 
 Once you have validator running it can be used to run against eQ runner (https://github.com/ONSdigital/eq-questionnaire-runner). If you have runner spun up you can run `make validate-test-schemas` from within the root of runner which will use your local validator on the test runner schemas.
 
