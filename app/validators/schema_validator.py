@@ -1,5 +1,7 @@
 import glob
 from json import load
+from pathlib import Path
+
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
@@ -17,26 +19,22 @@ class SchemaValidator(Validator):
         with open(schema, encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
-        registry = Registry()
-
-        registry = registry.with_resources(pairs=self.lookup_ref_store().items())
-        registry = registry.crawl()
+        registry = Registry().with_resources(
+            pairs=self.lookup_ref_store().items()
+            )
 
         self.schema_validator = DraftValidator(self.schema, registry=registry)
+
 
     @staticmethod
     def lookup_ref_store():
         store = {}
-        for glob_path in [
-            "schemas/**/**/**/*.json",
-            "schemas/**/**/*.json",
-            "schemas/**/*.json",
-            "schemas/*.json",
-        ]:
-            for filename in glob.glob(glob_path):
+
+        for filename in Path("schemas").rglob("*.json"):
                 with open(filename, encoding="utf8") as schema_file:
                     json_data = load(schema_file)
-                    store[json_data["$id"]] = Resource.from_contents(json_data)
+                    resource = Resource.from_contents(json_data)
+                    store[json_data["$id"]] = resource
         return store
 
     def validate(self):
