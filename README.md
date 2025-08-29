@@ -133,3 +133,7 @@ Run the following to format all json files in the schemas directory:
 ``` shell
 make format
 ```
+
+## Docker
+
+When PRs are merged in this repo there is a GitHub workflow that builds a Docker image of validator and then pushes to our GAR in GCP. This image can then be pulled down and run locally with Docker.
