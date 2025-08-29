@@ -21,7 +21,7 @@ class SchemaValidator(Validator):
 
         registry = Registry().with_resources(
             pairs=self.lookup_ref_store().items()
-            )
+            ).crawl()
 
         self.schema_validator = DraftValidator(self.schema, registry=registry)
 
