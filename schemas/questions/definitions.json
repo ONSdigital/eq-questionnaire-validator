@@ -2,20 +2,24 @@
   "$id": "/questions/definitions.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "question": {
-    "oneOf": [
-      {
-        "$ref": "types/general.json#/question"
-      },
-      {
-        "$ref": "types/calculated.json#/question"
-      },
-      {
-        "$ref": "types/date_range.json#/question"
-      },
-      {
-        "$ref": "types/mutually_exclusive.json#/question"
-      }
-    ]
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "General" } } },
+          "then": { "$ref": "types/general.json#/question" }
+        },
+        {
+          "if": { "properties": { "type": { "const": "Calculated" } } },
+          "then": { "$ref": "types/calculated.json#/question" }
+        },
+        {
+          "if": { "properties": { "type": { "const": "DateRange" } } },
+          "then": { "$ref": "types/date_range.json#/question" }
+        },
+        {
+          "if": { "properties": { "type": { "const": "MutuallyExclusive" } } },
+          "then": { "$ref": "types/mutually_exclusive.json#/question" }
+        }
+      ]
   },
   "summary": {
     "description": "TextField string concatenations for the summary page",
