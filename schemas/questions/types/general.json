@@ -49,51 +49,57 @@
             "minItems": 1,
             "items": {
               "allOf": [
-                  {
-                    "if": { "properties": { "type": { "const": "Currency" } } },
-                    "then": { "$ref": "../../answers/currency.json#/answer" }
+                {
+                  "if": { "properties": { "type": { "const": "Currency" } } },
+                  "then": { "$ref": "../../answers/currency.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "Date" } } },
+                  "then": { "$ref": "../../answers/date.json#/answer" }
+                },
+                {
+                  "if": {
+                    "properties": { "type": { "const": "MonthYearDate" } }
                   },
-                  {
-                    "if": { "properties": { "type": { "const": "Date" } } },
-                    "then": { "$ref": "../../answers/date.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "MonthYearDate" } } },
-                    "then": { "$ref": "../../answers/month_year_date.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "YearDate" } } },
-                    "then": { "$ref": "../../answers/year_date.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "Duration" } } },
-                    "then": { "$ref": "../../answers/duration.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "Number" } } },
-                    "then": { "$ref": "../../answers/number.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "Percentage" } } },
-                    "then": { "$ref": "../../answers/percentage.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "TextArea" } } },
-                    "then": { "$ref": "../../answers/text_area.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "TextField" } } },
-                    "then": { "$ref": "../../answers/text_field.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "Unit" } } },
-                    "then": { "$ref": "../../answers/unit.json#/answer" }
-                  },
-                  {
-                    "if": { "properties": { "type": { "const": "MobileNumber" } } },
-                    "then": { "$ref": "../../answers/mobile_number.json#/answer" }
+                  "then": {
+                    "$ref": "../../answers/month_year_date.json#/answer"
                   }
-                ]
+                },
+                {
+                  "if": { "properties": { "type": { "const": "YearDate" } } },
+                  "then": { "$ref": "../../answers/year_date.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "Duration" } } },
+                  "then": { "$ref": "../../answers/duration.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "Number" } } },
+                  "then": { "$ref": "../../answers/number.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "Percentage" } } },
+                  "then": { "$ref": "../../answers/percentage.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "TextArea" } } },
+                  "then": { "$ref": "../../answers/text_area.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "TextField" } } },
+                  "then": { "$ref": "../../answers/text_field.json#/answer" }
+                },
+                {
+                  "if": { "properties": { "type": { "const": "Unit" } } },
+                  "then": { "$ref": "../../answers/unit.json#/answer" }
+                },
+                {
+                  "if": {
+                    "properties": { "type": { "const": "MobileNumber" } }
+                  },
+                  "then": { "$ref": "../../answers/mobile_number.json#/answer" }
+                }
+              ]
             }
           }
         },
@@ -105,51 +111,51 @@
         "minItems": 1,
         "items": {
           "allOf": [
-              {
-                "if": { "properties": { "type": { "const": "Currency" } } },
-                "then": { "$ref": "../../answers/currency.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "Date" } } },
-                "then": { "$ref": "../../answers/date.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "MonthYearDate" } } },
-                "then": { "$ref": "../../answers/month_year_date.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "YearDate" } } },
-                "then": { "$ref": "../../answers/year_date.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "Duration" } } },
-                "then": { "$ref": "../../answers/duration.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "Number" } } },
-                "then": { "$ref": "../../answers/number.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "Percentage" } } },
-                "then": { "$ref": "../../answers/percentage.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "TextArea" } } },
-                "then": { "$ref": "../../answers/text_area.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "TextField" } } },
-                "then": { "$ref": "../../answers/text_field.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "Unit" } } },
-                "then": { "$ref": "../../answers/unit.json#/answer" }
-              },
-              {
-                "if": { "properties": { "type": { "const": "MobileNumber" } } },
-                "then": { "$ref": "../../answers/mobile_number.json#/answer" }
-              }
-            ]
+            {
+              "if": { "properties": { "type": { "const": "Currency" } } },
+              "then": { "$ref": "../../answers/currency.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "Date" } } },
+              "then": { "$ref": "../../answers/date.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "MonthYearDate" } } },
+              "then": { "$ref": "../../answers/month_year_date.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "YearDate" } } },
+              "then": { "$ref": "../../answers/year_date.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "Duration" } } },
+              "then": { "$ref": "../../answers/duration.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "Number" } } },
+              "then": { "$ref": "../../answers/number.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "Percentage" } } },
+              "then": { "$ref": "../../answers/percentage.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "TextArea" } } },
+              "then": { "$ref": "../../answers/text_area.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "TextField" } } },
+              "then": { "$ref": "../../answers/text_field.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "Unit" } } },
+              "then": { "$ref": "../../answers/unit.json#/answer" }
+            },
+            {
+              "if": { "properties": { "type": { "const": "MobileNumber" } } },
+              "then": { "$ref": "../../answers/mobile_number.json#/answer" }
+            }
+          ]
         }
       }
     },

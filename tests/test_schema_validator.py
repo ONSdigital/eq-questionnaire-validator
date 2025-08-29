@@ -1,9 +1,9 @@
 import json
 
+from jsonschema import Draft202012Validator
 from referencing import Registry
 
 from app.validators.schema_validator import SchemaValidator
-from jsonschema import Draft202012Validator
 from tests.utils import _open_and_load_schema_file
 
 
@@ -50,7 +50,6 @@ def test_invalid_answer_ids():
 
         expected_message = f"'{answer_id}' does not match"
 
-
         assert expected_message in validator.errors[0]["message"]
 
 
@@ -76,6 +75,7 @@ def test_single_variant_invalid():
     assert validator.errors[0]["message"] == "'when' is a required property"
 
     assert len(validator.errors) == 1
+
 
 def test_invalid_survey_id_whitespace():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
@@ -111,4 +111,3 @@ def test_invalid_q_code_regex_pattern():
         validator.errors[0]["message"]
         == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"
     )
-
