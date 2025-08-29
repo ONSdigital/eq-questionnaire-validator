@@ -56,6 +56,21 @@
                       }
                     ]
                   }
+                },
+                {
+                  "question": {
+                    "id": "question-3",
+                    "type": "General",
+                    "title": "What is your age?",
+                    "answers": [
+                      {
+                        "id": "answer-3",
+                        "label": "Your age?",
+                        "mandatory": false,
+                        "type": "Number"
+                      }
+                    ]
+                  }
                 }
               ]
             }
