@@ -44,6 +44,10 @@ make run
 Validator defaults to running on `http://localhost:5002/validate`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME` , `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
+The defaults for these are:
+- `AJV_VALIDATOR_SCHEME` = "http"
+- `AJV_VALIDATOR_HOST` = "localhost"
+- `AJV_VALIDATOR_PORT` = "5002"
 
 Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
 
