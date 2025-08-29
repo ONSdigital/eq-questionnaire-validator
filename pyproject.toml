@@ -21,6 +21,7 @@ uvicorn = "^0.35.0"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.2"}
 gunicorn = "^23.0.0"
 referencing = "^0.36.2"
+jsonpath-ng = "^1.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
