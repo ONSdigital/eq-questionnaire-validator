@@ -68,7 +68,7 @@ def test_schema():
 
 
 def test_single_variant_invalid():
-    file_name = "schemas/invalid/test_invalid_single_variant.json"
+    file_name = "schemas/invalid/test_invalid_when_property.json"
 
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
     validator.validate()
