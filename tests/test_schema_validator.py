@@ -1,9 +1,9 @@
 import json
 
-from jsonschema import RefResolver, validators
 from referencing import Registry
 
 from app.validators.schema_validator import SchemaValidator
+from jsonschema import Draft202012Validator
 from tests.utils import _open_and_load_schema_file
 
 
@@ -54,19 +54,16 @@ def test_invalid_answer_ids():
         assert expected_message in validator.errors[0]["message"]
 
 
-
-
 def test_schema():
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
-  
-        registry = Registry()
 
         registry = Registry().with_resources(
             pairs=SchemaValidator.lookup_ref_store().items()
         )
 
-        validator = validators.validator_for(schema)(schema, registry=registry)
+        validator = Draft202012Validator(schema, registry=registry)
+
         validator.check_schema(schema)
 
 
