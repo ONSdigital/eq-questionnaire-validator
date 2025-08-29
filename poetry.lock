@@ -579,22 +579,6 @@ ply = "*"
 six = "*"
 
 [[package]]
-name = "jsonpath-rw-ext"
-version = "1.2.2"
-description = "Extensions for JSONPath RW"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "jsonpath-rw-ext-1.2.2.tar.gz", hash = "sha256:a9e44e803b6d87d135b09d1e5af0db4d4cf97ba62711a80aa51c8c721980a994"},
-    {file = "jsonpath_rw_ext-1.2.2-py2.py3-none-any.whl", hash = "sha256:0947e018c4e6d46f9d04c56487793c702eb225fa252891aa4ed41a9ca26f3d84"},
-]
-
-[package.dependencies]
-jsonpath-rw = ">=1.2.0"
-pbr = ">=1.8"
-
-[[package]]
 name = "jsonpointer"
 version = "3.0.0"
 description = "Identify specific nodes in a JSON document (RFC 6901)"
@@ -690,21 +674,6 @@ files = [
     {file = "pathspec-0.12.1-py3-none-any.whl", hash = "sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08"},
     {file = "pathspec-0.12.1.tar.gz", hash = "sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712"},
 ]
-
-[[package]]
-name = "pbr"
-version = "6.1.1"
-description = "Python Build Reasonableness"
-optional = false
-python-versions = ">=2.6"
-groups = ["main"]
-files = [
-    {file = "pbr-6.1.1-py2.py3-none-any.whl", hash = "sha256:38d4daea5d9fa63b3f626131b9d34947fd0c8be9b05a29276870580050a25a76"},
-    {file = "pbr-6.1.1.tar.gz", hash = "sha256:93ea72ce6989eb2eed99d0f75721474f69ad88128afdef5ac377eb797c4bf76b"},
-]
-
-[package.dependencies]
-setuptools = "*"
 
 [[package]]
 name = "platformdirs"
@@ -1257,7 +1226,7 @@ version = "80.9.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "dev"]
+groups = ["dev"]
 files = [
     {file = "setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922"},
     {file = "setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c"},
@@ -1442,4 +1411,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "b2bd818f9f9e16fc487f9323ccf9de5ec4ad3661f727819cebcc994a8cb66e35"
+content-hash = "dbbf2ebc886476a0b8dbfb1f095fd3c1e6a4b6a82f8f8ef39b34863c3df26358"
