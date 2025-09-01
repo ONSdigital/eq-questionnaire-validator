@@ -76,7 +76,7 @@ As Validator runs on `localhost:5001` by default, here is an example of a comman
 http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-runner/refs/heads/main/schemas/test/en/test_address.json
 ```
 
-Only the following ur URLs and domains are accepted:
+Only the following URLs and domains are accepted:
 - "https://gist.githubusercontent.com/"
 - "https://raw.githubusercontent.com/"
 - "onsdigital.uk"
