@@ -8,10 +8,12 @@ In order to run locally you'll need Node.js, poetry and pyenv installed.
 
 ### Install NVM and pyenv
 
-NVM and pyenv will manage your versions of Node and Python.
+NVM and pyenv will manage your versions of Node and Python and these commands will install the required versions of them which will be read from `.nvmrc` and `.python-version`.
+
 ``` shell
 brew install nvm pyenv
 nvm use
+pyenv install
 ```
 
 If you get a message in the command line after running `nvm use` that the version of node specified in the `.nvmrc` file isn't installed, just follow the commands to install it.
@@ -41,7 +43,21 @@ To run the app:
 make run
 ```
 
-Validator defaults to running on `http://localhost:5002/validate`.
+Validator runs on two ports, `5001` is the main validator app and `5002` is the Ajv validator.
+
+### Validator
+
+Validator runs on `http://localhost:5001/validate`.
+
+If you need to change the port you can change the port variable in the Uvicorn settings in api.py:
+``` python
+uvicorn.run("api:app", workers=20, port=5001, reload=False)
+```
+If you want to run the app locally using multiple server workers you can also set reload to "False" here too.
+
+### Ajv Validator
+
+The Ajv validator defaults to running on `http://localhost:5002`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME` , `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
 The defaults for these are:
@@ -51,14 +67,14 @@ The defaults for these are:
 
 Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
 
-If you want to run the app locally using multiple server workers set reload to "False" in the Uvicorn settings in api.py:
-``` python
-uvicorn.run("api:app", workers=20, port=5001, reload=False)
-```
-
 ### Running against a URL
 
 Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json).
+
+As Validator runs on `localhost:5001` by default, here is an example of a command you can use to validate a schema via a URL:
+``` shell
+http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-runner/refs/heads/main/schemas/test/en/test_address.json
+```
 
 Only the following ur URLs and domains are accepted:
 - "https://gist.githubusercontent.com/"
@@ -66,12 +82,7 @@ Only the following ur URLs and domains are accepted:
 - "onsdigital.uk"
 - "localhost"
 
-Also when using a URL from GitHub you can only validate schemas from the ONSdigital organisation.
-
-Here is an example of a command you can use to validate a schema via a URL:
-```
-http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-runner/refs/heads/main/schemas/test/en/test_address.json
-```
+Also when using a URL from GitHub you can only validate schemas from the ONSdigital organisation and only against repos with the owner "ONSdigital".
 
 ### Running against eQ Runner
 
@@ -79,14 +90,12 @@ Also once you have validator running it can be used to run against eQ runner (`h
 
 ### Running the Ajv (server) version of validator
 
-Included is a node based version of the json schema validation which may be used during development to assist with debugging errors. This returns more errors than we'd currently like due to the way polymorphism works for each of our blocks.
-
-To run this you will need to add the `AJV_VALIDATOR_PORT` number to your .env file.
-
 Then run the Ajv server:
 ``` shell
 make start-ajv
 ```
+
+This defaults to running on port `5002` set `AJV_VALIDATOR_PORT` in your .env file if you need to change this.
 
 To stop the Ajv server:
 ``` shell
@@ -104,7 +113,9 @@ To run the app's unit tests:
 make test-unit
 ```
 
-To run the Ajv validator tests:
+Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID and then run `kill -9 PID`, replacing "PID" with the process id from the previous command.
+
+Run the Ajv validator tests:
 ``` shell
 make test-ajv
 ```
@@ -114,24 +125,40 @@ To run the app's unit tests and Ajv validator tests:
 make test
 ```
 
-#### Test the apps functionality against runner
+#### Test the local validator app against runner schemas
 
-Spin it up with:
+Spin validator up with:
 ``` shell
 make run
 ```
 
 Then, in another terminal, navigate to a checked out copy of `https://github.com/ONSdigital/eq-questionnaire-runner` and run:
 ``` shell
-make test
+make validate-test-schemas
+```
+This will run the validator against all runner test schemas.
+
+Or you can run it against a specific runner schema, to do this:
+- set the runner vars:
+    - `SCHEMA_PATH` to the path of the schema file (defaults to `./schemas/test/en/`)
+    - `SCHEMA` to the schema file name without the `.json`
+- then run:
+``` shell
+make validate-test-schema
 ```
 
-## Formatting json
+## Formatting/linting json
 
 Run the following to format all json files in the schemas directory:
 
 ``` shell
 make format
+```
+
+Run the following to lint all schemas, test schemas and Ajv files in the repo:
+
+``` shell
+make lint
 ```
 
 ## Docker
