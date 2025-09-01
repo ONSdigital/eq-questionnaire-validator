@@ -60,7 +60,7 @@ uvicorn.run("api:app", workers=20, port=5001, reload=False)
 
 Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json).
 
-Only the following ur URLs and domains are accepted:
+Only the following URLs and domains are accepted:
 - "https://gist.githubusercontent.com/"
 - "https://raw.githubusercontent.com/"
 - "onsdigital.uk"
