@@ -161,6 +161,52 @@ Run the following to lint all schemas, test schemas and Ajv files in the repo:
 make lint
 ```
 
-## Docker
+## Running with Docker
 
-When PRs are merged in this repo there is a GitHub workflow that builds a Docker image of validator and then pushes to our GAR in GCP. This image can then be pulled down and run locally with Docker.
+To install Docker run:
+
+``` shell
+brew install docker
+```
+
+On MacOS install container runtimes, eg. Colima:
+
+``` shell
+brew install colima
+```
+
+Make sure Colima is started every time you want to use Docker images:
+
+``` shell
+colima start
+```
+
+When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for validator and one for the AJV Validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker.
+
+You can do this using these commands:
+
+- Validator:
+
+``` shell
+docker run -it -p 5001:5001 onsdigital/eq-questionnaire-validator:latest
+```
+
+-  Ajv Validator:
+
+``` shell
+docker run -it -p 5002:5002 onsdigital/eq-questionnaire-validator:latest-ajv
+```
+
+To stop these containers you may need to use the `docker kill` command:
+
+First run:
+
+``` shell
+docker ps
+```
+
+Then make a note of the container id of the container you want to stop and then run (replacing "CONID" with the id):
+
+``` shell
+docker kill CONID
+```
