@@ -1,4 +1,4 @@
-from jsonpath_rw import parse
+from jsonpath_ng import parse
 
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
