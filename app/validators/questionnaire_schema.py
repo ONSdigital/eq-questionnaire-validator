@@ -145,7 +145,7 @@ class QuestionnaireSchema:
         self.list_collectors = [
             match.value
             for match in ext_parse('$..blocks[?(@.type=="ListCollector")]').find(
-                self.schema
+                self.schema,
             )
         ]
         self.list_collector_names = [
@@ -182,7 +182,8 @@ class QuestionnaireSchema:
 
         for answer in ext_parse("$..answers[*]").find(self.schema):
             numeric_answer_ranges[answer.value["id"]] = self._get_numeric_range_values(
-                answer.value, numeric_answer_ranges
+                answer.value,
+                numeric_answer_ranges,
             )
 
         return numeric_answer_ranges
@@ -391,7 +392,7 @@ class QuestionnaireSchema:
             return [
                 match.value
                 for match in ext_parse(f"$..blocks[?({final_condition})]").find(
-                    self.schema
+                    self.schema,
                 )
             ]
         return self.blocks
@@ -407,7 +408,7 @@ class QuestionnaireSchema:
             return [
                 match.value
                 for match in ext_parse(
-                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]'
+                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]',
                 ).find(self.schema)
             ]
         return self.blocks
