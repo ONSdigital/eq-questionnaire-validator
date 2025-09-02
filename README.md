@@ -181,7 +181,7 @@ Make sure Colima is started every time you want to use Docker images:
 colima start
 ```
 
-When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for validator and one for the AJV Validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker.
+When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for validator and one for the AJV Validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker. These images are pulled down and run from Runner when `make run validator` is run which uses the `docker-compose-schema-validator.yml` script.
 
 You can do this using these commands:
 
