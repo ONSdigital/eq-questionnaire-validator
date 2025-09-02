@@ -106,7 +106,7 @@ Running this returns either an empty json response when the questionnaire is val
 
 ### Testing and running against local schemas
 
-By default, all schemas in the `tests/schemas/valid` directory will be evaluated as part of the unit tests. Any errors in these schemas will cause a failure. You can use this to run against local schemas by adding any schemas to this folder.
+By default, all schemas in the `tests/schemas/valid` and `tests/schemas/invalid` directories will be evaluated as part of the unit tests. Any errors in these schemas will cause a failure.
 
 To run the app's unit tests:
 ``` shell
