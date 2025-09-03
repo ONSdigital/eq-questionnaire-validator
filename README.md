@@ -51,9 +51,9 @@ Validator runs on `http://localhost:5001/validate`.
 
 If you need to change the port you can change the port variable in the Uvicorn settings in api.py:
 ``` python
-uvicorn.run("api:app", workers=20, port=5001, reload=False)
+uvicorn.run("api:app", workers=20, port=5001, reload=True)
 ```
-If you want to run the app locally using multiple server workers you can also set reload to "False" here too.
+The reload flag here will allow the service to restart if you make a change to the code, if you want to run the app locally using multiple server workers you need to set reload to "False".
 
 ### Ajv Validator
 
