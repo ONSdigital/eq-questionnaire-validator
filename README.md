@@ -47,7 +47,7 @@ Validator runs on two ports, `5001` is the main validator app and `5002` is the 
 
 ### Validator
 
-Validator runs on `http://localhost:5001/validate`.
+Validator runs on `http://localhost:5001/validate` and accepts GET and POST requests.
 
 If you need to change the port you can change the port variable in the Uvicorn settings in api.py:
 ``` python
