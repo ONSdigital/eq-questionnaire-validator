@@ -139,12 +139,12 @@ make validate-test-schemas
 This will run the validator against all runner test schemas.
 
 Or you can run it against a specific runner schema, to do this:
-- set the runner vars:
+- set the following vars passing them into the following command:
     - `SCHEMA_PATH` to the path of the schema file (defaults to `./schemas/test/en/`)
     - `SCHEMA` to the schema file name without the `.json`
 - then run:
 ``` shell
-make validate-test-schema
+make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 ```
 
 ## Formatting/linting json
