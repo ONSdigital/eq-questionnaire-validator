@@ -102,12 +102,12 @@ make start-ajv
 
 This defaults to running on port `5002` set `AJV_VALIDATOR_PORT` in your .env file if you need to change this.
 
+Running the Ajv server returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key. The errors are ordered by their path length and with first error message being the deepest path into the schema and should represent the best match for the questionnaire which has been posted.
+
 To stop the Ajv server:
 ``` shell
 make stop-ajv
 ```
-
-Running this returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key. The errors are ordered by their path length and with first error message being the deepest path into the schema and should represent the best match for the questionnaire which has been posted.
 
 ### Testing and running against local schemas
 
