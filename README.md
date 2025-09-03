@@ -86,7 +86,12 @@ Also when using a URL from GitHub you can only validate schemas from the ONSdigi
 
 ### Running against eQ Runner
 
-Also once you have validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`). If you have runner spun up you can run the `make validate-test-schemas` script from within the root of runner which will run validator on the test runner schemas.
+Also once you have validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
+If you have runner spun up you can from within the root of runner run:
+``` shell
+make validate-test-schemas
+```
+This script will run validator on the test runner schemas.
 
 ### Running the Ajv (server) version of validator
 
