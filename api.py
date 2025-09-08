@@ -1,14 +1,16 @@
 import json
+import logging
 import os
+import sys
 from json import JSONDecodeError
 from urllib import error, request
 from urllib.parse import urlparse
 
 import requests
+import structlog
 import uvicorn
 from fastapi import Body, FastAPI, Response
 from requests import RequestException
-from structlog import get_logger
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
 
@@ -32,9 +34,37 @@ AJV_VALIDATOR_URL = os.getenv(
     f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
 )
 
+
+def configure_logging():
+    LOG_LEVEL = logging.DEBUG if os.getenv("LOG_LEVEL") == "DEBUG" else logging.INFO
+
+    error_log_handler = logging.StreamHandler(sys.stderr)
+    error_log_handler.setLevel(logging.ERROR)
+
+    renderer_processor = (
+        structlog.dev.ConsoleRenderer()
+        if LOG_LEVEL == logging.DEBUG
+        else structlog.processors.JSONRenderer()
+    )
+
+    logging.basicConfig(level=LOG_LEVEL, format="%(message)s", stream=sys.stdout)
+
+    structlog.configure(
+        processors=[
+            structlog.contextvars.merge_contextvars,
+            structlog.processors.add_log_level,
+            structlog.processors.StackInfoRenderer(),
+            structlog.dev.set_exc_info,
+            renderer_processor,
+        ],
+        logger_factory=structlog.stdlib.LoggerFactory(),
+    )
+
+
 app = FastAPI()
 
-logger = get_logger()
+configure_logging()
+logger = structlog.get_logger()
 
 
 @app.get("/status")
