@@ -118,7 +118,7 @@ To run the app's unit tests:
 make test-unit
 ```
 
-Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID and then run `kill -9 PID`, replacing "PID" with the process id from the previous command.
+Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID and then run `kill -9 <PID>`, replacing "<PID>" with the process id from the previous command.
 
 Run the Ajv validator tests:
 ``` shell
@@ -210,8 +210,8 @@ First run:
 docker ps
 ```
 
-Then make a note of the container id of the container you want to stop and then run (replacing "CONID" with the id):
+Then make a note of the container id of the container you want to stop and then run (replacing "<CONTAINER_ID>" with the id):
 
 ``` shell
-docker kill CONID
+docker kill <CONTAINER_ID>
 ```
