@@ -118,7 +118,7 @@ To run the app's unit tests:
 make test-unit
 ```
 
-Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID and then run `kill -9 <PID>`, replacing "<PID>" with the process id from the previous command.
+Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing "<PID>" with the process id from the previous command.
 
 Run the Ajv validator tests:
 ``` shell
