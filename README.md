@@ -160,7 +160,7 @@ Run the following to format all json files in the schemas directory:
 make format
 ```
 
-Run the following to lint all files in the repository:
+Run the following to lint the js files in the ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
 
 ``` shell
 make lint
