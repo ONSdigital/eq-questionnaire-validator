@@ -69,7 +69,7 @@ Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL
 
 ### Running against a URL
 
-Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (eg. GitHub Gist raw json).
+Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (e.g. GitHub Gist raw json).
 
 As Validator runs on `localhost:5001` by default, here is an example of a command you can use to validate a schema via a URL:
 ``` shell
@@ -174,7 +174,7 @@ To install Docker run:
 brew install docker
 ```
 
-On MacOS install container runtimes, eg. Colima:
+On MacOS install container runtimes, e.g. Colima:
 
 ``` shell
 brew install colima
