@@ -160,7 +160,7 @@ Run the following to format all json files in the schemas directory:
 make format
 ```
 
-Run the following to lint all schemas, test schemas and Ajv files in the repo:
+Run the following to lint all files in the repository:
 
 ``` shell
 make lint
