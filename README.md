@@ -95,7 +95,7 @@ This script will run validator on the test runner schemas.
 
 ### Running the Ajv (server) version of validator
 
-Then run the Ajv server:
+To run the Ajv server in isolation:
 ``` shell
 make start-ajv
 ```
