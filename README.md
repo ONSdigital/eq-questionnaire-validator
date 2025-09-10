@@ -95,7 +95,7 @@ This script will run validator on the test runner schemas.
 
 ### Running the Ajv (server) version of validator
 
-To run the Ajv server in isolation:
+Running `make run` will start up the both of services required for validation (Ajv validator and the validator app itself). However, if you want to start AJV individually, run:
 ``` shell
 make start-ajv
 ```
