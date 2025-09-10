@@ -157,7 +157,9 @@ async def validate_schema(data):
     validator = QuestionnaireValidator(json_to_validate)
     logger.debug(
         "Attempting to validate questionnaire schema contents with Questionnaire Validator...",
-        questionnaire_title=json_to_validate.get("title"),
+        form_type=json_to_validate.get("form_type"),
+        survey_id=json_to_validate.get("survey_id"),
+        title=json_to_validate.get("title"),
     )
     # Validates questionnaire schema contents using the QuestionnaireValidator
     validator.validate()
