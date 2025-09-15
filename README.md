@@ -192,16 +192,18 @@ When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker
 
 You can do this using these commands:
 
+You will need to be authenticated with GCP to run these, to do this run `gcloud auth login` first
+
 - Validator:
 
 ``` shell
-docker run -it -p 5001:5001 onsdigital/eq-questionnaire-validator:latest
+docker run -it -p 5001:5001 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator
 ```
 
 -  Ajv Validator:
 
 ``` shell
-docker run -it -p 5002:5002 onsdigital/eq-questionnaire-validator:latest-ajv
+docker run -it -p 5002:5002 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv
 ```
 
 To stop these containers you may need to use the `docker kill` command:
