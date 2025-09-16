@@ -6,18 +6,18 @@ import structlog
 
 
 def configure_logging():
-    LOG_LEVEL = logging.DEBUG if os.getenv("LOG_LEVEL") == "DEBUG" else logging.INFO
+    log_level = logging.DEBUG if os.getenv("LOG_LEVEL") == "DEBUG" else logging.INFO
 
     error_log_handler = logging.StreamHandler(sys.stderr)
     error_log_handler.setLevel(logging.ERROR)
 
     renderer_processor = (
         structlog.dev.ConsoleRenderer()
-        if LOG_LEVEL == logging.DEBUG
+        if log_level == logging.DEBUG
         else structlog.processors.JSONRenderer()
     )
 
-    logging.basicConfig(level=LOG_LEVEL, format="%(message)s", stream=sys.stdout)
+    logging.basicConfig(level=log_level, format="%(message)s", stream=sys.stdout)
 
     structlog.configure(
         processors=[

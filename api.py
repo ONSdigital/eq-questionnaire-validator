@@ -79,12 +79,13 @@ async def validate_schema_from_url(url=None):
 async def validate_schema(data):
     logger.debug("Attempting to validate schema from JSON data...")
     if data:
-        # Sets `json_to_validate` to the data received if it is a dictionary as data does not require parsing
         if isinstance(data, dict):
             logger.info("JSON data received as dictionary - parsing not required")
             json_to_validate = data
         # Sets `json_to_validate` to the parsed data if it is a string
         elif isinstance(data, str):
+            logger.info("JSON data received as string - parsing required")
+            logger.debug("Attempting to parse JSON data...")
             json_to_validate = parse_json(data)
         # Returns an error response if the data received is not a string or dictionary
         else:
@@ -113,7 +114,7 @@ async def validate_schema(data):
         # Returns errors in the response if AJV Validator service returned any errors
         if ajv_response_dict := ajv_response.json():
             response["errors"] = ajv_response_dict["errors"]
-            logger.warning(
+            logger.info(
                 "AJV Schema Validator service returned errors",
                 status=400,
                 errors=response["errors"],
@@ -121,7 +122,7 @@ async def validate_schema(data):
             return response, 400
 
     except RequestException:
-        logger.error("AJV Schema Validator service unavailable")
+        logger.exception("AJV Schema Validator service unavailable")
         return json.dumps(obj={}, error="AJV Schema Validator service unavailable")
 
     logger.info("AJV Schema Validator service returned no errors", status=200)
@@ -139,7 +140,7 @@ async def validate_schema(data):
     # Adds errors from validation to the response if there are any
     if validator.errors:
         response["errors"] = validator.errors
-        logger.warning(
+        logger.info(
             "Questionnaire Validator returned errors",
             status=400,
             errors=response["errors"],
@@ -201,18 +202,13 @@ def is_url_allowed(parsed_url, domain):
 
 
 def parse_json(data):
-    processed_data = data
-    # Parses `data` if it is in string format
-    if isinstance(data, str):
-        logger.info("JSON data received as string - parsing required")
-        logger.debug("Attempting to parse JSON data...")
-        try:
-            processed_data = json.loads(data)
-            logger.info("JSON data parsed successfully")
-        except JSONDecodeError:
-            logger.error("Failed to parse JSON data", status=400)
-            return Response(status_code=400, content="Failed to parse JSON")
-    return processed_data
+    try:
+        processed_data = json.loads(data)
+        logger.info("JSON data parsed successfully")
+        return processed_data
+    except JSONDecodeError:
+        logger.exception("Failed to parse JSON data", status=400)
+        return Response(status_code=400, content="Failed to parse JSON")
 
 
 if __name__ == "__main__":
