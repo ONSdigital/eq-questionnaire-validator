@@ -10,7 +10,7 @@ In order to run locally you'll need Node.js, poetry and python installed. It's r
 
 NVM and pyenv will manage your versions of Node and Python and these commands will install the required versions of them which will be read from `.nvmrc` and `.python-version`.
 
-``` shell
+```shell
 brew install nvm pyenv
 nvm use
 pyenv install
@@ -19,19 +19,19 @@ pyenv install
 If you get a message in the command line after running `nvm use` that the version of node specified in the `.nvmrc` file isn't installed, just follow the commands to install it.
 
 e.g.
-``` shell
+```shell
 nvm install v22.15.0
 ```
 
 ### Install JS dependencies
 
-``` shell
+```shell
 npm install
 ```
 
 ### Install Poetry and Python dependencies
 
-``` shell
+```shell
 curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
 poetry install
 ```
@@ -39,7 +39,7 @@ poetry install
 ## Running locally
 
 To run the app:
-``` shell
+```shell
 make run
 ```
 
@@ -50,7 +50,7 @@ Validator runs on two ports, `5001` is the main validator app and `5002` is the 
 Validator runs on `http://localhost:5001/validate` and accepts GET and POST requests.
 
 If you need to change the port you can change the port variable in the Uvicorn settings in api.py:
-``` python
+```python
 uvicorn.run("api:app", workers=20, port=5001, reload=True)
 ```
 The reload flag here will allow the service to restart if you make a change to the code, if you want to run the app locally using multiple server workers you need to set reload to "False".
@@ -72,7 +72,7 @@ Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL
 Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (e.g. GitHub Gist raw json).
 
 As Validator runs on `localhost:5001` by default, here is an example of a command you can use to validate a schema via a URL:
-``` shell
+```shell
 http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-runner/refs/heads/main/schemas/test/en/test_address.json
 ```
 
@@ -88,7 +88,7 @@ Also when using a URL from GitHub you can only validate schemas from the ONSdigi
 
 Also once you have validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
 If you have runner spun up you can from within the root of runner run:
-``` shell
+```shell
 make validate-test-schemas
 ```
 This script will run validator on the test runner schemas.
@@ -96,7 +96,7 @@ This script will run validator on the test runner schemas.
 ### Running the Ajv (server) version of validator
 
 Running `make run` will start up the both of services required for validation (Ajv validator and the validator app itself). However, if you want to start AJV individually, run:
-``` shell
+```shell
 make start-ajv
 ```
 
@@ -107,7 +107,7 @@ Running the Ajv server returns either an empty json response when the questionna
 To stop the Ajv server:
 
 You will need `AJV_VALIDATOR_PORT` set in your .env file to the port the server is running on, then you can run the following:
-``` shell
+```shell
 make stop-ajv
 ```
 
@@ -116,31 +116,31 @@ make stop-ajv
 By default, all schemas in the `tests/schemas/valid` and `tests/schemas/invalid` directories will be evaluated as part of the unit tests. Any errors in these schemas will cause a failure.
 
 To run the app's unit tests:
-``` shell
+```shell
 make test-unit
 ```
 
 Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing "<PID>" with the process id from the previous command.
 
 Run the Ajv validator tests:
-``` shell
+```shell
 make test-ajv
 ```
 
 To run the app's unit tests and Ajv validator tests:
-``` shell
+```shell
 make test
 ```
 
 #### Test the local validator app against runner schemas
 
 Spin validator up with:
-``` shell
+```shell
 make run
 ```
 
 Then, in another terminal, navigate to a checked out copy of `https://github.com/ONSdigital/eq-questionnaire-runner` and run:
-``` shell
+```shell
 make validate-test-schemas
 ```
 This will run the validator against all runner test schemas.
@@ -150,7 +150,7 @@ Or you can run it against a specific runner schema, to do this:
     - `SCHEMA_PATH` to the path of the schema file (if not specified defaults to `./schemas/test/en/`)
     - `SCHEMA` to the schema file name without the `.json`
 - then run (for example):
-``` shell
+```shell
 make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 ```
 
@@ -158,13 +158,13 @@ make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 
 Run the following to format the js files in the ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
 
-``` shell
+```shell
 make format
 ```
 
 Run the following to lint the js files in the ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
 
-``` shell
+```shell
 make lint
 ```
 
@@ -172,19 +172,19 @@ make lint
 
 To install Docker run:
 
-``` shell
+```shell
 brew install docker
 ```
 
 On MacOS install container runtimes, e.g. Colima:
 
-``` shell
+```shell
 brew install colima
 ```
 
 Make sure Colima is started every time you want to use Docker images:
 
-``` shell
+```shell
 colima start
 ```
 
@@ -196,13 +196,13 @@ You will need to be authenticated with GCP to run these, to do this run `gcloud 
 
 - Validator:
 
-``` shell
+```shell
 docker run -it -p 5001:5001 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator
 ```
 
 -  Ajv Validator:
 
-``` shell
+```shell
 docker run -it -p 5002:5002 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv
 ```
 
@@ -210,12 +210,12 @@ To stop these containers you may need to use the `docker kill` command:
 
 First run:
 
-``` shell
+```shell
 docker ps
 ```
 
 Then make a note of the container id of the container you want to stop and then run (replacing "<CONTAINER_ID>" with the id):
 
-``` shell
+```shell
 docker kill <CONTAINER_ID>
 ```
