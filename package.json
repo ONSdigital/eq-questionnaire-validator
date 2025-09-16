@@ -34,7 +34,6 @@
   "dependencies": {
     "ajv": "^8.11.0",
     "axios": "*",
-    "debug": "^4.3.4",
     "express": "*",
     "glob": "*"
   },
@@ -43,8 +42,14 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "ansi-regex": "5.0.1",
+    "ansi-styles": "3.2.1",
     "chai": "*",
     "chai-http": "*",
+    "chalk": "2.4.2",
+    "color-convert": "1.9.3",
+    "color-name": "1.1.3",
+    "debug": "4.4.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-chai-friendly": "^0.7.2",
@@ -56,7 +61,11 @@
     "fancy-log": "^1.3.3",
     "mocha": "*",
     "nodemon": "*",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "slice-ansi": "4.0.0",
+    "strip-ansi": "6.0.1",
+    "supports-color": "5.5.0",
+    "wrap-ansi": "8.1.0"
   },
   "prettier": {}
 }
