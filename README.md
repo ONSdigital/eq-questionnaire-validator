@@ -156,13 +156,13 @@ make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 
 ## Formatting/linting json
 
-Run the following to format the js files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
+Run the following to format the JS files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
 
 ```shell
 make format
 ```
 
-Run the following to lint the js files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
+Run the following to lint the JS files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
 
 ```shell
 make lint
