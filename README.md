@@ -86,12 +86,12 @@ Also when using a URL from GitHub you can only validate schemas from the ONSdigi
 
 ### Running against eQ Runner
 
-Also once you have Validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
-If you have runner spun up you can from within the root of runner run:
+Also once you have Validator running it can be used to run against eQ Runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
+If you have eQ Runner spun up you can from within the root of eQ Runner run:
 ```shell
 make validate-test-schemas
 ```
-This script will run Validator on the test runner schemas.
+This script will run Validator on the test eQ Runner schemas.
 
 ### Running the Ajv (server) version of Validator
 
@@ -132,7 +132,7 @@ To run the app's unit tests and Ajv validator tests:
 make test
 ```
 
-#### Test the local Validator app against runner schemas
+#### Test the local Validator app against eQ Runner schemas
 
 Spin Validator up with:
 ```shell
@@ -143,9 +143,9 @@ Then, in another terminal, navigate to a checked out copy of `https://github.com
 ```shell
 make validate-test-schemas
 ```
-This will run Validator against all runner test schemas.
+This will run Validator against all eQ Runner test schemas.
 
-Or you can run it against a specific runner schema, to do this:
+Or you can run it against a specific eQ Runner schema, to do this:
 - set the following vars passing them into the following command:
     - `SCHEMA_PATH` to the path of the schema file (if not specified defaults to `./schemas/test/en/`)
     - `SCHEMA` to the schema file name without the `.json`
@@ -188,7 +188,7 @@ Make sure Colima is started every time you want to use Docker images:
 colima start
 ```
 
-When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for Validator and one for the Ajv validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker. These images are pulled down and run from Runner when `make run validator` is run which uses the `docker-compose-schema-validator.yml` script.
+When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for Validator and one for the Ajv validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker. These images are pulled down and run from eQ Runner when `make run validator` is run which uses the `docker-compose-schema-validator.yml` script.
 
 You can do this using these commands:
 
