@@ -4,7 +4,7 @@ An API for validating survey schemas.
 
 ## Setup
 
-In order to run locally you'll need Node.js, poetry and python installed. It's recommended that python is installed via pyenv but pyenv is optional.
+In order to run locally you'll need Node.js, poetry and Python installed. It's recommended that Python is installed via pyenv but pyenv is optional.
 
 ### Install NVM and pyenv
 
@@ -156,13 +156,13 @@ make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 
 ## Formatting/linting json
 
-Run the following to format the js files in the Ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
+Run the following to format the js files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
 
 ```shell
 make format
 ```
 
-Run the following to lint the js files in the Ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
+Run the following to lint the js files in the Ajv folder, the json files in the schemas and test schemas folders and the Python files in the repository:
 
 ```shell
 make lint
