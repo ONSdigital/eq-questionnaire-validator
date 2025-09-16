@@ -4,7 +4,7 @@ An API for validating survey schemas.
 
 ## Setup
 
-In order to run locally you'll need Node.js, poetry and Python installed. It's recommended that Python is installed via pyenv but pyenv is optional.
+In order to run locally you'll need Node.js, Poetry and Python installed. It's recommended that Python is installed via pyenv but pyenv is optional.
 
 ### Install NVM and pyenv
 
