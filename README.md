@@ -16,7 +16,7 @@ nvm use
 pyenv install
 ```
 
-If you get a message in the command line after running `nvm use` that the version of node specified in the `.nvmrc` file isn't installed, just follow the commands to install it.
+If you get a message in the command line after running `nvm use` that the version of Node specified in the `.nvmrc` file isn't installed, just follow the commands to install it.
 
 e.g.
 ```shell
@@ -43,7 +43,7 @@ To run the app:
 make run
 ```
 
-Validator runs on two ports, `5001` is the main validator app and `5002` is the Ajv validator.
+Validator runs on two ports, `5001` is the main validator app and `5002` is Ajv validator.
 
 ### Validator
 
@@ -55,9 +55,9 @@ uvicorn.run("api:app", workers=20, port=5001, reload=True)
 ```
 The reload flag here will allow the service to restart if you make a change to the code, if you want to run the app locally using multiple server workers you need to set reload to "False".
 
-### Ajv Validator
+### Ajv validator
 
-The Ajv validator defaults to running on `http://localhost:5002`.
+Ajv validator defaults to running on `http://localhost:5002`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
 The defaults for these are:
@@ -69,7 +69,7 @@ Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL
 
 ### Running against a URL
 
-Once validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (e.g. GitHub Gist raw json).
+Once Validator is running, it can be called directly in the browser using the "/validate" endpoint and the "url" parameter for the address where the schema is located (e.g. GitHub Gist raw json).
 
 As Validator runs on `localhost:5001` by default, here is an example of a command you can use to validate a schema via a URL:
 ```shell
@@ -86,16 +86,16 @@ Also when using a URL from GitHub you can only validate schemas from the ONSdigi
 
 ### Running against eQ Runner
 
-Also once you have validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
+Also once you have Validator running it can be used to run against eQ runner (`https://github.com/ONSdigital/eq-questionnaire-runner`).
 If you have runner spun up you can from within the root of runner run:
 ```shell
 make validate-test-schemas
 ```
-This script will run validator on the test runner schemas.
+This script will run Validator on the test runner schemas.
 
-### Running the Ajv (server) version of validator
+### Running the Ajv (server) version of Validator
 
-Running `make run` will start up the both of services required for validation (Ajv validator and the validator app itself). However, if you want to start AJV individually, run:
+Running `make run` will start up the both of services required for validation (Ajv validator and the Validator app itself). However, if you want to start Ajv individually, run:
 ```shell
 make start-ajv
 ```
@@ -132,9 +132,9 @@ To run the app's unit tests and Ajv validator tests:
 make test
 ```
 
-#### Test the local validator app against runner schemas
+#### Test the local Validator app against runner schemas
 
-Spin validator up with:
+Spin Validator up with:
 ```shell
 make run
 ```
@@ -143,7 +143,7 @@ Then, in another terminal, navigate to a checked out copy of `https://github.com
 ```shell
 make validate-test-schemas
 ```
-This will run the validator against all runner test schemas.
+This will run Validator against all runner test schemas.
 
 Or you can run it against a specific runner schema, to do this:
 - set the following vars passing them into the following command:
@@ -156,13 +156,13 @@ make validate-test-schema SCHEMA=test_checkbox SCHEMA_PATH=./schemas/
 
 ## Formatting/linting json
 
-Run the following to format the js files in the ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
+Run the following to format the js files in the Ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
 
 ```shell
 make format
 ```
 
-Run the following to lint the js files in the ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
+Run the following to lint the js files in the Ajv folder, the json files in the schemas and test schemas folders and the python files in the repository:
 
 ```shell
 make lint
@@ -188,7 +188,7 @@ Make sure Colima is started every time you want to use Docker images:
 colima start
 ```
 
-When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for validator and one for the AJV Validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker. These images are pulled down and run from Runner when `make run validator` is run which uses the `docker-compose-schema-validator.yml` script.
+When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for Validator and one for the Ajv validator and then pushes them to our GAR in GCP. These images can then be pulled down and run locally with Docker. These images are pulled down and run from Runner when `make run validator` is run which uses the `docker-compose-schema-validator.yml` script.
 
 You can do this using these commands:
 
@@ -200,7 +200,7 @@ You will need to be authenticated with GCP to run these, to do this run `gcloud 
 docker run -it -p 5001:5001 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator
 ```
 
--  Ajv Validator:
+-  Ajv validator:
 
 ```shell
 docker run -it -p 5002:5002 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv
