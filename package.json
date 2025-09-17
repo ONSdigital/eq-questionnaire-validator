@@ -45,8 +45,6 @@
     "@babel/register": "^7.0.0",
     "chai": "*",
     "chai-http": "*",
-    "color-convert": "1.9.3",
-    "color-name": "1.1.3",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-chai-friendly": "^0.7.2",
