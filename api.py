@@ -123,7 +123,7 @@ async def validate_schema(data):
 
     except RequestException:
         logger.exception("AJV Schema Validator service unavailable")
-        return json.dumps(obj={}, error="AJV Schema Validator service unavailable")
+        return Response(content="AJV Schema Validator service unavailable", status_code=503)
 
     logger.info("AJV Schema Validator service returned no errors", status=200)
 
