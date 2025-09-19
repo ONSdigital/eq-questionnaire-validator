@@ -1,4 +1,3 @@
-import glob
 from json import load
 from pathlib import Path
 
