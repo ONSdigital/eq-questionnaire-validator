@@ -59,7 +59,7 @@ The reload flag here will allow the service to restart if you make a change to t
 
 Ajv validator defaults to running on `http://localhost:5002`.
 
-You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
+You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables. These can be set by creating a `.env` file in the route of the repo file structure. There is a `.development.env` file with defaults that you can look at to see how they need to be set.
 The defaults for these are:
 - `AJV_VALIDATOR_SCHEME` = "http"
 - `AJV_VALIDATOR_HOST` = "localhost"
@@ -105,8 +105,6 @@ This defaults to running on port `5002`, set `AJV_VALIDATOR_PORT` in your .env f
 Running the Ajv server returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key. The errors are ordered by their path length and with first error message being the deepest path into the schema and should represent the best match for the questionnaire which has been posted.
 
 To stop the Ajv server:
-
-You will need `AJV_VALIDATOR_PORT` set in your .env file to the port the server is running on, then you can run the following:
 ```shell
 make stop-ajv
 ```
