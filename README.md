@@ -220,7 +220,10 @@ docker kill <CONTAINER_ID>
 
 ## Environment variables
 
-| Environment Variable  | Description                           | Valid Values       | Default Value |
-|-----------------------|---------------------------------------|--------------------|---------------|
-| `LOG_LEVEL`           | Sets the minimum log level to output  | `DEBUG`, `INFO`    | `INFO`        |
-
+| Environment Variable   | Description                                                              | Default Value                                                                 |
+|------------------------|--------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `LOG_LEVEL`            | Sets the minimum log level, can be set to `DEBUG` to increase this level | `INFO`                                                                        |
+| `AJV_VALIDATOR_SCHEME` | Sets the scheme for the URL that Ajv validator will run on               | `http`                                                                        |
+| `AJV_VALIDATOR_HOST`   | Sets the host for the URL that Ajv validator will run on                 | `localhost`                                                                   |
+| `AJV_VALIDATOR_PORT`   | Sets the port for the URL that Ajv validator will run on                 | `5002`                                                                        |
+| `AJV_VALIDATOR_URL`    | Sets complete URL that Ajv validator will run on                         | `<AJV_VALIDATOR_SCHEME>://<AJV_VALIDATOR_HOST>:<AJV_VALIDATOR_PORT>/validate` |
