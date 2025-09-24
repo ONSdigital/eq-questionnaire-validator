@@ -217,3 +217,10 @@ Then make a note of the container id of the container you want to stop and then 
 ```shell
 docker kill <CONTAINER_ID>
 ```
+
+## Environment variables
+
+| Environment Variable  | Description                           | Valid Values       | Default Value |
+|-----------------------|---------------------------------------|--------------------|---------------|
+| `LOG_LEVEL`           | Sets the minimum log level to output  | `DEBUG`, `INFO`    | `INFO`        |
+
