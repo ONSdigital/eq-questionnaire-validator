@@ -68,7 +68,8 @@ async def validate_schema_from_url(url=None):
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             logger.warning(
-                "Could not load schema from allowed domain - URL not found", url=url
+                "Could not load schema from allowed domain - URL not found",
+                url=url,
             )
             return Response(
                 status_code=404,
@@ -95,7 +96,8 @@ async def validate_schema(data):
                 status=400,
             )
             return Response(
-                status_code=400, content="Invalid data type received for validation"
+                status_code=400,
+                content="Invalid data type received for validation",
             )
     else:
         logger.error("No JSON data provided for validation", status=400)
@@ -126,7 +128,8 @@ async def validate_schema(data):
     except RequestException:
         logger.exception("AJV Schema Validator service unavailable")
         return Response(
-            content="AJV Schema Validator service unavailable", status_code=503
+            content="AJV Schema Validator service unavailable",
+            status_code=503,
         )
 
     logger.info("AJV Schema Validator service returned no errors", status=200)
