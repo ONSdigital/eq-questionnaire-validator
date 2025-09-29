@@ -1,7 +1,7 @@
 import json
 
-from jsonschema import Draft202012Validator
 from referencing import Registry
+from jsonschema import Draft202012Validator
 
 from app.validators.schema_validator import SchemaValidator
 from tests.utils import _open_and_load_schema_file
@@ -57,17 +57,14 @@ def test_schema():
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
 
-        registry = Registry().with_resources(
-            pairs=SchemaValidator.lookup_ref_store().items()
-        )
-
+        registry = Registry().with_resources(pairs=SchemaValidator.lookup_ref_store().items())
         validator = Draft202012Validator(schema, registry=registry)
 
         validator.check_schema(schema)
 
 
 def test_single_variant_invalid():
-    file_name = "schemas/invalid/test_invalid_when_property.json"
+    file_name = "schemas/invalid/test_invalid_single_variant.json"
 
     validator = SchemaValidator(_open_and_load_schema_file(file_name))
     validator.validate()
