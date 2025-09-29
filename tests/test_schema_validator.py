@@ -1,7 +1,7 @@
 import json
 
-from referencing import Registry
 from jsonschema import Draft202012Validator
+from referencing import Registry
 
 from app.validators.schema_validator import SchemaValidator
 from tests.utils import _open_and_load_schema_file
@@ -57,7 +57,9 @@ def test_schema():
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
 
-        registry = Registry().with_resources(pairs=SchemaValidator.lookup_ref_store().items())
+        registry = Registry().with_resources(
+            pairs=SchemaValidator.lookup_ref_store().items()
+        )
         validator = Draft202012Validator(schema, registry=registry)
 
         validator.check_schema(schema)

@@ -50,16 +50,20 @@ class SchemaValidator(Validator):
             self.add_error(e)
         return self.errors
 
+
 # Utility functions adapted from jsonschema (MIT License)
 
 WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
 STRONG_MATCHES: frozenset[str] = frozenset()
 
+
 def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
     def relevance(error):
         validator = error.validator
         return -len(error.path), validator not in weak, validator in strong
+
     return relevance
+
 
 def best_match(errors, key=by_relevance()):
     errors = iter(errors)
@@ -71,9 +75,3 @@ def best_match(errors, key=by_relevance()):
     while best.context:
         best = min(best.context, key=key)
     return best
-
-
-
-
-
-
