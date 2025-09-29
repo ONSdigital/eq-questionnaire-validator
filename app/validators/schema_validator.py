@@ -1,9 +1,10 @@
+import itertools
 from json import load
 from pathlib import Path
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
-from jsonschema.exceptions import SchemaError, best_match
+from jsonschema.exceptions import SchemaError
 from referencing import Registry, Resource
 
 from app.validators.validator import Validator
@@ -48,3 +49,31 @@ class SchemaValidator(Validator):
         except SchemaError as e:
             self.add_error(e)
         return self.errors
+
+# Utility functions adapted from jsonschema (MIT License)
+
+WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
+STRONG_MATCHES: frozenset[str] = frozenset()
+
+def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
+    def relevance(error):
+        validator = error.validator
+        return -len(error.path), validator not in weak, validator in strong
+    return relevance
+
+def best_match(errors, key=by_relevance()):
+    errors = iter(errors)
+    best = next(errors, None)
+    if best is None:
+        return
+    best = max(itertools.chain([best], errors), key=key)
+
+    while best.context:
+        best = min(best.context, key=key)
+    return best
+
+
+
+
+
+
