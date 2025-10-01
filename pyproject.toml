@@ -19,6 +19,7 @@ jsonpath-ng = "^1.7.0"
 uvicorn = "^0.35.0"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.3"}
 gunicorn = "^23.0.0"
+starlette = "^0.47.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
