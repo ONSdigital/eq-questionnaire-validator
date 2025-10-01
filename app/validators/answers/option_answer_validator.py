@@ -66,7 +66,7 @@ class OptionAnswerValidator(AnswerValidator):
                     answer_type=self.answer_type.value,
                     required_num_options=min_options,
                     actual_num_options=options_len,
-                )
+                ),
             )
 
     def validate_duplicate_options(self):
@@ -96,7 +96,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def validate_dynamic_options(self):
         if not self.dynamic_options:
-            return None
+            return
 
         self._validate_dynamic_options_answer_source()
         self._validate_dynamic_options_value_rules()
@@ -116,7 +116,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def _validate_dynamic_options_answer_source(self):
         if "source" not in self.dynamic_options["values"]:
-            return None
+            return
 
         value_source = self.dynamic_options["values"]
         transform = self.dynamic_options["transform"]

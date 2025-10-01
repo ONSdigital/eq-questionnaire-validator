@@ -34,3 +34,6 @@ display_result $? 1 "isort linting check"
 black --check . --exclude node_modules
 
 display_result $? 1 "Python code formatting check"
+
+ruff check .
+display_result $? 1 "Ruff linting check"

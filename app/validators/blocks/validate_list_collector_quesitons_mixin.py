@@ -28,7 +28,8 @@ class ValidateListCollectorQuestionsMixin(Validator):
                     self.add_error(missing_radio_error)
 
                 if not _options_contain_action_type(
-                    collector_answer["options"], expected_action
+                    collector_answer["options"],
+                    expected_action,
                 ):
                     self.add_error(missing_action_error)
 
@@ -38,5 +39,6 @@ class ValidateListCollectorQuestionsMixin(Validator):
         for same_name_answer_id in same_name_item_answer_ids:
             if same_name_answer_id not in answer_ids:
                 self.add_error(
-                    self.MISSING_SAME_NAME_ANSWER_ID, answer_id=same_name_answer_id
+                    self.MISSING_SAME_NAME_ANSWER_ID,
+                    answer_id=same_name_answer_id,
                 )
