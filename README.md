@@ -112,3 +112,9 @@ make stop-ajv
 This returns either an empty json response when the questionnaire is valid, or a response containing an "errors" key.
 The errors are ordered by their path length and with first error message being the deepest path into the schema and
 should represent the best match for the questionnaire which has been posted.
+
+## Environment variables
+
+| Environment Variable  | Description                           | Valid Values       | Default Value |
+|-----------------------|---------------------------------------|--------------------|---------------|
+| `LOG_LEVEL`           | Sets the minimum log level to output  | `DEBUG`, `INFO`    | `INFO`        |
