@@ -1,9 +1,11 @@
-import glob
+import itertools
 from json import load
+from pathlib import Path
 
 from jsonschema import Draft202012Validator as DraftValidator
-from jsonschema import RefResolver, ValidationError
-from jsonschema.exceptions import SchemaError, best_match
+from jsonschema import ValidationError
+from jsonschema.exceptions import SchemaError
+from referencing import Registry, Resource
 
 from app.validators.validator import Validator
 
@@ -15,26 +17,21 @@ class SchemaValidator(Validator):
         with open(schema, encoding="utf8") as schema_data:
             self.schema = load(schema_data)
 
-        resolver = RefResolver(
-            base_uri="",
-            referrer=self.schema,
-            store=self.lookup_ref_store(),
+        registry = (
+            Registry().with_resources(pairs=self.lookup_ref_store().items()).crawl()
         )
-        self.schema_validator = DraftValidator(self.schema, resolver=resolver)
+
+        self.schema_validator = DraftValidator(self.schema, registry=registry)
 
     @staticmethod
     def lookup_ref_store():
         store = {}
-        for glob_path in [
-            "schemas/**/**/**/*.json",
-            "schemas/**/**/*.json",
-            "schemas/**/*.json",
-            "schemas/*.json",
-        ]:
-            for filename in glob.glob(glob_path):
-                with open(filename, encoding="utf8") as schema_file:
-                    json_data = load(schema_file)
-                    store[json_data["$id"]] = json_data
+
+        for filename in Path("schemas").rglob("*.json"):
+            with open(filename, encoding="utf8") as schema_file:
+                json_data = load(schema_file)
+                resource = Resource.from_contents(json_data)
+                store[json_data["$id"]] = resource
         return store
 
     def validate(self):
@@ -52,3 +49,29 @@ class SchemaValidator(Validator):
         except SchemaError as e:
             self.add_error(e)
         return self.errors
+
+
+# Utility functions adapted from jsonschema (MIT License)
+
+WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
+STRONG_MATCHES: frozenset[str] = frozenset()
+
+
+def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
+    def relevance(error):
+        validator = error.validator
+        return -len(error.path), validator not in weak, validator in strong
+
+    return relevance
+
+
+def best_match(errors, key=by_relevance()):
+    errors = iter(errors)
+    best = next(errors, None)
+    if best is None:
+        return
+    best = max(itertools.chain([best], errors), key=key)
+
+    while best.context:
+        best = min(best.context, key=key)
+    return best
