@@ -40,9 +40,10 @@ class SectionValidator(Validator):
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        """
-        We validate here: if there is a summary without items or there is no summary or there is a list summary
-        within a section then we allow multiple list collectors otherwise we disallow them
+        """Summary validation.
+
+        Validates if there is a summary without items or there is no summary or there is a list summary
+        within a section then we allow multiple list collectors otherwise we disallow them.
         """
         if not (section_summary := self.section.get("summary")):
             return
@@ -59,7 +60,9 @@ class SectionValidator(Validator):
 
         when = section_enabled["when"]
         when_validator = RulesValidator(
-            when, self.section["id"], self.questionnaire_schema
+            when,
+            self.section["id"],
+            self.questionnaire_schema,
         )
         self.errors += when_validator.validate()
 
@@ -69,7 +72,9 @@ class SectionValidator(Validator):
 
     def validate_skip_conditions(self, skip_condition, origin_id):
         when_validator = RulesValidator(
-            skip_condition["when"], origin_id, self.questionnaire_schema
+            skip_condition["when"],
+            origin_id,
+            self.questionnaire_schema,
         )
         self.errors += when_validator.validate()
 
@@ -121,7 +126,8 @@ class SectionValidator(Validator):
 
         if question:
             question_validator = get_question_validator(
-                question, self.questionnaire_schema
+                question,
+                self.questionnaire_schema,
             )
 
             self.errors += question_validator.validate()
@@ -140,20 +146,23 @@ class SectionValidator(Validator):
         # This is validated in json schema, but the error message is not good at the moment.
         if len(question_variants) == 1 or len(content_variants) == 1:
             self.add_error(
-                error_messages.VARIANTS_HAS_ONE_VARIANT, block_id=block["id"]
+                error_messages.VARIANTS_HAS_ONE_VARIANT,
+                block_id=block["id"],
             )
 
         for variant in all_variants:
             if when_clause := variant.get("when"):
                 when_validator = RulesValidator(
-                    when_clause, self.section["id"], self.questionnaire_schema
+                    when_clause,
+                    self.section["id"],
+                    self.questionnaire_schema,
                 )
                 self.errors += when_validator.validate()
 
         self.validate_variant_fields(block, question_variants)
 
     def validate_variant_fields(self, block, variants):
-        """Ensure consistency between relevant fields in variants
+        """Ensure consistency between relevant fields in variants.
 
         - Ensure that question_ids are the same across all variants.
         - Ensure answer_ids are the same across all variants.
@@ -214,7 +223,8 @@ class SectionValidator(Validator):
         # as the latter cannot do standard block validation
         for repeating_block in block.get("repeating_blocks", []):
             block_validator = get_block_validator(
-                repeating_block, self.questionnaire_schema
+                repeating_block,
+                self.questionnaire_schema,
             )
             self.errors += block_validator.validate()
 
@@ -293,13 +303,13 @@ class SectionValidator(Validator):
     def validate_section_summary_items(self):
         summary_items = self.schema_element.get("summary", {}).get("items", [])
         if not summary_items:
-            return None
+            return
 
         blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
         list_collector_answer_ids_by_list = defaultdict(list)
         for block in blocks:
             list_collector_answer_ids_by_list[block["for_list"]].extend(
-                self.questionnaire_schema.get_list_collector_answer_ids(block["id"])
+                self.questionnaire_schema.get_list_collector_answer_ids(block["id"]),
             )
 
         for item in summary_items:
@@ -316,12 +326,15 @@ class SectionValidator(Validator):
 
             for answer_source in item.get("related_answers", []):
                 self._validate_related_answer_belong_to_list_collector(
-                    answer_source, list_collector_answer_ids_for_list
+                    answer_source,
+                    list_collector_answer_ids_for_list,
                 )
                 self._validate_related_answer_has_label(answer_source)
 
     def _validate_related_answer_belong_to_list_collector(
-        self, answer_source, list_collector_answer_ids
+        self,
+        answer_source,
+        list_collector_answer_ids,
     ):
         if answer_source["identifier"] not in list_collector_answer_ids:
             self.add_error(
@@ -330,12 +343,16 @@ class SectionValidator(Validator):
             )
 
     def _validate_item_anchor_answer_id_belongs_to_list_collector(
-        self, anchor_answer_id, list_collector_answer_ids, list_name
+        self,
+        anchor_answer_id,
+        list_collector_answer_ids,
+        list_name,
     ):
         if anchor_answer_id not in list_collector_answer_ids:
             self.add_error(
                 error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR.format(
-                    answer_id=anchor_answer_id, list_name=list_name
+                    answer_id=anchor_answer_id,
+                    list_name=list_name,
                 ),
                 id=anchor_answer_id,
             )
@@ -371,7 +388,7 @@ class SectionValidator(Validator):
         for_lists = []
 
         for block_id in self.questionnaire_schema.get_section_block_ids(
-            self.section["id"]
+            self.section["id"],
         ):
             block = self.questionnaire_schema.get_block(block_id)
             if block["type"] in ["ListCollector", "ListCollectorContent"]:
