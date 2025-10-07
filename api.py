@@ -1,5 +1,7 @@
 import json
+import logging
 import os
+import sys
 from json import JSONDecodeError
 from urllib import error, request
 from urllib.parse import urlparse
@@ -11,7 +13,6 @@ from fastapi import Body, FastAPI, Response
 from requests import RequestException
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
-from configs.logging_config import configure_logging
 
 ALLOWED_FULL_DOMAINS = {
     "https://gist.githubusercontent.com/",
@@ -35,8 +36,36 @@ AJV_VALIDATOR_URL = os.getenv(
 
 app = FastAPI()
 
-configure_logging()
 logger = structlog.get_logger()
+
+
+def configure_logging():
+    log_level = logging.DEBUG if os.getenv("LOG_LEVEL") == "DEBUG" else logging.INFO
+
+    error_log_handler = logging.StreamHandler(sys.stderr)
+    error_log_handler.setLevel(logging.ERROR)
+
+    renderer_processor = (
+        structlog.dev.ConsoleRenderer()
+        if log_level == logging.DEBUG
+        else structlog.processors.JSONRenderer()
+    )
+
+    logging.basicConfig(level=log_level, format="%(message)s", stream=sys.stdout)
+
+    structlog.configure(
+        processors=[
+            structlog.contextvars.merge_contextvars,
+            structlog.processors.add_log_level,
+            structlog.processors.StackInfoRenderer(),
+            structlog.dev.set_exc_info,
+            renderer_processor,
+        ],
+        logger_factory=structlog.stdlib.LoggerFactory(),
+    )
+
+
+configure_logging()
 
 
 @app.get("/status")
