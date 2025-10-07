@@ -25,11 +25,11 @@ lint: lint-python
 	npm run lint
 
 .PHONY: ruff
-ruff: ## Run ruff linter.
+ruff: ## Run ruff linter code check.
 	poetry run ruff check .
 
 .PHONY: black
-black: ## Run black code formatter.
+black: ## Run black linter code check.
 	poetry run black --check .
 
 lint-python:
