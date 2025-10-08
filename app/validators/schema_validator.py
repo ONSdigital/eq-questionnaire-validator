@@ -9,7 +9,8 @@ from referencing import Registry, Resource
 
 from app.validators.validator import Validator
 
-
+WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
+STRONG_MATCHES: frozenset[str] = frozenset()
 class SchemaValidator(Validator):
     def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
         super().__init__(schema_element)
@@ -53,11 +54,22 @@ class SchemaValidator(Validator):
 
 # Utility functions adapted from jsonschema (MIT License)
 
-WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
-STRONG_MATCHES: frozenset[str] = frozenset()
+def by_relevance(weak = WEAK_MATCHES, strong = STRONG_MATCHES):
+    """
+    Return a function that orders validation errors by relevance.
 
+    Args:
+        weak (frozenset[str]): A set of validator names that are considered weak matches.
+        strong (frozenset[str]): A set of validator names that are considered strong matches.
 
-def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
+    Returns: 
+        relevance (function): A function that can be used as a key for sorting validation errors.
+
+    Notes:
+        Errors that occur deeper in the schema are considered more relevant.
+        Errors from weaker keywords like 'anyOf' or 'oneOf' are given lower priority.
+
+    """
     def relevance(error):
         validator = error.validator
         return -len(error.path), validator not in weak, validator in strong
@@ -65,11 +77,28 @@ def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
     return relevance
 
 
-def best_match(errors, key=by_relevance()):
+def best_match(errors: list[ValidationError]) -> None | ValidationError:
+    """
+    Return the most relevant validation error from a list of errors.
+
+    Args:
+        errors (list<ValidationErrors>): A list of validation errors.
+
+    Returns: 
+        None: If there are no errors
+        best (ValidationError): The most relevant ValidationError.
+
+    Notes:
+        Uses the given key function by_relevance() to choose the most specific error.
+        If the error has nested context errors(anyOf, oneOf), it will pick the deepest errors,
+        based on the same key function.
+    """
     errors = iter(errors)
     best = next(errors, None)
     if best is None:
-        return
+        return None
+
+    key = by_relevance()
     best = max(itertools.chain([best], errors), key=key)
 
     while best.context:
