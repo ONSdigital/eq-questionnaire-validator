@@ -20,6 +20,7 @@ eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", re
 gunicorn = "^23.0.0"
 referencing = "^0.36.2"
 jsonpath-ng = "^1.7.0"
+starlette = "^0.47.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
