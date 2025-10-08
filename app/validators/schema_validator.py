@@ -1,6 +1,7 @@
 import itertools
 from json import load
 from pathlib import Path
+from typing import Callable
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
@@ -11,6 +12,8 @@ from app.validators.validator import Validator
 
 WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
 STRONG_MATCHES: frozenset[str] = frozenset()
+
+
 class SchemaValidator(Validator):
     def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
         super().__init__(schema_element)
@@ -54,7 +57,10 @@ class SchemaValidator(Validator):
 
 # Utility functions adapted from jsonschema (MIT License)
 
-def by_relevance(weak = WEAK_MATCHES, strong = STRONG_MATCHES):
+
+def by_relevance(
+    weak: frozenset[str] = WEAK_MATCHES, strong: frozenset[str] = STRONG_MATCHES
+) -> Callable[[ValidationError], tuple[int, bool, bool] :]:
     """
     Return a function that orders validation errors by relevance.
 
@@ -62,7 +68,7 @@ def by_relevance(weak = WEAK_MATCHES, strong = STRONG_MATCHES):
         weak (frozenset[str]): A set of validator names that are considered weak matches.
         strong (frozenset[str]): A set of validator names that are considered strong matches.
 
-    Returns: 
+    Returns:
         relevance (function): A function that can be used as a key for sorting validation errors.
 
     Notes:
@@ -70,7 +76,8 @@ def by_relevance(weak = WEAK_MATCHES, strong = STRONG_MATCHES):
         Errors from weaker keywords like 'anyOf' or 'oneOf' are given lower priority.
 
     """
-    def relevance(error):
+
+    def relevance(error: ValidationError) -> tuple[int, bool, bool]:
         validator = error.validator
         return -len(error.path), validator not in weak, validator in strong
 
@@ -84,7 +91,7 @@ def best_match(errors: list[ValidationError]) -> None | ValidationError:
     Args:
         errors (list<ValidationErrors>): A list of validation errors.
 
-    Returns: 
+    Returns:
         None: If there are no errors
         best (ValidationError): The most relevant ValidationError.
 
