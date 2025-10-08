@@ -60,7 +60,7 @@ class SchemaValidator(Validator):
 
 def by_relevance(
     weak: frozenset[str] = WEAK_MATCHES, strong: frozenset[str] = STRONG_MATCHES
-) -> Callable[[ValidationError], tuple[int, bool, bool] :]:
+) -> Callable[[ValidationError], tuple[int, bool, bool]]:
     """
     Return a function that orders validation errors by relevance.
 
@@ -74,7 +74,6 @@ def by_relevance(
     Notes:
         Errors that occur deeper in the schema are considered more relevant.
         Errors from weaker keywords like 'anyOf' or 'oneOf' are given lower priority.
-
     """
 
     def relevance(error: ValidationError) -> tuple[int, bool, bool]:
@@ -89,7 +88,7 @@ def best_match(errors: list[ValidationError]) -> None | ValidationError:
     Return the most relevant validation error from a list of errors.
 
     Args:
-        errors (list<ValidationErrors>): A list of validation errors.
+        errors (list<ValidationError>): A list of validation errors.
 
     Returns:
         None: If there are no errors
@@ -97,7 +96,7 @@ def best_match(errors: list[ValidationError]) -> None | ValidationError:
 
     Notes:
         Uses the given key function by_relevance() to choose the most specific error.
-        If the error has nested context errors(anyOf, oneOf), it will pick the deepest errors,
+        If the error has nested context errors (anyOf, oneOf), it will pick the deepest errors,
         based on the same key function.
     """
     errors = iter(errors)
