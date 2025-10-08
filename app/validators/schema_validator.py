@@ -91,7 +91,7 @@ def best_match(errors: list[ValidationError]) -> None | ValidationError:
         errors (list<ValidationError>): A list of validation errors.
 
     Returns:
-        None: If there are no errors
+        None: If there are no errors.
         best (ValidationError): The most relevant ValidationError.
 
     Notes:
