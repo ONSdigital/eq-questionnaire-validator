@@ -1,7 +1,7 @@
 import itertools
 from json import load
 from pathlib import Path
-from typing import Callable, Mapping, Any
+from typing import Any, Callable, Mapping
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
@@ -27,7 +27,10 @@ class SchemaFileValidator(Validator):
         for resolving $ref links. And Validates schema using Draft202012
         validator rules.
     """
-    def __init__(self, schema_element: dict, schema: str ="schemas/questionnaire_v1.json"):
+
+    def __init__(
+        self, schema_element: dict, schema: str = "schemas/questionnaire_v1.json"
+    ):
         super().__init__(schema_element)
 
         with open(schema, encoding="utf8") as schema_data:
@@ -71,6 +74,7 @@ class SchemaFileValidator(Validator):
 # Reason: Default best_match() did not handle anyOf/oneOf errors needed for our schema
 # custom by_relevance + best_match() ensured nested and weak/strong matches are correctly
 # prioritised to give the most relevant validation error.
+
 
 def by_relevance(
     weak: frozenset[str] = WEAK_MATCHES, strong: frozenset[str] = STRONG_MATCHES
