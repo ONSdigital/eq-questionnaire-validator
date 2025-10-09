@@ -1,7 +1,7 @@
 import itertools
 from json import load
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Mapping, Any
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError
@@ -14,12 +14,24 @@ WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
 STRONG_MATCHES: frozenset[str] = frozenset()
 
 
-class SchemaValidator(Validator):
-    def __init__(self, schema_element, schema="schemas/questionnaire_v1.json"):
+class SchemaFileValidator(Validator):
+    """
+    Validates JSON data against a schema, resolving $ref references.
+
+    Args:
+        schema (str): The path to the schema file.
+        schema_element (dict): The JSON schema to validate.
+
+    Notes:
+        This class loads in a schema file, builds a reference registry
+        for resolving $ref links. And Validates schema using Draft202012
+        validator rules.
+    """
+    def __init__(self, schema_element: dict, schema: str ="schemas/questionnaire_v1.json"):
         super().__init__(schema_element)
 
         with open(schema, encoding="utf8") as schema_data:
-            self.schema = load(schema_data)
+            self.schema: Mapping[str, Any] = load(schema_data)
 
         registry = (
             Registry().with_resources(pairs=self.lookup_ref_store().items()).crawl()
