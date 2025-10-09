@@ -67,8 +67,10 @@ class SchemaFileValidator(Validator):
         return self.errors
 
 
-# Utility functions adapted from jsonschema (MIT License)
-
+# Override: function (by_relevance, best_match) from jsonschema.exceptions v4.25.1
+# Reason: Default best_match() did not handle anyOf/oneOf errors needed for our schema
+# custom by_relevance + best_match() ensured nested and weak/strong matches are correctly
+# prioritised to give the most relevant validation error.
 
 def by_relevance(
     weak: frozenset[str] = WEAK_MATCHES, strong: frozenset[str] = STRONG_MATCHES
