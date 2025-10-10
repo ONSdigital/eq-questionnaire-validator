@@ -4,7 +4,7 @@ import pytest
 from structlog import configure, getLogger
 from structlog.stdlib import LoggerFactory
 
-from app.validators.schema_validator import SchemaFileValidator
+from tests.helpers.schema_validator import SchemaFileValidator
 from tests.conftest import find_all_json_files
 
 logger = getLogger()

@@ -8,7 +8,7 @@ from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
-from app.validators.schema_validator import SchemaFileValidator
+from tests.helpers.schema_validator import SchemaFileValidator
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import find_all_json_files
 from tests.utils import _open_and_load_schema_file

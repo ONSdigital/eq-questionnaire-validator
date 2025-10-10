@@ -3,7 +3,7 @@ import json
 from jsonschema import Draft202012Validator
 from referencing import Registry
 
-from app.validators.schema_validator import SchemaFileValidator
+from tests.helpers.schema_validator import SchemaFileValidator
 from tests.utils import _open_and_load_schema_file
 
 
