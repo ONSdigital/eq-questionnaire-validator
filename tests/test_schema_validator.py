@@ -3,7 +3,7 @@ import json
 from jsonschema import Draft202012Validator
 from referencing import Registry
 
-from tests.helpers.schema_validator import SchemaFileValidator
+from tests.helpers.schema_validator import SchemaTestValidator
 from tests.utils import _open_and_load_schema_file
 
 
@@ -29,7 +29,7 @@ def test_valid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        validator = SchemaFileValidator(json_to_validate)
+        validator = SchemaTestValidator(json_to_validate)
         validator.validate()
 
         assert len(validator.errors) == 0
@@ -45,7 +45,7 @@ def test_invalid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        validator = SchemaFileValidator(json_to_validate)
+        validator = SchemaTestValidator(json_to_validate)
         validator.validate()
 
         expected_message = f"'{answer_id}' does not match"
@@ -58,7 +58,7 @@ def test_schema():
         schema = json.load(schema_data)
 
         registry = Registry().with_resources(
-            pairs=SchemaFileValidator.lookup_ref_store().items()
+            pairs=SchemaTestValidator.lookup_ref_store().items()
         )
         validator = Draft202012Validator(schema, registry=registry)
 
@@ -68,7 +68,7 @@ def test_schema():
 def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
-    validator = SchemaFileValidator(_open_and_load_schema_file(file_name))
+    validator = SchemaTestValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
     assert validator.errors[0]["message"] == "'when' is a required property"
@@ -80,7 +80,7 @@ def test_invalid_survey_id_whitespace():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaFileValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 
@@ -91,7 +91,7 @@ def test_returns_pointer():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaFileValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 
@@ -102,7 +102,7 @@ def test_invalid_q_code_regex_pattern():
     file = "schemas/invalid/test_invalid_q_code_regex_pattern.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaFileValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 

@@ -14,7 +14,7 @@ WEAK_MATCHES: frozenset[str] = frozenset(["anyOf", "oneOf"])
 STRONG_MATCHES: frozenset[str] = frozenset()
 
 
-class SchemaFileValidator(Validator):
+class SchemaTestValidator(Validator):
     """
     Validates JSON data against a schema, resolving $ref references.
 
