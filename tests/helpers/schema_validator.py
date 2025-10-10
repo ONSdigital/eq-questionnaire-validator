@@ -69,6 +69,7 @@ class SchemaFileValidator(Validator):
             self.add_error(e)
         return self.errors
 
+
 # Utility functions adapted from jsonschema (MIT License)
 # Override: function (by_relevance, best_match) from jsonschema.exceptions v4.25.1
 # Reason: Default best_match() did not handle anyOf/oneOf errors needed for our schema
