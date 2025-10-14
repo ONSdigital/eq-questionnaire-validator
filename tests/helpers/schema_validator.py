@@ -85,7 +85,7 @@ class SchemaTestValidator(Validator):
 
         Notes:
             Uses custom best_match() logic to find the most relevant validation error.
-        
+
         """
         try:
             self.schema_validator.validate(self.schema_element)
