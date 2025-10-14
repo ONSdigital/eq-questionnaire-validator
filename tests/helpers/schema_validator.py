@@ -16,11 +16,17 @@ STRONG_MATCHES: frozenset[str] = frozenset()
 
 class SchemaTestValidator(Validator):
     """
-    Validates JSON data against a schema, resolving $ref references.
+    Validate JSON data against a schema, resolving $ref references.
 
-    Args:
+    Attributes:
         schema (str): The path to the schema file.
         schema_element (dict): The JSON schema to validate.
+
+    Methods:
+        lookup_ref_store(): Loads schema files into a ref store.
+        validate(): Validates the schema_element against the schema.
+        by_relevance(): Orders validation errors by relevance.
+        best_match(): Finds the most relevant validation error.
 
     Notes:
         This class loads in a schema file, builds a reference registry
@@ -31,6 +37,13 @@ class SchemaTestValidator(Validator):
     def __init__(
         self, schema_element: dict, schema: str = "schemas/questionnaire_v1.json"
     ):
+        """
+        Initialise the SchemaTestValidator with a schema and schema element.
+
+        Args:
+            schema (str): The path to the schema file.
+            schema_element (dict): The JSON schema to validate.
+        """
         super().__init__(schema_element)
 
         with open(schema, encoding="utf8") as schema_data:
@@ -44,6 +57,16 @@ class SchemaTestValidator(Validator):
 
     @staticmethod
     def lookup_ref_store():
+        """
+        Return a store (dict) of schema resources.
+
+        Returns:
+            store (dict): A dictionary mapping schema $id to Resource objects (json schema).
+
+        Notes:
+            Loops through all JSON schema files in the 'schemas' directory,
+            and stores them in a dictionary with their $id as the key in a Resource object.
+        """
         store = {}
 
         for filename in Path("schemas").rglob("*.json"):
@@ -54,6 +77,16 @@ class SchemaTestValidator(Validator):
         return store
 
     def validate(self):
+        """
+        Validate the schema_element against the schema.
+
+        Returns:
+            errors (list<dict>): A list of validation errors, empty if valid.
+
+        Notes:
+            Uses custom best_match() logic to find the most relevant validation error.
+        
+        """
         try:
             self.schema_validator.validate(self.schema_element)
             return {}
