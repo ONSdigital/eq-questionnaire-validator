@@ -1,8 +1,9 @@
 import json
 
-from jsonschema import RefResolver, validators
+from jsonschema import Draft202012Validator
+from referencing import Registry
 
-from app.validators.schema_validator import SchemaValidator
+from tests.helpers.schema_validator import SchemaTestValidator
 from tests.utils import _open_and_load_schema_file
 
 
@@ -28,7 +29,7 @@ def test_valid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        validator = SchemaValidator(json_to_validate)
+        validator = SchemaTestValidator(json_to_validate)
         validator.validate()
 
         assert len(validator.errors) == 0
@@ -44,7 +45,7 @@ def test_invalid_answer_ids():
 
     for answer_id in answer_ids:
         json_to_validate = create_schema_with_answer_id(answer_id)
-        validator = SchemaValidator(json_to_validate)
+        validator = SchemaTestValidator(json_to_validate)
         validator.validate()
 
         expected_message = f"'{answer_id}' does not match"
@@ -55,21 +56,19 @@ def test_invalid_answer_ids():
 def test_schema():
     with open("schemas/questionnaire_v1.json", encoding="utf8") as schema_data:
         schema = json.load(schema_data)
-        resolver = RefResolver(
-            base_uri="",
-            referrer=schema,
-            store=SchemaValidator.lookup_ref_store(),
-        )
 
-        validator = validators.validator_for(schema)
-        validator.resolver = resolver
+        registry = Registry().with_resources(
+            pairs=SchemaTestValidator.lookup_ref_store().items()
+        )
+        validator = Draft202012Validator(schema, registry=registry)
+
         validator.check_schema(schema)
 
 
 def test_single_variant_invalid():
     file_name = "schemas/invalid/test_invalid_single_variant.json"
 
-    validator = SchemaValidator(_open_and_load_schema_file(file_name))
+    validator = SchemaTestValidator(_open_and_load_schema_file(file_name))
     validator.validate()
 
     assert validator.errors[0]["message"] == "'when' is a required property"
@@ -81,7 +80,7 @@ def test_invalid_survey_id_whitespace():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 
@@ -92,7 +91,7 @@ def test_returns_pointer():
     file = "schemas/invalid/test_invalid_survey_id_whitespace.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 
@@ -103,7 +102,7 @@ def test_invalid_q_code_regex_pattern():
     file = "schemas/invalid/test_invalid_q_code_regex_pattern.json"
     json_to_validate = _open_and_load_schema_file(file)
 
-    validator = SchemaValidator(json_to_validate)
+    validator = SchemaTestValidator(json_to_validate)
 
     validator.validate()
 
