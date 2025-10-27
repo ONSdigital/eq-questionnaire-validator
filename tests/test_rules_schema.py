@@ -16,7 +16,8 @@ def _assert_schema_is_valid(valid_schema_filename, *, json_schema_definition_fil
     with open(valid_schema_filename, encoding="utf8") as json_file:
         for json_fixture in load(json_file):
             schema_validator = SchemaTestValidator(
-                json_fixture["rule"], schema=json_schema_definition_filepath
+                json_fixture["rule"],
+                schema=json_schema_definition_filepath,
             )
             schema_validator.validate()
 
@@ -27,12 +28,11 @@ def _assert_schema_is_valid(valid_schema_filename, *, json_schema_definition_fil
 
 
 @pytest.mark.parametrize(
-    "valid_schema_filename", find_all_json_files("tests/schemas/rules/boolean")
+    "valid_schema_filename",
+    find_all_json_files("tests/schemas/rules/boolean"),
 )
 def test_param_valid_schemas_boolean_operators(valid_schema_filename):
-    """
-    Uses py.test generated tests to validate all schemas contained in the 'rules/boolean' folder.
-    """
+    """Uses py.test generated tests to validate all schemas contained in the 'rules/boolean' folder."""
     _assert_schema_is_valid(
         valid_schema_filename,
         json_schema_definition_filepath="schemas/rules/boolean_rule.json",
@@ -40,12 +40,11 @@ def test_param_valid_schemas_boolean_operators(valid_schema_filename):
 
 
 @pytest.mark.parametrize(
-    "valid_schema_filename", find_all_json_files("tests/schemas/rules/value")
+    "valid_schema_filename",
+    find_all_json_files("tests/schemas/rules/value"),
 )
 def test_param_valid_schemas_value_operators(valid_schema_filename):
-    """
-    Uses py.test generated tests to validate all schemas contained in the 'rules/value' folder.
-    """
+    """Uses py.test generated tests to validate all schemas contained in the 'rules/value' folder."""
     _assert_schema_is_valid(
         valid_schema_filename,
         json_schema_definition_filepath="schemas/rules/value_rule.json",

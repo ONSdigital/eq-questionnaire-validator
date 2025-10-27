@@ -18,7 +18,8 @@ def test_number_of_decimals():
     }
 
     validator = NumberAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     validator.validate_decimals()
@@ -42,7 +43,8 @@ def test_invalid_single_date_period():
     }
 
     answer_validator = DateAnswerValidator(
-        answer, get_mock_schema_with_data_version("0.0.3")
+        answer,
+        get_mock_schema_with_data_version("0.0.3"),
     )
 
     assert not answer_validator.is_offset_date_valid()
@@ -61,7 +63,7 @@ def test_confirmation_question_q_code():
         {
             "answer_id": "confirmation-1-answer",
             "message": validator.CONFIRMATION_QUESTION_HAS_Q_CODE,
-        }
+        },
     ]
 
     assert expected_error_messages == validator.errors
@@ -81,7 +83,7 @@ def test_data_version_0_0_3_q_code():
         {
             "answer_id": "favourite-lunch",
             "message": validator.DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT,
-        }
+        },
     ]
 
     assert expected_error_messages == validator.errors
