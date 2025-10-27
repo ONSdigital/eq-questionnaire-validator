@@ -8,9 +8,9 @@ from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from app.validators.questions import MutuallyExclusiveQuestionValidator
-from app.validators.schema_validator import SchemaValidator
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.conftest import find_all_json_files
+from tests.helpers.schema_validator import SchemaTestValidator
 from tests.utils import _open_and_load_schema_file
 
 logger = getLogger()
@@ -28,7 +28,7 @@ def test_param_valid_schemas(valid_schema_filename):
         json_to_validate = load(json_file)
 
         validator = QuestionnaireValidator(json_to_validate)
-        schema_validator = SchemaValidator(json_to_validate)
+        schema_validator = SchemaTestValidator(json_to_validate)
 
         schema_validator.validate()
         validator.validate()
