@@ -58,7 +58,7 @@ def test_schema():
         schema = json.load(schema_data)
 
         registry = Registry().with_resources(
-            pairs=SchemaTestValidator.lookup_ref_store().items()
+            pairs=SchemaTestValidator.lookup_ref_store().items(),
         )
         validator = Draft202012Validator(schema, registry=registry)
 

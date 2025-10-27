@@ -16,7 +16,8 @@ def _assert_schema_is_valid(valid_schema_filename, *, json_schema_definition_fil
     with open(valid_schema_filename, encoding="utf8") as json_file:
         for json_fixture in load(json_file):
             schema_validator = SchemaTestValidator(
-                json_fixture["rule"], schema=json_schema_definition_filepath
+                json_fixture["rule"],
+                schema=json_schema_definition_filepath,
             )
             schema_validator.validate()
 
