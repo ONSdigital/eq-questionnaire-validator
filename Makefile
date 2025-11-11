@@ -1,14 +1,20 @@
+RUNNER_ENV_FILE ?= .development.env
+
 .PHONY: build run lint test
-ifneq (,$(wildcard .env))
-  include .env
-  export
+ifneq (,$(wildcard $(RUNNER_ENV_FILE)))
+  include $(RUNNER_ENV_FILE)
+  export $(shell sed 's/=.*//' $(RUNNER_ENV_FILE))
 endif
 
+
+link-development-env:
+	@ln -sf $(RUNNER_ENV_FILE) .env
 
 build:
 	poetry run ./scripts/build.sh
 
-stop-ajv:
+stop-ajv: link-development-env
+	@echo "Stopping AJV on port $(AJV_VALIDATOR_PORT)..."
 	@AJV_VALIDATOR_PORT=$(AJV_VALIDATOR_PORT) npm run stop
 
 start-ajv:
