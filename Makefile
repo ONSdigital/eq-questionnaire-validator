@@ -13,11 +13,11 @@ link-development-env:
 build:
 	poetry run ./scripts/build.sh
 
-stop-ajv: link-development-env
+stop-ajv:
 	@echo "Stopping AJV on port $(AJV_VALIDATOR_PORT)..."
 	@AJV_VALIDATOR_PORT=$(AJV_VALIDATOR_PORT) npm run stop
 
-start-ajv:
+start-ajv: link-development-env
 	npm run start
 
 run: start-ajv
