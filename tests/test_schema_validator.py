@@ -8,8 +8,8 @@ from tests.utils import _open_and_load_schema_file
 
 
 def create_schema_with_answer_id(answer_id):
-    """
-    Utility method that loads a JSON schema file and swaps out an answer Id.
+    """Utility method that loads a JSON schema file and swaps out an answer Id.
+
     :param answer_id: The Id to use for the answer.
     :return: The JSON file with the Id swapped for schema_id
     """
@@ -58,7 +58,7 @@ def test_schema():
         schema = json.load(schema_data)
 
         registry = Registry().with_resources(
-            pairs=SchemaTestValidator.lookup_ref_store().items()
+            pairs=SchemaTestValidator.lookup_ref_store().items(),
         )
         validator = Draft202012Validator(schema, registry=registry)
 

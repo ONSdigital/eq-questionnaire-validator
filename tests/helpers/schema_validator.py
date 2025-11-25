@@ -15,8 +15,7 @@ STRONG_MATCHES: frozenset[str] = frozenset()
 
 
 class SchemaTestValidator(Validator):
-    """
-    Validate JSON data against a schema, resolving $ref references.
+    """Validate JSON data against a schema, resolving $ref references.
 
     Attributes:
         schema (str): The path to the schema file.
@@ -35,10 +34,11 @@ class SchemaTestValidator(Validator):
     """
 
     def __init__(
-        self, schema_element: dict, schema: str = "schemas/questionnaire_v1.json"
+        self,
+        schema_element: dict,
+        schema: str = "schemas/questionnaire_v1.json",
     ):
-        """
-        Initialise the SchemaTestValidator with a schema and schema element.
+        """Initialise the SchemaTestValidator with a schema and schema element.
 
         Args:
             schema (str): The path to the schema file.
@@ -57,8 +57,7 @@ class SchemaTestValidator(Validator):
 
     @staticmethod
     def lookup_ref_store():
-        """
-        Return a store (dict) of schema resources.
+        """Return a store (dict) of schema resources.
 
         Returns:
             store (dict): A dictionary mapping schema $id to Resource objects (json schema).
@@ -77,8 +76,7 @@ class SchemaTestValidator(Validator):
         return store
 
     def validate(self):
-        """
-        Validate the schema_element against the schema.
+        """Validate the schema_element against the schema.
 
         Returns:
             errors (list<dict>): A list of validation errors, empty if valid.
@@ -111,10 +109,10 @@ class SchemaTestValidator(Validator):
 
 
 def by_relevance(
-    weak: frozenset[str] = WEAK_MATCHES, strong: frozenset[str] = STRONG_MATCHES
+    weak: frozenset[str] = WEAK_MATCHES,
+    strong: frozenset[str] = STRONG_MATCHES,
 ) -> Callable[[ValidationError], tuple[int, bool, bool]]:
-    """
-    Return a function that orders validation errors by relevance.
+    """Return a function that orders validation errors by relevance.
 
     Args:
         weak (frozenset[str]): A set of validator names that are considered weak matches.
@@ -136,8 +134,7 @@ def by_relevance(
 
 
 def best_match(errors: list[ValidationError]) -> None | ValidationError:
-    """
-    Return the most relevant validation error from a list of errors.
+    """Return the most relevant validation error from a list of errors.
 
     Args:
         errors (list<ValidationError>): A list of validation errors.

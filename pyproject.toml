@@ -31,7 +31,131 @@ pytest-xdist = "^3.6.1"
 pytest-sugar = "^1.0.0"
 black = "^25.0.0"
 flake8-quotes = "^3.4.0"
+ruff = "^0.14.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+
+allowed-confusables = [
+    "’",  # Cf. https://github.com/astral-sh/ruff/issues/3977
+]
+
+extend-select = [
+    "E4", "E7", "E9", "E5", # On top of the defaults (`E4`, E7`, `E9`, and `F`), enable E5 (Adds line length check - error "E501")
+    "Q",  # flake8-quotes (Q)
+    "B", # flake8-bugbear (B)
+    "A", # flake8-builtins (A)
+    "C4", # flake8-comprehensions (C4)
+    "PIE", # flake8-pie (PIE)
+    "SLF", # flake8-self (SLF)
+    "ARG", # flake8-unused-arguments (ARG)
+    "YTT", # flake8-2020 (YTT)
+    "C", # flake8-comprehensions (C)
+    "DTZ", # flake8-datetimez (DTZ)
+    "S", # flake8-bandit (S)
+    "TID", # flake8-tidy-imports (TID)
+    "ICN", # flake8-import-conventions (ICN)
+    "ISC", # flake8-implicit-str-concat (ISC)
+    "COM", # flake8-commas (COM)
+    "LOG", # flake8-logging (LOG)
+    "G", # flake8-logging-format (G)
+    "EM", # flake8-errmsg (EM)
+    "FBT", # flake8-boolean-trap (FBT)
+    "TD", # flake8-todo (TD)
+    "FA", # flake8-future-annotations (FA)
+    "T20", # flake8-print (T20)
+    "RET", # flake8-return (RET)
+    "E", # pycodestyle Error (E)
+    "W", # pycodestyle Warning (W)
+    "F", # pyflakes (F)
+    "I", # isort (I)
+    "N", # pep8-naming (N)
+    "RUF", # Ruff-specific rules (RUF)
+    "UP", # pyupgrade (UP)
+    "ERA", # eradicate (ERA)
+    "FURB", # refurb (FURB)
+    "TRY", # tryceratops (TRY)
+    "FLY", # flynt (FLY)
+    "PERF", # Perflint (PERF)
+    "SIM",    # flake8-simplify
+    "D",      # pydocstyle - Enforce existing docstrings only
+    "C90",    # mccabe
+]
+
+ignore = [
+    # Remove E501 when ruff supports all black rules
+    "E501",
+    # Allow TODO comments without a listed author
+    "TD002",
+    # Allow TODO comments without a linked issue
+    "TD003",
+    # Hide 'B019 @lru_cache warning' - to be reviewed
+    "B019",
+    # Hide 'FA102 Missing `from __future__ import annotations`, but uses PEP 604 union' - to be reviewed
+    "FA102",
+    # Hide 'RET503 Missing explicit `return` at the end of function able to return non-`None` value' - to be reviewed
+    "RET503",
+    # Hide 'RET504 Unnecessary assignment to `ids` before `return` statement' - to be reviewed
+    "RET504",
+    # Hide 'RUF012 Mutable class attributes should be annotated with `typing.ClassVar`' - to be reviewed
+    "RUF012",
+    # Hide 'UP035 Import from `collections.abc` instead: `Mapping`' - to be reviewed
+    "UP035",
+    # Hide 'B024 `Validator` is an abstract base class, but it has no abstract methods or properties' - to be reviewed
+    "B024",
+    # Hide 'TRY300 Consider moving this statement to an `else` block' - to be reviewed
+    "TRY300",
+    # Hide 'RUF005 Consider iterable unpacking instead of concatenation' - to be reviewed
+    "RUF005",
+    # Hide 'RUF015 Prefer `next(iter(operator["map"][0].values()))` over single element slice' - to be reviewed
+    "RUF015",
+    # Hide 'PERF401 Use a list comprehension to create a transformed list' - to be reviewed
+    "PERF401",
+    # Hide 'DTZ007 Naive datetime constructed using `datetime.datetime.strptime()` without %z' - to be reviewed
+    "DTZ007",
+    # Hide 'DTZ003 `datetime.datetime.utcnow()` used' - to be reviewed
+    "DTZ003",
+    # Hide 'SIM102 Use a single `if` statement instead of nested `if` statements' - to be reviewed
+    "SIM102",
+    # Hide 'S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.' - to be reviewed
+    "S310",
+    # Hide 'B008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable' - to be reviewed
+    "B008",
+    # Hide 'C409 Unnecessary list literal passed to `tuple()` (rewrite as a tuple literal)' - to be revisited
+    "C409",
+    # Hide 'C405 Unnecessary list literal (rewrite as a set literal)' - to be revisited
+    "C405",
+    # Hide 'D100 Missing docstring in public module' - to be revisited
+    "D100",
+    # Hide 'D101 Missing docstring in public class' - to be revisited
+    "D101",
+    # Hide 'D102 Missing docstring in public method' - to be revisited
+    "D102",
+    # Hide 'D103 Missing docstring in public function' - to be revisited
+    "D103",
+    # Hide 'D104 Missing docstring in public package' - to be revisited
+    "D104",
+    # Hide 'D107 Missing docstring in `__init__`' - to be revisited
+    "D107",
+
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    # Allow use of assert statements in tests
+    "S101",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

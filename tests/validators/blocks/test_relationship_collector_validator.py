@@ -14,7 +14,7 @@ def test_invalid_relationship_multiple_answers():
         {
             "message": validator.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS,
             "block_id": "relationships",
-        }
+        },
     ]
 
     validator.validate()
@@ -33,7 +33,7 @@ def test_invalid_relationship_wrong_answer_type():
         {
             "message": validator.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE,
             "block_id": "relationships",
-        }
+        },
     ]
 
     validator.validate_answer_type()

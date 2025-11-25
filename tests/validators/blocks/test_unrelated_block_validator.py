@@ -14,7 +14,7 @@ def test_invalid_actions():
         {
             "message": validator.ACTION_PARAMS_MISSING,
             "block_id": "related-to-anyone-else",
-        }
+        },
     ]
 
     validator.validate()

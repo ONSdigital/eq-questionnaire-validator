@@ -27,10 +27,11 @@ class QuestionValidator(Validator):
             and self.answers[-1]["type"] == "Checkbox"
             and len(self.answers[-1]["options"]) == 1
         ):
-            return None
+            return
 
         for answer in self.answers:
             if not answer.get("label"):
                 self.add_error(
-                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS, answer_id=answer["id"]
+                    self.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS,
+                    answer_id=answer["id"],
                 )

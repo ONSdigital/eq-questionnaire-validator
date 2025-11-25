@@ -19,12 +19,11 @@ configure(logger_factory=LoggerFactory())
 
 
 @pytest.mark.parametrize(
-    "valid_schema_filename", find_all_json_files("tests/schemas/valid")
+    "valid_schema_filename",
+    find_all_json_files("tests/schemas/valid"),
 )
 def test_param_valid_schemas(valid_schema_filename):
-    """
-    Uses py.test generated tests to validate all schemas contained in the 'valid' folder.
-    """
+    """Uses py.test generated tests to validate all schemas contained in the 'valid' folder."""
     with open(valid_schema_filename, encoding="utf8") as json_file:
         json_to_validate = load(json_file)
 
@@ -81,7 +80,7 @@ def test_invalid_string_transforms():
             "differences": {"answer2"},
         },
         {
-            "message": PlaceholderValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF
+            "message": PlaceholderValidator.FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF,
         },
         {"message": PlaceholderValidator.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN},
     ]
@@ -146,9 +145,7 @@ def test_duplicate_answer_ids():
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "block-and-question"},
     ]
 
-    assert all(
-        {expected_error in validator.errors for expected_error in expected_errors}
-    )
+    assert all(expected_error in validator.errors for expected_error in expected_errors)
 
 
 def test_inconsistent_ids_in_variants():
@@ -196,7 +193,7 @@ def test_inconsistent_default_answers_in_variants():
             "block_id": "block-2",
             "section_id": "section",
             "question_ids": {"question-2"},
-        }
+        },
     ] == validator.errors
 
 
@@ -212,9 +209,7 @@ def test_invalid_list_collector_duplicate_ids_between_list_collectors():
         {"message": error_messages.DUPLICATE_ID_FOUND, "id": "edit-person"},
     ]
 
-    assert all(
-        {expected_error in validator.errors for expected_error in expected_errors}
-    )
+    assert all(expected_error in validator.errors for expected_error in expected_errors)
 
 
 def test_inconsistent_types_in_variants():
@@ -350,7 +345,7 @@ def test_invalid_answer_type_for_question_summary_concatenation():
             "message": error_messages.UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE,
             "answer_id": "radio-answer",
             "section_id": "default-section",
-        }
+        },
     ]
 
     validator.validate()
@@ -390,7 +385,7 @@ def test_introduction_block_not_in_schema():
 
 
 def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
-    """Asserts `invalid` when a value source references an invalid calculated or grand calculated summary id"""
+    """Asserts `invalid` when a value source references an invalid calculated or grand calculated summary id."""
     filename = "schemas/invalid/test_invalid_value_source_calculated_and_grand_calculated_summary.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
@@ -413,9 +408,9 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
 
 
 def test_answer_as_source_referenced_before_created():
-    """
-    The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block,
-    resulting in duplicated expected errors.
+    """The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block.
+
+    Results in duplicated expected errors.
     """
     filename = "schemas/invalid/test_invalid_answer_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
