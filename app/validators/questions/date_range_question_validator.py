@@ -15,9 +15,10 @@ class DateRangeQuestionValidator(QuestionValidator):
         self.period_limits = self.question.get("period_limits", {})
 
     def validate(self):
-        """
+        """Validate the date range question.
+
         If period_limits object is present in the DateRange question validates that a date range
-        does not have a negative period and days can not be used to define limits for yyyy-mm date ranges
+        does not have a negative period and days can not be used to define limits for yyyy-mm date ranges.
         """
         super().validate()
         self.validate_range()
@@ -30,10 +31,12 @@ class DateRangeQuestionValidator(QuestionValidator):
 
             # Get minimum and maximum possible dates
             minimum_date = DateAnswerValidator.get_relative_date(
-                example_date, self.period_limits["minimum"]
+                example_date,
+                self.period_limits["minimum"],
             )
             maximum_date = DateAnswerValidator.get_relative_date(
-                example_date, self.period_limits["maximum"]
+                example_date,
+                self.period_limits["maximum"],
             )
 
             if minimum_date > maximum_date:
@@ -43,10 +46,12 @@ class DateRangeQuestionValidator(QuestionValidator):
         first_answer_type = self.answers[0]["type"]
 
         has_days_limit = "days" in self.period_limits.get(
-            "minimum", []
+            "minimum",
+            [],
         ) or "days" in self.period_limits.get("maximum", [])
         has_months_limit = "months" in self.period_limits.get(
-            "minimum", []
+            "minimum",
+            [],
         ) or "months" in self.period_limits.get("maximum", [])
 
         if first_answer_type == "MonthYearDate" and has_days_limit:

@@ -9,7 +9,9 @@ def test_answer_code_validation_incorrect_data_version():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.1", questionnaire_schema.schema["answer_codes"], questionnaire_schema
+        "0.0.1",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()
@@ -110,7 +112,7 @@ def test_duplicate_answer_id_for_answer_code():
         {
             "message": validator.DUPLICATE_ANSWER_ID_FOUND,
             "duplicates": ["name-answer"],
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -158,7 +160,7 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
         {
             "message": validator.ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA,
             "answer_codes.answer_id": "name-answer-3",
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -210,7 +212,7 @@ def test_answer_value_set_for_answer_without_answer_options():
                 "code": "3",
             },
             "answer_id": "name-answer",
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -222,13 +224,15 @@ def test_answer_code_not_set_for_answer_found_in_schema():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.3", questionnaire_schema.schema["answer_codes"], questionnaire_schema
+        "0.0.3",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()
 
     expected_errors = [
-        {"message": validator.MISSING_ANSWER_CODE, "answer_id": "name-answer-2"}
+        {"message": validator.MISSING_ANSWER_CODE, "answer_id": "name-answer-2"},
     ]
 
     assert validator.errors == expected_errors
@@ -531,7 +535,7 @@ def test_answer_code_with_duplicate_option_answer_values():
                 },
             ],
             "allowed_values": ["None", "Ham & Cheese", "Ham", "Pepperoni", "Other"],
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -583,7 +587,7 @@ def test_incorrect_answer_value_set_in_answer_code():
                 "answer_value": "Pepperonis",
                 "code": "1d",
             },
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -628,7 +632,7 @@ def test_answer_codes_must_be_set_at_parent_level_for_dynamic_options():
                     "code": "1a",
                 },
             ],
-        }
+        },
     ]
 
     assert validator.errors == expected_errors
@@ -640,7 +644,9 @@ def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = AnswerCodeValidator(
-        "0.0.3", questionnaire_schema.schema["answer_codes"], questionnaire_schema
+        "0.0.3",
+        questionnaire_schema.schema["answer_codes"],
+        questionnaire_schema,
     )
 
     validator.validate()
@@ -687,7 +693,7 @@ def test_invalid_value_in_answer_code_for_dynamic_options():
                 "answer_value": "No favourite",
                 "code": "1a",
             },
-        }
+        },
     ]
 
     assert validator.errors == expected_errors

@@ -48,18 +48,18 @@ class NumberAnswerValidator(AnswerValidator):
         if self.questionnaire_schema:
             # Validate referred numeric answer exists (skip further tests for answer if error is returned)
             referred_errors = self.validate_referred_numeric_answer(
-                self.questionnaire_schema.numeric_answer_ranges
+                self.questionnaire_schema.numeric_answer_ranges,
             )
 
             if referred_errors:
-                return
+                return None
 
             # Validate numeric answer has a positive range of possible responses
             self.validate_numeric_range(self.questionnaire_schema.numeric_answer_ranges)
 
             # Validate referred numeric answer decimals
             self.validate_referred_numeric_answer_decimals(
-                self.questionnaire_schema.numeric_answer_ranges
+                self.questionnaire_schema.numeric_answer_ranges,
             )
 
             self.validate_value_in_limits()
@@ -88,13 +88,16 @@ class NumberAnswerValidator(AnswerValidator):
 
         if isinstance(min_value, int) and min_value < MIN_NUMBER:
             self.add_error(
-                self.MINIMUM_LESS_THAN_LIMIT, value=min_value, limit=MIN_NUMBER
+                self.MINIMUM_LESS_THAN_LIMIT,
+                value=min_value,
+                limit=MIN_NUMBER,
             )
         elif isinstance(min_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=min_value, answer_ranges=answer_ranges
+                    value_source=min_value,
+                    answer_ranges=answer_ranges,
                 )
             )
             if referred_answer["min"] < MIN_NUMBER:
@@ -106,13 +109,16 @@ class NumberAnswerValidator(AnswerValidator):
 
         if isinstance(max_value, int) and max_value > MAX_NUMBER:
             self.add_error(
-                self.MAXIMUM_GREATER_THAN_LIMIT, value=max_value, limit=MAX_NUMBER
+                self.MAXIMUM_GREATER_THAN_LIMIT,
+                value=max_value,
+                limit=MAX_NUMBER,
             )
         elif isinstance(max_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
             referred_answer = (
                 self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=max_value, answer_ranges=answer_ranges
+                    value_source=max_value,
+                    answer_ranges=answer_ranges,
                 )
             )
             if referred_answer["max"] > MAX_NUMBER:
@@ -141,8 +147,8 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
     def validate_referred_numeric_answer(self, answer_ranges):
-        """
-        Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema
+        """Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema.
+
         If either of the above is true then it will not have been given a value by _get_numeric_range_values
         """
         errors_found = False

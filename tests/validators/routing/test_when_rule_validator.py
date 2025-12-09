@@ -12,17 +12,24 @@ from app.validators.routing.types import (
 from app.validators.rules.rule_validator import RulesValidator
 from tests.conftest import get_mock_schema
 
+# pylint: disable=duplicate-code
+
 ORIGIN_ID = "block-id"
 
 default_answer_with_context = {
-    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
+    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}},
 }
 
 
 def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None):
     return RulesValidator(
-        rule, ORIGIN_ID, get_mock_schema(questionnaire_schema, answers_with_context)
+        rule,
+        ORIGIN_ID,
+        get_mock_schema(questionnaire_schema, answers_with_context),
     )
+
+
+# pylint: enable=duplicate-code
 
 
 @pytest.mark.parametrize(
@@ -44,14 +51,17 @@ def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None)
 )
 @pytest.mark.parametrize("operator_name", ["<", "<=", ">", ">="])
 def test_operator_argument_type_mismatch(
-    first_argument, second_argument, types, operator_name
+    first_argument,
+    second_argument,
+    types,
+    operator_name,
 ):
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(
         rule,
         answers_with_context={
-            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
+            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}},
         },
     )
     validator.validate()
@@ -80,14 +90,17 @@ def test_operator_argument_type_mismatch(
 )
 @pytest.mark.parametrize("operator_name", ["!=", "=="])
 def test_equality_operator_argument_type_mismatch(
-    first_argument, second_argument, types, operator_name
+    first_argument,
+    second_argument,
+    types,
+    operator_name,
 ):
     rule = {operator_name: [first_argument, second_argument]}
 
     validator = get_validator(
         rule,
         answers_with_context={
-            "string-answer": {"answer": {"id": "answer-1", "type": "TextField"}}
+            "string-answer": {"answer": {"id": "answer-1", "type": "TextField"}},
         },
     )
     validator.validate()
@@ -104,7 +117,9 @@ def test_equality_operator_argument_type_mismatch(
 @pytest.mark.parametrize("first_argument, second_argument", [(1, None), (None, 1)])
 @pytest.mark.parametrize("operator_name", ["!=", "=="])
 def test_equality_operator_allows_null_mismatch(
-    first_argument, second_argument, operator_name
+    first_argument,
+    second_argument,
+    operator_name,
 ):
     rule = {operator_name: [first_argument, second_argument]}
 
@@ -141,13 +156,13 @@ def test_comparison_operator_invalid_argument_types(operator_name):
         operator_name: [
             {"source": "answers", "identifier": "object-answer"},
             {"line1": "7 Evelyn Street"},
-        ]
+        ],
     }
 
     validator = get_validator(
         rule,
         answers_with_context={
-            "object-answer": {"answer": {"id": "object-answer", "type": "Address"}}
+            "object-answer": {"answer": {"id": "object-answer", "type": "Address"}},
         },
     )
     validator.validate()
@@ -192,7 +207,7 @@ def test_in_operator_first_argument_is_not_array():
     validator = get_validator(
         rule,
         answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}}
+            "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
         },
     )
     validator.validate()
@@ -233,17 +248,17 @@ def test_any_in_all_in_operators_arguments_not_arrays(operator_name):
         operator_name: [
             {"source": "answers", "identifier": "string-answer-1"},
             {"source": "answers", "identifier": "string-answer-2"},
-        ]
+        ],
     }
 
     validator = get_validator(
         rule,
         answers_with_context={
             "string-answer-1": {
-                "answer": {"id": "string-answer-1", "type": "TextField"}
+                "answer": {"id": "string-answer-1", "type": "TextField"},
             },
             "string-answer-2": {
-                "answer": {"id": "string-answer-2", "type": "TextField"}
+                "answer": {"id": "string-answer-2", "type": "TextField"},
             },
         },
     )

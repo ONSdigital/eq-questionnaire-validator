@@ -23,16 +23,14 @@ def find_duplicates(values: Iterable[T]) -> list[T]:
 
 
 def find_dictionary_duplicates(dictionary: dict[K, T]) -> list[K]:
-    """
-    Find keys with duplicate values
-    """
+    """Find keys with duplicate values."""
     value_counts = collections.Counter(dictionary.values())
     return [key for key, value in dictionary.items() if value_counts[value] > 1]
 
 
 def get_object_containing_key(data, key_name):
-    """
-    Get all dicts that contain `key_name` within a piece of data
+    """Get all dicts that contain `key_name` within a piece of data.
+
     :param data: the data to search
     :param key_name: the key to find
     :return: list of tuples containing the json path and matched object
@@ -73,8 +71,8 @@ def get_element_value(key, match):
 
 
 def json_path_position(match) -> tuple[int, ...]:
-    """
-    Given a match, whose json path will look like 'sections[x].groups[y].blocks[z]...'
+    """Given a match, whose json path will look like 'sections[x].groups[y].blocks[z]...'.
+
     return a tuple of (x, y, z, ...) to represent the position of the match within the schema
     """
     path = str(match.full_path)
@@ -106,7 +104,7 @@ class QuestionnaireSchema:
         self.matches = [
             *parse("$..blocks[*]").find(self.schema),
             *parse("$..[add_block, edit_block, add_or_edit_block, remove_block]").find(
-                self.schema
+                self.schema,
             ),
             *parse("$..repeating_blocks[*]").find(self.schema),
         ]
@@ -117,10 +115,10 @@ class QuestionnaireSchema:
         self.block_ids = list(self.blocks_by_id.keys())
         self.block_ids_without_sub_blocks = [block["id"] for block in self.blocks]
         self.calculated_summary_block_ids = self.get_block_ids_for_block_type(
-            "CalculatedSummary"
+            "CalculatedSummary",
         )
         self.grand_calculated_summary_block_ids = self.get_block_ids_for_block_type(
-            "GrandCalculatedSummary"
+            "GrandCalculatedSummary",
         )
         self.sections = [
             match.value for match in ext_parse("$.sections[*]").find(self.schema)
@@ -147,7 +145,7 @@ class QuestionnaireSchema:
         self.list_collectors = [
             match.value
             for match in ext_parse('$..blocks[?(@.type=="ListCollector")]').find(
-                self.schema
+                self.schema,
             )
         ]
         self.list_collector_names = [
@@ -174,7 +172,7 @@ class QuestionnaireSchema:
             if dynamic_answer["values"]["source"] == "list":
                 list_name = dynamic_answer["values"]["identifier"]
                 answer_id_to_list.update(
-                    {answer["id"]: list_name for answer in dynamic_answer["answers"]}
+                    {answer["id"]: list_name for answer in dynamic_answer["answers"]},
                 )
         return answer_id_to_list
 
@@ -184,7 +182,8 @@ class QuestionnaireSchema:
 
         for answer in ext_parse("$..answers[*]").find(self.schema):
             numeric_answer_ranges[answer.value["id"]] = self._get_numeric_range_values(
-                answer.value, numeric_answer_ranges
+                answer.value,
+                numeric_answer_ranges,
             )
 
         return numeric_answer_ranges
@@ -272,10 +271,10 @@ class QuestionnaireSchema:
 
     @cached_property
     def ids(self):
-        """
-        question_id & answer_id should be globally unique with some exceptions:
-            - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
-            - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
+        """question_id & answer_id should be globally unique with some exceptions.
+
+        - within a block, ids can be duplicated across variants, but must still be unique outside of the block.
+        - answer_ids must be duplicated across add / edit blocks on list collectors which populate the same list.
         """
         unique_ids_per_block = defaultdict(set)
         all_block_ids = []
@@ -308,9 +307,9 @@ class QuestionnaireSchema:
 
     @cached_property
     def id_paths(self):
-        """
-        These values will be returned with the json path to them through the object e.g.
-            - 'sections.[0].groups[0].blocks[1].question_variants[0].question.question-2'
+        """These values will be returned with the json path to them through the object e.g.
+
+        - 'sections.[0].groups[0].blocks[1].question_variants[0].question.question-2'
 
         Returns: generator yielding (path, value) tuples
         """
@@ -393,7 +392,7 @@ class QuestionnaireSchema:
             return [
                 match.value
                 for match in ext_parse(f"$..blocks[?({final_condition})]").find(
-                    self.schema
+                    self.schema,
                 )
             ]
         return self.blocks
@@ -409,7 +408,7 @@ class QuestionnaireSchema:
             return [
                 match.value
                 for match in ext_parse(
-                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]'
+                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]',
                 ).find(self.schema)
             ]
         return self.blocks
@@ -418,14 +417,17 @@ class QuestionnaireSchema:
     def has_single_driving_question(self, list_name):
         return (
             len(
-                self.get_blocks(type="ListCollectorDrivingQuestion", for_list=list_name)
+                self.get_blocks(
+                    type="ListCollectorDrivingQuestion",
+                    for_list=list_name,
+                ),
             )
             == 1
         )
 
     @staticmethod
     def get_all_questions_for_block(block):
-        """Get all questions on a block including variants"""
+        """Get all questions on a block including variants."""
         questions = []
 
         for variant in block.get("question_variants", []):
@@ -439,6 +441,7 @@ class QuestionnaireSchema:
 
     @lru_cache
     def get_list_collector_answer_ids(self, block_id):
+        """Get all answer IDs for a list collector block."""
         block = self.blocks_by_id[block_id]
         if "add_or_edit_block" in block:
             return self.get_all_answer_ids(block["add_or_edit_block"]["id"])
@@ -475,10 +478,7 @@ class QuestionnaireSchema:
         }
 
     def get_list_name_for_answer_id(self, answer_id: str) -> str | None:
-        """
-        If the answer is dynamic or in a repeating block or section, return the name of the list it repeats over
-        otherwise None
-        """
+        """If the answer is dynamic or in a repeating block or section, return the name of the list it repeats over otherwise None."""
         if list_name := self.list_names_by_dynamic_answer_id.get(answer_id):
             return list_name
         block = self.get_block_by_answer_id(answer_id)
@@ -536,10 +536,16 @@ class QuestionnaireSchema:
 
         return {
             "min": self._get_answer_minimum(
-                min_value, decimal_places, exclusive, answer_ranges
+                min_value,
+                decimal_places,
+                exclusive,
+                answer_ranges,
             ),
             "max": self._get_answer_maximum(
-                max_value, decimal_places, exclusive, answer_ranges
+                max_value,
+                decimal_places,
+                exclusive,
+                answer_ranges,
             ),
             "decimal_places": decimal_places,
             "min_referred": min_referred,
@@ -548,7 +554,11 @@ class QuestionnaireSchema:
         }
 
     def _get_answer_minimum(
-        self, defined_minimum, decimal_places, exclusive, answer_ranges
+        self,
+        defined_minimum,
+        decimal_places,
+        exclusive,
+        answer_ranges,
     ):
         minimum_value = self._get_numeric_value(defined_minimum, 0, answer_ranges)
         if exclusive:
@@ -556,10 +566,16 @@ class QuestionnaireSchema:
         return minimum_value
 
     def _get_answer_maximum(
-        self, defined_maximum, decimal_places, exclusive, answer_ranges
+        self,
+        defined_maximum,
+        decimal_places,
+        exclusive,
+        answer_ranges,
     ):
         maximum_value = self._get_numeric_value(
-            defined_maximum, MAX_NUMBER, answer_ranges
+            defined_maximum,
+            MAX_NUMBER,
+            answer_ranges,
         )
         if exclusive:
             return maximum_value - (1 / 10**decimal_places)
@@ -580,15 +596,16 @@ class QuestionnaireSchema:
 
     @staticmethod
     def get_calculation_block_ids(*, block: Mapping, source_type: str) -> list[str]:
-        """
-        Returns the list of block ids of type source_type used in a calculation object,
+        """Returns the list of block ids of type source_type used in a calculation object.
+
         e.g. answers for a calculated summary, or calculated summaries for a grand calculated summary
         """
         if block["calculation"].get("answers_to_calculate"):
             return block["calculation"]["answers_to_calculate"]
 
         value_sources = get_object_containing_key(
-            block["calculation"]["operation"], "source"
+            block["calculation"]["operation"],
+            "source",
         )
 
         return [
@@ -598,27 +615,31 @@ class QuestionnaireSchema:
         ]
 
     def get_answer_ids_for_value_source(
-        self, value_source: Mapping[str, str]
+        self,
+        value_source: Mapping[str, str],
     ) -> list[str]:
-        """
-        Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer source
-        or the list of included answer ids in the case of a calculated or grand calculated summary
+        """Gets the list of answer_ids relating to the provided value source.
+
+        Either the identifier if its an answer source or the list of included answer ids in the case of a calculated or grand calculated summary
         """
         source = value_source["source"]
         identifier = value_source["identifier"]
 
         if source == "calculated_summary":
             return self.get_calculation_block_ids(
-                block=self.get_block(identifier), source_type="answers"
+                block=self.get_block(identifier),
+                source_type="answers",
             )
         if source == "grand_calculated_summary":
             return [
                 answer_id
                 for calculated_summary_id in self.get_calculation_block_ids(
-                    block=self.get_block(identifier), source_type="calculated_summary"
+                    block=self.get_block(identifier),
+                    source_type="calculated_summary",
                 )
                 for answer_id in self.get_calculation_block_ids(
-                    block=self.get_block(calculated_summary_id), source_type="answers"
+                    block=self.get_block(calculated_summary_id),
+                    source_type="answers",
                 )
             ]
         return [identifier]
@@ -658,7 +679,10 @@ class QuestionnaireSchema:
         return parent_section and self.is_repeating_section(parent_section["id"])
 
     def get_numeric_value_for_value_source(
-        self, *, value_source: Mapping[str, str], answer_ranges: Mapping[str, Mapping]
+        self,
+        *,
+        value_source: Mapping[str, str],
+        answer_ranges: Mapping[str, Mapping],
     ) -> Mapping | None:
         referred_answer = None
         answers_to_calculate = self.get_answer_ids_for_value_source(value_source)

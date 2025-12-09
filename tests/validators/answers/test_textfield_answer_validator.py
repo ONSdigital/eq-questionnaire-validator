@@ -17,9 +17,9 @@ def test_textfield_validator():
 
     validator.validate()
 
-    assert [
-        {"message": validator.INVALID_SUGGESTION_URL, "answer_id": "favourite-lunch"}
-    ] == validator.errors
+    assert validator.errors == [
+        {"message": validator.INVALID_SUGGESTION_URL, "answer_id": "favourite-lunch"},
+    ]
 
 
 def test_textfield_validator_success():

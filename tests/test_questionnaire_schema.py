@@ -13,7 +13,8 @@ def test_get_blocks():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     driving_question_blocks = questionnaire_schema.get_blocks(
-        type="ListCollectorDrivingQuestion", for_list="people"
+        type="ListCollectorDrivingQuestion",
+        for_list="people",
     )
 
     assert len(driving_question_blocks) == 1
@@ -26,7 +27,9 @@ def test_get_other_blocks():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     other_list_collectors = questionnaire_schema.get_other_blocks(
-        block_id_to_filter="list-collector", type="ListCollector", for_list="people"
+        block_id_to_filter="list-collector",
+        type="ListCollector",
+        for_list="people",
     )
 
     assert len(other_list_collectors) == 1
@@ -62,7 +65,7 @@ def test_questions_with_context():
                             {"label": "Yes", "value": "Yes"},
                             {"label": "No", "value": "No"},
                         ],
-                    }
+                    },
                 ],
             },
             {"section": "section", "block": "block-1", "group_id": "group"},
@@ -81,7 +84,7 @@ def test_questions_with_context():
                             {"label": "Yes", "value": "Yes"},
                             {"label": "No", "value": "No"},
                         ],
-                    }
+                    },
                 ],
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
@@ -100,7 +103,7 @@ def test_questions_with_context():
                             {"label": "Yes", "value": "Yes"},
                             {"label": "No", "value": "No"},
                         ],
-                    }
+                    },
                 ],
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
@@ -259,9 +262,9 @@ def test_answers_with_context():
                                 "identifier": "supermarket-name",
                                 "source": "answers",
                             },
-                        }
+                        },
                     ],
-                    "text": "How many days a week you shop " "at {transformed_value}",
+                    "text": "How many days a week you shop at {transformed_value}",
                 },
                 "mandatory": True,
                 "maximum": {"value": 7},
@@ -302,9 +305,9 @@ def test_answers_with_context():
                                 "identifier": "supermarket-name",
                                 "source": "answers",
                             },
-                        }
+                        },
                     ],
-                    "text": "Percentage of " "shopping at " "{transformed_value}",
+                    "text": "Percentage of shopping at {transformed_value}",
                 },
                 "mandatory": False,
                 "maximum": {"value": 100},
@@ -335,7 +338,7 @@ def test_answers_with_context():
         "set-maximum": {
             "answer": {
                 "decimal_places": 2,
-                "description": "Maximum amount of spending at this " "supermarket",
+                "description": "Maximum amount of spending at this supermarket",
                 "id": "set-maximum",
                 "label": "Maximum amount of spending",
                 "mandatory": True,
@@ -458,7 +461,7 @@ def test_answers_method():
                             "identifier": "supermarket-name",
                             "source": "answers",
                         },
-                    }
+                    },
                 ],
                 "text": "Percentage of shopping at {transformed_value}",
             },
@@ -477,7 +480,7 @@ def test_answers_method():
                             "identifier": "supermarket-name",
                             "source": "answers",
                         },
-                    }
+                    },
                 ],
                 "text": "How many days a week you shop at {transformed_value}",
             },
@@ -512,7 +515,7 @@ def test_get_first_answer_in_block_dynamic_answers():
                 {
                     "placeholder": "transformed_value",
                     "value": {"source": "answers", "identifier": "supermarket-name"},
-                }
+                },
             ],
         },
         "id": "percentage-of-shopping",

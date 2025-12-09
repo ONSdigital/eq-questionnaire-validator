@@ -40,7 +40,7 @@ def test_no_answer_label_multiple_answers():
             "message": validator.ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS,
             "answer_id": "number-2",
             "question_id": "some-question",
-        }
+        },
     ]
 
     assert expected_error_messages == validator.errors
@@ -68,7 +68,7 @@ def test_no_answer_label_mutually_exclusive():
                     {
                         "label": "None of the these apply",
                         "value": "None of the these apply",
-                    }
+                    },
                 ],
                 "type": "Checkbox",
             },
@@ -100,7 +100,7 @@ def test_no_answer_label_two_answers_last_answer_single_checkbox():
                 "id": "age-estimate",
                 "mandatory": False,
                 "options": [
-                    {"label": "This is an estimate", "value": "This is an estimate"}
+                    {"label": "This is an estimate", "value": "This is an estimate"},
                 ],
                 "type": "Checkbox",
             },

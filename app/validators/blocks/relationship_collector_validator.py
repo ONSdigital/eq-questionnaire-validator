@@ -45,6 +45,7 @@ class RelationshipCollectorValidator(BlockValidator):
     def validate_unrelated_block(self):
         if "unrelated_block" in self.block:
             block_validator = UnrelatedBlockValidator(
-                self.block["unrelated_block"], self.questionnaire_schema
+                self.block["unrelated_block"],
+                self.questionnaire_schema,
             )
             self.errors += block_validator.validate()

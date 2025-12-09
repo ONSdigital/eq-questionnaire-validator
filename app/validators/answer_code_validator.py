@@ -78,7 +78,8 @@ class AnswerCodeValidator(Validator):
             if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
                 if answer_id in self.answer_codes_answer_ids:
                     self.add_error(
-                        self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR, answer_id=answer_id
+                        self.INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR,
+                        answer_id=answer_id,
                     )
                 continue
 
@@ -132,7 +133,8 @@ class AnswerCodeValidator(Validator):
                     values=values,
                 )
                 self.validate_incorrect_values_in_answer_options(
-                    answer_codes_for_options=answer_codes_for_options, values=values
+                    answer_codes_for_options=answer_codes_for_options,
+                    values=values,
                 )
 
             else:
@@ -147,7 +149,11 @@ class AnswerCodeValidator(Validator):
                         )
 
     def validate_missing_answer_codes_for_answer_options(
-        self, answer, answer_id, answer_codes_for_options, values
+        self,
+        answer,
+        answer_id,
+        answer_codes_for_options,
+        values,
     ):
         if len(values) != len(answer_codes_for_options) and all(
             "answer_value" in answer_code for answer_code in answer_codes_for_options
@@ -182,7 +188,9 @@ class AnswerCodeValidator(Validator):
                 )
 
     def validate_incorrect_values_in_answer_options(
-        self, answer_codes_for_options, values
+        self,
+        answer_codes_for_options,
+        values,
     ):
         answer_values = set()
         for answer_code in answer_codes_for_options:

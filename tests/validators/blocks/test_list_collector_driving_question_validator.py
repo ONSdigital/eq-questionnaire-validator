@@ -17,7 +17,7 @@ def test_invalid_driving_question_multiple_driving_questions():
             "message": validator.MULTIPLE_DRIVING_QUESTIONS_FOR_LIST,
             "block_id": "anyone-usually-live-at",
             "for_list": "people",
-        }
+        },
     ]
 
     assert expected_error_messages == validator.validate()

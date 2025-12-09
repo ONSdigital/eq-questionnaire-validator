@@ -9,7 +9,7 @@ from tests.conftest import get_mock_schema
 ORIGIN_ID = "block-id"
 
 default_answer_with_context = {
-    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}}
+    "string-answer": {"answer": {"id": "string-answer", "type": "TextField"}},
 }
 
 
@@ -79,7 +79,9 @@ def test_validate_options(operator_name, first_argument, second_argument):
     ],
 )
 def test_validate_options_null_value_is_valid(
-    operator_name, first_argument, second_argument
+    operator_name,
+    first_argument,
+    second_argument,
 ):
     rule = {operator_name: [first_argument, second_argument]}
 
@@ -103,15 +105,15 @@ def test_validate_options_multiple_errors():
         "in": [
             {"source": "answers", "identifier": "string-answer"},
             ["Maybe", "Not sure"],
-        ]
+        ],
     }
 
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
-        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}}
+        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
     }
     questionnaire_schema.answer_id_to_option_values_map = {
-        "string-answer": ["Yes", "No"]
+        "string-answer": ["Yes", "No"],
     }
     validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
     validator.validate()
@@ -138,7 +140,8 @@ def test_validate_date_operator_non_date_answer():
     date_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context
+        date_operator,
+        answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -153,11 +156,12 @@ def test_validate_date_operator_non_date_answer():
 
 def test_validate_date_operator_with_offset():
     date_operator = {
-        "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}]
+        "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}],
     }
 
     validator = get_validator(
-        date_operator, answers_with_context=default_answer_with_context
+        date_operator,
+        answers_with_context=default_answer_with_context,
     )
     validator.validate()
 
@@ -177,10 +181,10 @@ def test_validate_nested_date_operator_non_date_answer():
                 "==": [
                     {"date": [{"source": "answers", "identifier": "string-answer"}]},
                     {"date": ["2021-01-01"]},
-                ]
+                ],
             },
             {"==": [{"source": "answers", "identifier": "string-answer"}, "Yes"]},
-        ]
+        ],
     }
 
     validator = get_validator(rule, answers_with_context=default_answer_with_context)
@@ -201,7 +205,7 @@ def test_validate_count_operator_non_checkbox_answer():
     validator = get_validator(
         count_operator,
         answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
     )
     validator.validate()
@@ -224,7 +228,7 @@ def test_validate_sum_operator():
     validator = get_validator(
         sum_operator,
         answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}}
+            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
     )
     validator.validate()
@@ -248,10 +252,10 @@ def test_validate_nested_sum_operator():
                 "+": [
                     {"source": "answers", "identifier": "array-answer"},
                     {"source": "answers", "identifier": "checkbox-answer"},
-                ]
+                ],
             },
             {"source": "answers", "identifier": "number-answer"},
-        ]
+        ],
     }
 
     validator = get_validator(
@@ -259,7 +263,7 @@ def test_validate_nested_sum_operator():
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
             "checkbox-answer": {
-                "answer": {"id": "checkbox-answer", "type": "Checkbox"}
+                "answer": {"id": "checkbox-answer", "type": "Checkbox"},
             },
             "number-answer": {"answer": {"id": "array-answer", "type": "Number"}},
         },
@@ -273,7 +277,7 @@ def test_validate_nested_sum_operator():
                 "+": [
                     {"identifier": "array-answer", "source": "answers"},
                     {"identifier": "checkbox-answer", "source": "answers"},
-                ]
+                ],
             },
             "message": "Invalid argument type for operator",
             "operator": "+",
@@ -293,13 +297,13 @@ def test_map_operator_with_self_reference():
                 "date-range": [
                     {
                         "date": [
-                            {"source": "response_metadata", "identifier": "started_at"}
-                        ]
+                            {"source": "response_metadata", "identifier": "started_at"},
+                        ],
                     },
                     7,
-                ]
+                ],
             },
-        ]
+        ],
     }
 
     validator = get_validator(operator)
@@ -316,13 +320,13 @@ def test_map_operator_without_self_reference():
                 "date-range": [
                     {
                         "date": [
-                            {"source": "response_metadata", "identifier": "started_at"}
-                        ]
+                            {"source": "response_metadata", "identifier": "started_at"},
+                        ],
                     },
                     7,
-                ]
+                ],
             },
-        ]
+        ],
     }
 
     validator = get_validator(operator)
@@ -346,14 +350,15 @@ def test_map_operator_without_self_reference():
     ],
 )
 def test_self_reference_outside_map_operator_without_allow_self_reference(
-    operator_name, operands
+    operator_name,
+    operands,
 ):
     rule = {operator_name: operands}
 
     validator = get_validator(
         rule,
         answers_with_context={
-            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}}
+            "date-answer": {"answer": {"id": "date-answer", "type": "Date"}},
         },
         allow_self_reference=False,
     )
@@ -377,7 +382,8 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     ],
 )
 def test_self_reference_outside_map_operator_with_allow_self_reference(
-    operator_name, operands
+    operator_name,
+    operands,
 ):
     rule = {operator_name: operands}
 

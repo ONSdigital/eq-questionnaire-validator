@@ -14,7 +14,7 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
         {
             "message": validator.LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH,
             "block_id": "list-collector",
-        }
+        },
     ]
 
     validator.validate()
@@ -66,7 +66,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
             "list_name": "people",
             "block_id": "list-collector",
             "other_list_block_id": "another-list-collector",
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -114,12 +114,16 @@ def test_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+        questionnaire_schema.get_block("list-collector"),
+        questionnaire_schema,
     )
     validator.validate()
 
     expected_error_messages = [
-        {"message": validator.NO_RADIO_FOR_LIST_COLLECTOR, "block_id": "list-collector"}
+        {
+            "message": validator.NO_RADIO_FOR_LIST_COLLECTOR,
+            "block_id": "list-collector",
+        },
     ]
 
     assert expected_error_messages == validator.errors
@@ -132,7 +136,8 @@ def test_invalid_list_collector_with_no_add_answer_action():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+        questionnaire_schema.get_block("list-collector"),
+        questionnaire_schema,
     )
     validator.validate()
 
@@ -140,7 +145,7 @@ def test_invalid_list_collector_with_no_add_answer_action():
         {
             "message": validator.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
             "block_id": "list-collector",
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -153,7 +158,8 @@ def test_invalid_list_collector_with_no_remove_answer_action():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+        questionnaire_schema.get_block("list-collector"),
+        questionnaire_schema,
     )
     validator.validate()
 
@@ -161,7 +167,7 @@ def test_invalid_list_collector_with_no_remove_answer_action():
         {
             "message": validator.NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION,
             "block_id": "list-collector",
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -172,7 +178,8 @@ def test_invalid_list_collector_same_name_answer_id_reference():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"), questionnaire_schema
+        questionnaire_schema.get_block("list-collector"),
+        questionnaire_schema,
     )
     validator.validate()
 
@@ -181,7 +188,7 @@ def test_invalid_list_collector_same_name_answer_id_reference():
             "message": validator.MISSING_SAME_NAME_ANSWER_ID,
             "block_id": "list-collector",
             "answer_id": "surname",
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -202,7 +209,7 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
             "block_id": "any-other-companies-or-branches",
             "list_name": "companies",
             "message": validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
@@ -218,16 +225,14 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
             "block_id": "any-other-companies-or-branches-again",
             "list_name": "companies",
             "message": validator.NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR,
-        }
+        },
     ]
 
     assert expected_errors == validator.errors
 
 
 def test_invalid_list_collector_for_supplementary_list():
-    """
-    Tests that you cannot have a normal list collector for a supplementary list
-    """
+    """Tests that you cannot have a normal list collector for a supplementary list."""
     filename = "schemas/invalid/test_invalid_supplementary_data_list_collector.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -242,7 +247,7 @@ def test_invalid_list_collector_for_supplementary_list():
             "message": ListCollectorValidator.LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID,
             "block_id": "list-collector-additional",
             "list_name": "additional-employees",
-        }
+        },
     ]
 
     assert expected_errors == validator.errors

@@ -5,7 +5,8 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 
 class PrimaryPersonListCollectorValidator(
-    BlockValidator, ValidateListCollectorQuestionsMixin
+    BlockValidator,
+    ValidateListCollectorQuestionsMixin,
 ):
     REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
@@ -21,7 +22,7 @@ class PrimaryPersonListCollectorValidator(
         super().validate()
 
         collector_questions = self.questionnaire_schema.get_all_questions_for_block(
-            self.block
+            self.block,
         )
         self.validate_collector_questions(
             collector_questions,
@@ -30,7 +31,7 @@ class PrimaryPersonListCollectorValidator(
             self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
         )
         answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
-            self.block["id"]
+            self.block["id"],
         )
         self.validate_same_name_answer_ids(answer_ids)
 
@@ -38,22 +39,22 @@ class PrimaryPersonListCollectorValidator(
         return self.errors
 
     def validate_primary_person_list_collector_answer_ids(self, block):
-        """
-        - Ensure that answer_ids on add blocks match between all blocks that populate a single list.
-        """
+        """Ensure that answer_ids on add blocks match between all blocks that populate a single list."""
         list_name = block["for_list"]
 
         add_or_edit_answer_ids = self.questionnaire_schema.get_all_answer_ids(
-            block["add_or_edit_block"]["id"]
+            block["add_or_edit_block"]["id"],
         )
 
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
-            self.block["id"], for_list=list_name, type="PrimaryPersonListCollector"
+            self.block["id"],
+            for_list=list_name,
+            type="PrimaryPersonListCollector",
         )
 
         for other_list_collector in other_list_collectors:
             other_add_ids = self.questionnaire_schema.get_all_answer_ids(
-                other_list_collector["add_or_edit_block"]["id"]
+                other_list_collector["add_or_edit_block"]["id"],
             )
             difference = other_add_ids.symmetric_difference(add_or_edit_answer_ids)
             if difference:
