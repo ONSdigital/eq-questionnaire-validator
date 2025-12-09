@@ -65,7 +65,7 @@ The defaults for these are:
 - `AJV_VALIDATOR_HOST` = localhost
 - `AJV_VALIDATOR_PORT` = 5002
 
-Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
+Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly. (**Note**: These values are also defined in the Dockerfiles, so if you choose to run [Validator through Docker](#running-with-docker) these may need to be updated) 
 
 ### Running against a URL
 

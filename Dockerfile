@@ -15,6 +15,10 @@ WORKDIR /usr/src/
 COPY app /usr/src/app
 COPY api.py poetry.lock pyproject.toml /usr/src/
 
+ENV AJV_VALIDATOR_SCHEME=http
+ENV AJV_VALIDATOR_HOST=localhost
+ENV AJV_VALIDATOR_PORT=5002
+
 RUN poetry install --only main
 
 EXPOSE 5000
