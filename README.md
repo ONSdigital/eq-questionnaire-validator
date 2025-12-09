@@ -61,9 +61,9 @@ Ajv validator defaults to running on `http://localhost:5002`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables. These values are set by the `.development.env` file in the route of the repo file structure. This is linked to `.env` by the `link-development-env` command in the make file, which is triggered automatically on run. The linking of the `.env` files ensures that changes in one are reflected in the other.
 The defaults for these are:
-- `AJV_VALIDATOR_SCHEME` = "http"
-- `AJV_VALIDATOR_HOST` = "localhost"
-- `AJV_VALIDATOR_PORT` = "5002"
+- `AJV_VALIDATOR_SCHEME` = http
+- `AJV_VALIDATOR_HOST` = localhost
+- `AJV_VALIDATOR_PORT` = 5002
 
 Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
 
