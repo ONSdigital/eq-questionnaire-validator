@@ -42,9 +42,10 @@ class QuestionnaireValidator(Validator):
             section_validator = SectionValidator(section, self.questionnaire_schema)
             self.errors += section_validator.validate()
 
-        required_hub_section_ids = self.schema_element["questionnaire_flow"][
-            "options"
-        ].get("required_completed_sections", [])
+        required_hub_section_ids = self.schema_element["questionnaire_flow"]["options"].get(
+            "required_completed_sections",
+            [],
+        )
 
         self.validate_required_section_ids(
             self.questionnaire_schema.section_ids,
@@ -125,9 +126,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for text in values_to_check:
-                if text and (
-                    text.startswith(" ") or text.endswith(" ") or "  " in text
-                ):
+                if text and (text.startswith(" ") or text.endswith(" ") or "  " in text):
                     self.add_error(
                         error_messages.INVALID_WHITESPACE_FOUND,
                         pointer=translatable_item.pointer,
@@ -136,9 +135,7 @@ class QuestionnaireValidator(Validator):
 
     def validate_introduction_block(self):
         blocks = self.questionnaire_schema.get_blocks()
-        has_introduction_blocks = any(
-            block["type"] == "Introduction" for block in blocks
-        )
+        has_introduction_blocks = any(block["type"] == "Introduction" for block in blocks)
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
@@ -156,10 +153,7 @@ class QuestionnaireValidator(Validator):
         for path, identifier_reference, parent_block in identifier_references:
             # set up default parent_block_id for later check (group or block level)
             parent_block_id = None
-            if (
-                "source" in identifier_reference
-                and identifier_reference["source"] == "answers"
-            ):
+            if "source" in identifier_reference and identifier_reference["source"] == "answers":
                 source_block = self.questionnaire_schema.get_block_by_answer_id(
                     identifier_reference["identifier"],
                 )
@@ -207,25 +201,17 @@ class QuestionnaireValidator(Validator):
     def validate_answer_source_section(self, section, section_index):
         identifier_references = get_object_containing_key(section, "source")
         for path, identifier_reference, _ in identifier_references:
-            if (
-                "source" in identifier_reference
-                and identifier_reference["source"] == "answers"
-                and "enabled" in path
-            ):
+            if "source" in identifier_reference and identifier_reference["source"] == "answers" and "enabled" in path:
                 source_block = self.questionnaire_schema.get_block_by_answer_id(
                     identifier_reference["identifier"],
                 )
                 source_block_id = self.resolve_source_block_id(source_block)
 
-                source_block_section_id = (
-                    self.questionnaire_schema.get_section_id_for_block_id(
-                        source_block_id,
-                    )
+                source_block_section_id = self.questionnaire_schema.get_section_id_for_block_id(
+                    source_block_id,
                 )
-                source_block_section_index = (
-                    self.questionnaire_schema.get_section_index_for_section_id(
-                        source_block_section_id,
-                    )
+                source_block_section_index = self.questionnaire_schema.get_section_index_for_section_id(
+                    source_block_section_id,
                 )
                 if section_index < source_block_section_index:
                     self.add_error(
@@ -244,10 +230,8 @@ class QuestionnaireValidator(Validator):
 
         # Handling of source block nested (list collector's repeating block)
         if source_block["type"] == "ListRepeatingQuestion":
-            return (
-                self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
-                    source_block["id"],
-                )
+            return self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
+                source_block["id"],
             )
         # Handling of standard source block
         return source_block["id"]
@@ -274,12 +258,9 @@ class QuestionnaireValidator(Validator):
                                 section_id=section["id"],
                                 block_id=parent_block["id"],
                             )
-                    elif (
-                        section_index
-                        < lists_with_context[list_identifier]["section_index"]
-                    ):
-                        # Section level "enabled" rule that can use list source,
-                        # check: common_definitions.json#/section_enabled
+                    elif section_index < lists_with_context[list_identifier]["section_index"]:
+                        # Section level "enabled" rule that can use
+                        # list source, check: common_definitions.json#/section_enabled
                         self.add_error(
                             error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
                             list_name=list_identifier,

@@ -14,8 +14,7 @@ class PrimaryPersonListCollectorValidator(
         "The primary person list collector block does not contain a Radio answer type"
     )
     NON_UNIQUE_ANSWER_ID_FOR_PRIMARY_LIST_COLLECTOR_ADD_OR_EDIT = (
-        "Multiple primary person list collectors "
-        "populate a list using different answer ids in the add_or_edit block"
+        "Multiple primary person list collectors populate a list using different answer ids in the add_or_edit block"
     )
 
     def validate(self):

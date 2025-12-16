@@ -22,12 +22,9 @@ class OptionAnswerValidator(AnswerValidator):
         "{answer_type} requires at least {required_num_options} answer option(s) but got {actual_num_options}"
     )
     OPTIONS_DEFINED_BUT_EMPTY = "Answer options defined, but empty"
-    DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER = (
-        "Dynamic options references non Checkbox answer"
-    )
+    DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER = "Dynamic options references non Checkbox answer"
     DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH = (
-        "Dynamic options source identifier and "
-        "option label from value answer_id do not match"
+        "Dynamic options source identifier and option label from value answer_id do not match"
     )
 
     def __init__(self, schema_element, questionnaire_schema):
@@ -89,9 +86,7 @@ class OptionAnswerValidator(AnswerValidator):
 
     def validate_default_exists_in_options(self):
         default_value = self.answer.get("default")
-        if default_value and default_value not in [
-            option["value"] for option in self.options
-        ]:
+        if default_value and default_value not in [option["value"] for option in self.options]:
             self.add_error(self.ANSWER_DEFAULT_MISSING, default_value=default_value)
 
     def validate_dynamic_options(self):
@@ -122,10 +117,7 @@ class OptionAnswerValidator(AnswerValidator):
         transform = self.dynamic_options["transform"]
 
         if value_source["source"] == "answers":
-            if (
-                self.questionnaire_schema.get_answer_type(value_source["identifier"])
-                != AnswerType.CHECKBOX
-            ):
+            if self.questionnaire_schema.get_answer_type(value_source["identifier"]) != AnswerType.CHECKBOX:
                 self.add_error(
                     self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
                     value_source=value_source,
@@ -133,8 +125,7 @@ class OptionAnswerValidator(AnswerValidator):
 
             if (
                 "option-label-from-value" in transform
-                and transform["option-label-from-value"][1]
-                != value_source["identifier"]
+                and transform["option-label-from-value"][1] != value_source["identifier"]
             ):
                 self.add_error(
                     self.DYNAMIC_OPTIONS_SOURCE_IDENTIFIER_AND_OPTION_LABEL_FROM_VALUE_MISMATCH,

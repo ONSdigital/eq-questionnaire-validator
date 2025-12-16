@@ -409,7 +409,7 @@ def test_answers_method():
         },
         {
             "decimal_places": 2,
-            "description": "Maximum amount of spending at this supermarket, should be " "between 1001 and 10000",
+            "description": "Maximum amount of spending at this supermarket, should be between 1001 and 10000",
             "id": "set-maximum",
             "label": "Maximum Spending",
             "mandatory": True,

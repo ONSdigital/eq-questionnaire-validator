@@ -7,9 +7,7 @@ class RelationshipCollectorValidator(BlockValidator):
     RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE = (
         "Only answers of type Relationship are valid in RelationshipCollector blocks."
     )
-    RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS = (
-        "RelationshipCollector contains more than one answer."
-    )
+    RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS = "RelationshipCollector contains more than one answer."
 
     def validate(self):
         super().validate()
@@ -22,12 +20,7 @@ class RelationshipCollectorValidator(BlockValidator):
         return self.errors
 
     def validate_answer_type(self):
-        if (
-            self.questionnaire_schema.get_first_answer_in_block(self.block["id"])[
-                "type"
-            ]
-            != "Relationship"
-        ):
+        if self.questionnaire_schema.get_first_answer_in_block(self.block["id"])["type"] != "Relationship":
             self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE)
 
     def validate_multiple_answers(self):

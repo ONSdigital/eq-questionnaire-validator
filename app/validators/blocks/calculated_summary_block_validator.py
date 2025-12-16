@@ -41,11 +41,8 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
                 single_answer_id,
             )
             # check if its dynamic
-            if (
-                single_answer_id
-                in self.questionnaire_schema.get_all_dynamic_answer_ids(
-                    question_block["id"],
-                )
+            if single_answer_id in self.questionnaire_schema.get_all_dynamic_answer_ids(
+                question_block["id"],
             ):
                 return
             # check if it's for a repeating question

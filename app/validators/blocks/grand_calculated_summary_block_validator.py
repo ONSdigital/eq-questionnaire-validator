@@ -14,9 +14,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
     CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY = (
         "Cannot have a grand calculated summary before a calculated summary that it depends on"
     )
-    CALCULATED_SUMMARY_HAS_INVALID_ID = (
-        "Invalid calculated summary id in block's answers_to_calculate"
-    )
+    CALCULATED_SUMMARY_HAS_INVALID_ID = "Invalid calculated summary id in block's answers_to_calculate"
     REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT = (
         "Cannot have a non-repeating grand calculated summary reference a repeating calculated summary"
     )
@@ -34,11 +32,9 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         self.answers_to_calculate: list[str] = []
         # check calculated summary answers sets to verify no two calculated summaries are identical
         self.calculated_summary_answers: dict[str, tuple[str, ...]] = {}
-        self.calculated_summaries_to_calculate = (
-            self.questionnaire_schema.get_calculation_block_ids(
-                block=self.block,
-                source_type="calculated_summary",
-            )
+        self.calculated_summaries_to_calculate = self.questionnaire_schema.get_calculation_block_ids(
+            block=self.block,
+            source_type="calculated_summary",
         )
 
     def validate(self):
@@ -102,13 +98,9 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         1) any grand calculated summary referencing a repeating calculated summary
         2) repeating grand calculated summary referencing a static calculated summary
         """
-        grand_calculated_summary_section = (
-            self.questionnaire_schema.get_parent_section_for_block(self.block["id"])
-        )
-        is_grand_calculated_summary_repeating = (
-            self.questionnaire_schema.is_repeating_section(
-                grand_calculated_summary_section["id"],
-            )
+        grand_calculated_summary_section = self.questionnaire_schema.get_parent_section_for_block(self.block["id"])
+        is_grand_calculated_summary_repeating = self.questionnaire_schema.is_repeating_section(
+            grand_calculated_summary_section["id"],
         )
         for calculated_summary_id in self.calculated_summaries_to_calculate:
             if self.questionnaire_schema.is_block_in_repeating_section(
@@ -117,9 +109,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 self._validate_repeating_calculated_summary_in_grand_calculated_summary(
                     calculated_summary_id=calculated_summary_id,
                     is_grand_calculated_summary_repeating=is_grand_calculated_summary_repeating,
-                    grand_calculated_summary_section_id=grand_calculated_summary_section[
-                        "id"
-                    ],
+                    grand_calculated_summary_section_id=grand_calculated_summary_section["id"],
                 )
             elif is_grand_calculated_summary_repeating:
                 list_name = grand_calculated_summary_section["repeat"]["for_list"]
@@ -171,11 +161,8 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 block_id=self.block["id"],
                 calculated_summary_id=calculated_summary_id,
             )
-        elif (
-            grand_calculated_summary_section_id
-            != self.questionnaire_schema.get_section_id_for_block_id(
-                calculated_summary_id,
-            )
+        elif grand_calculated_summary_section_id != self.questionnaire_schema.get_section_id_for_block_id(
+            calculated_summary_id,
         ):
             self.add_error(
                 self.CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION,

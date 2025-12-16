@@ -3,9 +3,7 @@ from app.validators.validator import Validator
 
 
 class QuestionValidator(Validator):
-    ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = (
-        "Answer label must be provided for questions with multiple answers"
-    )
+    ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = "Answer label must be provided for questions with multiple answers"
     question = {}
 
     def __init__(self, schema_element, schema=None):
@@ -23,9 +21,7 @@ class QuestionValidator(Validator):
 
     def _validate_answer_labels(self):
         if len(self.answers) < 2 or (
-            len(self.answers) == 2
-            and self.answers[-1]["type"] == "Checkbox"
-            and len(self.answers[-1]["options"]) == 1
+            len(self.answers) == 2 and self.answers[-1]["type"] == "Checkbox" and len(self.answers[-1]["options"]) == 1
         ):
             return
 

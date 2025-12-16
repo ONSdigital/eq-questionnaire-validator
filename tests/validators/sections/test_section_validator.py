@@ -80,9 +80,7 @@ def test_invalid_list_collector_repeating_blocks_validated_from_section_validato
 
 
 def test_invalid_multiple_list_collectors_when_summary_with_items_enabled():
-    filename = (
-        "schemas/invalid/test_invalid_multiple_list_collectors_with_summary_items.json"
-    )
+    filename = "schemas/invalid/test_invalid_multiple_list_collectors_with_summary_items.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     section = questionnaire_schema.get_section("section-companies")

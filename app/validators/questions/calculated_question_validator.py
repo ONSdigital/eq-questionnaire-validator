@@ -27,9 +27,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         answers_to_calculate: list[str],
     ) -> dict[str, str]:
         return {
-            answer: self.schema.get_answer_type(answer).value
-            for answer in [answer_id, *answers_to_calculate]
-            if answer
+            answer: self.schema.get_answer_type(answer).value for answer in [answer_id, *answers_to_calculate] if answer
         }
 
     def validate_calculations(self):
@@ -37,9 +35,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         answer_ids = [answer["id"] for answer in self.answers]
         for calculation in self.question.get("calculations"):
             answer_ids_list = calculation["answers_to_calculate"]
-            if len(answer_ids_list) == 1 and answer_ids_list[
-                0
-            ] not in self.schema.get_all_dynamic_answer_ids(
+            if len(answer_ids_list) == 1 and answer_ids_list[0] not in self.schema.get_all_dynamic_answer_ids(
                 self.schema.get_block_by_answer_id(answer_ids_list[0])["id"],
             ):
                 self.add_error(

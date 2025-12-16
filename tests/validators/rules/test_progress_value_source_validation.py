@@ -36,8 +36,7 @@ def test_invalid_non_linear_progress_references():
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:
@@ -46,9 +45,7 @@ def test_invalid_non_linear_progress_references():
 
 def test_invalid_current_location_progress():
     """Tests a progress value source cannot refer to the current section or the current block."""
-    schema_path = (
-        "schemas/invalid/test_invalid_progress_value_source_current_location.json"
-    )
+    schema_path = "schemas/invalid/test_invalid_progress_value_source_current_location.json"
     questionnaire_validator = QuestionnaireValidator(
         _open_and_load_schema_file(schema_path),
     )
@@ -68,8 +65,7 @@ def test_invalid_current_location_progress():
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:
@@ -106,8 +102,7 @@ def test_invalid_block_in_repeating_section():
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:

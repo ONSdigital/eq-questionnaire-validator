@@ -93,9 +93,7 @@ def test_invalid_answer_type_in_answers_to_calculate_against_numeric_value():
 
 
 def test_answers_to_calculate_too_short():
-    filename = (
-        "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
-    )
+    filename = "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     question = schema.blocks_by_id["dynamic-answer-only"]["question"]
 

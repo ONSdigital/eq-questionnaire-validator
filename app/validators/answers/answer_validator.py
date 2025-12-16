@@ -10,15 +10,9 @@ class AnswerValidator(Validator):
     DETAIL_ANSWER_MISSING_Q_CODE = "Detail answer q_code must be provided"
     CHECKBOX_DETAIL_ANSWER_HAS_Q_CODE = "Checkbox detail answer cannot contain q_code"
     CONFIRMATION_QUESTION_HAS_Q_CODE = "Confirmation question cannot contain q_code"
-    DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT = (
-        "q_code can only be used with data_version 0.0.1"
-    )
-    CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE = (
-        "Checkbox answer and option q_code are mutually exclusive"
-    )
-    CHECKBOX_ANSWER_OR_OPTIONS_MUST_HAVE_Q_CODES = (
-        "Either checkbox answer or options must have q_codes"
-    )
+    DATA_VERSION_NOT_0_0_1_Q_CODE_PRESENT = "q_code can only be used with data_version 0.0.1"
+    CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE = "Checkbox answer and option q_code are mutually exclusive"
+    CHECKBOX_ANSWER_OR_OPTIONS_MUST_HAVE_Q_CODES = "Either checkbox answer or options must have q_codes"
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
@@ -35,14 +29,10 @@ class AnswerValidator(Validator):
 
     def _validate_q_codes(self):
         is_confirmation_question = (
-            self.questionnaire_schema.get_block_by_answer_id(self.answer_id).get("type")
-            == "ConfirmationQuestion"
+            self.questionnaire_schema.get_block_by_answer_id(self.answer_id).get("type") == "ConfirmationQuestion"
         )
 
-        if (
-            self.questionnaire_schema.schema["data_version"] != "0.0.1"
-            or is_confirmation_question
-        ):
+        if self.questionnaire_schema.schema["data_version"] != "0.0.1" or is_confirmation_question:
             has_q_code = get_object_containing_key(self.answer, key_name="q_code")
             if has_q_code:
                 self.add_error(
@@ -110,9 +100,7 @@ class AnswerValidator(Validator):
         any_option_missing_q_code = self._validate_options_q_code()
 
         if has_answer_q_code:
-            any_option_has_q_code = any(
-                True for option in self.answer.get("options", []) if "q_code" in option
-            )
+            any_option_has_q_code = any(True for option in self.answer.get("options", []) if "q_code" in option)
             if any_option_has_q_code:
                 self.add_error(
                     self.CHECKBOX_ANSWER_AND_OPTIONS_Q_CODE_MUTUALLY_EXCLUSIVE,

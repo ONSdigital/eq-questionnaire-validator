@@ -428,34 +428,34 @@ def test_answer_as_source_referenced_before_created():
     expected_errors = [
         {
             "block_id": "confirm-dob",
-            "message": "Answer 'date-of-birth-answer' referenced as source before it has " "been added.",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has been added.",
         },
         {
             "block_id": "confirm-sex",
-            "message": "Answer 'sex-answer' referenced as source before it has been " "added.",
+            "message": "Answer 'sex-answer' referenced as source before it has been added.",
         },
         {
             "group_id": "confirmation-group",
-            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before it has been added.",
         },
         {
             "block_id": "number-of-employees-split-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before it has been added.",
         },
         {
             "block_id": "number-of-employees-split-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before it has been added.",
         },
         {
             "block_id": "confirm-zero-employees-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before it has been added.",
         },
         {
             "block_id": "any-other-companies-or-branches",
-            "message": "Answer 'any-companies-or-branches-answer' referenced as source " "before it has been added.",
+            "message": "Answer 'any-companies-or-branches-answer' referenced as source before it has been added.",
         },
         {
-            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before it has been added.",
             "section_id": "confirmation-section",
         },
     ]
@@ -528,7 +528,7 @@ def test_list_and_answer_source_referenced_before_created_repeating_blocks():
     expected_errors = [
         {
             "block_id": "any-other-companies-or-branches",
-            "message": "Answer 'company-or-branch-name' referenced as source before it " "has been added.",
+            "message": "Answer 'company-or-branch-name' referenced as source before it has been added.",
         },
         {
             "block_id": "any-other-companies-or-branches",
