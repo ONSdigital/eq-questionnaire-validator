@@ -2,8 +2,8 @@ RUNNER_ENV_FILE ?= .development.env
 
 .PHONY: build run lint test
 ifneq (,$(wildcard $(RUNNER_ENV_FILE)))
-  include $(RUNNER_ENV_FILE)
-  export $(shell sed 's/=.*//' $(RUNNER_ENV_FILE))
+	include $(RUNNER_ENV_FILE)
+	export $(shell sed 's/=.*//' $(RUNNER_ENV_FILE))
 endif
 
 
@@ -26,6 +26,7 @@ run: start-ajv
 .PHONY: clean
 clean: ## Clean the temporary files.
 	rm -rf .ruff_cache
+	rm -rf megalinter-reports
 
 lint: lint-python
 	npm run lint
@@ -55,3 +56,10 @@ format: format-python
 format-python:
 	poetry run isort .
 	poetry run black .
+
+.PHONY: megalint
+megalint:  ## Run the MegaLinter.
+	docker run --platform linux/amd64 --rm \
+		-v /var/run/docker.sock:/var/run/docker.sock:rw \
+		-v $(shell pwd):/tmp/lint:rw \
+		ghcr.io/oxsecurity/megalinter-python:v9.1.0

@@ -809,10 +809,7 @@
                   "when": {
                     "and": [
                       {
-                        "==": [
-                          { "identifier": "proxy-answer", "source": "answers" },
-                          "No, I’m answering for myself"
-                        ]
+                        "==": [{ "identifier": "proxy-answer", "source": "answers" }, "No, I’m answering for myself"]
                       },
                       {
                         "<=": [
@@ -892,10 +889,7 @@
                   "when": {
                     "and": [
                       {
-                        "==": [
-                          { "identifier": "proxy-answer", "source": "answers" },
-                          "Yes"
-                        ]
+                        "==": [{ "identifier": "proxy-answer", "source": "answers" }, "Yes"]
                       },
                       {
                         "<=": [

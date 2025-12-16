@@ -68,12 +68,7 @@
                   {
                     "calculation_type": "sum",
                     "answer_id": "total-answer",
-                    "answers_to_calculate": [
-                      "breakdown-1",
-                      "breakdown-2",
-                      "breakdown-3",
-                      "breakdown-4"
-                    ],
+                    "answers_to_calculate": ["breakdown-1", "breakdown-2", "breakdown-3", "breakdown-4"],
                     "conditions": ["equals"]
                   },
                   {
@@ -82,12 +77,7 @@
                       "source": "answers",
                       "identifier": "total-answer"
                     },
-                    "answers_to_calculate": [
-                      "breakdown-1",
-                      "breakdown-2",
-                      "breakdown-3",
-                      "breakdown-4"
-                    ],
+                    "answers_to_calculate": ["breakdown-1", "breakdown-2", "breakdown-3", "breakdown-4"],
                     "conditions": ["equals"]
                   }
                 ],

@@ -46,9 +46,7 @@
                   "contents": [
                     {
                       "title": "About",
-                      "list": [
-                        "This survey tests that when you re-use answers between calculated summaries, the grand calculated summary still resolves to the correct value"
-                      ]
+                      "list": ["This survey tests that when you re-use answers between calculated summaries, the grand calculated summary still resolves to the correct value"]
                     },
                     {
                       "title": "How to test this schema",

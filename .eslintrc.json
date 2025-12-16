@@ -4,24 +4,15 @@
     "es6": true,
     "mocha": true
   },
-  "plugins": [
-        "security"
-    ],
-  "extends": [
-    "standard",
-    "eslint:recommended",
-    "plugin:import/recommended",
-    "plugin:security/recommended"
-  ],
+  "plugins": ["security"],
+  "extends": ["standard", "eslint:recommended", "plugin:import/recommended", "plugin:security/recommended"],
   "parserOptions": {
     "ecmaVersion": 12,
     "ecmaFeatures": {
       "modules": true
     }
   },
-  "plugins": [
-    "json"
-  ],
+  "plugins": ["json"],
   "rules": {
     "consistent-return": 1,
     "indent": [
@@ -52,10 +43,7 @@
         "allowTemplateLiterals": true
       }
     ],
-    "semi": [
-      2,
-      "always"
-    ],
+    "semi": [2, "always"],
     "space-before-function-paren": 0,
     "padded-blocks": [
       "error",

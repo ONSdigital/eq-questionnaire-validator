@@ -43,9 +43,7 @@
               "question": {
                 "id": "breakdown-question",
                 "title": "Breakdown validated against a number value",
-                "description": [
-                  "This is a breakdown of the total from a number value."
-                ],
+                "description": ["This is a breakdown of the total from a number value."],
                 "type": "Calculated",
                 "calculations": [
                   {

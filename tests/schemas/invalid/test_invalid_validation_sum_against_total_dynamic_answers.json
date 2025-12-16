@@ -234,9 +234,7 @@
                   {
                     "calculation_type": "sum",
                     "value": 1000,
-                    "answers_to_calculate": [
-                      "percentage-of-shopping-elsewhere"
-                    ],
+                    "answers_to_calculate": ["percentage-of-shopping-elsewhere"],
                     "conditions": ["equals"]
                   }
                 ],

@@ -24,14 +24,7 @@
         {
           "type": "string",
           "description": "The format to return the date in. https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns",
-          "enum": [
-            "EEEE d MMMM",
-            "EEEE d MMMM yyyy",
-            "d MMMM yyyy",
-            "yyyy-MM-dd",
-            "yyyy-MM",
-            "yyyy"
-          ]
+          "enum": ["EEEE d MMMM", "EEEE d MMMM yyyy", "d MMMM yyyy", "yyyy-MM-dd", "yyyy-MM", "yyyy"]
         }
       ]
     }
