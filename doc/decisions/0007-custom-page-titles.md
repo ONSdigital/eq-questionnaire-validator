@@ -8,73 +8,78 @@ Page titles are currently defined in question or content block using the block t
 1. String with a list item index: `"Person {index}"`
 1. String with multiple list item indices: `"Person {index} and person {index}"` (RelationshipCollector blocks only)
 
-This could be achieved with the introduction of a new transform object, one that takes a list item id and returns it's index position in a list; this approach would require significant changes to almost all Census schema block definitions. Instead, we can rely on Python's string formatting to render the index value for the list item ids.
+This could be achieved with the introduction of a new transform object, one that takes a list item id and returns it's index position in a list; this approach would require significant changes to almost all Census schema block definitions.
+Instead, we can rely on Python's string formatting to render the index value for the list item ids.
 
 ## Proposal
 
-We will add an optional `page_title` property to page definitions (both block and non-block pages). This property, when provided, will override any question or content page title definitions for that page. If it is omitted, the page title will still be determined from a question or content definition depending on the definition type. For ListCollectorAction blocks, the `page_title` property can also be defined on the ListCollectorAction
+We will add an optional `page_title` property to page definitions (both block and non-block pages).
+This property, when provided, will override any question or content page title definitions for that page.
+If it is omitted, the page title will still be determined from a question or content definition depending on the definition type.
+For ListCollectorAction blocks, the `page_title` property can also be defined on the ListCollectorAction
 
-Python's string formatting will be used to resolve the `list_item_index` and `to_list_item_index` parameters. Note that the `to_list_item_index` will only be available for Relationship block types. If either `list_item_index` (or `to_list_item_index` where applicable) cannot be resolved, the question or content title will be used.
+Python's string formatting will be used to resolve the `list_item_index` and `to_list_item_index` parameters. Note that the `to_list_item_index` will only be available for Relationship block types.
+If either `list_item_index` (or `to_list_item_index` where applicable) cannot be resolved, the question or content title will be used.
 
 ### Examples:
 
 ```json
 {
-  "blocks": [
-    {
-      "type": "Question",
-      "id": "",
-      "page_title": "Question or Content block: Person {list_item_index}"
+    "blocks": [
+        {
+            "type": "Question",
+            "id": "",
+            "page_title": "Question or Content block: Person {list_item_index}"
+        }
+    ]
+}
+```
+
+```json
+{
+    "blocks": {
+        "type": "RelationshipCollector",
+        "id": "relationships",
+        "page_title": "How Person {list_item_index} is related to Person {to_list_item_index}",
+        "for_list": "household"
     }
-  ]
 }
 ```
 
 ```json
 {
-  "blocks": {
-    "type": "RelationshipCollector",
-    "id": "relationships",
-    "page_title": "How Person {list_item_index} is related to Person {to_list_item_index}",
-    "for_list": "household"
-  }
+    "content": {
+        "title": "Content"
+    },
+    "page_title": "Question or Content block: Person {list_item_index}"
 }
 ```
 
 ```json
 {
-  "content": {
-    "title": "Content"
-  },
-  "page_title": "Question or Content block: Person {list_item_index}"
+    "sections": [
+        {
+            "id": "section",
+            "title": "Household",
+            "summary": {
+                "page_title": "Custom section summary page title"
+            }
+        }
+    ]
 }
 ```
 
 ```json
 {
-  "sections": [
-    {
-      "id": "section",
-      "title": "Household",
-      "summary": {
-        "page_title": "Custom section summary page title"
-      }
+    "add_block": {
+        "id": "add-person",
+        "type": "ListAddQuestion",
+        "page_title": "Custom page title"
     }
-  ]
-}
-```
-
-```json
-{
-  "add_block": {
-    "id": "add-person",
-    "type": "ListAddQuestion",
-    "page_title": "Custom page title"
-  }
 }
 ```
 
 ## Consequences
 
-- Page title rendering will be implicit in the schema.
-- There will be two methods for rendering strings, placeholder definitions and implicit string formatting (though this is already the case due to min and max definitions).
+-   Page title rendering will be implicit in the schema.
+-   There will be two methods for rendering strings, placeholder definitions and implicit string formatting (though this is already the case due to min and max definitions).

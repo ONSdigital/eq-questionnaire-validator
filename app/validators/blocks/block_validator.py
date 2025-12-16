@@ -10,7 +10,9 @@ from app.validators.validator import Validator
 class BlockValidator(Validator):
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
-    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of id relationships, can only be used with RelationshipCollector block type"
+    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = (
+        "Invalid use of id relationships, can only be used with RelationshipCollector block type"
+    )
     PLACEHOLDER_ANSWER_SELF_REFERENCE = (
         "Placeholder references an answer in the same block (self-reference)"
     )

@@ -7,9 +7,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 
 class DateAnswerValidator(AnswerValidator):
-    INVALID_OFFSET_DATE = (
-        "The minimum offset date is greater than the maximum offset date"
-    )
+    INVALID_OFFSET_DATE = "The minimum offset date is greater than the maximum offset date"
 
     def validate(self):
         super().validate()

@@ -13,7 +13,7 @@ FORMATTERS_DISABLE_ERRORS: false
 # be disabled by default
 ENABLE:
   #  - COPYPASTE
-  #- EDITORCONFIG
+  - EDITORCONFIG
   - JSON
   #  - MARKDOWN
   #- PYTHON

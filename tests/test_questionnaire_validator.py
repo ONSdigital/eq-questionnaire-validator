@@ -107,7 +107,10 @@ def test_invalid_placeholder_answer_ids():
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer1",
-            "json_path": "groups.[0].blocks.[1].question.answers.[1].description.placeholders.[0].transforms.[0].arguments.number.identifier",
+            "json_path": (
+                "groups.[0].blocks.[1].question.answers.[1].description.placeholders."
+                "[0].transforms.[0].arguments.number.identifier"
+            ),
         },
         {
             "message": ValueSourceValidator.SOURCE_REFERENCE_INVALID.format("metadata"),
@@ -179,9 +182,7 @@ def test_inconsistent_ids_in_variants():
 
 
 def test_inconsistent_default_answers_in_variants():
-    file_name = (
-        "schemas/invalid/test_invalid_inconsistent_default_answers_in_variants.json"
-    )
+    file_name = "schemas/invalid/test_invalid_inconsistent_default_answers_in_variants.json"
     json_to_validate = _open_and_load_schema_file(file_name)
 
     validator = QuestionnaireValidator(json_to_validate)
@@ -392,12 +393,18 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
     expected_errors = [
         {
             "identifier": "first-number-block",
-            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders.[0].transforms.[0].arguments.number.identifier",
+            "json_path": (
+                "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders."
+                "[0].transforms.[0].arguments.number.identifier"
+            ),
             "message": "Invalid calculated_summary source reference",
         },
         {
             "identifier": "currency-total-playback",
-            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders.[0].transforms.[0].arguments.number.identifier",
+            "json_path": (
+                "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders."
+                "[0].transforms.[0].arguments.number.identifier"
+            ),
             "message": "Invalid grand_calculated_summary source reference",
         },
     ]
@@ -408,7 +415,10 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
 
 
 def test_answer_as_source_referenced_before_created():
-    """The schema being validated contains blocks where an invalid answer source being referenced multiple times within that block.
+    """Test answer as source referenced before created.
+
+    The schema being validated contains blocks where an invalid answer source being
+    referenced multiple times within that block.
 
     Results in duplicated expected errors.
     """
@@ -418,42 +428,34 @@ def test_answer_as_source_referenced_before_created():
     expected_errors = [
         {
             "block_id": "confirm-dob",
-            "message": "Answer 'date-of-birth-answer' referenced as source before it has "
-            "been added.",
+            "message": "Answer 'date-of-birth-answer' referenced as source before it has " "been added.",
         },
         {
             "block_id": "confirm-sex",
-            "message": "Answer 'sex-answer' referenced as source before it has been "
-            "added.",
+            "message": "Answer 'sex-answer' referenced as source before it has been " "added.",
         },
         {
             "group_id": "confirmation-group",
-            "message": "Answer 'number-of-employees-total' referenced as source before "
-            "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
         },
         {
             "block_id": "number-of-employees-split-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before "
-            "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
         },
         {
             "block_id": "number-of-employees-split-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before "
-            "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
         },
         {
             "block_id": "confirm-zero-employees-block",
-            "message": "Answer 'number-of-employees-total' referenced as source before "
-            "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
         },
         {
             "block_id": "any-other-companies-or-branches",
-            "message": "Answer 'any-companies-or-branches-answer' referenced as source "
-            "before it has been added.",
+            "message": "Answer 'any-companies-or-branches-answer' referenced as source " "before it has been added.",
         },
         {
-            "message": "Answer 'number-of-employees-total' referenced as source before "
-            "it has been added.",
+            "message": "Answer 'number-of-employees-total' referenced as source before " "it has been added.",
             "section_id": "confirmation-section",
         },
     ]
@@ -520,16 +522,13 @@ def test_list_as_source_referenced_before_created():
 
 
 def test_list_and_answer_source_referenced_before_created_repeating_blocks():
-    filename = (
-        "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
-    )
+    filename = "schemas/invalid/test_invalid_list_source_reference_repeating_blocks.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_errors = [
         {
             "block_id": "any-other-companies-or-branches",
-            "message": "Answer 'company-or-branch-name' referenced as source before it "
-            "has been added.",
+            "message": "Answer 'company-or-branch-name' referenced as source before it " "has been added.",
         },
         {
             "block_id": "any-other-companies-or-branches",

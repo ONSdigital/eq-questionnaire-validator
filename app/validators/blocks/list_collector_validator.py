@@ -21,12 +21,24 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
         "The list collector remove block does not contain a Radio answer type"
     )
-    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
-    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
-    DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST = "Multiple list collectors with same name populate a list using different answer_ids in add block"
-    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR = "Different list collectors populate a list using duplicate answer_ids in a list block"
-    LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE = "List collector child block answer_id is already used elsewhere outside the list collector"
-    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
+    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = (
+        "Non content list collectors cannot be for a list which comes from supplementary data"
+    )
+    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
+        "The list collector block contains an add block and edit block with different answer ids"
+    )
+    DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST = (
+        "Multiple list collectors with same name populate a list using different answer_ids in add block"
+    )
+    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR = (
+        "Different list collectors populate a list using duplicate answer_ids in a list block"
+    )
+    LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE = (
+        "List collector child block answer_id is already used elsewhere outside the list collector"
+    )
+    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = (
+        "List may only have one List Collector, if the List Collector features Repeating Blocks"
+    )
 
     def validate(self):
         super().validate()

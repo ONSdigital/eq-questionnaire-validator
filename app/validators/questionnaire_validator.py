@@ -278,7 +278,8 @@ class QuestionnaireValidator(Validator):
                         section_index
                         < lists_with_context[list_identifier]["section_index"]
                     ):
-                        # Section level "enabled" rule that can use list source, check: common_definitions.json#/section_enabled
+                        # Section level "enabled" rule that can use list source,
+                        # check: common_definitions.json#/section_enabled
                         self.add_error(
                             error_messages.LIST_REFERENCED_BEFORE_CREATED.format(),
                             list_name=list_identifier,

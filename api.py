@@ -46,9 +46,7 @@ def configure_logging():
     error_log_handler.setLevel(logging.ERROR)
 
     renderer_processor = (
-        structlog.dev.ConsoleRenderer()
-        if log_level == logging.DEBUG
-        else structlog.processors.JSONRenderer()
+        structlog.dev.ConsoleRenderer() if log_level == logging.DEBUG else structlog.processors.JSONRenderer()
     )
 
     logging.basicConfig(level=log_level, format="%(message)s", stream=sys.stdout)
@@ -195,15 +193,11 @@ async def validate_schema(data):
 def is_url_allowed(parsed_url, domain):
     logger.debug("Checking if domain is allowed...", domain=domain)
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
-    repo_owner = (
-        parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
-    )
+    repo_owner = parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
     logger.debug("Parsed URL components", base_url=base_url, repo_owner=repo_owner)
 
     # Allows URLs from verified full domains with trusted repo owners
-    full_url_allowed = (
-        base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
-    )
+    full_url_allowed = base_url in ALLOWED_FULL_DOMAINS and repo_owner in ALLOWED_REPO_OWNERS
     # Allows URLs from trusted base domains
     base_domain_allowed = domain in ALLOWED_BASE_DOMAINS
 

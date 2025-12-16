@@ -255,10 +255,7 @@ class SectionValidator(Validator):
             results["number_of_answers"].add(len(results["answer_ids"]))
 
         # Code to handle comparison of variants which contain a MutuallyExclusive answer type
-        if (
-            len(results["question_types"]) > 1
-            and "MutuallyExclusive" in results["question_types"]
-        ):
+        if len(results["question_types"]) > 1 and "MutuallyExclusive" in results["question_types"]:
             results["question_types"].remove("MutuallyExclusive")
 
             results["answer_ids"].clear()
@@ -278,10 +275,7 @@ class SectionValidator(Validator):
         return results
 
     def validate_number_of_list_collectors(self):
-        if (
-            self.has_list_summary_with_non_item_answers()
-            and self.has_multiple_list_collectors()
-        ):
+        if self.has_list_summary_with_non_item_answers() and self.has_multiple_list_collectors():
             self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
 
     def has_list_summary_with_non_item_answers(self):
@@ -292,11 +286,7 @@ class SectionValidator(Validator):
     def has_multiple_list_collectors(self):
         list_collectors = []
         for group in self.schema_element.get("groups"):
-            list_collectors.extend(
-                block
-                for block in group.get("blocks")
-                if block["type"] in ["ListCollector"]
-            )
+            list_collectors.extend(block for block in group.get("blocks") if block["type"] in ["ListCollector"])
 
         return len(list_collectors) > 1
 
@@ -313,9 +303,7 @@ class SectionValidator(Validator):
             )
 
         for item in summary_items:
-            list_collector_answer_ids_for_list = list_collector_answer_ids_by_list[
-                item["for_list"]
-            ]
+            list_collector_answer_ids_for_list = list_collector_answer_ids_by_list[item["for_list"]]
 
             if item_anchor_answer_id := item.get("item_anchor_answer_id"):
                 self._validate_item_anchor_answer_id_belongs_to_list_collector(

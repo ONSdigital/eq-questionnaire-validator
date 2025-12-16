@@ -10,17 +10,15 @@ def is_value_for_key_unique(dictionaries: list[dict], key: str) -> bool:
 
 
 class CalculationBlockValidator(BlockValidator):
-    """Both Calculated summaries and grand calculated summaries require all answers to be of the same type so this validation can be reused."""
+    """Calculation Block Validator.
 
-    ANSWERS_MUST_HAVE_SAME_TYPE = (
-        "All answers in block's answers_to_calculate must be of the same type"
-    )
-    ANSWERS_MUST_HAVE_SAME_CURRENCY = (
-        "All answers in block's answers_to_calculate must be of the same currency"
-    )
-    ANSWERS_MUST_HAVE_SAME_UNIT = (
-        "All answers in block's answers_to_calculate must be of the same unit"
-    )
+    Both Calculated summaries and grand calculated summaries require all answers
+    to be of the same type so this validation can be reused.
+    """
+
+    ANSWERS_MUST_HAVE_SAME_TYPE = "All answers in block's answers_to_calculate must be of the same type"
+    ANSWERS_MUST_HAVE_SAME_CURRENCY = "All answers in block's answers_to_calculate must be of the same currency"
+    ANSWERS_MUST_HAVE_SAME_UNIT = "All answers in block's answers_to_calculate must be of the same unit"
     ANSWERS_HAS_INVALID_ID = "Invalid answer id in block's answers_to_calculate"
 
     def get_answers(self, answers_to_calculate) -> list[dict] | None:

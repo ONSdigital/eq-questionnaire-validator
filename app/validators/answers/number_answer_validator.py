@@ -15,18 +15,10 @@ class NumberAnswerValidator(AnswerValidator):
     DECIMAL_PLACES_TOO_LONG = "Number of decimal places is greater than system limit"
     DECIMAL_PLACES_UNDEFINED = "'decimal_places' must be defined and set to 2"
     ANSWER_RANGE_INVALID = "Invalid range of min and max is possible for answer"
-    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = (
-        "The referenced answer cannot be used to set the minimum of answer"
-    )
-    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = (
-        "The referenced answer cannot be used to set the maximum of answer"
-    )
-    GREATER_DECIMALS_ON_ANSWER_REFERENCE = (
-        "The referenced answer has a greater number of decimal places than answer"
-    )
-    MIN_OR_MAX_IS_NOT_NUMERIC = (
-        "The minimum or maximum value is not a float or an integer"
-    )
+    MINIMUM_CANNOT_BE_SET_WITH_ANSWER = "The referenced answer cannot be used to set the minimum of answer"
+    MAXIMUM_CANNOT_BE_SET_WITH_ANSWER = "The referenced answer cannot be used to set the maximum of answer"
+    GREATER_DECIMALS_ON_ANSWER_REFERENCE = "The referenced answer has a greater number of decimal places than answer"
+    MIN_OR_MAX_IS_NOT_NUMERIC = "The minimum or maximum value is not a float or an integer"
 
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element, questionnaire_schema)
@@ -74,10 +66,7 @@ class NumberAnswerValidator(AnswerValidator):
         for min_max in ["minimum", "maximum"]:
             if value := self.answer.get(min_max, {}).get("value", 0):
                 if isinstance(value, dict):
-                    if (
-                        resolve_value_source_json_type(value, self.questionnaire_schema)
-                        != TYPE_NUMBER
-                    ):
+                    if resolve_value_source_json_type(value, self.questionnaire_schema) != TYPE_NUMBER:
                         self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
                 elif not isinstance(value, int | float | Decimal):
                     self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
@@ -94,11 +83,9 @@ class NumberAnswerValidator(AnswerValidator):
             )
         elif isinstance(min_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
-            referred_answer = (
-                self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=min_value,
-                    answer_ranges=answer_ranges,
-                )
+            referred_answer = self.questionnaire_schema.get_numeric_value_for_value_source(
+                value_source=min_value,
+                answer_ranges=answer_ranges,
             )
             if referred_answer["min"] < MIN_NUMBER:
                 self.add_error(
@@ -115,11 +102,9 @@ class NumberAnswerValidator(AnswerValidator):
             )
         elif isinstance(max_value, dict):
             answer_ranges = self.questionnaire_schema.numeric_answer_ranges
-            referred_answer = (
-                self.questionnaire_schema.get_numeric_value_for_value_source(
-                    value_source=max_value,
-                    answer_ranges=answer_ranges,
-                )
+            referred_answer = self.questionnaire_schema.get_numeric_value_for_value_source(
+                value_source=max_value,
+                answer_ranges=answer_ranges,
             )
             if referred_answer["max"] > MAX_NUMBER:
                 self.add_error(
@@ -181,10 +166,7 @@ class NumberAnswerValidator(AnswerValidator):
     def validate_referred_numeric_answer_decimals(self, answer_ranges):
         answer_values = answer_ranges[self.answer["id"]]
 
-        if (
-            answer_values["min_referred"] is not None
-            and answer_values["min_referred"] in answer_ranges
-        ):
+        if answer_values["min_referred"] is not None and answer_values["min_referred"] in answer_ranges:
             referred_values = answer_ranges[answer_values["min_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(
@@ -192,10 +174,7 @@ class NumberAnswerValidator(AnswerValidator):
                     referenced_id=answer_values["min_referred"],
                 )
 
-        if (
-            answer_values["max_referred"] is not None
-            and answer_values["max_referred"] in answer_ranges
-        ):
+        if answer_values["max_referred"] is not None and answer_values["max_referred"] in answer_ranges:
             referred_values = answer_ranges[answer_values["max_referred"]]
             if answer_values["decimal_places"] < referred_values["decimal_places"]:
                 self.add_error(

@@ -5,7 +5,11 @@ from tests.utils import _open_and_load_schema_file
 
 
 def test_invalid_list_collector_content_for_list():
-    """Tests that when a for_list for a list collector content is not from supplementary data or another list collector it is found to be invalid."""
+    """Test invalid list collector content for list.
+
+    Tests that when a for_list for a list collector content is not from supplementary data or
+    another list collector it is found to be invalid.
+    """
     filename = "schemas/invalid/test_invalid_supplementary_data_list_collector.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 

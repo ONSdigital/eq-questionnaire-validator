@@ -10,15 +10,30 @@ class ValueSourceValidator(Validator):
     ANSWER_SOURCE_REFERENCE_INVALID = SOURCE_REFERENCE_INVALID.format("answers")
 
     # Progress source reference errors
-    SOURCE_REFERENCE_CURRENT_BLOCK = "Invalid {} source reference: the identifier being referenced in the progress source cannot be the current block"
-    SOURCE_REFERENCE_CURRENT_SECTION = "Invalid {} source reference: the identifier being referenced in the progress source cannot be the current section"
-    SOURCE_REFERENCE_FUTURE_BLOCK = "Invalid {} source reference: the identifier being referenced in the progress source must come before the current block"
-    SOURCE_REFERENCE_FUTURE_SECTION = "Invalid {} source reference: the identifier being referenced in the progress source must come before the current section"
+    SOURCE_REFERENCE_CURRENT_BLOCK = (
+        "Invalid {} source reference: the identifier being referenced "
+        "in the progress source cannot be the current block"
+    )
+    SOURCE_REFERENCE_CURRENT_SECTION = (
+        "Invalid {} source reference: the identifier being referenced "
+        "in the progress source cannot be the current section"
+    )
+    SOURCE_REFERENCE_FUTURE_BLOCK = (
+        "Invalid {} source reference: the identifier being referenced "
+        "in the progress source must come before the current block"
+    )
+    SOURCE_REFERENCE_FUTURE_SECTION = (
+        "Invalid {} source reference: the identifier being referenced "
+        "in the progress source must come before the current section"
+    )
     SOURCE_REFERENCE_BLOCK_IN_REPEATING_SECTION = (
         "Invalid {} source reference: the identifier being "
         "referenced in the progress source cannot be a block in a repeating section except for current section"
     )
-    SOURCE_REFERENCE_REPEATING_SECTION = "Invalid {} source reference: the identifier being referenced in the progress source cannot be a repeating section"
+    SOURCE_REFERENCE_REPEATING_SECTION = (
+        "Invalid {} source reference: the identifier being referenced "
+        "in the progress source cannot be a repeating section"
+    )
 
     COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
         "Address": ["line1", "line2", "town", "postcode"],
@@ -56,18 +71,10 @@ class ValueSourceValidator(Validator):
             }
 
     def _get_valid_progress_value_source_block_identifiers(self):
-        return (
-            self.past_block_ids
-            - set([self.current_block_id])
-            - self.block_ids_in_past_repeating_sections
-        )
+        return self.past_block_ids - set([self.current_block_id]) - self.block_ids_in_past_repeating_sections
 
     def _get_valid_progress_value_source_section_identifiers(self):
-        return (
-            self.past_section_ids
-            - set([self.current_section_id])
-            - self.past_repeating_section_ids
-        )
+        return self.past_section_ids - set([self.current_section_id]) - self.past_repeating_section_ids
 
     @cached_property
     def block_ids_in_past_repeating_sections(self) -> set[str]:
@@ -112,26 +119,18 @@ class ValueSourceValidator(Validator):
             }
         else:
             parent_block_id = self.parent_block["id"]
-            parent_block_index_in_block_list = (
-                self.questionnaire_schema.block_ids_without_sub_blocks.index(
-                    parent_block_id,
-                )
+            parent_block_index_in_block_list = self.questionnaire_schema.block_ids_without_sub_blocks.index(
+                parent_block_id,
             )
             past_blocks_ids = set(
-                self.questionnaire_schema.block_ids_without_sub_blocks[
-                    :parent_block_index_in_block_list
-                ],
+                self.questionnaire_schema.block_ids_without_sub_blocks[:parent_block_index_in_block_list],
             )
 
         return past_blocks_ids
 
     @cached_property
     def future_section_ids(self) -> set[str]:
-        return (
-            set(self.questionnaire_schema.section_ids)
-            - self.past_section_ids
-            - set([self.current_section_id])
-        )
+        return set(self.questionnaire_schema.section_ids) - self.past_section_ids - set([self.current_section_id])
 
     @cached_property
     def current_section_id(self) -> str | None:
@@ -142,13 +141,9 @@ class ValueSourceValidator(Validator):
     def past_section_ids(self) -> set[dict]:
         """Returns a list of sections that are before the current parent section."""
         parent_section_id = self.parent_section["id"]
-        parent_section_index_in_section_list = (
-            self.questionnaire_schema.section_ids.index(parent_section_id)
-        )
+        parent_section_index_in_section_list = self.questionnaire_schema.section_ids.index(parent_section_id)
         ids = set(
-            self.questionnaire_schema.section_ids[
-                :parent_section_index_in_section_list
-            ],
+            self.questionnaire_schema.section_ids[:parent_section_index_in_section_list],
         )
 
         return ids
@@ -184,13 +179,9 @@ class ValueSourceValidator(Validator):
         selector = self.value_source.get("selector")
 
         if selector == "block":
-            valid_identifiers = self._valid_source_identifiers_map["progress"][
-                "block_ids"
-            ]
+            valid_identifiers = self._valid_source_identifiers_map["progress"]["block_ids"]
         else:
-            valid_identifiers = self._valid_source_identifiers_map["progress"][
-                "section_ids"
-            ]
+            valid_identifiers = self._valid_source_identifiers_map["progress"]["section_ids"]
 
         for identifier in identifiers:
             self._validate_source_identifier_progress_source(

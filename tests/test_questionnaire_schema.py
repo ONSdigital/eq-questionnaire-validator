@@ -115,10 +115,7 @@ def test_get_sub_block_context():
     filename = "schemas/valid/test_list_collector_driving_question.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert [
-        (question["id"], context)
-        for question, context in questionnaire_schema.questions_with_context
-    ] == [
+    assert [(question["id"], context) for question, context in questionnaire_schema.questions_with_context] == [
         (
             "anyone-usually-live-at-question",
             {
@@ -412,8 +409,7 @@ def test_answers_method():
         },
         {
             "decimal_places": 2,
-            "description": "Maximum amount of spending at this supermarket, should be "
-            "between 1001 and 10000",
+            "description": "Maximum amount of spending at this supermarket, should be " "between 1001 and 10000",
             "id": "set-maximum",
             "label": "Maximum Spending",
             "mandatory": True,
@@ -531,7 +527,4 @@ def test_get_block_id_by_answer_id_dynamic_answers():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert (
-        questionnaire_schema.get_block_id_by_answer_id("percentage-of-shopping")
-        == "dynamic-answer"
-    )
+    assert questionnaire_schema.get_block_id_by_answer_id("percentage-of-shopping") == "dynamic-answer"

@@ -8,12 +8,18 @@ from app.validators.questionnaire_schema import (
 
 
 class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
-    CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = "Cannot have multiple calculated summaries referencing exactly the same answers in a grand calculated summary"
-    CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY = "Cannot have a grand calculated summary before a calculated summary that it depends on"
+    CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = (
+        "Cannot have multiple calculated summaries referencing exactly the same answers in a grand calculated summary"
+    )
+    CALCULATED_SUMMARY_AFTER_GRAND_CALCULATED_SUMMARY = (
+        "Cannot have a grand calculated summary before a calculated summary that it depends on"
+    )
     CALCULATED_SUMMARY_HAS_INVALID_ID = (
         "Invalid calculated summary id in block's answers_to_calculate"
     )
-    REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT = "Cannot have a non-repeating grand calculated summary reference a repeating calculated summary"
+    REPEATING_CALCULATED_SUMMARY_OUTSIDE_REPEAT = (
+        "Cannot have a non-repeating grand calculated summary reference a repeating calculated summary"
+    )
     CALCULATED_SUMMARY_IN_DIFFERENT_REPEATING_SECTION = (
         "Cannot have a repeating grand calculated summary reference"
         " a repeating calculated summary in a different repeating section"

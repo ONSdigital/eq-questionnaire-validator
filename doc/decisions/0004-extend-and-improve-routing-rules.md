@@ -4,9 +4,9 @@
 
 There are some issues with the current structure of routing rules:
 
-- They only support limited `AND` and `OR` logic - `OR` is only supported outside of a `when` block leading to duplicate routing targets 
-- Logic can't be nested for more nuanced rules
-- Dynamic values (answers, metadata, lists) are referenced inconsistently
+-   They only support limited `AND` and `OR` logic - `OR` is only supported outside of a `when` block leading to duplicate routing targets
+-   Logic can't be nested for more nuanced rules
+-   Dynamic values (answers, metadata, lists) are referenced inconsistently
 
 Routing rules in Author don't suffer from the first issue (see https://github.com/ONSdigital/eq-author-app/wiki/Routing,-MK2); they were used as a starting point for this proposal, combined with ideas from http://jsonlogic.com.
 
@@ -15,7 +15,7 @@ Routing rules in Author don't suffer from the first issue (see https://github.co
 We will define a rule as an operation and it's arguments:
 
 ```
-{ 
+{
     "operation": [
         "argument1", "argument2"
     ]
@@ -37,9 +37,9 @@ An argument can be an operation:
 }
 ```
 
-- Operations can be boolean (and, or, equal etc.), numeric (more than, less than etc.) or array (contains etc.)
-- An operation can take any number of arguments
-- References to dynamic values - answers, metadata, lists and location - can be used in place of any argument
+-   Operations can be boolean (and, or, equal etc.), numeric (more than, less than etc.) or array (contains etc.)
+-   An operation can take any number of arguments
+-   References to dynamic values - answers, metadata, lists and location - can be used in place of any argument
 
 ### Worked example
 
@@ -96,17 +96,16 @@ The rule definition is:
                 }
             ]
         }
-	]
+    ]
 }
 ```
 
 ## Consequences
 
-- This is a breaking change. All places where rules are used will need to be migrated
-- Rules are more consistent
-- More advanced logic is possible
-- Author conversion process is less complicated
-
+-   This is a breaking change. All places where rules are used will need to be migrated
+-   Rules are more consistent
+-   More advanced logic is possible
+-   Author conversion process is less complicated
 
 ## Other information
 
@@ -115,6 +114,7 @@ The rule definition is:
 #### equals
 
 Current:
+
 ```json
 {
     "condition": "equals",
@@ -124,6 +124,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "equal": [
@@ -137,29 +138,29 @@ Proposed:
 ```
 
 All of the other simple boolean operators would work in the same way:
-- `not-equal`
-- `greater-than`
-- `greather-than-or-equal-to`
-- `less-than`
-- `less-than-or-equal-to`
+
+-   `not-equal`
+-   `greater-than`
+-   `greather-than-or-equal-to`
+-   `less-than`
+-   `less-than-or-equal-to`
 
 We should consider using the short form of expressing these rules (`==`, `!=`, `>`, `>=`, `<`, `<=`).
 
 #### equals any
 
 Current:
+
 ```json
 {
     "condition": "equals any",
     "id": "confirm-date-of-birth-answer",
-    "values": [
-        "No, I need to change their date of birth",
-        "No, I need to change my date of birth"
-    ]
+    "values": ["No, I need to change their date of birth", "No, I need to change my date of birth"]
 }
 ```
 
 Proposed:
+
 ```json
 {
     "in": [
@@ -167,10 +168,7 @@ Proposed:
             "source": "answers",
             "identifier": "confirm-date-of-birth-answer"
         },
-        [
-            "No, I need to change their date of birth",
-            "No, I need to change my date of birth"
-        ]
+        ["No, I need to change their date of birth", "No, I need to change my date of birth"]
     ]
 }
 ```
@@ -178,18 +176,17 @@ Proposed:
 #### not equals any
 
 Current:
+
 ```json
 {
     "condition": "not equals any",
     "id": "confirm-date-of-birth-answer",
-    "values": [
-        "No, I need to change their date of birth",
-        "No, I need to change my date of birth"
-    ]
+    "values": ["No, I need to change their date of birth", "No, I need to change my date of birth"]
 }
 ```
 
 Proposed:
+
 ```json
 {
     "not": [
@@ -199,10 +196,7 @@ Proposed:
                     "source": "answers",
                     "identifier": "confirm-date-of-birth-answer"
                 },
-                [
-                    "No, I need to change their date of birth",
-                    "No, I need to change my date of birth"
-                ]
+                ["No, I need to change their date of birth", "No, I need to change my date of birth"]
             ]
         }
     ]
@@ -212,6 +206,7 @@ Proposed:
 #### contains
 
 Current:
+
 ```json
 {
     "condition": "contains",
@@ -221,6 +216,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "in": [
@@ -238,6 +234,7 @@ Note that this uses the `in` operation with the arguments reversed (rather than 
 #### greater than date with offset
 
 Current:
+
 ```json
 {
     "condition": "greater than",
@@ -252,6 +249,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "greater-than": [
@@ -277,6 +275,7 @@ This example demonstrates the extensibility of this approach as new operations c
 #### list
 
 Current:
+
 ```json
 {
     "condition": "greater than",
@@ -286,6 +285,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "greater-than": [
@@ -301,6 +301,7 @@ Proposed:
 #### location
 
 Current:
+
 ```json
 {
     "comparison": {
@@ -314,13 +315,14 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "equal": [
         {
             "source": "list",
             "identifier": "household",
-            "id_selector": "primary_person",
+            "id_selector": "primary_person"
         },
         {
             "source": "location",
@@ -333,6 +335,7 @@ Proposed:
 #### combined not equals and greater than date
 
 Current:
+
 ```json
 [
     {
@@ -354,6 +357,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "and": [

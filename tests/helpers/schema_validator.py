@@ -49,9 +49,7 @@ class SchemaTestValidator(Validator):
         with open(schema, encoding="utf8") as schema_data:
             self.schema: Mapping[str, Any] = load(schema_data)
 
-        registry = (
-            Registry().with_resources(pairs=self.lookup_ref_store().items()).crawl()
-        )
+        registry = Registry().with_resources(pairs=self.lookup_ref_store().items()).crawl()
 
         self.schema_validator = DraftValidator(self.schema, registry=registry)
 

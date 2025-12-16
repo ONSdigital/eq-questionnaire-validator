@@ -5,8 +5,12 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )
-    ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = "Answer ids for calculated summary must be set in the same section as the calculated summary block"
-    CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER = "Calculated summaries cannot consist of a single answer unless it is a repeating answer"
+    ANSWER_SET_IN_DIFFERENT_SECTION_FOR_CALCULATED_SUMMARY = (
+        "Answer ids for calculated summary must be set in the same section as the calculated summary block"
+    )
+    CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER = (
+        "Calculated summaries cannot consist of a single answer unless it is a repeating answer"
+    )
 
     def __init__(self, block, questionnaire_schema):
         super().__init__(block, questionnaire_schema)

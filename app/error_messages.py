@@ -2,45 +2,41 @@ DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
 INVALID_WHITESPACE_FOUND = "Found invalid white space(s) in schema text"
 DUPLICATE_ID_FOUND = "Duplicate id found"
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks or supplementary data sources"
-MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED = "Section cannot have multiple list collectors that populate the same list when summary with items are enabled."
-MULTIPLE_LIST_COLLECTORS = "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers"
-RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = (
-    "Related_answers id not present in any list collector"
+MULTIPLE_LIST_COLLECTORS_WITH_SUMMARY_ENABLED = (
+    "Section cannot have multiple list collectors that populate the same list when summary with items are enabled."
 )
-NO_LABEL_FOR_RELATED_ANSWER = "No label found for answer '{answer_id}', only answers that support labels can be used as related answers"
-ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR = "Item anchor answer id '{answer_id}' not present in any list collector for list name '{list_name}'"
-ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = (
-    "The referenced answer cannot be used to set the minimum of answer"
+MULTIPLE_LIST_COLLECTORS = (
+    "Section cannot contain multiple ListCollector blocks with a summary showing non-item answers"
 )
-ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID = "The answer type for option label from value is not of type ['Radio','Checkbox','Dropdown']"
-ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID = "Expected the answer type for '{transform}' transform to be type '{expected_type}' but got type '{answer_type}'"
-ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH = "The answer unit and transform unit mismatch, '{answer_unit}' not '{transform_unit}'"
-ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = (
-    "The referenced answer cannot be used to set the maximum of answer"
+RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR = "Related_answers id not present in any list collector"
+NO_LABEL_FOR_RELATED_ANSWER = (
+    "No label found for answer '{answer_id}', only answers that support labels can be used as related answers"
 )
-UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE = (
-    "Unsupported answer type used for question summary concatenation"
+ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR = (
+    "Item anchor answer id '{answer_id}' not present in any list collector for list name '{list_name}'"
 )
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MIN = "The referenced answer cannot be used to set the minimum of answer"
+ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID = (
+    "The answer type for option label from value is not of type ['Radio','Checkbox','Dropdown']"
+)
+ANSWER_TYPE_FOR_TRANSFORM_TYPE_INVALID = (
+    "Expected the answer type for '{transform}' transform to be type '{expected_type}' but got type '{answer_type}'"
+)
+ANSWER_UNIT_AND_TRANSFORM_UNIT_MISMATCH = (
+    "The answer unit and transform unit mismatch, '{answer_unit}' not '{transform_unit}'"
+)
+ANSWER_REFERENCE_CANNOT_BE_USED_ON_MAX = "The referenced answer cannot be used to set the maximum of answer"
+UNSUPPORTED_QUESTION_SUMMARY_ANSWER_TYPE = "Unsupported answer type used for question summary concatenation"
 REQUIRED_HUB_SECTION_UNDEFINED = "Required section for hub is undefined"
 VARIANTS_HAS_ONE_VARIANT = "Variants list only contains one variant"
-VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = (
-    "Variants in block contain different numbers of answers"
-)
-VARIANTS_HAVE_DIFFERENT_QUESTION_IDS = (
-    "Variants contain more than one question_id for block"
-)
-VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS = (
-    "Variants contain different default answers for block"
-)
+VARIANTS_HAVE_DIFFERENT_ANSWER_LIST_LENGTHS = "Variants in block contain different numbers of answers"
+VARIANTS_HAVE_DIFFERENT_QUESTION_IDS = "Variants contain more than one question_id for block"
+VARIANTS_HAVE_DIFFERENT_DEFAULT_ANSWERS = "Variants contain different default answers for block"
 VARIANTS_HAVE_MISMATCHED_ANSWER_IDS = "Variants have mismatched answer_ids for block"
-VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = (
-    "Variants have mismatched answer types for block"
+VARIANTS_HAVE_MISMATCHED_ANSWER_TYPES = "Variants have mismatched answer types for block"
+VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = "Variants have more than one question type for block."
+PREVIEW_WITHOUT_INTRODUCTION_BLOCK = (
+    "No introduction block found. Introduction block is mandatory when using the preview questions feature."
 )
-VARIANTS_HAVE_MULTIPLE_QUESTION_TYPES = (
-    "Variants have more than one question type for block."
-)
-PREVIEW_WITHOUT_INTRODUCTION_BLOCK = "No introduction block found. Introduction block is mandatory when using the preview questions feature."
-ANSWER_REFERENCED_BEFORE_EXISTS = (
-    "Answer '{answer_id}' referenced as source before it has been added."
-)
+ANSWER_REFERENCED_BEFORE_EXISTS = "Answer '{answer_id}' referenced as source before it has been added."
 LIST_REFERENCED_BEFORE_CREATED = "List referenced as source before it has been created."

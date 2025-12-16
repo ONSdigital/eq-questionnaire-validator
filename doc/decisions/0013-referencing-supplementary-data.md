@@ -7,10 +7,10 @@ The structure of the supplementary data is documented at https://github.com/ONSd
 
 **Requirements:**
 
-- Use supplementary data where value sources are supported, such as placeholders, validation, routing etc.
-- Support looping features for lists of items such as a list of employees, products etc.
-- Ability to use list features such as repeating sections
-- Support for retrieving values from a nested structure
+-   Use supplementary data where value sources are supported, such as placeholders, validation, routing etc.
+-   Support looping features for lists of items such as a list of employees, products etc.
+-   Ability to use list features such as repeating sections
+-   Support for retrieving values from a nested structure
 
 ## Proposal
 
@@ -23,9 +23,9 @@ The JSON Runner will use for the supplementary data will be part of the SDS API 
 
 ```yaml
 {
-  "status": "success",
-  "survey_id": "123",
-  "data": "..."  #  <- the encrypted data that decrypts to the JSON below
+    "status": "success",
+    "survey_id": "123",
+    "data": "...", #  <- the encrypted data that decrypts to the JSON below
 }
 ```
 
@@ -33,37 +33,37 @@ The JSON that is decrypted from the above `data` property would look like this:
 
 ```json
 {
-  "schema_version": "v1",
-  "identifier": "79900005222",
-  "note": {
-    "title": "Volume of total production",
-    "description": "Figures should cover the total quantity of the goods produced during the period of the return",
-    "example": {
-      "title": "Including",
-      "description": "Any production that was incorporated into the manufacture of other products."
+    "schema_version": "v1",
+    "identifier": "79900005222",
+    "note": {
+        "title": "Volume of total production",
+        "description": "Figures should cover the total quantity of the goods produced during the period of the return",
+        "example": {
+            "title": "Including",
+            "description": "Any production that was incorporated into the manufacture of other products."
+        }
+    },
+    "guidance": "Some guidance about the survey",
+    "items": {
+        "products": [
+            {
+                "identifier": "89929001",
+                "name": "Articles and equipment for sports or outdoor games",
+                "value_sales": {
+                    "answer_code": "12345",
+                    "label": "Value of sales"
+                }
+            },
+            {
+                "identifier": "201630601",
+                "name": "Other Minerals",
+                "value_sales": {
+                    "answer_code": "54321",
+                    "label": "Value of sales"
+                }
+            }
+        ]
     }
-  },
-  "guidance": "Some guidance about the survey",
-  "items": {
-    "products": [
-       {
-          "identifier": "89929001",
-          "name": "Articles and equipment for sports or outdoor games",
-          "value_sales": {
-             "answer_code": "12345",
-             "label": "Value of sales"
-          }
-       },
-       {
-          "identifier": "201630601",
-          "name": "Other Minerals",
-          "value_sales": {
-             "answer_code": "54321",
-             "label": "Value of sales"
-          }
-       }
-    ]
-  }
 }
 ```
 
@@ -71,57 +71,64 @@ The JSON that is decrypted from the above `data` property would look like this:
 
 1. **Referencing simple key-value data:**
 
-   ```json
-   {
-     "source": "supplementary_data",
-     "identifier": "guidance"
-   }
-   ```
+    ```json
+    {
+        "source": "supplementary_data",
+        "identifier": "guidance"
+    }
+    ```
 
-   The above would resolve to the string: `Some guidance about the survey`
+    The above would resolve to the string: `Some guidance about the survey`
 
 2. **Referencing data from a nested structure**
 
-   A new property named `selectors`, an array of strings, will be added to the value source definition. This will allow us to reference data from a nested structure. The existing property `selector`, which is a string, won't be used for supplementary data sources as that only supports a single level of nesting.
-   The use of `selectors` will only support referencing nested data of multiple objects and not arrays.
+    A new property named `selectors`, an array of strings, will be added to the value source definition. This will allow us to reference data from a nested structure.
+    The existing property `selector`, which is a string, won't be used for supplementary data sources as that only supports a single level of nesting.
+    The use of `selectors` will only support referencing nested data of multiple objects and not arrays.
 
-   **Single level of nesting**
+    **Single level of nesting**
 
-   ```json
-   {
-     "source": "supplementary_data",
-     "identifier": "note",
-     "selectors": ["title"]
-   }
-   ```
+    ```json
+    {
+        "source": "supplementary_data",
+        "identifier": "note",
+        "selectors": ["title"]
+    }
+    ```
 
-   The above would resolve to the string: `Volume of total production`
+    The above would resolve to the string: `Volume of total production`
 
-   **Multiple levels of nesting**
+    **Multiple levels of nesting**
 
-   ```json
-   {
-     "source": "supplementary_data",
-     "identifier": "note",
-     "selectors": ["example", "description"]
-   }
-   ```
+    ```json
+    {
+        "source": "supplementary_data",
+        "identifier": "note",
+        "selectors": ["example", "description"]
+    }
+    ```
 
-   The above would resolve to the string: `Any production that was incorporated into the manufacture of other products.`
+    The above would resolve to the string: `Any production that was incorporated into the manufacture of other products.`
 
 ---
 
 ### Referencing data for repeating items
 
-As documented in the `sds-schema-definitions` repo, the top-level key `items` represents repeating items, for example, a list of employees, companies, products etc. This has special meaning in Runner as any "list" of things defined in `items` will be preloaded in eQ Runner's List Store. This allows us to use any looping or repeating feature backed by a list store, such as looping 2.5, repeating sections etc.
-For example, `items.products` will result in a list named `products` being added to the list store. The identifiers will be uniquely generated by eQ. eQ will not use the identifiers defined in the supplementary data as we cannot control an ID's structure and allowed values. However, on submission, eQ will provide downstream with a mapping of list item IDs to supplementary data IDs.
+As documented in the `sds-schema-definitions` repo, the top-level key `items` represents repeating items, for example, a list of employees, companies, products etc.
+This has special meaning in Runner as any "list" of things defined in `items` will be preloaded in eQ Runner's List Store.
+This allows us to use any looping or repeating feature backed by a list store, such as looping 2.5, repeating sections etc.
+For example, `items.products` will result in a list named `products` being added to the list store.
+The identifiers will be uniquely generated by eQ. eQ will not use the identifiers defined in the supplementary data as we cannot control an ID's structure and allowed values.
+However, on submission, eQ will provide downstream with a mapping of list item IDs to supplementary data IDs.
 
 When referencing data for a repeating item, there will be no need to use the keys such as `"items"` in the source definition. This structure provides a generic way to define repeating items and for Runner to parse it with enough context.
 
 Referencing data for repeating items works similarly to non-repeating items. The reference will be made using the list item name.
 
-A key point to understand here is that referencing data for a repeating item will only be supported in the context of a "repeat". For example, inside the list collector child pages, such as the repeating questions, or anywhere inside a repeating section.
-This is because, in both cases, Runner will have access to the list item id of the current item, which is what Runner will use to look up the data for the correct item. This is identical to how values for **answers** are resolved inside a repeat. We use the answer ID and the list item ID to resolve the value.
+A key point to understand here is that referencing data for a repeating item will only be supported in the context of a "repeat".
+For example, inside the list collector child pages, such as the repeating questions, or anywhere inside a repeating section.
+This is because, in both cases, Runner will have access to the list item id of the current item, which is what Runner will use to look up the data for the correct item.
+This is identical to how values for **answers** are resolved inside a repeat. We use the answer ID and the list item ID to resolve the value.
 
 For both the examples below, we'll assume the list item id for the location (URL) is `abCdE`, which behind the scenes is Runner's ID which maps to the SDS ID `89929001` (`items.products[].identifier`).
 
@@ -129,28 +136,28 @@ For both the examples below, we'll assume the list item id for the location (URL
 
     ```json
     {
-      "source": "supplementary_data",
-      "identifier": "products",
-      "selectors": ["name"]
+        "source": "supplementary_data",
+        "identifier": "products",
+        "selectors": ["name"]
     }
     ```
 
-   The above would resolve to the string: `Articles and equipment for sports or outdoor games`
+    The above would resolve to the string: `Articles and equipment for sports or outdoor games`
 
 2. **Referencing data from a nested structure**
 
     ```json
     {
-      "source": "supplementary_data",
-      "identifier": "products",
-      "selectors": ["value_sales", "answer_code"]
+        "source": "supplementary_data",
+        "identifier": "products",
+        "selectors": ["value_sales", "answer_code"]
     }
     ```
 
-   The above would resolve to the string: `12345`
+    The above would resolve to the string: `12345`
 
 ## Consequences
 
-- Supplementary data can be used where value sources are supported.
-- Supplementary data can be used in the context of a list collector child pages and repeating sections
-- Able to reference data from a nested structure.
+-   Supplementary data can be used where value sources are supported.
+-   Supplementary data can be used in the context of a list collector child pages and repeating sections
+-   Able to reference data from a nested structure.

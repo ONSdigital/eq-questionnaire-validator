@@ -3,8 +3,9 @@
 ## Context
 
 We need to be able to support:
-- variations of text based on the number of items in a list
-- word forms of numbers 1 to 9
+
+-   variations of text based on the number of items in a list
+-   word forms of numbers 1 to 9
 
 For example:
 
@@ -20,16 +21,16 @@ Yes, .. people live here
 
 ## Proposal
 
-- Use a placeholder transform to transform a number into words.
-- New `text_plural` element to support the plural forms of the text.
-- Use the CLDR plural categories to define the plural forms (http://www.unicode.org/reports/tr35/tr35-33/tr35-numbers.html#Language_Plural_Rules):
-    - zero
-    - one
-    - two
-    - few
-    - many
-    - other
-- Choose the plural form based on a numeric answer, metadata or number of items in a list.
+-   Use a placeholder transform to transform a number into words.
+-   New `text_plural` element to support the plural forms of the text.
+-   Use the CLDR plural categories to define the plural forms (http://www.unicode.org/reports/tr35/tr35-33/tr35-numbers.html#Language_Plural_Rules):
+    -   zero
+    -   one
+    -   two
+    -   few
+    -   many
+    -   other
+-   Choose the plural form based on a numeric answer, metadata or number of items in a list.
 
 Example schema:
 
@@ -146,13 +147,13 @@ other - msgstr[5]
 
 ## Consequences
 
-- Plural forms can be used in schema text.
-- Translators need to be aware of how to populate the plural forms in the translation tool.
-- Need to review the rule that enforces answer labels and values are the same.
+-   Plural forms can be used in schema text.
+-   Translators need to be aware of how to populate the plural forms in the translation tool.
+-   Need to review the rule that enforces answer labels and values are the same.
 
 ## Useful references
 
-- http://babel.pocoo.org/en/latest/api/plural.html
-- http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
-- http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html#cy
-- https://www.omniglot.com/language/numbers/welsh.htm
+-   http://babel.pocoo.org/en/latest/api/plural.html
+-   http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
+-   http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html#cy
+-   https://www.omniglot.com/language/numbers/welsh.htm
