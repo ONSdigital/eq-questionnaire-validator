@@ -207,6 +207,26 @@ and the Python files in the repository:
 make lint
 ```
 
+## MegaLinter (Lint/Format non-python files)
+
+[MegaLinter](https://github.com/oxsecurity/megalinter) is utilised to lint the non-python files in the project.
+It offers a single interface to execute a suite of linters for multiple languages and formats, ensuring adherence to
+best practices and maintaining consistency across the repository without the need to install each linter individually.
+
+MegaLinter examines various file types and tools, including GitHub Actions, Shell scripts, Dockerfile, etc. It is
+configured using the `.mega-linter.yml` file.
+
+To run MegaLinter, ensure you have **Docker** installed on your system.
+
+> Note: The initial run may take some time to download the Docker image. However, subsequent executions will be
+> considerably faster due to Docker caching.
+
+To start the linter and automatically rectify fixable issues, run:
+
+```bash
+make megalint
+```
+
 ## Running with Docker
 
 To install Docker run:

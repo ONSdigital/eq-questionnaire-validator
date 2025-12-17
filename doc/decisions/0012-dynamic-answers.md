@@ -247,7 +247,7 @@ For Dynamic Answers driven by list collector sources, we would need to include t
 As a result, the answer payload sent downstream would only contain the prefixed `answer_id` and not the one that is
 dynamically generated at run time with the appended `list_item_id` outlined above e.g.
 
-````json
+```json
 {
     "answer_id": "percentage-of-shopping",
     "value": 70,
@@ -258,6 +258,7 @@ dynamically generated at run time with the appended `list_item_id` outlined abov
     "value": 30,
     "list_item_id": "fdhjfl"
 }
+```
 
 For other sources, we would set the `list_item_id` and use it the same way it is used for list collector sources
 but instead of it being set to an automatically generated value we would set it to to the option value with any spaces
@@ -279,7 +280,7 @@ replaced with hyphens as per the checkbox example below:
     "value": 30,
     "list_item_id": "Aldi"
 }
-````
+```
 
 This is something we will need to discuss with downstream teams as they will need to know we are using it in this way.
 We will also need to discuss it with Author because they will need to know that they need to be set but

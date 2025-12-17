@@ -47,7 +47,9 @@ An argument can be an operation:
 
 Using the example:
 
-`(answer1 = "No" OR unanswered) AND answer2 != 8 AND answer4 > answer3`
+```text
+(answer1 = "No" OR unanswered) AND answer2 != 8 AND answer4 > answer3
+```
 
 The rule definition is:
 
