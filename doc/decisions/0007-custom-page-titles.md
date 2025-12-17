@@ -81,5 +81,5 @@ If either `list_item_index` (or `to_list_item_index` where applicable) cannot be
 
 ## Consequences
 
--   Page title rendering will be implicit in the schema.
--   There will be two methods for rendering strings, placeholder definitions and implicit string formatting (though this is already the case due to min and max definitions).
+- Page title rendering will be implicit in the schema.
+- There will be two methods for rendering strings, placeholder definitions and implicit string formatting (though this is already the case due to min and max definitions).

@@ -2,21 +2,24 @@
 
 ## Context
 
-The current way we define piping (string interpolation) in a schema is to include jinja filters directly in the source strings. This has a number of issues:
+The current way we define piping (string interpolation) in a schema is to include jinja filters directly in the source strings.
+This has a number of issues:
 
--   It's hard to read for translators.
--   It's possible that the jinja filters could become corrupted during translation.
--   If the way that we resolve the piped information changes, then the translations would all need to be updated.
--   We can't easily parse the schema to understand what is being piped, for example to find all places where a specific answer is piped.
+- It's hard to read for translators.
+- It's possible that the jinja filters could become corrupted during translation.
+- If the way that we resolve the piped information changes, then the translations would all need to be updated.
+- We can't easily parse the schema to understand what is being piped,
+for example to find all places where a specific answer is piped.
 
 ## Proposal
 
-To define an appropriate schema to resolve placeholders in a source string. When resolving placeholder values we need to cater for:
+To define an appropriate schema to resolve placeholders in a source string.
+When resolving placeholder values we need to cater for:
 
--   Previous answers or metadata
--   Previous answers or metadata transformed in some way e.g. formatting a number with a currency symbol
--   Using multiple answers, metadata or fixed values in a transform e.g. formatting a date answer with a specific format
--   Chaining transforms e.g. concatenate a name and then add a 's
+- Previous answers or metadata
+- Previous answers or metadata transformed in some way e.g. formatting a number with a currency symbol
+- Using multiple answers, metadata or fixed values in a transform e.g. formatting a date answer with a specific format
+- Chaining transforms e.g. concatenate a name and then add a 's
 
 ### Previous answers or metadata
 
@@ -311,8 +314,12 @@ Note: The repetition of placeholder resolution in the same block is rare
 
 ## Other notes
 
--   No provision has been made in the schema design for group instances. It is assumed that:
-    -   When a placeholder is used in a non-repeating group that any reference to answers resolves to all answers that match the answer id.
-    -   When a placeholder is used in a repeating group that any reference to answers resolves to the answer that matches within the current repeat.
--   `format_date_range` and `format_datetime` should be done via two separate placeholders rather than a transform, so that the 'to' and 'at' are in the sentence to be translated.
--   Jinja filters are used to resolve values in the variables schema e.g. `period` in 1_0005. This will no longer work and will require some further design outside of the scope of this proposal.
+- No provision has been made in the schema design for group instances. It is assumed that:
+    - When a placeholder is used in a non-repeating group that any reference to answers resolves to
+    all answers that match the answer id.
+    - When a placeholder is used in a repeating group that any reference to answers resolves to the
+    answer that matches within the current repeat.
+- `format_date_range` and `format_datetime` should be done via two separate placeholders rather than a transform,
+so that the 'to' and 'at' are in the sentence to be translated.
+- Jinja filters are used to resolve values in the variables schema e.g. `period` in 1_0005.
+This will no longer work and will require some further design outside of the scope of this proposal.

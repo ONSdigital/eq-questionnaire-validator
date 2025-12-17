@@ -4,17 +4,19 @@
 
 There are some issues with the current structure of routing rules:
 
--   They only support limited `AND` and `OR` logic - `OR` is only supported outside of a `when` block leading to duplicate routing targets
--   Logic can't be nested for more nuanced rules
--   Dynamic values (answers, metadata, lists) are referenced inconsistently
+- They only support limited `AND` and `OR` logic - `OR` is only supported outside of
+a `when` block leading to duplicate routing targets
+- Logic can't be nested for more nuanced rules
+- Dynamic values (answers, metadata, lists) are referenced inconsistently
 
-Routing rules in Author don't suffer from the first issue (see https://github.com/ONSdigital/eq-author-app/wiki/Routing,-MK2); they were used as a starting point for this proposal, combined with ideas from http://jsonlogic.com.
+Routing rules in Author don't suffer from the first issue (see `https://github.com/ONSdigital/eq-author-app/wiki/Routing,-MK2`);
+they were used as a starting point for this proposal, combined with ideas from `http://jsonlogic.com`.
 
 ## Proposal
 
 We will define a rule as an operation and it's arguments:
 
-```
+```json
 {
     "operation": [
         "argument1", "argument2"
@@ -24,7 +26,7 @@ We will define a rule as an operation and it's arguments:
 
 An argument can be an operation:
 
-```
+```json
 {
     "operation": [
         {
@@ -37,17 +39,15 @@ An argument can be an operation:
 }
 ```
 
--   Operations can be boolean (and, or, equal etc.), numeric (more than, less than etc.) or array (contains etc.)
--   An operation can take any number of arguments
--   References to dynamic values - answers, metadata, lists and location - can be used in place of any argument
+- Operations can be boolean (and, or, equal etc.), numeric (more than, less than etc.) or array (contains etc.)
+- An operation can take any number of arguments
+- References to dynamic values - answers, metadata, lists and location - can be used in place of any argument
 
 ### Worked example
 
 Using the example:
 
-```
-(answer1 = "No" OR unanswered) AND answer2 != 8 AND answer4 > answer3
-```
+`(answer1 = "No" OR unanswered) AND answer2 != 8 AND answer4 > answer3`
 
 The rule definition is:
 
@@ -102,10 +102,10 @@ The rule definition is:
 
 ## Consequences
 
--   This is a breaking change. All places where rules are used will need to be migrated
--   Rules are more consistent
--   More advanced logic is possible
--   Author conversion process is less complicated
+- This is a breaking change. All places where rules are used will need to be migrated
+- Rules are more consistent
+- More advanced logic is possible
+- Author conversion process is less complicated
 
 ## Other information
 
@@ -139,11 +139,11 @@ Proposed:
 
 All of the other simple boolean operators would work in the same way:
 
--   `not-equal`
--   `greater-than`
--   `greather-than-or-equal-to`
--   `less-than`
--   `less-than-or-equal-to`
+- `not-equal`
+- `greater-than`
+- `greater-than-or-equal-to`
+- `less-than`
+- `less-than-or-equal-to`
 
 We should consider using the short form of expressing these rules (`==`, `!=`, `>`, `>=`, `<`, `<=`).
 
