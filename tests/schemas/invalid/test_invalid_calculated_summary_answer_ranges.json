@@ -62,10 +62,7 @@
               "title": "We calculate the total of currency values entered to be %(total)s. Is this correct? (Skipped Fourth)",
               "calculation": {
                 "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "first-number-answer",
-                  "second-number-answer"
-                ],
+                "answers_to_calculate": ["first-number-answer", "second-number-answer"],
                 "title": "Grand total of previous values"
               }
             },

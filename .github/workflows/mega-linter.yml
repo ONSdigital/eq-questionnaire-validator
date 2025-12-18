@@ -1,0 +1,89 @@
+# MegaLinter GitHub Action configuration file
+# More info at https://megalinter.io
+---
+name: MegaLinter
+
+permissions:
+  contents: read
+  actions: read
+
+# Trigger mega-linter at every push. Action will also be visible from
+# Pull Requests to main
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches: [main]
+
+# Comment env block if you do not want to apply fixes
+env:
+  # Show individual linter status in GitHub Actions status summary
+  GITHUB_STATUS_REPORTER: true
+
+  # Enable to show lint results in GitHub PR comments. Disabled as it can be noisy.
+  GITHUB_COMMENT_REPORTER: false
+
+concurrency:
+  group: "${{ github.head_ref || github.ref }}-${{ github.workflow }}"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: MegaLinter
+    runs-on: ubuntu-latest
+
+    steps:
+      # Git Checkout
+      - name: Checkout Code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+
+          # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to
+          # improve performance
+          # fetch-depth: 0
+
+      - name: Check PAT and Set APPLY_FIXES
+        run: |
+          if [ -z "${{ secrets.PAT }}" ]; then
+            echo "APPLY_FIXES=none" >> "$GITHUB_ENV"
+          fi
+
+      # MegaLinter
+      - name: MegaLinter
+
+        # You can override MegaLinter flavor used to have faster performances
+        # More info at https://megalinter.io/latest/flavors/
+        uses: oxsecurity/megalinter/flavors/python@v9.1.0
+
+        id: ml
+
+        # All available variables are described in documentation
+        # https://megalinter.io/latest/config-file/
+        env:
+          # Validates all source when push on main, else just the git diff with
+          # main. Override with true if you always want to lint all sources
+          #
+          # To validate the entire codebase, set to:
+          # VALIDATE_ALL_CODEBASE: true
+          #
+          # To validate only diff with main, set to:
+          # VALIDATE_ALL_CODEBASE: >-
+          #   ${{
+          #     github.event_name == 'push' &&
+          #     github.ref == 'refs/heads/main'
+          #   }}
+          VALIDATE_ALL_CODEBASE: true
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # ADD YOUR CUSTOM ENV VARIABLES HERE TO OVERRIDE VALUES OF
+          # .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
+
+      # Upload MegaLinter artifacts
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: success() || failure()
+        with:
+          name: MegaLinter reports
+          path: |
+            megalinter-reports
+            mega-linter.log

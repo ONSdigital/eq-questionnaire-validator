@@ -27,9 +27,7 @@ describe("AJV api status", () => {
 describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
     it("test_invalid_block_type", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/invalid/test_invalid_block_type.json"
-      );
+      const data = fs.readFileSync("ajv/tests/schemas/invalid/test_invalid_block_type.json");
       chai
         .request(app)
         .post("/validate")
@@ -46,9 +44,7 @@ describe("AJV schema Validator", () => {
         });
     });
     it("test_valid_question_description", (done) => {
-      const data = fs.readFileSync(
-        "ajv/tests/schemas/valid/test_question_description.json"
-      );
+      const data = fs.readFileSync("ajv/tests/schemas/valid/test_question_description.json");
       chai
         .request(app)
         .post("/validate")

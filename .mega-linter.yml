@@ -1,0 +1,44 @@
+---
+# Configuration file for MegaLinter
+#
+# See all available variables at https://megalinter.io/latest/config-file/ and in
+# linters documentation
+
+# all, none, or list of linter keys
+APPLY_FIXES: none
+
+FORMATTERS_DISABLE_ERRORS: false
+
+# If you use ENABLE variable, all other languages/formats/tooling-formats will
+# be disabled by default
+ENABLE:
+  #  - COPYPASTE
+  #- EDITORCONFIG
+  - JSON
+  #  - MARKDOWN
+  #- PYTHON
+  #- REPOSITORY
+  - YAML
+
+SHOW_ELAPSED_TIME: true
+
+FILEIO_REPORTER: false
+# Uncomment if you want MegaLinter to detect errors but not block CI to pass
+# DISABLE_ERRORS: true
+
+# Use yml file to allow the use of comments. Megalinter's default is .markdown-lint.json
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+
+# Dependabot yaml in SchemaStore is currently not up to date. Dependabot is validated on push by GitHub by default.
+YAML_V8R_FILTER_REGEX_EXCLUDE: "dependabot.yml"
+
+PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=120"
+
+# Skips Bandit rule preventing the use of assert statements in tests
+PYTHON_BANDIT_ARGUMENTS: "--skip B101"
+
+# Excludes `poetry.lock` from EditorConfig checks, as it is an auto-generated file
+EDITORCONFIG_EDITORCONFIG_CHECKER_FILTER_REGEX_EXCLUDE: "poetry.lock"
+
+# Disables import-error check for Pylint to prevent false positive errors
+PYTHON_PYLINT_ARGUMENTS: "--disable=import-error"

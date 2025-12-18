@@ -23,12 +23,12 @@ Yes, .. people live here
 - Use a placeholder transform to transform a number into words.
 - New `text_plural` element to support the plural forms of the text.
 - Use the CLDR plural categories to define the plural forms (http://www.unicode.org/reports/tr35/tr35-33/tr35-numbers.html#Language_Plural_Rules):
-  - zero
-  - one
-  - two
-  - few
-  - many
-  - other
+    - zero
+    - one
+    - two
+    - few
+    - many
+    - other
 - Choose the plural form based on a numeric answer, metadata or number of items in a list.
 
 Example schema:

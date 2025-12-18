@@ -15,14 +15,14 @@ This structure is used by placeholders and is part of the agreed [changes to rou
 
 ## Proposal
 
-Update validation so that it uses the same consistent way of referencing dynamic values as placeholders and routing. This will be changed for minimum and maximum validation on numbers and dates (all current validation we support). 
+Update validation so that it uses the same consistent way of referencing dynamic values as placeholders and routing. This will be changed for minimum and maximum validation on numbers and dates (all current validation we support).
 
-### Numbers 
+### Numbers
 
 Current:
 
 - Validation properties: `min_value`, `max_value`
-- Value reference properties: `answer_id` 
+- Value reference properties: `answer_id`
 - Also `exclusive` property
 
 ```json
@@ -55,7 +55,7 @@ Proposed:
 
 Current:
 
-- Validation properties: `minimum` and `maximum` 
+- Validation properties: `minimum` and `maximum`
 - Value references properties: `answer_id` and `meta`
 - Also `offset_by` property
 

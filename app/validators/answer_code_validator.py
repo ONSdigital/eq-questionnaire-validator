@@ -7,7 +7,10 @@ class AnswerCodeValidator(Validator):
         "Answer codes are only supported in data version 0.0.3"
     )
     DUPLICATE_ANSWER_CODE_FOUND = "Answer codes must be unique"
-    DUPLICATE_ANSWER_ID_FOUND = "Answer ids must only have one answer code unless answer codes are being set against answer values"
+    DUPLICATE_ANSWER_ID_FOUND = (
+        "Answer ids must only have one answer code unless answer codes are being set "
+        "against answer values"
+    )
     MISSING_ANSWER_CODE = "No answer codes found for answer_id set in the schema"
     ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA = (
         "No matching answer id found in the schema for the given answer code"
@@ -18,9 +21,18 @@ class AnswerCodeValidator(Validator):
     ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = (
         "The number of answer codes does not match number of answer options"
     )
-    MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = "Only one answer code should be set for an answer when not specifying answer codes for answer options"
-    INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = "Values specified in answer code and answer options do not match or they are of different lengths."
-    DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = "Answers with dynamic options must have an answer code mapping without answer value"
+    MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = (
+        "Only one answer code should be set for an answer when not specifying answer "
+        "codes for answer options"
+    )
+    INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
+        "Values specified in answer code and answer options do not match or they are "
+        "of different lengths."
+    )
+    DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
+        "Answers with dynamic options must have an answer code mapping without answer "
+        "value"
+    )
     INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR = (
         "Answer codes are not supported for list edit and remove question types"
     )

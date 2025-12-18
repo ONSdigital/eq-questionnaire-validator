@@ -115,3 +115,5 @@ node_modules
 
 # Linters
 .ruff_cache/
+
+megalinter-reports/

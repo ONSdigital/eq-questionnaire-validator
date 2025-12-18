@@ -340,10 +340,7 @@
                       "source": "supplementary_data",
                       "identifier": "total_uk_sales"
                     },
-                    "answers_to_calculate": [
-                      "sales-bristol-answer",
-                      "sales-london-answer"
-                    ],
+                    "answers_to_calculate": ["sales-bristol-answer", "sales-london-answer"],
                     "conditions": ["less than", "equals"]
                   }
                 ],
@@ -1255,10 +1252,7 @@
                                         {
                                           "source": "supplementary_data",
                                           "identifier": "products",
-                                          "selectors": [
-                                            "guidance_include",
-                                            "title"
-                                          ]
+                                          "selectors": ["guidance_include", "title"]
                                         }
                                       ]
                                     }
@@ -1279,10 +1273,7 @@
                                       "list_to_format": {
                                         "source": "supplementary_data",
                                         "identifier": "products",
-                                        "selectors": [
-                                          "guidance_include",
-                                          "list"
-                                        ]
+                                        "selectors": ["guidance_include", "list"]
                                       }
                                     }
                                   }
@@ -1305,10 +1296,7 @@
                                         {
                                           "source": "supplementary_data",
                                           "identifier": "products",
-                                          "selectors": [
-                                            "guidance_exclude",
-                                            "title"
-                                          ]
+                                          "selectors": ["guidance_exclude", "title"]
                                         }
                                       ]
                                     }
@@ -1329,10 +1317,7 @@
                                       "list_to_format": {
                                         "source": "supplementary_data",
                                         "identifier": "products",
-                                        "selectors": [
-                                          "guidance_exclude",
-                                          "list"
-                                        ]
+                                        "selectors": ["guidance_exclude", "list"]
                                       }
                                     }
                                   }

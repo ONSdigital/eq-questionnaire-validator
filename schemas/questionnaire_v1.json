@@ -2,18 +2,7 @@
   "$id": "/questionnaire_v1.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": [
-    "mime_type",
-    "schema_version",
-    "data_version",
-    "survey_id",
-    "title",
-    "sections",
-    "theme",
-    "metadata",
-    "language",
-    "questionnaire_flow"
-  ],
+  "required": ["mime_type", "schema_version", "data_version", "survey_id", "title", "sections", "theme", "metadata", "language", "questionnaire_flow"],
   "properties": {
     "language": {
       "enum": ["cy", "en", "eo", "ga"]
@@ -65,22 +54,7 @@
       "additionalProperties": false
     },
     "theme": {
-      "enum": [
-        "business",
-        "social",
-        "default",
-        "health",
-        "northernireland",
-        "dbt",
-        "dbt-ni",
-        "dbt-dsit",
-        "dbt-dsit-ni",
-        "orr",
-        "desnz",
-        "desnz-ni",
-        "ukhsa-ons",
-        "ons-nhs"
-      ]
+      "enum": ["business", "social", "default", "health", "northernireland", "dbt", "dbt-ni", "dbt-dsit", "dbt-dsit-ni", "orr", "desnz", "desnz-ni", "ukhsa-ons", "ons-nhs"]
     },
     "legal_basis": {
       "$ref": "common_definitions.json#/non_empty_string"

@@ -106,10 +106,7 @@
                         "identifier": "mandatory-checkbox-answer"
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
-                        ]
+                        "option-label-from-value": ["self", "mandatory-checkbox-answer"]
                       }
                     }
                   }
@@ -134,10 +131,7 @@
                         "identifier": "mandatory-checkbox-answer"
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
-                        ]
+                        "option-label-from-value": ["self", "mandatory-checkbox-answer"]
                       }
                     }
                   }
@@ -163,10 +157,7 @@
                         "identifier": "mandatory-checkbox-answer"
                       },
                       "transform": {
-                        "option-label-from-value": [
-                          "self",
-                          "mandatory-checkbox-answer"
-                        ]
+                        "option-label-from-value": ["self", "mandatory-checkbox-answer"]
                       }
                     }
                   }

@@ -25,12 +25,7 @@
           }
         },
         "additionalProperties": false,
-        "required": [
-          "first_name",
-          "middle_names",
-          "last_name",
-          "include_middle_names"
-        ]
+        "required": ["first_name", "middle_names", "last_name", "include_middle_names"]
       }
     },
     "additionalProperties": false,

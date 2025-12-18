@@ -160,12 +160,7 @@
                             "source": "answers",
                             "identifier": "conditional-routing-answer"
                           },
-                          [
-                            "Yes",
-                            "Sometimes",
-                            "I don’t like coffee",
-                            "No, I don’t drink any hot drinks"
-                          ]
+                          ["Yes", "Sometimes", "I don’t like coffee", "No, I don’t drink any hot drinks"]
                         ]
                       }
                     ]

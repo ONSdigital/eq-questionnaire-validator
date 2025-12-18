@@ -79,10 +79,7 @@
               "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
               "calculation": {
                 "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "first-number-answer",
-                  "second-number-answer"
-                ],
+                "answers_to_calculate": ["first-number-answer", "second-number-answer"],
                 "title": "Grand total of previous values"
               }
             },
@@ -128,10 +125,7 @@
               "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
               "calculation": {
                 "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "third-number-answer",
-                  "fourth-number-answer"
-                ],
+                "answers_to_calculate": ["third-number-answer", "fourth-number-answer"],
                 "title": "Grand total of previous values"
               }
             },
@@ -179,10 +173,7 @@
               "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
               "calculation": {
                 "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "fifth-number-answer",
-                  "sixth-number-answer"
-                ],
+                "answers_to_calculate": ["fifth-number-answer", "sixth-number-answer"],
                 "title": "Grand total of previous values"
               }
             },
@@ -192,10 +183,7 @@
               "title": "We calculate the total of values entered to be %(total)s. Is this correct?",
               "calculation": {
                 "calculation_type": "sum",
-                "answers_to_calculate": [
-                  "sixth-number-answer",
-                  "seventh-number-answer"
-                ],
+                "answers_to_calculate": ["sixth-number-answer", "seventh-number-answer"],
                 "title": "Grand total of previous values"
               }
             }
