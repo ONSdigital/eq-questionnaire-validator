@@ -21,6 +21,18 @@ ENV AJV_VALIDATOR_PORT=5002
 
 RUN poetry install --only main
 
+# Create a non-root user and group
+RUN adduser --group --system appuser
+
+# Change ownership of the application directory to the non-root user
+RUN chown -R appuser /usr/src/
+
+# Set the user running the application to the non-root user
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:5001/docs || exit 1
+
 EXPOSE 5000
 
 CMD ["gunicorn", "api:app", \
