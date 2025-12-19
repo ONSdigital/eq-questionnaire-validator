@@ -25,7 +25,7 @@ RUN poetry install --only main
 RUN adduser --group --system appuser
 
 # Change ownership of the application directory to the non-root user
-RUN chown -R appuser api.py poetry.lock pyproject.toml /usr/src/ app
+RUN chown -R appuser /usr/src/
 
 # Set the user running the application to the non-root user
 USER appuser
