@@ -10,10 +10,10 @@ from app.validators.validator import Validator
 class BlockValidator(Validator):
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
-    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = "Invalid use of id relationships, can only be used with RelationshipCollector block type"
-    PLACEHOLDER_ANSWER_SELF_REFERENCE = (
-        "Placeholder references an answer in the same block (self-reference)"
+    ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = (
+        "Invalid use of id relationships, can only be used with RelationshipCollector block type"
     )
+    PLACEHOLDER_ANSWER_SELF_REFERENCE = "Placeholder references an answer in the same block (self-reference)"
 
     def __init__(
         self,
@@ -34,10 +34,7 @@ class BlockValidator(Validator):
         return self.errors
 
     def validate_id_relationships_used_with_relationship_collector(self):
-        if (
-            self.block["id"] == "relationships"
-            and self.block["type"] != "RelationshipCollector"
-        ):
+        if self.block["id"] == "relationships" and self.block["type"] != "RelationshipCollector":
             self.add_error(
                 self.ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR,
                 block_id=self.block["id"],
@@ -83,10 +80,7 @@ class BlockValidator(Validator):
                     if (
                         "placeholders" in json_path
                         and identifier in self.questionnaire_schema.answers_with_context
-                        and self.questionnaire_schema.answers_with_context[identifier][
-                            "block"
-                        ]
-                        == self.block["id"]
+                        and self.questionnaire_schema.answers_with_context[identifier]["block"] == self.block["id"]
                     ):
                         self.add_error(
                             self.PLACEHOLDER_ANSWER_SELF_REFERENCE,

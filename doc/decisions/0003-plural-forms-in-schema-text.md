@@ -3,12 +3,13 @@
 ## Context
 
 We need to be able to support:
+
 - variations of text based on the number of items in a list
 - word forms of numbers 1 to 9
 
 For example:
 
-```
+```text
 Yes, one person lives here
 Yes, two people live here
 Yes, three people live here
@@ -22,7 +23,7 @@ Yes, .. people live here
 
 - Use a placeholder transform to transform a number into words.
 - New `text_plural` element to support the plural forms of the text.
-- Use the CLDR plural categories to define the plural forms (http://www.unicode.org/reports/tr35/tr35-33/tr35-numbers.html#Language_Plural_Rules):
+- Use the CLDR plural categories to define the plural forms (`http://www.unicode.org/reports/tr35/tr35-33/tr35-numbers.html#Language_Plural_Rules`):
     - zero
     - one
     - two
@@ -129,13 +130,13 @@ Additional placeholders can also be defined:
 
 We will use the gettext plural forms mapping. For example, the Welsh gettext plural forms are:
 
-```
+```text
 "Plural-Forms: nplurals=6; plural=(n == 0) ? 0 : ((n == 1) ? 1 : ((n == 2) ? 2 : ((n == 3) ? 3 : ((n == 6) ? 4 : 5))));\n"
 ```
 
 Which would map to:
 
-```
+```text
 zero - msgstr[0]
 one - msgstr[1]
 two - msgstr[2]
@@ -152,7 +153,7 @@ other - msgstr[5]
 
 ## Useful references
 
-- http://babel.pocoo.org/en/latest/api/plural.html
-- http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
-- http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html#cy
-- https://www.omniglot.com/language/numbers/welsh.htm
+- `http://babel.pocoo.org/en/latest/api/plural.html`
+- `http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories`
+- `http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html#cy`
+- `https://www.omniglot.com/language/numbers/welsh.htm`

@@ -4,18 +4,20 @@
 
 There are some issues with the current structure of routing rules:
 
-- They only support limited `AND` and `OR` logic - `OR` is only supported outside of a `when` block leading to duplicate routing targets 
+- They only support limited `AND` and `OR` logic - `OR` is only supported outside of
+a `when` block leading to duplicate routing targets
 - Logic can't be nested for more nuanced rules
 - Dynamic values (answers, metadata, lists) are referenced inconsistently
 
-Routing rules in Author don't suffer from the first issue (see https://github.com/ONSdigital/eq-author-app/wiki/Routing,-MK2); they were used as a starting point for this proposal, combined with ideas from http://jsonlogic.com.
+Routing rules in Author don't suffer from the first issue (see `https://github.com/ONSdigital/eq-author-app/wiki/Routing,-MK2`);
+they were used as a starting point for this proposal, combined with ideas from `http://jsonlogic.com`.
 
 ## Proposal
 
 We will define a rule as an operation and it's arguments:
 
-```
-{ 
+```json
+{
     "operation": [
         "argument1", "argument2"
     ]
@@ -24,7 +26,7 @@ We will define a rule as an operation and it's arguments:
 
 An argument can be an operation:
 
-```
+```json
 {
     "operation": [
         {
@@ -45,7 +47,7 @@ An argument can be an operation:
 
 Using the example:
 
-```
+```text
 (answer1 = "No" OR unanswered) AND answer2 != 8 AND answer4 > answer3
 ```
 
@@ -96,7 +98,7 @@ The rule definition is:
                 }
             ]
         }
-	]
+    ]
 }
 ```
 
@@ -107,7 +109,6 @@ The rule definition is:
 - More advanced logic is possible
 - Author conversion process is less complicated
 
-
 ## Other information
 
 ### Converting current rules
@@ -115,6 +116,7 @@ The rule definition is:
 #### equals
 
 Current:
+
 ```json
 {
     "condition": "equals",
@@ -124,6 +126,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "equal": [
@@ -137,9 +140,10 @@ Proposed:
 ```
 
 All of the other simple boolean operators would work in the same way:
+
 - `not-equal`
 - `greater-than`
-- `greather-than-or-equal-to`
+- `greater-than-or-equal-to`
 - `less-than`
 - `less-than-or-equal-to`
 
@@ -148,18 +152,17 @@ We should consider using the short form of expressing these rules (`==`, `!=`, `
 #### equals any
 
 Current:
+
 ```json
 {
     "condition": "equals any",
     "id": "confirm-date-of-birth-answer",
-    "values": [
-        "No, I need to change their date of birth",
-        "No, I need to change my date of birth"
-    ]
+    "values": ["No, I need to change their date of birth", "No, I need to change my date of birth"]
 }
 ```
 
 Proposed:
+
 ```json
 {
     "in": [
@@ -167,10 +170,7 @@ Proposed:
             "source": "answers",
             "identifier": "confirm-date-of-birth-answer"
         },
-        [
-            "No, I need to change their date of birth",
-            "No, I need to change my date of birth"
-        ]
+        ["No, I need to change their date of birth", "No, I need to change my date of birth"]
     ]
 }
 ```
@@ -178,18 +178,17 @@ Proposed:
 #### not equals any
 
 Current:
+
 ```json
 {
     "condition": "not equals any",
     "id": "confirm-date-of-birth-answer",
-    "values": [
-        "No, I need to change their date of birth",
-        "No, I need to change my date of birth"
-    ]
+    "values": ["No, I need to change their date of birth", "No, I need to change my date of birth"]
 }
 ```
 
 Proposed:
+
 ```json
 {
     "not": [
@@ -199,10 +198,7 @@ Proposed:
                     "source": "answers",
                     "identifier": "confirm-date-of-birth-answer"
                 },
-                [
-                    "No, I need to change their date of birth",
-                    "No, I need to change my date of birth"
-                ]
+                ["No, I need to change their date of birth", "No, I need to change my date of birth"]
             ]
         }
     ]
@@ -212,6 +208,7 @@ Proposed:
 #### contains
 
 Current:
+
 ```json
 {
     "condition": "contains",
@@ -221,6 +218,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "in": [
@@ -238,6 +236,7 @@ Note that this uses the `in` operation with the arguments reversed (rather than 
 #### greater than date with offset
 
 Current:
+
 ```json
 {
     "condition": "greater than",
@@ -252,6 +251,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "greater-than": [
@@ -277,6 +277,7 @@ This example demonstrates the extensibility of this approach as new operations c
 #### list
 
 Current:
+
 ```json
 {
     "condition": "greater than",
@@ -286,6 +287,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "greater-than": [
@@ -301,6 +303,7 @@ Proposed:
 #### location
 
 Current:
+
 ```json
 {
     "comparison": {
@@ -314,13 +317,14 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "equal": [
         {
             "source": "list",
             "identifier": "household",
-            "id_selector": "primary_person",
+            "id_selector": "primary_person"
         },
         {
             "source": "location",
@@ -333,6 +337,7 @@ Proposed:
 #### combined not equals and greater than date
 
 Current:
+
 ```json
 [
     {
@@ -354,6 +359,7 @@ Current:
 ```
 
 Proposed:
+
 ```json
 {
     "and": [

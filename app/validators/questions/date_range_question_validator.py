@@ -5,9 +5,7 @@ from app.validators.questions.question_validator import QuestionValidator
 class DateRangeQuestionValidator(QuestionValidator):
     MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
     CANNOT_USE_DAYS = "Days can not be used in period_limit for yyyy-mm date range"
-    CANNOT_USE_DAYS_MONTHS = (
-        "Days/Months can not be used in period_limit for yyyy date range"
-    )
+    CANNOT_USE_DAYS_MONTHS = "Days/Months can not be used in period_limit for yyyy date range"
 
     def __init__(self, question):
         super().__init__(question)

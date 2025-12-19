@@ -18,9 +18,7 @@ def create_schema_with_answer_id(answer_id):
     with open(schema_path, encoding="utf8") as json_data:
         json_content = json.load(json_data)
 
-        json_content["sections"][0]["groups"][0]["blocks"][0]["question"]["answers"][0][
-            "id"
-        ] = answer_id
+        json_content["sections"][0]["groups"][0]["blocks"][0]["question"]["answers"][0]["id"] = answer_id
         return json_content
 
 
@@ -106,7 +104,4 @@ def test_invalid_q_code_regex_pattern():
 
     validator.validate()
 
-    assert (
-        validator.errors[0]["message"]
-        == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"
-    )
+    assert validator.errors[0]["message"] == "'&*fgh er*R' does not match '^[a-zA-Z0-9._-]+$'"

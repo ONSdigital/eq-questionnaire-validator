@@ -35,8 +35,11 @@ insert_final_newline = true
 [*.{js,html,json,yaml,yml}]
 indent_size = 2
 
-[*.{json,yaml,yml}]
+[*.{yaml,yml}]
 max_line_length = 200
+
+[*.json]
+max_line_length = 320
 
 [*.{md,toml,lock,pylintrc}]
 max_line_length = 250

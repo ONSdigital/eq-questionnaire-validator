@@ -3,48 +3,34 @@ from app.validators.validator import Validator
 
 
 class AnswerCodeValidator(Validator):
-    INCORRECT_DATA_VERSION_FOR_ANSWER_CODES = (
-        "Answer codes are only supported in data version 0.0.3"
-    )
+    INCORRECT_DATA_VERSION_FOR_ANSWER_CODES = "Answer codes are only supported in data version 0.0.3"
     DUPLICATE_ANSWER_CODE_FOUND = "Answer codes must be unique"
     DUPLICATE_ANSWER_ID_FOUND = (
-        "Answer ids must only have one answer code unless answer codes are being set "
-        "against answer values"
+        "Answer ids must only have one answer code unless answer codes are being set against answer values"
     )
     MISSING_ANSWER_CODE = "No answer codes found for answer_id set in the schema"
-    ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA = (
-        "No matching answer id found in the schema for the given answer code"
-    )
+    ANSWER_CODE_ANSWER_ID_NOT_FOUND_IN_SCHEMA = "No matching answer id found in the schema for the given answer code"
     ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS = (
         "Answer values can only be set for answers that support answer options"
     )
-    ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = (
-        "The number of answer codes does not match number of answer options"
-    )
+    ANSWER_CODE_MISSING_FOR_ANSWER_OPTIONS = "The number of answer codes does not match number of answer options"
     MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL = (
-        "Only one answer code should be set for an answer when not specifying answer "
-        "codes for answer options"
+        "Only one answer code should be set for an answer when not specifying answer codes for answer options"
     )
     INCORRECT_VALUE_FOR_ANSWER_CODE_WITH_ANSWER_OPTIONS = (
-        "Values specified in answer code and answer options do not match or they are "
-        "of different lengths."
+        "Values specified in answer code and answer options do not match or they are of different lengths."
     )
     DYNAMIC_ANSWER_OPTION_MUST_HAVE_ANSWER_CODE_SET_AT_TOP_LEVEL = (
-        "Answers with dynamic options must have an answer code mapping without answer "
-        "value"
+        "Answers with dynamic options must have an answer code mapping without answer value"
     )
-    INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR = (
-        "Answer codes are not supported for list edit and remove question types"
-    )
+    INVALID_ANSWER_CODE_FOR_LIST_COLLECTOR = "Answer codes are not supported for list edit and remove question types"
 
     def __init__(self, data_version, answer_codes, questionnaire_schema):
         self.data_version = data_version
         self.answer_codes = answer_codes
         self.questionnaire_schema = questionnaire_schema
         self.codes = [answer["code"] for answer in self.answer_codes]
-        self.answer_codes_answer_ids = {
-            answer["answer_id"] for answer in self.answer_codes
-        }
+        self.answer_codes_answer_ids = {answer["answer_id"] for answer in self.answer_codes}
         self.all_answer_ids = list(self.questionnaire_schema.answers_with_context)
         super().__init__(questionnaire_schema)
 
@@ -63,9 +49,7 @@ class AnswerCodeValidator(Validator):
 
     def validate_duplicates(self):
         answer_ids = [
-            answer_code["answer_id"]
-            for answer_code in self.answer_codes
-            if "answer_value" not in answer_code
+            answer_code["answer_id"] for answer_code in self.answer_codes if "answer_value" not in answer_code
         ]
 
         for values, error_message in [
@@ -104,14 +88,11 @@ class AnswerCodeValidator(Validator):
 
             if "dynamic_options" in answer["answer"]:
                 answer_codes_for_options = [
-                    answer_code
-                    for answer_code in self.answer_codes
-                    if answer_code["answer_id"] == answer_id
+                    answer_code for answer_code in self.answer_codes if answer_code["answer_id"] == answer_id
                 ]
 
                 top_level_answer_code_count = sum(
-                    "answer_value" not in answer_code
-                    for answer_code in answer_codes_for_options
+                    "answer_value" not in answer_code for answer_code in answer_codes_for_options
                 )
                 if top_level_answer_code_count == 0:
                     self.add_error(
@@ -133,9 +114,7 @@ class AnswerCodeValidator(Validator):
                 values.extend(option["value"] for option in answer["answer"]["options"])
 
                 answer_codes_for_options = [
-                    answer_code
-                    for answer_code in self.answer_codes
-                    if answer_code["answer_id"] == answer_id
+                    answer_code for answer_code in self.answer_codes if answer_code["answer_id"] == answer_id
                 ]
 
                 self.validate_missing_answer_codes_for_answer_options(
@@ -151,9 +130,7 @@ class AnswerCodeValidator(Validator):
 
             else:
                 for answer_code in self.answer_codes:
-                    if answer_code["answer_id"] == answer_id and (
-                        "answer_value" in answer_code
-                    ):
+                    if answer_code["answer_id"] == answer_id and ("answer_value" in answer_code):
                         self.add_error(
                             self.ANSWER_VALUE_SET_FOR_ANSWER_WITH_NO_OPTIONS,
                             answer_code=answer_code,
@@ -177,10 +154,7 @@ class AnswerCodeValidator(Validator):
                 answer_id=answer_id,
             )
 
-        if any(
-            "answer_value" not in answer_code
-            for answer_code in answer_codes_for_options
-        ):
+        if any("answer_value" not in answer_code for answer_code in answer_codes_for_options):
             if len(answer_codes_for_options) == 1:
                 if len(values) != 1 and "answer_value" in answer_codes_for_options[0]:
                     self.add_error(
@@ -189,9 +163,7 @@ class AnswerCodeValidator(Validator):
                         answer_codes_for_options=answer_codes_for_options,
                     )
 
-            elif not self.questionnaire_schema.answers_with_context[answer_id][
-                "answer"
-            ].get("dynamic_options"):
+            elif not self.questionnaire_schema.answers_with_context[answer_id]["answer"].get("dynamic_options"):
                 # Multiple answer codes are only allowed at the parent level where options are dynamic
                 self.add_error(
                     self.MORE_THAN_ONE_ANSWER_CODE_SET_AT_PARENT_LEVEL,

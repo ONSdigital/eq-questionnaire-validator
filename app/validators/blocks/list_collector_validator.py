@@ -9,24 +9,28 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
 
-    NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION = (
-        f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION = f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    NO_RADIO_FOR_LIST_COLLECTOR = "The list collector block does not contain a Radio answer type"
+    NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = "The list collector remove block does not contain a Radio answer type"
+    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = (
+        "Non content list collectors cannot be for a list which comes from supplementary data"
     )
-    NO_REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = (
-        f"{REDIRECT_TO_LIST_ADD_BLOCK_ACTION} action not found"
+    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = (
+        "The list collector block contains an add block and edit block with different answer ids"
     )
-    NO_RADIO_FOR_LIST_COLLECTOR = (
-        "The list collector block does not contain a Radio answer type"
+    DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST = (
+        "Multiple list collectors with same name populate a list using different answer_ids in add block"
     )
-    NO_RADIO_FOR_LIST_COLLECTOR_REMOVE = (
-        "The list collector remove block does not contain a Radio answer type"
+    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR = (
+        "Different list collectors populate a list using duplicate answer_ids in a list block"
     )
-    LIST_COLLECTOR_FOR_SUPPLEMENTARY_LIST_IS_INVALID = "Non content list collectors cannot be for a list which comes from supplementary data"
-    LIST_COLLECTOR_ADD_EDIT_IDS_DONT_MATCH = "The list collector block contains an add block and edit block with different answer ids"
-    DIFFERENT_LIST_COLLECTOR_ADD_BLOCKS_FOR_SAME_LIST = "Multiple list collectors with same name populate a list using different answer_ids in add block"
-    DUPLICATE_ANSWER_ID_FOR_DIFFERENT_LIST_COLLECTOR = "Different list collectors populate a list using duplicate answer_ids in a list block"
-    LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE = "List collector child block answer_id is already used elsewhere outside the list collector"
-    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = "List may only have one List Collector, if the List Collector features Repeating Blocks"
+    LIST_COLLECTOR_ANSWER_ID_USED_ELSEWHERE = (
+        "List collector child block answer_id is already used elsewhere outside the list collector"
+    )
+    NON_SINGLE_REPEATING_BLOCKS_LIST_COLLECTOR = (
+        "List may only have one List Collector, if the List Collector features Repeating Blocks"
+    )
 
     def validate(self):
         super().validate()
@@ -44,10 +48,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 self.block["id"],
             )
             self.validate_same_name_answer_ids(answer_ids)
-            collector_remove_questions = (
-                self.questionnaire_schema.get_all_questions_for_block(
-                    self.block["remove_block"],
-                )
+            collector_remove_questions = self.questionnaire_schema.get_all_questions_for_block(
+                self.block["remove_block"],
             )
             self.validate_collector_questions(
                 collector_remove_questions,
@@ -71,10 +73,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         - Enforce the same answer_ids on add and edit sub-blocks
         - Ensure that that child block answer_ids are not used elsewhere in the schema that's not another list collector
         """
-        list_answer_ids = (
-            self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
-                block["id"],
-            )
+        list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+            block["id"],
         )
 
         if list_answer_ids["add_block"].symmetric_difference(
@@ -111,10 +111,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         - non-unique answer id in add block for any other same-named list collectors
         - duplicate answer id in add, edit, or remove block for other different-named list collectors
         """
-        list_answer_ids = (
-            self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
-                self.block["id"],
-            )
+        list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+            self.block["id"],
         )
         other_list_collectors = self.questionnaire_schema.get_other_blocks(
             self.block["id"],
@@ -122,10 +120,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         )
 
         for other_list_collector in other_list_collectors:
-            other_list_answer_ids = (
-                self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
-                    other_list_collector["id"],
-                )
+            other_list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+                other_list_collector["id"],
             )
 
             if self.block["for_list"] == other_list_collector["for_list"]:

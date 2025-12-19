@@ -3,12 +3,8 @@ from app.validators.validator import Validator
 
 
 class RoutingValidator(Validator):
-    ROUTING_RULES_DO_NOT_HAVE_A_DEFAULT_RULE = (
-        "Routing rules do not have a default rule"
-    )
-    ROUTING_RULES_HAS_TOO_MANY_DEFAULTS = (
-        "Routing rules have more than one default rule"
-    )
+    ROUTING_RULES_DO_NOT_HAVE_A_DEFAULT_RULE = "Routing rules do not have a default rule"
+    ROUTING_RULES_HAS_TOO_MANY_DEFAULTS = "Routing rules have more than one default rule"
     ROUTING_RULE_BLOCK_TARGET_INVALID = "Routing rule routes to invalid block"
     ROUTING_RULE_GROUP_TARGET_INVALID = "Routing rule routes to invalid group"
 

@@ -19,22 +19,24 @@ def test_invalid_non_linear_progress_references():
 
     expected_error_messages = [
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source must come before the current block",
+            "msg": "Invalid progress source reference: the identifier being referenced in the progress source "
+            "must come before the current block",
             "identifier": "s1-b3",
         },
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source must come before the current block",
+            "msg": "Invalid progress source reference: the identifier being referenced in the progress source "
+            "must come before the current block",
             "identifier": "s2-b1",
         },
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source must come before the current section",
+            "msg": "Invalid progress source reference: the identifier being referenced in the progress source "
+            "must come before the current section",
             "identifier": "second-section",
         },
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:
@@ -43,9 +45,7 @@ def test_invalid_non_linear_progress_references():
 
 def test_invalid_current_location_progress():
     """Tests a progress value source cannot refer to the current section or the current block."""
-    schema_path = (
-        "schemas/invalid/test_invalid_progress_value_source_current_location.json"
-    )
+    schema_path = "schemas/invalid/test_invalid_progress_value_source_current_location.json"
     questionnaire_validator = QuestionnaireValidator(
         _open_and_load_schema_file(schema_path),
     )
@@ -53,18 +53,19 @@ def test_invalid_current_location_progress():
 
     expected_error_messages = [
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source cannot be the current block",
+            "msg": "Invalid progress source reference: the identifier being referenced in the progress source cannot "
+            "be the current block",
             "identifier": "s1-b1",
         },
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source cannot be the current section",
+            "msg": "Invalid progress source reference: the identifier being referenced in the progress source cannot "
+            "be the current section",
             "identifier": "first-section",
         },
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:
@@ -72,9 +73,10 @@ def test_invalid_current_location_progress():
 
 
 def test_invalid_block_in_repeating_section():
-    """Tests a progress value source cannot refer to a block in a repeating section except if it is the parent section of the value source.
+    """Test for invalid block in repeating section.
 
-    Nor to a repeating section.
+    Tests a progress value source cannot refer to a block in a repeating section
+    except if it is the parent section of the value source. Nor to a repeating section.
     """
     schema_path = "schemas/invalid/test_invalid_progress_value_source_block_in_past_repeating_section.json"
     questionnaire_validator = QuestionnaireValidator(
@@ -85,20 +87,22 @@ def test_invalid_block_in_repeating_section():
     expected_error_messages = [
         {
             "msg": (
-                "Invalid progress source reference: the identifier being referenced "
-                "in the progress source cannot be a block in a repeating section except for current section"
+                "Invalid progress source reference: the identifier being referenced in the progress source cannot "
+                "be a block in a repeating section except for current section"
             ),
             "identifier": "dob-block",
         },
         {
-            "msg": "Invalid progress source reference: the identifier being referenced in the progress source cannot be a repeating section",
+            "msg": (
+                "Invalid progress source reference: the identifier being referenced in the progress source cannot "
+                "be a repeating section"
+            ),
             "identifier": "section-2",
         },
     ]
 
     error_messages = [
-        {"msg": error["message"], "identifier": error["identifier"]}
-        for error in questionnaire_validator.errors
+        {"msg": error["message"], "identifier": error["identifier"]} for error in questionnaire_validator.errors
     ]
 
     for expected_error in expected_error_messages:

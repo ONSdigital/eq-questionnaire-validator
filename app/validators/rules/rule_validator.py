@@ -60,39 +60,24 @@ VALUE_OPERATORS = [
 
 NUMERIC_OPERATORS = [Operator.SUM, Operator.COUNT]
 
-ALL_OPERATORS = (
-    LOGIC_OPERATORS
-    + COMPARISON_OPERATORS
-    + ARRAY_OPERATORS
-    + VALUE_OPERATORS
-    + NUMERIC_OPERATORS
-)
+ALL_OPERATORS = LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + VALUE_OPERATORS + NUMERIC_OPERATORS
 
-ALL_WHEN_RULE_OPERATORS = (
-    LOGIC_OPERATORS
-    + COMPARISON_OPERATORS
-    + ARRAY_OPERATORS
-    + [Operator.DATE, Operator.COUNT]
-)
+ALL_WHEN_RULE_OPERATORS = LOGIC_OPERATORS + COMPARISON_OPERATORS + ARRAY_OPERATORS + [Operator.DATE, Operator.COUNT]
 
 SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
-    DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = (
-        "Date operator references non Date, MonthYearDate, or YearDate answer"
-    )
-    COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = (
-        "Count operator references non Checkbox answer"
-    )
+    DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = "Date operator references non Date, MonthYearDate, or YearDate answer"
+    COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = "Count operator references non Checkbox answer"
     MAP_OPERATOR_WITHOUT_SELF_REFERENCE = (
         f"Argument one of the `map` operator does not reference `{SELF_REFERENCE_KEY}`"
     )
-    SELF_REFERENCE_OUTSIDE_MAP_OPERATOR = (
-        f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
+    SELF_REFERENCE_OUTSIDE_MAP_OPERATOR = f"Reference to {SELF_REFERENCE_KEY} was made outside of the `map` operator"
+    ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID = (
+        "Expected the answer type for sum operator to be type 'number' but got type '{answer_type}'"
     )
-    ANSWER_TYPE_FOR_SUM_OPERATOR_INVALID = "Expected the answer type for sum operator to be type 'number' but got type '{answer_type}'"
     OPERATOR_ARGUMENT_TYPE_MISMATCH = "Argument types don't match"
     INVALID_ARGUMENT_TYPE_FOR_OPERATOR = "Invalid argument type for operator"
 
@@ -122,9 +107,7 @@ class RulesValidator(Validator):
 
         arguments = rules[operator_name]
         for argument in arguments:
-            if isinstance(argument, dict) and any(
-                operator in argument for operator in ALL_OPERATORS
-            ):
+            if isinstance(argument, dict) and any(operator in argument for operator in ALL_OPERATORS):
                 self._validate_rule(argument, allow_self_reference=allow_self_reference)
 
         if operator_name == Operator.DATE:
@@ -147,13 +130,8 @@ class RulesValidator(Validator):
 
     def _validate_self_references(self, rules, operator_name, *, allow_self_reference):
         """Validate references to `self` are within the context of the `map` operator."""
-        arguments_for_non_map_operators = (
-            self._get_flattened_arguments_for_non_map_operators(rules[operator_name])
-        )
-        if (
-            SELF_REFERENCE_KEY in arguments_for_non_map_operators
-            and not allow_self_reference
-        ):
+        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(rules[operator_name])
+        if SELF_REFERENCE_KEY in arguments_for_non_map_operators and not allow_self_reference:
             self.add_error(self.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR, rule=rules)
 
     def _validate_map_operator(self, operator):
@@ -165,10 +143,8 @@ class RulesValidator(Validator):
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return
 
-        arguments_for_non_map_operators = (
-            self._get_flattened_arguments_for_non_map_operators(
-                function_to_map_over_arguments,
-            )
+        arguments_for_non_map_operators = self._get_flattened_arguments_for_non_map_operators(
+            function_to_map_over_arguments,
         )
 
         if SELF_REFERENCE_KEY not in arguments_for_non_map_operators:
@@ -197,21 +173,21 @@ class RulesValidator(Validator):
         """
         non_operator_arguments = []
         if isinstance(argument, dict) and any(
-            operator in argument
-            for operator in ALL_OPERATORS
-            if operator != Operator.MAP
+            operator in argument for operator in ALL_OPERATORS if operator != Operator.MAP
         ):
             for operands in argument.values():
-                non_operator_arguments += (
-                    self._get_flattened_arguments_for_non_map_operators(operands)
-                )
+                non_operator_arguments += self._get_flattened_arguments_for_non_map_operators(operands)
         else:
             non_operator_arguments.append(argument)
 
         return non_operator_arguments
 
     def _validate_option_label_from_value_operator(self, operator):
-        """Validate the referenced answer id in `option-label-from-value` exists and is of type ['Radio','Checkbox','Dropdown']."""
+        """Validate option label from value operator.
+
+        Validate the referenced answer id in `option-label-from-value` exists
+        and is of type ['Radio','Checkbox','Dropdown'].
+        """
         answer_id = operator[next(iter(operator))][1]
         answers = self.questionnaire_schema.answers_with_context
         if answer_id not in answers:
@@ -220,9 +196,7 @@ class RulesValidator(Validator):
                 identifier=answer_id,
             )
 
-        elif not any(
-            x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType
-        ):
+        elif not any(x.value == answers[answer_id]["answer"]["type"] for x in AnswerOptionType):
             self.add_error(
                 error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
                 identifier=answer_id,
@@ -248,10 +222,8 @@ class RulesValidator(Validator):
         option_values = []
         for argument in rules[operator_name]:
             if isinstance(argument, dict) and argument.get("source") == "answers":
-                option_values = (
-                    self.questionnaire_schema.answer_id_to_option_values_map.get(
-                        argument["identifier"],
-                    )
+                option_values = self.questionnaire_schema.answer_id_to_option_values_map.get(
+                    argument["identifier"],
                 )
             else:
                 values = argument if isinstance(argument, list) else [argument]
@@ -294,9 +266,7 @@ class RulesValidator(Validator):
     def _get_argument_types_for_operator(self, arguments):
         argument_types = []
         for argument in arguments:
-            if isinstance(argument, dict) and any(
-                operator in argument for operator in ALL_WHEN_RULE_OPERATORS
-            ):
+            if isinstance(argument, dict) and any(operator in argument for operator in ALL_WHEN_RULE_OPERATORS):
                 argument_type = self._validate_operator_arguments(argument)
             elif isinstance(argument, dict) and "source" in argument:
                 argument_type = resolve_value_source_json_type(
@@ -364,9 +334,7 @@ class RulesValidator(Validator):
             return [TYPE_ARRAY]
 
         if operator_name == Operator.IN:
-            return (
-                [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
-            )
+            return [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
         if operator_name == Operator.COUNT:
             return [TYPE_ARRAY]
 

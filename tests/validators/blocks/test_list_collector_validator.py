@@ -130,9 +130,7 @@ def test_invalid_list_collector_non_radio():
 
 
 def test_invalid_list_collector_with_no_add_answer_action():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_with_no_add_answer_action.json"
-    )
+    filename = "schemas/invalid/test_invalid_list_collector_with_no_add_answer_action.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(
@@ -152,9 +150,7 @@ def test_invalid_list_collector_with_no_add_answer_action():
 
 
 def test_invalid_list_collector_with_no_remove_answer_action():
-    filename = (
-        "schemas/invalid/test_invalid_list_collector_with_no_remove_answer_action.json"
-    )
+    filename = "schemas/invalid/test_invalid_list_collector_with_no_remove_answer_action.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = ListCollectorValidator(

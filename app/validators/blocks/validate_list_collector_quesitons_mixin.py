@@ -2,11 +2,7 @@ from app.validators.validator import Validator
 
 
 def _options_contain_action_type(options, expected_action):
-    return any(
-        option["action"]["type"] == expected_action
-        for option in options
-        if "action" in option
-    )
+    return any(option["action"]["type"] == expected_action for option in options if "action" in option)
 
 
 class ValidateListCollectorQuestionsMixin(Validator):

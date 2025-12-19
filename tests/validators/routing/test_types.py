@@ -64,9 +64,7 @@ def test_resolve_answer_value_source_json_type(answer_type, json_type):
         },
     }
 
-    assert (
-        resolve_value_source_json_type(value_source, questionnaire_schema) == json_type
-    )
+    assert resolve_value_source_json_type(value_source, questionnaire_schema) == json_type
 
 
 def test_resolve_calculated_summary_value_source_json_type():
@@ -79,10 +77,7 @@ def test_resolve_calculated_summary_value_source_json_type():
         "identifier": "currency-total-playback",
     }
 
-    assert (
-        resolve_value_source_json_type(value_source, questionnaire_schema)
-        == TYPE_NUMBER
-    )
+    assert resolve_value_source_json_type(value_source, questionnaire_schema) == TYPE_NUMBER
 
 
 def test_resolve_grand_calculated_summary_value_source_json_type():
@@ -95,10 +90,7 @@ def test_resolve_grand_calculated_summary_value_source_json_type():
         "identifier": "grand-calculated-summary-shopping",
     }
 
-    assert (
-        resolve_value_source_json_type(value_source, questionnaire_schema)
-        == TYPE_NUMBER
-    )
+    assert resolve_value_source_json_type(value_source, questionnaire_schema) == TYPE_NUMBER
 
 
 @pytest.mark.parametrize(
@@ -118,10 +110,7 @@ def test_resolve_metadata_summary_value_source_json_type(
     filename = "schemas/valid/test_valid_metadata.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert (
-        resolve_value_source_json_type(metadata_value_source, questionnaire_schema)
-        == json_type
-    )
+    assert resolve_value_source_json_type(metadata_value_source, questionnaire_schema) == json_type
 
 
 @pytest.mark.parametrize(

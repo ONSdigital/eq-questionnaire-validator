@@ -62,10 +62,7 @@ def get_parent_block_from_match(match) -> dict | None:
 
 
 def get_element_value(key, match):
-    if (
-        str(match.full_path.left).endswith(f".{key}")
-        or str(match.full_path.left) == key
-    ):
+    if str(match.full_path.left).endswith(f".{key}") or str(match.full_path.left) == key:
         return match.value
     return get_element_value(key, match.context)
 
@@ -120,27 +117,20 @@ class QuestionnaireSchema:
         self.grand_calculated_summary_block_ids = self.get_block_ids_for_block_type(
             "GrandCalculatedSummary",
         )
-        self.sections = [
-            match.value for match in ext_parse("$.sections[*]").find(self.schema)
-        ]
+        self.sections = [match.value for match in ext_parse("$.sections[*]").find(self.schema)]
         self.sections_by_id = {section["id"]: section for section in self.sections}
         self.section_ids = list(self.sections_by_id.keys())
         self.blocks_by_section_id = {
-            section["id"]: [
-                block for group in section["groups"] for block in group["blocks"]
-            ]
+            section["id"]: [block for group in section["groups"] for block in group["blocks"]]
             for section in self.sections
         }
 
-        self.groups = [
-            match.value for match in ext_parse("$..groups[*]").find(self.schema)
-        ]
+        self.groups = [match.value for match in ext_parse("$..groups[*]").find(self.schema)]
         self.groups_by_id = {group["id"]: group for group in self.groups}
         self.group_ids = list(self.groups_by_id.keys())
 
         self.supplementary_lists = [
-            match.value
-            for match in ext_parse("$..supplementary_data.lists[*]").find(self.schema)
+            match.value for match in ext_parse("$..supplementary_data.lists[*]").find(self.schema)
         ]
         self.list_collectors = [
             match.value
@@ -148,9 +138,7 @@ class QuestionnaireSchema:
                 self.schema,
             )
         ]
-        self.list_collector_names = [
-            list_collector["for_list"] for list_collector in self.list_collectors
-        ]
+        self.list_collector_names = [list_collector["for_list"] for list_collector in self.list_collectors]
         self.list_names = self.list_collector_names + self.supplementary_lists
         self.list_names_by_repeating_block_id = {
             block["id"]: list_collector["for_list"]
@@ -241,8 +229,7 @@ class QuestionnaireSchema:
             for block in blocks:
                 list_id = block["for_list"]
                 if list_id not in self._lists_with_context or (
-                    self.block_ids.index(block["id"])
-                    < self._lists_with_context[list_id]["block_index"]
+                    self.block_ids.index(block["id"]) < self._lists_with_context[list_id]["block_index"]
                 ):
                     section_id = self.get_section_id_for_block_id(block["id"])
                     section_index = self.section_ids.index(section_id)
@@ -328,16 +315,10 @@ class QuestionnaireSchema:
             is_list_collector_answer_id = False
             if hasattr(match.context.context.full_path, "left"):
                 is_list_collector_answer_id = (
-                    any(
-                        ignored_sub_path in full_path
-                        for ignored_sub_path in ignored_sub_paths
-                    )
+                    any(ignored_sub_path in full_path for ignored_sub_path in ignored_sub_paths)
                     and str(match.context.context.full_path.right) == "answers"
                 )
-            if (
-                not any(ignored_path in full_path for ignored_path in ignored)
-                and not is_list_collector_answer_id
-            ):
+            if not any(ignored_path in full_path for ignored_path in ignored) and not is_list_collector_answer_id:
                 yield str(match.full_path.left), match.value
 
     @cached_property
@@ -462,23 +443,21 @@ class QuestionnaireSchema:
     @lru_cache
     def get_all_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return {
-            answer["id"]
-            for question in questions
-            for answer in self.get_answers_from_question(question)
-        }
+        return {answer["id"] for question in questions for answer in self.get_answers_from_question(question)}
 
     @lru_cache
     def get_all_dynamic_answer_ids(self, block_id):
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
         return {
-            answer["id"]
-            for question in questions
-            for answer in question.get("dynamic_answers", {}).get("answers", [])
+            answer["id"] for question in questions for answer in question.get("dynamic_answers", {}).get("answers", [])
         }
 
     def get_list_name_for_answer_id(self, answer_id: str) -> str | None:
-        """If the answer is dynamic or in a repeating block or section, return the name of the list it repeats over otherwise None."""
+        """Get list name for answer id.
+
+        If the answer is dynamic or in a repeating block or section,
+        return the name of the list it repeats over otherwise None.
+        """
         if list_name := self.list_names_by_dynamic_answer_id.get(answer_id):
             return list_name
         block = self.get_block_by_answer_id(answer_id)
@@ -524,12 +503,8 @@ class QuestionnaireSchema:
     def _get_numeric_range_values(self, answer, answer_ranges):
         min_value = answer.get("minimum", {}).get("value", {})
         max_value = answer.get("maximum", {}).get("value", {})
-        min_referred = (
-            min_value.get("identifier") if isinstance(min_value, dict) else None
-        )
-        max_referred = (
-            max_value.get("identifier") if isinstance(max_value, dict) else None
-        )
+        min_referred = min_value.get("identifier") if isinstance(min_value, dict) else None
+        max_referred = max_value.get("identifier") if isinstance(max_value, dict) else None
 
         exclusive = answer.get("exclusive", False)
         decimal_places = answer.get("decimal_places", 0)
@@ -608,11 +583,7 @@ class QuestionnaireSchema:
             "source",
         )
 
-        return [
-            source[1]["identifier"]
-            for source in value_sources
-            if source[1]["source"] == source_type
-        ]
+        return [source[1]["identifier"] for source in value_sources if source[1]["source"] == source_type]
 
     def get_answer_ids_for_value_source(
         self,
@@ -620,7 +591,8 @@ class QuestionnaireSchema:
     ) -> list[str]:
         """Gets the list of answer_ids relating to the provided value source.
 
-        Either the identifier if its an answer source or the list of included answer ids in the case of a calculated or grand calculated summary
+        Either the identifier if its an answer source or the list of included answer ids
+        in the case of a calculated or grand calculated summary
         """
         source = value_source["source"]
         identifier = value_source["identifier"]
@@ -656,10 +628,7 @@ class QuestionnaireSchema:
     def get_parent_list_collector_for_add_block(self, block_id) -> dict | None:
         for blocks in self.blocks_by_section_id.values():
             for block in blocks:
-                if (
-                    block["type"] == "ListCollector"
-                    and block["add_block"]["id"] == block_id
-                ):
+                if block["type"] == "ListCollector" and block["add_block"]["id"] == block_id:
                     return block["id"]
 
     def get_parent_list_collector_for_repeating_block(self, block_id) -> dict | None:

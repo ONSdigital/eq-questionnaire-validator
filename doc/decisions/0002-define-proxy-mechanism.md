@@ -1,58 +1,69 @@
 # 2. Define a more flexible approach to proxy questions
 
 ## Context
+
 Currently, the solution for proxy question titles has some limitations:
 
 - Unable to modify any part of a question except the title
 - Current solution difficult to integrate with structured string interpolation.
 - Does not support interstitials
 
-Since only titles are currently changeable, routing and duplicated blocks have been used to resolve this, but this can cause issues when routing becomes complicated or changes need to be made later on.
+Since only titles are currently changeable, routing and duplicated blocks have been used to resolve this,
+but this can cause issues when routing becomes complicated or changes need to be made later on.
 
 ### Example of current question schema
 
 Currently, proxy titles are defined through the question `titles` object:
 
- ```json
+```json
 {
     "id": "example",
     "type": "Question",
-    "questions": [{
-        "id": "example-question",
-        "titles": [{
-                "value": "Did they work today?",
-                "when": [{
-                    "id": "proxy-check-answer",
-                    "condition": "equals",
-                    "value": "proxy"
-                }]
-            },
-            {
-                "value": "Did you do any work today?"
-            }
-        ],
-        "type": "General",
-        "answers": [{
-            "id": "example-answer",
-            "mandatory": true,
-            "type": "Radio",
-            "options": [{
-                    "label": "Yes",
-                    "value": "Yes"
+    "questions": [
+        {
+            "id": "example-question",
+            "titles": [
+                {
+                    "value": "Did they work today?",
+                    "when": [
+                        {
+                            "id": "proxy-check-answer",
+                            "condition": "equals",
+                            "value": "proxy"
+                        }
+                    ]
                 },
                 {
-                    "label": "No",
-                    "value": "No"
+                    "value": "Did you do any work today?"
+                }
+            ],
+            "type": "General",
+            "answers": [
+                {
+                    "id": "example-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ]
                 }
             ]
-        }]
-    }]
+        }
+    ]
 }
 ```
 
 ### Current multiple questions with skip conditions
 
-Currently, it is possible to create a proxy variant of questions within a block. This takes advantage of the capability for multiple questions within a block where each question includes a skip condition.
+Currently, it is possible to create a proxy variant of questions within a block. This takes advantage of the
+capability for multiple questions within a block where each question includes a skip condition.
 
 Example:
 
@@ -60,64 +71,81 @@ Example:
 {
     "id": "example",
     "type": "Question",
-    "questions": [{
-        "id": "example-question",
-        "title": "Did you do any work today?",
-        "type": "General",
-        "answers": [{
-            "id": "example-answer",
-            "mandatory": true,
-            "type": "Radio",
-            "options": [{
-                    "label": "Yes",
-                    "value": "Yes"
-                },
+    "questions": [
+        {
+            "id": "example-question",
+            "title": "Did you do any work today?",
+            "type": "General",
+            "answers": [
                 {
-                    "label": "No",
-                    "value": "No"
+                    "id": "example-answer",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ]
+                }
+            ],
+            "skip_conditions": [
+                {
+                    "when": [
+                        {
+                            "id": "proxy-check-answer",
+                            "condition": "equals",
+                            "value": "no"
+                        }
+                    ]
                 }
             ]
-        }],
-        "skip_conditions": [{
-            "when": [{
-                "id": "proxy-check-answer",
-                "condition": "equals",
-                "value": "no"
-            }],
-        }]
-    },
-    {
-        "id": "example-question-proxy",
-        "title": "Did they do any work today?",
-        "type": "General",
-        "answers": [{
-            "id": "example-answer-proxy",
-            "mandatory": true,
-            "type": "Radio",
-            "options": [{
-                    "label": "Yes",
-                    "value": "Yes"
-                },
+        },
+        {
+            "id": "example-question-proxy",
+            "title": "Did they do any work today?",
+            "type": "General",
+            "answers": [
                 {
-                    "label": "No",
-                    "value": "No"
+                    "id": "example-answer-proxy",
+                    "mandatory": true,
+                    "type": "Radio",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ]
+                }
+            ],
+            "skip_conditions": [
+                {
+                    "when": [
+                        {
+                            "id": "proxy-check-answer",
+                            "condition": "equals",
+                            "value": "proxy"
+                        }
+                    ]
                 }
             ]
-        }],
-        "skip_conditions": [{
-            "when": [{
-                "id": "proxy-check-answer",
-                "condition": "equals",
-                "value": "proxy"
-            }],
-        }]
-    }]
+        }
+    ]
 }
 ```
 
 ### Example of current interstitial schema
 
-Interstitials do not currently support proxy titles, so the current method to use them in schemas which require proxy is to create multiple interstitials and route between them according to a proxy question.
+Interstitials do not currently support proxy titles, so the current method to use them in schemas
+which require proxy is to create multiple interstitials and route between them according to a proxy question.
 
 Example (assumes a previous question routes to one of these depending on a proxy question):
 
@@ -197,13 +225,13 @@ Must support proxy versions for the following features:
         - `Yes, {proxy_name} is {age_years} old`
         - `No, I need to change my date of birth`
         - `No, I need to change {proxy_name_posessive} date of birth`
-        
-        
+
 ## Proposal
 
 ### Interstitial
 
-To allow proxy versions of interstitials, a top-level `content_variants` object has been introduced. The variant to display will be chosen based on the `when` conditions for each object in the variants block. 
+To allow proxy versions of interstitials, a top-level `content_variants` object has been introduced.
+The variant to display will be chosen based on the `when` conditions for each object in the variants block.
 
 ```json
 {
@@ -219,21 +247,20 @@ To allow proxy versions of interstitials, a top-level `content_variants` object 
                 "content": [
                     {
                         "title": "Some extra information",
-                        "list": [
-                            "A list of thing",
-                            "Some of these things are needed"
-                        ]
+                        "list": ["A list of thing", "Some of these things are needed"]
                     },
                     {
                         "description": "Some more extra information"
                     }
                 ]
             },
-            "when": [{
-                "id": "proxy-answer",
-                "condition": "equals",
-                "value": "no"
-            }]
+            "when": [
+                {
+                    "id": "proxy-answer",
+                    "condition": "equals",
+                    "value": "no"
+                }
+            ]
         },
         {
             "content": {
@@ -244,28 +271,29 @@ To allow proxy versions of interstitials, a top-level `content_variants` object 
                 "content": [
                     {
                         "title": "Some extra information",
-                        "list": [
-                            "A list of thing",
-                            "Some of these things are needed"
-                        ]
+                        "list": ["A list of thing", "Some of these things are needed"]
                     },
                     {
                         "description": "Some more extra information"
                     }
                 ]
             },
-            "when": [{
-                "id": "proxy-answer",
-                "condition": "equals",
-                "value": "proxy"
-            }],
+            "when": [
+                {
+                    "id": "proxy-answer",
+                    "condition": "equals",
+                    "value": "proxy"
+                }
+            ]
         }
     ],
-    "routing_rules": [{
-        "goto": {
-            "block": "main-job-type-past"
+    "routing_rules": [
+        {
+            "goto": {
+                "block": "main-job-type-past"
+            }
         }
-    }]
+    ]
 }
 ```
 
@@ -277,77 +305,90 @@ Variants with a length of one should be disallowed since they can be moved out o
 
 ### Question
 
-For questions, the basic premise is to use the multiple question scheme that is currently possible with some changes to keep them aligned with interstitials:
+For questions, the basic premise is to use the multiple question scheme that is currently possible
+with some changes to keep them aligned with interstitials:
 
- ```json
+```json
 {
     "id": "example",
     "type": "Question",
-    "question_variants": [{
-        "question": {
-            "id": "example-question",
-            "title": "Did you do any work today?",
-            "type": "General",
-            "answers": [{
-                "id": "example-answer",
-                "mandatory": true,
-                "type": "Radio",
-                "options": [{
-                        "label": "Yes",
-                        "value": "Yes"
-                    },
+    "question_variants": [
+        {
+            "question": {
+                "id": "example-question",
+                "title": "Did you do any work today?",
+                "type": "General",
+                "answers": [
                     {
-                        "label": "No",
-                        "value": "No"
+                        "id": "example-answer",
+                        "mandatory": true,
+                        "type": "Radio",
+                        "options": [
+                            {
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
                     }
                 ]
-            }]
+            },
+            "when": [
+                {
+                    "id": "proxy-answer",
+                    "condition": "equals",
+                    "value": "no"
+                }
+            ]
         },
-        "when": [{
-            "id": "proxy-answer",
-            "condition": "equals",
-            "value": "no"
-        }]
-    },
-    {
-        "question": {
-            "id": "example-question-proxy",
-            "title": "Did they do any work today?",
-            "type": "General",
-            "answers": [{
-                "id": "example-answer-proxy",
-                "mandatory": true,
-                "type": "Radio",
-                "options": [
+        {
+            "question": {
+                "id": "example-question-proxy",
+                "title": "Did they do any work today?",
+                "type": "General",
+                "answers": [
                     {
-                        "label": "Yes",
-                        "value": "Yes"
-                    },
-                    {
-                        "label": "No",
-                        "value": "No"
+                        "id": "example-answer-proxy",
+                        "mandatory": true,
+                        "type": "Radio",
+                        "options": [
+                            {
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
                     }
                 ]
-            }]
-        },
-        "when": [{
-            "id": "proxy-answer",
-            "condition": "equals",
-            "value": "proxy"
-        }]
-    }]
+            },
+            "when": [
+                {
+                    "id": "proxy-answer",
+                    "condition": "equals",
+                    "value": "proxy"
+                }
+            ]
+        }
+    ]
 }
 ```
 
-Each variant should have the same structure as questions currently do. 
+Each variant should have the same structure as questions currently do.
 
 The `questions` key should be removed from the block and replaced with `question` and `question_variant`.
 
-Single variants should be disallowed (i.e. length of variants == 1) since a variants object should be converted to a question at this point.
+Single variants should be disallowed (i.e. length of variants == 1) since a variants object
+should be converted to a question at this point.
 
 ### Additional Changes
+
 - The current `titles` key should be removed and replaced with `title` which is a string.
-- `questions` should be removed and relpaced with `question` object which only allows a single question.
+- `questions` should be removed and replaced with `question` object which only allows a single question.
 - The schema validator should ensure that question_variants and content_variants has a length of greater than one.
 - Answer IDs within variants should allow duplicates. This means routing becomes simpler for proxy etc.
-

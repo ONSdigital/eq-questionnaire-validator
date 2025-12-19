@@ -2,7 +2,8 @@
 
 ## Context
 
-We reference dynamic values (metadata, answers) in placeholders, validation, and routing. The agreed structure for referencing dynamic values is:
+We reference dynamic values (metadata, answers) in placeholders, validation, and routing.
+The agreed structure for referencing dynamic values is:
 
 ```json
 {
@@ -11,11 +12,14 @@ We reference dynamic values (metadata, answers) in placeholders, validation, and
 }
 ```
 
-This structure is used by placeholders and is part of the agreed [changes to routing](https://github.com/ONSdigital/eq-schema-validator/blob/v3/doc/decisions/0004-extend-and-improve-routing-rules.md). Validation is inconsistent with these.
+This structure is used by placeholders and is part of the agreed
+[changes to routing](https://github.com/ONSdigital/eq-schema-validator/blob/v3/doc/decisions/0004-extend-and-improve-routing-rules.md).
+Validation is inconsistent with these.
 
 ## Proposal
 
-Update validation so that it uses the same consistent way of referencing dynamic values as placeholders and routing. This will be changed for minimum and maximum validation on numbers and dates (all current validation we support).
+Update validation so that it uses the same consistent way of referencing dynamic values as placeholders and routing.
+This will be changed for minimum and maximum validation on numbers and dates (all current validation we support).
 
 ### Numbers
 
@@ -90,5 +94,6 @@ Proposed:
 
 ## Consequences
 
-- We will be more consistent in how we reference dynamic values. This will simplify the development of services that are consumers of the schema (runner, author).
+- We will be more consistent in how we reference dynamic values.
+This will simplify the development of services that are consumers of the schema (runner, author).
 - All dynamic values will be available to all validations e.g. the number of items in a list.

@@ -93,9 +93,7 @@ def test_invalid_answer_type_in_answers_to_calculate_against_numeric_value():
 
 
 def test_answers_to_calculate_too_short():
-    filename = (
-        "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
-    )
+    filename = "schemas/invalid/test_invalid_validation_sum_against_total_dynamic_answers.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     question = schema.blocks_by_id["dynamic-answer-only"]["question"]
 
@@ -115,7 +113,11 @@ def test_answers_to_calculate_too_short():
 
 
 def test_invalid_different_numeric_answer_types():
-    """Validation for answers to calculate that have a different type to the answer_id they are being calculated against."""
+    """Test invalid different numeric answer types.
+
+    Validation for answers to calculate that have a different type to the answer_id
+    they are being calculated against.
+    """
     filename = "schemas/invalid/test_invalid_validation_sum_against_total_different_answer_types.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 

@@ -2,9 +2,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 
 class ListCollectorDrivingQuestionValidator(BlockValidator):
-    MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = (
-        "The block_id should be the only ListCollectorDrivingQuestion for list"
-    )
+    MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = "The block_id should be the only ListCollectorDrivingQuestion for list"
 
     def validate(self):
         super().validate()
