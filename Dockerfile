@@ -23,6 +23,12 @@ RUN poetry install --only main
 
 EXPOSE 5000
 
+# Set the user running the application to the non-root user
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:5001/docs || exit 1
+
 CMD ["gunicorn", "api:app", \
     "--bind", "0.0.0.0:5000", \
     "--workers", "20", \

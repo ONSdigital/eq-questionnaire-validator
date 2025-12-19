@@ -16,4 +16,10 @@ ENV DEBUG=ajv-schema-validator
 
 WORKDIR /usr/src
 
+# Set the user running the application to the non-root user
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:5002/docs || exit 1
+
 CMD [ "node", "app/app.js" ]
