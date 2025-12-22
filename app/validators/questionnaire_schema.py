@@ -604,18 +604,18 @@ class QuestionnaireSchema:
                     source_type="answers",
                 )
             if source == "grand_calculated_summary":
-                result = []
+                identifiers = []
                 for calculated_summary_id in self.get_calculation_block_ids(
                     block=block,
                     source_type="calculated_summary",
                 ):
                     if calculated_summary_block := self.get_block(calculated_summary_id):
-                        for answer_id in self.get_calculation_block_ids(
+                        answer_ids = self.get_calculation_block_ids(
                             block=calculated_summary_block,
                             source_type="answers",
-                        ):
-                            result.append(answer_id)
-                return result
+                        )
+                        identifiers.extend(answer_ids)
+                return identifiers
         return [identifier]
 
     def is_repeating_section(self, section_id: str) -> bool:
