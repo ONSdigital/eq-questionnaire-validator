@@ -88,10 +88,16 @@ async def validate_schema_from_url(url=None):
                 status_code=400,
                 content=f"URL domain [{parsed_url.hostname}] is not allowed",
             )
+        if parsed_url.scheme not in {"http", "https"}:
+            return Response(
+                status_code=400,
+                content="Only http and https schemes are allowed",
+            )
         logger.info("Schema validation request accepted - URL allowed", url=url)
         try:
             # Opens the URL and validates the schema
-            with request.urlopen(parsed_url.geturl()) as opened_url:
+            with request.urlopen(parsed_url.geturl()) as opened_url:  # nosec B310
+                # Risk of opening `ftp://` and `file://` URLs with urllib.request is mitigated in lines 91-95.
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             logger.warning(

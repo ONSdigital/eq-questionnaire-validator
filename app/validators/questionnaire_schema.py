@@ -5,8 +5,8 @@ from collections import defaultdict
 from functools import cached_property, lru_cache
 from typing import Iterable, Mapping, TypeVar
 
-from jsonpath_ng import parse
-from jsonpath_ng.ext import parse as ext_parse
+from jsonpath_ng import parse  # pyright: ignore
+from jsonpath_ng.ext import parse as ext_parse  # pyright: ignore
 
 from app.answer_type import AnswerType
 
@@ -206,6 +206,10 @@ class QuestionnaireSchema:
         self._answers_with_context = answers_dict
         return self._answers_with_context
 
+    @answers_with_context.setter
+    def answers_with_context(self, value):
+        self._answers_with_context = value
+
     @property
     def lists_with_context(self):
         if supplementary_list := self.supplementary_lists:
@@ -251,10 +255,6 @@ class QuestionnaireSchema:
                         "answer": detail_answer,
                         **context,
                     }
-
-    @answers_with_context.setter
-    def answers_with_context(self, value):
-        self._answers_with_context = value
 
     @cached_property
     def ids(self):
@@ -460,14 +460,15 @@ class QuestionnaireSchema:
         """
         if list_name := self.list_names_by_dynamic_answer_id.get(answer_id):
             return list_name
-        block = self.get_block_by_answer_id(answer_id)
-        if list_name := self.list_names_by_repeating_block_id.get(block["id"]):
-            return list_name
-        if block["type"] == "ListCollector":
-            return block["for_list"]
-        section = self.get_parent_section_for_block(block["id"])
-        if section.get("repeat"):
-            return section["repeat"]["for_list"]
+        if block := self.get_block_by_answer_id(answer_id):
+            if list_name := self.list_names_by_repeating_block_id.get(block["id"]):
+                return list_name
+            if block["type"] == "ListCollector":
+                return block["for_list"]
+            section = self.get_parent_section_for_block(block["id"])
+            if section and section.get("repeat"):
+                return section["repeat"]["for_list"]
+        return None
 
     @lru_cache
     def get_first_answer_in_block(self, block_id):
@@ -596,24 +597,25 @@ class QuestionnaireSchema:
         """
         source = value_source["source"]
         identifier = value_source["identifier"]
-
-        if source == "calculated_summary":
-            return self.get_calculation_block_ids(
-                block=self.get_block(identifier),
-                source_type="answers",
-            )
-        if source == "grand_calculated_summary":
-            return [
-                answer_id
-                for calculated_summary_id in self.get_calculation_block_ids(
-                    block=self.get_block(identifier),
-                    source_type="calculated_summary",
-                )
-                for answer_id in self.get_calculation_block_ids(
-                    block=self.get_block(calculated_summary_id),
+        if block := self.get_block(identifier):
+            if source == "calculated_summary":
+                return self.get_calculation_block_ids(
+                    block=block,
                     source_type="answers",
                 )
-            ]
+            if source == "grand_calculated_summary":
+                result = []
+                for calculated_summary_id in self.get_calculation_block_ids(
+                    block=block,
+                    source_type="calculated_summary",
+                ):
+                    if calculated_summary_block := self.get_block(calculated_summary_id):
+                        for answer_id in self.get_calculation_block_ids(
+                            block=calculated_summary_block,
+                            source_type="answers",
+                        ):
+                            result.append(answer_id)
+                return result
         return [identifier]
 
     def is_repeating_section(self, section_id: str) -> bool:
@@ -624,14 +626,16 @@ class QuestionnaireSchema:
             for block in blocks:
                 if block_id == block["id"]:
                     return self.sections_by_id[section_id]
+        return None
 
-    def get_parent_list_collector_for_add_block(self, block_id) -> dict | None:
+    def get_parent_list_collector_for_add_block(self, block_id) -> str | None:
         for blocks in self.blocks_by_section_id.values():
             for block in blocks:
                 if block["type"] == "ListCollector" and block["add_block"]["id"] == block_id:
                     return block["id"]
+        return None
 
-    def get_parent_list_collector_for_repeating_block(self, block_id) -> dict | None:
+    def get_parent_list_collector_for_repeating_block(self, block_id) -> str | None:
         for blocks in self.blocks_by_section_id.values():
             for block in blocks:
                 if block["type"] in [
@@ -645,7 +649,9 @@ class QuestionnaireSchema:
 
     def is_block_in_repeating_section(self, block_id: str) -> bool:
         parent_section = self.get_parent_section_for_block(block_id)
-        return parent_section and self.is_repeating_section(parent_section["id"])
+        if parent_section:
+            return self.is_repeating_section(parent_section["id"])
+        return False
 
     def get_numeric_value_for_value_source(
         self,
@@ -675,12 +681,15 @@ class QuestionnaireSchema:
         for section_id, blocks in self.blocks_by_section_id.items():
             if block in blocks:
                 return section_id
+        return None
 
     def get_section_id_for_block_id(self, block_id: str) -> str | None:
         if block := self.get_block(block_id):
             return self.get_section_id_for_block(block)
+        return None
 
-    def get_section_index_for_section_id(self, section_id: str) -> int:
+    def get_section_index_for_section_id(self, section_id: str) -> int | None:
         for index, section in enumerate(self.sections):
             if section["id"] == section_id:
                 return index
+        return None

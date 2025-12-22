@@ -86,18 +86,19 @@ class ValueSourceValidator(Validator):
         }
 
     @cached_property
-    def past_repeating_section_ids(self) -> set[str]:
-        """Returns a list of repeating sections' IDs that are before the current parent section."""
-        return {
-            section_id
-            for section_id in self.past_section_ids
-            if self.questionnaire_schema.is_repeating_section(section_id)
-        }
+    def past_repeating_section_ids(self) -> set:
+        """Returns a set of repeating section IDs that are before the current parent section."""
+        repeating_section_ids = set()
+        for section_id in self.past_section_ids:
+            if self.questionnaire_schema.is_repeating_section(section_id):
+                repeating_section_ids.add(section_id)
+        return repeating_section_ids
 
     @property
     def current_block_id(self) -> str | None:
         if self.parent_block:
             return self.parent_block.get("id")
+        return None
 
     @cached_property
     def future_block_ids(self) -> set[str]:
@@ -134,18 +135,17 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def current_section_id(self) -> str | None:
-        if self.parent_section:
-            return self.parent_section.get("id")
+        return self.parent_section.get("id") if self.parent_section else None
 
     @cached_property
-    def past_section_ids(self) -> set[dict]:
+    def past_section_ids(self) -> set[str]:
         """Returns a list of sections that are before the current parent section."""
-        parent_section_id = self.parent_section["id"]
-        parent_section_index_in_section_list = self.questionnaire_schema.section_ids.index(parent_section_id)
-        ids = set(
-            self.questionnaire_schema.section_ids[:parent_section_index_in_section_list],
-        )
-
+        ids = set()
+        if self.parent_section and (parent_section_id := self.parent_section.get("id")):
+            parent_section_index_in_section_list = self.questionnaire_schema.section_ids.index(parent_section_id)
+            ids = set(
+                self.questionnaire_schema.section_ids[:parent_section_index_in_section_list],
+            )
         return ids
 
     def validate(self):
