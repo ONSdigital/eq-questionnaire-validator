@@ -7,8 +7,10 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_answer_ids_in_add_and_edit.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("list-collector")
-    validator = ListCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    # Block always exists in this test schema
+    validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {
@@ -26,8 +28,10 @@ def test_invalid_list_collector_with_answer_id_used_elsewhere():
     filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_answer_id_used_elsewhere.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("list-collector")
-    validator = ListCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    # Block always exists in this test schema
+    validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {
@@ -56,8 +60,10 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
     filename = "schemas/invalid/test_invalid_list_collector_with_different_add_block_answer_ids.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("list-collector")
-    validator = ListCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    # Block always exists in this test schema
+    validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
     validator.validate()
 
     expected_errors = [
@@ -76,8 +82,10 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
     filename = "schemas/invalid/test_invalid_list_collector_with_duplicate_answer_ids_for_different_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("list-collector")
-    validator = ListCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    # Block always exists in this test schema
+    validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
     validator.validate()
 
     expected_errors = [
@@ -113,8 +121,10 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
 def test_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_list_collector_non_radio.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("list-collector"),  # pyright: ignore
+        # Block always exists in test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -133,8 +143,10 @@ def test_invalid_list_collector_with_no_add_answer_action():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_add_answer_action.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -153,8 +165,10 @@ def test_invalid_list_collector_with_no_remove_answer_action():
     filename = "schemas/invalid/test_invalid_list_collector_with_no_remove_answer_action.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -173,8 +187,10 @@ def test_invalid_list_collector_same_name_answer_id_reference():
     filename = "schemas/invalid/test_invalid_list_collector_same_name_answer_ids.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -194,8 +210,10 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
     filename = "schemas/invalid/test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_section.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("any-other-companies-or-branches"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("any-other-companies-or-branches"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -210,8 +228,10 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
 
     assert expected_errors == validator.errors
 
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("any-other-companies-or-branches-again"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("any-other-companies-or-branches-again"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()
@@ -232,8 +252,10 @@ def test_invalid_list_collector_for_supplementary_list():
     filename = "schemas/invalid/test_invalid_supplementary_data_list_collector.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    validator = ListCollectorValidator(
-        questionnaire_schema.get_block("list-collector-additional"),
+    validator = ListCollectorValidator(  # type: ignore
+        # Validator always instantiates for this test schema
+        questionnaire_schema.get_block("list-collector-additional"),  # type: ignore
+        # Block always exists in this test schema
         questionnaire_schema,
     )
     validator.validate()

@@ -1,5 +1,5 @@
-from structlog import configure, getLogger
-from structlog.stdlib import LoggerFactory
+from structlog import configure, getLogger  # pyright: ignore
+from structlog.stdlib import LoggerFactory  # pyright: ignore
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from tests.utils import _open_and_load_schema_file

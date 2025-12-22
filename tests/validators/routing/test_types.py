@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-import pytest
+import pytest  # pyright: ignore
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.types import (
@@ -129,4 +129,4 @@ def test_resolve_non_answer_value_source_json_type(source, selector, json_type):
     value_source = {"source": source}
     if selector:
         value_source["selector"] = selector
-    assert resolve_value_source_json_type(value_source, {}) == json_type
+    assert resolve_value_source_json_type(value_source, QuestionnaireSchema({})) == json_type

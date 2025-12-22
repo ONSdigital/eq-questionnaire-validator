@@ -7,7 +7,8 @@ def test_invalid_actions():
     filename = "schemas/invalid/test_invalid_relationships_unrelated.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("relationships").get("unrelated_block")
+    block = questionnaire_schema.get_block("relationships").get("unrelated_block")  # type: ignore
+    # Block always exists in this test schema
     validator = UnrelatedBlockValidator(block, questionnaire_schema)
 
     expected_errors = [

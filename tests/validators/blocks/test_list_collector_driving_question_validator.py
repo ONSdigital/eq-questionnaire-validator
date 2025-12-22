@@ -10,7 +10,8 @@ def test_invalid_driving_question_multiple_driving_questions():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     block = questionnaire_schema.get_block("anyone-usually-live-at")
-    validator = ListCollectorDrivingQuestionValidator(block, questionnaire_schema)
+    validator = ListCollectorDrivingQuestionValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_error_messages = [
         {

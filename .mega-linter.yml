@@ -9,8 +9,6 @@ APPLY_FIXES: none
 
 FORMATTERS_DISABLE_ERRORS: false
 
-FILTER_REGEX_EXCLUDE: "^tests/*"
-
 # If you use ENABLE variable, all other languages/formats/tooling-formats will
 # be disabled by default
 ENABLE:

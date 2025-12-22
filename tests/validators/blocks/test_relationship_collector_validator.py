@@ -7,8 +7,10 @@ def test_invalid_relationship_multiple_answers():
     filename = "schemas/invalid/test_invalid_relationship_multiple_answers.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("relationships")
-    validator = RelationshipCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("relationships")  # type: ignore
+    # Block always exists in this test schema
+    validator = RelationshipCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {
@@ -26,8 +28,10 @@ def test_invalid_relationship_wrong_answer_type():
     filename = "schemas/invalid/test_invalid_relationship_wrong_answer_type.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("relationships")
-    validator = RelationshipCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("relationships")  # type: ignore
+    # Block always exists in this test schema
+    validator = RelationshipCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {

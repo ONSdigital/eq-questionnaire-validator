@@ -1,7 +1,7 @@
 import json
 
-from jsonschema import Draft202012Validator
-from referencing import Registry
+from jsonschema import Draft202012Validator  # pyright: ignore
+from referencing import Registry  # pyright: ignore
 
 from tests.helpers.schema_validator import SchemaTestValidator
 from tests.utils import _open_and_load_schema_file

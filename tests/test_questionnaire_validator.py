@@ -1,8 +1,8 @@
 from json import load
 
-import pytest
-from structlog import configure, getLogger
-from structlog.stdlib import LoggerFactory
+import pytest  # pyright: ignore
+from structlog import configure, getLogger  # pyright: ignore
+from structlog.stdlib import LoggerFactory  # pyright: ignore
 
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator

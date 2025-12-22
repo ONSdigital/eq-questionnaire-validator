@@ -7,9 +7,11 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_different_answer_ids_multi_collectors.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("primary-person-list-collector")
+    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    # Block always exists in this test schema
 
-    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)
+    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {
@@ -26,7 +28,8 @@ def test_primary_person_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_radio.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = PrimaryPersonListCollectorValidator(
-        questionnaire_schema.get_block("primary-person-list-collector"),
+        questionnaire_schema.get_block("primary-person-list-collector"),  # type: ignore
+        # Always exists in this test schema
         questionnaire_schema,
     )
 
@@ -43,9 +46,11 @@ def test_primary_person_invalid_list_collector_non_radio():
 def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_add_edit_action.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("primary-person-list-collector")
+    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    # Block always exists in this test schema
 
-    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)
+    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
 
     expected_errors = [
         {
@@ -61,8 +66,11 @@ def test_invalid_primary_person_list_collector_same_name_answer_id_reference():
     filename = "schemas/invalid/test_invalid_list_collector_same_name_answer_ids.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("primary-person-list-collector")
-    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)
+    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    # Block always exists in this test schema
+
+    validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore
+    # Validator always instantiates for this test schema
     validator.validate()
 
     expected_errors = [

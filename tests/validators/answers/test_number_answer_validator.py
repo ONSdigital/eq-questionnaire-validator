@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyright: ignore
 
 from app.validators.answers import NumberAnswerValidator
 from app.validators.questionnaire_schema import (
