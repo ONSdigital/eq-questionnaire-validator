@@ -28,8 +28,8 @@ def test_primary_person_invalid_list_collector_non_radio():
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_radio.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = PrimaryPersonListCollectorValidator(
+        # Block always exists in this test schema, .get_block() will never return None
         questionnaire_schema.get_block("primary-person-list-collector"),  # type: ignore
-        # Always exists in this test schema
         questionnaire_schema,
     )
 
