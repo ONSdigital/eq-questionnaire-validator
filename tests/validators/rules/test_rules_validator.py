@@ -51,8 +51,8 @@ def test_validate_options(operator_name, first_argument, second_argument):
         "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
         "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
     }
+    # For testing purposes we need to assign a value to answer_id_to_option_values_map
     questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
-        # For testing we need to assign a value to answer_id_to_option_values_map
         "string-answer": ["Yes", "No"],
         "array-answer": ["Yes", "No"],
     }
@@ -91,8 +91,8 @@ def test_validate_options_null_value_is_valid(
         "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
         "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
     }
+    # For testing purposes we need to assign a value to answer_id_to_option_values_map
     questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
-        # For testing we need to assign a value to answer_id_to_option_values_map
         "string-answer": ["Yes", "No"],
         "array-answer": ["Yes", "No"],
     }
@@ -114,8 +114,8 @@ def test_validate_options_multiple_errors():
     questionnaire_schema.answers_with_context = {
         "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
     }
+    # For testing purposes we need to assign a value to answer_id_to_option_values_map
     questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
-        # For testing we need to assign a value to answer_id_to_option_values_map
         "string-answer": ["Yes", "No"],
     }
     validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
