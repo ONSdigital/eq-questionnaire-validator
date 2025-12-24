@@ -285,8 +285,9 @@ class SectionValidator(Validator):
 
     def has_multiple_list_collectors(self):
         list_collectors = []
-        for group in self.schema_element.get("groups"):
-            list_collectors.extend(block for block in group.get("blocks") if block["type"] in ["ListCollector"])
+        if groups := self.schema_element.get("groups"):
+            for group in groups:
+                list_collectors.extend(block for block in group.get("blocks") if block["type"] in ["ListCollector"])
 
         return len(list_collectors) > 1
 

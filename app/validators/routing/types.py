@@ -1,3 +1,5 @@
+from typing import Mapping
+
 from app.validators.questionnaire_schema import QuestionnaireSchema
 
 TYPE_STRING = "string"
@@ -59,10 +61,9 @@ def resolve_answer_source_json_type(answer_id: str, schema: QuestionnaireSchema)
 
 
 def resolve_calculated_summary_source_json_type(
-    block_id: str,
+    block: Mapping,
     schema: QuestionnaireSchema,
 ) -> str:
-    block = schema.get_block(block_id)
     if block["calculation"].get("answers_to_calculate"):
         answer_id = block["calculation"]["answers_to_calculate"][0]
     else:
@@ -73,10 +74,9 @@ def resolve_calculated_summary_source_json_type(
 
 
 def resolve_grand_calculated_summary_source_json_type(
-    block_id: str,
+    block: Mapping,
     schema: QuestionnaireSchema,
 ) -> str:
-    block = schema.get_block(block_id)
     first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
     return resolve_value_source_json_type(first_calculated_summary_source, schema)
 
@@ -103,17 +103,19 @@ def resolve_value_source_json_type(
     source = value_source["source"]
     identifier = value_source.get("identifier")
     selector = value_source.get("selector")
-    if source == "answers":
-        return resolve_answer_source_json_type(identifier, schema)
+    if identifier:
+        if source == "answers":
+            return resolve_answer_source_json_type(identifier, schema)
 
-    if source == "calculated_summary":
-        return resolve_calculated_summary_source_json_type(identifier, schema)
+        if block := schema.get_block(identifier):
+            if source == "calculated_summary" and "calculation" in block:
+                return resolve_calculated_summary_source_json_type(block, schema)
 
-    if source == "grand_calculated_summary":
-        return resolve_grand_calculated_summary_source_json_type(identifier, schema)
+            if source == "grand_calculated_summary":
+                return resolve_grand_calculated_summary_source_json_type(block, schema)
 
-    if source == "metadata":
-        return resolve_metadata_source_json_type(identifier, schema)
+        if source == "metadata":
+            return resolve_metadata_source_json_type(identifier, schema)
 
     if source == "list":
         return resolve_list_source_json_type(selector)

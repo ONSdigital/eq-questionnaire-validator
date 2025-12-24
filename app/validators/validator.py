@@ -4,8 +4,8 @@ from typing import Mapping
 
 class Validator(ABC):
     def __init__(self, schema_element: Mapping | None = None):
-        self.errors = []
-        self.context = {}
+        self.errors: list[dict] = []
+        self.context: dict[str, str] = {}
         self.schema_element = schema_element or {}
 
     def add_error(self, message, **context):

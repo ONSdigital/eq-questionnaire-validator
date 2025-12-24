@@ -37,17 +37,17 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         """Validate that if there is only one answer in the answers_to_calculate list, it's for repeating answers."""
         if len(answers) == 1:
             single_answer_id = answers[0]["id"]
-            question_block = self.questionnaire_schema.get_block_by_answer_id(
-                single_answer_id,
-            )
             # check if its dynamic
-            if single_answer_id in self.questionnaire_schema.get_all_dynamic_answer_ids(
-                question_block["id"],
+            if question_block := self.questionnaire_schema.get_block_by_answer_id(
+                single_answer_id,
             ):
-                return
-            # check if it's for a repeating question
-            if question_block["type"] == "ListRepeatingQuestion":
-                return
+                if single_answer_id in self.questionnaire_schema.get_all_dynamic_answer_ids(
+                    question_block["id"],
+                ):
+                    return
+                # check if it's for a repeating question
+                if question_block["type"] == "ListRepeatingQuestion":
+                    return
 
             self.add_error(
                 self.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,

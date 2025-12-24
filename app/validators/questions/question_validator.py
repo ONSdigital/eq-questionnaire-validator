@@ -4,7 +4,7 @@ from app.validators.validator import Validator
 
 class QuestionValidator(Validator):
     ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = "Answer label must be provided for questions with multiple answers"
-    question = {}
+    question: dict = {}
 
     def __init__(self, schema_element, schema=None):
         super().__init__(schema_element)

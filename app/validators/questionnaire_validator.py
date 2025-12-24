@@ -1,4 +1,5 @@
 import re
+from typing import Mapping
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -205,34 +206,39 @@ class QuestionnaireValidator(Validator):
                 source_block = self.questionnaire_schema.get_block_by_answer_id(
                     identifier_reference["identifier"],
                 )
-                source_block_id = self.resolve_source_block_id(source_block)
+                if isinstance(source_block, dict) and (source_block_id := self.resolve_source_block_id(source_block)):
+                    if source_block_section_id := self.questionnaire_schema.get_section_id_for_block_id(
+                        source_block_id,
+                    ):
+                        source_block_section_index = self.questionnaire_schema.get_section_index_for_section_id(
+                            source_block_section_id,
+                        )
+                        if source_block_section_index and section_index < source_block_section_index:
+                            self.add_error(
+                                error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
+                                    answer_id=identifier_reference["identifier"],
+                                ),
+                                section_id=section["id"],
+                            )
 
-                source_block_section_id = self.questionnaire_schema.get_section_id_for_block_id(
-                    source_block_id,
-                )
-                source_block_section_index = self.questionnaire_schema.get_section_index_for_section_id(
-                    source_block_section_id,
-                )
-                if section_index < source_block_section_index:
-                    self.add_error(
-                        error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
-                            answer_id=identifier_reference["identifier"],
-                        ),
-                        section_id=section["id"],
-                    )
-
-    def resolve_source_block_id(self, source_block):
+    def resolve_source_block_id(self, source_block: Mapping) -> str:
         # Handling of source block nested (list collector's add-block)
         if source_block["type"] == "ListAddQuestion":
-            return self.questionnaire_schema.get_parent_list_collector_for_add_block(
-                source_block["id"],
-            )
+            if isinstance(source_block, dict) and (
+                block_id := self.questionnaire_schema.get_parent_list_collector_for_add_block(
+                    source_block["id"],
+                )
+            ):
+                return block_id
 
         # Handling of source block nested (list collector's repeating block)
         if source_block["type"] == "ListRepeatingQuestion":
-            return self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
-                source_block["id"],
-            )
+            if isinstance(source_block, dict) and (
+                block_id := self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
+                    source_block["id"],
+                )
+            ):
+                return block_id
         # Handling of standard source block
         return source_block["id"]
 
