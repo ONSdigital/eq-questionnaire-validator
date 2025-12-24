@@ -1,4 +1,4 @@
-import pytest  # pyright: ignore
+import pytest
 
 from app import error_messages
 from app.validators.questionnaire_schema import QuestionnaireSchema

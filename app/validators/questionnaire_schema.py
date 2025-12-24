@@ -5,8 +5,8 @@ from collections import defaultdict
 from functools import cached_property, lru_cache
 from typing import Iterable, Mapping, TypeVar
 
-from jsonpath_ng import parse  # pyright: ignore
-from jsonpath_ng.ext import parse as ext_parse  # pyright: ignore
+from jsonpath_ng import parse
+from jsonpath_ng.ext import parse as ext_parse
 
 from app.answer_type import AnswerType
 

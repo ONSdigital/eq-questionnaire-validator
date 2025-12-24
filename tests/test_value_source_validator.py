@@ -1,4 +1,4 @@
-import pytest  # pyright: ignore
+import pytest
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.value_source_validator import ValueSourceValidator

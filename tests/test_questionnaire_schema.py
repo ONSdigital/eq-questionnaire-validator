@@ -1,4 +1,4 @@
-from jsonpath_ng import parse  # pyright: ignore
+from jsonpath_ng import parse
 
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,

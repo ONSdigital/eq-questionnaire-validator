@@ -1,4 +1,4 @@
-import pytest  # pyright: ignore
+import pytest
 
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator

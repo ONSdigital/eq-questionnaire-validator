@@ -1,4 +1,4 @@
-import pytest  # pyright: ignore
+import pytest
 
 from app.validators.routing.types import (
     TYPE_ARRAY,

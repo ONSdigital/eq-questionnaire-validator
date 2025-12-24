@@ -7,9 +7,9 @@ from urllib import error, request
 from urllib.parse import urlparse
 
 import requests
-import structlog  # pyright: ignore
-import uvicorn  # pyright: ignore
-from fastapi import Body, FastAPI, Response  # pyright: ignore
+import structlog
+import uvicorn
+from fastapi import Body, FastAPI, Response
 from requests import RequestException
 
 from app.validators.questionnaire_validator import QuestionnaireValidator

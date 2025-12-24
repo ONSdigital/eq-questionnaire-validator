@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-import pytest  # pyright: ignore
+import pytest
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from app.validators.routing.types import (

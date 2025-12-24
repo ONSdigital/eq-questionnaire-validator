@@ -3,10 +3,10 @@ from json import load
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
-from jsonschema import Draft202012Validator as DraftValidator  # pyright: ignore
-from jsonschema import ValidationError  # pyright: ignore
-from jsonschema.exceptions import SchemaError  # pyright: ignore
-from referencing import Registry, Resource  # pyright: ignore
+from jsonschema import Draft202012Validator as DraftValidator
+from jsonschema import ValidationError
+from jsonschema.exceptions import SchemaError
+from referencing import Registry, Resource
 
 from app.validators.validator import Validator
 

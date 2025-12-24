@@ -1,7 +1,7 @@
 import re
 from typing import Mapping
 
-from eq_translations.survey_schema import SurveySchema  # pyright: ignore
+from eq_translations.survey_schema import SurveySchema
 
 from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator

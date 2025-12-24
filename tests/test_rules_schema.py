@@ -1,8 +1,8 @@
 from json import load
 
-import pytest  # pyright: ignore
-from structlog import configure, getLogger  # pyright: ignore
-from structlog.stdlib import LoggerFactory  # pyright: ignore
+import pytest
+from structlog import configure, getLogger
+from structlog.stdlib import LoggerFactory
 
 from tests.conftest import find_all_json_files
 from tests.helpers.schema_validator import SchemaTestValidator
