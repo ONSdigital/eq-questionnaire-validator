@@ -13,14 +13,14 @@ def test_missing_id_in_answers_to_calculate():
 
     expected_error_messages = [
         {
-            "message": validator.ANSWER_NOT_IN_QUESTION,  # type: ignore
             # Validator is accessible here even though the type checker can't see it
+            "message": validator.ANSWER_NOT_IN_QUESTION,  # type: ignore
             "question_id": "breakdown-question",
             "answer_id": "breakdown-3",
         },
         {
-            "message": validator.ANSWER_NOT_IN_QUESTION,  # type: ignore
             # Validator is accessible here even though the type checker can't see it
+            "message": validator.ANSWER_NOT_IN_QUESTION,  # type: ignore
             "question_id": "breakdown-question",
             "answer_id": "breakdown-4",
         },
@@ -40,24 +40,24 @@ def test_invalid_answer_type_in_answers_to_calculate():
 
     expected_error_messages = [
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_type="string",
             ),
             "answer_id": "total-answer",
             "question_id": "additional-breakdown-question",
         },
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_type="string",
             ),
             "answer_id": "additional-breakdown-1",
             "question_id": "additional-breakdown-question",
         },
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_type="string",
             ),
             "answer_id": "additional-breakdown-2",
@@ -79,16 +79,16 @@ def test_invalid_answer_type_in_answers_to_calculate_against_numeric_value():
 
     expected_error_messages = [
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_type="string",
             ),
             "answer_id": "text-breakdown-1",
             "question_id": "text-breakdown-question",
         },
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_type="string",
             ),
             "answer_id": "text-breakdown-2",
@@ -109,8 +109,8 @@ def test_answers_to_calculate_too_short():
 
     expected_error_messages = [
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWERS_TO_CALCULATE_TOO_SHORT.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 list=["percentage-of-shopping-elsewhere"],
             ),
             "question_id": "dynamic-answer-only-question",
@@ -135,8 +135,8 @@ def test_invalid_different_numeric_answer_types():
 
     expected_error_messages = [
         {
+            # Validator is accessible here even though the type checker can't see it
             "message": validator.ANSWER_TYPES_FOR_CALCULATION_MISMATCH.format(  # type: ignore
-                # Validator is accessible here even though the type checker can't see it
                 answer_types=["Currency", "Number"],
             ),
             "question_id": "breakdown-question",
