@@ -27,9 +27,6 @@ RUN groupadd -r appuser && useradd -r -g appuser -u 9000 appuser && chown -R app
 # Set the user running the application to the non-root user
 USER appuser
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:5001/status || exit 1
-
 EXPOSE 5000
 
 CMD ["gunicorn", "api:app", \
