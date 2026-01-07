@@ -85,7 +85,7 @@ class SchemaTestValidator(Validator):
         """
         try:
             self.schema_validator.validate(self.schema_element)
-            return {}
+            return []
         except ValidationError as e:
             match = best_match([e])
             path = "/".join(str(path_element) for path_element in e.path)
@@ -93,7 +93,8 @@ class SchemaTestValidator(Validator):
                 "reason": e.message.replace(str(e.instance), "").strip(),
                 "json": e.instance,
             }
-            self.add_error(match.message, verbose=error, pointer=f"/{path}")
+            if match is not None:
+                self.add_error(match.message, verbose=error, pointer=f"/{path}")
         except SchemaError as e:
             self.add_error(e)
         return self.errors
@@ -146,8 +147,8 @@ def best_match(errors: list[ValidationError]) -> None | ValidationError:
         If the error has nested context errors (anyOf, oneOf), it will pick the deepest errors,
         based on the same key function.
     """
-    errors = iter(errors)
-    best = next(errors, None)
+    errors_iterator = iter(errors)
+    best = next(errors_iterator, None)
     if best is None:
         return None
 

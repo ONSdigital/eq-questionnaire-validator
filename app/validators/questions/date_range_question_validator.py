@@ -37,7 +37,7 @@ class DateRangeQuestionValidator(QuestionValidator):
                 self.period_limits["maximum"],
             )
 
-            if minimum_date > maximum_date:
+            if (minimum_date and maximum_date) and minimum_date > maximum_date:
                 self.add_error(self.MIN_GREATER_THAN_MAX)
 
     def validate_period_limits(self):

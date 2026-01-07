@@ -19,7 +19,8 @@ def test_invalid_list_collector_content_for_list():
         "list-collector-products",
     ]:
         block = questionnaire_schema.get_block(block_id)
-        validator = ListCollectorContentValidator(block, questionnaire_schema)
+        validator = ListCollectorContentValidator(block, questionnaire_schema)  # type: ignore
+        # Validator always instantiates for this test schema (block always exists)
         errors += validator.validate()
 
     expected_errors = [

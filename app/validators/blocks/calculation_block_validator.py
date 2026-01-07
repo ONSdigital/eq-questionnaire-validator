@@ -30,6 +30,7 @@ class CalculationBlockValidator(BlockValidator):
             ]
         except KeyError as e:
             self.add_error(self.ANSWERS_HAS_INVALID_ID, answer_id=str(e).strip("'"))
+        return None
 
     def validate_answer_types(self, answers: list[dict]) -> None:
         answer_type = answers[0]["type"]

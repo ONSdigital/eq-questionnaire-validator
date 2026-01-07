@@ -26,8 +26,7 @@ class DateAnswerValidator(AnswerValidator):
             ):
                 minimum_date = self._get_offset_date(self.answer["minimum"])
                 maximum_date = self._get_offset_date(self.answer["maximum"])
-
-                return minimum_date < maximum_date
+                return minimum_date < maximum_date if minimum_date and maximum_date else False
         return True
 
     def _get_offset_date(self, answer_min_or_max):
@@ -43,11 +42,13 @@ class DateAnswerValidator(AnswerValidator):
     @classmethod
     def get_relative_date(cls, date_string, offset_object):
         # Returns a relative date given an offset or period object
-        return cls._convert_to_datetime(date_string) + relativedelta(
-            years=offset_object.get("years", 0),
-            months=offset_object.get("months", 0),
-            days=offset_object.get("days", 0),
-        )
+        if converted_to_datetime := cls._convert_to_datetime(date_string):
+            return converted_to_datetime + relativedelta(
+                years=offset_object.get("years", 0),
+                months=offset_object.get("months", 0),
+                days=offset_object.get("days", 0),
+            )
+        return None
 
     @staticmethod
     def _convert_to_datetime(value):

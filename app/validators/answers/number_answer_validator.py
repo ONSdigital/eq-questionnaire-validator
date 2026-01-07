@@ -44,7 +44,7 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
             if referred_errors:
-                return None
+                return self.errors
 
             # Validate numeric answer has a positive range of possible responses
             self.validate_numeric_range(self.questionnaire_schema.numeric_answer_ranges)

@@ -7,7 +7,8 @@ def test_invalid_answer_action_redirect_to_list_add_block_no_params():
     filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_no_params.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
-        questionnaire_schema.get_block("anyone-else-live-here-block"),
+        # Block always exists in this test schema, .get_block() will never return None
+        questionnaire_schema.get_block("anyone-else-live-here-block"),  # type: ignore
         questionnaire_schema,
     )
 
@@ -27,7 +28,8 @@ def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
     filename = "schemas/invalid/test_invalid_answer_action_redirect_to_list_add_block_unexpected_params.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
-        questionnaire_schema.get_block("list-collector"),
+        # Block always exists in this test schema, .get_block() will never return None
+        questionnaire_schema.get_block("list-collector"),  # type: ignore
         questionnaire_schema,
     )
 
@@ -47,7 +49,8 @@ def test_invalid_use_of_id_relationships_with_type():
     filename = "schemas/invalid/test_invalid_use_of_block_id_relationships.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
-        questionnaire_schema.get_block("relationships"),
+        # Block always exists in this test schema, .get_block() will never return None
+        questionnaire_schema.get_block("relationships"),  # type: ignore
         questionnaire_schema,
     )
 
