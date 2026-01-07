@@ -1,0 +1,2 @@
+# The HEALTHCHECK command in the Dockerfile needs decisions on values like intervals, timeouts, etc.
+AVD-DS-0026

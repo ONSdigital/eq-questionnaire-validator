@@ -21,6 +21,12 @@ ENV AJV_VALIDATOR_PORT=5002
 
 RUN poetry install --only main
 
+# Create a non-root user and group
+RUN groupadd -r appuser && useradd -r -g appuser -u 9000 appuser && chown -R appuser:appuser .
+
+# Set the user running the application to the non-root user
+USER appuser
+
 EXPOSE 5000
 
 CMD ["gunicorn", "api:app", \
