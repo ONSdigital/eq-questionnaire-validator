@@ -2,7 +2,6 @@ from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
-
 shared_answer_codes = [
     {
         "answer_id": "mandatory-checkbox-answer",
@@ -29,6 +28,7 @@ shared_answer_codes = [
     {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
     {"answer_id": "name-answer", "code": "3"},
 ]
+
 
 def test_answer_code_validation_incorrect_data_version():
     filename = "schemas/valid/test_answer_codes.json"
