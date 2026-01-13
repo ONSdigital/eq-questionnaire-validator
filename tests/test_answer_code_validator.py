@@ -3,6 +3,33 @@ from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
 
+shared_answer_codes = [
+    {
+        "answer_id": "mandatory-checkbox-answer",
+        "answer_value": "None",
+        "code": "1a",
+    },
+    {
+        "answer_id": "mandatory-checkbox-answer",
+        "answer_value": "Ham & Cheese",
+        "code": "1b",
+    },
+    {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
+    {
+        "answer_id": "mandatory-checkbox-answer",
+        "answer_value": "Pepperoni",
+        "code": "1d",
+    },
+    {
+        "answer_id": "mandatory-checkbox-answer",
+        "answer_value": "Other",
+        "code": "1e",
+    },
+    {"answer_id": "other-answer-mandatory", "code": "1f"},
+    {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
+    {"answer_id": "name-answer", "code": "3"},
+]
+
 def test_answer_code_validation_incorrect_data_version():
     filename = "schemas/valid/test_answer_codes.json"
 
@@ -24,34 +51,13 @@ def test_answer_code_validation_incorrect_data_version():
 def test_duplicate_answer_codes():
     filename = "schemas/valid/test_answer_codes.json"
 
-    answer_codes = [
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "None",
-            "code": "1a",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Ham & Cheese",
-            "code": "1b",
-        },
-        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Pepperoni",
-            "code": "1d",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Other",
-            "code": "1e",
-        },
-        {"answer_id": "other-answer-mandatory", "code": "1f"},
-        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
+    answer_codes = shared_answer_codes.copy()
+    answer_codes.append(
         {"answer_id": "name-answer", "code": "3"},
-        {"answer_id": "name-answer", "code": "3"},
+    )
+    answer_codes.append(
         {"answer_id": "name-answer-2", "code": "4"},
-    ]
+    )
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -73,34 +79,13 @@ def test_duplicate_answer_codes():
 def test_duplicate_answer_id_for_answer_code():
     filename = "schemas/valid/test_answer_codes.json"
 
-    answer_codes = [
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "None",
-            "code": "1a",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Ham & Cheese",
-            "code": "1b",
-        },
-        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Pepperoni",
-            "code": "1d",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Other",
-            "code": "1e",
-        },
-        {"answer_id": "other-answer-mandatory", "code": "1f"},
-        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
-        {"answer_id": "name-answer", "code": "3"},
+    answer_codes = shared_answer_codes.copy()
+    answer_codes.append(
         {"answer_id": "name-answer", "code": "4"},
+    )
+    answer_codes.append(
         {"answer_id": "name-answer-2", "code": "5"},
-    ]
+    )
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
@@ -121,34 +106,13 @@ def test_duplicate_answer_id_for_answer_code():
 def test_answer_id_set_in_answer_codes_not_in_schema():
     filename = "schemas/valid/test_answer_codes.json"
 
-    answer_codes = [
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "None",
-            "code": "1a",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Ham & Cheese",
-            "code": "1b",
-        },
-        {"answer_id": "mandatory-checkbox-answer", "answer_value": "Ham", "code": "1c"},
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Pepperoni",
-            "code": "1d",
-        },
-        {
-            "answer_id": "mandatory-checkbox-answer",
-            "answer_value": "Other",
-            "code": "1e",
-        },
-        {"answer_id": "other-answer-mandatory", "code": "1f"},
-        {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
-        {"answer_id": "name-answer", "code": "3"},
+    answer_codes = shared_answer_codes.copy()
+    answer_codes.append(
         {"answer_id": "name-answer-2", "code": "4"},
+    )
+    answer_codes.append(
         {"answer_id": "name-answer-3", "code": "5"},
-    ]
+    )
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
