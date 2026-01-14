@@ -1,0 +1,151 @@
+---
+# Config for Dependabot updates. See Documentation here:
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Update GitHub actions in workflows
+  - package-ecosystem: github-actions
+
+    # Applies an open pull request limit of 10 to overwrite the default value of 5
+    open-pull-requests-limit: 10
+
+    directory: /
+    # Every week
+    schedule:
+      interval: weekly
+
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+    groups:
+      # Group updates into fewer pull requests
+      gh-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+      gh-version-updates:
+        applies-to: version-updates
+        patterns:
+          - "*"
+
+  # Enable Security updates for Python package manager (production dependencies)
+  - package-ecosystem: pip
+
+    # When set to 0, version updates are disabled.
+    open-pull-requests-limit: 10
+
+    # Look for a pyproject.toml/requirements.txt/Pipfile.lock in the root directory
+    directory: /
+    # Every weekday
+    schedule:
+      interval: daily
+
+    labels:
+      - "dependencies"
+      - "python"
+
+    allow:
+      - dependency-type: "production"
+
+    groups:
+      # Group updates into fewer pull requests
+      py-security-updates-prod:
+        dependency-type: "production"
+        applies-to: security-updates
+        patterns:
+          - "fastapi"
+          - "jsonpointer"
+          - "structlog"
+          - "python-dateutil"
+          - "jsonschema"
+          - "uvicorn"
+          - "gunicorn"
+          - "referencing"
+          - "jsonpath-ng"
+          - "starlette"
+
+      py-version-updates-prod:
+        dependency-type: "production"
+        applies-to: version-updates
+        patterns:
+          - "fastapi"
+          - "jsonpointer"
+          - "structlog"
+          - "python-dateutil"
+          - "jsonschema"
+          - "uvicorn"
+          - "gunicorn"
+          - "referencing"
+          - "jsonpath-ng"
+          - "starlette"
+
+  # Enable Security updates for Python package manager (development dependencies)
+  - package-ecosystem: pip
+
+    # When set to 0, version updates are disabled.
+    open-pull-requests-limit: 10
+
+    # Look for a pyproject.toml/requirements.txt/Pipfile.lock in the root directory
+    directory: /
+    # Every weekday
+    schedule:
+      interval: weekly
+
+    labels:
+      - "dependencies"
+      - "python-dev"
+
+    allow:
+      - dependency-type: "development"
+
+    groups:
+      # Group updates into fewer pull requests
+      py-security-updates-dev:
+        dependency-type: "development"
+        applies-to: security-updates
+        patterns:
+          - "pytest*"
+          - "flake8*"
+          - "pylint"
+          - "black"
+          - "ruff"
+
+      py-version-updates-dev:
+        dependency-type: "development"
+        applies-to: version-updates
+        patterns:
+          - "pytest*"
+          - "flake8*"
+          - "pylint"
+          - "black"
+          - "ruff"
+
+  # Update GitHub actions in workflows
+  - package-ecosystem: npm
+
+    # Applies an open pull request limit of 10 to overwrite the default value of 5
+    open-pull-requests-limit: 10
+
+    directory: /
+    # Every week
+    schedule:
+      interval: weekly
+
+    labels:
+      - "dependencies"
+      - "node"
+
+    groups:
+      # Group updates into fewer pull requests
+      npm-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+      npm-version-updates:
+        applies-to: version-updates
+        patterns:
+          - "*"
