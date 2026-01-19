@@ -43,6 +43,8 @@ updates:
     schedule:
       interval: daily
 
+    target-branch: main
+
     labels:
       - "dependencies"
       - "python"
