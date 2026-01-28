@@ -6,6 +6,79 @@ from app.validators.questionnaire_schema import (
 )
 from tests.utils import _open_and_load_schema_file
 
+radio_answers = [
+    {
+        "type": "Radio",
+        "id": "answer-2",
+        "mandatory": False,
+        "options": [
+            {"label": "Yes", "value": "Yes"},
+            {"label": "No", "value": "No"},
+        ],
+    },
+]
+
+days_a_week_answer = {
+    "decimal_places": 0,
+    "id": "days-a-week",
+    "label": {
+        "placeholders": [
+            {
+                "placeholder": "transformed_value",
+                "value": {
+                    "identifier": "supermarket-name",
+                    "source": "answers",
+                },
+            },
+        ],
+        "text": "How many days a week you shop at {transformed_value}",
+    },
+    "mandatory": True,
+    "maximum": {"value": 7},
+    "minimum": {"value": 1},
+    "type": "Number",
+}
+
+percentage_of_shopping_answer = {
+    "decimal_places": 0,
+    "id": "percentage-of-shopping",
+    "label": {
+        "placeholders": [
+            {
+                "placeholder": "transformed_value",
+                "value": {
+                    "identifier": "supermarket-name",
+                    "source": "answers",
+                },
+            },
+        ],
+        "text": "Percentage of shopping at {transformed_value}",
+    },
+    "mandatory": False,
+    "maximum": {"value": 100},
+    "type": "Percentage",
+}
+
+any_supermarket_answer = {
+    "id": "any-supermarket-answer",
+    "mandatory": True,
+    "options": [
+        {
+            "action": {
+                "params": {
+                    "block_id": "add-supermarket",
+                    "list_name": "supermarkets",
+                },
+                "type": "RedirectToListAddBlock",
+            },
+            "label": "Yes",
+            "value": "Yes",
+        },
+        {"label": "No", "value": "No"},
+    ],
+    "type": "Radio",
+}
+
 
 def test_get_blocks():
     filename = "schemas/valid/test_list_collector_driving_question.json"
@@ -75,17 +148,7 @@ def test_questions_with_context():
                 "id": "question-2",
                 "type": "General",
                 "title": "Are you in full time education?",
-                "answers": [
-                    {
-                        "type": "Radio",
-                        "id": "answer-2",
-                        "mandatory": False,
-                        "options": [
-                            {"label": "Yes", "value": "Yes"},
-                            {"label": "No", "value": "No"},
-                        ],
-                    },
-                ],
+                "answers": radio_answers,
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
         ),
@@ -94,17 +157,7 @@ def test_questions_with_context():
                 "id": "question-2",
                 "type": "General",
                 "title": "Is the person your are answering for in full time education?",
-                "answers": [
-                    {
-                        "type": "Radio",
-                        "id": "answer-2",
-                        "mandatory": False,
-                        "options": [
-                            {"label": "Yes", "value": "Yes"},
-                            {"label": "No", "value": "No"},
-                        ],
-                    },
-                ],
+                "answers": radio_answers,
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
         ),
@@ -224,50 +277,13 @@ def test_answers_with_context():
 
     assert questionnaire_schema.answers_with_context == {
         "any-supermarket-answer": {
-            "answer": {
-                "id": "any-supermarket-answer",
-                "mandatory": True,
-                "options": [
-                    {
-                        "action": {
-                            "params": {
-                                "block_id": "add-supermarket",
-                                "list_name": "supermarkets",
-                            },
-                            "type": "RedirectToListAddBlock",
-                        },
-                        "label": "Yes",
-                        "value": "Yes",
-                    },
-                    {"label": "No", "value": "No"},
-                ],
-                "type": "Radio",
-            },
+            "answer": any_supermarket_answer,
             "block": "any-supermarket",
             "group_id": "group",
             "section": "section",
         },
         "days-a-week": {
-            "answer": {
-                "decimal_places": 0,
-                "id": "days-a-week",
-                "label": {
-                    "placeholders": [
-                        {
-                            "placeholder": "transformed_value",
-                            "value": {
-                                "identifier": "supermarket-name",
-                                "source": "answers",
-                            },
-                        },
-                    ],
-                    "text": "How many days a week you shop at {transformed_value}",
-                },
-                "mandatory": True,
-                "maximum": {"value": 7},
-                "minimum": {"value": 1},
-                "type": "Number",
-            },
+            "answer": days_a_week_answer,
             "block": "dynamic-answer",
             "group_id": "group",
             "section": "section",
@@ -291,25 +307,7 @@ def test_answers_with_context():
             "section": "section",
         },
         "percentage-of-shopping": {
-            "answer": {
-                "decimal_places": 0,
-                "id": "percentage-of-shopping",
-                "label": {
-                    "placeholders": [
-                        {
-                            "placeholder": "transformed_value",
-                            "value": {
-                                "identifier": "supermarket-name",
-                                "source": "answers",
-                            },
-                        },
-                    ],
-                    "text": "Percentage of shopping at {transformed_value}",
-                },
-                "mandatory": False,
-                "maximum": {"value": 100},
-                "type": "Percentage",
-            },
+            "answer": percentage_of_shopping_answer,
             "block": "dynamic-answer",
             "group_id": "group",
             "section": "section",
@@ -369,25 +367,7 @@ def test_answers_method():
     answers = list(questionnaire_schema.answers)
 
     assert answers == [
-        {
-            "id": "any-supermarket-answer",
-            "mandatory": True,
-            "options": [
-                {
-                    "action": {
-                        "params": {
-                            "block_id": "add-supermarket",
-                            "list_name": "supermarkets",
-                        },
-                        "type": "RedirectToListAddBlock",
-                    },
-                    "label": "Yes",
-                    "value": "Yes",
-                },
-                {"label": "No", "value": "No"},
-            ],
-            "type": "Radio",
-        },
+        any_supermarket_answer,
         {
             "id": "list-collector-answer",
             "mandatory": True,
@@ -446,45 +426,8 @@ def test_answers_method():
             ],
             "type": "Radio",
         },
-        {
-            "decimal_places": 0,
-            "id": "percentage-of-shopping",
-            "label": {
-                "placeholders": [
-                    {
-                        "placeholder": "transformed_value",
-                        "value": {
-                            "identifier": "supermarket-name",
-                            "source": "answers",
-                        },
-                    },
-                ],
-                "text": "Percentage of shopping at {transformed_value}",
-            },
-            "mandatory": False,
-            "maximum": {"value": 100},
-            "type": "Percentage",
-        },
-        {
-            "decimal_places": 0,
-            "id": "days-a-week",
-            "label": {
-                "placeholders": [
-                    {
-                        "placeholder": "transformed_value",
-                        "value": {
-                            "identifier": "supermarket-name",
-                            "source": "answers",
-                        },
-                    },
-                ],
-                "text": "How many days a week you shop at {transformed_value}",
-            },
-            "mandatory": True,
-            "maximum": {"value": 7},
-            "minimum": {"value": 1},
-            "type": "Number",
-        },
+        percentage_of_shopping_answer,
+        days_a_week_answer,
     ]
 
 

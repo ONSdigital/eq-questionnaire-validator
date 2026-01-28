@@ -32,6 +32,7 @@ def get_validator(rule, *, questionnaire_schema=None, answers_with_context=None)
 # pylint: enable=duplicate-code
 
 
+# jscpd:ignore-start  # noqa: ERA001
 @pytest.mark.parametrize(
     "first_argument, second_argument, types",
     [
@@ -112,6 +113,9 @@ def test_equality_operator_argument_type_mismatch(
         "argument_types": types,
     }
     assert validator.errors == [expected_error]
+
+
+# jscpd:ignore-end  # noqa: ERA001
 
 
 @pytest.mark.parametrize("first_argument, second_argument", [(1, None), (None, 1)])

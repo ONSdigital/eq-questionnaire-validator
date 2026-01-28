@@ -24,6 +24,7 @@ describe("AJV api status", () => {
     });
   });
 });
+// jscpd:ignore-start
 describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
     it("test_invalid_block_type", (done) => {
@@ -59,6 +60,7 @@ describe("AJV schema Validator", () => {
     });
   });
 });
+// jscpd:ignore-end
 function isError(err) {
   if (err) {
     throw new Error("Unable to execute test case");
