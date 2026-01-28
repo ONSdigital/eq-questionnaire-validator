@@ -185,15 +185,12 @@ async def validate_schema(data):
             status=400,
             errors=response["errors"],
         )
-        response = Response(content=json.dumps(response), status_code=400)
 
-        return response
+        return Response(content=json.dumps(response), status_code=400)
 
     logger.info("Schema validation successfully completed with no errors", status=200)
 
-    response = Response(content=json.dumps(response), status_code=200)
-
-    return response
+    return Response(content=json.dumps(response), status_code=200)
 
 
 def is_url_allowed(parsed_url, domain):

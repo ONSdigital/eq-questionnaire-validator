@@ -57,9 +57,7 @@ def get_parent_block_from_match(match) -> dict | None:
     if walked_contexts[-1] is None:
         return None
 
-    block = walked_contexts[-3].value
-
-    return block
+    return walked_contexts[-3].value
 
 
 def get_element_value(key, match):
