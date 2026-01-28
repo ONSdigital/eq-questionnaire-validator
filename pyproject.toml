@@ -107,8 +107,7 @@ ignore = [
     "RET504",
     # Hide 'RUF012 Mutable class attributes should be annotated with `typing.ClassVar`' - to be reviewed
     "RUF012",
-    # Hide 'UP035 Import from `collections.abc` instead: `Mapping`' - to be reviewed
-    "UP035",
+
     # Hide 'B024 `Validator` is an abstract base class, but it has no abstract methods or properties' - to be reviewed
     "B024",
     # Hide 'TRY300 Consider moving this statement to an `else` block' - to be reviewed

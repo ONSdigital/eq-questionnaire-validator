@@ -1,7 +1,8 @@
 import itertools
+from collections.abc import Callable, Mapping
 from json import load
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any
 
 from jsonschema import Draft202012Validator as DraftValidator
 from jsonschema import ValidationError

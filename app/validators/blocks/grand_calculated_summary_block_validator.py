@@ -1,4 +1,4 @@
-from typing import Mapping
+from collections.abc import Mapping
 
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import (

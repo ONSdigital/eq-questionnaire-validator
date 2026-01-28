@@ -1,5 +1,5 @@
 import re
-from typing import Mapping
+from collections.abc import Mapping
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -110,7 +110,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for schema_text in values_to_check:
-                if schema_text and quote_regex.search(schema_text):
+                if isinstance(schema_text, str) and schema_text and quote_regex.search(schema_text):
                     self.add_error(
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
@@ -127,7 +127,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for text in values_to_check:
-                if text and (text.startswith(" ") or text.endswith(" ") or "  " in text):
+                if isinstance(text, str) and (text.startswith(" ") or text.endswith(" ") or "  " in text):
                     self.add_error(
                         error_messages.INVALID_WHITESPACE_FOUND,
                         pointer=translatable_item.pointer,

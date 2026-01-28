@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Mapping
+from collections.abc import Mapping
 
 
 class Validator(ABC):

@@ -2,8 +2,9 @@
 import collections
 import re
 from collections import defaultdict
+from collections.abc import Iterable, Mapping
 from functools import cached_property, lru_cache
-from typing import Iterable, Mapping, TypeVar
+from typing import TypeVar
 
 from jsonpath_ng import parse
 from jsonpath_ng.ext import parse as ext_parse
