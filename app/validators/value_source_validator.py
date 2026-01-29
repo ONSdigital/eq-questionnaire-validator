@@ -206,16 +206,14 @@ class ValueSourceValidator(Validator):
         if identifier not in valid_identifiers:
             error_mapping = {
                 "block": {
-                    tuple([self.current_block_id]): self.SOURCE_REFERENCE_CURRENT_BLOCK,
+                    (self.current_block_id,): self.SOURCE_REFERENCE_CURRENT_BLOCK,
                     tuple(self.future_block_ids): self.SOURCE_REFERENCE_FUTURE_BLOCK,
                     tuple(
                         self.block_ids_in_past_repeating_sections,
                     ): self.SOURCE_REFERENCE_BLOCK_IN_REPEATING_SECTION,
                 },
                 "section": {
-                    tuple(
-                        [self.current_section_id],
-                    ): self.SOURCE_REFERENCE_CURRENT_SECTION,
+                    (self.current_section_id,): self.SOURCE_REFERENCE_CURRENT_SECTION,
                     tuple(
                         self.future_section_ids,
                     ): self.SOURCE_REFERENCE_FUTURE_SECTION,
