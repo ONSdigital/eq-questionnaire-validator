@@ -28,15 +28,3 @@ def mock_ajv_valid(monkeypatch):
         return MockResponse({}) # no errors
 
     monkeypatch.setattr(api.requests, "post", mock_post)
-
-
-@pytest.fixture
-def valid_schema():
-    # Hard relative from known project structure
-    schema_path = Path("tests/schemas/valid/test_valid_skip_conditions.json").resolve()
-    
-    if not schema_path.exists():
-        raise FileNotFoundError(f"Schema not found: {schema_path}")
-    
-    with open(schema_path) as f:
-        return json.load(f)
