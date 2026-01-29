@@ -120,8 +120,7 @@ ignore = [
     "DTZ007",
     # Hide 'DTZ003 `datetime.datetime.utcnow()` used' - to be reviewed
     "DTZ003",
-    # Hide 'SIM102 Use a single `if` statement instead of nested `if` statements' - to be reviewed
-    "SIM102",
+
     # Hide 'S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.' - to be reviewed
     "S310",
     # Hide 'B008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable' - to be reviewed

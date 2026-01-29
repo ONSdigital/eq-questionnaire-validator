@@ -17,17 +17,24 @@ class DateAnswerValidator(AnswerValidator):
         return self.errors
 
     def is_offset_date_valid(self):
-        if "minimum" in self.answer and "maximum" in self.answer:
-            if (
-                "value" in self.answer["minimum"]
-                and "value" in self.answer["maximum"]
-                and not isinstance(self.answer["minimum"]["value"], dict)
-                and not isinstance(self.answer["maximum"]["value"], dict)
-            ):
-                minimum_date = self._get_offset_date(self.answer["minimum"])
-                maximum_date = self._get_offset_date(self.answer["maximum"])
-                return minimum_date < maximum_date if minimum_date and maximum_date else False
-        return True
+        minimum = self.answer.get("minimum")
+        maximum = self.answer.get("maximum")
+        if not (minimum and maximum):
+            return True
+
+        if (
+            "value" not in minimum
+            or "value" not in maximum
+            or isinstance(minimum["value"], dict)
+            or isinstance(maximum["value"], dict)
+        ):
+            return True
+
+        minimum_date = self._get_offset_date(minimum)
+        maximum_date = self._get_offset_date(maximum)
+        if minimum_date and maximum_date:
+            return minimum_date < maximum_date
+        return False
 
     def _get_offset_date(self, answer_min_or_max):
         if answer_min_or_max["value"] == "now":
