@@ -127,8 +127,7 @@ ignore = [
     "B008",
     # Hide 'C409 Unnecessary list literal passed to `tuple()` (rewrite as a tuple literal)' - to be revisited
     "C409",
-    # Hide 'C405 Unnecessary list literal (rewrite as a set literal)' - to be revisited
-    "C405",
+
     # Hide 'D100 Missing docstring in public module' - to be revisited
     "D100",
     # Hide 'D101 Missing docstring in public class' - to be revisited

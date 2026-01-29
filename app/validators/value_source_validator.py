@@ -71,10 +71,10 @@ class ValueSourceValidator(Validator):
             }
 
     def _get_valid_progress_value_source_block_identifiers(self):
-        return self.past_block_ids - set([self.current_block_id]) - self.block_ids_in_past_repeating_sections
+        return self.past_block_ids - {self.current_block_id} - self.block_ids_in_past_repeating_sections
 
     def _get_valid_progress_value_source_section_identifiers(self):
-        return self.past_section_ids - set([self.current_section_id]) - self.past_repeating_section_ids
+        return self.past_section_ids - {self.current_section_id} - self.past_repeating_section_ids
 
     @cached_property
     def block_ids_in_past_repeating_sections(self) -> set[str]:
@@ -103,9 +103,7 @@ class ValueSourceValidator(Validator):
     @cached_property
     def future_block_ids(self) -> set[str]:
         return (
-            set(self.questionnaire_schema.block_ids_without_sub_blocks)
-            - self.past_block_ids
-            - set([self.current_block_id])
+            set(self.questionnaire_schema.block_ids_without_sub_blocks) - self.past_block_ids - {self.current_block_id}
         )
 
     @cached_property
@@ -131,7 +129,7 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def future_section_ids(self) -> set[str]:
-        return set(self.questionnaire_schema.section_ids) - self.past_section_ids - set([self.current_section_id])
+        return set(self.questionnaire_schema.section_ids) - self.past_section_ids - {self.current_section_id}
 
     @cached_property
     def current_section_id(self) -> str | None:
