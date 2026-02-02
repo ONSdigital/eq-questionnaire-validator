@@ -4,27 +4,25 @@ from app.validators.blocks.calculated_summary_block_validator import (
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
 
-
-def base_error_messages():
-    return [
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
-            "block_id": "total-playback-type-error",
-        },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_CURRENCY,
-            "block_id": "total-playback-currency-error",
-        },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_UNIT,
-            "block_id": "total-playback-unit-error",
-        },
-        {
-            "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_INVALID_ID,
-            "answer_id": "seventh-number-answer",
-            "block_id": "total-playback-answer-error",
-        },
-    ]
+COMMON_ERROR_MESSAGES = [
+    {
+        "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_TYPE,
+        "block_id": "total-playback-type-error",
+    },
+    {
+        "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_CURRENCY,
+        "block_id": "total-playback-currency-error",
+    },
+    {
+        "message": CalculatedSummaryBlockValidator.ANSWERS_MUST_HAVE_SAME_UNIT,
+        "block_id": "total-playback-unit-error",
+    },
+    {
+        "message": CalculatedSummaryBlockValidator.ANSWERS_HAS_INVALID_ID,
+        "answer_id": "seventh-number-answer",
+        "block_id": "total-playback-answer-error",
+    },
+]
 
 
 def test_invalid_calculated_summary():
@@ -32,7 +30,7 @@ def test_invalid_calculated_summary():
     filename = "schemas/invalid/test_invalid_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
-    expected_error_messages = base_error_messages()
+    expected_error_messages = COMMON_ERROR_MESSAGES
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
@@ -54,7 +52,7 @@ def test_invalid_new_calculated_summary():
     filename = "schemas/invalid/test_invalid_new_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
-    expected_error_messages = base_error_messages() + [
+    expected_error_messages = COMMON_ERROR_MESSAGES + [
         {
             "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
             "block_id": "total-playback-not-enough-answers",

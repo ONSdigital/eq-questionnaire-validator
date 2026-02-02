@@ -6,7 +6,7 @@ from app.validators.questionnaire_schema import (
 )
 from tests.utils import _open_and_load_schema_file
 
-radio_answers = [
+RADIO_ANSWERS = [
     {
         "type": "Radio",
         "id": "answer-2",
@@ -18,7 +18,7 @@ radio_answers = [
     },
 ]
 
-days_a_week_answer = {
+DAYS_A_WEEK_ANSWER = {
     "decimal_places": 0,
     "id": "days-a-week",
     "label": {
@@ -39,7 +39,7 @@ days_a_week_answer = {
     "type": "Number",
 }
 
-percentage_of_shopping_answer = {
+PERCENTAGE_OF_SHOPPING_ANSWER = {
     "decimal_places": 0,
     "id": "percentage-of-shopping",
     "label": {
@@ -59,7 +59,7 @@ percentage_of_shopping_answer = {
     "type": "Percentage",
 }
 
-any_supermarket_answer = {
+ANY_SUPERMARKET_ANSWER = {
     "id": "any-supermarket-answer",
     "mandatory": True,
     "options": [
@@ -148,7 +148,7 @@ def test_questions_with_context():
                 "id": "question-2",
                 "type": "General",
                 "title": "Are you in full time education?",
-                "answers": radio_answers,
+                "answers": RADIO_ANSWERS,
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
         ),
@@ -157,7 +157,7 @@ def test_questions_with_context():
                 "id": "question-2",
                 "type": "General",
                 "title": "Is the person your are answering for in full time education?",
-                "answers": radio_answers,
+                "answers": RADIO_ANSWERS,
             },
             {"section": "section", "block": "block-2", "group_id": "group"},
         ),
@@ -277,13 +277,13 @@ def test_answers_with_context():
 
     assert questionnaire_schema.answers_with_context == {
         "any-supermarket-answer": {
-            "answer": any_supermarket_answer,
+            "answer": ANY_SUPERMARKET_ANSWER,
             "block": "any-supermarket",
             "group_id": "group",
             "section": "section",
         },
         "days-a-week": {
-            "answer": days_a_week_answer,
+            "answer": DAYS_A_WEEK_ANSWER,
             "block": "dynamic-answer",
             "group_id": "group",
             "section": "section",
@@ -307,7 +307,7 @@ def test_answers_with_context():
             "section": "section",
         },
         "percentage-of-shopping": {
-            "answer": percentage_of_shopping_answer,
+            "answer": PERCENTAGE_OF_SHOPPING_ANSWER,
             "block": "dynamic-answer",
             "group_id": "group",
             "section": "section",
@@ -367,7 +367,7 @@ def test_answers_method():
     answers = list(questionnaire_schema.answers)
 
     assert answers == [
-        any_supermarket_answer,
+        ANY_SUPERMARKET_ANSWER,
         {
             "id": "list-collector-answer",
             "mandatory": True,
@@ -426,8 +426,8 @@ def test_answers_method():
             ],
             "type": "Radio",
         },
-        percentage_of_shopping_answer,
-        days_a_week_answer,
+        PERCENTAGE_OF_SHOPPING_ANSWER,
+        DAYS_A_WEEK_ANSWER,
     ]
 
 
