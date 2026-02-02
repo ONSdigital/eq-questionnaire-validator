@@ -240,10 +240,10 @@ def parse_json(data):
     try:
         processed_data = json.loads(data)
         logger.info("JSON data parsed successfully")
-        return processed_data
     except JSONDecodeError:
         logger.exception("Failed to parse JSON data", status=400)
         return Response(status_code=400, content="Failed to parse JSON")
+    return processed_data
 
 
 if __name__ == "__main__":

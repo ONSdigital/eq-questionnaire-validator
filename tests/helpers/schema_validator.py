@@ -86,7 +86,6 @@ class SchemaTestValidator(Validator):
         """
         try:
             self.schema_validator.validate(self.schema_element)
-            return []
         except ValidationError as e:
             match = best_match([e])
             path = "/".join(str(path_element) for path_element in e.path)
@@ -98,6 +97,8 @@ class SchemaTestValidator(Validator):
                 self.add_error(match.message, verbose=error, pointer=f"/{path}")
         except SchemaError as e:
             self.add_error(e)
+        else:
+            return []
         return self.errors
 
 

@@ -104,8 +104,7 @@ ignore = [
     "RUF012",
     # Hide 'B024 `Validator` is an abstract base class, but it has no abstract methods or properties' - to be reviewed
     "B024",
-    # Hide 'TRY300 Consider moving this statement to an `else` block' - to be reviewed
-    "TRY300",
+
     # Hide 'RUF005 Consider iterable unpacking instead of concatenation' - to be reviewed
     "RUF005",
     # Hide 'RUF015 Prefer `next(iter(operator["map"][0].values()))` over single element slice' - to be reviewed
