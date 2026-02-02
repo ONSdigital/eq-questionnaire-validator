@@ -1,9 +1,11 @@
 from io import BytesIO
 import json
 from pathlib import Path
+from typing import Mapping
 import pytest
 import os
 import urllib.request
+import urllib.error
 import pytest
 from fastapi.testclient import TestClient
 import urllib
@@ -64,7 +66,29 @@ def mock_ajv_error(monkeypatch):
 def mock_urlopen_valid(monkeypatch, valid_schema):
     json_bytes = json.dumps(valid_schema).encode('utf-8')
     
-    def fake_urlopen(url):
+    def mock_urlopen(url):
         return BytesIO(json_bytes)
-    
-    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+
+@pytest.fixture
+def mock_urlopen_not_found(monkeypatch):
+    def mock_urlopen(url):
+        hdrs: Mapping[str, str] = {}
+        raise urllib.error.HTTPError(
+            url=url,
+            code=404,
+            msg="Not Found",
+            hdrs=hdrs, # type: ignore[arg-type]
+            fp=None
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+
+@pytest.fixture
+def mock_urlopen_failure(monkeypatch):
+    def mock_urlopen(url):
+        raise urllib.error.URLError("Failed to reach the server")
+
+    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+
