@@ -99,23 +99,16 @@ ignore = [
     "TD003",
     # Hide 'B019 @lru_cache warning' - to be reviewed
     "B019",
-
     # Hide 'RUF012 Mutable class attributes should be annotated with `typing.ClassVar`' - to be reviewed
     "RUF012",
     # Hide 'B024 `Validator` is an abstract base class, but it has no abstract methods or properties' - to be reviewed
     "B024",
-
     # Hide 'RUF005 Consider iterable unpacking instead of concatenation' - to be reviewed
     "RUF005",
     # Hide 'RUF015 Prefer `next(iter(operator["map"][0].values()))` over single element slice' - to be reviewed
     "RUF015",
     # Hide 'PERF401 Use a list comprehension to create a transformed list' - to be reviewed
     "PERF401",
-    # Hide 'DTZ007 Naive datetime constructed using `datetime.datetime.strptime()` without %z' - to be reviewed
-    "DTZ007",
-    # Hide 'DTZ003 `datetime.datetime.utcnow()` used' - to be reviewed
-    "DTZ003",
-
     # Hide 'S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.' - to be reviewed
     "S310",
     # Hide 'B008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable' - to be reviewed
