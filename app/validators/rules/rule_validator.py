@@ -242,7 +242,7 @@ class RulesValidator(Validator):
         operator_name = next(iter(rule))
         argument_types = self._get_argument_types_for_operator(rule[operator_name])
 
-        if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS + NUMERIC_OPERATORS:
+        if operator_name in [*COMPARISON_OPERATORS, *ARRAY_OPERATORS, *NUMERIC_OPERATORS]:
             self._validate_comparison_operator_argument_types(
                 rule,
                 operator_name,
@@ -250,7 +250,7 @@ class RulesValidator(Validator):
             )
 
         if (
-            operator_name in COMPARISON_OPERATORS + [Operator.ALL_IN, Operator.ANY_IN]
+            operator_name in [*COMPARISON_OPERATORS, Operator.ALL_IN, Operator.ANY_IN]
             and TYPE_NULL not in argument_types
         ):
             self._validate_argument_types_match(rule, argument_types)

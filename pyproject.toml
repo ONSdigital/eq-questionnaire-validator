@@ -97,14 +97,13 @@ ignore = [
     "TD002",
     # Allow TODO comments without a linked issue
     "TD003",
+
     # Hide 'B019 @lru_cache warning' - to be reviewed
     "B019",
     # Hide 'RUF012 Mutable class attributes should be annotated with `typing.ClassVar`' - to be reviewed
     "RUF012",
     # Hide 'B024 `Validator` is an abstract base class, but it has no abstract methods or properties' - to be reviewed
     "B024",
-    # Hide 'RUF005 Consider iterable unpacking instead of concatenation' - to be reviewed
-    "RUF005",
     # Hide 'RUF015 Prefer `next(iter(operator["map"][0].values()))` over single element slice' - to be reviewed
     "RUF015",
     # Hide 'PERF401 Use a list comprehension to create a transformed list' - to be reviewed
