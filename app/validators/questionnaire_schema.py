@@ -408,15 +408,10 @@ class QuestionnaireSchema:
     @staticmethod
     def get_all_questions_for_block(block):
         """Get all questions on a block including variants."""
-        questions = []
-
-        for variant in block.get("question_variants", []):
-            questions.append(variant["question"])
-
+        questions = [variant["question"] for variant in block.get("question_variants", [])]
         single_question = block.get("question")
         if single_question:
             questions.append(single_question)
-
         return questions
 
     @lru_cache
