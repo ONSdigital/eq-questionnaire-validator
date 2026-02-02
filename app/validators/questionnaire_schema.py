@@ -483,6 +483,7 @@ class QuestionnaireSchema:
                 context=context,
             ):
                 return block_id
+        return None
 
     @staticmethod
     def get_block_id_for_answer(*, answer_id, answers, context):
@@ -493,6 +494,7 @@ class QuestionnaireSchema:
                 detail_answer = option.get("detail_answer")
                 if detail_answer and answer_id == detail_answer["id"]:
                     return context["block"]
+        return None
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):

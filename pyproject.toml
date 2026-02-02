@@ -99,10 +99,6 @@ ignore = [
     "TD003",
     # Hide 'B019 @lru_cache warning' - to be reviewed
     "B019",
-    # Hide 'FA102 Missing `from __future__ import annotations`, but uses PEP 604 union' - to be reviewed
-    "FA102",
-    # Hide 'RET503 Missing explicit `return` at the end of function able to return non-`None` value' - to be reviewed
-    "RET503",
 
     # Hide 'RUF012 Mutable class attributes should be annotated with `typing.ClassVar`' - to be reviewed
     "RUF012",

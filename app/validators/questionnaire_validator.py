@@ -198,6 +198,7 @@ class QuestionnaireValidator(Validator):
                             ),
                             group_id=group["id"],
                         )
+        return None
 
     def validate_answer_source_section(self, section, section_index):
         identifier_references = get_object_containing_key(section, "source")
