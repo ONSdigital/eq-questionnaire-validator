@@ -45,3 +45,26 @@ def mock_ajv_valid(monkeypatch):
         return MockResponse({}) # no errors
 
     monkeypatch.setattr(api.requests, "post", mock_post)
+
+
+@pytest.fixture
+def mock_ajv_error(monkeypatch):
+
+    def mock_post(*args, **kwargs):
+        return MockResponse({
+            "errors": [
+                {"keyword": "required", "message": "Missing survey_id'"},
+                {"keyword": "type", "message": "Invalid data type for validation"}
+            ]
+        }) 
+
+    monkeypatch.setattr(api.requests, "post", mock_post)
+
+@pytest.fixture
+def mock_urlopen_valid(monkeypatch, valid_schema):
+    json_bytes = json.dumps(valid_schema).encode('utf-8')
+    
+    def fake_urlopen(url):
+        return BytesIO(json_bytes)
+    
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
