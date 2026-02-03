@@ -14,14 +14,14 @@ default_answer_with_context = {
 
 
 def run_validator(
-    rule,
     *,
+    operator=None,
     questionnaire_schema=None,
     answers_with_context=None,
     allow_self_reference=False,
 ):
     validator = RulesValidator(
-        rule,
+        operator,
         ORIGIN_ID,
         get_mock_schema(questionnaire_schema, answers_with_context),
         allow_self_reference=allow_self_reference,
@@ -31,7 +31,7 @@ def run_validator(
     return validator.errors
 
 
-def validate_options(rule):
+def validate_options(operator):
     questionnaire_schema = QuestionnaireSchema({})
     questionnaire_schema.answers_with_context = {
         "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
@@ -42,7 +42,7 @@ def validate_options(rule):
         "string-answer": ["Yes", "No"],
         "array-answer": ["Yes", "No"],
     }
-    errors = run_validator(rule, questionnaire_schema=questionnaire_schema)
+    errors = run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
 
     return errors
 
@@ -63,8 +63,8 @@ def validate_options(rule):
     ],
 )
 def test_validate_options(operator_name, first_argument, second_argument):
-    rule = {operator_name: [first_argument, second_argument]}
-    errors = validate_options(rule)
+    operator = {operator_name: [first_argument, second_argument]}
+    errors = validate_options(operator)
 
     assert errors == [
         {
@@ -91,14 +91,14 @@ def test_validate_options_null_value_is_valid(
     first_argument,
     second_argument,
 ):
-    rule = {operator_name: [first_argument, second_argument]}
-    errors = validate_options(rule)
+    operator = {operator_name: [first_argument, second_argument]}
+    errors = validate_options(operator)
 
     assert not errors
 
 
 def test_validate_options_multiple_errors():
-    rule = {
+    operator = {
         "in": [
             {"source": "answers", "identifier": "string-answer"},
             ["Maybe", "Not sure"],
@@ -113,7 +113,7 @@ def test_validate_options_multiple_errors():
     questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
         "string-answer": ["Yes", "No"],
     }
-    errors = run_validator(rule, questionnaire_schema=questionnaire_schema)
+    errors = run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
 
     assert errors == [
         {
@@ -135,7 +135,7 @@ def test_validate_date_operator_non_date_answer():
     date_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
 
     errors = run_validator(
-        date_operator,
+        operator=date_operator,
         answers_with_context=default_answer_with_context,
     )
 
@@ -154,7 +154,7 @@ def test_validate_date_operator_with_offset():
     }
 
     errors = run_validator(
-        date_operator,
+        operator=date_operator,
         answers_with_context=default_answer_with_context,
     )
 
@@ -168,7 +168,7 @@ def test_validate_date_operator_with_offset():
 
 
 def test_validate_nested_date_operator_non_date_answer():
-    rule = {
+    operator = {
         "and": [
             {
                 "==": [
@@ -180,7 +180,7 @@ def test_validate_nested_date_operator_non_date_answer():
         ],
     }
 
-    errors = run_validator(rule, answers_with_context=default_answer_with_context)
+    errors = run_validator(operator=operator, answers_with_context=default_answer_with_context)
 
     assert errors == [
         {
@@ -204,7 +204,7 @@ def test_validate_operator(
     valid_types,
 ):
     errors = run_validator(
-        operator,
+        operator=operator,
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
@@ -236,7 +236,7 @@ def test_validate_nested_sum_operator():
     }
 
     errors = run_validator(
-        sum_operator,
+        operator=sum_operator,
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
             "checkbox-answer": {
@@ -280,7 +280,7 @@ def test_map_operator_with_self_reference():
         ],
     }
 
-    errors = run_validator(operator)
+    errors = run_validator(operator=operator)
 
     assert not errors
 
@@ -302,7 +302,7 @@ def test_map_operator_without_self_reference():
         ],
     }
 
-    errors = run_validator(operator)
+    errors = run_validator(operator=operator)
 
     assert errors == [
         {
@@ -325,10 +325,10 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     operator_name,
     operands,
 ):
-    rule = {operator_name: operands}
+    operator = {operator_name: operands}
 
     errors = run_validator(
-        rule,
+        operator=operator,
         answers_with_context={
             "date-answer": {"answer": {"id": "date-answer", "type": "Date"}},
         },
@@ -338,7 +338,7 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     expected_error = {
         "message": RulesValidator.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR,
         "origin_id": ORIGIN_ID,
-        "rule": rule,
+        "rule": operator,
     }
 
     assert expected_error in errors
@@ -356,17 +356,17 @@ def test_self_reference_outside_map_operator_with_allow_self_reference(
     operator_name,
     operands,
 ):
-    rule = {operator_name: operands}
+    operator = {operator_name: operands}
 
-    errors = run_validator(rule, answers_with_context={}, allow_self_reference=True)
+    errors = run_validator(operator=operator, answers_with_context={}, allow_self_reference=True)
 
     assert not errors
 
 
 def test_non_existing_answer_id_in_option_label_for_value_operator():
-    rule = {"option-label-from-value": ["self", "non-existing-answer"]}
+    operator = {"option-label-from-value": ["self", "non-existing-answer"]}
 
-    errors = run_validator(rule, answers_with_context={}, allow_self_reference=True)
+    errors = run_validator(operator=operator, answers_with_context={}, allow_self_reference=True)
 
     assert errors == [
         {
@@ -378,9 +378,9 @@ def test_non_existing_answer_id_in_option_label_for_value_operator():
 
 
 def test_answer_type_invalid_for_option_label_from_value():
-    rule = {"option-label-from-value": ["self", "string-answer"]}
+    operator = {"option-label-from-value": ["self", "string-answer"]}
     errors = run_validator(
-        rule,
+        operator=operator,
         answers_with_context=default_answer_with_context,
         allow_self_reference=True,
     )
