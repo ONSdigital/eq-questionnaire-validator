@@ -34,6 +34,8 @@ AJV_VALIDATOR_URL = os.getenv(
     f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
 )
 
+DEFAULT_BODY = Body(None)
+
 app = FastAPI()
 
 logger = structlog.get_logger()
@@ -72,7 +74,7 @@ async def status():
 
 
 @app.post("/validate")
-async def validate_schema_request_body(payload=Body(None)):
+async def validate_schema_request_body(payload=DEFAULT_BODY):
     logger.info("Schema validation request received")
     return await validate_schema(payload)
 

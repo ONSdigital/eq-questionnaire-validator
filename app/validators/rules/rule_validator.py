@@ -139,7 +139,7 @@ class RulesValidator(Validator):
 
         The second argument is currently not validated here as it can currently only be `date-range`
         """
-        function_to_map_over_arguments = list(operator["map"][0].values())[0]
+        function_to_map_over_arguments = next(iter(operator["map"][0].values()))
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return
 
