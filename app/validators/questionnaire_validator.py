@@ -36,6 +36,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_html()
         self.validate_answer_references()
         self.validate_list_references()
 
@@ -115,6 +116,47 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
+    def validate_html(self):
+        html_strings = []
+        schema_object = SurveySchema(self.schema_element)
+
+        # pylint: disable=invalid-string-quote
+        html_regex = re.compile(r"<[^>]*>")
+
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            html_strings.extend(
+                {"pointer": translatable_item.pointer, "text": schema_text}
+                for schema_text in values_to_check
+                if schema_text and html_regex.search(schema_text)
+            )
+        if html_strings:
+            self.check_invalid_html_tags(html_strings)
+
+    def check_invalid_html_tags(self, html_strings):
+        strong = re.compile(r"<strong>(?:(?!</strong>).)*</strong>")
+        anchor = re.compile(r"<a [^>]*>.*?</a>")
+        all_tags = re.compile(
+            r"<([a-z0-9]+)(?=[\s>])(?:[^>=]|='[^']*'|=\"[^\"]*\"|=[^'\"\s]*)*\s?/?>"
+        )
+
+        for html_string in html_strings:
+            if len(strong.findall(html_string["text"])) + len(
+                anchor.findall(html_string["text"])
+            ) != len(all_tags.findall(html_string["text"])):
+
+                self.add_error(
+                    error_messages.HTML_FOUND,
+                    pointer=html_string["pointer"],
+                    text=html_string["text"],
+                )
 
     def validate_white_spaces(self):
         schema_object = SurveySchema(self.schema_element)
