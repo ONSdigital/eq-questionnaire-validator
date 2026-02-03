@@ -100,8 +100,6 @@ ignore = [
 
     # Hide 'B019 @lru_cache warning' - to be reviewed
     "B019",
-    # Hide 'S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.' - to be reviewed
-    "S310",
 
     # Hide 'D100 Missing docstring in public module' - to be revisited
     "D100",

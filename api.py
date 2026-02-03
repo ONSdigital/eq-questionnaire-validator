@@ -99,7 +99,7 @@ async def validate_schema_from_url(url=None):
         try:
             # Opens the URL and validates the schema
             # Mitigation for opening ftp:// and file:// URLs with urllib.request is implemented in lines 91-95
-            with request.urlopen(parsed_url.geturl()) as opened_url:  # nosec B310
+            with request.urlopen(parsed_url.geturl()) as opened_url:  # nosec B310  # noqa: S310
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             logger.warning(
