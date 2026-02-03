@@ -1,5 +1,3 @@
-import pytest
-
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.questionnaire_schema import QuestionnaireSchema
 from tests.utils import _open_and_load_schema_file
@@ -36,14 +34,6 @@ ADDITIONAL_ANSWER_CODES = [
     {"answer_id": "name-answer", "code": "3"},
     {"answer_id": "name-answer-2", "code": "4"},
 ]
-
-
-@pytest.fixture
-def load_schema():
-    def _load(filename: str):
-        return QuestionnaireSchema(_open_and_load_schema_file(filename))
-
-    return _load
 
 
 def run_validator(
