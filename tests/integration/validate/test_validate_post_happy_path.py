@@ -6,15 +6,7 @@ import pytest
 from pathlib import Path
 from fastapi.testclient import TestClient
 
-def test_valid_schema_post(client, mock_ajv_valid, valid_schema):
-
-    # schema_path = Path(__file__).parents[3] / "tests" / "schemas" / "valid" / "test_valid_skip_conditions.json"
-
-    # if not schema_path.exists():
-    #     raise FileNotFoundError(f"Cannot find schema: {schema_path}")
-
-    # with open(schema_path) as f:
-    #     payload = json.load(f)
+def test_valid_schema_post(client, valid_schema, mock_ajv_valid):
 
     response = client.post("/validate", json=valid_schema)
     assert response.status_code == 200
