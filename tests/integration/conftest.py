@@ -1,3 +1,4 @@
+import importlib
 from io import BytesIO
 import json
 from pathlib import Path
@@ -10,13 +11,23 @@ import pytest
 from fastapi.testclient import TestClient
 import urllib
 
-os.environ.setdefault("AJV_VALIDATOR_URL", "http://mock-ajv-validator/validate")
+from requests import RequestException
 
-import api 
+
+
+
+@pytest.fixture(scope="session")
+def api_module():
+    os.environ.setdefault("AJV_VALIDATOR_URL", "http://mock-ajv-validator/validate")
+
+    import api
+    importlib.reload(api)  # make sure env var is applied even if api imported earlier
+    return api
+
 
 @pytest.fixture
-def client():
-    return TestClient(api.app)
+def client(api_module):
+    return TestClient(api_module.app)
 
 class MockResponse:
     def __init__(self, json_data: dict):
@@ -41,26 +52,26 @@ def valid_schema():
         return json.load(f)
 
 @pytest.fixture
-def mock_ajv_valid(monkeypatch):
+def mock_ajv_valid(api_module, monkeypatch):
     """Mock the AJV validation endpoint to always return a valid response (no errors)."""
     def mock_post(*args, **kwargs):
         return MockResponse({}) # no errors
 
-    monkeypatch.setattr(api.requests, "post", mock_post)
+    monkeypatch.setattr(api_module.requests, "post", mock_post)
 
 
 @pytest.fixture
-def mock_ajv_error(monkeypatch):
-
+def mock_ajv_down(api_module, monkeypatch):
     def mock_post(*args, **kwargs):
-        return MockResponse({
-            "errors": [
-                {"keyword": "required", "message": "Missing survey_id'"},
-                {"keyword": "type", "message": "Invalid data type for validation"}
-            ]
-        }) 
+        raise RequestException("AJV unavailable")
+    
+    monkeypatch.setattr(api_module.requests, "post", mock_post)
 
-    monkeypatch.setattr(api.requests, "post", mock_post)
+@pytest.fixture
+def mock_ajv_error(api_module, monkeypatch):
+    def mock_post(*args, **kwargs):
+        return MockResponse({"errors": [{"message": "schema invalid"}]})
+    monkeypatch.setattr(api_module.requests, "post", mock_post, raising=True)
 
 @pytest.fixture
 def mock_urlopen_valid(monkeypatch, valid_schema):
