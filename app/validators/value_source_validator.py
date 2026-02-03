@@ -1,4 +1,5 @@
 from functools import cached_property
+from typing import ClassVar
 
 from app.validators.validator import Validator
 
@@ -35,10 +36,10 @@ class ValueSourceValidator(Validator):
         "in the progress source cannot be a repeating section"
     )
 
-    COMPOSITE_ANSWERS_TO_SELECTORS_MAP = {
+    COMPOSITE_ANSWERS_TO_SELECTORS_MAP: ClassVar[dict[str, list[str]]] = {
         "Address": ["line1", "line2", "town", "postcode"],
     }
-    RESPONSE_METADATA_IDENTIFIERS = ["started_at"]
+    RESPONSE_METADATA_IDENTIFIERS: ClassVar[list[str]] = ["started_at"]
 
     def __init__(  # pylint: disable=too-many-positional-arguments
         self,
