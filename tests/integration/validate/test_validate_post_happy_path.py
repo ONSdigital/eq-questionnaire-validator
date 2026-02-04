@@ -1,11 +1,3 @@
-import json
-import pytest
-import os
-import importlib
-import pytest
-from pathlib import Path
-from fastapi.testclient import TestClient
-
 def test_valid_schema_post(client, valid_schema, mock_ajv_valid):
 
     response = client.post("/validate", json=valid_schema)
