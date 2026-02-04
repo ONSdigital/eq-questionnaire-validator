@@ -8,4 +8,4 @@ def test_validate_get_url_happy_path(client, mock_urlopen_valid, mock_ajv_valid)
     assert response.status_code == 200
     assert response.json() == {}
     assert "errors" not in response.json()
-
+    
