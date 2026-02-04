@@ -98,9 +98,6 @@ ignore = [
     # Allow TODO comments without a linked issue
     "TD003",
 
-    # Hide 'B019 @lru_cache warning' - to be reviewed
-    "B019",
-
     # Hide 'D100 Missing docstring in public module' - to be revisited
     "D100",
     # Hide 'D101 Missing docstring in public class' - to be revisited

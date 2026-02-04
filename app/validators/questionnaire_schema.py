@@ -3,7 +3,7 @@ import collections
 import re
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from functools import cached_property, lru_cache
+from functools import cached_property
 from typing import TypeVar
 
 from jsonpath_ng import parse
@@ -97,6 +97,7 @@ def get_context_from_match(match):
 class QuestionnaireSchema:
     def __init__(self, schema):
         self.schema = schema
+        self._cache = {}
         self.matches = [
             *parse("$..blocks[*]").find(self.schema),
             *parse("$..[add_block, edit_block, add_or_edit_block, remove_block]").find(
@@ -147,9 +148,13 @@ class QuestionnaireSchema:
         self._answers_with_context = {}
         self._lists_with_context = {}
 
-    @lru_cache
     def get_block_ids_for_block_type(self, block_type: str) -> list[str]:
-        return [block["id"] for block in self.blocks if block["type"] == block_type]
+        cache_key = ("get_block_ids_for_block_type", block_type)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = [block["id"] for block in self.blocks if block["type"] == block_type]
+        self._cache[cache_key] = result
+        return result
 
     @cached_property
     def list_names_by_dynamic_answer_id(self) -> dict[str, str]:
@@ -340,62 +345,94 @@ class QuestionnaireSchema:
         for question, _ in self.questions_with_context:
             yield from self.get_answers_from_question(question)
 
-    @lru_cache
     def get_answer(self, answer_id):
-        return self.answers_with_context[answer_id]["answer"]
+        cache_key = ("get_answer", answer_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = self.answers_with_context[answer_id]["answer"]
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_answer_type(self, answer_id):
+        cache_key = ("get_answer_type", answer_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         answer = self.get_answer(answer_id)
-        return AnswerType(answer["type"])
+        result = AnswerType(answer["type"])
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_group(self, group_id):
-        return self.groups_by_id[group_id]
+        cache_key = ("get_group", group_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = self.groups_by_id[group_id]
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_section(self, section_id):
-        return self.sections_by_id[section_id]
+        cache_key = ("get_section", section_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = self.sections_by_id[section_id]
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_block(self, block_id):
-        return self.blocks_by_id.get(block_id, None)
+        cache_key = ("get_block", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = self.blocks_by_id.get(block_id, None)
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_blocks(self, **filters):
+        cache_key = ("get_blocks", tuple(sorted(filters.items())))
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         conditions = []
         for key, value in filters.items():
             conditions.append(f'@.{key}=="{value}"')
 
         if conditions:
             final_condition = " & ".join(conditions)
-            return [
+            result = [
                 match.value
                 for match in ext_parse(f"$..blocks[?({final_condition})]").find(
                     self.schema,
                 )
             ]
+            self._cache[cache_key] = result
+            return result
+        self._cache[cache_key] = self.blocks
         return self.blocks
 
-    @lru_cache
     def get_other_blocks(self, block_id_to_filter, **filters):
+        cache_key = ("get_other_blocks", block_id_to_filter, tuple(sorted(filters.items())))
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         conditions = []
         for key, value in filters.items():
             conditions.append(f'@.{key}=="{value}"')
 
         if conditions:
             final_condition = " & ".join(conditions)
-            return [
+            result = [
                 match.value
                 for match in ext_parse(
                     f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]',
                 ).find(self.schema)
             ]
+            self._cache[cache_key] = result
+            return result
+        self._cache[cache_key] = self.blocks
         return self.blocks
 
-    @lru_cache
     def has_single_driving_question(self, list_name):
-        return (
+        cache_key = ("has_single_driving_question", list_name)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        result = (
             len(
                 self.get_blocks(
                     type="ListCollectorDrivingQuestion",
@@ -404,6 +441,8 @@ class QuestionnaireSchema:
             )
             == 1
         )
+        self._cache[cache_key] = result
+        return result
 
     @staticmethod
     def get_all_questions_for_block(block):
@@ -414,37 +453,53 @@ class QuestionnaireSchema:
             questions.append(single_question)
         return questions
 
-    @lru_cache
     def get_list_collector_answer_ids(self, block_id):
-        """Get all answer IDs for a list collector block."""
+        cache_key = ("get_list_collector_answer_ids", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         block = self.blocks_by_id[block_id]
         if "add_or_edit_block" in block:
-            return self.get_all_answer_ids(block["add_or_edit_block"]["id"])
+            result = self.get_all_answer_ids(block["add_or_edit_block"]["id"])
+            self._cache[cache_key] = result
+            return result
 
         add_answer_ids = self.get_all_answer_ids(block["add_block"]["id"])
-
         edit_answer_ids = self.get_all_answer_ids(block["edit_block"]["id"])
-        return add_answer_ids | edit_answer_ids
+        result = add_answer_ids | edit_answer_ids
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_list_collector_answer_ids_by_child_block(self, block_id: str):
+        cache_key = ("get_list_collector_answer_ids_by_child_block", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         block = self.blocks_by_id[block_id]
-        return {
+        result = {
             child_block: self.get_all_answer_ids(block[child_block]["id"])
             for child_block in ["add_block", "edit_block", "remove_block"]
         }
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_all_answer_ids(self, block_id):
+        cache_key = ("get_all_answer_ids", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return {answer["id"] for question in questions for answer in self.get_answers_from_question(question)}
+        result = {answer["id"] for question in questions for answer in self.get_answers_from_question(question)}
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_all_dynamic_answer_ids(self, block_id):
+        cache_key = ("get_all_dynamic_answer_ids", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return {
+        result = {
             answer["id"] for question in questions for answer in question.get("dynamic_answers", {}).get("answers", [])
         }
+        self._cache[cache_key] = result
+        return result
 
     def get_list_name_for_answer_id(self, answer_id: str) -> str | None:
         """Get list name for answer id.
@@ -464,20 +519,28 @@ class QuestionnaireSchema:
                 return section["repeat"]["for_list"]
         return None
 
-    @lru_cache
     def get_first_answer_in_block(self, block_id):
+        cache_key = ("get_first_answer_in_block", block_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         questions = self.get_all_questions_for_block(self.blocks_by_id[block_id])
-        return self.get_answers_from_question(questions[0])[0]
+        result = self.get_answers_from_question(questions[0])[0]
+        self._cache[cache_key] = result
+        return result
 
-    @lru_cache
     def get_block_id_by_answer_id(self, answer_id):
+        cache_key = ("get_block_id_by_answer_id", answer_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         for question, context in self.questions_with_context:
             if block_id := self.get_block_id_for_answer(
                 answer_id=answer_id,
                 answers=self.get_answers_from_question(question),
                 context=context,
             ):
+                self._cache[cache_key] = block_id
                 return block_id
+        self._cache[cache_key] = None
         return None
 
     @staticmethod
@@ -491,11 +554,14 @@ class QuestionnaireSchema:
                     return context["block"]
         return None
 
-    @lru_cache
     def get_block_by_answer_id(self, answer_id):
+        cache_key = ("get_block_by_answer_id", answer_id)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         block_id = self.get_block_id_by_answer_id(answer_id)
-
-        return self.get_block(block_id)
+        result = self.get_block(block_id)
+        self._cache[cache_key] = result
+        return result
 
     def _get_numeric_range_values(self, answer, answer_ranges):
         min_value = answer.get("minimum", {}).get("value", {})
