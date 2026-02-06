@@ -3,7 +3,7 @@
 # Run unit tests
 #
 # NOTE: This script expects to be run from the project root with
-# ./scripts/run_tests_unit.sh
+# ./scripts/run_tests_integration.sh
 set -o pipefail
 
 function display_result {
@@ -19,6 +19,6 @@ function display_result {
     fi
 }
 
-py.test -n auto --cov-config=.coveragerc --cov --cov-report html --ignore=tests/integration
+poetry run pytest tests/integration
 
-display_result $? 3 "Unit tests"
+display_result $? 4 "Integration tests"
