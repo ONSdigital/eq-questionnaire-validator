@@ -1,4 +1,4 @@
-from typing import Mapping
+from collections.abc import Mapping
 
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import (
@@ -77,6 +77,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
             )
             self.answers_to_calculate.extend(answers)
             self.calculated_summary_answers[calculated_summary_id] = tuple(answers)
+        return None
 
     def validate_calculated_summary_is_before_grand_calculated_summary_block(
         self,
