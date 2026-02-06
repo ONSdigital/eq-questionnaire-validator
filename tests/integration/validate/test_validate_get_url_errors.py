@@ -1,4 +1,9 @@
-def test_validate_get_url_not_found(client, mock_urlopen_not_found):
+import pytest
+
+
+# pylint: disable=duplicate-code
+@pytest.mark.usefixtures("mock_urlopen_not_found")
+def test_validate_get_url_not_found(client):
 
     url = "https://raw.githubusercontent.com/ONSdigital/does_not_exist.json"
     response = client.get("/validate", params={"url": url})

@@ -1,11 +1,19 @@
-def test_validate_no_json_data(client, mock_ajv_valid):
+import pytest
+
+import api
+
+
+# pylint: disable=duplicate-code
+@pytest.mark.usefixtures("mock_ajv_valid")
+def test_validate_no_json_data(client):
 
     response = client.post("/validate")
     assert response.status_code == 400
     assert "No JSON data provided for validation" in response.text
 
 
-def test_validate_post_wrong_type(client, mock_ajv_valid):
+@pytest.mark.usefixtures("mock_ajv_valid")
+def test_validate_post_wrong_type(client):
 
     response = client.post("/validate", json=[7, 8, 9])
     assert response.status_code == 400
@@ -13,8 +21,8 @@ def test_validate_post_wrong_type(client, mock_ajv_valid):
 
 
 # validator bug - returns 200 even though ajv is an error...
-"""
-def test_validate_post_ajv_errors(client, mock_ajv_error, valid_schema):
+@pytest.mark.usefixtures("mock_ajv_error")
+def test_validate_post_ajv_errors(client, valid_schema):
 
     response = client.post("/validate", json=valid_schema)
     assert response.status_code == 400
@@ -22,17 +30,18 @@ def test_validate_post_ajv_errors(client, mock_ajv_error, valid_schema):
     body = response.json()
     assert "errors" in body
     assert len(body["errors"]) > 0
-"""
 
 
-def test_validate_post_ajv_unavailable_returns_503(client, valid_schema, mock_ajv_down):
+@pytest.mark.usefixtures("mock_ajv_down")
+def test_validate_post_ajv_unavailable_returns_503(client, valid_schema):
 
     response = client.post("/validate", json=valid_schema)
     assert response.status_code == 503
     assert "AJV Schema Validator service unavailable" in response.text
 
 
-def test_validate_post_questionnaire_validator_errors(client, valid_schema, api_module, mock_ajv_valid, monkeypatch):
+@pytest.mark.usefixtures("mock_ajv_valid")
+def test_validate_post_questionnaire_validator_errors(client, valid_schema, monkeypatch):
 
     class MockValidator:
         def __init__(self, _json_data):
@@ -41,7 +50,7 @@ def test_validate_post_questionnaire_validator_errors(client, valid_schema, api_
         def validate(self):
             return None
 
-    monkeypatch.setattr(api_module, "QuestionnaireValidator", MockValidator)
+    monkeypatch.setattr(api, "QuestionnaireValidator", MockValidator)
 
     response = client.post("/validate", json=valid_schema)
     assert response.status_code == 400

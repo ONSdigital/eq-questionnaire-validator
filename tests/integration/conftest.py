@@ -1,4 +1,3 @@
-import importlib
 import json
 import os
 import urllib
@@ -12,20 +11,14 @@ import pytest
 from fastapi.testclient import TestClient
 from requests import RequestException
 
+import api
 
-@pytest.fixture(scope="session")
-def api_module():
-    os.environ.setdefault("AJV_VALIDATOR_URL", "http://mock-ajv-validator/validate")
-
-    import api
-
-    importlib.reload(api)  # make sure env var is applied even if api imported earlier
-    return api
+os.environ.setdefault("AJV_VALIDATOR_URL", "http://mock-ajv-validator/validate")
 
 
 @pytest.fixture
-def client(api_module):
-    return TestClient(api_module.app)
+def client():
+    return TestClient(api.app)
 
 
 class MockResponse:
@@ -43,45 +36,45 @@ def valid_schema():
     schema_path = Path(__file__).parents[1] / "schemas" / "valid" / "test_valid_skip_conditions.json"
 
     if not schema_path.exists():
-        raise FileNotFoundError(
-            f"Valid schema file not found: {schema_path}\n" f"Check if the file exists and the path is correct."
-        )
+        error_msg = f"Valid schema file not found: {schema_path}\nCheck if the file exists and the path is correct."
+        raise FileNotFoundError(error_msg)
 
-    with open(schema_path) as f:
+    with open(schema_path, encoding="utf-8") as f:
         return json.load(f)
 
 
 @pytest.fixture
-def mock_ajv_valid(api_module, monkeypatch):
+def mock_ajv_valid(monkeypatch):
     """Mock the AJV validation endpoint to always return a valid response (no errors)."""
 
-    def mock_post(*args, **kwargs):
+    def mock_post(*_args, **_kwargs):
         return MockResponse({})  # no errors
 
-    monkeypatch.setattr(api_module.requests, "post", mock_post)
+    monkeypatch.setattr(api.requests, "post", mock_post)
 
 
 @pytest.fixture
-def mock_ajv_down(api_module, monkeypatch):
-    def mock_post(*args, **kwargs):
-        raise RequestException("AJV unavailable")
+def mock_ajv_down(monkeypatch):
+    def mock_post(*_args, **_kwargs):
+        error_msg = "AJV unavailable"
+        raise RequestException(error_msg)
 
-    monkeypatch.setattr(api_module.requests, "post", mock_post)
+    monkeypatch.setattr(api.requests, "post", mock_post)
 
 
 @pytest.fixture
-def mock_ajv_error(api_module, monkeypatch):
-    def mock_post(*args, **kwargs):
+def mock_ajv_error(monkeypatch):
+    def mock_post(*_args, **_kwargs):
         return MockResponse({"errors": [{"message": "schema invalid"}]})
 
-    monkeypatch.setattr(api_module.requests, "post", mock_post, raising=True)
+    monkeypatch.setattr(api.requests, "post", mock_post)
 
 
 @pytest.fixture
-def mock_urlopen_valid(monkeypatch, valid_schema):
-    json_bytes = json.dumps(valid_schema).encode("utf-8")
+def mock_urlopen_valid(monkeypatch, test_valid_schema):
+    json_bytes = json.dumps(test_valid_schema).encode("utf-8")
 
-    def mock_urlopen(url):
+    def mock_urlopen(_url):
         return BytesIO(json_bytes)
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
@@ -98,7 +91,8 @@ def mock_urlopen_not_found(monkeypatch):
 
 @pytest.fixture
 def mock_urlopen_failure(monkeypatch):
-    def mock_urlopen(url):
-        raise urllib.error.URLError("Failed to reach the server")
+    def mock_urlopen(_url):
+        error_msg = "Failed to reach the server"
+        raise urllib.error.URLError(error_msg)
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
