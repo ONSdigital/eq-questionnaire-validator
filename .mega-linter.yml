@@ -12,7 +12,7 @@ FORMATTERS_DISABLE_ERRORS: false
 # If you use ENABLE variable, all other languages/formats/tooling-formats will
 # be disabled by default
 ENABLE:
-  #  - COPYPASTE
+  - COPYPASTE
   - EDITORCONFIG
   - JSON
   - MARKDOWN

@@ -13,19 +13,38 @@ default_answer_with_context = {
 }
 
 
-def get_validator(
-    rule,
+def run_validator(
     *,
+    operator=None,
     questionnaire_schema=None,
     answers_with_context=None,
     allow_self_reference=False,
 ):
-    return RulesValidator(
-        rule,
+    validator = RulesValidator(
+        operator,
         ORIGIN_ID,
         get_mock_schema(questionnaire_schema, answers_with_context),
         allow_self_reference=allow_self_reference,
     )
+    validator.validate()
+
+    return validator.errors
+
+
+def validate_options(operator):
+    questionnaire_schema = QuestionnaireSchema({})
+    questionnaire_schema.answers_with_context = {
+        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
+        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
+    }
+    # For testing purposes we need to assign a value to answer_id_to_option_values_map (defaultdict immutable)
+    questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
+        "string-answer": ["Yes", "No"],
+        "array-answer": ["Yes", "No"],
+    }
+    errors = run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
+
+    return errors
 
 
 @pytest.mark.parametrize(
@@ -44,29 +63,17 @@ def get_validator(
     ],
 )
 def test_validate_options(operator_name, first_argument, second_argument):
-    rule = {operator_name: [first_argument, second_argument]}
+    operator = {operator_name: [first_argument, second_argument]}
+    errors = validate_options(operator)
 
-    questionnaire_schema = QuestionnaireSchema({})
-    questionnaire_schema.answers_with_context = {
-        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
-        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
-    }
-    # For testing purposes we need to assign a value to answer_id_to_option_values_map (defaultdict immutable)
-    questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
-        "string-answer": ["Yes", "No"],
-        "array-answer": ["Yes", "No"],
-    }
-    validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
-    validator.validate()
-
-    expected_error = {
-        "message": validator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
-        "origin_id": ORIGIN_ID,
-        "answer_options": ["Yes", "No"],
-        "value": "Maybe",
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": RulesValidator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
+            "origin_id": ORIGIN_ID,
+            "answer_options": ["Yes", "No"],
+            "value": "Maybe",
+        },
+    ]
 
 
 @pytest.mark.parametrize(
@@ -84,26 +91,14 @@ def test_validate_options_null_value_is_valid(
     first_argument,
     second_argument,
 ):
-    rule = {operator_name: [first_argument, second_argument]}
+    operator = {operator_name: [first_argument, second_argument]}
+    errors = validate_options(operator)
 
-    questionnaire_schema = QuestionnaireSchema({})
-    questionnaire_schema.answers_with_context = {
-        "string-answer": {"answer": {"id": "string-answer", "type": "Radio"}},
-        "array-answer": {"answer": {"id": "array-answer", "type": "Checkbox"}},
-    }
-    # For testing purposes we need to assign a value to answer_id_to_option_values_map (defaultdict immutable)
-    questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
-        "string-answer": ["Yes", "No"],
-        "array-answer": ["Yes", "No"],
-    }
-    validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
-    validator.validate()
-
-    assert not validator.errors
+    assert not errors
 
 
 def test_validate_options_multiple_errors():
-    rule = {
+    operator = {
         "in": [
             {"source": "answers", "identifier": "string-answer"},
             ["Maybe", "Not sure"],
@@ -118,43 +113,39 @@ def test_validate_options_multiple_errors():
     questionnaire_schema.answer_id_to_option_values_map = {  # pyright: ignore
         "string-answer": ["Yes", "No"],
     }
-    validator = get_validator(rule, questionnaire_schema=questionnaire_schema)
-    validator.validate()
+    errors = run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
 
-    expected_errors = [
+    assert errors == [
         {
-            "message": validator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
+            "message": RulesValidator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
             "origin_id": ORIGIN_ID,
             "answer_options": ["Yes", "No"],
             "value": "Maybe",
         },
         {
-            "message": validator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
+            "message": RulesValidator.VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS,
             "origin_id": ORIGIN_ID,
             "answer_options": ["Yes", "No"],
             "value": "Not sure",
         },
     ]
 
-    assert validator.errors == expected_errors
-
 
 def test_validate_date_operator_non_date_answer():
     date_operator = {"date": [{"source": "answers", "identifier": "string-answer"}]}
 
-    validator = get_validator(
-        date_operator,
+    errors = run_validator(
+        operator=date_operator,
         answers_with_context=default_answer_with_context,
     )
-    validator.validate()
 
-    expected_error = {
-        "message": validator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
-        "origin_id": ORIGIN_ID,
-        "value_source": {"source": "answers", "identifier": "string-answer"},
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": RulesValidator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
+            "origin_id": ORIGIN_ID,
+            "value_source": {"source": "answers", "identifier": "string-answer"},
+        },
+    ]
 
 
 def test_validate_date_operator_with_offset():
@@ -162,23 +153,22 @@ def test_validate_date_operator_with_offset():
         "date": [{"source": "answers", "identifier": "string-answer"}, {"years": 1}],
     }
 
-    validator = get_validator(
-        date_operator,
+    errors = run_validator(
+        operator=date_operator,
         answers_with_context=default_answer_with_context,
     )
-    validator.validate()
 
-    expected_error = {
-        "message": validator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
-        "origin_id": ORIGIN_ID,
-        "value_source": {"source": "answers", "identifier": "string-answer"},
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": RulesValidator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
+            "origin_id": ORIGIN_ID,
+            "value_source": {"source": "answers", "identifier": "string-answer"},
+        },
+    ]
 
 
 def test_validate_nested_date_operator_non_date_answer():
-    rule = {
+    operator = {
         "and": [
             {
                 "==": [
@@ -190,62 +180,46 @@ def test_validate_nested_date_operator_non_date_answer():
         ],
     }
 
-    validator = get_validator(rule, answers_with_context=default_answer_with_context)
-    validator.validate()
+    errors = run_validator(operator=operator, answers_with_context=default_answer_with_context)
 
-    expected_error = {
-        "message": validator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
-        "origin_id": ORIGIN_ID,
-        "value_source": {"source": "answers", "identifier": "string-answer"},
-    }
+    assert errors == [
+        {
+            "message": RulesValidator.DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER,
+            "origin_id": ORIGIN_ID,
+            "value_source": {"source": "answers", "identifier": "string-answer"},
+        },
+    ]
 
-    assert validator.errors == [expected_error]
 
-
-def test_validate_count_operator_non_checkbox_answer():
-    count_operator = {"count": [{"source": "answers", "identifier": "array-answer"}]}
-
-    validator = get_validator(
-        count_operator,
+@pytest.mark.parametrize(
+    "operator_name, operator, valid_types",
+    [
+        ("count", {"count": [{"source": "answers", "identifier": "array-answer"}]}, ["array"]),
+        ("+", {"+": [{"source": "answers", "identifier": "array-answer"}, 10]}, ["number"]),
+    ],
+)
+def test_validate_operator(
+    operator_name,
+    operator,
+    valid_types,
+):
+    errors = run_validator(
+        operator=operator,
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
         },
     )
-    validator.validate()
 
-    expected_error = {
-        "argument_type": "string",
-        "argument_value": {"identifier": "array-answer", "source": "answers"},
-        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
-        "operator": "count",
-        "origin_id": "block-id",
-        "valid_types": ["array"],
-    }
-
-    assert validator.errors == [expected_error]
-
-
-def test_validate_sum_operator():
-    sum_operator = {"+": [{"source": "answers", "identifier": "array-answer"}, 10]}
-
-    validator = get_validator(
-        sum_operator,
-        answers_with_context={
-            "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
+    assert errors == [
+        {
+            "argument_type": "string",
+            "argument_value": {"identifier": "array-answer", "source": "answers"},
+            "message": RulesValidator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
+            "operator": operator_name,
+            "origin_id": "block-id",
+            "valid_types": valid_types,
         },
-    )
-    validator.validate()
-
-    expected_error = {
-        "argument_type": "string",
-        "argument_value": {"identifier": "array-answer", "source": "answers"},
-        "message": validator.INVALID_ARGUMENT_TYPE_FOR_OPERATOR,
-        "operator": "+",
-        "origin_id": "block-id",
-        "valid_types": ["number"],
-    }
-
-    assert validator.errors == [expected_error]
+    ]
 
 
 def test_validate_nested_sum_operator():
@@ -261,8 +235,8 @@ def test_validate_nested_sum_operator():
         ],
     }
 
-    validator = get_validator(
-        sum_operator,
+    errors = run_validator(
+        operator=sum_operator,
         answers_with_context={
             "array-answer": {"answer": {"id": "array-answer", "type": "TextField"}},
             "checkbox-answer": {
@@ -271,9 +245,8 @@ def test_validate_nested_sum_operator():
             "number-answer": {"answer": {"id": "array-answer", "type": "Number"}},
         },
     )
-    validator.validate()
 
-    expected_errors = [
+    assert errors == [
         {
             "argument_type": "object",
             "argument_value": {
@@ -288,8 +261,6 @@ def test_validate_nested_sum_operator():
             "valid_types": ["number"],
         },
     ]
-
-    assert validator.errors == expected_errors
 
 
 def test_map_operator_with_self_reference():
@@ -309,10 +280,9 @@ def test_map_operator_with_self_reference():
         ],
     }
 
-    validator = get_validator(operator)
-    validator.validate()
+    errors = run_validator(operator=operator)
 
-    assert not validator.errors
+    assert not errors
 
 
 def test_map_operator_without_self_reference():
@@ -332,16 +302,15 @@ def test_map_operator_without_self_reference():
         ],
     }
 
-    validator = get_validator(operator)
-    validator.validate()
+    errors = run_validator(operator=operator)
 
-    expected_error = {
-        "message": validator.MAP_OPERATOR_WITHOUT_SELF_REFERENCE,
-        "origin_id": ORIGIN_ID,
-        "rule": {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": RulesValidator.MAP_OPERATOR_WITHOUT_SELF_REFERENCE,
+            "origin_id": ORIGIN_ID,
+            "rule": {"format-date": [{"date": ["now"]}, "yyyy-MM-dd"]},
+        },
+    ]
 
 
 @pytest.mark.parametrize(
@@ -356,24 +325,23 @@ def test_self_reference_outside_map_operator_without_allow_self_reference(
     operator_name,
     operands,
 ):
-    rule = {operator_name: operands}
+    operator = {operator_name: operands}
 
-    validator = get_validator(
-        rule,
+    errors = run_validator(
+        operator=operator,
         answers_with_context={
             "date-answer": {"answer": {"id": "date-answer", "type": "Date"}},
         },
         allow_self_reference=False,
     )
-    validator.validate()
 
     expected_error = {
-        "message": validator.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR,
+        "message": RulesValidator.SELF_REFERENCE_OUTSIDE_MAP_OPERATOR,
         "origin_id": ORIGIN_ID,
-        "rule": rule,
+        "rule": operator,
     }
 
-    assert expected_error in validator.errors
+    assert expected_error in errors
 
 
 @pytest.mark.parametrize(
@@ -388,42 +356,39 @@ def test_self_reference_outside_map_operator_with_allow_self_reference(
     operator_name,
     operands,
 ):
-    rule = {operator_name: operands}
+    operator = {operator_name: operands}
 
-    validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
-    validator.validate()
+    errors = run_validator(operator=operator, answers_with_context={}, allow_self_reference=True)
 
-    assert not validator.errors
+    assert not errors
 
 
 def test_non_existing_answer_id_in_option_label_for_value_operator():
-    rule = {"option-label-from-value": ["self", "non-existing-answer"]}
+    operator = {"option-label-from-value": ["self", "non-existing-answer"]}
 
-    validator = get_validator(rule, answers_with_context={}, allow_self_reference=True)
-    validator.validate()
+    errors = run_validator(operator=operator, answers_with_context={}, allow_self_reference=True)
 
-    expected_error = {
-        "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
-        "origin_id": ORIGIN_ID,
-        "identifier": "non-existing-answer",
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
+            "origin_id": ORIGIN_ID,
+            "identifier": "non-existing-answer",
+        },
+    ]
 
 
 def test_answer_type_invalid_for_option_label_from_value():
-    rule = {"option-label-from-value": ["self", "string-answer"]}
-    validator = get_validator(
-        rule,
+    operator = {"option-label-from-value": ["self", "string-answer"]}
+    errors = run_validator(
+        operator=operator,
         answers_with_context=default_answer_with_context,
         allow_self_reference=True,
     )
-    validator.validate()
 
-    expected_error = {
-        "message": error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
-        "origin_id": ORIGIN_ID,
-        "identifier": "string-answer",
-    }
-
-    assert validator.errors == [expected_error]
+    assert errors == [
+        {
+            "message": error_messages.ANSWER_TYPE_FOR_OPTION_LABEL_FROM_VALUE_INVALID,
+            "origin_id": ORIGIN_ID,
+            "identifier": "string-answer",
+        },
+    ]
