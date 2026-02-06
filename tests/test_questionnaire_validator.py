@@ -467,54 +467,40 @@ def test_list_as_source_referenced_before_created():
     filename = "schemas/invalid/test_invalid_list_source_reference.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
+    error_household_individual_interstitial = {
+        "list_id": "household",
+        "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+        "block_id": "individual-interstitial",
+        "section_id": "individuals-section",
+    }
+
+    error_household_list_status_2 = {
+        "list_id": "household",
+        "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+        "block_id": "list-status-2",
+        "section_id": "individuals-section",
+    }
+
+    error_utility_bills_dynamic_answer = {
+        "list_id": "utility-bills",
+        "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
+        "block_id": "dynamic-answer",
+        "section_id": "utility-bills-section",
+    }
+
     expected_errors = [
-        {
-            "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "individual-interstitial",
-            "section_id": "individuals-section",
-        },
-        {
-            "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "individual-interstitial",
-            "section_id": "individuals-section",
-        },
-        {
-            "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "list-status-2",
-            "section_id": "individuals-section",
-        },
-        {
-            "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "list-status-2",
-            "section_id": "individuals-section",
-        },
-        {
-            "list_id": "household",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "list-status-2",
-            "section_id": "individuals-section",
-        },
+        error_household_individual_interstitial,
+        error_household_individual_interstitial,
+        error_household_list_status_2,
+        error_household_list_status_2,
+        error_household_list_status_2,
         {
             "list_name": "household",
             "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
             "section_id": "individuals-section",
         },
-        {
-            "list_id": "utility-bills",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "dynamic-answer",
-            "section_id": "utility-bills-section",
-        },
-        {
-            "list_id": "utility-bills",
-            "message": error_messages.LIST_REFERENCED_BEFORE_CREATED,
-            "block_id": "dynamic-answer",
-            "section_id": "utility-bills-section",
-        },
+        error_utility_bills_dynamic_answer,
+        error_utility_bills_dynamic_answer,
     ]
 
     validator.validate()
