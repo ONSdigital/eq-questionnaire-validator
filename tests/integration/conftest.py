@@ -63,8 +63,8 @@ def mock_ajv_down(monkeypatch):
 
 
 @pytest.fixture
-def mock_urlopen_valid(monkeypatch, test_valid_schema):
-    json_bytes = json.dumps(test_valid_schema).encode("utf-8")
+def mock_urlopen_valid(monkeypatch, valid_schema):
+    json_bytes = json.dumps(valid_schema).encode("utf-8")
 
     def mock_urlopen(_url):
         return BytesIO(json_bytes)
