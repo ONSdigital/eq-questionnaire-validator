@@ -2,8 +2,8 @@ import pytest
 
 
 @pytest.mark.usefixtures("mock_ajv_valid")
-def test_valid_schema_post(client, valid_schema):
+def test_load_valid_schema_post(client, load_valid_schema):
 
-    response = client.post("/validate", json=valid_schema)
+    response = client.post("/validate", json=load_valid_schema)
     assert response.status_code == 200
     assert response.json() == {}

@@ -21,15 +21,15 @@ def test_validate_post_wrong_type(client):
 
 
 @pytest.mark.usefixtures("mock_ajv_down")
-def test_validate_post_ajv_unavailable_returns_503(client, valid_schema):
+def test_validate_post_ajv_unavailable_returns_503(client, load_valid_schema):
 
-    response = client.post("/validate", json=valid_schema)
+    response = client.post("/validate", json=load_valid_schema)
     assert response.status_code == 503
     assert "AJV Schema Validator service unavailable" in response.text
 
 
 @pytest.mark.usefixtures("mock_ajv_valid")
-def test_validate_post_questionnaire_validator_errors(client, valid_schema, monkeypatch):
+def test_validate_post_questionnaire_validator_errors(client, load_valid_schema, monkeypatch):
 
     class MockValidator:
         def __init__(self, _json_data):
@@ -40,6 +40,6 @@ def test_validate_post_questionnaire_validator_errors(client, valid_schema, monk
 
     monkeypatch.setattr(api, "QuestionnaireValidator", MockValidator)
 
-    response = client.post("/validate", json=valid_schema)
+    response = client.post("/validate", json=load_valid_schema)
     assert response.status_code == 400
     assert "errors" in response.text

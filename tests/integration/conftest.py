@@ -29,8 +29,8 @@ class MockResponse:
         return self.json_data
 
 
-@pytest.fixture(scope="session")
-def valid_schema():
+@pytest.fixture
+def load_valid_schema():
     # Adjust the path based on your structure
     # From tests/integration/conftest.py → go up to tests/ → then schemas/valid/
     schema_path = Path(__file__).parents[1] / "schemas" / "valid" / "test_valid_skip_conditions.json"
@@ -63,8 +63,8 @@ def mock_ajv_down(monkeypatch):
 
 
 @pytest.fixture
-def mock_urlopen_valid(monkeypatch, valid_schema):
-    json_bytes = json.dumps(valid_schema).encode("utf-8")
+def mock_urlopen_valid(monkeypatch, test_url_valid_schema):
+    json_bytes = json.dumps(test_url_valid_schema).encode("utf-8")
 
     def mock_urlopen(_url):
         return BytesIO(json_bytes)
