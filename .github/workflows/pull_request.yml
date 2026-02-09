@@ -89,7 +89,7 @@ jobs:
         run: make test-unit
 
   test-integration:
-   permissions:
+    permissions:
       contents: read
     runs-on: ubuntu-22.04
     steps:
