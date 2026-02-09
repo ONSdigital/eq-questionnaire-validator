@@ -36,7 +36,7 @@ npm install
 ### Install Poetry and Python dependencies
 
 ```shell
-curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
+curl -sSL https://install.python-poetry.org | python3 - --version 2.2.1
 poetry install
 ```
 
@@ -150,6 +150,12 @@ make test-unit
 Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you
 do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing `<PID>` with
 the process id from the previous command.
+
+To run the app's integration tests:
+
+```shell
+make test-integration
+```
 
 Run the Ajv validator tests:
 
