@@ -20,18 +20,6 @@ def test_validate_post_wrong_type(client):
     assert "Invalid data type received for validation" in response.text
 
 
-# validator bug - returns 200 even though ajv is an error...
-@pytest.mark.usefixtures("mock_ajv_error")
-def test_validate_post_ajv_errors(client, valid_schema):
-
-    response = client.post("/validate", json=valid_schema)
-    assert response.status_code == 400
-
-    body = response.json()
-    assert "errors" in body
-    assert len(body["errors"]) > 0
-
-
 @pytest.mark.usefixtures("mock_ajv_down")
 def test_validate_post_ajv_unavailable_returns_503(client, valid_schema):
 

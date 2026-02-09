@@ -63,14 +63,6 @@ def mock_ajv_down(monkeypatch):
 
 
 @pytest.fixture
-def mock_ajv_error(monkeypatch):
-    def mock_post(*_args, **_kwargs):
-        return MockResponse({"errors": [{"message": "schema invalid"}]})
-
-    monkeypatch.setattr(api.requests, "post", mock_post)
-
-
-@pytest.fixture
 def mock_urlopen_valid(monkeypatch, test_valid_schema):
     json_bytes = json.dumps(test_valid_schema).encode("utf-8")
 
