@@ -386,47 +386,32 @@ class QuestionnaireSchema:
         self._cache[cache_key] = result
         return result
 
+    def _get_blocks_with_filters(self, filters, exclude_block_id=None):
+        """Helper to get blocks with filters, optionally excluding a block by id."""
+        conditions = [f'@.{key}=="{value}"' for key, value in filters.items()]
+        if exclude_block_id is not None:
+            conditions.insert(0, f'@.id != "{exclude_block_id}"')
+        if conditions:
+            final_condition = " & ".join(conditions)
+            path = f"$..blocks[?({final_condition})]"
+            return [match.value for match in ext_parse(path).find(self.schema)]
+        return self.blocks
+
     def get_blocks(self, **filters):
         cache_key = ("get_blocks", tuple(sorted(filters.items())))
         if cache_key in self._cache:
             return self._cache[cache_key]
-        conditions = []
-        for key, value in filters.items():
-            conditions.append(f'@.{key}=="{value}"')
-
-        if conditions:
-            final_condition = " & ".join(conditions)
-            result = [
-                match.value
-                for match in ext_parse(f"$..blocks[?({final_condition})]").find(
-                    self.schema,
-                )
-            ]
-            self._cache[cache_key] = result
-            return result
-        self._cache[cache_key] = self.blocks
-        return self.blocks
+        result = self._get_blocks_with_filters(filters)
+        self._cache[cache_key] = result
+        return result
 
     def get_other_blocks(self, block_id_to_filter, **filters):
         cache_key = ("get_other_blocks", block_id_to_filter, tuple(sorted(filters.items())))
         if cache_key in self._cache:
             return self._cache[cache_key]
-        conditions = []
-        for key, value in filters.items():
-            conditions.append(f'@.{key}=="{value}"')
-
-        if conditions:
-            final_condition = " & ".join(conditions)
-            result = [
-                match.value
-                for match in ext_parse(
-                    f'$..blocks[?(@.id != "{block_id_to_filter}" & {final_condition})]',
-                ).find(self.schema)
-            ]
-            self._cache[cache_key] = result
-            return result
-        self._cache[cache_key] = self.blocks
-        return self.blocks
+        result = self._get_blocks_with_filters(filters, exclude_block_id=block_id_to_filter)
+        self._cache[cache_key] = result
+        return result
 
     def has_single_driving_question(self, list_name):
         cache_key = ("has_single_driving_question", list_name)

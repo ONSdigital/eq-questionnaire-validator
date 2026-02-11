@@ -52,7 +52,8 @@ def test_invalid_new_calculated_summary():
     filename = "schemas/invalid/test_invalid_new_calculated_summary.json"
     json_to_validate = _open_and_load_schema_file(filename)
 
-    expected_error_messages = COMMON_ERROR_MESSAGES + [
+    expected_error_messages = [
+        *COMMON_ERROR_MESSAGES,
         {
             "message": CalculatedSummaryBlockValidator.CALCULATED_SUMMARY_WITH_NON_REPEATING_SINGLE_ANSWER,
             "block_id": "total-playback-not-enough-answers",

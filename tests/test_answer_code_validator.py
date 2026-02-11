@@ -65,13 +65,14 @@ def checkbox_codes_for_options(*entries):
 
 
 def checkbox_answer_codes():
-    return checkbox_codes_for_options(
-        ("1a", "None"),
-        ("1b", "Ham & Cheese"),
-        ("1c", "Ham"),
-        ("1d", "Pepperoni"),
-        ("1e", "Other"),
-    ) + [
+    return [
+        *checkbox_codes_for_options(
+            ("1a", "None"),
+            ("1b", "Ham & Cheese"),
+            ("1c", "Ham"),
+            ("1d", "Pepperoni"),
+            ("1e", "Other"),
+        ),
         {"answer_id": "other-answer-mandatory", "code": "1f"},
     ]
 
@@ -86,7 +87,8 @@ def test_answer_code_validation_incorrect_data_version():
 
 
 def test_duplicate_answer_codes():
-    answer_codes = checkbox_answer_codes() + [
+    answer_codes = [
+        *checkbox_answer_codes(),
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
         {"answer_id": "name-answer", "code": "3"},
@@ -111,7 +113,8 @@ def test_duplicate_answer_codes():
 
 
 def test_duplicate_answer_id_for_answer_code():
-    answer_codes = checkbox_answer_codes() + [
+    answer_codes = [
+        *checkbox_answer_codes(),
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
         {"answer_id": "name-answer", "code": "4"},
@@ -132,7 +135,8 @@ def test_duplicate_answer_id_for_answer_code():
 
 
 def test_answer_id_set_in_answer_codes_not_in_schema():
-    answer_codes = checkbox_answer_codes() + [
+    answer_codes = [
+        *checkbox_answer_codes(),
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
         {"answer_id": "name-answer-2", "code": "4"},
@@ -153,7 +157,8 @@ def test_answer_id_set_in_answer_codes_not_in_schema():
 
 
 def test_answer_value_set_for_answer_without_answer_options():
-    answer_codes = checkbox_answer_codes() + [
+    answer_codes = [
+        *checkbox_answer_codes(),
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "answer_value": "missing_value", "code": "3"},
         {"answer_id": "name-answer-2", "code": "4"},
@@ -235,7 +240,8 @@ def test_answer_code_missing_for_answer_options_only_one_value_set():
             "answer_value": "Ham",
             "code": "1",
         },
-    ] + ADDITIONAL_ANSWER_CODES
+        *ADDITIONAL_ANSWER_CODES,
+    ]
 
     errors = run_validator(
         filename="schemas/valid/test_answer_codes.json",
@@ -270,7 +276,8 @@ def test_answer_code_missing_for_answer_options_only_one_value_set():
 
 
 def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
-    answer_codes = checkbox_answer_codes() + [
+    answer_codes = [
+        *checkbox_answer_codes(),
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2a"},
         {"answer_id": "name-answer", "code": "3"},
@@ -299,13 +306,14 @@ def test_more_than_one_answer_code_for_answer_options_when_no_value_set():
 
 
 def test_answer_code_with_duplicate_option_answer_values():
-    answer_codes = checkbox_codes_for_options(
-        ("1a", "None"),
-        ("1b", "Ham & Cheese"),
-        ("1c", "Ham"),
-        ("1d", "Pepperoni"),
-        ("1e", "Pepperoni"),
-    ) + [
+    answer_codes = [
+        *checkbox_codes_for_options(
+            ("1a", "None"),
+            ("1b", "Ham & Cheese"),
+            ("1c", "Ham"),
+            ("1d", "Pepperoni"),
+            ("1e", "Pepperoni"),
+        ),
         {"answer_id": "other-answer-mandatory", "code": "1g"},
         {"answer_id": "mandatory-checkbox-answer-2", "code": "2"},
         {"answer_id": "name-answer", "code": "3"},
@@ -353,16 +361,16 @@ def test_answer_code_with_duplicate_option_answer_values():
 
 
 def test_incorrect_answer_value_set_in_answer_code():
-    answer_codes = (
-        checkbox_codes_for_options(
+    answer_codes = [
+        *checkbox_codes_for_options(
             ("1a", "None"),
             ("1b", "Ham & Cheese"),
             ("1c", "Ham"),
             ("1d", "Pepperonis"),
             ("1e", "Other"),
-        )
-        + ADDITIONAL_ANSWER_CODES
-    )
+        ),
+        *ADDITIONAL_ANSWER_CODES,
+    ]
 
     errors = run_validator(
         filename="schemas/valid/test_answer_codes.json",
@@ -400,7 +408,8 @@ def base_answer_codes_must_be_set_at_parent_level_for_dynamic_options():
 
 
 def test_answer_codes_must_be_set_at_parent_level_for_dynamic_options():
-    answer_codes = base_answer_codes_must_be_set_at_parent_level_for_dynamic_options() + [
+    answer_codes = [
+        *base_answer_codes_must_be_set_at_parent_level_for_dynamic_options(),
         {
             "answer_id": "dynamic-checkbox-answer",
             "answer_value": "I don’t have a favourite",
@@ -436,7 +445,8 @@ def test_answer_codes_allowed_at_parent_and_value_level_for_dynamic_options():
 
 
 def test_invalid_value_in_answer_code_for_dynamic_options():
-    answer_codes = base_answer_codes_must_be_set_at_parent_level_for_dynamic_options() + [
+    answer_codes = [
+        *base_answer_codes_must_be_set_at_parent_level_for_dynamic_options(),
         {"answer_id": "dynamic-checkbox-answer", "code": "1"},
         {
             "answer_id": "dynamic-checkbox-answer",
@@ -498,7 +508,8 @@ def test_missing_answer_codes_for_list_add_questions():
 
 
 def test_invalid_answer_codes_for_list_collector_remove_question():
-    answer_codes = base_missing_answer_codes_for_list_add_questions() + [
+    answer_codes = [
+        *base_missing_answer_codes_for_list_add_questions(),
         {"answer_id": "registration-number", "code": "1b"},
         {"answer_id": "remove-company-confirmation", "code": "5a"},
     ]
