@@ -34,6 +34,8 @@ AJV_VALIDATOR_URL = os.getenv(
     f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
 )
 
+DEFAULT_BODY = Body(None)
+
 app = FastAPI()
 
 logger = structlog.get_logger()
@@ -72,7 +74,7 @@ async def status():
 
 
 @app.post("/validate")
-async def validate_schema_request_body(payload=Body(None)):
+async def validate_schema_request_body(payload=DEFAULT_BODY):
     logger.info("Schema validation request received")
     return await validate_schema(payload)
 
@@ -97,7 +99,7 @@ async def validate_schema_from_url(url=None):
         try:
             # Opens the URL and validates the schema
             # Mitigation for opening ftp:// and file:// URLs with urllib.request is implemented in lines 91-95
-            with request.urlopen(parsed_url.geturl()) as opened_url:  # nosec B310
+            with request.urlopen(parsed_url.geturl()) as opened_url:  # nosec B310  # noqa: S310
                 return await validate_schema(data=opened_url.read().decode())
         except error.URLError:
             logger.warning(
@@ -108,20 +110,22 @@ async def validate_schema_from_url(url=None):
                 status_code=404,
                 content=f"Could not load schema from allowed domain - URL not found [{url}]",
             )
+    return None
 
 
-async def validate_schema(data):
+async def validate_schema(data):  # pylint: disable=R0911
     logger.debug("Attempting to validate schema from JSON data...")
     if data:
         if isinstance(data, dict):
             logger.info("JSON data received as dictionary - parsing not required")
             json_to_validate = data
-        # Sets `json_to_validate` to the parsed data if it is a string
         elif isinstance(data, str):
             logger.info("JSON data received as string - parsing required")
             logger.debug("Attempting to parse JSON data...")
             json_to_validate = parse_json(data)
-        # Returns an error response if the data received is not a string or dictionary
+            # If parse_json returns a Response (error), return it immediately
+            if isinstance(json_to_validate, Response):
+                return json_to_validate
         else:
             logger.error(
                 "Invalid data type received for validation (expected string or dictionary)",
@@ -185,15 +189,12 @@ async def validate_schema(data):
             status=400,
             errors=response["errors"],
         )
-        response = Response(content=json.dumps(response), status_code=400)
 
-        return response
+        return Response(content=json.dumps(response), status_code=400)
 
     logger.info("Schema validation successfully completed with no errors", status=200)
 
-    response = Response(content=json.dumps(response), status_code=200)
-
-    return response
+    return Response(content=json.dumps(response), status_code=200)
 
 
 def is_url_allowed(parsed_url, domain):
@@ -241,10 +242,10 @@ def parse_json(data):
     try:
         processed_data = json.loads(data)
         logger.info("JSON data parsed successfully")
-        return processed_data
     except JSONDecodeError:
         logger.exception("Failed to parse JSON data", status=400)
         return Response(status_code=400, content="Failed to parse JSON")
+    return processed_data
 
 
 if __name__ == "__main__":
