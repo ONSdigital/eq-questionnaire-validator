@@ -1,3 +1,10 @@
+"""This module contains the PrimaryPersonListCollectorValidator class, which validates primary person list collector
+blocks in a questionnaire schema.
+
+Classes:
+    PrimaryPersonListCollectorValidator
+"""
+
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
@@ -8,6 +15,12 @@ class PrimaryPersonListCollectorValidator(
     BlockValidator,
     ValidateListCollectorQuestionsMixin,
 ):
+    """Validates the primary person list collector block.
+
+    Methods:
+        validate
+        validate_primary_person_list_collector_answer_ids
+    """
     REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (
@@ -18,6 +31,11 @@ class PrimaryPersonListCollectorValidator(
     )
 
     def validate(self):
+        """Validates the primary person list collector block by invoking methods in specific order.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
 
         collector_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -38,7 +56,11 @@ class PrimaryPersonListCollectorValidator(
         return self.errors
 
     def validate_primary_person_list_collector_answer_ids(self, block):
-        """Ensure that answer_ids on add blocks match between all blocks that populate a single list."""
+        """Ensure that answer_ids on add blocks match between all blocks that populate a single list.
+
+        Args:
+            block (Mapping): The primary person list collector block to validate.
+        """
         list_name = block["for_list"]
 
         add_or_edit_answer_ids = self.questionnaire_schema.get_all_answer_ids(

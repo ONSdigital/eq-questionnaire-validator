@@ -17,7 +17,7 @@ def get_question_validator(question, schema):
 
     Args:
         question (dict): The question to be validated.
-        schema (dict, None): The entire questionnaire schema, which may be needed for certain validators.
+        schema (QuestionnaireSchema): The entire questionnaire schema, which may be needed for certain validators.
 
     Returns:
         An instance of a question validator class that corresponds to the type of the question.
