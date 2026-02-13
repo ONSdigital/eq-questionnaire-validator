@@ -41,6 +41,7 @@ line-length = 120
 [tool.ruff]
 line-length = 120
 indent-width = 4
+extend-exclude = ["api*", "app/validators/value_source_validator*", "app/validators/questionnaire_validator*", "app/validators/answer_code_validator*", "app/validators/blocks*", "app/validators/answers*", "app/validators/sections*", "app/validators/rules*", "app/validators/routing*", "tests"]
 
 [tool.ruff.lint]
 
@@ -133,18 +134,12 @@ ignore = [
     "C409",
     # Hide 'C405 Unnecessary list literal (rewrite as a set literal)' - to be revisited
     "C405",
-    # Hide 'D100 Missing docstring in public module' - to be revisited
-    "D100",
-    # Hide 'D101 Missing docstring in public class' - to be revisited
-    "D101",
-    # Hide 'D102 Missing docstring in public method' - to be revisited
-    "D102",
-    # Hide 'D103 Missing docstring in public function' - to be revisited
-    "D103",
     # Hide 'D104 Missing docstring in public package' - to be revisited
     "D104",
     # Hide 'D107 Missing docstring in `__init__`' - to be revisited
     "D107",
+    # Hide '1 blank line required between summary line and description' - to be revisited
+    "D205"
 
 ]
 

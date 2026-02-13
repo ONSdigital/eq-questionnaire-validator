@@ -68,6 +68,30 @@ SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
+    """Validates that rules are correctly formed and reference valid answer options and answer types.
+
+    Attributes:
+        rules (dict): The rules to validate.
+        questionnaire_schema (QuestionnaireSchema): The questionnaire schema to validate against.
+        allow_self_reference (bool): Whether to allow self references in the rules. Defaults to False
+
+    Methods:
+        validate: Validates the rules and returns a list of errors.
+        _validate_rule: Validates a single rule and its sub-rules.
+        _validate_self_references: Validates that self references are only used within the context of the map operator.
+        _validate_map_operator: Validates that the first argument to the map operator has a reference to self.
+        _get_flattened_arguments_for_non_map_operators: Recursively fetches all the arguments for all non map operators as a flattened list.
+        _get_non_map_arguments_from_argument: For the given argument, recursively fetches all the arguments for all non map operators as a flattened list.
+        _validate_option_label_from_value_operator: Validates that the referenced answer id in option-label-from-value exists and is of type ['Radio','Checkbox','Dropdown'].
+        _validate_date_operator: Validates that when an answer value source is used in a date operator, it is a date.
+        _validate_options: Validates that answer options referenced in a rule exist.
+        _validate_operator_arguments: Validates that all arguments for an operator are of the correct type and that argument types match where required.
+        _get_argument_types_for_operator: Returns a list of argument types for the given operator arguments.
+        _validate_argument_types_match: Validates that all arguments are of the same type.
+        _validate_comparison_operator_argument_types: Validates that all arguments are of the correct type for the operator.
+        _get_valid_types_for_operator: Returns a list of valid argument types for the given operator.
+
+    """
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = "Date operator references non Date, MonthYearDate, or YearDate answer"
     COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = "Count operator references non Checkbox answer"
@@ -264,6 +288,7 @@ class RulesValidator(Validator):
         return TYPE_BOOLEAN
 
     def _get_argument_types_for_operator(self, arguments):
+        """Returns a list of argument types for the given operator arguments."""
         argument_types = []
         for argument in arguments:
             if isinstance(argument, dict) and any(operator in argument for operator in ALL_WHEN_RULE_OPERATORS):
@@ -312,6 +337,7 @@ class RulesValidator(Validator):
 
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
+        """Returns a list of valid argument types for the given operator."""
         if operator_name in [Operator.EQUAL, Operator.NOT_EQUAL]:
             return [
                 TYPE_DATE,
