@@ -1,3 +1,10 @@
+"""This module contains the NumberAnswerValidator class, which is responsible for validating number answers in a
+questionnaire schema.
+
+Classes:
+NumberAnswerValidator
+"""
+
 from decimal import Decimal
 
 from app.validators.answers.answer_validator import AnswerValidator
@@ -9,6 +16,25 @@ MAX_DECIMAL_PLACES = 6
 
 
 class NumberAnswerValidator(AnswerValidator):
+    """Validator for number answers in a questionnaire schema. Inherits from AnswerValidator and adds additional
+    validation.
+
+    Attributes:
+        schema_element (Mapping): The answer to be validated.
+        questionnaire_schema (QuestionnaireSchema): The questionnaire schema to validate against.
+
+    Methods:
+        validate
+        validate_mandatory_has_no_default
+        validate_min_max_is_number
+        validate_value_in_limits
+        are_decimal_places_valid
+        validate_decimal_places
+        validate_decimals
+        validate_referred_numeric_answer
+        validate_numeric_range
+        validate_referred_numeric_answer_decimals
+    """
     DEFAULT_ON_MANDATORY = "Default answer is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"
@@ -25,6 +51,12 @@ class NumberAnswerValidator(AnswerValidator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
+        """Validates the number answer by first calling the base validation, then performing additional checks specific
+        to number answers.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
 
         self.validate_min_max_is_number()
@@ -59,10 +91,14 @@ class NumberAnswerValidator(AnswerValidator):
         return self.errors
 
     def validate_mandatory_has_no_default(self):
+        """Validates that if the answer is marked as mandatory, it does not have a default value set."""
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
 
     def validate_min_max_is_number(self):
+        """Validates that the minimum and maximum values, if present, are of a numeric type (int, float, Decimal) or
+        a value source that resolves to a numeric type.
+        """
         for min_max in ["minimum", "maximum"]:
             if value := self.answer.get(min_max, {}).get("value", 0):
                 if isinstance(value, dict):
@@ -72,6 +108,7 @@ class NumberAnswerValidator(AnswerValidator):
                     self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
+        """Validates that the minimum and maximum values, if present, are within the defined limits."""
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
@@ -114,15 +151,22 @@ class NumberAnswerValidator(AnswerValidator):
                 )
 
     def are_decimal_places_valid(self):
+        """Checks that if the answer is calculated, it has 2 decimal places defined. Else defaults to True.
+
+        Returns:
+            bool: True if the answer is not calculated or if it is calculated and has 2.
+        """
         if "calculated" in self.answer:
             return self.answer.get("decimal_places") == 2
         return True
 
     def validate_decimal_places(self):
+        """Validates that if the answer is calculated, it has 2 decimal places defined."""
         if not self.are_decimal_places_valid():
             self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_decimals(self):
+        """Validates that the number of decimal places defined for the answer does not exceed the limit."""
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > MAX_DECIMAL_PLACES:
             self.add_error(
@@ -132,9 +176,14 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
     def validate_referred_numeric_answer(self, answer_ranges):
-        """Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema.
+        """Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema. If either
+        of the above is true then it will not have been given a value by _get_numeric_range_values.
 
-        If either of the above is true then it will not have been given a value by _get_numeric_range_values
+        Args:
+            answer_ranges (dict): A dictionary of answer ids and their corresponding numeric range values.
+
+        Returns:
+            errors_found (bool): True if errors are found, False otherwise.
         """
         errors_found = False
         if answer_ranges[self.answer.get("id")]["min"] is None:
@@ -152,6 +201,11 @@ class NumberAnswerValidator(AnswerValidator):
         return errors_found
 
     def validate_numeric_range(self, answer_ranges):
+        """Validates that the numeric range defined by the minimum and maximum values is valid.
+
+        Args:
+            answer_ranges (dict): A dictionary of answer ids and their corresponding numeric range values.
+        """
         max_value = answer_ranges[self.answer.get("id")]["max"]
         min_value = answer_ranges[self.answer.get("id")]["min"]
 
@@ -164,6 +218,12 @@ class NumberAnswerValidator(AnswerValidator):
             )
 
     def validate_referred_numeric_answer_decimals(self, answer_ranges):
+        """Validates that the referenced answers for the minimum and maximum values, if present, do not have a greater
+        number of decimal places than the answer itself.
+
+        Args:
+            answer_ranges (dict): A dictionary of answer ids and their corresponding numeric range values.
+        """
         answer_values = answer_ranges[self.answer["id"]]
 
         if answer_values["min_referred"] is not None and answer_values["min_referred"] in answer_ranges:
