@@ -41,7 +41,7 @@ line-length = 120
 [tool.ruff]
 line-length = 120
 indent-width = 4
-extend-exclude = ["api*", "app/validators/value_source_validator*", "app/validators/questionnaire_validator*", "app/validators/answer_code_validator*", "app/validators/blocks*", "app/validators/answers*", "app/validators/sections*", "app/validators/rules*", "app/validators/routing*", "tests"]
+extend-exclude = ["api*", "app/validators/value_source_validator*", "app/validators/questionnaire_validator*", "app/validators/answer_code_validator*", "app/validators/blocks*", "app/validators/answers*", "app/validators/sections*",  "app/validators/routing*", "tests"]
 
 [tool.ruff.lint]
 

@@ -164,6 +164,9 @@ class QuestionnaireSchema:
     groups, answers, lists, and related metadata.
     It provides methods to access and process these elements for validation purposes.
 
+    Attributes:
+        schema (dict): The original questionnaire schema as a dictionary.
+
     Methods:
         get_block_ids_for_block_type
         list_names_by_dynamic_answer_id

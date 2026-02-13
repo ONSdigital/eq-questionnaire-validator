@@ -10,9 +10,12 @@ from typing import Mapping
 
 class Validator(ABC):
     """Base class for validators.
-
     All validators inherit from this class and implement the validate method to perform
     validation on a given schema element.
+
+    Attributes:
+        schema_element (Mapping): The schema element to be validated, which can be a question, answer, block,
+        or any other relevant part of the questionnaire schema.
 
     Methods:
         add_error

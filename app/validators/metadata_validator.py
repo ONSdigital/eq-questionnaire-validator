@@ -13,6 +13,11 @@ from app.validators.validator import Validator
 class MetadataValidator(Validator):
     """Validator for the metadata field in a questionnaire schema.
 
+    Attributes:
+        metadata (list): The metadata field to be validated, which is a list of metadata fields defined in
+        the questionnaire schema.
+        theme_name (str): The theme of the questionnaire, which determines the mandatory metadata fields.
+
     Methods:
         validate
         metadata_names
