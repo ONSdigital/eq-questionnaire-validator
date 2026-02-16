@@ -1,8 +1,31 @@
+"""This module contains the AnswerCodeValidator class which is responsible for validating answer codes in a
+questionnaire schema.
+
+Classes:
+    AnswerCodeValidator
+"""
+
 from app.validators.questionnaire_schema import find_duplicates
 from app.validators.validator import Validator
 
 
 class AnswerCodeValidator(Validator):
+    """Validator for answer codes in a questionnaire schema.
+
+    Attributes:
+        data_version: The version of the data format being used for answer codes.
+        answer_codes: A list of answer code mappings to validate against the questionnaire schema.
+        questionnaire_schema: The questionnaire schema to validate the answer codes against.
+
+    Methods:
+        validate
+        validate_data_version
+        validate_duplicates
+        validate_missing_answer_id
+        validate_missing_answer_codes
+        validate_dynamic_options
+        validate_answer_codes_at_option_level
+    """
     INCORRECT_DATA_VERSION_FOR_ANSWER_CODES = "Answer codes are only supported in data version 0.0.3"
     DUPLICATE_ANSWER_CODE_FOUND = "Answer codes must be unique"
     DUPLICATE_ANSWER_ID_FOUND = (
@@ -35,6 +58,11 @@ class AnswerCodeValidator(Validator):
         super().__init__(questionnaire_schema)
 
     def validate(self):
+        """Validates the answer codes by performing a series of checks.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         self.validate_data_version()
         self.validate_duplicates()
         self.validate_missing_answer_id()
@@ -44,10 +72,14 @@ class AnswerCodeValidator(Validator):
         return self.errors
 
     def validate_data_version(self):
+        """Validates that the data version being used for answer codes is correct. Answer codes are only supported
+        in data version 0.0.3, so if the data version is not 0.0.3, an error message is added to the list of errors.
+        """
         if self.data_version != "0.0.3":
             self.add_error(self.INCORRECT_DATA_VERSION_FOR_ANSWER_CODES)
 
     def validate_duplicates(self):
+        """Validates that there are no duplicate answer codes or duplicate answer ids in the answer codes list."""
         answer_ids = [
             answer_code["answer_id"] for answer_code in self.answer_codes if "answer_value" not in answer_code
         ]
@@ -60,6 +92,7 @@ class AnswerCodeValidator(Validator):
                 self.add_error(error_message, duplicates=list(duplicates))
 
     def validate_missing_answer_id(self):
+        """Validates that all answer ids specified in the answer codes exist in the questionnaire schema."""
         for answer_code_id in self.answer_codes_answer_ids:
             if answer_code_id not in self.all_answer_ids:
                 self.add_error(
@@ -68,6 +101,7 @@ class AnswerCodeValidator(Validator):
                 )
 
     def validate_missing_answer_codes(self):
+        """Validates that all answer ids specified in the questionnaire schema have a corresponding answer code."""
         for answer_id in self.all_answer_ids:
             block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
 
@@ -83,6 +117,9 @@ class AnswerCodeValidator(Validator):
                 self.add_error(self.MISSING_ANSWER_CODE, answer_id=answer_id)
 
     def validate_dynamic_options(self):
+        """Validates that answers with dynamic options have an answer code mapping without answer value, and that
+        they are the only answer code mapping for that answer id.
+        """
         for answer_id in self.questionnaire_schema.answers_with_context:
             answer = self.questionnaire_schema.answers_with_context[answer_id]
 
@@ -101,6 +138,9 @@ class AnswerCodeValidator(Validator):
                     )
 
     def validate_answer_codes_at_option_level(self):
+        """Validates that if answer codes are set at the option level for an answer or if they are incorrectly set at
+        the option level, then the error messages are added to the list of errors.
+        """
         for answer_id in self.questionnaire_schema.answers_with_context:
             answer = self.questionnaire_schema.answers_with_context[answer_id]
 
@@ -144,6 +184,15 @@ class AnswerCodeValidator(Validator):
         answer_codes_for_options,
         values,
     ):
+        """Validates that if answer codes are set at the option level for an answer, then the number of answer codes
+        matches.
+
+        Args:
+            answer (dict): The answer from the questionnaire schema to validate.
+            answer_id (str): The id of the answer to validate.
+            answer_codes_for_options (list): The list of answer codes that are set for the answer options.
+            values (list): The list of values for the answer options.
+        """
         if len(values) != len(answer_codes_for_options) and all(
             "answer_value" in answer_code for answer_code in answer_codes_for_options
         ):
@@ -176,6 +225,13 @@ class AnswerCodeValidator(Validator):
         answer_codes_for_options,
         values,
     ):
+        """Validates that values specified in answer codes for answer options match the values specified in the answer
+        options.
+
+        Args:
+           answer_codes_for_options (list): The list of answer codes that are set for the answer options.
+           values (list): The list of values for the answer options.
+        """
         answer_values = set()
         for answer_code in answer_codes_for_options:
             if answer_value := answer_code.get("answer_value"):

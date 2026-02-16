@@ -1,4 +1,4 @@
-# pylint: disable=too-many-public-methods
+# pylint: disable=too-many-public-methods,too-many-lines
 """This module provides the `QuestionnaireSchema` class, which is responsible for parsing a questionnaire schema.
 It extracts and organizes the various components of the schema, such as sections, blocks, groups, answers, and lists.
 
