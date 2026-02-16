@@ -1,3 +1,14 @@
+"""API for validating questionnaire schemas using an AJV Validator service and a Questionnaire Validator instance.
+
+Functions:
+    configure_logging
+
+
+Endpoints:
+    GET /status
+    POST /validate
+    GET /validate
+"""
 import json
 import logging
 import os
