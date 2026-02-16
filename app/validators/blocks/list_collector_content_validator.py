@@ -15,6 +15,7 @@ class ListCollectorContentValidator(BlockValidator):
         validate
         validate_for_list_is_valid
     """
+
     def validate(self):
         """Validates the list collector content block.
 

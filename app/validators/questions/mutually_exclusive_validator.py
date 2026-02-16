@@ -4,6 +4,7 @@ mutually exclusive questions.
 Classes:
     MutuallyExclusiveQuestionValidator
 """
+
 from app.answer_type import AnswerType
 from app.validators.questions.question_validator import QuestionValidator
 
@@ -14,6 +15,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
     Methods:
         validate
     """
+
     question: dict = {}
     MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = "MutuallyExclusive question type cannot contain mandatory answers."
     INVALID_EXCLUSIVE_ANSWER = "Mutually exclusive answer is not of type Checkbox or Radio."

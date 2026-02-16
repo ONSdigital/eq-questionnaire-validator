@@ -26,6 +26,7 @@ class AnswerCodeValidator(Validator):
         validate_dynamic_options
         validate_answer_codes_at_option_level
     """
+
     INCORRECT_DATA_VERSION_FOR_ANSWER_CODES = "Answer codes are only supported in data version 0.0.3"
     DUPLICATE_ANSWER_CODE_FOUND = "Answer codes must be unique"
     DUPLICATE_ANSWER_ID_FOUND = (
@@ -229,8 +230,8 @@ class AnswerCodeValidator(Validator):
         options.
 
         Args:
-           answer_codes_for_options (list): The list of answer codes that are set for the answer options.
-           values (list): The list of values for the answer options.
+            answer_codes_for_options (list): The list of answer codes that are set for the answer options.
+            values (list): The list of values for the answer options.
         """
         answer_values = set()
         for answer_code in answer_codes_for_options:

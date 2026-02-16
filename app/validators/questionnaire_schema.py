@@ -126,7 +126,7 @@ def json_path_position(match) -> tuple[int, ...]:
         match (jsonpath_ng.match): A jsonpath_ng match object representing a match for a key in the schema.
 
     Returns:
-         tuple: A tuple to represent the position of the match within the schema.
+        tuple: A tuple to represent the position of the match within the schema.
     """
     path = str(match.full_path)
     indices = re.findall(r"\[(\d+)]", path)
@@ -209,6 +209,7 @@ class QuestionnaireSchema:
         get_section_index_for_section_id
 
     """
+
     def __init__(self, schema):
         self.schema = schema
         self.matches = [
@@ -293,7 +294,7 @@ class QuestionnaireSchema:
     @cached_property
     def numeric_answer_ranges(self):
         """Get a mapping of answer id to its numeric range values, used for extracting minimum and maximum values for
-         percentage, currency, unit and number answer types.
+        percentage, currency, unit and number answer types.
 
         Returns:
             numeric_answer_ranges (dict): A dictionary mapping answer ids to key-value pairs,
@@ -311,7 +312,7 @@ class QuestionnaireSchema:
 
     @cached_property
     def metadata_ids(self):
-        """"Get a list of metadata ids used in the schema's top-level metadata field.
+        """ "Get a list of metadata ids used in the schema's top-level metadata field.
 
         Returns:
             list: A list of metadata ids or empty list.
@@ -507,8 +508,8 @@ class QuestionnaireSchema:
         from value. Only for answers that have options.
 
         Returns:
-           answer_id_to_option_values_map (dict): A dictionary mapping answer ids to the set of option values for
-           that answer.
+            answer_id_to_option_values_map (dict): A dictionary mapping answer ids to the set of option values for
+            that answer.
         """
         answer_id_to_option_values_map = defaultdict(set)
 
@@ -602,14 +603,14 @@ class QuestionnaireSchema:
         an empty list. If no filters are provided, all blocks will be returned.
 
         Example:
-             get_blocks(type="ListCollector", for_list="household") will return all blocks of type ListCollector
-             that have a for_list value of household.
+            get_blocks(type="ListCollector", for_list="household") will return all blocks of type ListCollector
+            that have a for_list value of household.
 
         Args:
             **filters: Arbitrary keyword arguments representing the fields and values to filter the blocks by.
 
         Returns:
-             list: A list of blocks that match the given filters, or an empty list if no blocks match.
+            list: A list of blocks that match the given filters, or an empty list if no blocks match.
         """
         conditions = []
         for key, value in filters.items():
@@ -630,9 +631,9 @@ class QuestionnaireSchema:
         """Get all blocks that match the given filters excluding the block given in block_id_to_filter.
 
         Example:
-             get_other_blocks(block_id_to_filter="list-collector", type="ListCollector", for_list="household")
-             will return all blocks of type ListCollector that have a for_list value of household except for
-             the block with id list-collector.
+            get_other_blocks(block_id_to_filter="list-collector", type="ListCollector", for_list="household")
+            will return all blocks of type ListCollector that have a for_list value of household except for
+            the block with id list-collector.
 
         Args:
             block_id_to_filter (str): The id of the block to exclude from the results.
@@ -665,7 +666,7 @@ class QuestionnaireSchema:
 
         Returns:
             bool: True if there is only one driving question for the list collector with the given list name,
-             False otherwise.
+            False otherwise.
         """
         return (
             len(
@@ -724,9 +725,8 @@ class QuestionnaireSchema:
             block_id (str): The ID of the list collector block.
 
         Returns:
-            dict: A dictionary where the keys are child block types
-                  ("add_block", "edit_block", "remove_block") and the values
-                  are lists of answer ids associated with each child block.
+            dict: A dictionary where the keys are child block types ("add_block", "edit_block", "remove_block") and the
+            values are lists of answer ids associated with each child block.
         """
         block = self.blocks_by_id[block_id]
         return {
@@ -849,7 +849,7 @@ class QuestionnaireSchema:
         return self.get_block(block_id)
 
     def _get_numeric_range_values(self, answer, answer_ranges):
-        """"Get the numeric range values for a given answer, including minimum and maximum values,
+        """ "Get the numeric range values for a given answer, including minimum and maximum values,
         decimal places and whether the minimum and maximum values are exclusive. If the minimum or maximum value
         is a reference to another answer, the reference will be resolved to the actual value of that answer using
         get_numeric_value_for_value_source.
@@ -1002,7 +1002,7 @@ class QuestionnaireSchema:
         value_source: Mapping[str, str],
     ) -> list[str]:
         """Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer
-         source or the list of included answer ids in the case of a calculated or grand calculated summary.
+        source or the list of included answer ids in the case of a calculated or grand calculated summary.
 
         Args:
             value_source: A dictionary representing the value source, containing a 'source' key indicating the type of
@@ -1064,7 +1064,7 @@ class QuestionnaireSchema:
 
     def get_parent_list_collector_for_add_block(self, block_id) -> str | None:
         """Get the parent list collector block id for a given add block id by iterating through the blocks
-         in each section and checking for a match with the add block id.
+        in each section and checking for a match with the add block id.
 
         Args:
             block_id (str): The id of the add block to get the parent list collector for.
@@ -1168,7 +1168,8 @@ class QuestionnaireSchema:
         return [block["id"] for block in self.blocks_by_section_id[current_section]]
 
     def get_section_id_for_block(self, block: Mapping) -> str | None:
-        """Get the section id for a given block by iterating through the blocks in each section and checking for a match with the given block.
+        """Get the section id for a given block by iterating through the blocks in each section and checking for
+        a match with the given block.
 
         Args:
             block: The block to get the section id for.

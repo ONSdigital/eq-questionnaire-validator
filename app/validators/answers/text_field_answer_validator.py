@@ -5,7 +5,6 @@ Classes:
     TextFieldAnswerValidator
 """
 
-
 import re
 from urllib.parse import urlparse
 
@@ -20,6 +19,7 @@ class TextFieldAnswerValidator(AnswerValidator):
         validate_suggestions_url
         is_suggestion_url_valid
     """
+
     INVALID_SUGGESTION_URL = "Suggestions url is invalid"
 
     def validate(self):
@@ -45,7 +45,7 @@ class TextFieldAnswerValidator(AnswerValidator):
         is a valid relative URL by matching it against a regular expression.
 
         Returns:
-           bool: True if the suggestions_url is a valid URL or a valid relative URL, False otherwise.
+            bool: True if the suggestions_url is a valid URL or a valid relative URL, False otherwise.
         """
         parsed_result = urlparse(self.answer["suggestions_url"])
 

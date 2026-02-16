@@ -14,6 +14,7 @@ class UnrelatedBlockValidator(BlockValidator):
         validate
         validate_answer_actions
     """
+
     ACTION_PARAMS_MISSING = "RemoveUnrelatedRelationships and AddUnrelatedRelationships actions must be present"
 
     def validate(self):

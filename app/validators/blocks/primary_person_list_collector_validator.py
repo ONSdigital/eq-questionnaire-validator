@@ -21,6 +21,7 @@ class PrimaryPersonListCollectorValidator(
         validate
         validate_primary_person_list_collector_answer_ids
     """
+
     REDIRECT_TO_LIST_ADD_BLOCK = "RedirectToListAddBlock"
     NO_REDIRECT_TO_LIST_ADD_BLOCK = f"{REDIRECT_TO_LIST_ADD_BLOCK} action not found"
     NO_RADIO_FOR_PRIMARY_PERSON_LIST_COLLECTOR = (

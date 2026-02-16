@@ -33,7 +33,7 @@ lint: lint-python
 
 .PHONY: ruff
 ruff: ## Run ruff linter code check.
-	poetry run ruff check --fix .
+	poetry run ruff check .
 
 .PHONY: black
 black: ## Run black linter code check.

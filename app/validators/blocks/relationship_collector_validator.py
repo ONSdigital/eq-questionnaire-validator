@@ -20,6 +20,7 @@ class RelationshipCollectorValidator(BlockValidator):
         validate_list_exists
         validate_unrelated_block
     """
+
     RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE = (
         "Only answers of type Relationship are valid in RelationshipCollector blocks."
     )

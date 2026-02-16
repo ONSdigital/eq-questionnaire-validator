@@ -18,6 +18,7 @@ Endpoints:
     - POST /validate: Validates a questionnaire schema provided in the request body (JSON).
     - GET /validate: Validates a questionnaire schema provided via a URL query parameter.
 """
+
 import json
 import logging
 import os
@@ -164,11 +165,11 @@ async def validate_schema_from_url(url=None):
 
 async def validate_schema(data):
     """Validates a questionnaire schema provided as JSON data. The JSON data is first validated using an AJV Schema
-     Validator service, and then the contents of the schema are validated using a Questionnaire Validator instance.
+    Validator service, and then the contents of the schema are validated using a Questionnaire Validator instance.
 
     Args:
-         data (str or dict): The JSON data containing the questionnaire schema to be validated.
-         This can be either a JSON string or a JSON object (dictionary).
+        data (str or dict): The JSON data containing the questionnaire schema to be validated. This can be either
+        a JSON string or a JSON object (dictionary).
 
     Returns:
         A response with status code 200 if the schema is valid, or a response with status code 400 containing error

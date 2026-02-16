@@ -90,11 +90,11 @@ def resolve_calculated_summary_source_json_type(
     in its calculation operation.
 
     Args:
-       block: The block containing the grand calculated summary source to resolve the JSON type for.
-       schema: The questionnaire schema to use for resolving the JSON type.
+        block: The block containing the grand calculated summary source to resolve the JSON type for.
+        schema: The questionnaire schema to use for resolving the JSON type.
 
     Returns:
-       The JSON type of the calculated summary source as a string.
+        The JSON type of the calculated summary source as a string.
     """
     if block["calculation"].get("answers_to_calculate"):
         answer_id = block["calculation"]["answers_to_calculate"][0]
@@ -113,11 +113,11 @@ def resolve_grand_calculated_summary_source_json_type(
     operation.
 
     Args:
-       block: The block containing the grand calculated summary source to resolve the JSON type for.
-       schema: The questionnaire schema to use for resolving the JSON type.
+        block: The block containing the grand calculated summary source to resolve the JSON type for.
+        schema: The questionnaire schema to use for resolving the JSON type.
 
     Returns:
-       The JSON type of the grand calculated summary source as a string.
+        The JSON type of the grand calculated summary source as a string.
     """
     first_calculated_summary_source = block["calculation"]["operation"]["+"][0]
     return resolve_value_source_json_type(first_calculated_summary_source, schema)

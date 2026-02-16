@@ -44,6 +44,7 @@ class QuestionnaireValidator(Validator):
         validate_list_references
         resolve_source_block_id
     """
+
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
@@ -51,7 +52,7 @@ class QuestionnaireValidator(Validator):
 
     def validate(self):
         """Validates the questionnaire schema by calling various validation methods for different aspects of the schema,
-         such as metadata, placeholders, duplicates and instantiating placeholder and section validators.
+        such as metadata, placeholders, duplicates and instantiating placeholder and section validators.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -103,8 +104,8 @@ class QuestionnaireValidator(Validator):
         sections of the questionnaire schema.
 
         Args:
-           section_ids (list): A list of section ids defined in the questionnaire schema.
-           required_section_ids (list): A list of required section ids specified in the questionnaire flow options.
+            section_ids (list): A list of section ids defined in the questionnaire schema.
+            required_section_ids (list): A list of required section ids specified in the questionnaire flow options.
         """
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
@@ -264,9 +265,9 @@ class QuestionnaireValidator(Validator):
         in the schema.
 
         Args:
-           section (dict): The section to validate, which may contain an "enabled" rule with answer references.
-           section_index (int): The index of the section in the questionnaire schema, used to determine the order of
-           sections for validation.
+            section (dict): The section to validate, which may contain an "enabled" rule with answer references.
+            section_index (int): The index of the section in the questionnaire schema, used to determine the order of
+            sections for validation.
         """
         identifier_references = get_object_containing_key(section, "source")
         for path, identifier_reference, _ in identifier_references:

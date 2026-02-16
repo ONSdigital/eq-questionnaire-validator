@@ -35,6 +35,7 @@ class NumberAnswerValidator(AnswerValidator):
         validate_numeric_range
         validate_referred_numeric_answer_decimals
     """
+
     DEFAULT_ON_MANDATORY = "Default answer is being used with a mandatory answer"
     MINIMUM_LESS_THAN_LIMIT = "Minimum value is less than system limit"
     MAXIMUM_GREATER_THAN_LIMIT = "Maximum value is greater than system limit"

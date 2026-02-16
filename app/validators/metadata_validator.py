@@ -4,6 +4,7 @@ in a questionnaire schema.
 Classes:
     MetadataValidator
 """
+
 from functools import cached_property
 
 from app.validators.questionnaire_schema import find_duplicates
@@ -24,6 +25,7 @@ class MetadataValidator(Validator):
         validate_duplicates
         validate_mandatory
     """
+
     MISSING_METADATA = "Metadata not specified in metadata field"
     DUPLICATE_METADATA = "Metadata contains duplicates"
 

@@ -3,12 +3,13 @@ are of the same type, and if they are of type "Unit" or "Currency", that they ha
 respectively.
 
 Classes:
-  CalculationBlockValidator
+    CalculationBlockValidator
 
 Functions:
     is_value_for_key_unique
 
 """
+
 from app.validators.blocks.block_validator import BlockValidator
 
 

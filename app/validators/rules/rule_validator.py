@@ -23,6 +23,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 class Operator:
     """Defines constants for supported rule operators used in questionnaire validation."""
+
     NOT = "not"
     AND = "and"
     OR = "or"
@@ -100,6 +101,7 @@ class RulesValidator(Validator):
         _validate_comparison_operator_argument_types
         _get_valid_types_for_operator
     """
+
     VALUE_DOESNT_EXIST_IN_ANSWER_OPTIONS = "Value doesn't exist in answer options"
     DATE_OPERATOR_REFERENCES_NON_DATE_ANSWER = "Date operator references non Date, MonthYearDate, or YearDate answer"
     COUNT_OPERATOR_REFERENCES_NON_CHECKBOX_ANSWER = "Count operator references non Checkbox answer"

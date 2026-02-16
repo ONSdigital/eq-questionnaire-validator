@@ -16,7 +16,7 @@ from app.validators.questionnaire_schema import (
 
 class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
     """Validator for grand calculated summary blocks. Inherits from CalculationBlockValidator and adds additional
-     validation.
+    validation.
 
     Attributes:
         block (dict): The block to be validated.
@@ -30,6 +30,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         _validate_static_calculated_summary_in_repeating_grand_calculated_summary
         _validate_repeating_calculated_summary_in_grand_calculated_summary
     """
+
     CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = (
         "Cannot have multiple calculated summaries referencing exactly the same answers in a grand calculated summary"
     )
@@ -61,7 +62,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
 
     def validate(self):
         """Validates the grand calculated summary block by performing several checks on the calculated summaries to be
-         calculated.
+        calculated.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.

@@ -5,6 +5,7 @@ ListCollectorDrivingQuestionValidator, to perform additional validations specifi
 Classes:
     BlockValidator
 """
+
 from typing import Mapping
 
 from app.validators.questionnaire_schema import (
@@ -28,6 +29,7 @@ class BlockValidator(Validator):
         validate_redirect_to_list_add_block_params
         validate_placeholder_answer_self_references
     """
+
     ACTION_PARAMS_MISSING = "Action params key missing"
     ACTION_PARAMS_SHOULDNT_EXIST = "Action params key should not exist"
     ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR = (

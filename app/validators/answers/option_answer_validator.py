@@ -34,6 +34,7 @@ class OptionAnswerValidator(AnswerValidator):
         _validate_dynamic_options_value_rules
         _validate_dynamic_options_answer_source
     """
+
     DUPLICATE_LABEL = "Duplicate label found"
     DUPLICATE_VALUE = "Duplicate value found"
     LIST_NAME_MISSING = "List name defined in action params does not exist"

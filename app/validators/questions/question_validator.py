@@ -22,6 +22,7 @@ class QuestionValidator(Validator):
         validate
         _validate_answer_labels
     """
+
     ANSWER_LABEL_MISSING_MULTIPLE_ANSWERS = "Answer label must be provided for questions with multiple answers"
     question: dict = {}
 

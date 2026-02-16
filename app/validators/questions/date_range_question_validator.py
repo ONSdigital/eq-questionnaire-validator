@@ -17,6 +17,7 @@ class DateRangeQuestionValidator(QuestionValidator):
         validate_range
         validate_period_limits
     """
+
     MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
     CANNOT_USE_DAYS = "Days can not be used in period_limit for yyyy-mm date range"
     CANNOT_USE_DAYS_MONTHS = "Days/Months can not be used in period_limit for yyyy date range"

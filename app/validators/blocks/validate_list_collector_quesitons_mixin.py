@@ -1,7 +1,7 @@
 """This module contains the ValidateListCollectorQuestionsMixin class, which provides validation methods for list
- collector questions.
+collector questions.
 
- Classes:
+Classes:
     ValidateListCollectorQuestionsMixin
 
 Functions:
@@ -31,6 +31,7 @@ class ValidateListCollectorQuestionsMixin(Validator):
         validate_collector_questions
         validate_same_name_answer_ids
     """
+
     MISSING_SAME_NAME_ANSWER_ID = "Invalid id in same_name_answer_ids"
 
     def __init__(self, *args, **kwargs):

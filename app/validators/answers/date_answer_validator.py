@@ -22,6 +22,7 @@ class DateAnswerValidator(AnswerValidator):
         get_relative_date
         _convert_to_datetime
     """
+
     INVALID_OFFSET_DATE = "The minimum offset date is greater than the maximum offset date"
 
     def validate(self):
@@ -29,7 +30,7 @@ class DateAnswerValidator(AnswerValidator):
         valid.
 
         Returns:
-           A list of error messages if validation fails, or an empty list if validation passes.
+            A list of error messages if validation fails, or an empty list if validation passes.
         """
         super().validate()
 
@@ -87,7 +88,7 @@ class DateAnswerValidator(AnswerValidator):
 
         Returns:
             A datetime object representing the relative date obtained by applying the offset to the given date string,
-             or None if the date string cannot be converted to a datetime object.
+            or None if the date string cannot be converted to a datetime object.
         """
         # Returns a relative date given an offset or period object
         if converted_to_datetime := cls._convert_to_datetime(date_string):

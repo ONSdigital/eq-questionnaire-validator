@@ -3,6 +3,7 @@
 Classes:
     ListCollectorDrivingQuestionValidator
 """
+
 from app.validators.blocks.block_validator import BlockValidator
 
 
@@ -12,6 +13,7 @@ class ListCollectorDrivingQuestionValidator(BlockValidator):
     Methods:
         validate
     """
+
     MULTIPLE_DRIVING_QUESTIONS_FOR_LIST = "The block_id should be the only ListCollectorDrivingQuestion for list"
 
     def validate(self):

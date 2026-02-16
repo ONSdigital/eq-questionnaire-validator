@@ -1,10 +1,11 @@
 """This module contains the CalculatedSummaryBlockValidator class, which is responsible for validating calculated
 summary blocks in a questionnaire schema. It inherits from the CalculationBlockValidator and adds additional validation
- specific to calculated summary blocks.
+specific to calculated summary blocks.
 
 Classes:
     CalculatedSummaryBlockValidator
 """
+
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 
 
@@ -21,6 +22,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         validate_answer_id_set_before_calculated_summary_block
         validate_answer_id_for_calculated_summary_not_in_different_section
     """
+
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )

@@ -6,7 +6,6 @@ Classes:
 
 """
 
-
 from collections import defaultdict
 
 from app import error_messages
@@ -58,6 +57,7 @@ class SectionValidator(Validator):
         _validate_multiple_list_collectors
 
     """
+
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
         self.section = schema_element
@@ -132,7 +132,8 @@ class SectionValidator(Validator):
 
         Args:
             skip_condition (dict): The skip condition containing the "when" clause to be validated.
-            origin_id (str): The identifier of the element that the skip condition is associated with, used for error context.
+            origin_id (str): The identifier of the element that the skip condition is associated with, used for error
+            context.
         """
         when_validator = RulesValidator(
             skip_condition["when"],
@@ -262,8 +263,8 @@ class SectionValidator(Validator):
         all variants.
 
         Args:
-           block (dict): The block containing the variants to be validated.
-           variants (list): The list of variants to be validated.
+            block (dict): The block containing the variants to be validated.
+            variants (list): The list of variants to be validated.
         """
         if not variants:
             return
@@ -488,7 +489,7 @@ class SectionValidator(Validator):
 
     def _validate_related_answer_has_label(self, answer_source):
         """Validates that the related answer defined in the summary item has a label, as only answers that support
-         labels can be used as related answers.
+        labels can be used as related answers.
 
         Args:
             answer_source (dict): The related answer source to be validated.

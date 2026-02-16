@@ -1,4 +1,5 @@
 """This module contains the PlaceholderValidator class, which validates that placeholders in a questionnaire schema."""
+
 import re
 
 from app import error_messages
@@ -24,6 +25,7 @@ class PlaceholderValidator(Validator):
         _validate_placeholder_previous_transforms
         validate_placeholder_transforms
     """
+
     PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
     FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = "Can't reference `previous_transform` in a first transform"
     NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = "`previous_transform` not referenced in chained transform"

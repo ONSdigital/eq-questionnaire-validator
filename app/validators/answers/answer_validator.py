@@ -23,6 +23,7 @@ class AnswerValidator(Validator):
         _validate_detail_answer_q_code
         _validate_checkbox_q_code
     """
+
     OPTION_MISSING_Q_CODE = "Option q_code must be provided"
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"

@@ -44,6 +44,7 @@ class ValueSourceValidator(Validator):
         _validate_source_identifier
         _validate_answer_source_selector_reference
     """
+
     COMPOSITE_ANSWER_INVALID = "Invalid composite answer"
     COMPOSITE_ANSWER_FIELD_INVALID = "Invalid field for composite answer"
     SOURCE_REFERENCE_INVALID = "Invalid {} source reference"
@@ -309,7 +310,7 @@ class ValueSourceValidator(Validator):
         valid_identifiers,
     ):
         """Detects & adds errors for invalid progress source references. Rules for valid progress source references are
-         as follows:
+        as follows:
         - Block must be before the current parent block.
         - Block must NOT be in a repeat section except if it is the current section.
         - Section must be before the current parent section.
