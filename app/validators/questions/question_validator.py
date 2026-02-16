@@ -14,6 +14,10 @@ class QuestionValidator(Validator):
     """Validator for questions in a questionnaire schema. It checks that if a question has multiple answers,
     and is not of type "MutuallyExclusive", then each answer must have a label.
 
+    Attributes:
+        schema_element (Mapping): The answer element to be validated.
+        schema (QuestionnaireSchema): The entire questionnaire schema.
+
     Methods:
         validate
         _validate_answer_labels

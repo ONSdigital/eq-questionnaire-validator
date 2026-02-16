@@ -1,3 +1,12 @@
+"""This module provides the `SectionValidator` class, which is responsible for validating sections in a questionnaire
+schema.
+
+Classes:
+    SectionValidator
+
+"""
+
+
 from collections import defaultdict
 
 from app import error_messages
@@ -15,6 +24,40 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class SectionValidator(Validator):
+    """Validator for sections in a questionnaire schema. It checks for various aspects of a section and instantiates
+    specific validators for some components, such as questions, answers, blocks, routing rules.
+
+    Attributes:
+        schema_element (Mapping): The answer element to be validated.
+        questionnaire_schema (QuestionnaireSchema): The entire questionnaire schema.
+
+    Methods:
+        validate
+        validate_repeat
+        validate_summary
+        validate_section_enabled
+        validate_list_exists
+        validate_skip_conditions
+        validate_value_sources
+        validate_groups
+        validate_blocks
+        validate_routing
+        validate_question
+        validate_variants
+        validate_repeating_blocks
+        validate_variant_fields
+        _get_question_variant_fields_sets
+        validate_number_of_list_collectors
+        has_list_summary_with_non_item_answers
+        has_multiple_list_collectors
+        validate_section_summary_items
+        _validate_related_answer_belong_to_list_collector
+        _validate_item_anchor_answer_id_belongs_to_list_collector
+        _validate_related_answer_has_label
+        _validate_answers
+        _validate_multiple_list_collectors
+
+    """
     def __init__(self, schema_element, questionnaire_schema):
         super().__init__(schema_element)
         self.section = schema_element
@@ -22,6 +65,11 @@ class SectionValidator(Validator):
         self.context["section_id"] = self.section["id"]
 
     def validate(self):
+        """Validates the section by calling various validation methods for different components of the section.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         self.validate_repeat()
         self.validate_value_sources()
         if self.errors:  # return when value sources are not valid
@@ -34,16 +82,17 @@ class SectionValidator(Validator):
         return self.errors
 
     def validate_repeat(self):
+        """Checks if repeat is defined in the section and if it is, validates that the list it references exists in
+        the questionnaire schema.
+        """
         section_repeat = self.section.get("repeat", None)
 
         if section_repeat:
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        """Summary validation.
-
-        Validates if there is a summary without items or there is no summary or there is a list summary
-        within a section then we allow multiple list collectors otherwise we disallow them.
+        """Validates if there is a summary without items or there is no summary or there is a list summary within
+        a section then we allow multiple list collectors otherwise we disallow them.
         """
         if not (section_summary := self.section.get("summary")):
             return
@@ -54,6 +103,9 @@ class SectionValidator(Validator):
                 self.validate_list_exists(item.get("for_list"))
 
     def validate_section_enabled(self):
+        """Validates if the section has an "enabled" condition and if it does, validates the rules defined in the "when"
+        clause of the "enabled" condition using RulesValidator.
+        """
         section_enabled = self.section.get("enabled", None)
         if not section_enabled:
             return
@@ -67,10 +119,21 @@ class SectionValidator(Validator):
         self.errors += when_validator.validate()
 
     def validate_list_exists(self, list_name):
+        """Checks if the list referenced in the section exists in the questionnaire schema.
+
+        Args:
+            list_name (str): The name of the list to check for existence in the questionnaire schema.
+        """
         if list_name not in self.questionnaire_schema.list_names:
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def validate_skip_conditions(self, skip_condition, origin_id):
+        """Validates the rules defined in the "when" clause of the skip condition using RulesValidator.
+
+        Args:
+            skip_condition (dict): The skip condition containing the "when" clause to be validated.
+            origin_id (str): The identifier of the element that the skip condition is associated with, used for error context.
+        """
         when_validator = RulesValidator(
             skip_condition["when"],
             origin_id,
@@ -79,6 +142,9 @@ class SectionValidator(Validator):
         self.errors += when_validator.validate()
 
     def validate_value_sources(self):
+        """Validates the value sources defined in the section by instantiating a ValueSourceValidator for each value
+        source.
+        """
         source_references = get_object_containing_key(self.section, "identifier")
         for json_path, source_reference, parent_block in source_references:
             if "source" in source_reference:
@@ -92,11 +158,20 @@ class SectionValidator(Validator):
                 self.errors += value_source_validator.validate()
 
     def validate_groups(self):
+        """Validates the groups defined in the section by iterating through each group and calling validate_routing and
+        validate_blocks for each group.
+        """
         for group in self.section["groups"]:
             self.validate_routing(group, group)
             self.validate_blocks(group["id"])
 
     def validate_blocks(self, group_id):
+        """Validates the blocks defined in the group by iterating through each block and calling the block validator
+        factory function to instantiate the appropriate block validator for each block.
+
+        Args:
+            group_id (str): The identifier of the group whose blocks are to be validated.
+        """
         group = self.questionnaire_schema.get_group(group_id)
 
         for block in group.get("blocks"):
@@ -110,6 +185,13 @@ class SectionValidator(Validator):
             self.validate_repeating_blocks(block)
 
     def validate_routing(self, schema_element, group):
+        """Validates the routing rules by calling the RoutingValidator if routing rules are defined in the
+        schema element. It also validates skip conditions if they are defined in the schema element.
+
+        Args:
+            schema_element (dict): The schema element (group or block) to validate routing for.
+            group (dict): The group that the schema element belongs to, used for error context in
+        """
         if "routing_rules" in schema_element:
             routing_validator = RoutingValidator(
                 routing_rules=schema_element["routing_rules"],
@@ -122,6 +204,13 @@ class SectionValidator(Validator):
             self.validate_skip_conditions(skip_conditions, schema_element["id"])
 
     def validate_question(self, block_or_variant):
+        """Validates the question defined in the block or variant by instantiating the appropriate question validator
+        based on the type of the question. Called by both validate_blocks and validate_variants to validate questions
+        in both question blocks and variants of questions.
+
+        Args:
+            block_or_variant (dict): The block or variant containing the question to be validated.
+        """
         question = block_or_variant.get("question")
 
         if question:
@@ -135,6 +224,12 @@ class SectionValidator(Validator):
             self._validate_answers(question)
 
     def validate_variants(self, block):
+        """Validates the variants defined in the block by checking that there are multiple and validates the rules
+        defined in the "when" clause of each variant using RulesValidator.
+
+        Args:
+            block (dict): The block containing the variants to be validated.
+        """
         question_variants = block.get("question_variants", [])
         content_variants = block.get("content_variants", [])
 
@@ -162,13 +257,13 @@ class SectionValidator(Validator):
         self.validate_variant_fields(block, question_variants)
 
     def validate_variant_fields(self, block, variants):
-        """Ensure consistency between relevant fields in variants.
+        """Validates that the variants defined in the block have consistent question and answer fields by comparing the
+        sets of question ids, question types, answer ids, answer types, default answers, and number of answers across
+        all variants.
 
-        - Ensure that question_ids are the same across all variants.
-        - Ensure answer_ids are the same across all variants.
-        - Ensure question types are the same across all variants.
-        - Ensure answer types are the same across all variants.
-        - Ensure default answers are the same across all variants.
+        Args:
+           block (dict): The block containing the variants to be validated.
+           variants (list): The list of variants to be validated.
         """
         if not variants:
             return
@@ -219,6 +314,12 @@ class SectionValidator(Validator):
                 )
 
     def validate_repeating_blocks(self, block):
+        """Validates the repeating blocks defined in the block by iterating through each repeating block and calling
+        the block validator factory function to instantiate the appropriate block validator for each repeating block.
+
+        Args:
+            block (dict): The block containing the repeating blocks to be validated.
+        """
         # Repeating blocks must be validated here instead of from ListCollectorValidator
         # as the latter cannot do standard block validation
         for repeating_block in block.get("repeating_blocks", []):
@@ -233,6 +334,15 @@ class SectionValidator(Validator):
 
     @staticmethod
     def _get_question_variant_fields_sets(variants):
+        """Helper method to extract sets of question ids, question types, answer ids, answer types, default answers,
+        and number of answers from the variants for comparison in validate_variant_fields.
+
+        Args:
+            variants (list): The list of variants to extract the fields from.
+
+        Returns:
+            results (dict): A dictionary containing sets of the above-mentioned fields for the variants.
+        """
         results = {
             "question_ids": set(),
             "question_types": set(),
@@ -275,15 +385,28 @@ class SectionValidator(Validator):
         return results
 
     def validate_number_of_list_collectors(self):
+        """Validates that if there is a list summary with non-item answers in the section and only one list collector
+        in that section.
+        """
         if self.has_list_summary_with_non_item_answers() and self.has_multiple_list_collectors():
             self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
 
     def has_list_summary_with_non_item_answers(self):
+        """Checks if there is a list summary with non-item answers in the section.
+
+        Returns:
+            bool: True if there is a list summary with non-item answers in the section, False otherwise.
+        """
         if summary := self.schema_element.get("summary"):
             show_non_item_answers = summary.get("show_non_item_answers")
             return summary.get("items") and show_non_item_answers
 
     def has_multiple_list_collectors(self):
+        """Checks if there are multiple list collectors in the section.
+
+        Returns:
+            bool: True if there are multiple list collectors in the section, False otherwise.
+        """
         list_collectors = []
         if groups := self.schema_element.get("groups"):
             for group in groups:
@@ -292,6 +415,10 @@ class SectionValidator(Validator):
         return len(list_collectors) > 1
 
     def validate_section_summary_items(self):
+        """Validates that the summary items defined in the section summary are correctly configured with respect to
+        the list. Useful for validating that the item anchor answer and related answers defined in the summary items
+        belong to the list.
+        """
         summary_items = self.schema_element.get("summary", {}).get("items", [])
         if not summary_items:
             return
@@ -325,6 +452,12 @@ class SectionValidator(Validator):
         answer_source,
         list_collector_answer_ids,
     ):
+        """Validates that the related answer defined in the summary item belongs to the list collector.
+
+        Args:
+            answer_source (dict): The related answer source to be validated.
+            list_collector_answer_ids (list): The list of answer ids that belong to the list collector.
+        """
         if answer_source["identifier"] not in list_collector_answer_ids:
             self.add_error(
                 error_messages.RELATED_ANSWERS_NOT_IN_LIST_COLLECTOR,
@@ -337,6 +470,13 @@ class SectionValidator(Validator):
         list_collector_answer_ids,
         list_name,
     ):
+        """Validates that the item anchor answer defined in the summary item belongs to the list collector.
+
+        Args:
+            anchor_answer_id (str): The item anchor answer id to be validated.
+            list_collector_answer_ids (list): The list of answer ids that belong to the list collector.
+            list_name (str): The name of the list that the summary item belongs to.
+        """
         if anchor_answer_id not in list_collector_answer_ids:
             self.add_error(
                 error_messages.ITEM_ANCHOR_ANSWER_ID_NOT_IN_LIST_COLLECTOR.format(
@@ -347,6 +487,12 @@ class SectionValidator(Validator):
             )
 
     def _validate_related_answer_has_label(self, answer_source):
+        """Validates that the related answer defined in the summary item has a label, as only answers that support
+         labels can be used as related answers.
+
+        Args:
+            answer_source (dict): The related answer source to be validated.
+        """
         answer = self.questionnaire_schema.get_answer(answer_source["identifier"])
         if not answer.get("label"):
             self.add_error(
@@ -357,6 +503,13 @@ class SectionValidator(Validator):
             )
 
     def _validate_answers(self, question):
+        """Validate each answer in the question by instantiating the appropriate answer validator based on the type of
+        the answer. Also validates that if the question has a summary, then each answer in the question is of an
+        allowed type.
+
+        Args:
+            question (dict): The question containing the answers to be validated.
+        """
         for answer in QuestionnaireSchema.get_answers_from_question(question):
             answer_validator = get_answer_validator(answer, self.questionnaire_schema)
 
@@ -374,6 +527,9 @@ class SectionValidator(Validator):
             self.errors += answer_validator.errors
 
     def _validate_multiple_list_collectors(self):
+        """Checks if multiple list collectors are present in the section when there is a list summary with non-item
+        answers and adds an error if there are.
+        """
         for_lists = []
 
         for block_id in self.questionnaire_schema.get_section_block_ids(
