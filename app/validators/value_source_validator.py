@@ -114,28 +114,18 @@ class ValueSourceValidator(Validator):
     def _get_valid_progress_value_source_block_identifiers(self):
         """Returns a set of block ids that are before the current parent block and not in a repeating section except for
             the current section.
-
-        Returns:
-            As described above.
         """
         return self.past_block_ids - set([self.current_block_id]) - self.block_ids_in_past_repeating_sections
 
     def _get_valid_progress_value_source_section_identifiers(self):
         """Returns a set of section ids that are before the current parent section and not in a repeating section except
             for the current section.
-
-        Returns:
-            As described above.
         """
         return self.past_section_ids - set([self.current_section_id]) - self.past_repeating_section_ids
 
     @cached_property
     def block_ids_in_past_repeating_sections(self) -> set[str]:
-        """Returns a set of block ids that are in repeating sections that are before the current parent section.
-
-        Returns:
-            As described above.
-        """
+        """Returns a set of block ids that are in repeating sections that are before the current parent section."""
         return {
             block["id"]
             for section_id in self.past_repeating_section_ids
@@ -144,11 +134,7 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def past_repeating_section_ids(self) -> set:
-        """Returns a set of repeating section ids that are before the current parent section.
-
-        Returns:
-            As described above.
-        """
+        """Returns a set of repeating section ids that are before the current parent section."""
         repeating_section_ids = set()
         for section_id in self.past_section_ids:
             if self.questionnaire_schema.is_repeating_section(section_id):
@@ -157,11 +143,7 @@ class ValueSourceValidator(Validator):
 
     @property
     def current_block_id(self) -> str | None:
-        """Returns the current block id if the value source is within a block, otherwise None.
-
-        Returns:
-            As described above.
-        """
+        """Returns the current block id if the value source is within a block, otherwise None."""
         if self.parent_block:
             return self.parent_block.get("id")
         return None
@@ -169,11 +151,7 @@ class ValueSourceValidator(Validator):
     @cached_property
     def future_block_ids(self) -> set[str]:
         """Returns a set of block ids that are after the current parent block or in the current section if the current
-        block is None.
-
-        Returns:
-            As described above.
-        """
+        block is None."""
         return (
             set(self.questionnaire_schema.block_ids_without_sub_blocks)
             - self.past_block_ids
@@ -183,9 +161,6 @@ class ValueSourceValidator(Validator):
     @cached_property
     def past_block_ids(self) -> set[str]:
         """Returns a set of block ids that are before the current parent block or in previous sections if the current.
-
-        Returns:
-            As described above.
         """
         if self.parent_block is None:
             # Progress value source is at section level.
@@ -208,29 +183,17 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def future_section_ids(self) -> set[str]:
-        """Returns a set of section ids that are after the current parent section.
-
-        Returns:
-            As described above.
-        """
+        """Returns a set of section ids that are after the current parent section."""
         return set(self.questionnaire_schema.section_ids) - self.past_section_ids - set([self.current_section_id])
 
     @cached_property
     def current_section_id(self) -> str | None:
-        """Returns the current section id if the value source is within a section, otherwise None.
-
-        Returns:
-            As described above.
-        """
+        """Returns the current section id if the value source is within a section, otherwise None."""
         return self.parent_section.get("id") if self.parent_section else None
 
     @cached_property
     def past_section_ids(self) -> set[str]:
-        """Returns a list of sections that are before the current parent section.
-
-        Returns:
-            As described above.
-        """
+        """Returns a list of sections that are before the current parent section."""
         ids = set()
         if self.parent_section and (parent_section_id := self.parent_section.get("id")):
             parent_section_index_in_section_list = self.questionnaire_schema.section_ids.index(parent_section_id)
