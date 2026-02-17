@@ -151,7 +151,8 @@ class ValueSourceValidator(Validator):
     @cached_property
     def future_block_ids(self) -> set[str]:
         """Return a set of block ids that are after the current parent block or in the current section if the current
-        block is None."""
+        block is None.
+        """
         return (
             set(self.questionnaire_schema.block_ids_without_sub_blocks)
             - self.past_block_ids
