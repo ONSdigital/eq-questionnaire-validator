@@ -32,7 +32,8 @@ class AnswerType(Enum):
 
 class AnswerOptionType(Enum):
     """Defines the types of answers with options that can be used in a validators and reflect the answer types in the
-    schema."""
+    schema.
+    """
 
     DROPDOWN = "Dropdown"
     CHECKBOX = "Checkbox"

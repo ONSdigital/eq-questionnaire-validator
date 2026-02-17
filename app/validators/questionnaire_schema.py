@@ -312,7 +312,7 @@ class QuestionnaireSchema:
 
     @cached_property
     def metadata_ids(self):
-        """ "Get a list of metadata ids used in the schema's top-level metadata field.
+        """Get a list of metadata ids used in the schema's top-level metadata field.
 
         Returns:
             list: A list of metadata ids or empty list.
@@ -849,7 +849,7 @@ class QuestionnaireSchema:
         return self.get_block(block_id)
 
     def _get_numeric_range_values(self, answer, answer_ranges):
-        """ "Get the numeric range values for a given answer, including minimum and maximum values,
+        """Get the numeric range values for a given answer, including minimum and maximum values,
         decimal places and whether the minimum and maximum values are exclusive. If the minimum or maximum value
         is a reference to another answer, the reference will be resolved to the actual value of that answer using
         get_numeric_value_for_value_source.
