@@ -72,7 +72,7 @@
                 "title": "Section complete",
                 "contents": [
                   {
-                    "description": "<p>You have successfully completed this section</p>"
+                    "description": "You have successfully completed this section"
                   }
                 ]
               }
