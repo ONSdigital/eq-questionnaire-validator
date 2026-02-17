@@ -58,7 +58,7 @@ class OptionAnswerValidator(AnswerValidator):
         self.block_ids = self.questionnaire_schema.block_ids
 
     def validate(self):
-        """Validates the answer by performing several checks on the options and dynamic options.
+        """Validate the answer by performing several checks on the options and dynamic options.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -90,7 +90,7 @@ class OptionAnswerValidator(AnswerValidator):
         return self.answer.get("dynamic_options", {})
 
     def validate_min_options(self):
-        """Validates that the answer has the minimum number of options required based on its type, and that if
+        """Validate that the answer has the minimum number of options required based on its type, and that if
         dynamic options are defined, they are not empty.
         """
         options_len = len(self.options)
@@ -109,7 +109,7 @@ class OptionAnswerValidator(AnswerValidator):
             )
 
     def validate_duplicate_options(self):
-        """Validates that there are no duplicate labels or values in the options defined on the answer. If an option
+        """Validate that there are no duplicate labels or values in the options defined on the answer. If an option
         label is a dictionary, it is assumed to be a placeholder and is not checked for duplicates.
         """
         labels = set()
@@ -130,7 +130,7 @@ class OptionAnswerValidator(AnswerValidator):
             values.add(option["value"])
 
     def validate_default_exists_in_options(self):
-        """Validates that if a default value is defined for the answer, it exists in the options defined for
+        """Validate that if a default value is defined for the answer, it exists in the options defined for
         the answer.
         """
         default_value = self.answer.get("default")
@@ -138,7 +138,7 @@ class OptionAnswerValidator(AnswerValidator):
             self.add_error(self.ANSWER_DEFAULT_MISSING, default_value=default_value)
 
     def validate_dynamic_options(self):
-        """Validates the dynamic options defined on the answer, if they exist, by checking the validity of the
+        """Validate the dynamic options defined on the answer, if they exist, by checking the validity of the
         answer.
         """
         if not self.dynamic_options:
@@ -148,7 +148,7 @@ class OptionAnswerValidator(AnswerValidator):
         self._validate_dynamic_options_value_rules()
 
     def _validate_dynamic_options_value_rules(self):
-        """Validates the rules defined in the dynamic options for the answer, if they exist, by using the
+        """Validate the rules defined in the dynamic options for the answer, if they exist, by using the
         RulesValidator.
         """
         for key_to_validate, allow_self_reference in [
@@ -164,7 +164,7 @@ class OptionAnswerValidator(AnswerValidator):
             self.errors += validator.validate()
 
     def _validate_dynamic_options_answer_source(self):
-        """Validates the answer source defined in the dynamic options for the answer, if it exists, by checking that if
+        """Validate the answer source defined in the dynamic options for the answer, if it exists, by checking that if
         the source is "answers", the identifier references an answer of type Checkbox, and that if the transform
         option-label-from-value is used, the identifier in the source matches the identifier in the transform.
         """

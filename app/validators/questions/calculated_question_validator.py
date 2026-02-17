@@ -32,7 +32,7 @@ class CalculatedQuestionValidator(QuestionValidator):
     ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
-        """Validates the calculated question by first calling validate_calculations. If there are no errors,
+        """Validate the calculated question by first calling validate_calculations. If there are no errors,
         it then validate_calculations_numeric_matching_answer_types.
         """
         super().validate()
@@ -48,7 +48,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         answer_id: str | None,
         answers_to_calculate: list[str],
     ) -> dict[str, str]:
-        """Gets the answer types for the answer_id and answers_to_calculate list.
+        """Get the answer types for the answer_id and answers_to_calculate list.
 
         Args:
             answer_id: The answer id of the calculation, if applicable.
@@ -64,7 +64,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         }
 
     def validate_calculations(self):
-        """Validates that any answer ids within the 'answer_to_group' list are existing answers within the question."""
+        """Validate that any answer ids within the 'answer_to_group' list are existing answers within the question."""
         if not self.schema:
             return
         answer_ids = [answer["id"] for answer in self.answers]
@@ -84,7 +84,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                         self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
 
     def _validate_answers_are_numeric(self, answer_types: dict[str, str]):
-        """Checks that the answers to calculate and any answer_id are of a number type.
+        """Check that the answers to calculate and any answer_id are of a number type.
 
         Args:
             answer_types: A dictionary of answer ids and their corresponding answer types.
@@ -99,7 +99,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 )
 
     def validate_calculations_numeric_matching_answer_types(self):
-        """Validates that source answer is of number type, and that the answers_to_calculate match that type."""
+        """Validate that source answer is of number type, and that the answers_to_calculate match that type."""
         if calculations := self.question.get("calculations"):
             for calculation in calculations:
                 if not (answer_id := calculation.get("answer_id")):
@@ -116,7 +116,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 self._validate_answers_are_same_numeric_type(answer_types)
 
     def _validate_answers_are_same_numeric_type(self, answer_types: dict[str, str]):
-        """Checks that the answers to calculate and any answer_id are all the same type.
+        """Check that the answers to calculate and any answer_id are all the same type.
 
         Args:
             answer_types: A dictionary of answer ids and their corresponding answer types.

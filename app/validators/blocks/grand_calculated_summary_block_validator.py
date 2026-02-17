@@ -61,7 +61,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         )
 
     def validate(self):
-        """Validates the grand calculated summary block by performing several checks on the calculated summaries to be
+        """Validate the grand calculated summary block by performing several checks on the calculated summaries to be
         calculated.
 
         Returns:
@@ -91,7 +91,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         return self.errors
 
     def validate_calculated_summary_ids_to_calculate(self):
-        """Validates that all calculated summary ids in the calculated_summaries_to_calculate list are valid.
+        """Validate that all calculated summary ids in the calculated_summaries_to_calculate list are valid.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -115,7 +115,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
     def validate_calculated_summary_is_before_grand_calculated_summary_block(
         self,
     ):
-        """Validates that all calculated summary blocks are before the grand calculated summary block in the
+        """Validate that all calculated summary blocks are before the grand calculated summary block in the
         questionnaire schema.
         """
         for calculated_summary_id in self.calculated_summaries_to_calculate:
@@ -129,7 +129,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 )
 
     def validate_calculated_summaries(self):
-        """Validates that any grand calculated summary is referencing a repeating calculated summary and repeating
+        """Validate that any grand calculated summary is referencing a repeating calculated summary and repeating
         grand calculated summary is referencing a static calculated summary.
         """
         if grand_calculated_summary_section := self.questionnaire_schema.get_parent_section_for_block(self.block["id"]):
@@ -158,7 +158,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         list_name: str,
         calculated_summary_id: str,
     ):
-        """Validates that the grand calculated summary is correctly referencing a static calculated summary.
+        """Validate that the grand calculated summary is correctly referencing a static calculated summary.
         If the grand calculated summary is repeating, and references a static calculated summary with repeating answers,
         this is only valid if the repeating answers are for a different list to the grand calculated summary.
 
@@ -186,7 +186,7 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         is_grand_calculated_summary_repeating: bool,
         grand_calculated_summary_section_id: str,
     ):
-        """Validates that the grand calculated summary is correctly referencing a repeating calculated summary.
+        """Validate that the grand calculated summary is correctly referencing a repeating calculated summary.
         If the grand calculated summary references a repeating calculated summary, this is only valid if the grand
         calculated summary is also repeating, or it is in the same repeating section as the repeating calculated
         summary it references.

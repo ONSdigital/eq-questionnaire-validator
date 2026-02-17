@@ -51,7 +51,7 @@ class QuestionnaireValidator(Validator):
         self.questionnaire_schema = QuestionnaireSchema(schema_element)
 
     def validate(self):
-        """Validates the questionnaire schema by calling various validation methods for different aspects of the schema,
+        """Validate the questionnaire schema by calling various validation methods for different aspects of the schema,
         such as metadata, placeholders, duplicates and instantiating placeholder and section validators.
 
         Returns:
@@ -100,7 +100,7 @@ class QuestionnaireValidator(Validator):
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
-        """Validates that all required section ids specified in the questionnaire flow options are defined in the
+        """Validate that all required section ids specified in the questionnaire flow options are defined in the
         sections of the questionnaire schema.
 
         Args:
@@ -115,14 +115,14 @@ class QuestionnaireValidator(Validator):
                 )
 
     def validate_duplicates(self):
-        """Validates that there are no duplicate ids in the questionnaire schema. Calls the find_duplicates function
+        """Validate that there are no duplicate ids in the questionnaire schema. Calls the find_duplicates function
         from the questionnaire_schema module.
         """
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error(error_messages.DUPLICATE_ID_FOUND, id=duplicate)
 
     def validate_referred_numeric_answer(self, answer, answer_ranges):
-        """Validates that if an answer has a minimum or maximum value that is a reference to another answer, then the
+        """Validate that if an answer has a minimum or maximum value that is a reference to another answer, then the
         answer being referred to must be of a numeric type and must appear earlier in the schema.
 
         Args:
@@ -143,7 +143,7 @@ class QuestionnaireValidator(Validator):
             )
 
     def validate_smart_quotes(self):
-        """Validates that there are no single and double "dumb" quotes in the translatable text fields of the
+        """Validate that there are no single and double "dumb" quotes in the translatable text fields of the
         questionnaire schema. Uses a regular expression to search for occurrences of dumb quotes in the text.
         """
         schema_object = SurveySchema(self.schema_element)
@@ -166,7 +166,7 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_white_spaces(self):
-        """Validates that there are no leading, trailing or multiple consecutive white spaces in the translatable text
+        """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
         of the questionnaire schema.
         """
         schema_object = SurveySchema(self.schema_element)
@@ -187,14 +187,14 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_introduction_block(self):
-        """Validates if introduction block is present when preview questions are enabled."""
+        """Validate if introduction block is present when preview questions are enabled."""
         blocks = self.questionnaire_schema.get_blocks()
         has_introduction_blocks = any(block["type"] == "Introduction" for block in blocks)
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_answer_references(self):
-        """Validates that all answer references in the questionnaire schema refer to answers that are defined earlier
+        """Validate that all answer references in the questionnaire schema refer to answers that are defined earlier
         in the schema.
         """
         # Handling blocks in group
@@ -206,7 +206,7 @@ class QuestionnaireValidator(Validator):
             self.validate_answer_source_section(section, index)
 
     def validate_answer_source_group(self, group):
-        """Validates that all answer references in a group refer to answers that are defined earlier in the schema.
+        """Validate that all answer references in a group refer to answers that are defined earlier in the schema.
 
         Args:
             group (dict): The group to validate, which may contain blocks with answer references.
@@ -291,7 +291,7 @@ class QuestionnaireValidator(Validator):
                             )
 
     def resolve_source_block_id(self, source_block: Mapping) -> str:
-        """Resolves the block id of a source block, handling cases where the source block is nested within a list
+        """Resolve the block id of a source block, handling cases where the source block is nested within a list
         collector.
 
         Args:

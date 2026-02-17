@@ -15,7 +15,7 @@ class PrimaryPersonListCollectorValidator(
     BlockValidator,
     ValidateListCollectorQuestionsMixin,
 ):
-    """Validates the primary person list collector block.
+    """Validate the primary person list collector block.
 
     Methods:
         validate
@@ -32,7 +32,7 @@ class PrimaryPersonListCollectorValidator(
     )
 
     def validate(self):
-        """Validates the primary person list collector block by invoking methods in specific order.
+        """Validate the primary person list collector block by invoking methods in specific order.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.

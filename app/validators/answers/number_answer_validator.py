@@ -2,7 +2,7 @@
 questionnaire schema.
 
 Classes:
-NumberAnswerValidator
+    NumberAnswerValidator
 """
 
 from decimal import Decimal
@@ -52,7 +52,7 @@ class NumberAnswerValidator(AnswerValidator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        """Validates the number answer by first calling the base validation, then performing additional checks specific
+        """Validate the number answer by first calling the base validation, then performing additional checks specific
         to number answers.
 
         Returns:
@@ -92,12 +92,12 @@ class NumberAnswerValidator(AnswerValidator):
         return self.errors
 
     def validate_mandatory_has_no_default(self):
-        """Validates that if the answer is marked as mandatory, it does not have a default value set."""
+        """Validate that if the answer is marked as mandatory, it does not have a default value set."""
         if self.answer.get("mandatory") and self.answer.get("default") is not None:
             self.add_error(self.DEFAULT_ON_MANDATORY)
 
     def validate_min_max_is_number(self):
-        """Validates that the minimum and maximum values, if present, are of a numeric type (int, float, Decimal) or
+        """Validate that the minimum and maximum values, if present, are of a numeric type (int, float, Decimal) or
         a value source that resolves to a numeric type.
         """
         for min_max in ["minimum", "maximum"]:
@@ -109,7 +109,7 @@ class NumberAnswerValidator(AnswerValidator):
                     self.add_error(self.MIN_OR_MAX_IS_NOT_NUMERIC)
 
     def validate_value_in_limits(self):
-        """Validates that the minimum and maximum values, if present, are within the defined limits."""
+        """Validate that the minimum and maximum values, if present, are within the defined limits."""
         min_value = self.answer.get("minimum", {}).get("value", 0)
         max_value = self.answer.get("maximum", {}).get("value", 0)
 
@@ -152,7 +152,7 @@ class NumberAnswerValidator(AnswerValidator):
                 )
 
     def are_decimal_places_valid(self):
-        """Checks that if the answer is calculated, it has 2 decimal places defined. Else defaults to True.
+        """Check that if the answer is calculated, it has 2 decimal places defined. Else defaults to True.
 
         Returns:
             bool: True if the answer is not calculated or if it is calculated and has 2.
@@ -162,12 +162,12 @@ class NumberAnswerValidator(AnswerValidator):
         return True
 
     def validate_decimal_places(self):
-        """Validates that if the answer is calculated, it has 2 decimal places defined."""
+        """Validate that if the answer is calculated, it has 2 decimal places defined."""
         if not self.are_decimal_places_valid():
             self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_decimals(self):
-        """Validates that the number of decimal places defined for the answer does not exceed the limit."""
+        """Validate that the number of decimal places defined for the answer does not exceed the limit."""
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > MAX_DECIMAL_PLACES:
             self.add_error(

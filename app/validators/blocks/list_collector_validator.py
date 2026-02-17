@@ -11,7 +11,7 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
-    """Validates a list collector block. Inherits from BlockValidator and ValidateListCollectorQuestionsMixin,
+    """Validate a list collector block. Inherits from BlockValidator and ValidateListCollectorQuestionsMixin,
     and adds additional validation specific to list collector blocks.
 
     Methods:
@@ -50,7 +50,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     )
 
     def validate(self):
-        """Validates the list collector block by invoking methods in specific order.
+        """Validate the list collector block by invoking methods in specific order.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -129,7 +129,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
 
     def validate_other_list_collectors(self):
-        """Validates other list collectors in the schema. It Checks other list collectors for non-unique answer id in
+        """Validate other list collectors in the schema. It Checks other list collectors for non-unique answer id in
         add block for any other same-named list collectors. It also checks for duplicate answer id in add, edit, or
         remove block for other different-named list collectors.
         """

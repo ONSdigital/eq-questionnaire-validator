@@ -337,7 +337,7 @@ class QuestionnaireSchema:
 
     @property
     def answers_with_context(self):
-        """Gets a dictionary of every answer in a questionnaire schema as answer ids mapped to answer with context
+        """Get a dictionary of every answer in a questionnaire schema as answer ids mapped to answer with context
         object pairs by calling 'capture_answers' to extract the answers. Updates the _answers_with_context instance
         attribute of the class.
 
@@ -372,7 +372,7 @@ class QuestionnaireSchema:
 
     @property
     def lists_with_context(self):
-        """Gets a dictionary of list ids mapped to the context (section_index, block_index), handles them diffently
+        """Get a dictionary of list ids mapped to the context (section_index, block_index), handles them diffently
         depending on which list collector type is used for that list.
 
         Returns:
@@ -1001,7 +1001,7 @@ class QuestionnaireSchema:
         self,
         value_source: Mapping[str, str],
     ) -> list[str]:
-        """Gets the list of answer_ids relating to the provided value source. Either the identifier if its an answer
+        """Get the list of answer_ids relating to the provided value source. Either the identifier if its an answer
         source or the list of included answer ids in the case of a calculated or grand calculated summary.
 
         Args:

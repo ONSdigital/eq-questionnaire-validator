@@ -12,7 +12,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 
 class TextFieldAnswerValidator(AnswerValidator):
-    """Validates answers of type "text_field" in a questionnaire schema.
+    """Validate answers of type "text_field" in a questionnaire schema.
 
     Methods:
         validate
@@ -23,7 +23,7 @@ class TextFieldAnswerValidator(AnswerValidator):
     INVALID_SUGGESTION_URL = "Suggestions url is invalid"
 
     def validate(self):
-        """Validates the text field answer by first invoking the parent validate method and then checking if the
+        """Validate the text field answer by first invoking the parent validate method and then checking if the
         suggestions.
 
         Returns:
@@ -34,14 +34,14 @@ class TextFieldAnswerValidator(AnswerValidator):
         return self.errors
 
     def validate_suggestions_url(self):
-        """Validates the suggestions_url property of the answer if it is present and by calling the
+        """Validate the suggestions_url property of the answer if it is present and by calling the
         is_suggestion_url_valid method to check if it is a valid.
         """
         if "suggestions_url" in self.answer and not self.is_suggestion_url_valid():
             self.add_error(self.INVALID_SUGGESTION_URL)
 
     def is_suggestion_url_valid(self):
-        """Checks if the suggestions_url is a valid URL by parsing it and ensuring it has a scheme and netloc, or if it
+        """Check if the suggestions_url is a valid URL by parsing it and ensuring it has a scheme and netloc, or if it
         is a valid relative URL by matching it against a regular expression.
 
         Returns:

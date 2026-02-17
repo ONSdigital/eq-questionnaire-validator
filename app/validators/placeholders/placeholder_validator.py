@@ -35,7 +35,7 @@ class PlaceholderValidator(Validator):
         self.questionnaire_schema = QuestionnaireSchema(element)
 
     def validate(self):
-        """Filters through all strings in the questionnaire schema that contain placeholders and invokes the main
+        """Filter through all strings in the questionnaire schema that contain placeholders and invokes the main
         validation on each placeholder object.
 
         Returns:
@@ -51,7 +51,7 @@ class PlaceholderValidator(Validator):
         return self.errors
 
     def validate_placeholder_object(self, placeholder_object):
-        """Adds all placeholders in text and text_plural objects and checks if any placeholder definitions differ.
+        """Add all placeholders in text and text_plural objects and checks if any placeholder definitions differ.
         It also checks that any transforms defined for the placeholders are valid.
 
         Args:
@@ -197,7 +197,7 @@ class PlaceholderValidator(Validator):
                 break
 
     def _validate_placeholder_previous_transforms(self, transforms):
-        """Validates that the first transform in a chain of transforms does not reference a previous transform,
+        """Validate that the first transform in a chain of transforms does not reference a previous transform,
         and that all subsequent transforms do reference a previous transform.
 
         Args:

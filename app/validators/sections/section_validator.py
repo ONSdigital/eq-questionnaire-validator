@@ -65,7 +65,7 @@ class SectionValidator(Validator):
         self.context["section_id"] = self.section["id"]
 
     def validate(self):
-        """Validates the section by calling various validation methods for different components of the section.
+        """Validate the section by calling various validation methods for different components of the section.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -82,7 +82,7 @@ class SectionValidator(Validator):
         return self.errors
 
     def validate_repeat(self):
-        """Checks if repeat is defined in the section and if it is, validates that the list it references exists in
+        """Check if repeat is defined in the section and if it is, validates that the list it references exists in
         the questionnaire schema.
         """
         section_repeat = self.section.get("repeat", None)
@@ -91,7 +91,7 @@ class SectionValidator(Validator):
             self.validate_list_exists(section_repeat["for_list"])
 
     def validate_summary(self):
-        """Validates if there is a summary without items or there is no summary or there is a list summary within
+        """Validate if there is a summary without items or there is no summary or there is a list summary within
         a section then we allow multiple list collectors otherwise we disallow them.
         """
         if not (section_summary := self.section.get("summary")):
@@ -103,7 +103,7 @@ class SectionValidator(Validator):
                 self.validate_list_exists(item.get("for_list"))
 
     def validate_section_enabled(self):
-        """Validates if the section has an "enabled" condition and if it does, validates the rules defined in the "when"
+        """Validate if the section has an "enabled" condition and if it does, validates the rules defined in the "when"
         clause of the "enabled" condition using RulesValidator.
         """
         section_enabled = self.section.get("enabled", None)
@@ -119,7 +119,7 @@ class SectionValidator(Validator):
         self.errors += when_validator.validate()
 
     def validate_list_exists(self, list_name):
-        """Checks if the list referenced in the section exists in the questionnaire schema.
+        """Check if the list referenced in the section exists in the questionnaire schema.
 
         Args:
             list_name (str): The name of the list to check for existence in the questionnaire schema.
@@ -128,7 +128,7 @@ class SectionValidator(Validator):
             self.add_error(error_messages.FOR_LIST_NEVER_POPULATED, list_name=list_name)
 
     def validate_skip_conditions(self, skip_condition, origin_id):
-        """Validates the rules defined in the "when" clause of the skip condition using RulesValidator.
+        """Validate the rules defined in the "when" clause of the skip condition using RulesValidator.
 
         Args:
             skip_condition (dict): The skip condition containing the "when" clause to be validated.
@@ -393,7 +393,7 @@ class SectionValidator(Validator):
             self.add_error(error_messages.MULTIPLE_LIST_COLLECTORS)
 
     def has_list_summary_with_non_item_answers(self):
-        """Checks if there is a list summary with non-item answers in the section.
+        """Check if there is a list summary with non-item answers in the section.
 
         Returns:
             bool: True if there is a list summary with non-item answers in the section, False otherwise.
@@ -403,7 +403,7 @@ class SectionValidator(Validator):
             return summary.get("items") and show_non_item_answers
 
     def has_multiple_list_collectors(self):
-        """Checks if there are multiple list collectors in the section.
+        """Check if there are multiple list collectors in the section.
 
         Returns:
             bool: True if there are multiple list collectors in the section, False otherwise.
@@ -528,7 +528,7 @@ class SectionValidator(Validator):
             self.errors += answer_validator.errors
 
     def _validate_multiple_list_collectors(self):
-        """Checks if multiple list collectors are present in the section when there is a list summary with non-item
+        """Check if multiple list collectors are present in the section when there is a list summary with non-item
         answers and adds an error if there are.
         """
         for_lists = []

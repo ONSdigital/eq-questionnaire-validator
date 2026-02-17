@@ -41,7 +41,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         )
 
     def validate(self):
-        """Validates the calculated summary block by performing several checks on the answers to be calculated.
+        """Validate the calculated summary block by performing several checks on the answers to be calculated.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -86,7 +86,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
             )
 
     def validate_answer_id_set_before_calculated_summary_block(self):
-        """Validates that answer ids in the answers_to_calculate list are set before the calculated summary block."""
+        """Validate that answer ids in the answers_to_calculate list are set before the calculated summary block."""
         for answer_id in self.answers_to_calculate:
             answer_id_block = self.questionnaire_schema.get_block_id_by_answer_id(
                 answer_id,
@@ -100,7 +100,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
                 )
 
     def validate_answer_id_for_calculated_summary_not_in_different_section(self):
-        """Validates that all answer ids in the answers_to_calculate list are in the same section as the calculated
+        """Validate that all answer ids in the answers_to_calculate list are in the same section as the calculated
         summary block.
         """
         answer_section_ids = {

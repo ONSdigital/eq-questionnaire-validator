@@ -41,7 +41,7 @@ class DateRangeQuestionValidator(QuestionValidator):
         return self.errors
 
     def validate_range(self):
-        """Validates that the minimum period is not greater than the maximum period in the period_limits object
+        """Validate that the minimum period is not greater than the maximum period in the period_limits object
         of a DateRange question. It uses an example date to calculate the minimum and maximum possible dates
         based on the provided period limits, and checks if the minimum date is greater than the maximum date.
         """

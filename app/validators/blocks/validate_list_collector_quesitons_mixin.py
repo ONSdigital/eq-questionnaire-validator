@@ -12,7 +12,7 @@ from app.validators.validator import Validator
 
 
 def _options_contain_action_type(options, expected_action):
-    """Checks if any option in the provided list of options contains an action of the expected type.
+    """Check if any option in the provided list of options contains an action of the expected type.
 
     Args:
         options (list): A list of option dictionaries to check.
@@ -44,7 +44,7 @@ class ValidateListCollectorQuestionsMixin(Validator):
         expected_action,
         missing_action_error,
     ):
-        """Validates that all collector questions have a Radio answer type and contain the expected action type
+        """Validate that all collector questions have a Radio answer type and contain the expected action type
         in their options.
 
         Args:
@@ -66,7 +66,7 @@ class ValidateListCollectorQuestionsMixin(Validator):
                     self.add_error(missing_action_error)
 
     def validate_same_name_answer_ids(self, answer_ids):
-        """Validates that all answer ids in the same_name_answer_ids list are present in the provided answer_ids list.
+        """Validate that all answer ids in the same_name_answer_ids list are present in the provided answer_ids list.
 
         Args:
             answer_ids (list): A list of answer ids to validate against the same_name_answer_ids list.

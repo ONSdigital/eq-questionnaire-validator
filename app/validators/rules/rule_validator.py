@@ -1,4 +1,4 @@
-"""Validates that rules are correctly formed and reference valid answer options and answer types.
+"""Validate that rules are correctly formed and reference valid answer options and answer types.
 
 Classes:
     Operator
@@ -22,7 +22,7 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class Operator:
-    """Defines constants for supported rule operators used in questionnaire validation."""
+    """Define constants for supported rule operators used in questionnaire validation."""
 
     NOT = "not"
     AND = "and"
@@ -77,7 +77,7 @@ SELF_REFERENCE_KEY = "self"
 
 
 class RulesValidator(Validator):
-    """Validates that rules are correctly formed and reference valid answer options and answer types.
+    """Validate that rules are correctly formed and reference valid answer options and answer types.
 
     Attributes:
         rules (dict): The rules to validate.
@@ -331,7 +331,7 @@ class RulesValidator(Validator):
         return TYPE_BOOLEAN
 
     def _get_argument_types_for_operator(self, arguments):
-        """Returns a list of argument types for the given operator arguments.
+        """Return a list of argument types for the given operator arguments.
 
         Args:
             arguments (list): The list of arguments to get the types for.
@@ -398,7 +398,7 @@ class RulesValidator(Validator):
 
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
-        """Returns a list of valid argument types for the given operator.
+        """Return a list of valid argument types for the given operator.
 
         Args:
             operator_name (str): The name of the operator to get valid argument types for.

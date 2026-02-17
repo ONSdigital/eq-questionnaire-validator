@@ -13,7 +13,7 @@ from app.validators.answers.answer_validator import AnswerValidator
 
 
 class DateAnswerValidator(AnswerValidator):
-    """Validates date answers in a questionnaire.
+    """Validate date answers in a questionnaire.
 
     Methods:
         validate
@@ -26,7 +26,7 @@ class DateAnswerValidator(AnswerValidator):
     INVALID_OFFSET_DATE = "The minimum offset date is greater than the maximum offset date"
 
     def validate(self):
-        """Validates the date answer by invoking the parent validate method and then checking if the offset dates are
+        """Validate the date answer by invoking the parent validate method and then checking if the offset dates are
         valid.
 
         Returns:
@@ -39,7 +39,7 @@ class DateAnswerValidator(AnswerValidator):
         return self.errors
 
     def is_offset_date_valid(self):
-        """Checks if the minimum offset date is less than the maximum offset date if both are present and have valid
+        """Check if the minimum offset date is less than the maximum offset date if both are present and have valid
         values.
 
         Returns:
@@ -60,7 +60,7 @@ class DateAnswerValidator(AnswerValidator):
         return True
 
     def _get_offset_date(self, answer_min_or_max):
-        """Returns the offset date for a given minimum or maximum answer object.
+        """Return the offset date for a given minimum or maximum answer object.
 
         Args:
             answer_min_or_max (dict): The minimum or maximum answer object containing the value and offset information.
@@ -101,7 +101,7 @@ class DateAnswerValidator(AnswerValidator):
 
     @staticmethod
     def _convert_to_datetime(value):
-        """Converts a date string to a datetime object. The date string can be in the format "YYYY-MM-DD" or YYYY-MM".
+        """Convert a date string to a datetime object. The date string can be in the format "YYYY-MM-DD" or YYYY-MM".
 
         Args:
             value (str): The date string to convert.

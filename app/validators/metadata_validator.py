@@ -34,7 +34,7 @@ class MetadataValidator(Validator):
         super().__init__(metadata)
 
     def validate(self):
-        """Validates the metadata field by checking for duplicate metadata names and ensuring that mandatory
+        """Validate the metadata field by checking for duplicate metadata names and ensuring that mandatory
         metadata.
         """
         self.validate_duplicates()
@@ -43,7 +43,7 @@ class MetadataValidator(Validator):
 
     @cached_property
     def metadata_names(self):
-        """Gets the metadata names from the metadata field.
+        """Get the metadata names from the metadata field.
 
         Returns:
             A list of metadata names from the metadata field.
@@ -51,14 +51,14 @@ class MetadataValidator(Validator):
         return [metadata_field["name"] for metadata_field in self.schema_element]
 
     def validate_duplicates(self):
-        """Validates that there are no duplicate metadata names in the metadata field."""
+        """Validate that there are no duplicate metadata names in the metadata field."""
         duplicates = find_duplicates(self.metadata_names)
 
         if len(duplicates) > 0:
             self.add_error(self.DUPLICATE_METADATA, duplicates=duplicates)
 
     def validate_mandatory(self):
-        """Validates that mandatory metadata fields are present in the metadata field.
+        """Validate that mandatory metadata fields are present in the metadata field.
         The required metadata fields depend on the theme of the questionnaire.
         """
         # user_id and period_id required downstream for receipting

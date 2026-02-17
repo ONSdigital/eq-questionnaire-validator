@@ -9,7 +9,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 
 class ListCollectorContentValidator(BlockValidator):
-    """Validates the list collector of type ListCollectorContent.
+    """Validate the list collector of type ListCollectorContent.
 
     Methods:
         validate
@@ -17,7 +17,7 @@ class ListCollectorContentValidator(BlockValidator):
     """
 
     def validate(self):
-        """Validates the list collector content block.
+        """Validate the list collector content block.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -27,7 +27,7 @@ class ListCollectorContentValidator(BlockValidator):
         return self.errors
 
     def validate_for_list_is_valid(self):
-        """Validates that the 'for_list' property is valid. Verifies that the list for the list collector content block
+        """Validate that the 'for_list' property is valid. Verifies that the list for the list collector content block
         is either populated by a standard list collector or in the supplementary data lists property so populated
         by supplementary data.
         """

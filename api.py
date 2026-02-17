@@ -164,7 +164,7 @@ async def validate_schema_from_url(url=None):
 
 
 async def validate_schema(data):
-    """Validates a questionnaire schema provided as JSON data. The JSON data is first validated using an AJV Schema
+    """Validate a questionnaire schema provided as JSON data. The JSON data is first validated using an AJV Schema
     Validator service, and then the contents of the schema are validated using a Questionnaire Validator instance.
 
     Args:
@@ -262,7 +262,7 @@ async def validate_schema(data):
 
 
 def is_url_allowed(parsed_url, domain):
-    """Checks if a URL is allowed based on its domain and repo owner. The function checks if the base URL
+    """Check if a URL is allowed based on its domain and repo owner. The function checks if the base URL
     (scheme + netloc) is in the ALLOWED_FULL_DOMAINS set and if the repo owner (the first part of the path)
     is in the ALLOWED_REPO_OWNERS set.
 

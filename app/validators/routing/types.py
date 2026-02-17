@@ -86,7 +86,7 @@ def resolve_calculated_summary_source_json_type(
     block: Mapping,
     schema: QuestionnaireSchema,
 ) -> str:
-    """Resolves the JSON type of calculated summary source by looking at the first answer to calculate or value source
+    """Resolve the JSON type of calculated summary source by looking at the first answer to calculate or value source
     in its calculation operation.
 
     Args:
@@ -109,7 +109,7 @@ def resolve_grand_calculated_summary_source_json_type(
     block: Mapping,
     schema: QuestionnaireSchema,
 ) -> str:
-    """Resolves the JSON type of grand calculated summary source by looking at the first value source in its calculation
+    """Resolve the JSON type of grand calculated summary source by looking at the first value source in its calculation
     operation.
 
     Args:
@@ -127,7 +127,7 @@ def resolve_metadata_source_json_type(
     identifier: str | None,
     schema: QuestionnaireSchema,
 ) -> str:
-    """Resolves the JSON type of metadata source based on its identifier and the questionnaire schema.
+    """Resolve the JSON type of metadata source based on its identifier and the questionnaire schema.
 
     Args:
         identifier: The identifier of the metadata source to resolve the JSON type for.
@@ -145,7 +145,7 @@ def resolve_metadata_source_json_type(
 
 
 def resolve_list_source_json_type(selector: str | None) -> str:
-    """Resolves the list selector to JSON type, if selector is None, defaults to array type else returns the
+    """Resolve the list selector to JSON type, if selector is None, defaults to array type else returns the
     corresponding JSON type for the selector.
 
     Args:
@@ -161,7 +161,7 @@ def resolve_value_source_json_type(
     value_source: dict[str, str],
     schema: QuestionnaireSchema,
 ) -> str:
-    """Resolves the JSON type of value source based on its source, identifier, and selector.
+    """Resolve the JSON type of value source based on its source, identifier, and selector.
 
     Args:
         value_source: A dictionary containing the source, identifier, and selector of the value source.
@@ -194,7 +194,7 @@ def resolve_value_source_json_type(
 
 
 def python_type_to_json_type(python_type: str) -> str:
-    """Converts a Python type to its corresponding JSON type.
+    """Convert a Python type to its corresponding JSON type.
 
     Args:
         python_type: The name of the Python type to convert.

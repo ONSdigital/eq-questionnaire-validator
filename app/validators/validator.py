@@ -1,4 +1,4 @@
-"""Defines the base class for all validators.
+"""Define the base class for all validators.
 
 Classes:
     Validator
@@ -28,7 +28,7 @@ class Validator(ABC):
         self.schema_element = schema_element or {}
 
     def add_error(self, message, **context):
-        """Adds an error message to the list of errors with optional context.
+        """Add an error message to the list of errors with optional context.
 
         Args:
             message (str): The error message to add.
@@ -37,7 +37,7 @@ class Validator(ABC):
         self.errors.append({"message": message, **context, **self.context})
 
     def validate(self) -> list[dict]:
-        """Validates the schema element and returns a list of errors. This base method is extended in all child classes.
+        """Validate the schema element and returns a list of errors. This base method is extended in all child classes.
 
         Each error is represented as a dictionary containing the error message and any relevant context information.
 

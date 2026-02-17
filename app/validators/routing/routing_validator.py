@@ -39,7 +39,7 @@ class RoutingValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        """Validates the routing rules by calling multiple helper methods to check for the presence of a single default
+        """Validate the routing rules by calling multiple helper methods to check for the presence of a single default
         rule, validate block and group targets.
 
         Returns:
@@ -62,7 +62,7 @@ class RoutingValidator(Validator):
         return self.errors
 
     def validate_routing_rules_has_single_default_rule(self, rules):
-        """Ensures that a set of routing rules contains one default rule, without a when clause.
+        """Ensure that a set of routing rules contains one default rule, without a when clause.
 
         Args:
             rules (list): A list of routing rules to be validated.
@@ -81,7 +81,7 @@ class RoutingValidator(Validator):
             )
 
     def validate_routing_rule_block_target(self, rule, block_ids):
-        """Ensures that a routing rule that routes to a block has a valid block target.
+        """Ensure that a routing rule that routes to a block has a valid block target.
 
         Args:
             rule (dict): The routing rule to be validated.
@@ -96,7 +96,7 @@ class RoutingValidator(Validator):
             )
 
     def validate_routing_rule_group_target(self, rule, group_ids):
-        """Ensures that a routing rule that routes to a group has a valid group target.
+        """Ensure that a routing rule that routes to a group has a valid group target.
 
         Args:
             rule (dict): The routing rule to be validated.
@@ -111,7 +111,7 @@ class RoutingValidator(Validator):
             )
 
     def validate_routing_rule(self, rule):
-        """Validates a routing rule by validating its "when" condition if it exists using the RulesValidator.
+        """Validate a routing rule by validating its "when" condition if it exists using the RulesValidator.
 
         Args:
             rule (dict): The routing rule to be validated.

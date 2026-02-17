@@ -22,7 +22,7 @@ class MutuallyExclusiveQuestionValidator(QuestionValidator):
     NON_EXCLUSIVE_RADIO_ANSWER = "Mutually exclusive questions cannot contain non exclusive Radio answers."
 
     def validate(self):
-        """Validates the mutually exclusive question by checking that it does not contain any mandatory answers,
+        """Validate the mutually exclusive question by checking that it does not contain any mandatory answers,
         that the last answer is of type Checkbox or Radio, and that there are no non-exclusive Radio answers.
 
         Returns:

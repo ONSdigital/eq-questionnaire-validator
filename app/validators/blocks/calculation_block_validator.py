@@ -14,7 +14,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 
 def is_value_for_key_unique(dictionaries: list[dict], key: str) -> bool:
-    """Checks if the value for a given key is the same across all dictionaries in the list.
+    """Check if the value for a given key is the same across all dictionaries in the list.
 
     Args:
         dictionaries: A list of dictionaries to check.
@@ -46,7 +46,7 @@ class CalculationBlockValidator(BlockValidator):
     ANSWERS_HAS_INVALID_ID = "Invalid answer id in block's answers_to_calculate"
 
     def get_answers(self, answers_to_calculate) -> list[dict] | None:
-        """Gets the answers for the given answer ids in the answers_to_calculate list. If any of the answer ids are
+        """Get the answers for the given answer ids in the answers_to_calculate list. If any of the answer ids are
         invalid, an error is added to the errors list.
 
         Args:
@@ -66,7 +66,7 @@ class CalculationBlockValidator(BlockValidator):
         return None
 
     def validate_answer_types(self, answers: list[dict]) -> None:
-        """Validates that all answers in the answers list are of the same type and that they have the same unit
+        """Validate that all answers in the answers list are of the same type and that they have the same unit
         or currency respectively.
 
         Args:

@@ -34,7 +34,7 @@ class QuestionValidator(Validator):
         self.schema = schema
 
     def validate(self):
-        """Validates the question by checking if it has multiple answers and is not of type "MutuallyExclusive".
+        """Validate the question by checking if it has multiple answers and is not of type "MutuallyExclusive".
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -45,7 +45,7 @@ class QuestionValidator(Validator):
         return self.errors
 
     def _validate_answer_labels(self):
-        """Validates that each answer in the question has a label if the question contains multiple answers and
+        """Validate that each answer in the question has a label if the question contains multiple answers and
         other conditions are not met (e.g. if the question has only one answer, or if the last answer is a Checkbox
         with only one option, then labels are not required).
         """

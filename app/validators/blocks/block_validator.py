@@ -60,7 +60,7 @@ class BlockValidator(Validator):
         return self.errors
 
     def validate_id_relationships_used_with_relationship_collector(self):
-        """Validates that if the block has an id of "relationships", it must be of type RelationshipCollector."""
+        """Validate that if the block has an id of "relationships", it must be of type RelationshipCollector."""
         if self.block["id"] == "relationships" and self.block["type"] != "RelationshipCollector":
             self.add_error(
                 self.ID_RELATIONSHIPS_NOT_USED_WITH_RELATIONSHIP_COLLECTOR,
@@ -68,7 +68,7 @@ class BlockValidator(Validator):
             )
 
     def validate_redirect_to_list_add_block_params(self):
-        """Validates that options with an action of type RedirectToListAddBlock have the correct presence of params
+        """Validate that options with an action of type RedirectToListAddBlock have the correct presence of params
         and is used in the correct block types.
         """
         questions = self.questionnaire_schema.get_all_questions_for_block(self.block)
@@ -98,7 +98,7 @@ class BlockValidator(Validator):
                             )
 
     def validate_placeholder_answer_self_references(self):
-        """Validates that placeholders in the block do not reference answers within the same block, which would create
+        """Validate that placeholders in the block do not reference answers within the same block, which would create
         a self-reference.
         """
         source_references = get_object_containing_key(self.block, "identifier")

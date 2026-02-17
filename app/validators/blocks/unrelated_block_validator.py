@@ -8,7 +8,7 @@ from app.validators.blocks.block_validator import BlockValidator
 
 
 class UnrelatedBlockValidator(BlockValidator):
-    """Validates blocks that contain unrelated relationship actions.
+    """Validate blocks that contain unrelated relationship actions.
 
     Methods:
         validate
@@ -18,7 +18,7 @@ class UnrelatedBlockValidator(BlockValidator):
     ACTION_PARAMS_MISSING = "RemoveUnrelatedRelationships and AddUnrelatedRelationships actions must be present"
 
     def validate(self):
-        """Validates the block by invoking the base validation and then validate_answer_actions.
+        """Validate the block by invoking the base validation and then validate_answer_actions.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -28,7 +28,7 @@ class UnrelatedBlockValidator(BlockValidator):
         return self.errors
 
     def validate_answer_actions(self):
-        """Ensures that both AddUnrelatedRelationships and RemoveUnrelatedRelationships actions are present in the
+        """Ensure that both AddUnrelatedRelationships and RemoveUnrelatedRelationships actions are present in the
         block's questions.
         """
         expected_actions = ["AddUnrelatedRelationships", "RemoveUnrelatedRelationships"]

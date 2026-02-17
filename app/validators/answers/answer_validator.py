@@ -43,7 +43,7 @@ class AnswerValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
-        """Validates the answer, calls q_code validation.
+        """Validate the answer, calls q_code validation.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.
@@ -53,7 +53,7 @@ class AnswerValidator(Validator):
         return self.errors
 
     def _validate_q_codes(self):
-        """Validates the presence and correctness of q_codes in the answer and its options based on the answer type
+        """Validate the presence and correctness of q_codes in the answer and its options based on the answer type
         and questionnaire schema data version.
         """
         is_confirmation_question = (
@@ -85,7 +85,7 @@ class AnswerValidator(Validator):
                 self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
 
     def _validate_options_q_code(self):
-        """Validates the presence and correctness of q_codes in the options of the answer based on the answer type.
+        """Validate the presence and correctness of q_codes in the options of the answer based on the answer type.
 
         Returns:
             any_options_missing_q_code (bool): A boolean indicating whether any option is missing a q_code
@@ -114,7 +114,7 @@ class AnswerValidator(Validator):
         return any_option_missing_q_code
 
     def _validate_detail_answer_q_code(self, option):
-        """Validates the presence and correctness of q_codes in the detail answer of an option based on the answer type.
+        """Validate the presence and correctness of q_codes in the detail answer of an option based on the answer type.
 
         Args:
             option (dict): The option dictionary to validate the detail answer q_code for.
@@ -135,7 +135,7 @@ class AnswerValidator(Validator):
                 )
 
     def _validate_checkbox_q_code(self):
-        """Validates the presence and correctness of q_codes in a checkbox answer and its options, ensuring mutual
+        """Validate the presence and correctness of q_codes in a checkbox answer and its options, ensuring mutual
         exclusivity.
         """
         has_answer_q_code = self.answer.get("q_code")
