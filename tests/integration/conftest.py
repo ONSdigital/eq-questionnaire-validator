@@ -1,8 +1,7 @@
 import json
 import os
-import urllib
-import urllib.error
 import urllib.request
+from urllib.error import URLError, HTTPError
 from pathlib import Path
 from typing import Mapping
 
@@ -71,7 +70,7 @@ def mock_urlopen_not_found(monkeypatch):
 
     def mock_urlopen(url):
         hdrs: Mapping[str, str] = {}
-        raise urllib.error.HTTPError(url=url, code=404, msg="Not Found", hdrs=hdrs, fp=None)  # type: ignore[arg-type]
+        raise HTTPError(url=url, code=404, msg="Not Found", hdrs=hdrs, fp=None)  # type: ignore[arg-type]
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
 
@@ -82,6 +81,6 @@ def mock_urlopen_failure(monkeypatch):
 
     def mock_urlopen(_url):
         error_msg = "Failed to reach the server"
-        raise urllib.error.URLError(error_msg)
+        raise URLError(error_msg)
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
