@@ -155,7 +155,9 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Spin up validator
-        run: make run-validator ${{ env.CLEAN_TAG }}
+        run: docker-compose -f docker-compose-schema-validator.yml up -d
+        env:
+          TAG: ${{ env.CLEAN_TAG }}
       - name: Check validator is running
         run: curl -f http://localhost:5001/status || exit 1
       - name: Check AJV validator is running
