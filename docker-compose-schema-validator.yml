@@ -1,13 +1,17 @@
 services:
   ajv-validator:
-    image: eq-questionnaire-validator-ajv:${TAG}-ajv
+    build:
+      context: ./
+      dockerfile: Dockerfile-ajv
     networks:
       - eq-schema
     ports:
       - 5002:5002
 
   py-validator:
-    image: eq-questionnaire-validator:${TAG}
+    build:
+      context: ./
+      dockerfile: Dockerfile
     networks:
       - eq-schema
     environment:
