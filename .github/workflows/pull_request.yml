@@ -136,58 +136,35 @@ jobs:
           echo "Pushing to GAR with tag $TAG-ajv"
           docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
 
-      - run: |
-          echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a
-        with:
-          version: 2.1.2
-          virtualenvs-create: true
-          virtualenvs-in-project: false
-          virtualenvs-path: ~/.virtualenvs
-
-      - name: Cache Poetry virtualenv
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        id: cache-virtualenv
-        with:
-          path: ~/.virtualenvs
-          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
-      - name: Install virtual environment
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: poetry install
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Spin up AJV validator
+      - name: Spin up AJV Validator
         run: |
           docker run -d -p 5002:5002 eq-questionnaire-validator-ajv:local
-      - name: Spin up validator
+      - name: Spin up Python Validator
         run: |
           docker run -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator eq-questionnaire-validator:local
-      - name: Check validator is running
+      - name: Check Python Validator is running
         run: |
           for i in {1..10}; do
             if curl -f http://localhost:5001/status; then
-              echo "Validator is up!"
+              echo "Python Validator is up!"
               exit 0
             fi
-            echo "Waiting for Validator... ($i/10)"
+            echo "Waiting for Python Validator... ($i/10)"
             sleep 3
           done
-          echo "Validator did not start in time"
+          echo "Python Validator did not start in time"
           docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:local")
           exit 1
-      - name: Check AJV validator is running
+      - name: Check AJV Validator is running
         run: |
           for i in {1..10}; do
             if curl -f http://localhost:5002/status; then
-              echo "AJV validator is up!"
+              echo "AJV Validator is up!"
               exit 0
             fi
-            echo "Waiting for AJV validator... ($i/10)"
+            echo "Waiting for AJV Validator... ($i/10)"
             sleep 3
           done
-          echo "AJV validator did not start in time"
+          echo "AJV Validator did not start in time"
           docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator-ajv:local")
           exit 1
