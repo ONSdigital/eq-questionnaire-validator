@@ -166,6 +166,8 @@ jobs:
         run: |
           docker run -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator eq-questionnaire-validator:$TAG
       - name: Check validator is running
-        run: curl -f http://localhost:5001/status || exit 1
+        run: curl -f http://localhost:5001/status
+      - name: Print validator logs
+        run: docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:$TAG")
       - name: Check AJV validator is running
         run: curl -f http://localhost:5002/status || exit 1
