@@ -136,13 +136,13 @@ jobs:
           echo "Pushing to GAR with tag $TAG-ajv"
           docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
 
-      - name: Spin up AJV Validator
+      - name: Spin Up AJV Validator
         run: |
           docker run -d -p 5002:5002 eq-questionnaire-validator-ajv:local
-      - name: Spin up Python Validator
+      - name: Spin Up Python Validator
         run: |
           docker run -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator eq-questionnaire-validator:local
-      - name: Check Python Validator is running
+      - name: Check Python Validator is Running
         run: |
           for i in {1..10}; do
             if curl -f http://localhost:5001/status; then
@@ -155,7 +155,7 @@ jobs:
           echo "Python Validator did not start in time"
           docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:local")
           exit 1
-      - name: Check AJV Validator is running
+      - name: Check AJV Validator is Running
         run: |
           for i in {1..10}; do
             if curl -f http://localhost:5002/status; then
@@ -167,4 +167,32 @@ jobs:
           done
           echo "AJV Validator did not start in time"
           docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator-ajv:local")
+          exit 1
+
+      - name: Check Valid Schema Validation
+        run: |
+          for i in {1..10}; do
+            result=$(curl -s -f "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json")
+            if [ "$result" = "{}" ]; then
+              echo "Validation returned empty JSON as expected!"
+              exit 0
+            fi
+            echo "Waiting for validation result... ($i/10)"
+            sleep 3
+          done
+          echo "Validation did not return empty JSON in time. Actual result: $result"
+          exit 1
+
+      - name: Check Invalid Schema Validation
+        run: |
+          for i in {1..10}; do
+            result=$(curl -s -f "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json")
+            if echo "$result" | grep -q 'error'; then
+              echo "Validation returned error as expected!"
+              exit 0
+            fi
+            echo "Waiting for invalid validation result... ($i/10)"
+            sleep 3
+          done
+          echo "Validation did not return error in time. Actual result: $result"
           exit 1
