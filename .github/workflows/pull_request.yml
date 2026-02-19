@@ -129,7 +129,7 @@ jobs:
           docker build -t ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv -f Dockerfile-ajv .
 
       - name: Build AJV Validator Image (local)
-        run: docker build -t eq-questionnaire-validator-ajv:$TAG-ajv -f Dockerfile-ajv .
+        run: docker build -t eq-questionnaire-validator-ajv:$TAG -f Dockerfile-ajv .
 
       - name: Push AJV Validator Image
         run: |
@@ -159,11 +159,12 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: poetry install
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
+      - name: Spin up AJV validator
+        run: |
+          docker run eq-questionnaire-validator-ajv:$TAG -d --name ajv-validator -p 5002:5002
       - name: Spin up validator
-        run: docker compose -f docker-compose-schema-validator.yml up -d
-        env:
-          TAG: ${{ env.TAG }}
+        run: |
+          docker run eq-questionnaire-validator:$TAG -d --name py-validator -e AJV_VALIDATOR_HOST=ajv-validator -p 5001:5000
       - name: Check validator is running
         run: curl -f http://localhost:5001/status || exit 1
       - name: Check AJV validator is running
