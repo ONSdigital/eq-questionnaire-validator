@@ -172,7 +172,7 @@ jobs:
       - name: Check Valid Schema Validation
         run: |
           for i in {1..10}; do
-            result=$(curl -s -f "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json")
+            result=$(curl -s -f "https://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json")
             if [ "$result" = "{}" ]; then
               echo "Validation returned empty JSON as expected!"
               exit 0
@@ -186,7 +186,7 @@ jobs:
       - name: Check Invalid Schema Validation
         run: |
           for i in {1..10}; do
-            result=$(curl -s -f "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json")
+            result=$(curl -s -f "https://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json")
             if echo "$result" | grep -q 'error'; then
               echo "Validation returned error as expected!"
               exit 0
