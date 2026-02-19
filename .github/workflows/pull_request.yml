@@ -161,10 +161,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Spin up AJV validator
         run: |
-          docker run eq-questionnaire-validator-ajv:$TAG -d --name ajv-validator -p 5002:5002
+          docker run eq-questionnaire-validator-ajv:$TAG -p 5002:5002
       - name: Spin up validator
         run: |
-          docker run eq-questionnaire-validator:$TAG -d --name py-validator -e AJV_VALIDATOR_HOST=ajv-validator -p 5001:5000
+          docker run eq-questionnaire-validator:$TAG -e AJV_VALIDATOR_HOST=ajv-validator -p 5001:5000
       - name: Check validator is running
         run: curl -f http://localhost:5001/status || exit 1
       - name: Check AJV validator is running
