@@ -155,7 +155,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Spin up validator
-        run: docker-compose -f docker-compose-schema-validator.yml up -d
+        run: docker compose -f docker-compose-schema-validator.yml up -d
         env:
           TAG: ${{ env.CLEAN_TAG }}
       - name: Check validator is running
