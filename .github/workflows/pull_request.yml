@@ -162,6 +162,8 @@ jobs:
 
       - name: Spin up validator
         run: docker compose -f docker-compose-schema-validator.yml up -d
+        env:
+          TAG: ${{ env.TAG }}
       - name: Check validator is running
         run: curl -f http://localhost:5001/status || exit 1
       - name: Check AJV validator is running
