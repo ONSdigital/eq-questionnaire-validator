@@ -3,7 +3,6 @@ import pytest
 import api
 
 
-# pylint: disable=duplicate-code
 @pytest.mark.usefixtures("mock_ajv_valid")
 def test_validate_no_json_data(client):
     """Test the /validate endpoint with no JSON data."""
