@@ -1,9 +1,9 @@
 import json
 import os
 import urllib.request
-from urllib.error import URLError, HTTPError
 from pathlib import Path
 from typing import Mapping
+from urllib.error import HTTPError, URLError
 
 import pytest
 from fastapi.testclient import TestClient
@@ -36,8 +36,8 @@ def load_valid_schema():
     schema_path = Path(__file__).parents[1] / "schemas" / "valid" / "test_valid_skip_conditions.json"
 
     if not schema_path.exists():
-        error_msg = f"Valid schema file not found: {schema_path}\nCheck if the file exists and the path is correct."
-        raise FileNotFoundError(error_msg)
+        error_message = f"Valid schema file not found: {schema_path}\nCheck if the file exists and the path is correct."
+        raise FileNotFoundError(error_message)
 
     with open(schema_path, encoding="utf-8") as f:
         return json.load(f)
@@ -58,8 +58,8 @@ def mock_ajv_down(monkeypatch):
     """Mock the AJV validation endpoint to simulate a down service."""
 
     def mock_post(*_args, **_kwargs):
-        error_msg = "AJV unavailable"
-        raise RequestException(error_msg)
+        error_message = "AJV unavailable"
+        raise RequestException(error_message)
 
     monkeypatch.setattr(api.requests, "post", mock_post)
 
@@ -69,8 +69,8 @@ def mock_urlopen_not_found(monkeypatch):
     """Mock the urlopen function to simulate a 404 Not Found error."""
 
     def mock_urlopen(url):
-        hdrs: Mapping[str, str] = {}
-        raise HTTPError(url=url, code=404, msg="Not Found", hdrs=hdrs, fp=None)  # type: ignore[arg-type]
+        headers: Mapping[str, str] = {}
+        raise HTTPError(url=url, code=404, msg="Not Found", hdrs=headers, fp=None)  # type: ignore[arg-type]
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
 
@@ -80,7 +80,7 @@ def mock_urlopen_failure(monkeypatch):
     """Mock the urlopen function to simulate a failure."""
 
     def mock_urlopen(_url):
-        error_msg = "Failed to reach the server"
-        raise URLError(error_msg)
+        error_message = "Failed to reach the server"
+        raise URLError(error_message)
 
     monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)

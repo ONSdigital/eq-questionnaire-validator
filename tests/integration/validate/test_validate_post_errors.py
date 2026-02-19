@@ -13,7 +13,7 @@ def test_validate_no_json_data(client):
 
 
 @pytest.mark.usefixtures("mock_ajv_valid")
-def test_validate_post_wrong_type(client):
+def test_validate_post_wrong_data_type(client):
     """Test the /validate endpoint with a wrong data type."""
     response = client.post("/validate", json=[7, 8, 9])
     assert response.status_code == 400

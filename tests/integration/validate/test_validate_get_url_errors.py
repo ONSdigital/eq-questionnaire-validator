@@ -1,7 +1,6 @@
 import pytest
 
 
-# pylint: disable=duplicate-code
 @pytest.mark.usefixtures("mock_urlopen_not_found")
 def test_validate_get_url_not_found(client):
     """Test the /validate endpoint with a URL that does not exist."""
