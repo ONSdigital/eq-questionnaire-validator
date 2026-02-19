@@ -17,7 +17,6 @@ from app.validators.questionnaire_validator import QuestionnaireValidator
 ALLOWED_FULL_DOMAINS = {
     "https://gist.githubusercontent.com/",
     "https://raw.githubusercontent.com/",
-    "http://raw.githubusercontent.com/",
 }
 
 ALLOWED_BASE_DOMAINS = {"onsdigital.uk", "localhost"}
