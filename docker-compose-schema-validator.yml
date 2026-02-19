@@ -1,13 +1,13 @@
 services:
   ajv-validator:
-    image: europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv:${TAG}
+    image: eq-questionnaire-validator-ajv:${TAG}-ajv
     networks:
       - eq-schema
     ports:
       - 5002:5002
 
   py-validator:
-    image: europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator:${TAG}
+    image: eq-questionnaire-validator:${TAG}
     networks:
       - eq-schema
     environment:
