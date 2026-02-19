@@ -165,9 +165,18 @@ jobs:
       - name: Spin up validator
         run: |
           docker run -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator eq-questionnaire-validator:$TAG
-      - name: Check validator is running
-        run: curl -f http://localhost:5001/status
-      - name: Print validator logs
-        run: docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:$TAG")
+      - name: Wait for validator to be ready
+        run: |
+          for i in {1..10}; do
+            if curl -f http://localhost:5001/status; then
+              echo "Validator is up!"
+              exit 0
+            fi
+            echo "Waiting for Validator... ($i/10)"
+            sleep 3
+          done
+          echo "Validator did not start in time"
+          docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:$TAG")
+          exit 1
       - name: Check AJV validator is running
         run: curl -f http://localhost:5002/status || exit 1
