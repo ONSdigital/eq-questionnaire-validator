@@ -63,3 +63,6 @@ megalint:  clean ## Run the MegaLinter.
 		-v /var/run/docker.sock:/var/run/docker.sock:rw \
 		-v $(shell pwd):/tmp/lint:rw \
 		ghcr.io/oxsecurity/megalinter-python:v9.1.0
+
+run-validator:
+	./scripts/run_validator.sh $(TAG)
