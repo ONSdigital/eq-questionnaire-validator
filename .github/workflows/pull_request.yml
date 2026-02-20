@@ -162,3 +162,13 @@ jobs:
           echo "AJV Validator did not start in time"
           docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator-ajv:local")
           exit 1
+      - name: Check Valid Schema Validation
+        run: |
+          result=$(curl -s "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json")
+          echo "Validation result: $result"
+          if [ "$result" = "{}" ]; then
+            echo "Validation returned empty JSON as expected!"
+            exit 0
+          fi
+          echo "Validation did not return empty JSON. Actual result: $result"
+          exit 1
