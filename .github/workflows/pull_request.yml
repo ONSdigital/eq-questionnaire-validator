@@ -176,3 +176,13 @@ jobs:
           fi
           echo "Validation did not return empty JSON. Actual result: $result"
           exit 1
+      - name: Check Invalid Schema Validation
+        run: |
+          result=$(curl -s "http://localhost:5001/validate?url=https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json")
+          echo "Validation result: $result"
+          if [[ "$result" == *"error"* ]]; then
+          echo "Validation returned error as expected!"
+          exit 0
+          fi
+          echo "Validation did not return error. Actual result: $result"
+          exit 1
