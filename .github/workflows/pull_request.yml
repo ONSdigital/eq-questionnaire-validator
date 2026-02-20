@@ -136,10 +136,10 @@ jobs:
 
       - name: Spin Up AJV Validator
         run: |
-          docker run --network validator-network -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
       - name: Spin Up Python Validator
         run: |
-          docker run --network validator-network -d -p 5001:5000 -e AJV_VALIDATOR_HOST=localhost ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG
+          docker run --network validator-network -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG
       - name: Check Python Validator is Running
         run: |
           for i in {1..10}; do
