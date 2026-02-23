@@ -36,7 +36,7 @@ npm install
 ### Install Poetry and Python dependencies
 
 ```shell
-curl -sSL https://install.python-poetry.org | python3 - --version 2.2.1
+curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
 poetry install
 ```
 
