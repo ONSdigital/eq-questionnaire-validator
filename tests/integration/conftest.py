@@ -2,7 +2,7 @@ import json
 import os
 import urllib.request
 from pathlib import Path
-from typing import Mapping
+from collections.abc import Mapping
 from urllib.error import HTTPError, URLError
 
 import pytest
