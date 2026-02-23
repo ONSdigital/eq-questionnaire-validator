@@ -19,6 +19,6 @@ function display_result {
     fi
 }
 
-py.test -n auto --cov-config=.coveragerc --cov --cov-report html 
+py.test -n auto --cov-config=.coveragerc --cov --cov-report html
 
 display_result $? 3 "Unit tests"
