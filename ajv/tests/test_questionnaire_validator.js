@@ -4,9 +4,7 @@ import chaiHttp from "chai-http";
 import app from "../app.js";
 import fs from "fs";
 // Configure chai
-// eslint-disable-next-line import/no-named-as-default-member
 chai.use(chaiHttp);
-// eslint-disable-next-line import/no-named-as-default-member
 chai.should();
 describe("AJV api status", () => {
   describe("GET /status", () => {
