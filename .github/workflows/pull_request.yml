@@ -131,8 +131,7 @@ jobs:
           docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
 
       - name: Create Validator Network
-        run: |
-          docker network create validator-network || true
+        run: docker network create validator-network
 
       - name: Spin Up AJV Validator
         run: |
