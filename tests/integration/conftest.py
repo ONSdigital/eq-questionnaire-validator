@@ -32,15 +32,10 @@ class MockResponse:
 
 @pytest.fixture
 def load_valid_schema():
-    """Load the valid JSON schema for testing."""
-    schema_path = Path(__file__).parents[1] / "schemas" / "valid" / "test_valid_skip_conditions.json"
-
-    if not schema_path.exists():
-        error_message = f"Valid schema file not found: {schema_path}\nCheck if the file exists and the path is correct."
-        raise FileNotFoundError(error_message)
-
-    with open(schema_path, encoding="utf-8") as f:
-        return json.load(f)
+    """Return a known-valid questionnaire schema used by integration tests."""
+    schema_path = Path("tests/schemas/valid/test_valid_skip_conditions.json")
+    with open(schema_path, encoding="utf-8") as schema_file:
+        return json.load(schema_file)
 
 
 @pytest.fixture
