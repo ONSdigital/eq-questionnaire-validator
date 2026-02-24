@@ -45,10 +45,13 @@ lint-python:
 test-unit:
 	poetry run ./scripts/run_tests_unit.sh
 
+test-integration:
+	poetry run ./scripts/run_tests_integration.sh
+
 test-ajv:
 	npm run test
 
-test: test-unit test-ajv
+test: test-unit test-ajv test-integration
 
 format: format-python
 	npm run format
