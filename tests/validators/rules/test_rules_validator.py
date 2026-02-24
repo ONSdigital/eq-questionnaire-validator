@@ -42,9 +42,7 @@ def validate_options(operator):
         "string-answer": ["Yes", "No"],
         "array-answer": ["Yes", "No"],
     }
-    errors = run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
-
-    return errors
+    return run_validator(operator=operator, questionnaire_schema=questionnaire_schema)
 
 
 @pytest.mark.parametrize(

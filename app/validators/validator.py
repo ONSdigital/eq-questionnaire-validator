@@ -1,8 +1,7 @@
-from abc import ABC
-from typing import Mapping
+from collections.abc import Mapping
 
 
-class Validator(ABC):
+class Validator:
     def __init__(self, schema_element: Mapping | None = None):
         self.errors: list[dict] = []
         self.context: dict[str, str] = {}

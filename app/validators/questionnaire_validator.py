@@ -1,5 +1,5 @@
 import re
-from typing import Mapping
+from collections.abc import Mapping
 
 from eq_translations.survey_schema import SurveySchema
 
@@ -110,7 +110,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for schema_text in values_to_check:
-                if schema_text and quote_regex.search(schema_text):
+                if isinstance(schema_text, str) and schema_text and quote_regex.search(schema_text):
                     self.add_error(
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
@@ -127,7 +127,7 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for text in values_to_check:
-                if text and (text.startswith(" ") or text.endswith(" ") or "  " in text):
+                if isinstance(text, str) and (text.startswith(" ") or text.endswith(" ") or "  " in text):
                     self.add_error(
                         error_messages.INVALID_WHITESPACE_FOUND,
                         pointer=translatable_item.pointer,
@@ -198,6 +198,7 @@ class QuestionnaireValidator(Validator):
                             ),
                             group_id=group["id"],
                         )
+        return None
 
     def validate_answer_source_section(self, section, section_index):
         identifier_references = get_object_containing_key(section, "source")
@@ -206,39 +207,52 @@ class QuestionnaireValidator(Validator):
                 source_block = self.questionnaire_schema.get_block_by_answer_id(
                     identifier_reference["identifier"],
                 )
-                if isinstance(source_block, dict) and (source_block_id := self.resolve_source_block_id(source_block)):
-                    if source_block_section_id := self.questionnaire_schema.get_section_id_for_block_id(
-                        source_block_id,
-                    ):
-                        source_block_section_index = self.questionnaire_schema.get_section_index_for_section_id(
+                if (
+                    isinstance(source_block, dict)
+                    and (source_block_id := self.resolve_source_block_id(source_block))
+                    and (
+                        source_block_section_id := self.questionnaire_schema.get_section_id_for_block_id(
+                            source_block_id,
+                        )
+                    )
+                    and (
+                        source_block_section_index := self.questionnaire_schema.get_section_index_for_section_id(
                             source_block_section_id,
                         )
-                        if source_block_section_index and section_index < source_block_section_index:
-                            self.add_error(
-                                error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
-                                    answer_id=identifier_reference["identifier"],
-                                ),
-                                section_id=section["id"],
-                            )
+                    )
+                    and section_index < source_block_section_index
+                ):
+                    self.add_error(
+                        error_messages.ANSWER_REFERENCED_BEFORE_EXISTS.format(
+                            answer_id=identifier_reference["identifier"],
+                        ),
+                        section_id=section["id"],
+                    )
 
     def resolve_source_block_id(self, source_block: Mapping) -> str:
         # Handling of source block nested (list collector's add-block)
-        if source_block["type"] == "ListAddQuestion":
-            if isinstance(source_block, dict) and (
+        if (
+            source_block["type"] == "ListAddQuestion"
+            and isinstance(source_block, dict)
+            and (
                 block_id := self.questionnaire_schema.get_parent_list_collector_for_add_block(
                     source_block["id"],
                 )
-            ):
-                return block_id
+            )
+        ):
+            return block_id
 
         # Handling of source block nested (list collector's repeating block)
-        if source_block["type"] == "ListRepeatingQuestion":
-            if isinstance(source_block, dict) and (
+        if (
+            source_block["type"] == "ListRepeatingQuestion"
+            and isinstance(source_block, dict)
+            and (
                 block_id := self.questionnaire_schema.get_parent_list_collector_for_repeating_block(
                     source_block["id"],
                 )
-            ):
-                return block_id
+            )
+        ):
+            return block_id
         # Handling of standard source block
         return source_block["id"]
 
