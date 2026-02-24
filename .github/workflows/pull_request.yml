@@ -168,7 +168,7 @@ jobs:
           exit 1
       - name: Check Valid Schema Validation
         run: |
-          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox.json"
+          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
           if [ "$result" = "{}" ]; then
@@ -179,7 +179,7 @@ jobs:
           exit 1
       - name: Check Invalid Schema Validation
         run: |
-          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
+          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
           if [[ "$result" == *"error"* ]]; then
