@@ -30,20 +30,23 @@ class MockResponse:
         return self.json_data
 
 
+def _load_schema(schema_path: Path):
+    with open(schema_path, encoding="utf-8") as schema_file:
+        return json.load(schema_file)
+
+
 @pytest.fixture
 def load_valid_schema():
     """Return a known-valid questionnaire schema used by integration tests."""
-    schema_path = Path("tests/schemas/valid/test_valid_skip_conditions.json")
-    with open(schema_path, encoding="utf-8") as schema_file:
-        return json.load(schema_file)
+    valid_path = Path("tests/schemas/valid/test_valid_skip_conditions.json")
+    return _load_schema(valid_path)
 
 
 @pytest.fixture
 def load_invalid_schema():
     """Return an invalid questionnaire schema used by integration tests."""
-    schema_path = Path("tests/schemas/invalid/test_invalid_relationship_list_doesnt_exist.json")
-    with open(schema_path, encoding="utf-8") as schema_file:
-        return json.load(schema_file)
+    invalid_path = Path("tests/schemas/invalid/test_invalid_relationship_list_doesnt_exist.json")
+    return _load_schema(invalid_path)
 
 
 @pytest.fixture
