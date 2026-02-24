@@ -88,7 +88,6 @@ jobs:
       - name: Running unit tests
         run: make test-unit
 
-<<<<<<< EQS-234-integration-test
   test-integration:
     permissions:
       contents: read
@@ -118,10 +117,7 @@ jobs:
       - name: Running integration tests
         run: make test-integration
 
-  docker-push:
-=======
   docker-push-and-check:
->>>>>>> main
     permissions:
       contents: read
       id-token: write
