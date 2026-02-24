@@ -1,7 +1,5 @@
 import pytest
 
-import api
-
 
 @pytest.mark.usefixtures("mock_ajv_valid")
 def test_validate_no_json_data(client):
@@ -28,20 +26,8 @@ def test_validate_post_ajv_unavailable_returns_503(client, load_valid_schema):
 
 
 @pytest.mark.usefixtures("mock_ajv_valid")
-def test_validate_post_questionnaire_validator_errors(client, load_valid_schema, monkeypatch):
+def test_validate_post_questionnaire_validator_errors(client, load_invalid_schema):
     """Test the /validate endpoint with questionnaire validator errors."""
-
-    class MockValidator:
-        """Mock validator for testing."""
-
-        def __init__(self, _json_data):
-            self.errors = [{"message": "questionnaire invalid"}]
-
-        def validate(self):
-            return None
-
-    monkeypatch.setattr(api, "QuestionnaireValidator", MockValidator)
-
-    response = client.post("/validate", json=load_valid_schema)
+    response = client.post("/validate", json=load_invalid_schema)
     assert response.status_code == 400
     assert "errors" in response.text

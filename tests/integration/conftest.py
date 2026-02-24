@@ -39,6 +39,14 @@ def load_valid_schema():
 
 
 @pytest.fixture
+def load_invalid_schema():
+    """Return an invalid questionnaire schema used by integration tests."""
+    schema_path = Path("tests/schemas/invalid/test_invalid_relationship_list_doesnt_exist.json")
+    with open(schema_path, encoding="utf-8") as schema_file:
+        return json.load(schema_file)
+
+
+@pytest.fixture
 def mock_ajv_valid(monkeypatch):
     """Mock the AJV validation endpoint to always return a valid response (no errors)."""
 
