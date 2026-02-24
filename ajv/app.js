@@ -30,7 +30,7 @@ const ajValidator = new Ajv2020({
 const schemas = globSync("schemas/**/*.json");
 schemas.forEach((currentSchema) => {
   if (!(currentSchema.valueOf() === "schemas/questionnaire_v1.json")) {
-    const data = fs.readFileSync(currentSchema); // eslint-disable-line security/detect-non-literal-fs-filename
+    const data = fs.readFileSync(currentSchema);
     debug("Adding schema: " + currentSchema);
     ajValidator.addSchema(JSON.parse(data)).compile(true);
   }
