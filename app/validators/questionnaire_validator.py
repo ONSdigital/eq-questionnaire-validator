@@ -1,3 +1,10 @@
+"""This module contains the top level questionnaire validator which is responsible for validating rules that apply to
+the whole questionnaire schema and calling the section validator for each section in the questionnaire.
+
+Classes:
+    QuestionnaireValidator
+"""
+
 import re
 from typing import Mapping
 
@@ -18,12 +25,38 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class QuestionnaireValidator(Validator):
+    """This is the top level validator for a questionnaire schema. It validates the generic questionnaire schema rules
+    (preview questions, smart quotes, spacing) and order of references but also calls the placeholder validator and
+    section validator for each section in the questionnaire.
+
+    Attributes:
+        schema_element (Mapping): The entire questionnaire schema to be validated.
+
+    Methods:
+        validate
+        validate_required_section_ids
+        validate_duplicates
+        validate_referred_numeric_answer
+        validate_smart_quotes
+        validate_white_spaces
+        validate_introduction_block
+        validate_answer_references
+        validate_list_references
+        resolve_source_block_id
+    """
+
     def __init__(self, schema_element=None):
         super().__init__(schema_element)
 
         self.questionnaire_schema = QuestionnaireSchema(schema_element)
 
     def validate(self):
+        """Validate the questionnaire schema by calling various validation methods for different aspects of the schema,
+        such as metadata, placeholders, duplicates and instantiating placeholder and section validators.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         metadata_validator = MetadataValidator(
             self.schema_element["metadata"],
             self.schema_element["theme"],
@@ -67,6 +100,13 @@ class QuestionnaireValidator(Validator):
         return self.errors
 
     def validate_required_section_ids(self, section_ids, required_section_ids):
+        """Validate that all required section ids specified in the questionnaire flow options are defined in the
+        sections of the questionnaire schema.
+
+        Args:
+            section_ids (list): A list of section ids defined in the questionnaire schema.
+            required_section_ids (list): A list of required section ids specified in the questionnaire flow options.
+        """
         for required_section_id in required_section_ids:
             if required_section_id not in section_ids:
                 self.add_error(
@@ -75,13 +115,19 @@ class QuestionnaireValidator(Validator):
                 )
 
     def validate_duplicates(self):
+        """Validate that there are no duplicate ids in the questionnaire schema. Calls the find_duplicates function
+        from the questionnaire_schema module.
+        """
         for duplicate in find_duplicates(self.questionnaire_schema.ids):
             self.add_error(error_messages.DUPLICATE_ID_FOUND, id=duplicate)
 
     def validate_referred_numeric_answer(self, answer, answer_ranges):
-        """Referred will only be in answer_ranges if it's of a numeric type and appears earlier in the schema.
+        """Validate that if an answer has a minimum or maximum value that is a reference to another answer, then the
+        answer being referred to must be of a numeric type and must appear earlier in the schema.
 
-        If either of the above is true then it will not have been given a value by _get_numeric_range_values
+        Args:
+            answer (dict): The answer being validated, which may contain minimum and maximum value references.
+            answer_ranges (dict): A dictionary mapping answer ids to their minimum and maximum value types.
         """
         if answer_ranges[answer.get("id")]["min"] is None:
             self.add_error(
@@ -97,6 +143,9 @@ class QuestionnaireValidator(Validator):
             )
 
     def validate_smart_quotes(self):
+        """Validate that there are no single and double "dumb" quotes in the translatable text fields of the
+        questionnaire schema. Uses a regular expression to search for occurrences of dumb quotes in the text.
+        """
         schema_object = SurveySchema(self.schema_element)
 
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
@@ -117,6 +166,9 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_white_spaces(self):
+        """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
+        of the questionnaire schema.
+        """
         schema_object = SurveySchema(self.schema_element)
 
         for translatable_item in schema_object.translatable_items:
@@ -135,12 +187,16 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_introduction_block(self):
+        """Validate if introduction block is present when preview questions are enabled."""
         blocks = self.questionnaire_schema.get_blocks()
         has_introduction_blocks = any(block["type"] == "Introduction" for block in blocks)
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
 
     def validate_answer_references(self):
+        """Validate that all answer references in the questionnaire schema refer to answers that are defined earlier
+        in the schema.
+        """
         # Handling blocks in group
         for group in self.questionnaire_schema.groups:
             self.validate_answer_source_group(group)
@@ -150,6 +206,11 @@ class QuestionnaireValidator(Validator):
             self.validate_answer_source_section(section, index)
 
     def validate_answer_source_group(self, group):
+        """Validate that all answer references in a group refer to answers that are defined earlier in the schema.
+
+        Args:
+            group (dict): The group to validate, which may contain blocks with answer references.
+        """
         identifier_references = get_object_containing_key(group, "source")
         for path, identifier_reference, parent_block in identifier_references:
             # set up default parent_block_id for later check (group or block level)
@@ -200,6 +261,14 @@ class QuestionnaireValidator(Validator):
                         )
 
     def validate_answer_source_section(self, section, section_index):
+        """Validates that all answer references in a section's "enabled" rule refer to answers that are defined earlier
+        in the schema.
+
+        Args:
+            section (dict): The section to validate, which may contain an "enabled" rule with answer references.
+            section_index (int): The index of the section in the questionnaire schema, used to determine the order of
+            sections for validation.
+        """
         identifier_references = get_object_containing_key(section, "source")
         for path, identifier_reference, _ in identifier_references:
             if "source" in identifier_reference and identifier_reference["source"] == "answers" and "enabled" in path:
@@ -222,6 +291,15 @@ class QuestionnaireValidator(Validator):
                             )
 
     def resolve_source_block_id(self, source_block: Mapping) -> str:
+        """Resolve the block id of a source block, handling cases where the source block is nested within a list
+        collector.
+
+        Args:
+            source_block: The block that is being referenced as a source for an answer.
+
+        Returns:
+            The block id of the source block, which is the id of a parent list collector.
+        """
         # Handling of source block nested (list collector's add-block)
         if source_block["type"] == "ListAddQuestion":
             if isinstance(source_block, dict) and (
@@ -243,6 +321,9 @@ class QuestionnaireValidator(Validator):
         return source_block["id"]
 
     def validate_list_references(self):
+        """Validates that all list references in the questionnaire schema refer to lists that are defined earlier in
+        the schema.
+        """
         lists_with_context = self.questionnaire_schema.lists_with_context
 
         # We need to keep track of section index for: common_definitions.json#/section_enabled

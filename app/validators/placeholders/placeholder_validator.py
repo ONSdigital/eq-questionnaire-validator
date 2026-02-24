@@ -1,3 +1,5 @@
+"""This module contains the PlaceholderValidator class, which validates that placeholders in a questionnaire schema."""
+
 import re
 
 from app import error_messages
@@ -11,6 +13,19 @@ from app.validators.value_source_validator import ValueSourceValidator
 
 
 class PlaceholderValidator(Validator):
+    """Validator for placeholders in a questionnaire schema.
+
+    Methods:
+        validate
+        validate_placeholder_object
+        validate_placeholder_answer_id
+        validate_option_label_from_value_placeholder
+        validate_answer_type_for_transform
+        validate_answer_and_transform_unit_match
+        _validate_placeholder_previous_transforms
+        validate_placeholder_transforms
+    """
+
     PLACEHOLDERS_DONT_MATCH_DEFINITIONS = "Placeholders don't match definitions."
     FIRST_TRANSFORM_CONTAINS_PREVIOUS_TRANSFORM_REF = "Can't reference `previous_transform` in a first transform"
     NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN = "`previous_transform` not referenced in chained transform"
@@ -20,6 +35,12 @@ class PlaceholderValidator(Validator):
         self.questionnaire_schema = QuestionnaireSchema(element)
 
     def validate(self):
+        """Filter through all strings in the questionnaire schema that contain placeholders and invokes the main
+        validation on each placeholder object.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         strings_with_placeholders = get_object_containing_key(
             self.schema_element,
             "placeholders",
@@ -30,6 +51,12 @@ class PlaceholderValidator(Validator):
         return self.errors
 
     def validate_placeholder_object(self, placeholder_object):
+        """Add all placeholders in text and text_plural objects and checks if any placeholder definitions differ.
+        It also checks that any transforms defined for the placeholders are valid.
+
+        Args:
+            placeholder_object (dict): The placeholder object to validate.
+        """
         placeholders_in_string = set()
         placeholder_regex = re.compile("{(.*?)}")
 
@@ -68,10 +95,9 @@ class PlaceholderValidator(Validator):
         """Validate answer_id exists in Answer Context.
 
         Args:
-            answer_id: Answer id of placeholder
+            answer_id (str): answer_id in placeholder
         Returns:
-            True  : if exists
-            False : if not exists
+            bool: True if answer_id exists in answers with context, False and adds error if not.
         """
         answers = self.questionnaire_schema.answers_with_context
         if answer_id not in answers:
@@ -110,6 +136,13 @@ class PlaceholderValidator(Validator):
         argument_name,
         transform_type,
     ):
+        """Validate the answer type for a given transform.
+
+        Args:
+            argument (dict): The argument to validate.
+            argument_name (str): The name of the argument.
+            transform_type (str): The type of the transform.
+        """
         if not (
             transform_type in ["format_unit", "format_percentage"]
             and argument_name == "value"
@@ -134,6 +167,12 @@ class PlaceholderValidator(Validator):
         )
 
     def validate_answer_and_transform_unit_match(self, *, arguments, transform_type):
+        """Validate that the unit of the answer matches the unit specified in the transform.
+
+        Args:
+            arguments (dict): The arguments of the transform.
+            transform_type (str): The type of the transform.
+        """
         if transform_type != "format_unit":
             return
 
@@ -158,6 +197,12 @@ class PlaceholderValidator(Validator):
                 break
 
     def _validate_placeholder_previous_transforms(self, transforms):
+        """Validate that the first transform in a chain of transforms does not reference a previous transform,
+        and that all subsequent transforms do reference a previous transform.
+
+        Args:
+            transforms (list): A list of transforms to validate.
+        """
         # First transform can't reference a previous transform
         first_transform = transforms[0]
         for argument_name in first_transform.get("arguments"):
@@ -177,6 +222,11 @@ class PlaceholderValidator(Validator):
                 self.add_error(self.NO_PREVIOUS_TRANSFORM_REF_IN_CHAIN)
 
     def validate_placeholder_transforms(self, transforms):
+        """Validate the transforms for a placeholder.
+
+        Args:
+            transforms (list): A list of transforms to validate.
+        """
         self._validate_placeholder_previous_transforms(transforms)
 
         for transform in transforms:

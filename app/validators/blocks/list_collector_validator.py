@@ -1,3 +1,9 @@
+"""This module contains the ListCollectorValidator class, parent for different types of list collector validators.
+
+Classes:
+    ListCollectorValidator
+"""
+
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
@@ -5,6 +11,17 @@ from app.validators.blocks.validate_list_collector_quesitons_mixin import (
 
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
+    """Validate a list collector block. Inherits from BlockValidator and ValidateListCollectorQuestionsMixin,
+    and adds additional validation specific to list collector blocks.
+
+    Methods:
+        validate
+        validate_list_collector_answer_ids
+        validate_not_for_supplementary_list
+        validate_other_list_collectors
+        validate_single_repeating_blocks_list_collector
+    """
+
     LIST_COLLECTOR_KEY_MISSING = "Missing key in ListCollector"
     REDIRECT_TO_LIST_ADD_BLOCK_ACTION = "RedirectToListAddBlock"
     REMOVE_LIST_ITEM_AND_ANSWERS_ACTION = "RemoveListItemAndAnswers"
@@ -33,6 +50,11 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     )
 
     def validate(self):
+        """Validate the list collector block by invoking methods in specific order.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
         try:
             collector_questions = self.questionnaire_schema.get_all_questions_for_block(
@@ -67,11 +89,13 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         return self.errors
 
     def validate_list_collector_answer_ids(self, block):
-        """Validate the answer_ids for the list collector block.
+        """Validate the answer_ids for the list collector block. It ensures that answer_ids on add and edit blocks match
+        between all blocks that populate a single list. It enforces the same answer_ids on add and edit sub-blocks.
+        Ensures that that child block answer_ids are not used elsewhere in the schema that's not another list
+        collector.
 
-        - Ensure that answer_ids on add and edit blocks match between all blocks that populate a single list.
-        - Enforce the same answer_ids on add and edit sub-blocks
-        - Ensure that that child block answer_ids are not used elsewhere in the schema that's not another list collector
+        Args:
+            block (dict): The list collector block to validate.
         """
         list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
             block["id"],
@@ -105,11 +129,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
             )
 
     def validate_other_list_collectors(self):
-        """Validate other list collectors in the schema.
-
-        Checks other list collectors for:
-        - non-unique answer id in add block for any other same-named list collectors
-        - duplicate answer id in add, edit, or remove block for other different-named list collectors
+        """Validate other list collectors in the schema. It Checks other list collectors for non-unique answer id in
+        add block for any other same-named list collectors. It also checks for duplicate answer id in add, edit, or
+        remove block for other different-named list collectors.
         """
         list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
             self.block["id"],
@@ -147,6 +169,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                         )
 
     def validate_single_repeating_blocks_list_collector(self):
+        """If a list collector block has repeating blocks, there can only be one list collector for that list."""
         if not self.block.get("repeating_blocks"):
             return
         list_name = self.block["for_list"]

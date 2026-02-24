@@ -1,14 +1,33 @@
+"""This module provides the `MutuallyExclusiveQuestionValidator` class, which is responsible for validating
+mutually exclusive questions.
+
+Classes:
+    MutuallyExclusiveQuestionValidator
+"""
+
 from app.answer_type import AnswerType
 from app.validators.questions.question_validator import QuestionValidator
 
 
 class MutuallyExclusiveQuestionValidator(QuestionValidator):
+    """Validator for mutually exclusive questions in a questionnaire schema.
+
+    Methods:
+        validate
+    """
+
     question: dict = {}
     MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = "MutuallyExclusive question type cannot contain mandatory answers."
     INVALID_EXCLUSIVE_ANSWER = "Mutually exclusive answer is not of type Checkbox or Radio."
     NON_EXCLUSIVE_RADIO_ANSWER = "Mutually exclusive questions cannot contain non exclusive Radio answers."
 
     def validate(self):
+        """Validate the mutually exclusive question by checking that it does not contain any mandatory answers,
+        that the last answer is of type Checkbox or Radio, and that there are no non-exclusive Radio answers.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
 
         if any(answer["mandatory"] is True for answer in self.answers):

@@ -6,6 +6,17 @@ from app.validators.answers.text_field_answer_validator import TextFieldAnswerVa
 
 
 def get_answer_validator(answer, questionnaire_schema):
+    """Factory function called by section validator to return the appropriate answer validator based on
+    the answer type. If answer type doesn't match keys in validators dict, it returns a default `AnswerValidator`.
+
+    Args:
+        answer (dict): The answer to be validated.
+        questionnaire_schema (QuestionnaireSchema): The entire questionnaire schema, which may be needed for certain
+        validators.
+
+    Returns:
+        An instance of an answer validator class that corresponds to the type of the answer.
+    """
     validators = {
         "TextField": TextFieldAnswerValidator,
         "Date": DateAnswerValidator,

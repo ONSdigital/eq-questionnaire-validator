@@ -1,9 +1,29 @@
+"""This module contains the base AnswerValidator class. All specific answer validators inherit from this class.
+
+Classes:
+    AnswerValidator
+"""
+
 from app.answer_type import AnswerType
 from app.validators.questionnaire_schema import get_object_containing_key
 from app.validators.validator import Validator
 
 
 class AnswerValidator(Validator):
+    """Base class for validating answers in a questionnaire schema.
+
+    Attributes:
+        schema_element (Mapping): The answer element to be validated.
+        questionnaire_schema (QuestionnaireSchema): The entire questionnaire schema.
+
+    Methods:
+        validate
+        _validate_q_codes
+        _validate_options_q_code
+        _validate_detail_answer_q_code
+        _validate_checkbox_q_code
+    """
+
     OPTION_MISSING_Q_CODE = "Option q_code must be provided"
     ANSWER_MISSING_Q_CODE = "Answer q_code must be provided"
     NON_CHECKBOX_OPTION_HAS_Q_CODE = "Non checkbox option cannot contain q_code"
@@ -23,11 +43,19 @@ class AnswerValidator(Validator):
         self.questionnaire_schema = questionnaire_schema
 
     def validate(self):
+        """Validate the answer, calls q_code validation.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         self._validate_q_codes()
 
         return self.errors
 
     def _validate_q_codes(self):
+        """Validate the presence and correctness of q_codes in the answer and its options based on the answer type
+        and questionnaire schema data version.
+        """
         is_confirmation_question = (
             self.questionnaire_schema.get_block_by_answer_id(self.answer_id).get("type") == "ConfirmationQuestion"
         )
@@ -57,6 +85,12 @@ class AnswerValidator(Validator):
                 self.add_error(self.OPTION_MISSING_Q_CODE, answer_id=self.answer["id"])
 
     def _validate_options_q_code(self):
+        """Validate the presence and correctness of q_codes in the options of the answer based on the answer type.
+
+        Returns:
+            any_options_missing_q_code (bool): A boolean indicating whether any option is missing a q_code
+            (relevant for checkbox answers).
+        """
         any_option_missing_q_code = False
         for option in self.answer.get("options", []):
             option_has_q_code = option.get("q_code")
@@ -80,6 +114,11 @@ class AnswerValidator(Validator):
         return any_option_missing_q_code
 
     def _validate_detail_answer_q_code(self, option):
+        """Validate the presence and correctness of q_codes in the detail answer of an option based on the answer type.
+
+        Args:
+            option (dict): The option dictionary to validate the detail answer q_code for.
+        """
         if detail_answer := option.get("detail_answer"):
             has_q_code = detail_answer.get("q_code")
             is_checkbox = self.answer_type is AnswerType.CHECKBOX
@@ -96,6 +135,9 @@ class AnswerValidator(Validator):
                 )
 
     def _validate_checkbox_q_code(self):
+        """Validate the presence and correctness of q_codes in a checkbox answer and its options, ensuring mutual
+        exclusivity.
+        """
         has_answer_q_code = self.answer.get("q_code")
         any_option_missing_q_code = self._validate_options_q_code()
 

@@ -1,3 +1,24 @@
+"""API for validating questionnaire schemas using an AJV Validator service and a Questionnaire Validator instance.
+This module provides a FastAPI application for validating questionnaire schemas using both an external AJV Validator
+service and internal QuestionnaireValidator logic. It exposes endpoints for health checks and schema validation,
+supporting both direct JSON payloads and remote schema URLs.
+
+
+Functions:
+    configure_logging
+    status
+    validate_schema_request_body
+    validate_schema_from_url
+    validate_schema
+    is_url_allowed
+    parse_json
+
+Endpoints:
+    - GET /status: Health check endpoint. Returns HTTP 200 if service is running.
+    - POST /validate: Validates a questionnaire schema provided in the request body (JSON).
+    - GET /validate: Validates a questionnaire schema provided via a URL query parameter.
+"""
+
 import json
 import logging
 import os
@@ -40,6 +61,11 @@ logger = structlog.get_logger()
 
 
 def configure_logging():
+    """Configures logging for the application using structlog. The log level is set based on the LOG_LEVEL environment
+    variable, with DEBUG level if LOG_LEVEL is set to "DEBUG" and "INFO" level otherwise. Logs are output to stdout,
+    while error logs are output to stderr. The log format is set to a human-readable console format in "DEBUG" mode and
+    JSON format in other modes.
+    """
     log_level = logging.DEBUG if os.getenv("LOG_LEVEL") == "DEBUG" else logging.INFO
 
     error_log_handler = logging.StreamHandler(sys.stderr)
@@ -68,17 +94,44 @@ configure_logging()
 
 @app.get("/status")
 async def status():
+    """Endpoint for checking if the service is running.
+
+    Returns:
+        A response with status code 200 if the service is running.
+    """
     return Response(status_code=200)
 
 
 @app.post("/validate")
 async def validate_schema_request_body(payload=Body(None)):
+    """Endpoint for validating a questionnaire schema provided in the request body as JSON.
+
+    Args:
+        payload: The JSON payload containing the questionnaire schema to be validated. This can be either a JSON string
+        or a JSON object (dictionary).
+
+    Returns:
+        A response with status code 200 if the schema is valid, or a response with status code 400 containing error
+        details if the schema is invalid. If the AJV Validator service is unavailable, returns a response with status
+        code 503.
+    """
     logger.info("Schema validation request received")
     return await validate_schema(payload)
 
 
 @app.get("/validate")
 async def validate_schema_from_url(url=None):
+    """Endpoint for validating a questionnaire schema provided in a URL query parameter. The URL is validated against
+    allowed domains and repo owners before the schema is loaded and validated.
+
+    Args:
+        url: The URL query parameter containing the URL of the questionnaire schema to be validated.
+
+    Returns:
+        A response with status code 200 if the schema is valid, or a response with status code 400 containing error
+        details if the schema is invalid or if the URL is not allowed. If the AJV Validator service is unavailable,
+        returns a response with status code 503.
+    """
     logger.debug("Attempting to validate schema from URL...", url=url)
     if url:
         parsed_url = urlparse(url)
@@ -111,6 +164,18 @@ async def validate_schema_from_url(url=None):
 
 
 async def validate_schema(data):
+    """Validate a questionnaire schema provided as JSON data. The JSON data is first validated using an AJV Schema
+    Validator service, and then the contents of the schema are validated using a Questionnaire Validator instance.
+
+    Args:
+        data (str or dict): The JSON data containing the questionnaire schema to be validated. This can be either
+        a JSON string or a JSON object (dictionary).
+
+    Returns:
+        A response with status code 200 if the schema is valid, or a response with status code 400 containing error
+        details if the schema is invalid. If the AJV Validator service is unavailable, returns a response with status
+        code 503.
+    """
     logger.debug("Attempting to validate schema from JSON data...")
     if data:
         if isinstance(data, dict):
@@ -197,6 +262,14 @@ async def validate_schema(data):
 
 
 def is_url_allowed(parsed_url, domain):
+    """Check if a URL is allowed based on its domain and repo owner. The function checks if the base URL
+    (scheme + netloc) is in the ALLOWED_FULL_DOMAINS set and if the repo owner (the first part of the path)
+    is in the ALLOWED_REPO_OWNERS set.
+
+    Args:
+        parsed_url (str): The URL to check, parsed using urlparse.
+        domain (str): The domain of the URL (netloc) to check against allowed base domains.
+    """
     logger.debug("Checking if domain is allowed...", domain=domain)
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
     repo_owner = parsed_url.path.split("/")[1] if len(parsed_url.path.split("/")) > 1 else ""
@@ -238,6 +311,15 @@ def is_url_allowed(parsed_url, domain):
 
 
 def parse_json(data):
+    """Parses JSON data from a string and returns the resulting object. If the data cannot be parsed as JSON,
+    returns a response with status code 400.
+
+    Args:
+        data (str): The JSON data to parse, provided as a string.
+
+    Returns:
+        The parsed JSON object if parsing is successful, or a response with status code 400 if parsing fails.
+    """
     try:
         processed_data = json.loads(data)
         logger.info("JSON data parsed successfully")
