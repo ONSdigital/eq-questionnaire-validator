@@ -88,7 +88,7 @@ jobs:
       - name: Running unit tests
         run: make test-unit
 
-  docker-push:
+  docker-push-and-check:
     permissions:
       contents: read
       id-token: write
@@ -108,6 +108,7 @@ jobs:
         run: |
           CLEAN_TAG=$(echo "${{ github.event.pull_request.head.ref  }}"  | tr / -)
           echo "TAG=$CLEAN_TAG" >> $GITHUB_ENV
+          echo "clean_tag=$CLEAN_TAG" >> $GITHUB_OUTPUT
 
       - name: Authenticate Docker with GAR
         run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}
@@ -128,3 +129,62 @@ jobs:
         run: |
           echo "Pushing to GAR with tag $TAG-ajv"
           docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+
+      - name: Create Validator Network
+        run: docker network create validator-network
+
+      - name: Spin Up AJV Validator
+        run: |
+          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+      - name: Spin Up Python Validator
+        run: >
+          docker run
+          --network validator-network -d -p 5001:5000 -e AJV_VALIDATOR_HOST=ajv-validator ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG
+      - name: Check Python Validator is Running
+        run: |
+          for i in {1..10}; do
+            if curl -f http://localhost:5001/status; then
+              echo "Python Validator is up!"
+              exit 0
+            fi
+            echo "Waiting for Python Validator... ($i/10)"
+            sleep 3
+          done
+          echo "Python Validator did not start in time"
+          docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator:local")
+          exit 1
+      - name: Check AJV Validator is Running
+        run: |
+          for i in {1..10}; do
+            if curl -f http://localhost:5002/status; then
+              echo "AJV Validator is up!"
+              exit 0
+            fi
+            echo "Waiting for AJV Validator... ($i/10)"
+            sleep 3
+          done
+          echo "AJV Validator did not start in time"
+          docker logs $(docker ps -aqf "ancestor=eq-questionnaire-validator-ajv:local")
+          exit 1
+      - name: Check Valid Schema Validation
+        run: |
+          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
+          result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
+          echo "Validation result: $result"
+          if [ "$result" = "{}" ]; then
+            echo "Validation successful, returned empty JSON as expected!"
+            exit 0
+          fi
+          echo "Unexpected validation error, did not return empty JSON. Actual result: $result"
+          exit 1
+      - name: Check Invalid Schema Validation
+        run: |
+          schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json"
+          result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
+          echo "Validation result: $result"
+          if [[ "$result" == *"error"* ]]; then
+          echo "Validation returned error as expected!"
+          exit 0
+          fi
+          echo "Validation did not return error. Actual result: $result"
+          exit 1
