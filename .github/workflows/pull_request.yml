@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     permissions:
@@ -106,9 +109,12 @@ jobs:
 
       - name: Tag
         run: |
-          CLEAN_TAG=$(echo "${{ github.event.pull_request.head.ref  }}"  | tr / -)
-          echo "TAG=$CLEAN_TAG" >> $GITHUB_ENV
-          echo "clean_tag=$CLEAN_TAG" >> $GITHUB_OUTPUT
+          # Use github.ref_name and sanitize to allow only alphanumerics, dashes, and underscores
+          SAFE_TAG="${GITHUB_REF_NAME//[^a-zA-Z0-9_-]/-}"
+          echo "TAG=$SAFE_TAG" >> $GITHUB_ENV
+          echo "clean_tag=$SAFE_TAG" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
 
       - name: Authenticate Docker with GAR
         run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}

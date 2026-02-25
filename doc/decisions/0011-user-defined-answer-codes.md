@@ -14,7 +14,8 @@ which supports more complex features such as repeating answers.
 
 ## Proposal
 
-Introduce a new optional `answer_codes` top-level property to the schema JSON, which maps the answers to a user-defined code.
+Introduce a new optional `answer_codes` top-level property to the schema JSON,
+which maps the answers to a user-defined code.
 
 - `answer_codes` is an array of objects representing the answer ID and, optionally,
 the answer value to a user-defined code relationship.
