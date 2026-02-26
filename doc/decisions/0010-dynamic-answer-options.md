@@ -39,7 +39,8 @@ Properties and uses:
     will be used for
         [`options.*.label`](https://github.com/ONSdigital/eq-questionnaire-validator/blob/main/schemas/answers/definitions.json#L14-L16).
         If omitted, labels will use `dynamic_options.values` as the source.
-    - Structure to follow the new Rules structure allowing for the chaining of operators. All transforms are new [value operators](https://github.com/ONSdigital/eq-questionnaire-validator/tree/main/schemas/rules/operators/value).
+    - Structure to follow the new Rules structure allowing for the chaining of operators.
+        All transforms are new [value operators](https://github.com/ONSdigital/eq-questionnaire-validator/tree/main/schemas/rules/operators/value).
     - The reference to `self` within a transform refers to the value of the current iteration.
         Some mechanism is needed to identify the value of the current iteration and pass it to transforms.
         For example, in the JSON Logic lib, this is done using `var.""` however,
