@@ -7,7 +7,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
-fastapi = "^0.133.0"
+fastapi = "^0.133.1"
 jsonpointer = "^3.0.0"
 structlog = "^25.5.0"
 python-dateutil = "^2.9.0.post0"
@@ -16,7 +16,7 @@ uvicorn = "^0.41.0"
 eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.10.3"}
 gunicorn = "^25.1.0"
 referencing = "^0.37.0"
-jsonpath-ng = "^1.7.0"
+jsonpath-ng = "^1.8.0"
 starlette = "^0.52.1"
 
 [tool.poetry.group.dev.dependencies]
