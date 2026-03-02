@@ -3,7 +3,6 @@ from app.validators.questions.question_validator import QuestionValidator
 
 
 class MutuallyExclusiveQuestionValidator(QuestionValidator):
-    question: dict = {}
     MUTUALLY_EXCLUSIVE_CONTAINS_MANDATORY = "MutuallyExclusive question type cannot contain mandatory answers."
     INVALID_EXCLUSIVE_ANSWER = "Mutually exclusive answer is not of type Checkbox or Radio."
     NON_EXCLUSIVE_RADIO_ANSWER = "Mutually exclusive questions cannot contain non exclusive Radio answers."

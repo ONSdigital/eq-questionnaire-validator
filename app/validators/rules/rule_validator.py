@@ -139,7 +139,7 @@ class RulesValidator(Validator):
 
         The second argument is currently not validated here as it can currently only be `date-range`
         """
-        function_to_map_over_arguments = list(operator["map"][0].values())[0]
+        function_to_map_over_arguments = next(iter(operator["map"][0].values()))
         if SELF_REFERENCE_KEY in function_to_map_over_arguments:
             return
 
@@ -242,7 +242,7 @@ class RulesValidator(Validator):
         operator_name = next(iter(rule))
         argument_types = self._get_argument_types_for_operator(rule[operator_name])
 
-        if operator_name in COMPARISON_OPERATORS + ARRAY_OPERATORS + NUMERIC_OPERATORS:
+        if operator_name in [*COMPARISON_OPERATORS, *ARRAY_OPERATORS, *NUMERIC_OPERATORS]:
             self._validate_comparison_operator_argument_types(
                 rule,
                 operator_name,
@@ -250,7 +250,7 @@ class RulesValidator(Validator):
             )
 
         if (
-            operator_name in COMPARISON_OPERATORS + [Operator.ALL_IN, Operator.ANY_IN]
+            operator_name in [*COMPARISON_OPERATORS, Operator.ALL_IN, Operator.ANY_IN]
             and TYPE_NULL not in argument_types
         ):
             self._validate_argument_types_match(rule, argument_types)
@@ -312,8 +312,9 @@ class RulesValidator(Validator):
 
     @staticmethod
     def _get_valid_types_for_operator(operator_name, argument_position):
+        result = None
         if operator_name in [Operator.EQUAL, Operator.NOT_EQUAL]:
-            return [
+            result = [
                 TYPE_DATE,
                 TYPE_NUMBER,
                 TYPE_STRING,
@@ -321,22 +322,19 @@ class RulesValidator(Validator):
                 TYPE_ARRAY,
                 TYPE_BOOLEAN,
             ]
-
-        if operator_name in [
+        elif operator_name in [
             Operator.LESS_THAN,
             Operator.LESS_THAN_OR_EQUAL,
             Operator.GREATER_THAN,
             Operator.GREATER_THAN_OR_EQUAL,
         ]:
-            return [TYPE_DATE, TYPE_NUMBER]
-
-        if operator_name in [Operator.ANY_IN, Operator.ALL_IN]:
-            return [TYPE_ARRAY]
-
-        if operator_name == Operator.IN:
-            return [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
-        if operator_name == Operator.COUNT:
-            return [TYPE_ARRAY]
-
-        if operator_name == Operator.SUM:
-            return [TYPE_NUMBER]
+            result = [TYPE_DATE, TYPE_NUMBER]
+        elif operator_name in [Operator.ANY_IN, Operator.ALL_IN]:
+            result = [TYPE_ARRAY]
+        elif operator_name == Operator.IN:
+            result = [TYPE_NUMBER, TYPE_STRING] if argument_position == 0 else [TYPE_ARRAY]
+        elif operator_name == Operator.COUNT:
+            result = [TYPE_ARRAY]
+        elif operator_name == Operator.SUM:
+            result = [TYPE_NUMBER]
+        return result
