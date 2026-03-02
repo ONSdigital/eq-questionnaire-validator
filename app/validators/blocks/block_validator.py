@@ -6,7 +6,7 @@ Classes:
     BlockValidator
 """
 
-from typing import Mapping
+from collections.abc import Mapping
 
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,

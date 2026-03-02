@@ -401,6 +401,7 @@ class SectionValidator(Validator):
         if summary := self.schema_element.get("summary"):
             show_non_item_answers = summary.get("show_non_item_answers")
             return summary.get("items") and show_non_item_answers
+        return None
 
     def has_multiple_list_collectors(self):
         """Check if there are multiple list collectors in the section.

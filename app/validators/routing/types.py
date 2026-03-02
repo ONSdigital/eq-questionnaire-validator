@@ -10,7 +10,7 @@ Functions:
     python_type_to_json_type
 """
 
-from typing import Mapping
+from collections.abc import Mapping
 
 from app.validators.questionnaire_schema import QuestionnaireSchema
 

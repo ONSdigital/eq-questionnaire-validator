@@ -67,7 +67,8 @@ if you want to run the app locally using multiple server workers you need to set
 
 Ajv validator defaults to running on `http://localhost:5002`.
 
-You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`, and `AJV_VALIDATOR_PORT` environment variables.
+You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`,
+and `AJV_VALIDATOR_PORT` environment variables.
 These values are set by the `.development.env` file in the route of the repo file structure.
 This is linked to `.env` by the `link-development-env` command in the make file, which is triggered automatically on run.
 The linking of the `.env` files ensures that changes in one are reflected in the other.
@@ -150,6 +151,12 @@ make test-unit
 Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you
 do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing `<PID>` with
 the process id from the previous command.
+
+To run the app's integration tests:
+
+```shell
+make test-integration
+```
 
 Run the Ajv validator tests:
 

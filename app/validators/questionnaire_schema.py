@@ -16,8 +16,9 @@ Functions:
 import collections
 import re
 from collections import defaultdict
+from collections.abc import Iterable, Mapping
 from functools import cached_property, lru_cache
-from typing import Iterable, Mapping, TypeVar
+from typing import TypeVar
 
 from jsonpath_ng import parse
 from jsonpath_ng.ext import parse as ext_parse
@@ -97,9 +98,7 @@ def get_parent_block_from_match(match) -> dict | None:
     if walked_contexts[-1] is None:
         return None
 
-    block = walked_contexts[-3].value
-
-    return block
+    return walked_contexts[-3].value
 
 
 def get_element_value(key, match):
@@ -686,10 +685,7 @@ class QuestionnaireSchema:
         Returns:
             questions (list): A list of all question objects in the block, including variants.
         """
-        questions = []
-
-        for variant in block.get("question_variants", []):
-            questions.append(variant["question"])
+        questions = [variant["question"] for variant in block.get("question_variants", [])]
 
         single_question = block.get("question")
         if single_question:
@@ -812,6 +808,7 @@ class QuestionnaireSchema:
                 context=context,
             ):
                 return block_id
+        return None
 
     @staticmethod
     def get_block_id_for_answer(*, answer_id, answers, context):
@@ -832,6 +829,7 @@ class QuestionnaireSchema:
                 detail_answer = option.get("detail_answer")
                 if detail_answer and answer_id == detail_answer["id"]:
                     return context["block"]
+        return None
 
     @lru_cache
     def get_block_by_answer_id(self, answer_id):

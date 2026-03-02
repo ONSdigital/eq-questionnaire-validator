@@ -4,11 +4,10 @@ Classes:
     Validator
 """
 
-from abc import ABC
-from typing import Mapping
+from collections.abc import Mapping
 
 
-class Validator(ABC):
+class Validator:
     """Base class for validators.
     All validators inherit from this class and implement the validate method to perform
     validation on a given schema element.

@@ -135,7 +135,8 @@ Runner to parse it with enough context.
 Referencing data for repeating items works similarly to non-repeating items.
 The reference will be made using the list item name.
 
-A key point to understand here is that referencing data for a repeating item will only be supported in the context of a "repeat".
+A key point to understand here is that referencing data for a repeating item will only be supported
+in the context of a "repeat".
 For example, inside the list collector child pages, such as the repeating questions, or anywhere inside a repeating section.
 This is because, in both cases, Runner will have access to the list item id of the current item,
 which is what Runner will use to look up the data for the correct item.

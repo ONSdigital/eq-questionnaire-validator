@@ -45,10 +45,13 @@ lint-python:
 test-unit:
 	poetry run ./scripts/run_tests_unit.sh
 
+test-integration:
+	poetry run ./scripts/run_tests_integration.sh
+
 test-ajv:
 	npm run test
 
-test: test-unit test-ajv
+test: test-unit test-ajv test-integration
 
 format: format-python
 	npm run format
@@ -62,4 +65,4 @@ megalint:  clean ## Run the MegaLinter.
 	docker run --platform linux/amd64 --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock:rw \
 		-v $(shell pwd):/tmp/lint:rw \
-		ghcr.io/oxsecurity/megalinter-python:v9.1.0
+		ghcr.io/oxsecurity/megalinter-python:v9.3.0

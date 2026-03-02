@@ -5,7 +5,7 @@ Classes:
 """
 
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dateutil.relativedelta import relativedelta
 
@@ -47,17 +47,24 @@ class DateAnswerValidator(AnswerValidator):
             an invalid value. False if both are present and have valid values but the minimum offset date is
             greater than or equal to the maximum offset date.
         """
-        if "minimum" in self.answer and "maximum" in self.answer:
-            if (
-                "value" in self.answer["minimum"]
-                and "value" in self.answer["maximum"]
-                and not isinstance(self.answer["minimum"]["value"], dict)
-                and not isinstance(self.answer["maximum"]["value"], dict)
-            ):
-                minimum_date = self._get_offset_date(self.answer["minimum"])
-                maximum_date = self._get_offset_date(self.answer["maximum"])
-                return minimum_date < maximum_date if minimum_date and maximum_date else False
-        return True
+        minimum = self.answer.get("minimum")
+        maximum = self.answer.get("maximum")
+        if not (minimum and maximum):
+            return True
+
+        if (
+            "value" not in minimum
+            or "value" not in maximum
+            or isinstance(minimum["value"], dict)
+            or isinstance(maximum["value"], dict)
+        ):
+            return True
+
+        minimum_date = self._get_offset_date(minimum)
+        maximum_date = self._get_offset_date(maximum)
+        if minimum_date and maximum_date:
+            return minimum_date < maximum_date
+        return False
 
     def _get_offset_date(self, answer_min_or_max):
         """Return the offset date for a given minimum or maximum answer object.
@@ -69,7 +76,7 @@ class DateAnswerValidator(AnswerValidator):
             Invocation of get_relative_date.
         """
         if answer_min_or_max["value"] == "now":
-            value = datetime.utcnow().strftime("%Y-%m-%d")
+            value = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         else:
             value = answer_min_or_max["value"]
 
@@ -114,4 +121,4 @@ class DateAnswerValidator(AnswerValidator):
         if value and re.match(r"\d{4}-\d{2}-\d{2}", value):
             date_format = "%Y-%m-%d"
 
-        return datetime.strptime(value, date_format) if value else None
+        return datetime.strptime(value, date_format).replace(tzinfo=timezone.utc) if value else None
