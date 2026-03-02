@@ -1,8 +1,8 @@
 import json
 import os
-import urllib.request
 from collections.abc import Mapping
 from pathlib import Path
+from urllib import request
 from urllib.error import HTTPError, URLError
 
 import pytest
@@ -78,7 +78,7 @@ def mock_urlopen_not_found(monkeypatch):
         headers: Mapping[str, str] = {}
         raise HTTPError(url=url, code=404, msg="Not Found", hdrs=headers, fp=None)  # type: ignore[arg-type]
 
-    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+    monkeypatch.setattr(request, "urlopen", mock_urlopen)
 
 
 @pytest.fixture
@@ -89,4 +89,4 @@ def mock_urlopen_failure(monkeypatch):
         error_message = "Failed to reach the server"
         raise URLError(error_message)
 
-    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+    monkeypatch.setattr(request, "urlopen", mock_urlopen)
