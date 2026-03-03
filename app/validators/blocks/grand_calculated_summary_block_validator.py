@@ -4,6 +4,7 @@ from app.validators.blocks.calculation_block_validator import CalculationBlockVa
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
     find_dictionary_duplicates,
+    get_block,
 )
 
 
@@ -63,7 +64,8 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
 
     def validate_calculated_summary_ids_to_calculate(self):
         for calculated_summary_id in self.calculated_summaries_to_calculate:
-            calculated_summary_block = self.questionnaire_schema.get_block(
+            calculated_summary_block = get_block(
+                self.questionnaire_schema,
                 calculated_summary_id,
             )
             if not calculated_summary_block or not calculated_summary_block.get(

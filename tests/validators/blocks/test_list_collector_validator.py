@@ -1,5 +1,5 @@
 from app.validators.blocks import ListCollectorValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -8,7 +8,7 @@ def test_invalid_list_collector_with_different_answer_ids_in_add_and_edit():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "list-collector")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
 
@@ -29,7 +29,7 @@ def test_invalid_list_collector_with_answer_id_used_elsewhere():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "list-collector")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
 
@@ -61,7 +61,7 @@ def test_invalid_list_collector_with_different_add_block_answer_ids():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "list-collector")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
     validator.validate()
@@ -83,7 +83,7 @@ def test_invalid_list_collector_with_duplicate_add_block_answer_id_for_different
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "list-collector")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(block, questionnaire_schema)  # type: ignore
     validator.validate()
@@ -124,7 +124,7 @@ def test_invalid_list_collector_non_radio():
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in test schema
-        questionnaire_schema.get_block("list-collector"),  # pyright: ignore
+        get_block(questionnaire_schema, "list-collector"),  # pyright: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -146,7 +146,7 @@ def test_invalid_list_collector_with_no_add_answer_action():
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        get_block(questionnaire_schema, "list-collector"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -168,7 +168,7 @@ def test_invalid_list_collector_with_no_remove_answer_action():
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        get_block(questionnaire_schema, "list-collector"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -190,7 +190,7 @@ def test_invalid_list_collector_same_name_answer_id_reference():
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        get_block(questionnaire_schema, "list-collector"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -213,7 +213,7 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("any-other-companies-or-branches"),  # type: ignore
+        get_block(questionnaire_schema, "any-other-companies-or-branches"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -231,7 +231,7 @@ def test_invalid_list_collector_repeating_blocks_multiple_list_collectors_same_s
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("any-other-companies-or-branches-again"),  # type: ignore
+        get_block(questionnaire_schema, "any-other-companies-or-branches-again"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()
@@ -255,7 +255,7 @@ def test_invalid_list_collector_for_supplementary_list():
     # Validator always instantiates for this test schema (block always exists)
     validator = ListCollectorValidator(  # type: ignore
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("list-collector-additional"),  # type: ignore
+        get_block(questionnaire_schema, "list-collector-additional"),  # type: ignore
         questionnaire_schema,
     )
     validator.validate()

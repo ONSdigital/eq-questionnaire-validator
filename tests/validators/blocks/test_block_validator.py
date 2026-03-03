@@ -1,5 +1,5 @@
 from app.validators.blocks import BlockValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -8,7 +8,7 @@ def test_invalid_answer_action_redirect_to_list_add_block_no_params():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("anyone-else-live-here-block"),  # type: ignore
+        get_block(questionnaire_schema, "anyone-else-live-here-block"),  # type: ignore
         questionnaire_schema,
     )
 
@@ -29,7 +29,7 @@ def test_invalid_answer_action_redirect_to_list_add_block_unexpected_params():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("list-collector"),  # type: ignore
+        get_block(questionnaire_schema, "list-collector"),  # type: ignore
         questionnaire_schema,
     )
 
@@ -50,7 +50,7 @@ def test_invalid_use_of_id_relationships_with_type():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = BlockValidator(
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("relationships"),  # type: ignore
+        get_block(questionnaire_schema, "relationships"),  # type: ignore
         questionnaire_schema,
     )
 

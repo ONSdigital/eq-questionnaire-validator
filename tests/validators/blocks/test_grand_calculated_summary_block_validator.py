@@ -1,7 +1,7 @@
 from app.validators.blocks.grand_calculated_summary_block_validator import (
     GrandCalculatedSummaryBlockValidator,
 )
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -50,7 +50,7 @@ def test_invalid_grand_calculated_summary():
         "grand-calculated-summary-duplicate-answer-set-error",
         "grand-calculated-summary-id-error",
     ]:
-        block = questionnaire_schema.get_block(block_id)
+        block = get_block(questionnaire_schema, block_id)
         # Block always exists in this test schema, .get_block() will never return None
         validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)  # type: ignore
         errors += validator.validate()
@@ -74,7 +74,8 @@ def test_invalid_grand_calculated_summary_before_calculated_summary():
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
-    block = questionnaire_schema.get_block(
+    block = get_block(
+        questionnaire_schema,
         "grand-calculated-summary-before-calculated-summary-error",
     )
     # Block always exists in this test schema, .get_block() will never return None
@@ -99,7 +100,7 @@ def test_invalid_repeating_grand_calculated_summary_referencing_repeating_calcul
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("grand-calculated-summary-vehicle")  # type: ignore
+    block = get_block(questionnaire_schema, "grand-calculated-summary-vehicle")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)  # type: ignore
     errors = validator.validate()
@@ -127,7 +128,7 @@ def test_invalid_non_repeating_grand_calculated_summary_referencing_repeating_ca
 
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("grand-calculated-invalid-outside-repeat")  # type: ignore
+    block = get_block(questionnaire_schema, "grand-calculated-invalid-outside-repeat")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)  # type: ignore
     errors = validator.validate()
@@ -165,7 +166,7 @@ def test_invalid_repeating_grand_calculated_summary_with_repeating_answers_in_ca
         "grand-calculated-summary-dynamic-answer-cs",
     ]:
         # Block always exists in this test schema, .get_block() will never return None
-        block = questionnaire_schema.get_block(block_id)  # type: ignore
+        block = get_block(questionnaire_schema, block_id)  # type: ignore
         # Validator always instantiates for this test schema (block always exists)
         validator = GrandCalculatedSummaryBlockValidator(block, questionnaire_schema)  # type: ignore
         errors += validator.validate()

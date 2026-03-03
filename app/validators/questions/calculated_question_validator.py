@@ -1,3 +1,8 @@
+from app.validators.questionnaire_schema import (
+    get_all_dynamic_answer_ids,
+    get_answer_type,
+    get_block_by_answer_id,
+)
 from app.validators.questions.question_validator import QuestionValidator
 from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
@@ -29,7 +34,9 @@ class CalculatedQuestionValidator(QuestionValidator):
         if not self.schema:
             return {}
         return {
-            answer: self.schema.get_answer_type(answer).value for answer in [answer_id, *answers_to_calculate] if answer
+            answer: get_answer_type(self.schema, answer).value
+            for answer in [answer_id, *answers_to_calculate]
+            if answer
         }
 
     def validate_calculations(self):
@@ -40,8 +47,9 @@ class CalculatedQuestionValidator(QuestionValidator):
         if calculations := self.question.get("calculations"):
             for calculation in calculations:
                 answer_ids_list = calculation["answers_to_calculate"]
-                if len(answer_ids_list) == 1 and answer_ids_list[0] not in self.schema.get_all_dynamic_answer_ids(
-                    self.schema.get_block_by_answer_id(answer_ids_list[0])["id"],
+                if len(answer_ids_list) == 1 and answer_ids_list[0] not in get_all_dynamic_answer_ids(
+                    self.schema,
+                    get_block_by_answer_id(self.schema, answer_ids_list[0])["id"],
                 ):
                     self.add_error(
                         self.ANSWERS_TO_CALCULATE_TOO_SHORT.format(

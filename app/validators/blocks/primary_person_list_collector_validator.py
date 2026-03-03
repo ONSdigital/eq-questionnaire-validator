@@ -2,6 +2,11 @@ from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
 )
+from app.validators.questionnaire_schema import (
+    get_all_answer_ids,
+    get_list_collector_answer_ids,
+    get_other_blocks,
+)
 
 
 class PrimaryPersonListCollectorValidator(
@@ -29,7 +34,8 @@ class PrimaryPersonListCollectorValidator(
             self.REDIRECT_TO_LIST_ADD_BLOCK,
             self.NO_REDIRECT_TO_LIST_ADD_BLOCK,
         )
-        answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
+        answer_ids = get_list_collector_answer_ids(
+            self.questionnaire_schema,
             self.block["id"],
         )
         self.validate_same_name_answer_ids(answer_ids)
@@ -41,18 +47,21 @@ class PrimaryPersonListCollectorValidator(
         """Ensure that answer_ids on add blocks match between all blocks that populate a single list."""
         list_name = block["for_list"]
 
-        add_or_edit_answer_ids = self.questionnaire_schema.get_all_answer_ids(
+        add_or_edit_answer_ids = get_all_answer_ids(
+            self.questionnaire_schema,
             block["add_or_edit_block"]["id"],
         )
 
-        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+        other_list_collectors = get_other_blocks(
+            self.questionnaire_schema,
             self.block["id"],
             for_list=list_name,
             type="PrimaryPersonListCollector",
         )
 
         for other_list_collector in other_list_collectors:
-            other_add_ids = self.questionnaire_schema.get_all_answer_ids(
+            other_add_ids = get_all_answer_ids(
+                self.questionnaire_schema,
                 other_list_collector["add_or_edit_block"]["id"],
             )
             difference = other_add_ids.symmetric_difference(add_or_edit_answer_ids)

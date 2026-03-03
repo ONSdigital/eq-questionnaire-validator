@@ -1,4 +1,9 @@
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
+from app.validators.questionnaire_schema import (
+    get_all_dynamic_answer_ids,
+    get_block_by_answer_id,
+    get_block_id_by_answer_id,
+)
 
 
 class CalculatedSummaryBlockValidator(CalculationBlockValidator):
@@ -38,10 +43,12 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         if len(answers) == 1:
             single_answer_id = answers[0]["id"]
             # check if its dynamic
-            if question_block := self.questionnaire_schema.get_block_by_answer_id(
+            if question_block := get_block_by_answer_id(
+                self.questionnaire_schema,
                 single_answer_id,
             ):
-                if single_answer_id in self.questionnaire_schema.get_all_dynamic_answer_ids(
+                if single_answer_id in get_all_dynamic_answer_ids(
+                    self.questionnaire_schema,
                     question_block["id"],
                 ):
                     return
@@ -57,7 +64,8 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
 
     def validate_answer_id_set_before_calculated_summary_block(self):
         for answer_id in self.answers_to_calculate:
-            answer_id_block = self.questionnaire_schema.get_block_id_by_answer_id(
+            answer_id_block = get_block_id_by_answer_id(
+                self.questionnaire_schema,
                 answer_id,
             )
             if self.questionnaire_schema.block_ids.index(

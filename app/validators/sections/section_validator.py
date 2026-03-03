@@ -5,6 +5,11 @@ from app.validators.answers import get_answer_validator
 from app.validators.blocks import get_block_validator
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
+    get_answer,
+    get_block,
+    get_blocks,
+    get_group,
+    get_list_collector_answer_ids,
     get_object_containing_key,
 )
 from app.validators.questions import get_question_validator
@@ -97,7 +102,7 @@ class SectionValidator(Validator):
             self.validate_blocks(group["id"])
 
     def validate_blocks(self, group_id):
-        group = self.questionnaire_schema.get_group(group_id)
+        group = get_group(self.questionnaire_schema, group_id)
 
         for block in group.get("blocks"):
             self.validate_routing(block, group)
@@ -297,11 +302,11 @@ class SectionValidator(Validator):
         if not summary_items:
             return
 
-        blocks = self.questionnaire_schema.get_blocks(type="ListCollector")
+        blocks = get_blocks(self.questionnaire_schema, type="ListCollector")
         list_collector_answer_ids_by_list = defaultdict(list)
         for block in blocks:
             list_collector_answer_ids_by_list[block["for_list"]].extend(
-                self.questionnaire_schema.get_list_collector_answer_ids(block["id"]),
+                get_list_collector_answer_ids(self.questionnaire_schema, block["id"]),
             )
 
         for item in summary_items:
@@ -348,7 +353,7 @@ class SectionValidator(Validator):
             )
 
     def _validate_related_answer_has_label(self, answer_source):
-        answer = self.questionnaire_schema.get_answer(answer_source["identifier"])
+        answer = get_answer(self.questionnaire_schema, answer_source["identifier"])
         if not answer.get("label"):
             self.add_error(
                 error_messages.NO_LABEL_FOR_RELATED_ANSWER.format(
@@ -380,7 +385,7 @@ class SectionValidator(Validator):
         for block_id in self.questionnaire_schema.get_section_block_ids(
             self.section["id"],
         ):
-            block = self.questionnaire_schema.get_block(block_id)
+            block = get_block(self.questionnaire_schema, block_id)
             if block["type"] in ["ListCollector", "ListCollectorContent"]:
                 # Validation of two list collectors for the same list is disabled if summary is enabled
                 if block.get("summary"):

@@ -2,6 +2,11 @@ from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.validate_list_collector_quesitons_mixin import (
     ValidateListCollectorQuestionsMixin,
 )
+from app.validators.questionnaire_schema import (
+    get_list_collector_answer_ids,
+    get_list_collector_answer_ids_by_child_block,
+    get_other_blocks,
+)
 
 
 class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin):
@@ -44,7 +49,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                 self.REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
                 self.NO_REDIRECT_TO_LIST_ADD_BLOCK_ACTION,
             )
-            answer_ids = self.questionnaire_schema.get_list_collector_answer_ids(
+            answer_ids = get_list_collector_answer_ids(
+                self.questionnaire_schema,
                 self.block["id"],
             )
             self.validate_same_name_answer_ids(answer_ids)
@@ -73,7 +79,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         - Enforce the same answer_ids on add and edit sub-blocks
         - Ensure that that child block answer_ids are not used elsewhere in the schema that's not another list collector
         """
-        list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+        list_answer_ids = get_list_collector_answer_ids_by_child_block(
+            self.questionnaire_schema,
             block["id"],
         )
 
@@ -111,16 +118,19 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         - non-unique answer id in add block for any other same-named list collectors
         - duplicate answer id in add, edit, or remove block for other different-named list collectors
         """
-        list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+        list_answer_ids = get_list_collector_answer_ids_by_child_block(
+            self.questionnaire_schema,
             self.block["id"],
         )
-        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+        other_list_collectors = get_other_blocks(
+            self.questionnaire_schema,
             self.block["id"],
             type="ListCollector",
         )
 
         for other_list_collector in other_list_collectors:
-            other_list_answer_ids = self.questionnaire_schema.get_list_collector_answer_ids_by_child_block(
+            other_list_answer_ids = get_list_collector_answer_ids_by_child_block(
+                self.questionnaire_schema,
                 other_list_collector["id"],
             )
 
@@ -150,7 +160,8 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
         if not self.block.get("repeating_blocks"):
             return
         list_name = self.block["for_list"]
-        other_list_collectors = self.questionnaire_schema.get_other_blocks(
+        other_list_collectors = get_other_blocks(
+            self.questionnaire_schema,
             self.block["id"],
             for_list=list_name,
             type="ListCollector",

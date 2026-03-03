@@ -1,4 +1,4 @@
-from app.validators.questionnaire_schema import find_duplicates
+from app.validators.questionnaire_schema import find_duplicates, get_block_by_answer_id
 from app.validators.validator import Validator
 
 
@@ -69,7 +69,7 @@ class AnswerCodeValidator(Validator):
 
     def validate_missing_answer_codes(self):
         for answer_id in self.all_answer_ids:
-            block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
+            block = get_block_by_answer_id(self.questionnaire_schema, answer_id)
 
             if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
                 if answer_id in self.answer_codes_answer_ids:
@@ -104,7 +104,7 @@ class AnswerCodeValidator(Validator):
         for answer_id in self.questionnaire_schema.answers_with_context:
             answer = self.questionnaire_schema.answers_with_context[answer_id]
 
-            block = self.questionnaire_schema.get_block_by_answer_id(answer_id)
+            block = get_block_by_answer_id(self.questionnaire_schema, answer_id)
 
             if block["type"] in ["ListEditQuestion", "ListRemoveQuestion"]:
                 continue

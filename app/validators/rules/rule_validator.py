@@ -1,5 +1,6 @@
 from app import error_messages
 from app.answer_type import AnswerOptionType, AnswerType
+from app.validators.questionnaire_schema import get_answer_type
 from app.validators.routing.types import (
     TYPE_ARRAY,
     TYPE_BOOLEAN,
@@ -208,7 +209,7 @@ class RulesValidator(Validator):
         if (
             isinstance(first_argument, dict)
             and first_argument.get("source") == "answers"
-            and self.questionnaire_schema.get_answer_type(first_argument["identifier"])
+            and get_answer_type(self.questionnaire_schema, first_argument["identifier"])
             not in [AnswerType.DATE, AnswerType.MONTH_YEAR_DATE, AnswerType.YEAR_DATE]
         ):
             self.add_error(

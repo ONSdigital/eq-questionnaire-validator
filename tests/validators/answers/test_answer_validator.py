@@ -2,7 +2,7 @@ from app.validators.answers import get_answer_validator
 from app.validators.answers.answer_validator import AnswerValidator
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.answers.number_answer_validator import NumberAnswerValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_answer
 from app.validators.questionnaire_validator import QuestionnaireValidator
 from tests.conftest import get_mock_schema_with_data_version
 from tests.utils import _open_and_load_schema_file
@@ -53,7 +53,7 @@ def test_invalid_single_date_period():
 def test_confirmation_question_q_code():
     filename = "schemas/valid/test_q_codes.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    answer = schema.get_answer("confirmation-1-answer")
+    answer = get_answer(schema, "confirmation-1-answer")
     answer["q_code"] = "1"
 
     validator = get_answer_validator(answer, schema)
@@ -73,7 +73,7 @@ def test_data_version_0_0_3_q_code():
     # valid schema for test purposes, q_code is injected
     filename = "schemas/valid/test_interstitial_instruction.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    answer = schema.get_answer("favourite-lunch")
+    answer = get_answer(schema, "favourite-lunch")
     answer["q_code"] = "0"
 
     validator = get_answer_validator(answer, schema)
