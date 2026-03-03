@@ -13,6 +13,7 @@ Functions:
     json_path_position
     get_context_from_match
 """
+
 import collections
 import re
 from collections import defaultdict
