@@ -15,9 +15,9 @@ class MetadataValidator(Validator):
     """Validator for the metadata field in a questionnaire schema.
 
     Attributes:
-        metadata (list): The metadata field to be validated, which is a list of metadata fields defined in
+        metadata (list): The metadata field to be validated, which is a list of metadata names defined in
         the questionnaire schema.
-        theme_name (str): The theme of the questionnaire, which determines the mandatory metadata fields.
+        theme_name (str): The theme of the questionnaire, which determines the mandatory metadata names.
 
     Methods:
         validate
@@ -34,8 +34,8 @@ class MetadataValidator(Validator):
         super().__init__(metadata)
 
     def validate(self):
-        """Validate the metadata field by checking for duplicate metadata names and ensuring that mandatory
-        metadata.
+        """Validate the metadata field in a questionnaire schema by checking for duplicate metadata names and ensuring
+        that mandatory ones are present based on the theme of the questionnaire.
         """
         self.validate_duplicates()
         self.validate_mandatory()
@@ -43,23 +43,23 @@ class MetadataValidator(Validator):
 
     @cached_property
     def metadata_names(self):
-        """Get the metadata names from the metadata field.
+        """Get the metadata names from the metadata field in a questionnaire schema.
 
         Returns:
-            A list of metadata names from the metadata field.
+            A list of metadata names from the metadata field in a questionnaire schema.
         """
         return [metadata_field["name"] for metadata_field in self.schema_element]
 
     def validate_duplicates(self):
-        """Validate that there are no duplicate metadata names in the metadata field."""
+        """Validate that there are no duplicate metadata names in the metadata field in a questionnaire schema."""
         duplicates = find_duplicates(self.metadata_names)
 
         if len(duplicates) > 0:
             self.add_error(self.DUPLICATE_METADATA, duplicates=duplicates)
 
     def validate_mandatory(self):
-        """Validate that mandatory metadata fields are present in the metadata field.
-        The required metadata fields depend on the theme of the questionnaire.
+        """Validate that mandatory metadata names are present in the metadata field in a questionnaire schema.
+        The required metadata names depend on the theme of the questionnaire.
         """
         # user_id and period_id required downstream for receipting
         # ru_name required for template rendering in business, default and NI theme

@@ -24,7 +24,7 @@ class TextFieldAnswerValidator(AnswerValidator):
 
     def validate(self):
         """Validate the text field answer by first invoking the parent validate method and then checking if the
-        suggestions.
+        suggestions url is valid if it is present.
 
         Returns:
             A list of error messages if validation fails, or an empty list if validation passes.

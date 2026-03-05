@@ -162,12 +162,13 @@ class NumberAnswerValidator(AnswerValidator):
         return True
 
     def validate_decimal_places(self):
-        """Validate that if the answer is calculated, it has 2 decimal places defined."""
+        """Validate by calling are_decimal_places_valid and adding an error if it returns False."""
         if not self.are_decimal_places_valid():
             self.add_error(self.DECIMAL_PLACES_UNDEFINED)
 
     def validate_decimals(self):
-        """Validate that the number of decimal places defined for the answer does not exceed the limit."""
+        """Validate that the number of decimal places defined for the answer does not exceed the limit.
+        The limit is defined as a constant at the top of this module and is based on a system default."""
         decimal_places = self.answer.get("decimal_places", 0)
         if decimal_places > MAX_DECIMAL_PLACES:
             self.add_error(
