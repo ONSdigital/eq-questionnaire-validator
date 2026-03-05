@@ -130,9 +130,10 @@ async def validate_schema_from_url(url=None):
         url: The URL query parameter containing the URL of the questionnaire schema to be validated.
 
     Returns:
-        A response with status code 200 if the schema is valid, or a response with status code 400 containing error
-        details if the schema is invalid or if the URL is not allowed. If the AJV Validator service is unavailable,
-        returns a response with status code 503.
+        A response with status code 200 if the schema is valid, or a response with status code 400 containing error(s)
+        details if the schema failed validation or if the URL is not allowed. It also returns errors if url is not
+        allowed, schemes other than http and https are used, or if the schema cannot be loaded from the URL.
+        If the AJV Validator service is unavailable, returns a response with status code 503.
     """
     logger.debug("Attempting to validate schema from URL...", url=url)
     if url:
@@ -175,9 +176,9 @@ async def validate_schema(data):  # pylint: disable=R0911
         a JSON string or a JSON object (dictionary).
 
     Returns:
-        A response with status code 200 if the schema is valid, or a response with status code 400 containing error
-        details if the schema is invalid. If the AJV Validator service is unavailable, returns a response with status
-        code 503.
+        A response with status code 200 if the schema is valid, or a response with status code 400 containing error(s)
+        details if the schema failed validation. It can also return 400 if the JSON data is invalid or not provided.
+        If the AJV Validator service is unavailable, returns a response with status code 503.
     """
     logger.debug("Attempting to validate schema from JSON data...")
     if data:
