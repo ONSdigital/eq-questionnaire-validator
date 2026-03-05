@@ -33,7 +33,7 @@ class CalculatedQuestionValidator(QuestionValidator):
 
     def validate(self):
         """Validate the calculated question by first calling validate_calculations. If there are no errors,
-        it then validate_calculations_numeric_matching_answer_types.
+        it then calls validate_calculations_numeric_matching_answer_types.
         """
         super().validate()
         self.validate_calculations()

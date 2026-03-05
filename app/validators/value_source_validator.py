@@ -160,7 +160,9 @@ class ValueSourceValidator(Validator):
 
     @cached_property
     def past_block_ids(self) -> set[str]:
-        """Return a set of block ids that are before the current parent block or in previous sections if the current."""
+        """Return a set of block ids that are before the current parent block or in previous sections if the current
+        block is None, excluding blocks in repeating sections except for the current section.
+        """
         if self.parent_block is None:
             # Progress value source is at section level.
             # Return all blocks in the previous sections, that aren't in a repeating section

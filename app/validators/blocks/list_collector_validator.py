@@ -91,7 +91,7 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
     def validate_list_collector_answer_ids(self, block):
         """Validate the answer_ids for the list collector block. It ensures that answer_ids on add and edit blocks match
         between all blocks that populate a single list. It enforces the same answer_ids on add and edit sub-blocks.
-        Ensures that that child block answer_ids are not used elsewhere in the schema that's not another list
+        It ensures that child block answer_ids are not used elsewhere in the schema that's not another list
         collector.
 
         Args:
@@ -169,7 +169,9 @@ class ListCollectorValidator(BlockValidator, ValidateListCollectorQuestionsMixin
                         )
 
     def validate_single_repeating_blocks_list_collector(self):
-        """If a list collector block has repeating blocks, there can only be one list collector for that list."""
+        """Validates that if a list collector block has repeating blocks, there is only one list collector for that
+        list.
+        """
         if not self.block.get("repeating_blocks"):
             return
         list_name = self.block["for_list"]

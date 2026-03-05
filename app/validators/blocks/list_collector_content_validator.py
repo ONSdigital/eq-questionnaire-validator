@@ -28,7 +28,7 @@ class ListCollectorContentValidator(BlockValidator):
 
     def validate_for_list_is_valid(self):
         """Validate that the 'for_list' property is valid. Verifies that the list for the list collector content block
-        is either populated by a standard list collector or in the supplementary data lists property so populated
+        is either populated by a standard list collector or in the supplementary data lists property is populated
         by supplementary data.
         """
         list_name = self.block["for_list"]

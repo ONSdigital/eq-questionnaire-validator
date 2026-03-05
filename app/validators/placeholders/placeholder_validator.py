@@ -1,4 +1,6 @@
-"""This module contains the PlaceholderValidator class, which validates that placeholders in a questionnaire schema."""
+"""This module contains the PlaceholderValidator class, which validates that placeholders in a questionnaire schema
+match their definitions and that any transforms defined for the placeholders are valid.
+"""
 
 import re
 
