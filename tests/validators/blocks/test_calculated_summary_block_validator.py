@@ -1,7 +1,7 @@
 from app.validators.blocks.calculated_summary_block_validator import (
     CalculatedSummaryBlockValidator,
 )
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 COMMON_ERROR_MESSAGES = [
@@ -40,7 +40,7 @@ def test_invalid_calculated_summary():
         "total-playback-unit-error",
         "total-playback-answer-error",
     ]:
-        block = questionnaire_schema.get_block(block_id)
+        block = get_block(questionnaire_schema, block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
         errors += validator.validate()
 
@@ -70,7 +70,7 @@ def test_invalid_new_calculated_summary():
         "total-playback-answer-error",
         "total-playback-not-enough-answers",
     ]:
-        block = questionnaire_schema.get_block(block_id)
+        block = get_block(questionnaire_schema, block_id)
         validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
         errors += validator.validate()
 
@@ -112,7 +112,7 @@ def test_invalid_calculated_summary_answer_after_calculated_summary_block():
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
-    block = questionnaire_schema.get_block("currency-total-playback")
+    block = get_block(questionnaire_schema, "currency-total-playback")
     validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
     errors += validator.validate()
 
@@ -135,7 +135,7 @@ def test_invalid_calculated_summary_answer_in_different_section():
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
-    block = questionnaire_schema.get_block("currency-total-playback")
+    block = get_block(questionnaire_schema, "currency-total-playback")
     validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)
     errors += validator.validate()
 
@@ -162,7 +162,8 @@ def test_invalid_calculated_summary_with_single_static_answer():
     questionnaire_schema = QuestionnaireSchema(json_to_validate)
     errors = []
 
-    block = questionnaire_schema.get_block(
+    block = get_block(
+        questionnaire_schema,
         "invalid-calculated-summary-with-single-static-answer",
     )
     validator = CalculatedSummaryBlockValidator(block, questionnaire_schema)

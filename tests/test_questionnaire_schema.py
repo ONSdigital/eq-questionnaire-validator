@@ -2,7 +2,12 @@ from jsonpath_ng import parse
 
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
+    get_all_answer_ids,
+    get_block_id_by_answer_id,
+    get_blocks,
     get_context_from_match,
+    get_first_answer_in_block,
+    get_other_blocks,
 )
 from tests.utils import _open_and_load_schema_file
 
@@ -85,7 +90,8 @@ def test_get_blocks():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    driving_question_blocks = questionnaire_schema.get_blocks(
+    driving_question_blocks = get_blocks(
+        questionnaire_schema,
         type="ListCollectorDrivingQuestion",
         for_list="people",
     )
@@ -99,7 +105,8 @@ def test_get_other_blocks():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    other_list_collectors = questionnaire_schema.get_other_blocks(
+    other_list_collectors = get_other_blocks(
+        questionnaire_schema,
         block_id_to_filter="list-collector",
         type="ListCollector",
         for_list="people",
@@ -265,7 +272,7 @@ def test_get_block_id_by_answer_id():
 
     answer_id = "confirmation-1-answer"
 
-    block_id = questionnaire_schema.get_block_id_by_answer_id(answer_id)
+    block_id = get_block_id_by_answer_id(questionnaire_schema, answer_id)
 
     assert block_id == "confirmation-1"
 
@@ -436,7 +443,7 @@ def test_get_all_answer_ids_dynamic_answers():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert questionnaire_schema.get_all_answer_ids("dynamic-answer") == {
+    assert get_all_answer_ids(questionnaire_schema, "dynamic-answer") == {
         "days-a-week",
         "percentage-of-shopping",
     }
@@ -447,7 +454,7 @@ def test_get_first_answer_in_block_dynamic_answers():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert questionnaire_schema.get_first_answer_in_block("dynamic-answer") == {
+    assert get_first_answer_in_block(questionnaire_schema, "dynamic-answer") == {
         "label": {
             "text": "Percentage of shopping at {transformed_value}",
             "placeholders": [
@@ -470,4 +477,4 @@ def test_get_block_id_by_answer_id_dynamic_answers():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    assert questionnaire_schema.get_block_id_by_answer_id("percentage-of-shopping") == "dynamic-answer"
+    assert get_block_id_by_answer_id(questionnaire_schema, "percentage-of-shopping") == "dynamic-answer"

@@ -1,5 +1,5 @@
 from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -8,7 +8,7 @@ def test_invalid_actions():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("relationships").get("unrelated_block")  # type: ignore
+    block = get_block(questionnaire_schema, "relationships").get("unrelated_block")  # type: ignore
     validator = UnrelatedBlockValidator(block, questionnaire_schema)
 
     expected_errors = [

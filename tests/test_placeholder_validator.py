@@ -2,7 +2,7 @@ import pytest
 
 from app import error_messages
 from app.validators.placeholders.placeholder_validator import PlaceholderValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_answer
 from app.validators.value_source_validator import ValueSourceValidator
 from tests.utils import _open_and_load_schema_file
 
@@ -227,7 +227,7 @@ def test_validation_answer_and_transform_unit_single_source_answer_mismatch(answ
     filename = "schemas/invalid/test_invalid_calculated_summary_units_mismatch.json"
     schema_file = _open_and_load_schema_file(filename)
     schema = QuestionnaireSchema(schema_file)
-    answer = schema.get_answer(answer_id)
+    answer = get_answer(schema, answer_id)
     answer["unit"] = "length-meter"
 
     validator = PlaceholderValidator(schema_file)

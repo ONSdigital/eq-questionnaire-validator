@@ -1,6 +1,6 @@
 from app import error_messages
 from app.validators.blocks import BlockValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_section
 from app.validators.sections.section_validator import SectionValidator
 from tests.utils import _open_and_load_schema_file
 
@@ -8,7 +8,7 @@ from tests.utils import _open_and_load_schema_file
 def test_invalid_list_reference_in_custom_summary():
     filename = "schemas/invalid/test_invalid_custom_list_summary.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    section = questionnaire_schema.get_section("section")
+    section = get_section(questionnaire_schema, "section")
     validator = SectionValidator(section, questionnaire_schema)
 
     expected_errors = [
@@ -27,7 +27,7 @@ def test_invalid_list_reference_in_custom_summary():
 def test_invalid_section_summary_items():
     filename = "schemas/invalid/test_invalid_list_collector_section_summary_items.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    section = questionnaire_schema.get_section("section-companies")
+    section = get_section(questionnaire_schema, "section-companies")
     validator = SectionValidator(section, questionnaire_schema)
 
     expected_errors = [
@@ -64,7 +64,7 @@ def test_invalid_list_collector_repeating_blocks_validated_from_section_validato
     filename = "schemas/invalid/test_invalid_list_collector_repeating_blocks_placeholder_references_same_block.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    section = questionnaire_schema.get_section("section-companies")
+    section = get_section(questionnaire_schema, "section-companies")
     validator = SectionValidator(section, questionnaire_schema)
     validator.validate()
 
@@ -83,7 +83,7 @@ def test_invalid_multiple_list_collectors_when_summary_with_items_enabled():
     filename = "schemas/invalid/test_invalid_multiple_list_collectors_with_summary_items.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    section = questionnaire_schema.get_section("section-companies")
+    section = get_section(questionnaire_schema, "section-companies")
     validator = SectionValidator(section, questionnaire_schema)
     validator.validate()
 
@@ -108,7 +108,7 @@ def test_invalid_repeating_section_for_non_existent_list():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
     validator = SectionValidator(
-        questionnaire_schema.get_section("section-4"),
+        get_section(questionnaire_schema, "section-4"),
         questionnaire_schema,
     )
     validator.validate()

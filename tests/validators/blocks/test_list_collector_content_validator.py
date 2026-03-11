@@ -1,6 +1,6 @@
 from app.error_messages import FOR_LIST_NEVER_POPULATED
 from app.validators.blocks import ListCollectorContentValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -18,7 +18,7 @@ def test_invalid_list_collector_content_for_list():
         "list-collector-employees",
         "list-collector-products",
     ]:
-        block = questionnaire_schema.get_block(block_id)
+        block = get_block(questionnaire_schema, block_id)
         validator = ListCollectorContentValidator(block, questionnaire_schema)  # type: ignore
         # Validator always instantiates for this test schema (block always exists)
         errors += validator.validate()

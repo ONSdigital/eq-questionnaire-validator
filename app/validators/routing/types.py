@@ -12,7 +12,7 @@ Functions:
 
 from collections.abc import Mapping
 
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 
 TYPE_STRING = "string"
 TYPE_NUMBER = "number"
@@ -177,7 +177,7 @@ def resolve_value_source_json_type(
         if source == "answers":
             return resolve_answer_source_json_type(identifier, schema)
 
-        if block := schema.get_block(identifier):
+        if block := get_block(schema, identifier):
             if source == "calculated_summary" and "calculation" in block:
                 return resolve_calculated_summary_source_json_type(block, schema)
 

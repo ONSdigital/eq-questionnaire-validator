@@ -8,6 +8,10 @@ Classes:
 from app import error_messages
 from app.validators.blocks.block_validator import BlockValidator
 from app.validators.blocks.unrelated_block_validator import UnrelatedBlockValidator
+from app.validators.questionnaire_schema import (
+    get_all_answer_ids,
+    get_first_answer_in_block,
+)
 
 
 class RelationshipCollectorValidator(BlockValidator):
@@ -43,12 +47,12 @@ class RelationshipCollectorValidator(BlockValidator):
 
     def validate_answer_type(self):
         """Validate that the answer type of the first answer in the block is of type 'Relationship'."""
-        if self.questionnaire_schema.get_first_answer_in_block(self.block["id"])["type"] != "Relationship":
+        if get_first_answer_in_block(self.questionnaire_schema, self.block["id"])["type"] != "Relationship":
             self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE)
 
     def validate_multiple_answers(self):
         """Validate that there is only one answer in the block."""
-        answer_ids = self.questionnaire_schema.get_all_answer_ids(self.block["id"])
+        answer_ids = get_all_answer_ids(self.questionnaire_schema, self.block["id"])
 
         if len(answer_ids) > 1:
             self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_MULTIPLE_ANSWERS)

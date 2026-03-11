@@ -5,7 +5,10 @@ Classes:
 """
 
 from app.answer_type import AnswerType
-from app.validators.questionnaire_schema import get_object_containing_key
+from app.validators.questionnaire_schema import (
+    get_block_by_answer_id,
+    get_object_containing_key,
+)
 from app.validators.validator import Validator
 
 
@@ -57,7 +60,7 @@ class AnswerValidator(Validator):
         and questionnaire schema data version.
         """
         is_confirmation_question = (
-            self.questionnaire_schema.get_block_by_answer_id(self.answer_id).get("type") == "ConfirmationQuestion"
+            get_block_by_answer_id(self.questionnaire_schema, self.answer_id).get("type") == "ConfirmationQuestion"
         )
 
         if self.questionnaire_schema.schema["data_version"] != "0.0.1" or is_confirmation_question:
