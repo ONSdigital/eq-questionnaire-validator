@@ -1,5 +1,5 @@
 from app.validators.blocks import PrimaryPersonListCollectorValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -8,7 +8,7 @@ def test_invalid_primary_person_list_collector_with_different_add_block_answer_i
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "primary-person-list-collector")  # type: ignore
 
     # Validator always instantiates for this test schema (block always exists)
     validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore
@@ -29,7 +29,7 @@ def test_primary_person_invalid_list_collector_non_radio():
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     validator = PrimaryPersonListCollectorValidator(
         # Block always exists in this test schema, .get_block() will never return None
-        questionnaire_schema.get_block("primary-person-list-collector"),  # type: ignore
+        get_block(questionnaire_schema, "primary-person-list-collector"),  # type: ignore
         questionnaire_schema,
     )
 
@@ -47,7 +47,7 @@ def test_invalid_primary_person_list_collector_with_no_add_or_edit_answer_action
     filename = "schemas/invalid/test_invalid_primary_person_list_collector_no_add_edit_action.json"
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "primary-person-list-collector")  # type: ignore
 
     # Validator always instantiates for this test schema (block always exists)
     validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore
@@ -67,7 +67,7 @@ def test_invalid_primary_person_list_collector_same_name_answer_id_reference():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("primary-person-list-collector")  # type: ignore
+    block = get_block(questionnaire_schema, "primary-person-list-collector")  # type: ignore
 
     # Validator always instantiates for this test schema (block always exists)
     validator = PrimaryPersonListCollectorValidator(block, questionnaire_schema)  # type: ignore

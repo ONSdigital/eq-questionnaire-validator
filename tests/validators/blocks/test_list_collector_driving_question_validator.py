@@ -1,7 +1,7 @@
 from app.validators.blocks.list_collector_driving_question_validator import (
     ListCollectorDrivingQuestionValidator,
 )
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -9,7 +9,7 @@ def test_invalid_driving_question_multiple_driving_questions():
     filename = "schemas/invalid/test_invalid_list_collector_driving_question_multiple_driving_questions.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
-    block = questionnaire_schema.get_block("anyone-usually-live-at")
+    block = get_block(questionnaire_schema, "anyone-usually-live-at")
     validator = ListCollectorDrivingQuestionValidator(block, questionnaire_schema)  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
 

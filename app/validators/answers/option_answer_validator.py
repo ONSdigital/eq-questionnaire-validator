@@ -9,6 +9,7 @@ from functools import cached_property
 
 from app.answer_type import AnswerType
 from app.validators.answers.answer_validator import AnswerValidator
+from app.validators.questionnaire_schema import get_answer_type
 from app.validators.rules.rule_validator import RulesValidator
 
 MIN_OPTIONS_BY_ANSWER_TYPE = {
@@ -175,7 +176,7 @@ class OptionAnswerValidator(AnswerValidator):
         transform = self.dynamic_options["transform"]
 
         if value_source["source"] == "answers":
-            if self.questionnaire_schema.get_answer_type(value_source["identifier"]) != AnswerType.CHECKBOX:
+            if get_answer_type(self.questionnaire_schema, value_source["identifier"]) != AnswerType.CHECKBOX:
                 self.add_error(
                     self.DYNAMIC_OPTIONS_REFERENCES_NON_CHECKBOX_ANSWER,
                     value_source=value_source,

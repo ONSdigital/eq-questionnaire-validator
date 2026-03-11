@@ -5,6 +5,7 @@ from app.validators.questionnaire_schema import (
     MAX_NUMBER,
     MIN_NUMBER,
     QuestionnaireSchema,
+    get_answer,
 )
 from tests.conftest import get_mock_schema_with_data_version
 from tests.utils import _open_and_load_schema_file
@@ -141,7 +142,7 @@ def test_valid_max_if_numeric_value_source():
     filename = "schemas/valid/test_calculated_summary.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    answer = schema.get_answer("set-maximum-answer")
+    answer = get_answer(schema, "set-maximum-answer")
 
     validator = NumberAnswerValidator(answer, schema)
 
@@ -191,7 +192,7 @@ def test_invalid_range_calculated_summary_source():
     filename = "schemas/invalid/test_invalid_calculated_summary_answer_ranges.json"
     schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
 
-    answer = schema.get_answer("set-minimum-answer")
+    answer = get_answer(schema, "set-minimum-answer")
 
     validator = NumberAnswerValidator(
         answer,

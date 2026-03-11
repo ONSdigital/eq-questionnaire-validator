@@ -17,6 +17,8 @@ from app.validators.placeholders.placeholder_validator import PlaceholderValidat
 from app.validators.questionnaire_schema import (
     QuestionnaireSchema,
     find_duplicates,
+    get_block_by_answer_id,
+    get_blocks,
     get_object_containing_key,
 )
 from app.validators.sections.section_validator import SectionValidator
@@ -188,7 +190,7 @@ class QuestionnaireValidator(Validator):
 
     def validate_introduction_block(self):
         """Validate if introduction block is present when preview questions are enabled."""
-        blocks = self.questionnaire_schema.get_blocks()
+        blocks = get_blocks(self.questionnaire_schema)
         has_introduction_blocks = any(block["type"] == "Introduction" for block in blocks)
         if not has_introduction_blocks:
             self.add_error(error_messages.PREVIEW_WITHOUT_INTRODUCTION_BLOCK)
@@ -216,7 +218,8 @@ class QuestionnaireValidator(Validator):
             # set up default parent_block_id for later check (group or block level)
             parent_block_id = None
             if "source" in identifier_reference and identifier_reference["source"] == "answers":
-                source_block = self.questionnaire_schema.get_block_by_answer_id(
+                source_block = get_block_by_answer_id(
+                    self.questionnaire_schema,
                     identifier_reference["identifier"],
                 )
                 # Handling non-existing blocks used as source
@@ -273,7 +276,8 @@ class QuestionnaireValidator(Validator):
         identifier_references = get_object_containing_key(section, "source")
         for path, identifier_reference, _ in identifier_references:
             if "source" in identifier_reference and identifier_reference["source"] == "answers" and "enabled" in path:
-                source_block = self.questionnaire_schema.get_block_by_answer_id(
+                source_block = get_block_by_answer_id(
+                    self.questionnaire_schema,
                     identifier_reference["identifier"],
                 )
                 if (

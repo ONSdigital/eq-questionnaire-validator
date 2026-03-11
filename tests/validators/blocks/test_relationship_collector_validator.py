@@ -1,5 +1,5 @@
 from app.validators.blocks import RelationshipCollectorValidator
-from app.validators.questionnaire_schema import QuestionnaireSchema
+from app.validators.questionnaire_schema import QuestionnaireSchema, get_block
 from tests.utils import _open_and_load_schema_file
 
 
@@ -8,7 +8,7 @@ def test_invalid_relationship_multiple_answers():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("relationships")  # type: ignore
+    block = get_block(questionnaire_schema, "relationships")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = RelationshipCollectorValidator(block, questionnaire_schema)  # type: ignore
 
@@ -29,7 +29,7 @@ def test_invalid_relationship_wrong_answer_type():
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
     # Block always exists in this test schema, .get_block() will never return None
-    block = questionnaire_schema.get_block("relationships")  # type: ignore
+    block = get_block(questionnaire_schema, "relationships")  # type: ignore
     # Validator always instantiates for this test schema (block always exists)
     validator = RelationshipCollectorValidator(block, questionnaire_schema)  # type: ignore
 
