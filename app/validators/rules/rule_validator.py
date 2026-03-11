@@ -205,6 +205,9 @@ class RulesValidator(Validator):
 
         Args:
             arguments (list): The list of arguments to fetch the non `map` operator arguments from.
+
+        Returns:
+            non_operator_arguments (list): A list of all the non `map` operator arguments found within the arguments.
         """
         return [
             non_operator_argument
@@ -220,6 +223,9 @@ class RulesValidator(Validator):
 
         Args:
             argument (any): The argument to fetch the non `map` operator arguments from.
+
+        Returns:
+            non_operator_arguments (list): A list of all the non `map` operator arguments found within the argument.
         """
         non_operator_arguments = []
         if isinstance(argument, dict) and any(
@@ -305,6 +311,9 @@ class RulesValidator(Validator):
 
         Args:
             rule (dict): The rule containing the operator and its arguments to validate.
+
+        Returns:
+            The type of the operator result.
         """
         operator_name = next(iter(rule))
         argument_types = self._get_argument_types_for_operator(rule[operator_name])
