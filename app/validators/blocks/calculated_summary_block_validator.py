@@ -1,3 +1,11 @@
+"""This module contains the CalculatedSummaryBlockValidator class, which is responsible for validating calculated
+summary blocks in a questionnaire schema. It inherits from the CalculationBlockValidator and adds additional validation
+specific to calculated summary blocks.
+
+Classes:
+    CalculatedSummaryBlockValidator
+"""
+
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
 from app.validators.questionnaire_schema import (
     get_all_dynamic_answer_ids,
@@ -7,6 +15,19 @@ from app.validators.questionnaire_schema import (
 
 
 class CalculatedSummaryBlockValidator(CalculationBlockValidator):
+    """Validator for calculated summary blocks. Inherits from CalculationBlockValidator and adds additional validation.
+
+    Attributes:
+        block (dict): The block to be validated.
+        questionnaire_schema (QuestionnaireSchema): The questionnaire schema to validate against.
+
+    Methods:
+        validate
+        validate_single_answer_is_for_repeating_answers
+        validate_answer_id_set_before_calculated_summary_block
+        validate_answer_id_for_calculated_summary_not_in_different_section
+    """
+
     ANSWER_SET_AFTER_CALCULATED_SUMMARY = (
         "Answer ids for calculated summary must be set before calculated summary block"
     )
@@ -25,6 +46,11 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         )
 
     def validate(self):
+        """Validate the calculated summary block by performing several checks on the answers to be calculated.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
 
         if (answers := self.get_answers(self.answers_to_calculate)) is None:
@@ -39,7 +65,11 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
         return self.errors
 
     def validate_single_answer_is_for_repeating_answers(self, answers: list[dict]):
-        """Validate that if there is only one answer in the answers_to_calculate list, it's for repeating answers."""
+        """Validate that if there is only one answer in the answers_to_calculate list, it's for repeating answers.
+
+        Args:
+            answers: A list of answer dictionaries to be calculated in the calculated summary block.
+        """
         if len(answers) == 1:
             single_answer_id = answers[0]["id"]
             # check if its dynamic
@@ -63,6 +93,7 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
             )
 
     def validate_answer_id_set_before_calculated_summary_block(self):
+        """Validate that answer ids in the answers_to_calculate list are set before the calculated summary block."""
         for answer_id in self.answers_to_calculate:
             answer_id_block = get_block_id_by_answer_id(
                 self.questionnaire_schema,
@@ -77,6 +108,9 @@ class CalculatedSummaryBlockValidator(CalculationBlockValidator):
                 )
 
     def validate_answer_id_for_calculated_summary_not_in_different_section(self):
+        """Validate that all answer ids in the answers_to_calculate list are in the same section as the calculated
+        summary block.
+        """
         answer_section_ids = {
             self.questionnaire_schema.answers_with_context[answer_id]["section"]
             for answer_id in self.answers_to_calculate

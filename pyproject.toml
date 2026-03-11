@@ -26,9 +26,9 @@ pylint = "^4.0.4"
 pytest-cov = "^7.0.0"
 pytest-xdist = "^3.6.1"
 pytest-sugar = "^1.0.0"
-black = "^26.1.0"
+black = "^26.3.0"
 flake8-quotes = "^3.4.0"
-ruff = "^0.14.13"
+ruff = "^0.15.5"
 httpx = "^0.28.1"
 
 [build-system]
@@ -42,6 +42,7 @@ line-length = 120
 [tool.ruff]
 line-length = 120
 indent-width = 4
+extend-exclude = ["tests"]
 
 [tool.ruff.lint]
 
@@ -110,6 +111,8 @@ ignore = [
     "D104",
     # Hide 'D107 Missing docstring in `__init__`' - to be revisited
     "D107",
+    # Hide '1 blank line required between summary line and description' - to be revisited
+    "D205"
 
 ]
 

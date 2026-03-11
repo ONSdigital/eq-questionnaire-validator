@@ -21,6 +21,17 @@ from app.validators.blocks.relationship_collector_validator import (
 
 
 def get_block_validator(block, questionnaire_schema):
+    """Factory function called by section validator to return the appropriate block validator based on
+    the block type. If block type doesn't match keys in validators dict, it returns a default `BlockValidator`.
+
+    Args:
+        block (dict): The block to be validated.
+        questionnaire_schema (QuestionnaireSchema): The entire questionnaire schema, which may be needed for certain
+        validators.
+
+    Returns:
+        An instance of a block validator class that corresponds to the type of the block.
+    """
     validators = {
         "CalculatedSummary": CalculatedSummaryBlockValidator,
         "GrandCalculatedSummary": GrandCalculatedSummaryBlockValidator,

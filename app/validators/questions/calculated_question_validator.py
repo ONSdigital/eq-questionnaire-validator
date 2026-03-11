@@ -1,3 +1,10 @@
+"""This module provides the `CalculatedQuestionValidator` class, which is responsible for validating calculated
+questions in a questionnaire schema.
+
+Classes:
+    CalculatedQuestionValidator
+"""
+
 from app.validators.questionnaire_schema import (
     get_all_dynamic_answer_ids,
     get_answer_type,
@@ -8,6 +15,18 @@ from app.validators.routing.types import ANSWER_TYPE_TO_JSON_TYPE, TYPE_NUMBER
 
 
 class CalculatedQuestionValidator(QuestionValidator):
+    """Validator for calculated questions in a questionnaire schema.
+
+    Methods:
+        validate
+        _get_answer_types
+        validate_calculations
+        _validate_answers_are_numeric
+        validate_calculations_numeric_matching_answer_types
+        _validate_answers_are_same_numeric_type
+        validate_answers_are_numeric
+    """
+
     ANSWER_NOT_IN_QUESTION = "Answer does not exist within this question"
     ANSWER_TYPE_FOR_CALCULATION_TYPE_INVALID = (
         "Expected the answer type for calculation to be type 'number' but got type '{answer_type}'"
@@ -18,6 +37,9 @@ class CalculatedQuestionValidator(QuestionValidator):
     ANSWERS_TO_CALCULATE_TOO_SHORT = "Answers to calculate list is too short {list}"
 
     def validate(self):
+        """Validate the calculated question by first calling validate_calculations. If there are no errors,
+        it then calls validate_calculations_numeric_matching_answer_types.
+        """
         super().validate()
         self.validate_calculations()
         if self.errors:
@@ -31,6 +53,15 @@ class CalculatedQuestionValidator(QuestionValidator):
         answer_id: str | None,
         answers_to_calculate: list[str],
     ) -> dict[str, str]:
+        """Get the answer types for the answer_id and answers_to_calculate list.
+
+        Args:
+            answer_id: The answer id of the calculation, if applicable.
+            answers_to_calculate: The list of answer ids that are being calculated.
+
+        Returns:
+            A dictionary of answer ids and their corresponding answer types.
+        """
         if not self.schema:
             return {}
         return {
@@ -40,7 +71,7 @@ class CalculatedQuestionValidator(QuestionValidator):
         }
 
     def validate_calculations(self):
-        """Validates that any answer ids within the 'answer_to_group' list are existing answers within the question."""
+        """Validate that any answer ids within the 'answer_to_group' list are existing answers within the question."""
         if not self.schema:
             return
         answer_ids = [answer["id"] for answer in self.answers]
@@ -61,6 +92,11 @@ class CalculatedQuestionValidator(QuestionValidator):
                         self.add_error(self.ANSWER_NOT_IN_QUESTION, answer_id=answer_id)
 
     def _validate_answers_are_numeric(self, answer_types: dict[str, str]):
+        """Check that the answers to calculate and any answer_id are of a number type.
+
+        Args:
+            answer_types: A dictionary of answer ids and their corresponding answer types.
+        """
         for answer_id, answer_type in answer_types.items():
             if ANSWER_TYPE_TO_JSON_TYPE[answer_type] != TYPE_NUMBER:
                 self.add_error(
@@ -71,7 +107,7 @@ class CalculatedQuestionValidator(QuestionValidator):
                 )
 
     def validate_calculations_numeric_matching_answer_types(self):
-        """Validates that source answer is of number type, and that the answers_to_calculate match that type."""
+        """Validate that source answer is of number type, and that the answers_to_calculate match that type."""
         if calculations := self.question.get("calculations"):
             for calculation in calculations:
                 if not (answer_id := calculation.get("answer_id")):
@@ -88,7 +124,11 @@ class CalculatedQuestionValidator(QuestionValidator):
                 self._validate_answers_are_same_numeric_type(answer_types)
 
     def _validate_answers_are_same_numeric_type(self, answer_types: dict[str, str]):
-        """Checks that the answers to calculate and any answer_id are all the same type."""
+        """Check that the answers to calculate and any answer_id are all the same type.
+
+        Args:
+            answer_types: A dictionary of answer ids and their corresponding answer types.
+        """
         distinct_types = set(answer_types.values())
         if len(distinct_types) > 1:
             self.add_error(

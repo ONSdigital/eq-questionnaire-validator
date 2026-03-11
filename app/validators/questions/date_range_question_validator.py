@@ -1,8 +1,23 @@
+"""This module provides the `DateRangeQuestionValidator` class, which is responsible for validating date range questions
+in a questionnaire schema.
+
+Classes:
+    DateRangeQuestionValidator
+"""
+
 from app.validators.answers.date_answer_validator import DateAnswerValidator
 from app.validators.questions.question_validator import QuestionValidator
 
 
 class DateRangeQuestionValidator(QuestionValidator):
+    """Validator for date range questions in a questionnaire schema.
+
+    Methods:
+        validate
+        validate_range
+        validate_period_limits
+    """
+
     MIN_GREATER_THAN_MAX = "The minimum period is greater than the maximum period"
     CANNOT_USE_DAYS = "Days can not be used in period_limit for yyyy-mm date range"
     CANNOT_USE_DAYS_MONTHS = "Days/Months can not be used in period_limit for yyyy date range"
@@ -14,9 +29,11 @@ class DateRangeQuestionValidator(QuestionValidator):
 
     def validate(self):
         """Validate the date range question.
-
         If period_limits object is present in the DateRange question validates that a date range
         does not have a negative period and days can not be used to define limits for yyyy-mm date ranges.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
         """
         super().validate()
         self.validate_range()
@@ -24,6 +41,10 @@ class DateRangeQuestionValidator(QuestionValidator):
         return self.errors
 
     def validate_range(self):
+        """Validate that the minimum period is not greater than the maximum period in the period_limits object
+        of a DateRange question. It uses an example date to calculate the minimum and maximum possible dates
+        based on the provided period limits, and checks if the minimum date is greater than the maximum date.
+        """
         if "minimum" in self.period_limits and "maximum" in self.period_limits:
             example_date = "2016-05-10"
 
@@ -41,6 +62,9 @@ class DateRangeQuestionValidator(QuestionValidator):
                 self.add_error(self.MIN_GREATER_THAN_MAX)
 
     def validate_period_limits(self):
+        """If period_limits object is present in the DateRange question, it validates that days can not be used
+        to define limits for yyyy-mm and yyyy date ranges.
+        """
         first_answer_type = self.answers[0]["type"]
 
         has_days_limit = "days" in self.period_limits.get(

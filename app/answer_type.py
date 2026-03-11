@@ -1,7 +1,17 @@
+"""Define the AnswerType and AnswerOptionType enums that are used in validators to specify the types of answers that
+can be validated.
+
+Classes:
+    AnswerType
+    AnswerOptionType
+"""
+
 from enum import Enum
 
 
 class AnswerType(Enum):
+    """Define the types of answers that can be used in validators and reflect the answer types in the schema."""
+
     ADDRESS = "Address"
     CHECKBOX = "Checkbox"
     CURRENCY = "Currency"
@@ -21,6 +31,10 @@ class AnswerType(Enum):
 
 
 class AnswerOptionType(Enum):
+    """Define the types of answers with options that can be used in a validators and reflect the answer types in the
+    schema.
+    """
+
     DROPDOWN = "Dropdown"
     CHECKBOX = "Checkbox"
     RADIO = "Radio"

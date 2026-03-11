@@ -1,3 +1,10 @@
+"""This module contains the GrandCalculatedSummaryBlockValidator class, which is responsible for validating grand
+calculated summary blocks in a questionnaire schema.
+
+Classes:
+    GrandCalculatedSummaryBlockValidator
+"""
+
 from collections.abc import Mapping
 
 from app.validators.blocks.calculation_block_validator import CalculationBlockValidator
@@ -9,6 +16,22 @@ from app.validators.questionnaire_schema import (
 
 
 class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
+    """Validator for grand calculated summary blocks. Inherits from CalculationBlockValidator and adds additional
+    validation.
+
+    Attributes:
+        block (dict): The block to be validated.
+        questionnaire_schema (QuestionnaireSchema): The questionnaire schema to validate against.
+
+    Methods:
+        validate
+        validate_calculated_summary_ids_to_calculate
+        validate_calculated_summary_is_before_grand_calculated_summary_block
+        validate_calculated_summaries
+        _validate_static_calculated_summary_in_repeating_grand_calculated_summary
+        _validate_repeating_calculated_summary_in_grand_calculated_summary
+    """
+
     CALCULATED_SUMMARY_WITH_DUPLICATE_ANSWERS = (
         "Cannot have multiple calculated summaries referencing exactly the same answers in a grand calculated summary"
     )
@@ -39,6 +62,12 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         )
 
     def validate(self):
+        """Validate the grand calculated summary block by performing several checks on the calculated summaries to be
+        calculated.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         super().validate()
 
         if self.validate_calculated_summary_ids_to_calculate():
@@ -63,6 +92,11 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         return self.errors
 
     def validate_calculated_summary_ids_to_calculate(self):
+        """Validate that all calculated summary ids in the calculated_summaries_to_calculate list are valid.
+
+        Returns:
+            A list of error messages if validation fails, or an empty list if validation passes.
+        """
         for calculated_summary_id in self.calculated_summaries_to_calculate:
             calculated_summary_block = get_block(
                 self.questionnaire_schema,
@@ -84,6 +118,9 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
     def validate_calculated_summary_is_before_grand_calculated_summary_block(
         self,
     ):
+        """Validate that all calculated summary blocks are before the grand calculated summary block in the
+        questionnaire schema.
+        """
         for calculated_summary_id in self.calculated_summaries_to_calculate:
             if self.questionnaire_schema.block_ids.index(
                 calculated_summary_id,
@@ -95,11 +132,8 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
                 )
 
     def validate_calculated_summaries(self):
-        """Validates the calculated summaries.
-
-        Run additional validation for the scenarios:
-        1) any grand calculated summary referencing a repeating calculated summary
-        2) repeating grand calculated summary referencing a static calculated summary
+        """Validate that any grand calculated summary is referencing a repeating calculated summary and repeating
+        grand calculated summary is referencing a static calculated summary.
         """
         if grand_calculated_summary_section := self.questionnaire_schema.get_parent_section_for_block(self.block["id"]):
             is_grand_calculated_summary_repeating = self.questionnaire_schema.is_repeating_section(
@@ -127,10 +161,13 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         list_name: str,
         calculated_summary_id: str,
     ):
-        """Validates that the grand calculated summary is correctly referencing a static calculated summary.
-
+        """Validate that the grand calculated summary is correctly referencing a static calculated summary.
         If the grand calculated summary is repeating, and references a static calculated summary with repeating answers,
         this is only valid if the repeating answers are for a different list to the grand calculated summary.
+
+        Args:
+            list_name: The name of the list that the grand calculated summary is repeating for.
+            calculated_summary_id: The id of the calculated summary block being validated.
         """
         for answer_id in self.calculated_summary_answers[calculated_summary_id]:
             if (
@@ -152,11 +189,15 @@ class GrandCalculatedSummaryBlockValidator(CalculationBlockValidator):
         is_grand_calculated_summary_repeating: bool,
         grand_calculated_summary_section_id: str,
     ):
-        """Validates that the grand calculated summary is correctly referencing a repeating calculated summary.
+        """Validate that the grand calculated summary is correctly referencing a repeating calculated summary.
+        If the grand calculated summary references a repeating calculated summary, this is only valid if the grand
+        calculated summary is also repeating, or it is in the same repeating section as the repeating calculated
+        summary it references.
 
-        If the grand calculated summary references a repeating calculated summary, this is only valid if:
-        1) the grand calculated summary is also repeating
-        2) it is in the same repeating section as the repeating calculated summary it references
+        Args:
+            calculated_summary_id: The id of the calculated summary block being validated.
+            is_grand_calculated_summary_repeating: Whether the grand calculated summary block is in a repeating section.
+            grand_calculated_summary_section_id: The id of the section the grand calculated summary block is in.
         """
         if not is_grand_calculated_summary_repeating:
             self.add_error(
