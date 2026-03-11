@@ -42,6 +42,7 @@ line-length = 120
 [tool.ruff]
 line-length = 120
 indent-width = 4
+extend-exclude = ["tests"]
 
 [tool.ruff.lint]
 
@@ -98,10 +99,8 @@ ignore = [
     "TD002",
     # Allow TODO comments without a linked issue
     "TD003",
-
     # Hide 'B019 @lru_cache warning' - to be reviewed
     "B019",
-
     # Hide 'D100 Missing docstring in public module' - to be revisited
     "D100",
     # Hide 'D101 Missing docstring in public class' - to be revisited
@@ -114,6 +113,8 @@ ignore = [
     "D104",
     # Hide 'D107 Missing docstring in `__init__`' - to be revisited
     "D107",
+    # Hide '1 blank line required between summary line and description' - to be revisited
+    "D205"
 
 ]
 
