@@ -1060,7 +1060,7 @@ class QuestionnaireSchema:
                 return section_id
         return None
 
-    def get_section_id_for_block_id(self, block_id: str) -> str | None:]
+    def get_section_id_for_block_id(self, block_id: str) -> str | None:
         """Get the section id for a given block id by first getting the block using get_block and then using
         get_section_id_for_block.
 

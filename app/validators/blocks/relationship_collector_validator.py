@@ -49,7 +49,7 @@ class RelationshipCollectorValidator(BlockValidator):
         """Validate that the answer type of the first answer in the block is of type 'Relationship'."""
         if get_first_answer_in_block(self.questionnaire_schema, self.block["id"])["type"] != "Relationship":
             self.add_error(self.RELATIONSHIP_COLLECTOR_HAS_INVALID_ANSWER_TYPE)
-            
+
     def validate_multiple_answers(self):
         """Validate that there is only one answer in the block."""
         answer_ids = get_all_answer_ids(self.questionnaire_schema, self.block["id"])
