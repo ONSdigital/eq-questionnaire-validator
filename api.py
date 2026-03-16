@@ -262,13 +262,15 @@ async def validate_schema(data):  # pylint: disable=R0911
         )
 
         return Response(
-            content=json.dumps({**response, "validator_version": VALIDATOR_VERSION, "success": False}), status_code=400
+            content=json.dumps({**response, "validator_version": VALIDATOR_VERSION, "success": False}),
+            status_code=400,
         )
 
     logger.info("Schema validation successfully completed with no errors", status=200)
 
     return Response(
-        content=json.dumps({**response, "validator_version": VALIDATOR_VERSION, "success": True}), status_code=200
+        content=json.dumps({**response, "validator_version": VALIDATOR_VERSION, "success": True}),
+        status_code=200,
     )
 
 

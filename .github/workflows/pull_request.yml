@@ -50,7 +50,7 @@ jobs:
       - name: Lint Python
         run: make lint
 
-  test-unit:
+  test:
     permissions:
       contents: read
     runs-on: ubuntu-22.04
@@ -88,37 +88,8 @@ jobs:
       - name: Install virtual environment
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: poetry install
-      - name: Running unit tests
-        run: make test-unit
-
-  test-integration:
-    permissions:
-      contents: read
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - run: echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a # v1.4.1
-        with:
-          version: 2.1.2
-          virtualenvs-create: true
-          virtualenvs-in-project: false
-          virtualenvs-path: ~/.virtualenvs
-      - name: Cache Poetry virtualenv
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        id: cache-virtualenv
-        with:
-          path: ~/.virtualenvs
-          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-virtualenvs-${{ hashFiles('poetry.lock') }}
-      - name: Install virtual environment
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: poetry install
-      - name: Running integration tests
-        run: make test-integration
+      - name: Running Python tests
+        run: make test-python
 
   docker-push-and-check:
     permissions:
@@ -206,7 +177,7 @@ jobs:
           schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
-          if [ "$result" = "{}" ]; then
+          if [ "$result" = "{'validator_version': 'local', 'success': true}" ]; then
             echo "Validation successful, returned empty JSON as expected!"
             exit 0
           fi
@@ -217,7 +188,7 @@ jobs:
           schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
-          if [[ "$result" == *"error"* ]]; then
+          if [[ "$result" == *'"validation_version"'* && "$result" == *'"success": false'* && "$result" == *"error"* ]]; then
           echo "Validation returned error as expected!"
           exit 0
           fi

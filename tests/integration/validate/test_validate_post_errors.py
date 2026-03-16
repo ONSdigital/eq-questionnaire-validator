@@ -42,6 +42,6 @@ def test_validate_post_questionnaire_validator_errors(client, load_invalid_schem
             }
         ],
         "success": False,
-        "validator_version": "9.0.0",
+        "validator_version": "local",
     }
     assert "errors" in response.text

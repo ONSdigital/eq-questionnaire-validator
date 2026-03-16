@@ -140,23 +140,17 @@ make stop-ajv
 ### Testing and running against local schemas
 
 By default, all schemas in the `tests/schemas/valid` and `tests/schemas/invalid` directories will be
-evaluated as part of the unit tests. Any errors in these schemas will cause a failure.
+evaluated as part of the Python tests. Any errors in these schemas will cause a failure.
 
-To run the app's unit tests:
+To run the app's Python tests:
 
 ```shell
-make test-unit
+make test-python
 ```
 
 Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you
 do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing `<PID>` with
 the process id from the previous command.
-
-To run the app's integration tests:
-
-```shell
-make test-integration
-```
 
 Run the Ajv validator tests:
 
