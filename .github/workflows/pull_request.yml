@@ -177,11 +177,11 @@ jobs:
           schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
-          if [ "$result" = "{'validator_version': 'local', 'success': true}" ]; then
-            echo "Validation successful, returned empty JSON as expected!"
+          if [ "$result" = '{"validator_version": "local", "success": true}' ]; then
+            echo "Validation successful, returned JSON as expected!"
             exit 0
           fi
-          echo "Unexpected validation error, did not return empty JSON. Actual result: $result"
+          echo "Unexpected validation error, did not return correct JSON. Actual result: $result"
           exit 1
       - name: Check Invalid Schema Validation
         run: |
