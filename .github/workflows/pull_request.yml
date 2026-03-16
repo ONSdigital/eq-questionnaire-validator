@@ -188,9 +188,10 @@ jobs:
           schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/invalid/test_invalid_introduction_block.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
-          if [[ "$result" == *'"validation_version"'* && "$result" == *'"success": false'* && "$result" == *"error"* ]]; then
-          echo "Validation returned error as expected!"
+          if [ "$result" = '{"errors": [{"instancePath": "/sections/0", "schemaPath": "#/allOf/0/then/properties/sections/items/required", "keyword": "required", "params": {"missingProperty": "title"}\
+          , "message": "must have required property 'title'"}], "validator_version": "local", "success": false}' ]; then
+          echo "Validation returned JSON as expected!"
           exit 0
           fi
-          echo "Validation did not return error. Actual result: $result"
+          echo "Validation did not return correct JSON. Actual result: $result"
           exit 1
