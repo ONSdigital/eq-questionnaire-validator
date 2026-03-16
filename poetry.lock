@@ -458,20 +458,20 @@ testing = ["hatch", "pre-commit", "pytest", "tox"]
 
 [[package]]
 name = "fastapi"
-version = "0.133.0"
+version = "0.135.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "fastapi-0.133.0-py3-none-any.whl", hash = "sha256:0a78878483d60702a1dde864c24ab349a1a53ef4db6b6f74f8cd4a2b2bc67d2f"},
-    {file = "fastapi-0.133.0.tar.gz", hash = "sha256:b900a2bf5685cdb0647a41d5900bdeafc3a9e8a28ac08c6246b76699e164d60d"},
+    {file = "fastapi-0.135.1-py3-none-any.whl", hash = "sha256:46e2fc5745924b7c840f71ddd277382af29ce1cdb7d5eab5bf697e3fb9999c9e"},
+    {file = "fastapi-0.135.1.tar.gz", hash = "sha256:d04115b508d936d254cea545b7312ecaa58a7b3a0f84952535b4c9afae7668cd"},
 ]
 
 [package.dependencies]
 annotated-doc = ">=0.0.2"
 pydantic = ">=2.7.0"
-starlette = ">=0.40.0"
+starlette = ">=0.46.0"
 typing-extensions = ">=4.8.0"
 typing-inspection = ">=0.4.2"
 
@@ -639,19 +639,15 @@ plugins = ["setuptools"]
 
 [[package]]
 name = "jsonpath-ng"
-version = "1.7.0"
+version = "1.8.0"
 description = "A final implementation of JSONPath for Python that aims to be standard compliant, including arithmetic and binary comparison operators and providing clear AST for metaprogramming."
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "jsonpath-ng-1.7.0.tar.gz", hash = "sha256:f6f5f7fd4e5ff79c785f1573b394043b39849fb2bb47bcead935d12b00beab3c"},
-    {file = "jsonpath_ng-1.7.0-py2-none-any.whl", hash = "sha256:898c93fc173f0c336784a3fa63d7434297544b7198124a68f9a3ef9597b0ae6e"},
-    {file = "jsonpath_ng-1.7.0-py3-none-any.whl", hash = "sha256:f3d7f9e848cba1b6da28c55b1c26ff915dc9e0b1ba7e752a53d6da8d5cbd00b6"},
+    {file = "jsonpath_ng-1.8.0-py3-none-any.whl", hash = "sha256:b8dde192f8af58d646fc031fac9c99fe4d00326afc4148f1f043c601a8cfe138"},
+    {file = "jsonpath_ng-1.8.0.tar.gz", hash = "sha256:54252968134b5e549ea5b872f1df1168bd7defe1a52fed5a358c194e1943ddc3"},
 ]
-
-[package.dependencies]
-ply = "*"
 
 [[package]]
 name = "jsonpointer"
@@ -788,18 +784,6 @@ files = [
 [package.extras]
 dev = ["pre-commit", "tox"]
 testing = ["coverage", "pytest", "pytest-benchmark"]
-
-[[package]]
-name = "ply"
-version = "3.11"
-description = "Python Lex & Yacc"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
-    {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
-]
 
 [[package]]
 name = "pycodestyle"
@@ -1571,14 +1555,14 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "uvicorn"
-version = "0.41.0"
+version = "0.42.0"
 description = "The lightning-fast ASGI server."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "uvicorn-0.41.0-py3-none-any.whl", hash = "sha256:29e35b1d2c36a04b9e180d4007ede3bcb32a85fbdfd6c6aeb3f26839de088187"},
-    {file = "uvicorn-0.41.0.tar.gz", hash = "sha256:09d11cf7008da33113824ee5a1c6422d89fbc2ff476540d69a34c87fab8b571a"},
+    {file = "uvicorn-0.42.0-py3-none-any.whl", hash = "sha256:96c30f5c7abe6f74ae8900a70e92b85ad6613b745d4879eb9b16ccad15645359"},
+    {file = "uvicorn-0.42.0.tar.gz", hash = "sha256:9b1f190ce15a2dd22e7758651d9b6d12df09a13d51ba5bf4fc33c383a48e1775"},
 ]
 
 [package.dependencies]
@@ -1591,4 +1575,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "aeff990d2234f4c8354e3b1804ce158562c4c172599c664b99a47987a49b93ee"
+content-hash = "aae0a10bfe757f6c502c7a2c896e4ffcff95c400121519bc3622b604e5766aa6"
