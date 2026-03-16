@@ -8,6 +8,7 @@ def test_validate_get_url_not_found(client):
     response = client.get("/validate", params={"url": url})
 
     assert response.status_code == 404
+    assert not hasattr(response, "content_type")
     assert "Could not load schema from allowed domain - URL not found" in response.text
 
 
@@ -17,4 +18,5 @@ def test_validate_get_url_domain_not_allowed(client):
     response = client.get("/validate", params={"url": url})
 
     assert response.status_code == 400
+    assert not hasattr(response, "content_type")
     assert "URL domain [does_not_exist.com] is not allowed" in response.text

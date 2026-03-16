@@ -11,5 +11,5 @@ def test_validate_get_url_happy_path(client):
     response = client.get("/validate", params={"url": valid_url})
 
     assert response.status_code == 200
-    assert response.json() == {}
+    assert response.json() == {"success": True, "validator_version": "9.0.0"}
     assert "errors" not in response.json()
