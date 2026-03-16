@@ -134,7 +134,7 @@ jobs:
       - name: Push AJV Validator Image
         run: |
           echo "Pushing to GAR with tag $TAG-ajv"
-          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator-ajv:$TAG-ajv
 
       - name: Create Validator Network
         run: docker network create validator-network
