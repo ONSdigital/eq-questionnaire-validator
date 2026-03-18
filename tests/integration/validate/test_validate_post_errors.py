@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 import pytest
 
 
@@ -5,8 +7,9 @@ import pytest
 def test_validate_no_json_data(client):
     """Test the /validate endpoint with no JSON data."""
     response = client.post("/validate")
+    with pytest.raises(JSONDecodeError):
+        response.json()
     assert response.status_code == 400
-    assert not hasattr(response, "content_type")
     assert "No JSON data provided for validation" in response.text
 
 
@@ -14,8 +17,9 @@ def test_validate_no_json_data(client):
 def test_validate_post_wrong_data_type(client):
     """Test the /validate endpoint with a wrong data type."""
     response = client.post("/validate", json=[7, 8, 9])
+    with pytest.raises(JSONDecodeError):
+        response.json()
     assert response.status_code == 400
-    assert not hasattr(response, "content_type")
     assert "Invalid data type received for validation" in response.text
 
 
@@ -23,8 +27,9 @@ def test_validate_post_wrong_data_type(client):
 def test_validate_post_ajv_unavailable_returns_503(client, load_valid_schema):
     """Test the /validate endpoint when the AJV service is unavailable."""
     response = client.post("/validate", json=load_valid_schema)
+    with pytest.raises(JSONDecodeError):
+        response.json()
     assert response.status_code == 503
-    assert not hasattr(response, "content_type")
     assert "AJV Schema Validator service unavailable" in response.text
 
 
