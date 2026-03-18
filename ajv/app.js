@@ -14,9 +14,11 @@ app.use(
   })
 );
 
-app.listen(AJV_VALIDATOR_PORT, () => {
-  debug(`Server running on port  ${AJV_VALIDATOR_PORT}`);
-});
+if (process.env.NODE_ENV !== "test" && require.main === module) {
+  app.listen(AJV_VALIDATOR_PORT, () => {
+    debug(`Server running on port  ${AJV_VALIDATOR_PORT}`);
+  });
+}
 
 const ajValidator = new Ajv2020({
   allErrors: false,

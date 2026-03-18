@@ -9,7 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "mocha --require @babel/register ajv/tests/*.js --exit",
+    "test": "jest",
     "lint": "npm run lint:schemas && npm run lint:test-schemas && npm run lint:ajv",
     "start": "DEBUG=ajv-schema-validator node ajv/app.js &",
     "stop": "kill -9 $(lsof -ti:$AJV_VALIDATOR_PORT)",
@@ -45,18 +45,18 @@
     "@babel/preset-env": "7.29.0",
     "@babel/register": "7.28.6",
     "@eslint/json": "^1.1.0",
-    "chai": "4.3.10",
     "chai-http": "4.4.0",
     "eslint": "^9.39.3",
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-security": "4.0.0",
     "fancy-log": "2.0.0",
     "globals": "^17.4.0",
+    "jest": "^30.3.0",
     "jsonc-eslint-parser": "^3.1.0",
-    "mocha": "11.1.0",
     "neostandard": "^0.13.0",
     "nodemon": "3.1.14",
-    "prettier": "2.8.8"
+    "prettier": "2.8.8",
+    "supertest": "^7.2.2"
   },
   "prettier": {}
 }
