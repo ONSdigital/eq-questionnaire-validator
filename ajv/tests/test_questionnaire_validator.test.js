@@ -17,10 +17,7 @@ describe("AJV schema Validator", () => {
   describe("POST /validate", () => {
     it("test_invalid_block_type", async () => {
       const data = fs.readFileSync("ajv/tests/schemas/invalid/test_invalid_block_type.json");
-      const res = await request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data));
+      const res = await request(app).post("/validate").set("content-type", "application/json").send(JSON.parse(data));
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty("success", false);
       const failure = res.body.errors.pop();
@@ -30,10 +27,7 @@ describe("AJV schema Validator", () => {
 
     it("test_valid_question_description", async () => {
       const data = fs.readFileSync("ajv/tests/schemas/valid/test_question_description.json");
-      const res = await request(app)
-        .post("/validate")
-        .set("content-type", "application/json")
-        .send(JSON.parse(data));
+      const res = await request(app).post("/validate").set("content-type", "application/json").send(JSON.parse(data));
       expect(res.status).toBe(200);
       expect(res.body.success).not.toBe(false);
     });
