@@ -177,7 +177,7 @@ jobs:
           schema_url="https://raw.githubusercontent.com/ONSdigital/eq-questionnaire-validator/refs/heads/main/tests/schemas/valid/test_checkbox_instruction.json"
           result=$(curl -s "http://localhost:5001/validate?url=$schema_url")
           echo "Validation result: $result"
-          if [ "$result" = '{"validator_version":"0.0.0","success": true}' ]; then
+          if [ "$result" = '{"validator_version":"0.0.0","success":true}' ]; then
             echo "Validation successful, returned JSON as expected!"
             exit 0
           fi
