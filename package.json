@@ -9,7 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest ajv/tests/*.js",
     "lint": "npm run lint:schemas && npm run lint:test-schemas && npm run lint:ajv",
     "start": "DEBUG=ajv-schema-validator node ajv/app.js &",
     "stop": "kill -9 $(lsof -ti:$AJV_VALIDATOR_PORT)",
