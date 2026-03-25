@@ -36,7 +36,6 @@
     "axios": "1.13.6",
     "debug": "4.4.3",
     "express": "5.2.1",
-    "form-data": "4.0.5",
     "glob": "13.0.6"
   },
   "devDependencies": {
@@ -48,7 +47,6 @@
     "eslint": "^9.39.3",
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-security": "4.0.0",
-    "fancy-log": "2.0.0",
     "globals": "^17.4.0",
     "jsonc-eslint-parser": "^3.1.0",
     "neostandard": "^0.13.0",
