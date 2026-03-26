@@ -133,7 +133,7 @@ jobs:
 
       - name: Push AJV Validator Image
         run: |
-          echo "Pushing to GAR with tag $TAG-ajv"
+          echo "Pushing to GAR with tag $TAG"
           docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator-ajv:$TAG
 
       - name: Create Validator Network
@@ -141,7 +141,7 @@ jobs:
 
       - name: Spin Up AJV Validator
         run: |
-          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator-ajv:$TAG
       - name: Spin Up Python Validator
         run: >
           docker run
