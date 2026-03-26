@@ -42,16 +42,13 @@ black: ## Run black linter code check.
 lint-python:
 	poetry run ./scripts/run_lint_python.sh
 
-test-unit:
-	poetry run ./scripts/run_tests_unit.sh
-
-test-integration:
-	poetry run ./scripts/run_tests_integration.sh
+test-python:
+	poetry run ./scripts/run_tests_python.sh
 
 test-ajv:
 	npm run test
 
-test: test-unit test-ajv test-integration
+test: test-python test-ajv
 
 format: format-python
 	npm run format

@@ -30,7 +30,8 @@ from urllib.parse import urlparse
 import requests
 import structlog
 import uvicorn
-from fastapi import Body, FastAPI, Response
+from fastapi import Body, FastAPI
+from fastapi.responses import JSONResponse, Response
 from requests import RequestException
 
 from app.validators.questionnaire_validator import QuestionnaireValidator
@@ -54,6 +55,8 @@ AJV_VALIDATOR_URL = os.getenv(
     "AJV_VALIDATOR_URL",
     f"{AJV_VALIDATOR_SCHEME}://{AJV_VALIDATOR_HOST}:{AJV_VALIDATOR_PORT}/validate",
 )
+
+VALIDATOR_VERSION = os.getenv("VALIDATOR_VERSION", "0.0.0")
 
 DEFAULT_BODY = Body(None)
 
@@ -226,7 +229,10 @@ async def validate_schema(data):  # pylint: disable=R0911
                 status=400,
                 errors=response["errors"],
             )
-            return response, 400
+            return JSONResponse(
+                content={**response, "validator_version": VALIDATOR_VERSION, "success": False},
+                status_code=400,
+            )
 
     except RequestException:
         logger.exception("AJV Schema Validator service unavailable")
@@ -256,11 +262,17 @@ async def validate_schema(data):  # pylint: disable=R0911
             errors=response["errors"],
         )
 
-        return Response(content=json.dumps(response), status_code=400)
+        return JSONResponse(
+            content={**response, "validator_version": VALIDATOR_VERSION, "success": False},
+            status_code=400,
+        )
 
     logger.info("Schema validation successfully completed with no errors", status=200)
 
-    return Response(content=json.dumps(response), status_code=200)
+    return JSONResponse(
+        content={**response, "validator_version": VALIDATOR_VERSION, "success": True},
+        status_code=200,
+    )
 
 
 def is_url_allowed(parsed_url, domain):
