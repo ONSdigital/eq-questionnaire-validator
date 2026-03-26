@@ -158,19 +158,19 @@ jobs:
 
       - name: Build AJV Validator Image
         run: |
-          docker build -t ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv -f Dockerfile-ajv .
+          docker build -t ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator-ajv:$TAG -f Dockerfile-ajv .
 
       - name: Push AJV Validator Image
         run: |
           echo "Pushing to GAR with tag $TAG-ajv"
-          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+          docker push ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validatora-ajv:$TAG
 
       - name: Create Validator Network
         run: docker network create validator-network
 
       - name: Spin Up AJV Validator
         run: |
-          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator:$TAG-ajv
+          docker run --network validator-network --name ajv-validator -d -p 5002:5002 ${{ secrets.GAR_LOCATION }}/${{ secrets.GAR_PROJECT_ID }}/docker-images/eq-questionnaire-validator-ajv:$TAG
       - name: Spin Up Python Validator
         run: >
           docker run
