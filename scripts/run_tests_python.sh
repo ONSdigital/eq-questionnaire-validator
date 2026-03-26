@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Run integration tests
+# Run Python tests
 #
 # NOTE: This script expects to be run from the project root with
-# ./scripts/run_tests_integration.sh
+# ./scripts/run_tests_python.sh
 set -o pipefail
 
 function display_result {
@@ -19,6 +19,6 @@ function display_result {
     fi
 }
 
-poetry run pytest tests/integration
+py.test -n auto --cov-config=.coveragerc --cov --cov-report html
 
-display_result $? 4 "Integration tests"
+display_result $? 3 "Python unit and integration tests"
