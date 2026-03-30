@@ -210,56 +210,47 @@ def test_id_paths():
     found_paths = list(questionnaire_schema.id_paths)
 
     assert found_paths == [
-        ("sections.[0]", "section"),
-        ("sections.[0].groups.[0]", "group"),
-        ("sections.[0].groups.[0].blocks.[0]", "you-live-here-block"),
-        ("sections.[0].groups.[0].blocks.[0].question", "you-live-here-question"),
+        ("(sections.[0])", "section"),
+        ("(((sections.[0]).groups).[0])", "group"),
+        ("(((((sections.[0]).groups).[0]).blocks).[0])", "you-live-here-block"),
+        ("((((((sections.[0]).groups).[0]).blocks).[0]).question)", "you-live-here-question"),
+        ("((((((((sections.[0]).groups).[0]).blocks).[0]).question).answers).[0])", "you-live-here-answer"),
+        ("(((((sections.[0]).groups).[0]).blocks).[1])", "list-collector"),
+        ("((((((((sections.[0]).groups).[0]).blocks).[1]).question_variants).[0]).question)", "confirmation-question"),
         (
-            "sections.[0].groups.[0].blocks.[0].question.answers.[0]",
-            "you-live-here-answer",
-        ),
-        ("sections.[0].groups.[0].blocks.[1]", "list-collector"),
-        (
-            "sections.[0].groups.[0].blocks.[1].question_variants.[0].question",
-            "confirmation-question",
-        ),
-        (
-            "sections.[0].groups.[0].blocks.[1].question_variants.[0].question.answers.[0]",
+            "((((((((((sections.[0]).groups).[0]).blocks).[1]).question_variants).[0]).question).answers).[0])",
             "anyone-else",
         ),
+        ("((((((((sections.[0]).groups).[0]).blocks).[1]).question_variants).[1]).question)", "confirmation-question"),
         (
-            "sections.[0].groups.[0].blocks.[1].question_variants.[1].question",
-            "confirmation-question",
-        ),
-        (
-            "sections.[0].groups.[0].blocks.[1].question_variants.[1].question.answers.[0]",
+            "((((((((((sections.[0]).groups).[0]).blocks).[1]).question_variants).[1]).question).answers).[0])",
             "anyone-else",
         ),
-        ("sections.[0].groups.[0].blocks.[1].add_block", "add-person"),
+        ("((((((sections.[0]).groups).[0]).blocks).[1]).add_block)", "add-person"),
         (
-            "sections.[0].groups.[0].blocks.[1].add_block.question_variants.[0].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).add_block).question_variants).[0]).question)",
             "add-question",
         ),
         (
-            "sections.[0].groups.[0].blocks.[1].add_block.question_variants.[1].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).add_block).question_variants).[1]).question)",
             "add-question",
         ),
-        ("sections.[0].groups.[0].blocks.[1].edit_block", "edit-person"),
+        ("((((((sections.[0]).groups).[0]).blocks).[1]).edit_block)", "edit-person"),
         (
-            "sections.[0].groups.[0].blocks.[1].edit_block.question_variants.[0].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).edit_block).question_variants).[0]).question)",
             "edit-question",
         ),
         (
-            "sections.[0].groups.[0].blocks.[1].edit_block.question_variants.[1].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).edit_block).question_variants).[1]).question)",
             "edit-question",
         ),
-        ("sections.[0].groups.[0].blocks.[1].remove_block", "remove-person"),
+        ("((((((sections.[0]).groups).[0]).blocks).[1]).remove_block)", "remove-person"),
         (
-            "sections.[0].groups.[0].blocks.[1].remove_block.question_variants.[0].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).remove_block).question_variants).[0]).question)",
             "remove-question",
         ),
         (
-            "sections.[0].groups.[0].blocks.[1].remove_block.question_variants.[1].question",
+            "(((((((((sections.[0]).groups).[0]).blocks).[1]).remove_block).question_variants).[1]).question)",
             "remove-question",
         ),
     ]

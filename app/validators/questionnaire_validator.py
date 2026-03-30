@@ -154,6 +154,8 @@ class QuestionnaireValidator(Validator):
 
         for translatable_item in schema_object.translatable_items:
             schema_text = translatable_item.value
+            # not needed after eq-translations update
+            translatable_item.pointer = translatable_item.pointer.replace("(", "").replace(")", "")
 
             values_to_check = [schema_text]
 

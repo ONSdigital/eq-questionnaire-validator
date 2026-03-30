@@ -102,20 +102,19 @@ def test_invalid_placeholder_answer_ids():
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer0",
-            "json_path": "groups.[0].blocks.[0].question.answers.[1].description.placeholders.[0].value.identifier",
+            "json_path": "(((((((((((groups.[0]).blocks).[0]).question).answers).[1]).description).placeholders).[0]).value).identifier)",
         },
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer1",
             "json_path": (
-                "groups.[0].blocks.[1].question.answers.[1].description.placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
+                "((((((((((((((groups.[0]).blocks).[1]).question).answers).[1]).description).placeholders).[0]).transforms).[0]).arguments).number).identifier)"
             ),
         },
         {
             "message": ValueSourceValidator.SOURCE_REFERENCE_INVALID.format("metadata"),
             "identifier": "invalid-metadata-ref",
-            "json_path": "groups.[0].blocks.[3].question.answers.[0].description.placeholders.[0].value.identifier",
+            "json_path": "(((((((((((groups.[0]).blocks).[3]).question).answers).[0]).description).placeholders).[0]).value).identifier)",
         },
     ]
     assert validator.errors == expected_errors
@@ -318,16 +317,16 @@ def test_invalid_whitespaces_in_schema():
         for text, pointer in [
             (
                 "What is this persons  age?",
-                "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
+                "/(((((((((sections/0)/groups)/0)/blocks)/1)/question_variants)/0)/question)/title)",
             ),
             (
                 " The persons age",
-                "/sections/0/groups/0/blocks/0/question/description/0",
+                "/((((((((sections/0)/groups)/0)/blocks)/0)/question)/description)/0)",
             ),
-            ("Your age? ", "/sections/0/groups/0/blocks/0/question/answers/0/label"),
+            ("Your age? ", "/(((((((((sections/0)/groups)/0)/blocks)/0)/question)/answers)/0)/label)"),
             (
                 " Guidance Line 1",
-                "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
+                "/(((((((((((((sections/0)/groups)/0)/blocks)/0)/question)/answers)/0)/guidance)/contents)/0)/list)/0)",
             ),
         ]
     ]
@@ -393,18 +392,14 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
     expected_errors = [
         {
             "identifier": "first-number-block",
-            "json_path": (
-                "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
-            ),
+            "json_path": "(((((((((((((((groups.[0]).blocks).[3]).content).contents).[0]).list).[0]).placeholders).[0])"
+            ".transforms).[0]).arguments).number).identifier)",
             "message": "Invalid calculated_summary source reference",
         },
         {
             "identifier": "currency-total-playback",
-            "json_path": (
-                "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
-            ),
+            "json_path": "(((((((((((((((groups.[0]).blocks).[3]).content).contents).[0]).list).[1]).placeholders).[0])"
+            ".transforms).[0]).arguments).number).identifier)",
             "message": "Invalid grand_calculated_summary source reference",
         },
     ]

@@ -253,9 +253,22 @@ def get_element_value(key, match):
         match.value (jsonpath_ng.match.value, jsonpath_ng.match): if the match is for the key,
         otherwise continue walking up the context until we find a match for the key or reach the top of the JSON file.
     """
-    if str(match.full_path.left).endswith(f".{key}") or str(match.full_path.left) == key:
+    match_full_path_left = _get_converted_path_string(str(match.full_path.left))
+    if match_full_path_left.endswith(f".{key}") or match_full_path_left == key:
         return match.value
     return get_element_value(key, match.context)
+
+
+def _get_converted_path_string(path: str) -> str:
+    """Get a converted jsonpath_ng full path string to a sanitised string path that can be used for extracting indices.
+
+    Args:
+        path: A string representation of a jsonpath_ng full path.
+
+    Returns:
+        str: A string representation of the path with parentheses removed, e.g. 'sections[0].groups[1].blocks[2]'.
+    """
+    return path.replace("(", "").replace(")", "")
 
 
 def json_path_position(match) -> tuple[int, ...]:
@@ -576,6 +589,7 @@ class QuestionnaireSchema:
         all_ids = []
 
         for path, value in self.id_paths:
+            path = _get_converted_path_string(path)
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split(".")
