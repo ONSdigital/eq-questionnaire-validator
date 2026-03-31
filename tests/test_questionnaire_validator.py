@@ -102,19 +102,20 @@ def test_invalid_placeholder_answer_ids():
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer0",
-            "json_path": "(((((((((((groups.[0]).blocks).[0]).question).answers).[1]).description).placeholders).[0]).value).identifier)",
+            "json_path": "(((((((((((groups.[0]).blocks).[0]).question).answers).[1]).description).placeholders).[0])"
+            ".value).identifier)",
         },
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer1",
-            "json_path": (
-                "((((((((((((((groups.[0]).blocks).[1]).question).answers).[1]).description).placeholders).[0]).transforms).[0]).arguments).number).identifier)"
-            ),
+            "json_path": "((((((((((((((groups.[0]).blocks).[1]).question).answers).[1]).description).placeholders)."
+            "[0]).transforms).[0]).arguments).number).identifier)",
         },
         {
             "message": ValueSourceValidator.SOURCE_REFERENCE_INVALID.format("metadata"),
             "identifier": "invalid-metadata-ref",
-            "json_path": "(((((((((((groups.[0]).blocks).[3]).question).answers).[0]).description).placeholders).[0]).value).identifier)",
+            "json_path": "(((((((((((groups.[0]).blocks).[3]).question).answers).[0]).description).placeholders).[0])"
+            ".value).identifier)",
         },
     ]
     assert validator.errors == expected_errors
