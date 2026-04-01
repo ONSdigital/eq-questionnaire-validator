@@ -454,12 +454,10 @@ def get_translatable_items(schema_element: dict) -> Generator[TranslatableItem]:
         # The type ignore is necessary because jsonpath-ng's parse method does not have type hints
 
         for match in json_path.find(schema_element):
-            # Ensure match.value is a dict before using as a dict
-            if not isinstance(match.value, dict):
-                continue
             json_pointer, string_value = _get_json_pointer_and_string_value(str(match.full_path), match.value)
             additional_context = []
             for context_type in extractable_string.get("additional_context", []):  # type: ignore
+                # The type ignore is necessary because jsonpath-ng's find doesn't have type hints
                 context = _get_context_for_pointer(schema_element, json_pointer, context_type)
                 if context:
                     additional_context.append(context)
@@ -467,11 +465,13 @@ def get_translatable_items(schema_element: dict) -> Generator[TranslatableItem]:
             yield TranslatableItem(
                 pointer=json_pointer,
                 description=extractable_string["description"],  # type: ignore
+                # The type ignore is necessary because jsonpath-ng's find doesn't have type hints
                 value=string_value,
                 context=_get_context_for_pointer(
                     schema_element,
                     json_pointer,
                     extractable_string.get("context"),  # type: ignore
+                    # The type ignore is necessary because jsonpath-ng's find doesn't have type hints
                 ),
                 additional_context=additional_context or None,
             )
