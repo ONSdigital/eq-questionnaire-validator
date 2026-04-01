@@ -4,7 +4,9 @@ Classes:
     TranslatableItem
 """
 
+from collections.abc import Generator
 from dataclasses import dataclass
+from typing import Any
 
 from jsonpath_ng import parse
 from jsonpointer import resolve_pointer
@@ -425,7 +427,8 @@ class TranslatableItem:
     Attributes:
         pointer (str): JSON pointer for this item within the schema.
         description (str): Description of the translatable item.
-        value (str | dict): The resolved value of the pointer. This is a dict for plural forms, and a string for all other elements.
+        value (str | dict): The resolved value of the pointer. This is a dict for plural forms, and a string for all
+        other elements.
         context (str | None): The context to use when translating the item.
         additional_context (list[str] | None): Additional context for the item, if any.
     """
@@ -437,44 +440,46 @@ class TranslatableItem:
     additional_context: list[str] | None = None
 
 
-def get_translatable_items(schema_element):
+def get_translatable_items(schema_element: dict) -> Generator[TranslatableItem]:
     """Yields all translatable items found in the given schema element.
 
     Args:
-        schema_element (dict): The schema element to search for translatable items.
+        schema_element: The schema element to search for translatable items.
 
     Yields:
         TranslatableItem: An item representing a translatable string in the schema.
     """
     for extractable_string in EXTRACTABLE_STRINGS:
-        json_path = parse(extractable_string["json_path"])
+        json_path = parse(extractable_string["json_path"])  # type: ignore
+        # The type ignore is necessary because jsonpath-ng's parse method does not have type hints
 
         for match in json_path.find(schema_element):
+            # The type ignore is necessary because jsonpath-ng's find doesn't have type hints, match is an "object" type
             json_pointer, string_value = _get_json_pointer_and_string_value(str(match.full_path), match.value)
             additional_context = []
-            for context_type in extractable_string.get("additional_context", []):
+            for context_type in extractable_string.get("additional_context", []):  # type: ignore
                 context = _get_context_for_pointer(schema_element, json_pointer, context_type)
                 if context:
                     additional_context.append(context)
 
             yield TranslatableItem(
                 pointer=json_pointer,
-                description=extractable_string["description"],
+                description=extractable_string["description"],  # type: ignore
                 value=string_value,
-                context=_get_context_for_pointer(schema_element, json_pointer, extractable_string.get("context")),
+                context=_get_context_for_pointer(schema_element, json_pointer, extractable_string.get("context")),  # type: ignore
                 additional_context=additional_context or None,
             )
 
 
-def _get_parent_schema_object(input_data, json_pointer, parent_property):
+def _get_parent_schema_object(input_data: dict, json_pointer: str, parent_property: str) -> Any:
     """Get the parent schema object identified by `parent_property` in the JSON pointer.
 
     If the parent schema object is a list, the matching array item is returned.
 
     Args:
-        input_data (dict): The input data to search.
-        json_pointer (str): The pointer being searched.
-        parent_property (str): The parent property to search for.
+        input_data: The input data to search.
+        json_pointer: The pointer being searched.
+        parent_property: The parent property to search for.
 
     Returns:
         The schema object identified by `parent_property`.
@@ -489,13 +494,13 @@ def _get_parent_schema_object(input_data, json_pointer, parent_property):
     return schema_object
 
 
-def _get_context_for_pointer(schema, pointer, context_type):
+def _get_context_for_pointer(schema: dict, pointer: str, context_type: str) -> str | None:
     """Returns the context string for a given pointer and context type.
 
     Args:
-        schema (dict): The schema to search.
-        pointer (str): The JSON pointer to the item.
-        context_type (str): The type of context to retrieve.
+        schema: The schema to search.
+        pointer: The JSON pointer to the item.
+        context_type: The type of context to retrieve.
 
     Returns:
         str: The formatted context string, or None if not found.
@@ -509,7 +514,7 @@ def _get_context_for_pointer(schema, pointer, context_type):
     return None
 
 
-def _get_json_pointer_and_string_value(json_path, schema_object: dict):
+def _get_json_pointer_and_string_value(json_path: str, schema_object: dict) -> tuple[str, str | dict]:
     """Resolves the given schema_object to a json pointer and value.
 
     Args:
@@ -529,11 +534,11 @@ def _get_json_pointer_and_string_value(json_path, schema_object: dict):
     return json_pointer, schema_object
 
 
-def _json_path_to_json_pointer(json_path):
+def _json_path_to_json_pointer(json_path: str) -> str:
     """Convert a JSONPath string into a JSON Pointer string.
 
     Args:
-        json_path (str): The JSONPath to convert.
+        json_path: The JSONPath to convert.
 
     Returns:
         str: The equivalent JSON Pointer.
@@ -542,7 +547,7 @@ def _json_path_to_json_pointer(json_path):
     return f"/{json_pointer}"
 
 
-def _get_single_string_value(schema_object):
+def _get_single_string_value(schema_object: dict) -> dict:
     """Return a string value identifying the schema_object. If plural, returns the `other` form.
 
     Args:
