@@ -13,7 +13,6 @@ structlog = "^25.5.0"
 python-dateutil = "^2.9.0.post0"
 jsonschema = "4.26.0"
 uvicorn = "^0.42.0"
-eq-translations = {git = "https://github.com/ONSDigital/eq-translations.git", rev = "v4.11.0"}
 gunicorn = "^25.1.0"
 referencing = "^0.37.0"
 jsonpath-ng = "1.8.0"

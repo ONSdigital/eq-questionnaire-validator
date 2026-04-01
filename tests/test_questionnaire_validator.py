@@ -318,16 +318,16 @@ def test_invalid_whitespaces_in_schema():
         for text, pointer in [
             (
                 "What is this persons  age?",
-                "/(((((((((sections/0)/groups)/0)/blocks)/1)/question_variants)/0)/question)/title)",
+                "/sections/0/groups/0/blocks/1/question_variants/0/question/title",
             ),
             (
                 " The persons age",
-                "/((((((((sections/0)/groups)/0)/blocks)/0)/question)/description)/0)",
+                "/sections/0/groups/0/blocks/0/question/description/0",
             ),
-            ("Your age? ", "/(((((((((sections/0)/groups)/0)/blocks)/0)/question)/answers)/0)/label)"),
+            ("Your age? ", "/sections/0/groups/0/blocks/0/question/answers/0/label"),
             (
                 " Guidance Line 1",
-                "/(((((((((((((sections/0)/groups)/0)/blocks)/0)/question)/answers)/0)/guidance)/contents)/0)/list)/0)",
+                "/sections/0/groups/0/blocks/0/question/answers/0/guidance/contents/0/list/0",
             ),
         ]
     ]
