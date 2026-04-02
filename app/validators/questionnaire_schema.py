@@ -212,7 +212,8 @@ def get_object_containing_key(data, key_name):
     matches = []
     for match in parse(f"$..{key_name}").find(data):
         parent_block = get_parent_block_from_match(match)
-        matches.append((str(match.full_path), match.context.value, parent_block))
+        match_full_path = _get_converted_path_string(str(match.full_path))
+        matches.append((match_full_path, match.context.value, parent_block))
     return matches
 
 
