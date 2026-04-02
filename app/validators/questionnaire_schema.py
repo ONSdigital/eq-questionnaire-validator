@@ -261,10 +261,10 @@ def get_element_value(key, match):
 
 
 def _get_converted_path_string(path: jsonpath.Child) -> str:
-    """Get a converted jsonpath_ng full path string to a sanitised string path that can be used for extracting indices.
+    """Get a converted jsonpath_ng full path to a sanitised string path string that can be used for extracting indices.
 
     Args:
-        path: A string representation of a jsonpath_ng full path.
+        path: A jsonpath_ng full path object representing the path to a matched key in the schema.
 
     Returns:
         str: A string representation of the path with parentheses removed, e.g. 'sections[0].groups[1].blocks[2]'.
