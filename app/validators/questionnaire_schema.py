@@ -589,7 +589,6 @@ class QuestionnaireSchema:
         all_ids = []
 
         for path, value in self.id_paths:
-            path = _get_converted_path_string(path)
             if "blocks" in path:
                 # Generate a string path and add it to the set representing the ids in that path
                 path_list = path.split(".")
@@ -644,7 +643,7 @@ class QuestionnaireSchema:
                     and str(match.context.context.full_path.right) == "answers"
                 )
             if not any(ignored_path in full_path for ignored_path in ignored) and not is_list_collector_answer_id:
-                yield str(match.full_path.left), match.value
+                yield _get_converted_path_string(str(match.full_path.left)), match.value
 
     @cached_property
     def answer_id_to_option_values_map(self):
