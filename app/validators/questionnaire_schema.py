@@ -21,7 +21,7 @@ from collections.abc import Iterable, Mapping
 from functools import cached_property, lru_cache
 from typing import Any, TypeVar
 
-from jsonpath_ng import parse
+from jsonpath_ng import jsonpath, parse
 from jsonpath_ng.ext import parse as ext_parse
 
 from app.answer_type import AnswerType
@@ -212,7 +212,7 @@ def get_object_containing_key(data, key_name):
     matches = []
     for match in parse(f"$..{key_name}").find(data):
         parent_block = get_parent_block_from_match(match)
-        match_full_path = _get_converted_path_string(str(match.full_path))
+        match_full_path = _get_converted_path_string(match.full_path)
         matches.append((match_full_path, match.context.value, parent_block))
     return matches
 
@@ -254,13 +254,13 @@ def get_element_value(key, match):
         match.value (jsonpath_ng.match.value, jsonpath_ng.match): if the match is for the key,
         otherwise continue walking up the context until we find a match for the key or reach the top of the JSON file.
     """
-    match_full_path_left = _get_converted_path_string(str(match.full_path.left))
+    match_full_path_left = _get_converted_path_string(match.full_path.left)
     if match_full_path_left.endswith(f".{key}") or match_full_path_left == key:
         return match.value
     return get_element_value(key, match.context)
 
 
-def _get_converted_path_string(path: str) -> str:
+def _get_converted_path_string(path: jsonpath.Child) -> str:
     """Get a converted jsonpath_ng full path string to a sanitised string path that can be used for extracting indices.
 
     Args:
@@ -269,7 +269,7 @@ def _get_converted_path_string(path: str) -> str:
     Returns:
         str: A string representation of the path with parentheses removed, e.g. 'sections[0].groups[1].blocks[2]'.
     """
-    return path.replace("(", "").replace(")", "")
+    return str(path).replace("(", "").replace(")", "")
 
 
 def json_path_position(match) -> tuple[int, ...]:
@@ -644,7 +644,7 @@ class QuestionnaireSchema:
                     and str(match.context.context.full_path.right) == "answers"
                 )
             if not any(ignored_path in full_path for ignored_path in ignored) and not is_list_collector_answer_id:
-                yield _get_converted_path_string(str(match.full_path.left)), match.value
+                yield _get_converted_path_string(match.full_path.left), match.value
 
     @cached_property
     def answer_id_to_option_values_map(self):
