@@ -107,10 +107,8 @@ def test_invalid_placeholder_answer_ids():
         {
             "message": ValueSourceValidator.ANSWER_SOURCE_REFERENCE_INVALID,
             "identifier": "invalid-answer1",
-            "json_path": (
-                "groups.[0].blocks.[1].question.answers.[1].description.placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
-            ),
+            "json_path": "groups.[0].blocks.[1].question.answers.[1].description.placeholders.[0].transforms.[0]."
+            "arguments.number.identifier",
         },
         {
             "message": ValueSourceValidator.SOURCE_REFERENCE_INVALID.format("metadata"),
@@ -393,18 +391,14 @@ def test_invalid_calculated_or_grand_calculated_summary_id_in_value_source():
     expected_errors = [
         {
             "identifier": "first-number-block",
-            "json_path": (
-                "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
-            ),
+            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[0].placeholders.[0].transforms.[0].arguments"
+            ".number.identifier",
             "message": "Invalid calculated_summary source reference",
         },
         {
             "identifier": "currency-total-playback",
-            "json_path": (
-                "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders."
-                "[0].transforms.[0].arguments.number.identifier"
-            ),
+            "json_path": "groups.[0].blocks.[3].content.contents.[0].list.[1].placeholders.[0].transforms.[0].arguments"
+            ".number.identifier",
             "message": "Invalid grand_calculated_summary source reference",
         },
     ]
