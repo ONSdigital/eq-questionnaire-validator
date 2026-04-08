@@ -8,8 +8,6 @@ Classes:
 import re
 from collections.abc import Mapping
 
-from eq_translations.survey_schema import SurveySchema
-
 from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
@@ -22,6 +20,7 @@ from app.validators.questionnaire_schema import (
     get_object_containing_key,
 )
 from app.validators.sections.section_validator import SectionValidator
+from app.validators.translatable_items import get_translatable_items
 from app.validators.validator import Validator
 from app.validators.value_source_validator import ValueSourceValidator
 
@@ -148,12 +147,13 @@ class QuestionnaireValidator(Validator):
         """Validate that there are no single and double "dumb" quotes in the translatable text fields of the
         questionnaire schema. Uses a regular expression to search for occurrences of dumb quotes in the text.
         """
-        schema_object = SurveySchema(self.schema_element)
-
         quote_regex = re.compile(r"['|\"]+(?![^{]*})+(?![^<]*>)")
 
-        for translatable_item in schema_object.translatable_items:
+        for translatable_item in get_translatable_items(self.schema_element):  # type: ignore
+            # Schema object always exists at this point
             schema_text = translatable_item.value
+            # not needed after eq-translations update
+            translatable_item.pointer = translatable_item.pointer.replace("(", "").replace(")", "")
 
             values_to_check = [schema_text]
 
@@ -171,9 +171,8 @@ class QuestionnaireValidator(Validator):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
         of the questionnaire schema.
         """
-        schema_object = SurveySchema(self.schema_element)
-
-        for translatable_item in schema_object.translatable_items:
+        for translatable_item in get_translatable_items(self.schema_element):  # type: ignore
+            # Schema object always exists at this point
             schema_text = translatable_item.value
             values_to_check = [schema_text]
 
