@@ -18,22 +18,31 @@ function display_result {
     fi
 }
 
-flake8 --max-complexity 10 --count
+COMMON_EXCLUDES=".venv,.tox,node_modules,htmlcov,megalinter-reports"
+BLACK_EXCLUDES='/(\.venv|\.tox|node_modules|htmlcov|megalinter-reports)/'
+
+flake8 --max-complexity 10 --count --exclude "$COMMON_EXCLUDES"
 display_result $? 1 "Flake 8 code style check"
 
-find . -type f -name "*.py" | xargs pylint --reports=n --output-format=colorized --rcfile=.pylintrc -j 0
+find . \
+    \( -path "./.venv" -o \
+    -path "./.tox" -o \
+    -path "./node_modules" -o \
+    -path "./htmlcov" -o \
+    -path "./megalinter-reports" \) -prune \
+    -o -type f -name "*.py" -print | xargs pylint --reports=n --output-format=colorized --rcfile=.pylintrc -j 0
 # pylint bit encodes the exit code to allow you to figure out which category has failed.
 # https://docs.pylint.org/en/1.6.0/run.html#exit-codes
 # We want to fail on all errors so don't check for specific bits in the output; but if we did in future, see:
 # http://stackoverflow.com/questions/6626351/how-to-extract-bits-from-return-code-number-in-bash
 display_result $? 2 "Pylint linting check"
 
-isort --check .
+isort --check --skip .venv --skip .tox --skip node_modules --skip htmlcov --skip megalinter-reports .
 display_result $? 1 "isort linting check"
 
-black --check . --exclude node_modules
+black --check . --exclude "$BLACK_EXCLUDES"
 
 display_result $? 1 "Python code formatting check"
 
-ruff check .
+ruff check . --exclude .venv --exclude .tox --exclude node_modules --exclude htmlcov --exclude megalinter-reports
 display_result $? 1 "Ruff linting check"
