@@ -18,10 +18,7 @@ function display_result {
     fi
 }
 
-COMMON_EXCLUDES=".venv,.tox,node_modules,htmlcov,megalinter-reports"
-BLACK_EXCLUDES='/(\.venv|\.tox|node_modules|htmlcov|megalinter-reports)/'
-
-flake8 --max-complexity 10 --count --exclude "$COMMON_EXCLUDES"
+flake8 --count
 display_result $? 1 "Flake 8 code style check"
 
 find . \
@@ -37,12 +34,12 @@ find . \
 # http://stackoverflow.com/questions/6626351/how-to-extract-bits-from-return-code-number-in-bash
 display_result $? 2 "Pylint linting check"
 
-isort --check --skip .venv --skip .tox --skip node_modules --skip htmlcov --skip megalinter-reports .
+isort --check .
 display_result $? 1 "isort linting check"
 
-black --check . --exclude "$BLACK_EXCLUDES"
+black --check .
 
 display_result $? 1 "Python code formatting check"
 
-ruff check . --exclude .venv --exclude .tox --exclude node_modules --exclude htmlcov --exclude megalinter-reports
+ruff check .
 display_result $? 1 "Ruff linting check"
