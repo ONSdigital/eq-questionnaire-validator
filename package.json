@@ -33,7 +33,7 @@
   "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
   "dependencies": {
     "ajv": "8.18.0",
-    "axios": "1.13.6",
+    "axios": "1.15.0",
     "debug": "4.4.3",
     "express": "5.2.1",
     "glob": "13.0.6"
