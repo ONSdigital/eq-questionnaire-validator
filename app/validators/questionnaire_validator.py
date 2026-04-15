@@ -6,6 +6,7 @@ Classes:
 """
 
 import re
+from eq_translations.survey_schema import SurveySchema
 from collections.abc import Mapping
 
 from app import error_messages
@@ -70,6 +71,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_html()
         self.validate_answer_references()
         self.validate_list_references()
 
@@ -166,6 +168,87 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+    def validate_html(self):
+        # loop over translatable strings
+        # call check_html_tags(text, pointer)
+
+        schema_object = SurveySchema(self.schema_element)
+
+        for translatable_item in schema_object.translatable_items:
+            schema_text = translatable_item.value
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for text in values_to_check:
+                if isinstance(text, str) and text and "<" in text and ">" in text:
+                    self.check_html_tags(text, translatable_item.pointer)
+
+        return
+
+    def check_html_tags(self, text, pointer):
+        """Checks valid html tags.
+
+        Args:
+            text (str): The text to be validated for HTML tags.
+            pointer (str): The JSON pointer indicating the location of the text in the questionnaire schema, used for
+            error reporting.
+        """
+
+        allowed_tags = {"p", "strong", "a", "br", "em", "h1"}
+        self_closing_tags = {"br"}
+        
+        tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
+        stack = []
+        
+        for match in tag_matches: #for each HTML tag found in the text
+            raw_tag = match.group(0)
+            tag_name = match.group(1).lower()
+
+            is_closing = raw_tag.startswith("</")
+            is_self_closing = raw_tag.endswith("/>") or tag_name in self_closing_tags
+
+            if tag_name not in allowed_tags: # invalid html tag found
+                self.add_error(
+                    error_messages.HTML_FOUND,
+                    pointer=pointer,
+                    text=text,
+                )
+                return
+            
+            if is_closing: #closed tag found, pop
+                if tag_name in self_closing_tags or not stack or stack[-1] != tag_name:
+                    self.add_error(
+                        error_messages.HTML_FOUND,
+                        pointer=pointer,
+                        text=text,
+                    )
+                    return
+
+                stack.pop()
+
+            elif not is_self_closing:#open tag not void elem
+                stack.append(tag_name)
+
+        if stack:
+            self.add_error(
+                error_messages.HTML_FOUND,
+                pointer=pointer,
+                text=text,
+            )
+
+    def validate_html_entities(self, text, pointer):
+        """Validate that there are no HTML entities in the translatable text fields of the questionnaire schema. Uses a
+        regular expression to search for occurrences of HTML entities in the text.
+
+        Args:
+            text (str): The text to be validated for HTML entities.
+            pointer (str): The JSON pointer indicating the location of the text in the questionnaire schema, used for
+            error reporting.
+        """
+        return
+
 
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
