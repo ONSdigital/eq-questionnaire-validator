@@ -4,7 +4,7 @@ the whole questionnaire schema and calling the section validator for each sectio
 Classes:
     QuestionnaireValidator
 """
-
+import html.entities
 import re
 from eq_translations.survey_schema import SurveySchema
 from collections.abc import Mapping
@@ -182,8 +182,14 @@ class QuestionnaireValidator(Validator):
                 values_to_check = schema_text.values()
 
             for text in values_to_check:
-                if isinstance(text, str) and text and "<" in text and ">" in text:
+                if not isinstance(text, str) or not text:
+                    continue
+
+                if "<" in text and ">" in text:
                     self.check_html_tags(text, translatable_item.pointer)
+
+                if "&" in text and ";" in text:
+                    self.check_html_entities(text, translatable_item.pointer)          
 
         return
 
@@ -200,7 +206,7 @@ class QuestionnaireValidator(Validator):
         self_closing_tags = {"br"}
         
         tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
-        stack = []
+        stack = [] 
         
         for match in tag_matches: #for each HTML tag found in the text
             raw_tag = match.group(0)
@@ -238,17 +244,39 @@ class QuestionnaireValidator(Validator):
                 text=text,
             )
 
-    def validate_html_entities(self, text, pointer):
-        """Validate that there are no HTML entities in the translatable text fields of the questionnaire schema. Uses a
-        regular expression to search for occurrences of HTML entities in the text.
+    
+    def is_valid_html_entity(self, entity):
+        # Numeric entity
+        if entity.startswith("&#") and entity.endswith(";"):
+            numeric = entity[2:-1]
 
-        Args:
-            text (str): The text to be validated for HTML entities.
-            pointer (str): The JSON pointer indicating the location of the text in the questionnaire schema, used for
-            error reporting.
-        """
-        return
+            try:
+                if numeric.lower().startswith("x"):
+                    codepoint = int(numeric[1:], 16)
+                else:
+                    codepoint = int(numeric)
+            except ValueError:
+                return False
 
+            return 0 <= codepoint <= 0x10FFFF
+
+        # Named entity
+        if entity.startswith("&") and entity.endswith(";"):
+            return entity[1:-1] in html.entities.html5
+
+        return False
+    
+    def check_html_entities(self, text, pointer):
+        entity_matches = re.findall(r"&[^;\s]+;", text)
+
+        for entity in entity_matches:
+            if not self.is_valid_html_entity(entity):
+                self.add_error(
+                    error_messages.HTML_ENTITIES_FOUND,
+                    pointer=pointer,
+                    text=text,
+                )
+                return 
 
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
