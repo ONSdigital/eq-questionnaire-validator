@@ -41,7 +41,7 @@
       "groups": [
         {
           "id": "introduction-group",
-          "title": "General Business Information",
+          "title": "<p>General Business Information",
           "blocks": [
             {
               "id": "introduction",
@@ -49,14 +49,14 @@
               "primary_content": [
                 {
                   "id": "business-details",
-                  "title": "Introduction with valid and invalid HTML",
+                  "title": "Introduction with &fake; valid and invalid HTML",
                   "contents": [
                     {
                       "guidance": {
                         "contents": [
                           {
                             "title": "<invalid>Coronavirus (COVID-19) guidance</invalid>",
-                            "description": "<strong>Explain your figures</strong> in the comment section to minimise us contacting you and to help us tell an industry story"
+                            "description": "<strong>Explain your figures</strong> in the comment section to minimise us &amp; contacting you and to help us tell an industry story"
                           }
                         ]
                       }
