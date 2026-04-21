@@ -202,7 +202,7 @@ class QuestionnaireValidator(Validator):
             error reporting.
         """
 
-        allowed_tags = {"p", "strong", "a"}
+        allowed_tags = {"p", "strong", "a", "b"}
         self_closing_tags = {"br"}
         
         tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
