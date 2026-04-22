@@ -338,20 +338,20 @@ def test_invalid_html_in_schema():
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
 
     expected_error_messages = [
-        # {
-        #     "message": error_messages.HTML_FOUND,
-        #     "pointer": "/sections/0/groups/0/blocks/3/content/title",
-        #     "text": "<strong>Page with mixed invalid tags<strong>",
-        # },
-        # {
-        #     "message": error_messages.HTML_FOUND,
-        #     "pointer": "/sections/0/groups/0/blocks/1/content/contents/0/description",
-        #     "text": "<p>You have successfully completed this section<p>",
-        # },
         {
             "message": error_messages.HTML_FOUND,
             "pointer": "/sections/0/groups/0/title",
             "text": "<p>General Business Information",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/3/content/contents/0/description",
+            "text": "<h1>Title</h1><em>Not valid tag</em>",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/4/content/contents/0/description",
+            "text": "<strong>Title</strong><em>Not valid tag</em>",
         },
         {
             "message": error_messages.HTML_ENTITIES_FOUND,
@@ -363,7 +363,6 @@ def test_invalid_html_in_schema():
             "pointer": "/sections/0/groups/0/blocks/0/primary_content/0/contents/0/guidance/contents/0/title",
             "text": "<invalid>Coronavirus (COVID-19) guidance</invalid>",
         },
-
     ]
     validator.validate_html()
 
