@@ -1,6 +1,9 @@
 """Error messages used in validators and exceptions throughout the validator codebase."""
 
 DUMB_QUOTES_FOUND = "Found dumb quotes(s) in schema text"
+HTML_FOUND = "Found invalid HTML tag(s) in schema text"
+HTML_ENTITIES_FOUND = "Found invalid HTML entity(ies) in schema text"
+SPACE_BEFORE_BR = "Found whitespace before <br> tag"
 INVALID_WHITESPACE_FOUND = "Found invalid white space(s) in schema text"
 DUPLICATE_ID_FOUND = "Duplicate id found"
 FOR_LIST_NEVER_POPULATED = "for_list is not populated by any ListCollector blocks or supplementary data sources"
