@@ -9,8 +9,6 @@ import html.entities
 import re
 from collections.abc import Mapping
 
-from eq_translations.survey_schema import SurveySchema
-
 from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
 from app.validators.metadata_validator import MetadataValidator
@@ -175,9 +173,8 @@ class QuestionnaireValidator(Validator):
         # loop over translatable strings
         # call check_html_tags(text, pointer)
 
-        schema_object = SurveySchema(self.schema_element)
 
-        for translatable_item in schema_object.translatable_items:
+        for translatable_item in get_translatable_items(self.schema_element):  # type: ignore
             schema_text = translatable_item.value
             values_to_check = [schema_text]
 
