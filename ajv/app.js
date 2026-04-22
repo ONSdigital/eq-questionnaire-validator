@@ -11,7 +11,7 @@ const AJV_VALIDATOR_PORT = process.env.AJV_VALIDATOR_PORT || 5002;
 app.use(
   express.json({
     limit: "2Mb",
-  })
+  }),
 );
 
 // Only start the server if we're not in a test environment, otherwise export the app for testing purposes
