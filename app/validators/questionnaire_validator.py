@@ -262,7 +262,7 @@ class QuestionnaireValidator(Validator):
 
         # Named entity
         if entity.startswith("&") and entity.endswith(";"):
-            return entity[1:-1] in html.entities.html5
+            return entity[1:] in html.entities.html5
 
         return False
     
