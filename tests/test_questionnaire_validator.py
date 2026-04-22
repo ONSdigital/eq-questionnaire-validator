@@ -339,6 +339,11 @@ def test_invalid_html_in_schema():
 
     expected_error_messages = [
         {
+            "message": error_messages.SPACE_BEFORE_BR,
+            "pointer": "/sections/0/title",
+            "text": "Introduction <br>",
+        },
+        {
             "message": error_messages.HTML_FOUND,
             "pointer": "/sections/0/groups/0/title",
             "text": "<p>General Business Information",
