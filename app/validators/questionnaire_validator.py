@@ -4,10 +4,12 @@ the whole questionnaire schema and calling the section validator for each sectio
 Classes:
     QuestionnaireValidator
 """
+
 import html.entities
 import re
-from eq_translations.survey_schema import SurveySchema
 from collections.abc import Mapping
+
+from eq_translations.survey_schema import SurveySchema
 
 from app import error_messages
 from app.validators.answer_code_validator import AnswerCodeValidator
@@ -168,6 +170,7 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
     def validate_html(self):
         # loop over translatable strings
         # call check_html_tags(text, pointer)
@@ -190,9 +193,7 @@ class QuestionnaireValidator(Validator):
                     self.check_br_tag_whitespace(text, translatable_item.pointer)
 
                 if "&" in text and ";" in text:
-                    self.check_html_entities(text, translatable_item.pointer)          
-
-        return
+                    self.check_html_entities(text, translatable_item.pointer)
 
     def check_html_tags(self, text, pointer):
         """Checks valid html tags.
@@ -202,29 +203,28 @@ class QuestionnaireValidator(Validator):
             pointer (str): The JSON pointer indicating the location of the text in the questionnaire schema, used for
             error reporting.
         """
-
         allowed_tags = {"p", "strong", "a", "b", "br", "img"}
         self_closing_tags = {"br", "img"}
-        
+
         tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
-        stack = [] 
-        
-        for match in tag_matches: #for each HTML tag found in the text
+        stack = []
+
+        for match in tag_matches:
             raw_tag = match.group(0)
             tag_name = match.group(1).lower()
 
             is_closing = raw_tag.startswith("</")
             is_self_closing = raw_tag.endswith("/>") or tag_name in self_closing_tags
 
-            if tag_name not in allowed_tags: # invalid html tag found
+            if tag_name not in allowed_tags:
                 self.add_error(
                     error_messages.HTML_FOUND,
                     pointer=pointer,
                     text=text,
                 )
                 return
-            
-            if is_closing: #closed tag found, pop
+
+            if is_closing:
                 if tag_name in self_closing_tags or not stack or stack[-1] != tag_name:
                     self.add_error(
                         error_messages.HTML_FOUND,
@@ -235,7 +235,7 @@ class QuestionnaireValidator(Validator):
 
                 stack.pop()
 
-            elif not is_self_closing:#open tag not void elem
+            elif not is_self_closing:
                 stack.append(tag_name)
 
         if stack:
@@ -245,28 +245,22 @@ class QuestionnaireValidator(Validator):
                 text=text,
             )
 
-    
     def is_valid_html_entity(self, entity):
-        # Numeric entity
         if entity.startswith("&#") and entity.endswith(";"):
             numeric = entity[2:-1]
 
             try:
-                if numeric.lower().startswith("x"):
-                    codepoint = int(numeric[1:], 16)
-                else:
-                    codepoint = int(numeric)
+                numeric_value = int(numeric[1:], 16) if numeric.lower().startswith("x") else int(numeric)
             except ValueError:
                 return False
 
-            return 0 <= codepoint <= 0x10FFFF
+            return 0 <= numeric_value <= 0x10FFFF
 
-        # Named entity
         if entity.startswith("&") and entity.endswith(";"):
             return entity[1:] in html.entities.html5
 
         return False
-    
+
     def check_html_entities(self, text, pointer):
         entity_matches = re.findall(r"&[^;\s]+;", text)
 
@@ -277,8 +271,8 @@ class QuestionnaireValidator(Validator):
                     pointer=pointer,
                     text=text,
                 )
-                return 
-            
+                return
+
     def check_br_tag_whitespace(self, text, pointer):
         if re.search(r"\s+<br\s*/?>", text):
             self.add_error(
@@ -286,7 +280,6 @@ class QuestionnaireValidator(Validator):
                 pointer=pointer,
                 text=text,
             )
-
 
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
