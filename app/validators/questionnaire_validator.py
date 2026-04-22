@@ -249,8 +249,10 @@ class QuestionnaireValidator(Validator):
         if entity.startswith("&#") and entity.endswith(";"):
             numeric = entity[2:-1]
 
+            is_hex = numeric.lower().startswith("x")
+
             try:
-                numeric_value = int(numeric[1:], 16) if numeric.lower().startswith("x") else int(numeric)
+                numeric_value = int(numeric[1:], 16) if is_hex else int(numeric)
             except ValueError:
                 return False
 
