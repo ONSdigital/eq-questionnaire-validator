@@ -37,7 +37,7 @@
   "sections": [
     {
       "id": "introduction-section",
-      "title": "Introduction",
+      "title": "Introduction <br>",
       "groups": [
         {
           "id": "introduction-group",
