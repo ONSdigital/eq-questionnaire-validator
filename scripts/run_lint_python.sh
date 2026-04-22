@@ -18,10 +18,16 @@ function display_result {
     fi
 }
 
-flake8 --max-complexity 10 --count
+flake8 --count
 display_result $? 1 "Flake 8 code style check"
 
-find . -type f -name "*.py" | xargs pylint --reports=n --output-format=colorized --rcfile=.pylintrc -j 0
+find . \
+    \( -path "./.venv" -o \
+    -path "./.tox" -o \
+    -path "./node_modules" -o \
+    -path "./htmlcov" -o \
+    -path "./megalinter-reports" \) -prune \
+    -o -type f -name "*.py" -print | xargs pylint --reports=n --output-format=colorized --rcfile=.pylintrc -j 0
 # pylint bit encodes the exit code to allow you to figure out which category has failed.
 # https://docs.pylint.org/en/1.6.0/run.html#exit-codes
 # We want to fail on all errors so don't check for specific bits in the output; but if we did in future, see:
@@ -31,7 +37,7 @@ display_result $? 2 "Pylint linting check"
 isort --check .
 display_result $? 1 "isort linting check"
 
-black --check . --exclude node_modules
+black --check .
 
 display_result $? 1 "Python code formatting check"
 

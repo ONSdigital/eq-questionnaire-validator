@@ -131,3 +131,13 @@ indent-style = "space"
 
 [tool.pyright]
 reportMissingImports = false
+
+[tool.flake8]
+max-complexity = 10
+exclude = [
+    ".venv",
+    ".tox",
+    "node_modules",
+    "htmlcov",
+    "megalinter-reports"
+]
