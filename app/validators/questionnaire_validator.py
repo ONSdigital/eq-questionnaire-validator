@@ -187,6 +187,7 @@ class QuestionnaireValidator(Validator):
 
                 if "<" in text and ">" in text:
                     self.check_html_tags(text, translatable_item.pointer)
+                    self.check_br_tag_whitespace(text, translatable_item.pointer)
 
                 if "&" in text and ";" in text:
                     self.check_html_entities(text, translatable_item.pointer)          
@@ -202,8 +203,8 @@ class QuestionnaireValidator(Validator):
             error reporting.
         """
 
-        allowed_tags = {"p", "strong", "a", "b"}
-        self_closing_tags = {"br"}
+        allowed_tags = {"p", "strong", "a", "b", "br", "img"}
+        self_closing_tags = {"br", "img"}
         
         tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
         stack = [] 
@@ -277,6 +278,15 @@ class QuestionnaireValidator(Validator):
                     text=text,
                 )
                 return 
+            
+    def check_br_tag_whitespace(self, text, pointer):
+        if re.search(r"\s+<br\s*/?>", text):
+            self.add_error(
+                error_messages.SPACE_BEFORE_BR,
+                pointer=pointer,
+                text=text,
+            )
+
 
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
