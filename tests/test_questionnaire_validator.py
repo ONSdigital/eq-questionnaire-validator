@@ -351,6 +351,11 @@ def test_invalid_html_in_schema():
         },
         {
             "message": error_messages.HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/1/content/title",
+            "text": "Page <p>with invalid html</p> in title",
+        },
+        {
+            "message": error_messages.HTML_FOUND,
             "pointer": "/sections/0/groups/0/blocks/3/content/contents/0/description",
             "text": "<h1>Title</h1><em>Not valid tag</em>",
         },
