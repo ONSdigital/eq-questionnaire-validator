@@ -188,6 +188,7 @@ class QuestionnaireValidator(Validator):
                 if "<" in text and ">" in text:
                     self.check_html_tags(text, translatable_item.pointer)
                     self.check_br_tag_whitespace(text, translatable_item.pointer)
+                    self.check_p_tag_position(text, translatable_item.pointer)
 
                 if "&" in text and ";" in text:
                     self.check_html_entities(text, translatable_item.pointer)
@@ -280,6 +281,22 @@ class QuestionnaireValidator(Validator):
                 text=text,
             )
 
+    def check_p_tag_position(self, text, pointer):
+        match = re.search(r"<p(?=[\s>])[^>]*>", text)
+
+        if not match:
+            return
+
+        text_before_p = text[:match.start()]
+
+        content_before_p = text_before_p.strip(" \t\n\r[]()")
+
+        if content_before_p:
+            self.add_error(
+                error_messages.HTML_FOUND,
+                pointer=pointer,
+                text=text,
+            )
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
         of the questionnaire schema.
