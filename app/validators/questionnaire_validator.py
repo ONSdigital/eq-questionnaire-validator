@@ -170,10 +170,9 @@ class QuestionnaireValidator(Validator):
                     )
 
     def validate_html(self):
-        # loop over translatable strings
-        # call check_html_tags(text, pointer)
-
-
+        """Validates HTML in translatable schema text.
+        Checks tags, entities, <br> whitespace, and <p> positioning.
+        """
         for translatable_item in get_translatable_items(self.schema_element):  # type: ignore
             schema_text = translatable_item.value
             values_to_check = [schema_text]
@@ -194,7 +193,7 @@ class QuestionnaireValidator(Validator):
                     self.check_html_entities(text, translatable_item.pointer)
 
     def check_html_tags(self, text, pointer):
-        """Checks valid html tags.
+        """Validates HTML tags.
 
         Args:
             text (str): The text to be validated for HTML tags.
@@ -244,6 +243,12 @@ class QuestionnaireValidator(Validator):
             )
 
     def is_valid_html_entity(self, entity):
+        """Checks whether a given HTML entity is valid.
+        Supports both numeric (decimal and hexadecimal) and named entities.
+
+        Args:
+            entity (str): The HTML entity to validate (e.g. "&amp;", "&#169;").
+        """
         if entity.startswith("&#") and entity.endswith(";"):
             numeric = entity[2:-1]
 
@@ -262,6 +267,14 @@ class QuestionnaireValidator(Validator):
         return False
 
     def check_html_entities(self, text, pointer):
+        """Validates HTML entities found in the text.
+
+        Extracts all entities and checks whether each one is valid.
+
+        Args:
+            text (str): The text to validate for HTML entities.
+            pointer (str): JSON pointer to the location of the text in the schema.
+        """
         entity_matches = re.findall(r"&[^;\s]+;", text)
 
         for entity in entity_matches:
@@ -274,6 +287,12 @@ class QuestionnaireValidator(Validator):
                 return
 
     def check_br_tag_whitespace(self, text, pointer):
+        """Checks for invalid whitespace before <br> tags.
+
+        Args:
+            text (str): The text to validate.
+            pointer (str): JSON pointer to the location of the text in the schema.
+        """
         if re.search(r"\s+<br\s*/?>", text):
             self.add_error(
                 error_messages.SPACE_BEFORE_BR,
@@ -282,12 +301,19 @@ class QuestionnaireValidator(Validator):
             )
 
     def check_p_tag_position(self, text, pointer):
+        """Checks if p tag is at the start of a sentence
+        (ignoring whitespace and wrapper characters like [] and ()).
+
+        Args:
+        text (str): The text to validate.
+        pointer (str): JSON pointer to the location of the text in the schema.
+        """
         match = re.search(r"<p(?=[\s>])[^>]*>", text)
 
         if not match:
             return
 
-        text_before_p = text[:match.start()]
+        text_before_p = text[: match.start()]
 
         content_before_p = text_before_p.strip(" \t\n\r[]()")
 
@@ -297,6 +323,7 @@ class QuestionnaireValidator(Validator):
                 pointer=pointer,
                 text=text,
             )
+
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
         of the questionnaire schema.
