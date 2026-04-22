@@ -333,6 +333,7 @@ def test_invalid_whitespaces_in_schema():
 
     assert validator.errors == expected_error_messages
 
+
 def test_invalid_html_in_schema():
     filename = "schemas/invalid/test_invalid_html_tags.json"
     validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
