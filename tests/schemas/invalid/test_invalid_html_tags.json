@@ -69,10 +69,10 @@
               "type": "Interstitial",
               "id": "intersitital-one",
               "content": {
-                "title": "Page with invalid html",
+                "title": "Page <p>with invalid html</p> in title",
                 "contents": [
                   {
-                    "description": "<p>You have successfully completed this section</p>"
+                    "description": "[<p>You have successfully completed this section</p>]"
                   }
                 ]
               }
