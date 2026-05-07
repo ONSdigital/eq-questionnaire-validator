@@ -42,6 +42,7 @@ class QuestionnaireValidator(Validator):
         validate_smart_quotes
         validate_white_spaces
         validate_introduction_block
+        validate_html
         validate_answer_references
         validate_list_references
         resolve_source_block_id
@@ -215,7 +216,7 @@ class QuestionnaireValidator(Validator):
 
             if tag_name not in allowed_tags:
                 self.add_error(
-                    error_messages.HTML_FOUND,
+                    error_messages.INVALID_HTML_FOUND,
                     pointer=pointer,
                     text=text,
                 )
@@ -224,7 +225,7 @@ class QuestionnaireValidator(Validator):
             if is_closing:
                 if tag_name in self_closing_tags or not stack or stack[-1] != tag_name:
                     self.add_error(
-                        error_messages.HTML_FOUND,
+                        error_messages.INVALID_HTML_FOUND,
                         pointer=pointer,
                         text=text,
                     )
@@ -237,7 +238,7 @@ class QuestionnaireValidator(Validator):
 
         if stack:
             self.add_error(
-                error_messages.HTML_FOUND,
+                error_messages.INVALID_HTML_FOUND,
                 pointer=pointer,
                 text=text,
             )
@@ -280,7 +281,7 @@ class QuestionnaireValidator(Validator):
         for entity in entity_matches:
             if not self.is_valid_html_entity(entity):
                 self.add_error(
-                    error_messages.HTML_ENTITIES_FOUND,
+                    error_messages.INVALID_HTML_ENTITIES_FOUND,
                     pointer=pointer,
                     text=text,
                 )
@@ -319,7 +320,7 @@ class QuestionnaireValidator(Validator):
 
         if content_before_p:
             self.add_error(
-                error_messages.HTML_FOUND,
+                error_messages.INVALID_HTML_FOUND,
                 pointer=pointer,
                 text=text,
             )
