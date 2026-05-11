@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
   "dependencies": {
-    "ajv": "8.18.0",
-    "axios": "1.15.2",
+    "ajv": "8.20.0",
+    "axios": "1.16.0",
     "debug": "4.4.3",
     "express": "5.2.1",
     "glob": "13.0.6"
@@ -41,18 +41,18 @@
   "devDependencies": {
     "@babel/cli": "7.28.6",
     "@babel/core": "7.29.0",
-    "@babel/preset-env": "7.29.2",
-    "@babel/register": "7.28.6",
+    "@babel/preset-env": "7.29.5",
+    "@babel/register": "7.29.3",
     "@eslint/json": "^1.2.0",
-    "eslint": "^9.39.3",
+    "eslint": "9.39.4",
     "eslint-plugin-chai-friendly": "1.2.0",
     "eslint-plugin-security": "4.0.0",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "jsonc-eslint-parser": "^3.1.0",
     "neostandard": "^0.13.0",
     "nodemon": "3.1.14",
-    "prettier": "3.8.1",
-    "jest": "^30.3.0",
+    "prettier": "3.8.3",
+    "jest": "^30.4.2",
     "supertest": "^7.2.2"
   },
   "prettier": {}
