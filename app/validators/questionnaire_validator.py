@@ -306,19 +306,19 @@ class QuestionnaireValidator(Validator):
         (ignoring whitespace and wrapper characters like [] and ()).
 
         Args:
-        text (str): The text to validate.
-        pointer (str): JSON pointer to the location of the text in the schema.
+            text (str): The text to validate.
+            pointer (str): JSON pointer to the location of the text in the schema.
         """
         match = re.search(r"<p(?=[\s>])[^>]*>", text)
 
         if not match:
             return
 
-        text_before_p = text[: match.start()]
+        text_before_p_tag = text[: match.start()]
 
-        content_before_p = text_before_p.strip(" \t\n\r[]()")
+        content_before_p_tag = text_before_p_tag.strip(" \t\n\r[]()")
 
-        if content_before_p:
+        if content_before_p_tag:
             self.add_error(
                 error_messages.INVALID_HTML_FOUND,
                 pointer=pointer,
