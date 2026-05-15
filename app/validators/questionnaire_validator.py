@@ -46,7 +46,7 @@ class QuestionnaireValidator(Validator):
         validate_html_tags
         validate_html_entities
         is_valid_html_entity
-        validate_br_tag_whitespace
+        validate_whitespace_before_br_tag
         validate_p_tag_position
         validate_answer_references
         validate_list_references
@@ -192,7 +192,7 @@ class QuestionnaireValidator(Validator):
 
                 if "<" in text and ">" in text:
                     self.validate_html_tags(text, translatable_item.pointer)
-                    self.validate_br_tag_whitespace(text, translatable_item.pointer)
+                    self.validate_whitespace_before_br_tag(text, translatable_item.pointer)
                     self.validate_p_tag_position(text, translatable_item.pointer)
 
                 if "&" in text and ";" in text:
@@ -292,7 +292,7 @@ class QuestionnaireValidator(Validator):
                 )
                 return
 
-    def validate_br_tag_whitespace(self, text, pointer):
+    def validate_whitespace_before_br_tag(self, text, pointer):
         """Checks for invalid whitespace before <br> tags.
 
         Args:
