@@ -43,6 +43,11 @@ class QuestionnaireValidator(Validator):
         validate_white_spaces
         validate_introduction_block
         validate_html
+        validate_html_tags
+        validate_html_entities
+        is_valid_html_entity
+        validate_br_tag_whitespace
+        validate_p_tag_position
         validate_answer_references
         validate_list_references
         resolve_source_block_id
@@ -186,14 +191,14 @@ class QuestionnaireValidator(Validator):
                     continue
 
                 if "<" in text and ">" in text:
-                    self.check_html_tags(text, translatable_item.pointer)
-                    self.check_br_tag_whitespace(text, translatable_item.pointer)
-                    self.check_p_tag_position(text, translatable_item.pointer)
+                    self.validate_html_tags(text, translatable_item.pointer)
+                    self.validate_br_tag_whitespace(text, translatable_item.pointer)
+                    self.validate_p_tag_position(text, translatable_item.pointer)
 
                 if "&" in text and ";" in text:
-                    self.check_html_entities(text, translatable_item.pointer)
+                    self.validate_html_entities(text, translatable_item.pointer)
 
-    def check_html_tags(self, text, pointer):
+    def validate_html_tags(self, text, pointer):
         """Validates HTML tags.
 
         Args:
@@ -267,7 +272,7 @@ class QuestionnaireValidator(Validator):
 
         return False
 
-    def check_html_entities(self, text, pointer):
+    def validate_html_entities(self, text, pointer):
         """Validates HTML entities found in the text.
 
         Extracts all entities and checks whether each one is valid.
@@ -287,7 +292,7 @@ class QuestionnaireValidator(Validator):
                 )
                 return
 
-    def check_br_tag_whitespace(self, text, pointer):
+    def validate_br_tag_whitespace(self, text, pointer):
         """Checks for invalid whitespace before <br> tags.
 
         Args:
@@ -301,7 +306,7 @@ class QuestionnaireValidator(Validator):
                 text=text,
             )
 
-    def check_p_tag_position(self, text, pointer):
+    def validate_p_tag_position(self, text, pointer):
         """Checks if p tag is at the start of a sentence
         (ignoring whitespace and wrapper characters like [] and ()).
 
