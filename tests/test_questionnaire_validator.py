@@ -334,6 +334,52 @@ def test_invalid_whitespaces_in_schema():
     assert validator.errors == expected_error_messages
 
 
+def test_invalid_html_in_schema():
+    filename = "schemas/invalid/test_invalid_html_tags.json"
+    validator = QuestionnaireValidator(_open_and_load_schema_file(filename))
+
+    expected_error_messages = [
+        {
+            "message": error_messages.SPACE_BEFORE_BR,
+            "pointer": "/sections/0/title",
+            "text": "Introduction <br>",
+        },
+        {
+            "message": error_messages.INVALID_HTML_FOUND,
+            "pointer": "/sections/0/groups/0/title",
+            "text": "<p>General Business Information",
+        },
+        {
+            "message": error_messages.INVALID_HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/1/content/title",
+            "text": "Page <p>with invalid html</p> in title",
+        },
+        {
+            "message": error_messages.INVALID_HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/3/content/contents/0/description",
+            "text": "<h1>Title</h1><em>Not valid tag</em>",
+        },
+        {
+            "message": error_messages.INVALID_HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/4/content/contents/0/description",
+            "text": "<strong>Title</strong><em>Not valid tag</em>",
+        },
+        {
+            "message": error_messages.INVALID_HTML_ENTITIES_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/0/primary_content/0/title",
+            "text": "Introduction with &fake; valid and invalid HTML",
+        },
+        {
+            "message": error_messages.INVALID_HTML_FOUND,
+            "pointer": "/sections/0/groups/0/blocks/0/primary_content/0/contents/0/guidance/contents/0/title",
+            "text": "<invalid>Coronavirus (COVID-19) guidance</invalid>",
+        },
+    ]
+    validator.validate_html()
+
+    assert validator.errors == expected_error_messages
+
+
 def test_invalid_answer_type_for_question_summary_concatenation():
     filename = "schemas/invalid/test_invalid_answer_type_for_question_summary.json"
 
