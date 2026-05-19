@@ -5,6 +5,7 @@ Classes:
     QuestionnaireValidator
 """
 
+import html.entities
 import re
 from collections.abc import Mapping
 
@@ -41,6 +42,12 @@ class QuestionnaireValidator(Validator):
         validate_smart_quotes
         validate_white_spaces
         validate_introduction_block
+        validate_html
+        validate_html_tags
+        validate_html_entities
+        is_valid_html_entity
+        validate_whitespace_before_br_tag
+        validate_p_tag_position
         validate_answer_references
         validate_list_references
         resolve_source_block_id
@@ -70,6 +77,7 @@ class QuestionnaireValidator(Validator):
         self.validate_duplicates()
         self.validate_smart_quotes()
         self.validate_white_spaces()
+        self.validate_html()
         self.validate_answer_references()
         self.validate_list_references()
 
@@ -166,6 +174,161 @@ class QuestionnaireValidator(Validator):
                         error_messages.DUMB_QUOTES_FOUND,
                         pointer=translatable_item.pointer,
                     )
+
+    def validate_html(self):
+        """Validates HTML in translatable schema text.
+        Checks tags, entities, <br> whitespace, and <p> positioning.
+        """
+        for translatable_item in get_translatable_items(self.schema_element):  # type: ignore
+            schema_text = translatable_item.value
+            values_to_check = [schema_text]
+
+            if isinstance(schema_text, dict):
+                values_to_check = schema_text.values()
+
+            for text in values_to_check:
+                if not isinstance(text, str) or not text:
+                    continue
+
+                if "<" in text and ">" in text:
+                    self.validate_html_tags(text, translatable_item.pointer)
+                    self.validate_whitespace_before_br_tag(text, translatable_item.pointer)
+                    self.validate_p_tag_position(text, translatable_item.pointer)
+
+                if "&" in text and ";" in text:
+                    self.validate_html_entities(text, translatable_item.pointer)
+
+    def validate_html_tags(self, text, pointer):
+        """Validates HTML tags.
+
+        Args:
+            text (str): The text to be validated for HTML tags.
+            pointer (str): The JSON pointer indicating the location of the text in the questionnaire schema, used for
+            error reporting.
+        """
+        allowed_tags = {"p", "strong", "a", "b", "br", "img"}
+        self_closing_tags = {"br", "img"}
+
+        tag_matches = re.finditer(r"</?([a-zA-Z0-9]+)[^>]*>", text)
+        stack = []
+
+        for match in tag_matches:
+            raw_tag = match.group(0)
+            tag_name = match.group(1).lower()
+
+            is_closing = raw_tag.startswith("</")
+            is_self_closing = raw_tag.endswith("/>") or tag_name in self_closing_tags
+
+            if tag_name not in allowed_tags:
+                self.add_error(
+                    error_messages.INVALID_HTML_FOUND,
+                    pointer=pointer,
+                    text=text,
+                )
+                return
+
+            if is_closing:
+                if tag_name in self_closing_tags or not stack or stack[-1] != tag_name:
+                    self.add_error(
+                        error_messages.INVALID_HTML_FOUND,
+                        pointer=pointer,
+                        text=text,
+                    )
+                    return
+
+                stack.pop()
+
+            elif not is_self_closing:
+                stack.append(tag_name)
+
+        if stack:
+            self.add_error(
+                error_messages.INVALID_HTML_FOUND,
+                pointer=pointer,
+                text=text,
+            )
+
+    def is_valid_html_entity(self, entity):
+        """Checks whether a given HTML entity is valid.
+        Supports both numeric (decimal and hexadecimal) and named entities.
+
+        Args:
+            entity (str): The HTML entity to validate (e.g. "&amp;", "&#169;").
+        """
+        if entity.startswith("&#") and entity.endswith(";"):
+            numeric = entity[2:-1]
+
+            is_hex = numeric.lower().startswith("x")
+
+            try:
+                numeric_value = int(numeric[1:], 16) if is_hex else int(numeric)
+            except ValueError:
+                return False
+
+            return 0 <= numeric_value <= 0x10FFFF
+
+        if entity.startswith("&") and entity.endswith(";"):
+            return entity[1:] in html.entities.html5
+
+        return False
+
+    def validate_html_entities(self, text, pointer):
+        """Validates HTML entities found in the text.
+
+        Extracts all entities and checks whether each one is valid.
+
+        Args:
+            text (str): The text to validate for HTML entities.
+            pointer (str): JSON pointer to the location of the text in the schema.
+        """
+        entity_matches = re.findall(r"&[^;\s]+;", text)
+
+        for entity in entity_matches:
+            if not self.is_valid_html_entity(entity):
+                self.add_error(
+                    error_messages.INVALID_HTML_ENTITIES_FOUND,
+                    pointer=pointer,
+                    text=text,
+                )
+                return
+
+    def validate_whitespace_before_br_tag(self, text, pointer):
+        """Checks for invalid whitespace before <br> tags.
+
+        Args:
+            text (str): The text to validate.
+            pointer (str): JSON pointer to the location of the text in the schema.
+        """
+        if re.search(r"\s+<br\s*/?>", text):
+            self.add_error(
+                error_messages.SPACE_BEFORE_BR,
+                pointer=pointer,
+                text=text,
+            )
+
+    def validate_p_tag_position(self, text, pointer):
+        """Checks if p tag is at the start of a sentence
+        (ignoring whitespace and wrapper characters like [] and ()).
+
+        Args:
+            text (str): The text to validate.
+            pointer (str): JSON pointer to the location of the text in the schema.
+        """
+        match = re.search(r"<p(?=[\s>])[^>]*>", text)
+
+        if not match:
+            return
+
+        text_before_p_tag = text[: match.start()]
+
+        content_before_p_tag = text_before_p_tag.strip(" \t\n\r[]()")
+
+        if content_before_p_tag:
+            self.add_error(
+                error_messages.INVALID_HTML_FOUND,
+                pointer=pointer,
+                text=text,
+            )
 
     def validate_white_spaces(self):
         """Validate that there are no leading, trailing or multiple consecutive white spaces in the translatable text
