@@ -151,3 +151,8 @@ updates:
         applies-to: version-updates
         patterns:
           - "*"
+
+    ignore:
+      # temporarily pinned to minor/patch only - eslint v10 not compatible with neostandard@0.13.0 ("Could not resolve dependency: peer eslint@"^9.0.0" from neostandard@0.13.0")
+      - dependency-name: "eslint*"
+        update-types: ["version-update:semver-major"]
