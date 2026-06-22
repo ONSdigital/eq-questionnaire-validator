@@ -58,8 +58,6 @@
   "prettier": {},
   "overrides": {
     "brace-expansion": "5.0.6",
-    "@istanbuljs/load-nyc-config": {
-      "js-yaml": "4.2.0"
-    }
+    "js-yaml": "4.2.0"
   }
 }
