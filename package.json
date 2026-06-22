@@ -33,7 +33,7 @@
   "homepage": "https://github.com/ONSdigital/eq-schema-validator#readme",
   "dependencies": {
     "ajv": "8.20.0",
-    "axios": "1.16.1",
+    "axios": "1.17.0",
     "debug": "4.4.3",
     "express": "5.2.1",
     "glob": "^13.0.6"
@@ -43,7 +43,7 @@
     "@babel/core": "7.29.7",
     "@babel/preset-env": "7.29.7",
     "@babel/register": "7.29.7",
-    "@eslint/json": "^1.2.0",
+    "@eslint/json": "^2.0.0",
     "eslint": "9.39.4",
     "eslint-plugin-chai-friendly": "1.2.0",
     "eslint-plugin-security": "4.0.0",
