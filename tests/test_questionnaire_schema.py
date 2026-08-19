@@ -99,7 +99,7 @@ def test_get_blocks():
     assert driving_question_blocks[0]["id"] == "anyone-usually-live-at"
 
 
-def test_get_other_blocks():
+def test_get_blocks_with_block_id_to_filter():
     filename = "schemas/valid/test_list_collector.json"
 
     questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
@@ -109,6 +109,20 @@ def test_get_other_blocks():
         block_id_to_filter="list-collector",
         type="ListCollector",
         for_list="people",
+    )
+
+    assert len(other_list_collectors) == 1
+    assert other_list_collectors[0]["id"] == "another-list-collector"
+
+
+def test_get_blocks_with_block_id_to_filter_no_additional_params():
+    filename = "schemas/valid/test_list_collector.json"
+
+    questionnaire_schema = QuestionnaireSchema(_open_and_load_schema_file(filename))
+
+    other_list_collectors = get_blocks(
+        questionnaire_schema=questionnaire_schema,
+        block_id_to_filter="list-collector",
     )
 
     assert len(other_list_collectors) == 1
