@@ -4,40 +4,85 @@ An API for validating survey schemas.
 
 ## Setup
 
-In order to run locally you'll need Node.js, Poetry and Python installed.
-It's recommended that Python is installed via pyenv but pyenv is optional.
+In order to run locally you'll need Node.js, Poetry and Python installed, managed via a conda
+environment.
 
-### Install NVM and pyenv
+### Pre-Requisites
 
-NVM and pyenv will manage your versions of Node and Python and these commands will install the
-required versions of them which will be read from `.nvmrc` and `.python-version`.
+The following must be installed and working before you start:
+- Miniconda: Python, Node and system package management (install from Self Service)
+- Podman: Container runtime for supporting services (machine created and running)
+- gcloud: Pulling images from Google Artifact Registry
+
+Verify each is available:
 
 ```shell
-brew install nvm pyenv
-nvm use
-pyenv install
+conda --version
+podman --version
+gcloud --version
 ```
 
-If you get a message in the command line after running `nvm use` that the version of Node specified
-in the `.nvmrc` file isn't installed, just follow the commands to install it.
-
-e.g.
+If `conda` reports `command not found` after installing from Self Service, the installer did not
+write the conda block into `~/.zshrc`. Confirm the install is present and wire it in:
 
 ```shell
-nvm install v22.15.0
+ls -d /opt/miniconda3
+/opt/miniconda3/bin/conda init zsh
 ```
 
-### Install JS dependencies
+Open a new terminal tab and re-check `conda --version`.
+
+### Conda environment
+
+Python and Node.js versions are pinned in the committed `environment.yml`, matching
+`.python-version` and `.nvmrc` as closely as conda-forge availability allows:
+
+> Note: conda-forge does not publish every Node patch release (it jumps from `22.13.0` to
+> `22.17.0`). Where the exact `.nvmrc` version is unavailable, pin the closest available patch
+> below it and note the substitution in `environment.yml`.
+
+If `.python-version` or `.nvmrc` change, update `environment.yml` to match.
+
+Create and activate the environment:
 
 ```shell
-npm install
+conda env create -f environment.yml
+conda activate eq-validator
 ```
 
-### Install Poetry and Python dependencies
+Version can be changed by editing `environment.yml` and running:
 
 ```shell
-curl -sSL https://install.python-poetry.org | python3 - --version 2.1.2
+conda env update -f environment.yml --prune
+```
+
+### Poetry
+
+Poetry must install into the conda environment rather than creating its own virtualenv. Set this
+on the environment so no configuration file is left in the repository:
+
+```shell
+conda env config vars set POETRY_VIRTUALENVS_CREATE=false
+conda deactivate && conda activate eq-validator
+```
+
+Confirm it took effect: this must print `false`:
+
+```shell
+echo $POETRY_VIRTUALENVS_CREATE
+```
+
+### Install dependencies
+
+With the conda environment active, install the Python dependencies:
+
+```shell
 poetry install
+```
+
+Install the JavaScript dependencies:
+```shell
+npm ci
 ```
 
 ## Running locally
@@ -217,7 +262,8 @@ best practices and maintaining consistency across the repository without the nee
 MegaLinter examines various file types and tools, including GitHub Actions, Shell scripts, Dockerfile, etc. It is
 configured using the `.mega-linter.yml` file.
 
-To run MegaLinter, ensure you have **Docker** installed on your system.
+To run MegaLinter, ensure you have **Podman** installed and running on your system
+(see [Running with Docker](#running-with-docker) below for setup and the `docker` command shim).
 
 > Note: The initial run may take some time to download the Docker image. However, subsequent executions will be
 > considerably faster due to Docker caching.
@@ -230,23 +276,32 @@ make megalint
 
 ## Running with Docker
 
-To install Docker run:
+Install Podman for your system as the container runtime.
+
+Make sure the Podman machine is started every time you want to use container images:
 
 ```shell
-brew install docker
+podman machine start
 ```
 
-On MacOS install container runtimes, e.g. Colima:
+This repo's Makefile and commands below only use `docker run` (no compose), so provide a
+`docker` command that points at Podman:
 
 ```shell
-brew install colima
+mkdir -p ~/.local/bin
+ln -s "$(which podman)" ~/.local/bin/docker
+hash -r
 ```
 
-Make sure Colima is started every time you want to use Docker images:
+`~/.local/bin` must be on your `PATH`. Verify:
 
 ```shell
-colima start
+docker --version
 ```
+
+> Note: `eq-questionnaire-runner` pulls and runs these images via `docker-compose-schema-validator.yml`.
+> That repo's Makefile uses `docker-compose` (not `docker compose`), so if you also work in that
+> repo you additionally need `podman-compose`, installed with `conda install -c conda-forge podman-compose`.
 
 When PRs are merged in this repo there is a GitHub workflow that builds 2 Docker images one for Validator
 and one for the Ajv validator and then pushes them to our GAR in GCP.

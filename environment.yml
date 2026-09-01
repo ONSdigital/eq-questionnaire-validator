@@ -1,0 +1,8 @@
+name: eq-validator
+channels:
+  - conda-forge
+dependencies:
+  - python=3.14.6
+  - nodejs=22.13.0   # closest available patch to .nvmrc's v22.15.0
+  - poetry=2.1.2
+  - pip
