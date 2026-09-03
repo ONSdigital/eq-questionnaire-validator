@@ -30,6 +30,7 @@ from urllib.parse import urlparse
 import requests
 import structlog
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import Body, FastAPI
 from fastapi.responses import JSONResponse, Response
 from requests import RequestException
@@ -44,6 +45,8 @@ ALLOWED_FULL_DOMAINS = {
 ALLOWED_BASE_DOMAINS = {"onsdigital.uk", "localhost"}
 
 ALLOWED_REPO_OWNERS = {"ONSdigital"}
+
+load_dotenv()
 
 AJV_VALIDATOR_SCHEME = os.getenv("AJV_VALIDATOR_SCHEME")
 

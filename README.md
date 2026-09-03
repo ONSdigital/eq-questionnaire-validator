@@ -93,7 +93,7 @@ To run the app:
 make run
 ```
 
-Validator runs on two ports, `5001` is the main validator app and `5002` is Ajv validator.
+Validator runs on two ports, `5001` is the main validator app and `5005` is Ajv validator.
 
 ### Validator
 
@@ -110,7 +110,7 @@ if you want to run the app locally using multiple server workers you need to set
 
 ### Ajv validator
 
-Ajv validator defaults to running on `http://localhost:5002`.
+Ajv validator defaults to running on `http://localhost:5005`.
 
 You can override this by setting the `AJV_VALIDATOR_SCHEME`, `AJV_VALIDATOR_HOST`,
 and `AJV_VALIDATOR_PORT` environment variables.
@@ -121,7 +121,7 @@ The defaults for these are:
 
 - `AJV_VALIDATOR_SCHEME` = http
 - `AJV_VALIDATOR_HOST` = localhost
-- `AJV_VALIDATOR_PORT` = 5002
+- `AJV_VALIDATOR_PORT` = 5005
 
 Alternatively, you can override the entire URL by setting the `AJV_VALIDATOR_URL` environment variable directly.
 (**Note**: These values are also defined in the Dockerfiles, so if you choose to run
@@ -169,7 +169,7 @@ and the Validator app itself). However, if you want to start Ajv individually, r
 make start-ajv
 ```
 
-This defaults to running on port `5002`, set `AJV_VALIDATOR_PORT` in your .env file if you need to change this.
+This defaults to running on port `5005`, set `AJV_VALIDATOR_PORT` in your .env file if you need to change this.
 
 Running the Ajv server returns either an empty json response when the questionnaire is valid,
 or a response containing an "errors" key.
@@ -193,7 +193,7 @@ To run the app's Python tests:
 make test-python
 ```
 
-Make sure you don't already have Ajv running on localhost:5002 by running `lsof -i tcp:5002` if you
+Make sure you don't already have Ajv running on localhost:5005 by running `lsof -i tcp:5005` if you
 do make a note of the PID (process identifier) and then run `kill -9 <PID>`, replacing `<PID>` with
 the process id from the previous command.
 
@@ -322,7 +322,7 @@ docker run -it -p 5001:5001 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/
 - Ajv validator:
 
 ```shell
-docker run -it -p 5002:5002 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv
+docker run -it -p 5005:5005 europe-west2-docker.pkg.dev/ons-eq-ci/docker-images/eq-questionnaire-validator-ajv
 ```
 
 To stop these containers you may need to use the `docker kill` command:
@@ -347,6 +347,6 @@ docker kill <CONTAINER_ID>
 | `LOG_LEVEL`            | Sets the minimum log level, can be set to `DEBUG` to increase this level                      | `INFO`                                                                        |
 | `AJV_VALIDATOR_SCHEME` | Sets the scheme for the URL that Ajv validator will run on                                    | `http`                                                                        |
 | `AJV_VALIDATOR_HOST`   | Sets the host for the URL that Ajv validator will run on                                      | `localhost`                                                                   |
-| `AJV_VALIDATOR_PORT`   | Sets the port for the URL that Ajv validator will run on                                      | `5002`                                                                        |
+| `AJV_VALIDATOR_PORT`   | Sets the port for the URL that Ajv validator will run on                                      | `5005`                                                                        |
 | `AJV_VALIDATOR_URL`    | Sets complete URL that Ajv validator will run on                                              | `<AJV_VALIDATOR_SCHEME>://<AJV_VALIDATOR_HOST>:<AJV_VALIDATOR_PORT>/validate` |
 | `VALIDATOR_VERSION`    | Sets the version of the validator, this is used in the response from the `/validate` endpoint | `0.0.0`                                                                       |
