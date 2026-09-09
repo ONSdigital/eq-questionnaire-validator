@@ -57,22 +57,6 @@ Version can be changed by editing `environment.yml` and running:
 conda env update -f environment.yml --prune
 ```
 
-### Poetry
-
-Poetry must install into the conda environment rather than creating its own virtualenv. Set this
-on the environment so no configuration file is left in the repository:
-
-```shell
-conda env config vars set POETRY_VIRTUALENVS_CREATE=false
-conda deactivate && conda activate eq-validator
-```
-
-Confirm it took effect: this must print `false`:
-
-```shell
-echo $POETRY_VIRTUALENVS_CREATE
-```
-
 ### Install dependencies
 
 With the conda environment active, install the Python dependencies:

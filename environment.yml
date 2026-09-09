@@ -6,3 +6,5 @@ dependencies:
   - nodejs=22.13.0 # closest available patch to .nvmrc's v22.15.0
   - poetry=2.4.2
   - pip
+variables:
+  POETRY_VIRTUALENVS_CREATE: "false"
