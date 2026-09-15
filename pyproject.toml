@@ -18,6 +18,7 @@ referencing = "^0.37.0"
 jsonpath-ng = "1.8.0"
 starlette = "^1.0.0"
 requests = "^2.33.1"
+python-dotenv = "^1.2.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.3"
