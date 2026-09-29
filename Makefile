@@ -1,3 +1,5 @@
+# Set the container runtime based on architecture, default to docker for amd64 and podman for arm64
+DOCKER ?= $(shell if [ "$$(uname -m)" = "arm64" ]; then echo podman; else echo docker; fi)
 RUNNER_ENV_FILE ?= .development.env
 
 .PHONY: build run lint test
@@ -58,8 +60,8 @@ format-python:
 	poetry run black .
 
 .PHONY: megalint
-megalint:  clean ## Run the MegaLinter.
-	docker run --platform linux/amd64 --rm \
+megalint: clean ## Run the MegaLinter.
+	$(DOCKER) run --platform linux/amd64 --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock:rw \
 		-v $(shell pwd):/tmp/lint:rw \
 		ghcr.io/oxsecurity/megalinter-python:v9.5.0
