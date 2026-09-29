@@ -73,7 +73,7 @@ npm ci
 
 Temporary fix, this section can be removed once conda-forge has a nodejs build bundling npm 11:
 conda-forge's `nodejs=22.13.0` bundles npm 10.9.2. `make run` will not start the Python app on npm 10:
-`npm run start` holds the terminal despite the trailing `&`, so make never reaches `poetry run python api.py`.
+`npm run start` holds the terminal despite the trailing `&`, so make naver starts the Python app.
 Upgrade npm after creating the environment:
 
 ```shell

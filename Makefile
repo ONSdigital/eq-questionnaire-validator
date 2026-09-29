@@ -23,7 +23,7 @@ start-ajv: link-development-env
 	npm run start
 
 run: start-ajv
-	poetry run python api.py
+	poetry run -- dotenv -f .development.env run --no-override -- python api.py
 
 .PHONY: clean
 clean: ## Clean the temporary files.

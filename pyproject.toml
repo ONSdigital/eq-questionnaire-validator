@@ -18,7 +18,6 @@ referencing = "^0.37.0"
 jsonpath-ng = "1.8.0"
 starlette = "^1.0.0"
 requests = "^2.33.1"
-python-dotenv = "^1.2.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.3"
@@ -31,6 +30,7 @@ black = "^26.3.1"
 flake8-quotes = "^3.4.0"
 ruff = ">=0.15.9,<0.17.0"
 httpx = "^0.28.1"
+python-dotenv = {extras = ["cli"], version = "^1.2.3"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
