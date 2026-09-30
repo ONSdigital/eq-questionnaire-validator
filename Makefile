@@ -2,12 +2,12 @@
 DOCKER ?= $(shell if [ "$$(uname -m)" = "arm64" ]; then echo podman; else echo docker; fi)
 RUNNER_ENV_FILE ?= .development.env
 
-.PHONY: build run lint test
 ifneq (,$(wildcard $(RUNNER_ENV_FILE)))
-	include $(RUNNER_ENV_FILE)
-	export $(shell sed 's/=.*//' $(RUNNER_ENV_FILE))
+include $(RUNNER_ENV_FILE)
+export $(shell sed 's/=.*//' $(RUNNER_ENV_FILE))
 endif
 
+.PHONY: build run lint test
 
 link-development-env:
 	@ln -sf $(RUNNER_ENV_FILE) .env
@@ -23,7 +23,7 @@ start-ajv: link-development-env
 	npm run start
 
 run: start-ajv
-	poetry run -- dotenv -f .development.env run --no-override -- python api.py
+	poetry run python api.py
 
 .PHONY: clean
 clean: ## Clean the temporary files.

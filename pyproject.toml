@@ -30,7 +30,6 @@ black = "^26.3.1"
 flake8-quotes = "^3.4.0"
 ruff = ">=0.15.9,<0.17.0"
 httpx = "^0.28.1"
-python-dotenv = {extras = ["cli"], version = "^1.2.3"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
