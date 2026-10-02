@@ -42,6 +42,7 @@ export default [
       "@stylistic/semi": ["error", "always"],
       "@stylistic/space-before-function-paren": "off",
       "@stylistic/padded-blocks": ["error", { blocks: "never" }],
+      "@stylistic/comma-dangle": "off", // prevents conflict with prettier
     },
   },
 
