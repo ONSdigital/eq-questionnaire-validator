@@ -18,7 +18,7 @@ app.use(
 // Prevents the server from starting when running tests only, which can cause issues with port conflicts
 if (process.env.NODE_ENV !== "test") {
   app.listen(AJV_VALIDATOR_PORT, () => {
-    debug(`Server running on port  ${AJV_VALIDATOR_PORT}`);
+    debug(`Server running on port ${AJV_VALIDATOR_PORT}`);
   });
 }
 
