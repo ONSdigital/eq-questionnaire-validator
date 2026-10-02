@@ -11,7 +11,7 @@ COPY schemas ../schemas
 
 RUN npm install --production=true
 
-ENV AJV_VALIDATOR_PORT=5002
+ENV AJV_VALIDATOR_PORT=5005
 ENV DEBUG=ajv-schema-validator
 
 WORKDIR /usr/src

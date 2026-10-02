@@ -17,7 +17,7 @@ COPY api.py poetry.lock pyproject.toml /usr/src/
 
 ENV AJV_VALIDATOR_SCHEME=http
 ENV AJV_VALIDATOR_HOST=localhost
-ENV AJV_VALIDATOR_PORT=5002
+ENV AJV_VALIDATOR_PORT=5005
 
 RUN poetry install --only main
 
