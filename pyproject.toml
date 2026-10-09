@@ -7,15 +7,15 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.14"
-fastapi = ">=0.135.3,<0.142.0"
+fastapi = ">=0.135.3,<0.143.0"
 jsonpointer = "^3.1.1"
 structlog = ">=25.5,<27.0"
 python-dateutil = "^2.9.0.post0"
 jsonschema = "4.26.0"
-uvicorn = ">=0.44,<0.53"
+uvicorn = ">=0.44,<0.55"
 gunicorn = ">=25.3,<27.0"
 referencing = "^0.37.0"
-jsonpath-ng = "1.8.0"
+jsonpath-ng = "1.9.1"
 starlette = "^1.0.0"
 requests = "^2.33.1"
 
