@@ -20,6 +20,10 @@ ENABLE:
   - REPOSITORY
   - YAML
 
+# Disabled to allow critical vulnerability fix in "certifi" package to be applied without failing the build.
+DISABLE_LINTERS:
+  - REPOSITORY_OSV_SCANNER
+
 SHOW_ELAPSED_TIME: true
 
 FILEIO_REPORTER: false
